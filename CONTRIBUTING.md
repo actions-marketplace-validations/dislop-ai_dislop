@@ -1,6 +1,6 @@
 # Contributing to `dislop`
 
-Thank you for helping keep `dislop` accurate, low-noise, and zero-dependency.
+Thank you for helping keep `dislop` accurate, low-noise, and zero-dependency. Before picking up a larger change, check [ROADMAP.md](./ROADMAP.md) ([中文](./ROADMAP.zh-CN.md)) for active tracks and open design questions, and read [docs/brand-and-voice-guide.md](./docs/brand-and-voice-guide.md) before editing visitor-facing copy.
 
 ## 1. Rule Design Checklist
 
@@ -29,17 +29,18 @@ Every new or updated rule in `packs/<pack-id>/pack.json` must include:
 Run all checks from the repository root:
 
 ```bash
-# 1. Sync browser workbench bundle
+# 1. Sync browser workbench, Awesome READMEs, and /llms.txt endpoints
 node scripts/build_site.mjs
 
 # 2. Validate Pack Schema v2 and all 101+ rule fixtures in both runtimes
 node bin/dislop.mjs pack-test
 PYTHONPATH=src python3 -m dislop.cli pack-test
 
-# 3. Run unit & cross-runtime conformance tests (including DOCX, PPTX, PDF, MCP, verify)
+# 3. Run site tests, unit tests, and cross-runtime conformance tests
+node tests/test_site.mjs
 PYTHONPATH=src python3 -m unittest discover -s tests -v
 
-# 4. Self-dogfood docs, SVG assets, and site/ at warning threshold
+# 4. Self-dogfood docs, SVG assets, awesome/, and site/ at warning threshold
 node bin/dislop.mjs check . --fail-on warning
 PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning
 ```

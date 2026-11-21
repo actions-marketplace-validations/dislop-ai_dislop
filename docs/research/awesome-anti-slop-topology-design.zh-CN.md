@@ -2,7 +2,7 @@
 
 > 文档状态：暂缓拆仓预案（历史架构提案） · 核验基准日：2026-11-21
 >
-> 关联文档：[strategy-and-roadmap.zh-CN.md](../strategy-and-roadmap.zh-CN.md) · [anti-slop-radar-index.json](./anti-slop-radar-index.json) · [anti-pattern-detection-and-catalog.zh-CN.md](./anti-pattern-detection-and-catalog.zh-CN.md) · [multi-surface-integration-architecture.zh-CN.md](./multi-surface-integration-architecture.zh-CN.md)
+> 关联文档：[ROADMAP.zh-CN.md](../../ROADMAP.zh-CN.md) · [anti-slop-radar-index.json](./anti-slop-radar-index.json) · [anti-pattern-detection-and-catalog.zh-CN.md](./anti-pattern-detection-and-catalog.zh-CN.md) · [multi-surface-integration-architecture.zh-CN.md](./multi-surface-integration-architecture.zh-CN.md)
 >
 > 配套草案：[radar-v3-contract.json](./awesome-anti-slop-topology/radar-v3-contract.json)（`dislop.radar/3` 契约示例） · [mvp-starter-templates.md](./awesome-anti-slop-topology/mvp-starter-templates.md)（目录树、CI 流水线、Issue/PR 模板与同步脚本边界）
 

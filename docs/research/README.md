@@ -3,7 +3,7 @@
 本目录保存围绕 `dislop` 开展的一手生态调研、数据快照与远期设计草案。对外最新口径请直接看：
 
 - 品牌人格与表达基准：[brand-and-voice-guide.zh-CN.md](../brand-and-voice-guide.zh-CN.md)（[English](../brand-and-voice-guide.md)）
-- 路线与分阶段规划：[strategy-and-roadmap.zh-CN.md](../strategy-and-roadmap.zh-CN.md)（[English](../strategy-and-roadmap.md)）
+- 路线图与协作计划：[ROADMAP.zh-CN.md](../../ROADMAP.zh-CN.md)（[English](../../ROADMAP.md)）
 - 87 条同路清单：[awesome/README.zh-CN.md](../../awesome/README.zh-CN.md)（[English](../../awesome/README.md) · 在线筛选 `https://dislop.com/awesome/`）
 
 > 所有 GitHub 星标、最近推送日期与链接状态均于 **2026-11-21** 通过 GitHub API 与 HTTP 请求核验。本目录全部 Markdown 文档均需通过 Node 与 Python 双端 `dislop check docs/research --fail-on info` 零命中自审。

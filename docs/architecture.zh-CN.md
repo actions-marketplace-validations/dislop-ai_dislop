@@ -39,7 +39,7 @@
 | Node CLI 与 MCP | `bin/dislop.mjs`, `bin/dislop-mcp.mjs` | 命令行（`check`、`verify`、`explain`、`packs`、`pack-test`、`init`）与 stdio MCP 服务 |
 | Python 核心与接口 | `src/dislop/{engine,cli,mcp_server}.py` | 纯 Python 3.10+ 标准库实现，通过 `tests/test_conformance.py` 与 Node 保持行为一致 |
 | 规则包清单 | `packs/{core,business-brief,literary-essay,deck-and-ui}/pack.json` | 声明式 `dislop.pack/2` 规则、阈值、删除测试、三段样本与正反用例 |
-| 人机双读静态编译器 | `scripts/build_site.mjs` | 零依赖编译器，将 `src/core.mjs`、`packs/`、`skills/`、`docs/brand*` 与已核验研究 JSON 同源编译为 `site/` 与 `awesome/README.md` |
+| 官网静态编译器 | `scripts/build_site.mjs` | 零依赖编译器，将 `src/core.mjs`、`packs/`、`skills/`、`docs/brand*`、`ROADMAP*.md` 与已核验研究 JSON 同源编译为 `site/` 与 `awesome/README*.md` |
 | 专题研究、规格与原型 | `docs/research/`, `docs/specs/`, `scripts/prototype_antipattern_lab.mjs` | 87 条实测核验 Awesome Anti-Slop 数据源（`dislop.radar/2`）、31 条设计/学术参考、多形态与正向差异化研究、`v0.3` 探针规格及可独立自测的验证原型 |
 
 ## 3. 覆盖率诚实原则与退出码
@@ -52,11 +52,9 @@
 
 在零外部依赖模式下检查 PDF 时，`dislop` 会核验 `/URI` 本机路径泄露、`/Info` 原始文件名标题、`/FontDescriptor` 字体嵌入与跨页 `/MediaBox` 尺寸一致性，并将完整 CID 正文提取显式标记为 `[SKIP] <file>#prose`。
 
-## 4. 官网静态部署与人机双读服务（`dislop.com`）
+## 4. 官网静态部署（`dislop.com`）
 
-`site/` 产物为纯静态文件（全部采用相对路径，零后端进程）：
+`site/` 产物为纯静态文件（全部采用相对路径，零后端进程），直接通过 `https://dislop.com` 静态托管（关闭版本号暴露，配置 HSTS 与 `Content-Security-Policy` 双重锁死 `connect-src 'none'`，零第三方字体与统计外链）。官网与 `/awesome/` 默认呈现简体中文（`zh-CN`），右上角一键切原生英文（`en`），中英文页面的样稿、规则例句与 87 条清单摘要完全隔离、互不混排：
 
-- **单一官方入口（`https://dislop.com`）**：由海外静态 Nginx 源站直接通过 HTTPS 托管（关闭版本号暴露，配置 HSTS 与 `Content-Security-Policy` 双重锁死 `connect-src 'none'`，全站零第三方字体与统计外链）。中国大陆与海外访问者统一经由 `.com` 主站进入，不再分流或并存 `github.io` 镜像入口。
-- **人机双读（Level 0 Website-as-an-Agent-Service）**：
-  - **面向人类**：零上传浏览器清样工作台（`/#workbench`）、可多维检索的 29 条规则目录（`/#rules`，带稳定 `#rule-<id>` SARIF 锚点）以及 87 条离线可筛选的 Awesome Anti-Slop 精选清单（`/awesome/`）。
-  - **面向外部 Agent**：渐进披露纯文本与结构化端点（`/llms.txt`、`/catalog.json`、`/index.md`、`/tasks/*.md`、`/methodology/*.md`、`/cases/*.md`、`/tools/*.md`、`/packs/*.md`、`/rules/*.md`、`/awesome/index.{json,md}`、`/llms-full.txt`）。构建期自动执行体积预算、链接可达性、剔除 `fixtures.hit` 与去除 HTML 注释/不可见字符校验。
+- **面向人类**：首屏红笔三态校样卡、零上传浏览器工作台（`/#workbench`）、可检索规则表（`/#rules`，带稳定 `#rule-<id>` SARIF 锚点）、87 条离线筛选同路清单（`/awesome/`）以及同源编译的 `/roadmap.zh-CN.md` / `/roadmap.md`。
+- **面向外部 Agent**：渐进披露纯文本与结构化端点（`/llms.txt`、`/catalog.json`、`/index.md`、`/roadmap.md`、`/tasks/*.md`、`/methodology/*.md`、`/cases/*.md`、`/tools/*.md`、`/packs/*.md`、`/rules/*.md`、`/awesome/index.{json,md}`、`/llms-full.txt`）。构建期自动执行体积预算（`llms.txt <= 2,600 B`）、链接可达性、剔除 `fixtures.hit` 与去除 HTML 注释/不可见字符校验。

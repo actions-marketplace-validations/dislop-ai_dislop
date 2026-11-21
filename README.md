@@ -9,6 +9,7 @@
   <a href="./README.zh-CN.md">简体中文</a> ·
   <a href="https://dislop.com">Try it at dislop.com</a> ·
   <a href="./awesome/README.md">Awesome Anti-Slop</a> ·
+  <a href="./ROADMAP.md">Roadmap</a> ·
   <a href="./LICENSE">Apache-2.0</a>
 </p>
 
@@ -157,7 +158,7 @@ GitHub Actions CI runs `dislop pack-test` (101 fixture assertions in both Node a
 
 - [Brand & Voice Guide](./docs/brand-and-voice-guide.md) ([中文](./docs/brand-and-voice-guide.zh-CN.md))
 - [Architecture](./docs/architecture.md) ([中文](./docs/architecture.zh-CN.md)) · [Design System](./docs/design-system.md) ([中文](./docs/design-system.zh-CN.md))
-- [Roadmap](./docs/strategy-and-roadmap.md) ([中文](./docs/strategy-and-roadmap.zh-CN.md)) · [Research Index](./docs/research/README.md) · [Changelog](./CHANGELOG.md)
+- [Roadmap](./ROADMAP.md) ([中文](./ROADMAP.zh-CN.md)) · [Contributing](./CONTRIBUTING.md) · [Research Index](./docs/research/README.md) · [Changelog](./CHANGELOG.md)
 
 ```text
 dislop/

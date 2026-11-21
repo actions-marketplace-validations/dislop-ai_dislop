@@ -8,6 +8,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ### Added
 
+- **Collaboration Roadmap (`ROADMAP.md` & `ROADMAP.zh-CN.md`)**:
+  - Consolidated project milestones, 5 parallel workstreams (`v0.2.x` -> `v0.4+`), 5 open design questions for GitHub Discussions, and collaborator pre-PR checks into root [ROADMAP.md](./ROADMAP.md) & [ROADMAP.zh-CN.md](./ROADMAP.zh-CN.md) (replacing `docs/strategy-and-roadmap*.md`), synced to `https://dislop.com/roadmap.md` and `/roadmap.zh-CN.md`.
 - **Deep Brand Voice, UI/Visual Polish & Pure Bilingual Experience (`dislop.com` & GitHub)**:
   - Made `https://dislop.com` and `https://dislop.com/awesome/` default to Simplified Chinese (`zh-CN`) with one-click native English (`en`) switching and zero language mixing across hero samples, all 10 workbench specimens (5 ZH + 5 EN), margin notes, rule catalog, and all 87 Awesome Anti-Slop summaries (`awesome/README.md` in pure English + `awesome/README.zh-CN.md` in pure Chinese).
   - Replaced the hero terminal stack and numbered spec eyebrows on `dislop.com` with a perform-the-product red-pen headline, an interactive 3-state live Proof Card (powered by `src/core.mjs`), a 3-mark promise strip, collapsible editor-style margin notes, and a feed-legible `1200×630` social card (`assets/og-card.{svg,png}`).

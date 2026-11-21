@@ -117,5 +117,5 @@
 
 1. **把叙事收敛为「Agent 交付物的印前检查（Preflight Check）」**：与仓内 [design-system.zh-CN.md](../design-system.zh-CN.md) 的「建筑网格上的印刷校样单」意象完全合一，避开十万星前端与通用写作技能的正面红海。
 2. **优先补齐「可安装」与「可强制」**：完成 v0.2.0 正式发版并上架 npm / PyPI，提供 Claude Code 插件加保存/提交钩子或即用 GitHub Action，解决 MCP 只能靠 Agent 自愿调用的短板。
-3. **建设可复算的「改稿事实丢失与二阶漂移」离线基准**：这是比纯链接目录更高杠杆的生态切入点，路线安排见 [strategy-and-roadmap.zh-CN.md](../strategy-and-roadmap.zh-CN.md)。
+3. **建设可复算的「改稿事实丢失与二阶漂移」离线基准**：这是比纯链接目录更高杠杆的生态切入点，路线安排见 [ROADMAP.zh-CN.md](../../ROADMAP.zh-CN.md)。
 4. **让 `verify` 从二元拒绝演进为可确认事实账本**：在严格模式（适合无人值守 Agent 润色）之外，提供面向人类作者审阅的结构化变更清单，降低正当编辑误拒率。

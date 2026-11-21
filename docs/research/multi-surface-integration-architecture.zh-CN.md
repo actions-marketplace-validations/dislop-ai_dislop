@@ -1,7 +1,7 @@
 # `dislop` 多形态开发者集成与使用模式架构规划
 
 > 文档状态：架构规划草案（v1.1，增补 Website-as-an-Agent-Service 人机双读架构） · 基线版本：`dislop v0.2.0`（提交 `36fa1f8`） · 日期：2026-11-21
-> 关联参考：[architecture.zh-CN.md](../architecture.zh-CN.md)、[anti-slop-landscape-2026.zh-CN.md](./anti-slop-landscape-2026.zh-CN.md)、[strategy-and-roadmap.zh-CN.md](../strategy-and-roadmap.zh-CN.md) · 附属专项规范：[website-as-agent-service.zh-CN.md](./multi-surface-architecture/website-as-agent-service.zh-CN.md)
+> 关联参考：[architecture.zh-CN.md](../architecture.zh-CN.md)、[anti-slop-landscape-2026.zh-CN.md](./anti-slop-landscape-2026.zh-CN.md)、[ROADMAP.zh-CN.md](../../ROADMAP.zh-CN.md) · 附属专项规范：[website-as-agent-service.zh-CN.md](./multi-surface-architecture/website-as-agent-service.zh-CN.md)
 
 ## 核心架构判断
 
@@ -518,4 +518,4 @@ assert ver["ok"], ver["reasons"]
 | 适配层零规则逻辑 | CLI、MCP、Hook、SDK、HTTP 路由与官网生成器禁止硬编码正则、规则 ID 或严重级数值比较，所有判定与规则文案必须下沉到 `packs/`、`docs/` 或 `core` | 保证 Canonical Contract 跨形态完全等价 |
 | 不手写未验证私有插件 | LSP 与 OpenAPI 验证外部需求前，不为 VS Code、JetBrains、Chrome、Word、Dify、n8n 各自维护独立重型插件仓 | 防止宿主升级造成持续返工 |
 | 坚持无状态轻 API | P1/P2 初期不做账号库、文档存储库与计费系统，请求正文纯内存处理、零落盘、零正文日志 | 守住「本地优先、零上传」的品牌信誉并控运维成本 |
-| 遵守分阶段门控 | 与 [strategy-and-roadmap.zh-CN.md](../strategy-and-roadmap.zh-CN.md) 的阶段目标联动，前期采用未达标前不提前进入重型平台化开发 | 防止供给领先真实需求导致资源分散 |
+| 遵守分阶段门控 | 与 [ROADMAP.zh-CN.md](../../ROADMAP.zh-CN.md) 的阶段目标联动，前期采用未达标前不提前进入重型平台化开发 | 防止供给领先真实需求导致资源分散 |

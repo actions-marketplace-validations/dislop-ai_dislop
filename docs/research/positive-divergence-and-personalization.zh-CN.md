@@ -1,6 +1,6 @@
 # 反趋同研究报告：可控随机性、个性化声纹与正向差异化参考体系
 
-> 快照日期：2026-11-21 · 关联文档：[anti-slop-landscape-2026.zh-CN.md](./anti-slop-landscape-2026.zh-CN.md) · [strategy-and-roadmap.zh-CN.md](../strategy-and-roadmap.zh-CN.md) · [design-system.zh-CN.md](../design-system.zh-CN.md) · 附属结构化草案见 [positive-divergence/](./positive-divergence/)。本文严格区分「经一手论文、GitHub API 或公开网页实测核验的事实」与「面向 `dislop` 的工程设计及产品假设」。
+> 快照日期：2026-11-21 · 关联文档：[anti-slop-landscape-2026.zh-CN.md](./anti-slop-landscape-2026.zh-CN.md) · [ROADMAP.zh-CN.md](../../ROADMAP.zh-CN.md) · [design-system.zh-CN.md](../design-system.zh-CN.md) · 附属结构化草案见 [positive-divergence/](./positive-divergence/)。本文严格区分「经一手论文、GitHub API 或公开网页实测核验的事实」与「面向 `dislop` 的工程设计及产品假设」。
 
 ## 执行摘要
 
@@ -186,7 +186,7 @@ AI 味的表层症状是高频套词、否定转折口号和蓝紫粉渐变卡�
 
 ### 4.1 架构定力：为什么 `dislop` 必须坚持「零 LLM 核心 + 双向协同」
 
-结合 [anti-slop-landscape-2026.zh-CN.md](./anti-slop-landscape-2026.zh-CN.md) 与 [strategy-and-roadmap.zh-CN.md](../strategy-and-roadmap.zh-CN.md) 的生态判断，`dislop` 当前最稳固的护城河在于：**零第三方运行时依赖、零上传隐私保证、Node + Python 双端一致的确定性引擎、办公交付物（`.docx`/`.pptx`/`.pdf`）印前体检，以及 `dislop verify` 受保护事实复检**。
+结合 [anti-slop-landscape-2026.zh-CN.md](./anti-slop-landscape-2026.zh-CN.md) 与 [ROADMAP.zh-CN.md](../../ROADMAP.zh-CN.md) 的生态判断，`dislop` 当前最稳固的护城河在于：**零第三方运行时依赖、零上传隐私保证、Node + Python 双端一致的确定性引擎、办公交付物（`.docx`/`.pptx`/`.pdf`）印前体检，以及 `dislop verify` 受保护事实复检**。
 
 因此，引入「反趋同与正向差异化」方向时，**绝不能**把 `dislop` 变成内置大模型 API Key、替用户生成全文的膨胀套壳应用。正确的双引擎协作边界是：**生成交给人类或外部宿主 Agent（Claude Code / Codex / Cursor），`dislop` 垄断「正向规格编译 + 确定性声纹/设计提取 + 负向与正向双轨验收」**：
 
@@ -240,7 +240,7 @@ AI 味的表层症状是高频套词、否定转折口号和蓝紫粉渐变卡�
 
 ### 4.3 与仓库既有节奏对齐的 P0 / P1 / P2 路线图
 
-结合 [strategy-and-roadmap.zh-CN.md](../strategy-and-roadmap.zh-CN.md) 的精力配比纪律，正向引擎必须**服从现有 G0 发版优先级，分阶段凭实证推进**，避免在 `v0.2.0` 尚未发布到 npm / PyPI 前过度铺摊子：
+结合 [ROADMAP.zh-CN.md](../../ROADMAP.zh-CN.md) 的精力配比纪律，正向引擎必须**服从现有 G0 发版优先级，分阶段凭实证推进**，避免在 `v0.2.0` 尚未发布到 npm / PyPI 前过度铺摊子：
 
 | 阶段 | 时间定位与前置条件 | 核心交付物 | 验收与推进 Gate（不达标不进入下一阶段） |
 |---|---|---|---|
