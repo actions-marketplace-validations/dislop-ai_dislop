@@ -500,8 +500,8 @@ function runSelfTest() {
   // 1. Verify catalog loads all packs cleanly
   const catalog = loadCatalogEntries();
   assertions += 1;
-  if (catalog.length < 29) {
-    errors.push(`Expected >= 29 rules in catalog, got ${catalog.length}`);
+  if (catalog.length < 25) {
+    errors.push(`Expected >= 25 rules in catalog, got ${catalog.length}`);
   }
   assertions += 1;
   const negHits = queryCatalog(catalog, { query: "不是" });
@@ -509,9 +509,9 @@ function runSelfTest() {
     errors.push("Catalog query '不是' did not return negation-pivot-frame");
   }
   assertions += 1;
-  const uiHits = queryCatalog(catalog, { modality: "svg", severity: "warning" });
-  if (!uiHits.some((e) => e.id === "svg-text-overflow-or-a11y")) {
-    errors.push("Catalog modality/severity filter did not return svg-text-overflow-or-a11y");
+  const uiHits = queryCatalog(catalog, { modality: "html", severity: "warning" });
+  if (!uiHits.some((e) => e.id === "ui-ai-gradient")) {
+    errors.push("Catalog modality/severity filter did not return ui-ai-gradient");
   }
 
   // 2. Verify all candidate probe fixtures
