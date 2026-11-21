@@ -2,7 +2,7 @@
   "schema": "dislop.bench-detection/1",
   "version": "1.1.0",
   "license": "CC0-1.0",
-  "description": "16 real-world adversarial holdout samples (8 hard positives + 8 hard negatives) added in Thick Loop 4 to prevent overfitting to detection-v1.json.",
+  "description": "16 real-world adversarial holdout samples (8 hard positives + 8 hard negatives) to test out-of-sample generalization beyond detection-v1.json.",
   "samples": [
     {
       "id": "ho-01-zh-chat-closer",
