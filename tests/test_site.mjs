@@ -219,6 +219,9 @@ assert.ok(awesomeHtml.includes('<html lang="zh-CN">'), "site/awesome/index.html 
 assert.ok(indexHtml.includes('property="og:image" content="https://dislop.com/assets/og-card.png"'));
 assert.equal(indexHtml.includes('data-theme="light"'), false, "index.html should not force data-theme=light before hydration");
 assert.equal(/^[ \t]+$/m.test(indexHtml), false, "index.html contains whitespace-only lines");
+assert.equal(indexHtml.includes("NaN KB"), false, "index.html contains NaN KB in endpoints ledger");
+assert.equal(indexHtml.includes("undefined tok"), false, "index.html contains undefined tok in endpoints ledger");
+assert.equal(appSource.includes("rulesById"), false, "site/app.js must look up rules via pack.rules, not pack.rulesById");
 
 console.log(
   `dislop site-test: ok (${totalRules} rules, ${tryRulesChecked} Try demos, ${specimenCount} ZH/EN specimens + 2 hero proofs, ` +
