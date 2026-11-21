@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>dislop — Complete Multi-Modal De-Slop Toolkit (Writing, Docs, Decks, UI &amp; Agents)</title>
-  <meta name="description" content="De-slop AI outputs across writing, Markdown, Word, PowerPoint, PDF, Web UI, and agent workflows. Works with any model or dev environment via browser workbench, /llms.txt, Node/Python CLI, and MCP — zero runtime deps, fact-preserving verification, 29 deterministic rules, and an 87-entry verified radar.">
+  <meta name="description" content="De-slop AI outputs across writing, Markdown, Word, PowerPoint, PDF, Web UI, and agent workflows. Works with any model or dev environment via browser workbench, /llms.txt, Node/Python CLI, and MCP — zero runtime deps, revision comparison, 29 deterministic rules, and Awesome Anti-Slop (87 curated resources).">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="dislop">
   <meta property="og:url" content="https://dislop.com/">
-  <meta property="og:title" content="dislop — De-slop AI outputs. Verify every fact.">
-  <meta property="og:description" content="Complete multi-modal de-slop toolkit for writing, docs, decks, PDF, Web UI, and agent deliverables. Zero runtime deps, 29 deterministic rules, Stage-3 verify, and an 87-entry verified radar.">
+  <meta property="og:title" content="dislop — De-slop AI outputs. Compare every edit.">
+  <meta property="og:description" content="Multi-modal de-slop toolkit for writing, docs, decks, PDF, Web UI, and agent workflows. Zero runtime deps, 29 deterministic rules, revision comparison, and Awesome Anti-Slop (87 curated resources).">
   <meta property="og:image" content="https://dislop.com/assets/og-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="dislop — De-slop AI outputs. Verify every fact.">
-  <meta name="twitter:description" content="Multi-modal de-slop workbench, /llms.txt Agent Service, SKILL.md, CLI, and MCP with zero runtime dependencies.">
+  <meta name="twitter:title" content="dislop — De-slop AI outputs. Compare every edit.">
+  <meta name="twitter:description" content="Multi-modal de-slop workbench, Awesome Anti-Slop (87), /llms.txt, SKILL.md, CLI, and MCP with zero runtime dependencies.">
   <meta name="twitter:image" content="https://dislop.com/assets/og-card.png">
   <link rel="canonical" href="https://dislop.com/">
   <link rel="alternate" type="text/plain" href="./llms.txt" title="LLMs Resource Index">
@@ -42,7 +42,7 @@
         <a href="#system" data-i18n="nav.system">System</a>
         <a href="#rules" data-i18n="nav.rules">Rules (29)</a>
         <a href="#surfaces" data-i18n="nav.surfaces">Integrate</a>
-        <a href="./radar/" data-i18n="nav.radar">Radar (87)</a>
+        <a href="./awesome/" data-i18n="nav.awesome">Awesome (87)</a>
         <a href="./llms.txt" class="nav-agent-link">llms.txt</a>
         <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener">GitHub</a>
       </nav>
@@ -59,18 +59,15 @@
       <div class="lead-band band-rule">
         <div class="lead-copy">
           <div>
-            <p class="section-index" data-i18n="lead.index">00 / MULTI-MODAL DE-SLOP TOOLKIT · ANY MODEL, AGENT, OR DEV ENVIRONMENT</p>
-            <h1 class="lead-heading">
-              <span data-i18n="lead.titleStrong">De-slop AI outputs.</span>
-              <span class="muted-tail" data-i18n="lead.titleMuted">De-slop writing, Office docs, slide decks, PDF metadata, and Web UI across any model or dev stack. Catch stock phrasing and delivery defects deterministically, then verify edits kept every number, link, and citation intact.</span>
-            </h1>
+            <p class="section-index" data-i18n="lead.index">00 / multi-modal de-slop toolkit · any model, agent, or dev stack</p>
+            <h1 class="lead-heading" data-i18n="lead.titleStrong">De-slop AI outputs.</h1>
             <p class="lead-sub" data-i18n="lead.sub">
-              Drop into any workflow via browser workbench, static /llms.txt agent docs, Node.js/Python CLI, stdio MCP, Skill, or CI gates. Built on one zero-dependency dual-runtime engine with 29 deterministic rules, Stage-3 fact verification, draft positive-divergence protocols, and an 87-entry verified ecosystem radar.
+              Paste a draft, a deck, or a page. dislop strikes what can't ship, asks about what sounds canned, and checks that your edit kept numbers, links, and citations.
             </p>
           </div>
 
           <div class="dual-strip">
-            <span><strong data-i18n="lead.humanLabel">Human:</strong> <a href="#workbench" data-i18n="lead.humanAction">Live De-Slop Workbench ↓</a> · <a href="#coverage" data-i18n="lead.coverageAction">Coverage Matrix ↓</a> · <a href="./radar/" data-i18n="lead.radarAction">87-Entry Radar →</a></span>
+            <span><strong data-i18n="lead.humanLabel">Human:</strong> <a href="#workbench" data-i18n="lead.humanAction">Live Workbench ↓</a> · <a href="#coverage" data-i18n="lead.coverageAction">Coverage ↓</a> · <a href="./awesome/" data-i18n="lead.awesomeAction">Awesome Anti-Slop (87) →</a></span>
             <span><strong data-i18n="lead.agentLabel">Agent (Level 0):</strong> <a href="./llms.txt">/llms.txt</a> · <a href="./catalog.json">/catalog.json</a> · <a href="./index.md">/index.md</a></span>
           </div>
         </div>
@@ -92,7 +89,7 @@
             </div>
           </div>
           <div class="install-meta">
-            <span data-i18n="lead.zeroDeps">0 runtime deps · 29 rules · 101 test assertions · 87 radar entries</span>
+            <span data-i18n="lead.zeroDeps">No runtime deps · 29 rules · 101 fixture assertions · Awesome (87)</span>
             <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener">dislop-ai/dislop →</a>
           </div>
         </div>
@@ -101,24 +98,24 @@
       <!-- Level-2 Value Pillars (Hard Evidence, Zero Marketing Puffery) -->
       <div class="pillars-strip" aria-label="Core engineering pillars">
         <div class="pillar-cell">
-          <span class="pillar-kicker">01 / FULL-CHAIN DE-SLOP</span>
-          <h2 class="pillar-title" data-i18n="p1.title">Negative rules, fact lock, positive pull &amp; radar</h2>
-          <p class="pillar-desc" data-i18n="p1.desc">29 deterministic rules across 4 packs + Stage-3 verify fact guard + draft voice/taste divergence protocols + 87-entry verified ecosystem index.</p>
+          <span class="pillar-kicker" data-i18n="p1.kicker">01 / full-chain de-slop</span>
+          <h2 class="pillar-title" data-i18n="p1.title">Two pencils, edit guard &amp; Awesome Anti-Slop</h2>
+          <p class="pillar-desc" data-i18n="p1.desc">29 deterministic rules across 4 packs, Stage-3 revision comparison, draft voice/taste protocols, and 87 curated resources in /awesome/.</p>
         </div>
         <div class="pillar-cell">
-          <span class="pillar-kicker">02 / MULTI-MODAL SCOPE</span>
-          <h2 class="pillar-title" data-i18n="p2.title">Prose, Office docs, slides, Web UI &amp; PR handoffs</h2>
+          <span class="pillar-kicker" data-i18n="p2.kicker">02 / multi-modal scope</span>
+          <h2 class="pillar-title" data-i18n="p2.title">Prose, Office docs, slides, Web UI &amp; PR diffs</h2>
           <p class="pillar-desc" data-i18n="p2.desc">Live today on .md/.txt, .html/.css/.jsx/.svg, .docx, .pptx, .pdf metadata, and git diffs; 5 rhythm/chrome probes verified in the v0.3 prototype.</p>
         </div>
         <div class="pillar-cell">
-          <span class="pillar-kicker">03 / ANY MODEL OR HOST</span>
+          <span class="pillar-kicker" data-i18n="p3.kicker">03 / any model or host</span>
           <h2 class="pillar-title" data-i18n="p3.title">Model-agnostic across agents, IDEs &amp; CI</h2>
-          <p class="pillar-desc" data-i18n="p3.desc">Works on Claude, GPT, Gemini, DeepSeek, Qwen, and local outputs. Attach via browser, /llms.txt, CLI, stdio MCP, Skill, or GitHub Actions.</p>
+          <p class="pillar-desc" data-i18n="p3.desc">Works on Claude, GPT, Gemini, DeepSeek, Qwen, and local outputs. Attach via browser, /llms.txt, SKILL.md, CLI, stdio MCP, or GitHub Actions.</p>
         </div>
         <div class="pillar-cell">
-          <span class="pillar-kicker">04 / VERIFIABLE DEPTH</span>
-          <h2 class="pillar-title" data-i18n="p4.title">Deterministic parity, never silent rewrite drift</h2>
-          <p class="pillar-desc" data-i18n="p4.desc">0 external deps across Node and Python (101 pack fixtures + 12 conformance tests); verify locks numbers/qualifiers and blocks 2nd-order slogan traps.</p>
+          <span class="pillar-kicker" data-i18n="p4.kicker">04 / honest boundaries</span>
+          <h2 class="pillar-title" data-i18n="p4.title">Deterministic parity, never silent rewrites</h2>
+          <p class="pillar-desc" data-i18n="p4.desc">Node and Python share 101 fixtures and 12 conformance tests with no external deps; verify compares edits against the original and catches overcorrection.</p>
         </div>
       </div>
     </section>
@@ -150,7 +147,7 @@
           <div class="rail-title" data-i18n="wb.specimensTitle">SPECIMENS</div>
           <!-- Populated by app.js -->
           <div class="privacy-note" data-i18n="wb.privacyNote">
-            Runs 100% in browser memory via ./engine/core.mjs. Network egress is locked by CSP (connect-src 'none').
+            Your draft stays in this tab. The page's CSP sets connect-src 'none', so it couldn't phone home if it tried.
           </div>
         </aside>
 
@@ -162,8 +159,8 @@
               <button type="button" id="mode-edit-btn" class="ctrl-btn" aria-pressed="false" data-i18n="wb.modeEdit">Edit &amp; Recheck</button>
             </div>
             <div class="quick-actions">
-              <button type="button" id="btn-apply-good" class="ctrl-btn" data-i18n="wb.applyClean">Load Clean Revision</button>
-              <button type="button" id="btn-apply-trap" class="ctrl-btn" data-i18n="wb.tryTrap">Try 2nd-Order Trap</button>
+              <button type="button" id="btn-apply-good" class="ctrl-btn" data-i18n="wb.applyClean">Show a clean edit</button>
+              <button type="button" id="btn-apply-trap" class="ctrl-btn" data-i18n="wb.tryTrap">Try an overcorrection</button>
               <button type="button" id="btn-reset" class="ctrl-btn" data-i18n="wb.reset">Reset</button>
             </div>
           </div>
@@ -179,9 +176,9 @@
           </div>
 
           <div class="legend-strip">
-            <span class="legend-item"><span class="swatch-line swatch-error"></span> <span data-i18n="legend.error">error: core invariant (solid red)</span></span>
-            <span class="legend-item"><span class="swatch-line swatch-warn"></span> <span data-i18n="legend.warn">warn/info: taste query (dashed blue)</span></span>
-            <span class="legend-item"><span class="swatch-line swatch-stet"></span> <span data-i18n="legend.stet">stet: protected fact locked by verify</span></span>
+            <span class="legend-item"><span class="swatch-line swatch-error"></span> <span data-i18n="legend.error">Red, solid: can't ship (error)</span></span>
+            <span class="legend-item"><span class="swatch-line swatch-warn"></span> <span data-i18n="legend.warn">Blue, dashed: worth a second look (query)</span></span>
+            <span class="legend-item"><span class="swatch-line swatch-stet"></span> <span data-i18n="legend.stet">Green, dotted: span kept as written (stet)</span></span>
           </div>
         </div>
 
@@ -1014,14 +1011,14 @@ Band 3 [Prune Drift]    Drop 2nd-order slogans, template fallback &amp; cross-do
               <a class="endpoint-path" href="./llms.txt">/llms.txt</a>
               <div class="endpoint-desc" data-i18n="ep.llms">L0 routing index (llmstxt.org) for external agents</div>
             </div>
-            <span class="endpoint-meta">2.3 KB · ~596 tok</span>
+            <span class="endpoint-meta">2.3 KB · ~598 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
               <a class="endpoint-path" href="./catalog.json">/catalog.json</a>
               <div class="endpoint-desc" data-i18n="ep.catalog">L0 versioned machine catalog (dislop.catalog/1)</div>
             </div>
-            <span class="endpoint-meta">37.9 KB · ~9715 tok</span>
+            <span class="endpoint-meta">38.7 KB · ~9919 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
@@ -1060,8 +1057,8 @@ Band 3 [Prune Drift]    Drop 2nd-order slogans, template fallback &amp; cross-do
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
-              <a class="endpoint-path" href="./radar/index.json">/radar/index.json</a>
-              <div class="endpoint-desc" data-i18n="ep.radar">L1 raw JSON of 87 verified ecosystem entries</div>
+              <a class="endpoint-path" href="./awesome/index.json">/awesome/index.json</a>
+              <div class="endpoint-desc" data-i18n="ep.awesome">L1 raw JSON of 87 Awesome Anti-Slop entries</div>
             </div>
             <span class="endpoint-meta">55.0 KB · ~14067 tok</span>
           </div>
@@ -1070,7 +1067,7 @@ Band 3 [Prune Drift]    Drop 2nd-order slogans, template fallback &amp; cross-do
               <a class="endpoint-path" href="./methodology/index.md">/methodology/index.md</a>
               <div class="endpoint-desc" data-i18n="ep.method">L1 methodology pillar (Deletion Test &amp; Positive Pull)</div>
             </div>
-            <span class="endpoint-meta">0.8 KB · ~211 tok</span>
+            <span class="endpoint-meta">1.0 KB · ~254 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
@@ -1111,28 +1108,28 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
       </div>
     </section>
 
-    <!-- Band 06: Ecosystem Radar, Non-Mainstream Design References & Design System Specimen -->
-    <section id="radar" class="section-block band-rule">
+    <!-- Band 06: Awesome Anti-Slop, Non-Mainstream Design References & Brand Specimen -->
+    <section id="awesome" class="section-block band-rule">
       <div class="section-header">
         <div>
-          <p class="section-index">06 / ECOSYSTEM RADAR (dislop.radar/2) &amp; VISUAL SPECIMEN</p>
-          <h2 class="section-title" data-i18n="radar.title">87 verified de-slop resources and 31 non-mainstream design &amp; research references</h2>
-          <p class="section-desc" data-i18n="radar.desc">
-            Compiled directly from docs/research/anti-slop-radar-index.json and verified-positive-sources.json (snapshot verified 2026-11-21 via GitHub API and HTTP status checks). Zero hand-copied numbers.
+          <p class="section-index" data-i18n="awesome.index">06 / awesome anti-slop (87) &amp; brand specimen</p>
+          <h2 class="section-title" data-i18n="awesome.title">Awesome Anti-Slop: 87 curated resources and 31 non-mainstream design references</h2>
+          <p class="section-desc" data-i18n="awesome.desc">
+            A standalone, bookmarkable directory for humans and agents—compiled offline from verified JSON snapshots checked on 2026-11-21. Built as a shared hub alongside dislop's own engine.
           </p>
         </div>
-        <a href="./radar/" data-i18n="radar.openFull">Open Interactive 87-Entry Radar →</a>
+        <a href="./awesome/" data-i18n="awesome.openFull">Open Awesome Anti-Slop (87) →</a>
       </div>
 
       <div class="radar-split">
-        <!-- Left: Ecosystem Radar Summary & Dual-Repo Roadmap -->
+        <!-- Left: Awesome Anti-Slop Summary -->
         <div class="radar-split-col">
           <div class="ledger-item-head">
-            <h3 class="sub-heading" data-i18n="radar.ecoTitle">De-Slop Resource Radar (dislop.radar/2)</h3>
+            <h3 class="sub-heading" data-i18n="awesome.ecoTitle">Awesome Anti-Slop (87 Curated Entries)</h3>
             <span class="status-label status-live">2026-11-21</span>
           </div>
-          <p style="margin:0;font-size:0.88rem;color:var(--ink-2);" data-i18n="radar.ecoDesc">
-            Neutral cross-modality index spanning standards, English and Chinese writing tools, deterministic linters, UI/diagram rules, code/PR governance, and an isolated contrast-watch section for evasion tools.
+          <p style="margin:0;font-size:0.88rem;color:var(--ink-2);" data-i18n="awesome.ecoDesc">
+            Neutral cross-modality directory spanning standards, English and Chinese writing tools, deterministic linters, UI/diagram rules, code/PR governance, and an isolated contrast-watch section for evasion tools.
           </p>
 <!-- BUILD:RADAR_STATS -->
           <div class="stat-strip">
@@ -1142,23 +1139,24 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
             <div class="stat-cell"><span class="stat-num">21</span><span class="stat-label">zh / multilingual</span></div>
           </div>
 <!-- /BUILD:RADAR_STATS -->
-          <p style="margin:0 0 12px;font-size:0.84rem;color:var(--ink-2);" data-i18n="radar.topologyNote">
-            Maintained inside dislop-ai/dislop and served canonically at dislop.com/radar/ to keep community attention focused; structured under dislop.radar/3 specs for a clean standalone CC0-1.0 spin-out only if external PR volume justifies it.
+          <p style="margin:0 0 12px;font-size:0.84rem;color:var(--ink-2);" data-i18n="awesome.topologyNote">
+            Maintained inside dislop-ai/dislop (awesome/README.md) and served canonically at dislop.com/awesome/ so bookmarks, sharing, and workbench use stay together; structured for a standalone CC0-1.0 spin-out only if external PR volume justifies it.
           </p>
           <div class="quick-actions">
-            <a href="./radar/" class="ctrl-btn" style="text-decoration:none;" data-i18n="radar.browseBtn">Browse &amp; Filter 87 Entries →</a>
-            <a href="./radar/index.json" class="ctrl-btn" style="text-decoration:none;">index.json</a>
-            <a href="./radar/index.md" class="ctrl-btn" style="text-decoration:none;">index.md</a>
+            <a href="./awesome/" class="ctrl-btn" style="text-decoration:none;" data-i18n="awesome.browseBtn">Browse &amp; Filter 87 Entries →</a>
+            <a href="https://github.com/dislop-ai/dislop/tree/main/awesome" target="_blank" rel="noopener" class="ctrl-btn" style="text-decoration:none;">GitHub</a>
+            <a href="./awesome/index.json" class="ctrl-btn" style="text-decoration:none;">index.json</a>
+            <a href="./awesome/index.md" class="ctrl-btn" style="text-decoration:none;">index.md</a>
           </div>
         </div>
 
         <!-- Right: Non-Mainstream Positive Design Lineage -->
         <div class="radar-split-col">
           <div class="ledger-item-head">
-            <h3 class="sub-heading" data-i18n="radar.posTitle">Non-Mainstream Design &amp; Anti-Convergence Sources</h3>
+            <h3 class="sub-heading" data-i18n="awesome.posTitle">Non-Mainstream Design &amp; Anti-Convergence Sources</h3>
             <span class="status-label status-live">31 VERIFIED (22 DESIGN · 7 PAPERS)</span>
           </div>
-          <p style="margin:0;font-size:0.84rem;color:var(--ink-2);" data-i18n="radar.posDesc">
+          <p style="margin:0;font-size:0.84rem;color:var(--ink-2);" data-i18n="awesome.posDesc">
             Selected from verified-positive-sources.json to study grid proportions, typographic roles, and paper-ink contrast outside SaaS templates (abstract principles only, never copying source code):
           </p>
 <!-- BUILD:POSITIVE_REFS -->
@@ -1217,9 +1215,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
       <div class="colophon-links">
         <a href="./llms.txt">llms.txt</a>
         <a href="./catalog.json">catalog.json</a>
-        <a href="./radar/">Radar (87)</a>
+        <a href="./awesome/">Awesome (87)</a>
+        <a href="./methodology/brand-and-voice.md">Brand &amp; Voice</a>
         <a href="./methodology/index.md">Methodology</a>
-        <a href="https://dislop.com">dislop.com</a>
         <a href="https://github.com/dislop-ai/dislop">Source (Apache-2.0)</a>
       </div>
     </footer>

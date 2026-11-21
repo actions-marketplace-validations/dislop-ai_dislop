@@ -7,7 +7,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { auditText, contrastRatio, resolveEffectivePack, verifyRevision } from "../src/core.mjs";
 import { PACKS_BY_ID } from "../site/engine/packs-data.mjs";
-import { RADAR_DATA } from "../site/radar/radar-data.mjs";
+import { AWESOME_DATA } from "../site/awesome/awesome-data.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -106,14 +106,16 @@ for (const res of catalog.resources) {
   assert.equal(body.includes("<!--"), false, `HTML comment found in agent resource ${res.path}`);
 }
 
-// 4. Verify Radar URLs are strictly HTTPS and free of bidi/invisible control chars
-assert.equal(RADAR_DATA.entries.length, 87, "Expected 87 radar entries");
-for (const entry of RADAR_DATA.entries) {
-  assert.match(entry.url, /^https:\/\//i, `Non-HTTPS URL in radar entry ${entry.id}: ${entry.url}`);
+// 4. Verify Awesome Anti-Slop URLs are strictly HTTPS and free of bidi/invisible control chars
+assert.equal(AWESOME_DATA.entries.length, 87, "Expected 87 Awesome Anti-Slop entries");
+assert.ok(fs.existsSync(path.join(ROOT, "awesome", "README.md")), "Missing top-level awesome/README.md");
+assert.ok(fs.existsSync(path.join(SITE_DIR, "awesome", "index.html")), "Missing site/awesome/index.html");
+for (const entry of AWESOME_DATA.entries) {
+  assert.match(entry.url, /^https:\/\//i, `Non-HTTPS URL in awesome entry ${entry.id}: ${entry.url}`);
   if (entry.homepage) {
-    assert.match(entry.homepage, /^https:\/\//i, `Non-HTTPS homepage in radar entry ${entry.id}: ${entry.homepage}`);
+    assert.match(entry.homepage, /^https:\/\//i, `Non-HTTPS homepage in awesome entry ${entry.id}: ${entry.homepage}`);
   }
-  assert.equal(INVISIBLE_BIDI_RE.test(JSON.stringify(entry)), false, `Invisible/bidi char in radar entry ${entry.id}`);
+  assert.equal(INVISIBLE_BIDI_RE.test(JSON.stringify(entry)), false, `Invisible/bidi char in awesome entry ${entry.id}`);
 }
 
 // 5. Verify WCAG 2.2 AA contrast of CSS text & control-border tokens in site/styles.css
@@ -163,7 +165,10 @@ for (const [mode, t] of [
   }
 }
 
-// 6. Verify OG card assets exist in site/assets/ and HTML references them cleanly
+// 6. Verify brand baseline tokens, OG card assets, and Awesome Anti-Slop GitHub landing page
+assert.ok(css.includes("--pen: #F04438;"), "Missing master Vermilion --pen token in site/styles.css");
+assert.ok(css.includes("border-bottom: 2px dotted var(--mark-stet);"), "Missing dotted stet underline in site/styles.css");
+assert.ok(fs.existsSync(path.join(SITE_DIR, "methodology", "brand-and-voice.md")), "Missing site/methodology/brand-and-voice.md");
 assert.ok(fs.existsSync(path.join(SITE_DIR, "assets", "og-card.png")), "Missing site/assets/og-card.png");
 assert.ok(fs.existsSync(path.join(SITE_DIR, "assets", "og-card.svg")), "Missing site/assets/og-card.svg");
 const indexHtml = fs.readFileSync(path.join(SITE_DIR, "index.html"), "utf8");
@@ -171,7 +176,15 @@ assert.ok(indexHtml.includes('property="og:image" content="https://dislop.com/as
 assert.equal(indexHtml.includes('data-theme="light"'), false, "index.html should not force data-theme=light before hydration");
 assert.equal(/^[ \t]+$/m.test(indexHtml), false, "index.html contains whitespace-only lines");
 
+const awesomeReadme = fs.readFileSync(path.join(ROOT, "awesome", "README.md"), "utf8");
+assert.ok(awesomeReadme.includes("https://github.com/dislop-ai/dislop"), "awesome/README.md missing GitHub star CTA link");
+assert.ok(awesomeReadme.includes("https://dislop.com/awesome/"), "awesome/README.md missing interactive web link");
+assert.ok(awesomeReadme.includes("## Contents"), "awesome/README.md missing Contents TOC");
+for (const entry of AWESOME_DATA.entries) {
+  assert.ok(awesomeReadme.includes(entry.url), `awesome/README.md missing entry URL: ${entry.url}`);
+}
+
 console.log(
   `dislop site-test: ok (${totalRules} rules, ${tryRulesChecked} Try demos, ${specimens.length} specimens, ` +
-    `${catalog.resources.length} catalog resources, ${RADAR_DATA.entries.length} radar entries, WCAG AA & 3:1 control contrast passed)`
+    `${catalog.resources.length} catalog resources, ${AWESOME_DATA.entries.length} Awesome Anti-Slop entries, WCAG AA & 3:1 control contrast passed)`
 );

@@ -2,6 +2,7 @@
 :root,
 [data-theme="light"] {
   color-scheme: light;
+  --pen: #F04438;
   --stage: #F6F7F5;
   --sheet: #FFFFFF;
   --raised: #ECEEE9;
@@ -9,6 +10,8 @@
   --rule: #D5D7D2;
   --rule-strong: #B6BAB2;
   --control-border: #767C85;
+  --radius-ctrl: 6px;
+  --radius-input: 4px;
   --ink: #14171A;
   --ink-2: #474C55;
   --ink-3: #5E646E;
@@ -161,6 +164,17 @@ a:hover {
   width: 28px;
   height: 28px;
   display: block;
+  border-radius: 6px;
+}
+
+[data-theme="dark"] .brand-lockup img {
+  box-shadow: 0 0 0 1px var(--rule-strong);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .brand-lockup img {
+    box-shadow: 0 0 0 1px var(--rule-strong);
+  }
 }
 
 .brand-wordmark {
@@ -216,11 +230,12 @@ a:hover {
   background-color: var(--raised);
   color: var(--ink);
   border: 1px solid var(--control-border);
-  border-radius: 4px;
-  padding: 6px 11px;
+  border-radius: var(--radius-ctrl);
+  padding: 6px 12px;
   min-height: 32px;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
   line-height: 1.2;
   cursor: pointer;
   transition: border-color 110ms ease, background-color 110ms ease;
@@ -245,7 +260,8 @@ a:hover {
 .ctrl-btn-sm {
   padding: 4px 8px;
   min-height: 26px;
-  font-size: 0.72rem;
+  border-radius: 5px;
+  font-size: 0.74rem;
 }
 
 /* Lead Galley Introduction (Asymmetric two-ink claim + command strip) */
@@ -288,30 +304,32 @@ a:hover {
 }
 
 .lead-heading {
-  margin: 0 0 12px;
-  font-size: clamp(1.6rem, 2.5vw, 2.15rem);
-  font-weight: 650;
-  line-height: 1.22;
+  margin: 0 0 10px;
+  font-size: clamp(2rem, 3.6vw, 2.9rem);
+  font-weight: 700;
+  line-height: 1.14;
   letter-spacing: -0.025em;
   color: var(--ink);
-  max-width: 30ch;
+  max-width: 24ch;
+}
+
+html[lang^="zh"] .lead-heading,
+html[lang^="zh"] .section-title,
+html[lang^="zh"] .sub-heading {
+  letter-spacing: 0;
 }
 
 html[lang^="zh"] .lead-heading {
-  max-width: 26ch;
-  line-height: 1.32;
-}
-
-.lead-heading .muted-tail {
-  color: var(--ink-2);
-  font-weight: 450;
+  max-width: 20ch;
+  line-height: 1.24;
 }
 
 .lead-sub {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 1rem;
+  line-height: 1.62;
   color: var(--ink-2);
-  max-width: 64ch;
+  max-width: 60ch;
 }
 
 .dual-strip {
@@ -588,10 +606,10 @@ html[lang^="zh"] .lead-heading {
 .privacy-note {
   margin-top: auto;
   padding: 14px 16px;
-  font-family: var(--font-mono);
-  font-size: 0.71rem;
-  line-height: 1.45;
-  color: var(--ink-3);
+  font-family: var(--font-sans);
+  font-size: 0.77rem;
+  line-height: 1.5;
+  color: var(--ink-2);
   border-top: 1px solid var(--rule);
 }
 
@@ -683,7 +701,7 @@ html[lang^="zh"] .proof-lines {
 
 .mark-stet {
   background-color: var(--mark-stet-wash);
-  border-bottom: 1.5px dashed var(--mark-stet);
+  border-bottom: 2px dotted var(--mark-stet);
 }
 
 .mark-span.is-focused {
@@ -737,8 +755,8 @@ html[lang^="zh"] .proof-lines {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-  font-family: var(--font-mono);
-  font-size: 0.73rem;
+  font-family: var(--font-sans);
+  font-size: 0.79rem;
   color: var(--ink-2);
 }
 
@@ -763,7 +781,7 @@ html[lang^="zh"] .proof-lines {
 }
 
 .swatch-stet {
-  border-bottom: 2px dashed var(--mark-stet);
+  border-bottom: 2px dotted var(--mark-stet);
 }
 
 /* Right Margin Proofreader's Column */
@@ -898,8 +916,9 @@ html[lang^="zh"] .proof-lines {
 
 .clean-sheet-msg {
   padding: 20px 16px;
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  line-height: 1.55;
   color: var(--mark-stet);
 }
 

@@ -11,7 +11,8 @@ version: 0.2.0
 
 | Token | Role | Light | Dark | Dark Lightness / Contrast |
 |---|---|---|---|---|
-| `--stage` | Outer ground | `#F6F7F5` | `#0E1012` | `L* = 4.6` |
+| `--pen` | Drawn strokes (`>= 2.5px`) & logo loop | `#F04438` | `#F04438` | `L* = 55.0` (`4.8:1` on tile / `4.7:1` dark sheet) |
+| `--stage` | Outer margin / viewport ground | `#F6F7F5` | `#0E1012` | `L* = 4.6` |
 | `--sheet` | Primary column | `#FFFFFF` | `#15181C` | `L* = 8.1` (> stage) |
 | `--raised` | Controls & hover | `#ECEEE9` | `#1D2127` | `L* = 12.6` (> sheet) |
 | `--inset` | Code / input well | `#F1F3F0` | `#0A0C0E` | `L* = 3.2` (recessed) |
@@ -19,7 +20,7 @@ version: 0.2.0
 | `--ink` | Primary ink | `#14171A` | `#ECEEF0` | `18.0:1` light / `15.3:1` dark |
 | `--mark-error` | Invariant error (`dele`) | `#B42318` | `#FF7A6B` | `6.6:1` / `7.0:1` (2px solid) |
 | `--mark-warn` | Taste query (`query`) | `#1B52B0` | `#85B4FF` | `7.3:1` / `8.5:1` (1.5px dashed) |
-| `--mark-stet` | Protected fact (`stet`) | `#1E6B47` | `#6CD49B` | `6.5:1` / `9.8:1` (1.5px dashed) |
+| `--mark-stet` | Protected span (`stet`) | `#1E6B47` | `#6CD49B` | `6.5:1` / `9.8:1` (2px dotted) |
 
 ## Structural Rules Enforced on `site/`
 

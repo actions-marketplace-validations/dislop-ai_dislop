@@ -1,20 +1,20 @@
 # dislop
 
-> Complete multi-modal de-slop toolkit for writing, Markdown, HTML/CSS/JSX/SVG, Word (.docx), PowerPoint (.pptx), PDF, and agent deliverables. Works with any model, agent, or dev environment — 0 runtime deps, offline-first, deterministic checks + fact-preserving verify.
+> Multi-modal de-slop toolkit for writing, Markdown, HTML/CSS/JSX/SVG, Word (.docx), PowerPoint (.pptx), PDF, and agent deliverables. Works with any model, agent, or dev environment — offline-first, zero runtime deps, deterministic checks + revision comparison.
 
 Use this site directly as a static Level 0 de-slop service: fetch the smallest matching task bundle below (Methodology + Cases + Tools), or load `/catalog.json` to filter by modality, language, and token budget.
 
 ## Quick Start by Task (~800-1,500 tokens each)
-- [Business Brief & Tech Proposal](https://dislop.com/tasks/business-doc.md): Core invariants, `business-brief` pack, and fact-guard verification.
+- [Business Brief & Tech Proposal](https://dislop.com/tasks/business-doc.md): Core invariants, `business-brief` pack, and edit comparison.
 - [Web UI, SVG & Slide Decks](https://dislop.com/tasks/web-and-deck.md): Contrast and dark-elevation invariants, `deck-and-ui` rules, and design system tokens.
 - [Editorial & Literary Writing](https://dislop.com/tasks/editorial-writing.md): `literary-essay` pack, prose contrasts, and positive voice notes.
 - [Pre-Release Objective Gate](https://dislop.com/tasks/pre-release-gate.md): Core `error` probes, git diff CI gating, and `verify` workflow.
 
 ## Resource Pillars
-- [Methodology](https://dislop.com/methodology/index.md): Deletion Test, anti-pattern map, positive divergence (draft), and galley design system.
+- [Methodology](https://dislop.com/methodology/index.md): Deletion Test, anti-pattern map, positive divergence (draft), brand voice guide, and galley design system.
 - [Cases](https://dislop.com/cases/index.md): `bad -> trap -> good` contrasts, self-dogfooding audit, and 31 verified design/typography/academic references.
-- [Tools](https://dislop.com/tools/index.md): Browser workbench, raw `SKILL.md` (draft), prompt checklists, shipped CLI (`npx`/`uvx`) and MCP, plus roadmap Hooks/SDK/API.
-- [Ecosystem Radar](https://dislop.com/radar/index.md): 87 verified de-slop resources (`dislop.radar/2`, raw JSON at `/radar/index.json`).
+- [Tools](https://dislop.com/tools/index.md): Browser workbench, canonical `SKILL.md`, prompt checklists, shipped CLI (`npx`/`uvx`) and MCP, plus roadmap Hooks/SDK/API.
+- [Awesome Anti-Slop](https://dislop.com/awesome/index.md): 87 curated de-slop resources (`dislop.radar/2`, raw JSON at `/awesome/index.json`).
 
 ## Packs & Machine-Readable Index
 - [Structured Catalog (JSON)](https://dislop.com/catalog.json): Versioned manifest (`dislop.catalog/1`) with sha256 and token estimates.

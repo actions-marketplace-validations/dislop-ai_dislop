@@ -1,4 +1,4 @@
-import { RADAR_DATA } from "./radar-data.mjs";
+import { AWESOME_DATA } from "./awesome-data.mjs";
 
 const SECTION_LABELS = {
   "standards-research-policy": { en: "Standards, Research & Policy", zh: "标准、研究与平台政策" },
@@ -11,61 +11,61 @@ const SECTION_LABELS = {
   "awesome-and-registries": { en: "Awesome Lists & Registries", zh: "目录与注册中心" },
 };
 
-const SNAPSHOT_DATE = RADAR_DATA.snapshotDate || "2026-11-21";
-const SCHEMA_ID = RADAR_DATA.schema || "dislop.radar/2";
-const TOTAL_COUNT = (RADAR_DATA.entries || []).length;
+const SNAPSHOT_DATE = AWESOME_DATA.snapshotDate || "2026-11-21";
+const SCHEMA_ID = AWESOME_DATA.schema || "dislop.radar/2";
+const TOTAL_COUNT = (AWESOME_DATA.entries || []).length;
 
 const I18N = {
   en: {
-    "page.title": `dislop Radar — ${TOTAL_COUNT} Verified De-Slop Resources (${SCHEMA_ID})`,
+    "page.title": `Awesome Anti-Slop — ${TOTAL_COUNT} Curated De-Slop Resources (dislop)`,
     "nav.skip": "Skip to main content",
     "nav.workbench": "De-Slop Home",
-    "nav.radar": `Radar (${TOTAL_COUNT})`,
-    "radar.index": `DE-SLOP ECOSYSTEM RADAR · SCHEMA ${SCHEMA_ID} · SNAPSHOT ${SNAPSHOT_DATE}`,
-    "radar.heading": `${TOTAL_COUNT} verified de-slop resources across writing, UI, decks, code, and standards.`,
-    "radar.sub":
-      `Compiled offline from docs/research/anti-slop-radar-index.json with zero runtime network calls (CSP: connect-src 'none'). Every GitHub star count, push date, and URL was checked on ${SNAPSHOT_DATE}. Evasion tools are isolated in the Contrast Watch section.`,
-    "radar.allSections": "All Sections",
-    "radar.allModalities": "All modalities",
-    "radar.allLocales": "All locales",
-    "radar.detOnly": "Deterministic check only",
-    "radar.reset": "Reset filters",
-    "radar.colName": "Resource & Repository",
-    "radar.colSection": "Section & Format",
-    "radar.colTags": "Modality / Locale / Check",
-    "radar.colSummary": "Objective Summary",
-    "radar.colMeta": "Snapshot Meta",
-    "radar.contrastNote":
-      "Neutrality & Ethics Boundary: Contrast Watch (contrast-and-detection) isolates both probabilistic AI-text detectors (e.g., Fast-DetectGPT, Pangram) and adversarial evasion or bypass tools strictly for ecosystem contrast. dislop removes AI slop and preserves factual integrity rather than helping evade AI disclosure rules.",
-    "footer.snapshot": `Snapshot: ${SNAPSHOT_DATE} · Zero runtime network calls (CSP: connect-src 'none')`,
-    "footer.home": "Home & Workbench",
+    "nav.awesome": `Awesome (${TOTAL_COUNT})`,
+    "awesome.index": `AWESOME ANTI-SLOP · ${TOTAL_COUNT} VERIFIED ENTRIES · SNAPSHOT ${SNAPSHOT_DATE}`,
+    "awesome.heading": `Awesome Anti-Slop: ${TOTAL_COUNT} curated resources across writing, UI, decks, code, and standards.`,
+    "awesome.sub":
+      `A standalone, bookmarkable directory for humans and agents—compiled offline with no outbound requests (CSP: connect-src 'none'). Every star count, push date, and URL was checked on ${SNAPSHOT_DATE}. Evasion tools stay isolated in Contrast Watch.`,
+    "awesome.allSections": "All Sections",
+    "awesome.allModalities": "All modalities",
+    "awesome.allLocales": "All locales",
+    "awesome.detOnly": "Deterministic check only",
+    "awesome.reset": "Reset filters",
+    "awesome.colName": "Resource & Repository",
+    "awesome.colSection": "Section & Format",
+    "awesome.colTags": "Modality / Locale / Check",
+    "awesome.colSummary": "Objective Summary",
+    "awesome.colMeta": "Snapshot Meta",
+    "awesome.contrastNote":
+      "Neutrality boundary: Contrast Watch (contrast-and-detection) isolates probabilistic AI-text detectors (Fast-DetectGPT, Pangram) and adversarial bypass tools strictly for reference. dislop improves clarity and checks edits against the original rather than helping evade disclosure rules.",
+    "footer.snapshot": `Snapshot: ${SNAPSHOT_DATE} · Runs offline in this tab (CSP: connect-src 'none')`,
+    "footer.home": "dislop Workbench",
     "footer.json": "Raw JSON",
     "theme.dark": "Dark",
     "theme.light": "Light",
   },
   zh: {
-    "page.title": `dislop 生态雷达 — ${TOTAL_COUNT} 条实测核验去 AI 味资源（${SCHEMA_ID}）`,
+    "page.title": `Awesome Anti-Slop — ${TOTAL_COUNT} 条实测核验去 AI 味精选清单（dislop）`,
     "nav.skip": "跳至正文",
     "nav.workbench": "返回首页",
-    "nav.radar": `生态雷达 (${TOTAL_COUNT})`,
-    "radar.index": `去 AI 味生态资源雷达 · SCHEMA ${SCHEMA_ID} · 核验快照 ${SNAPSHOT_DATE}`,
-    "radar.heading": `${TOTAL_COUNT} 条经实测核验的跨媒介去 AI 味资源索引。`,
-    "radar.sub":
-      `由 docs/research/anti-slop-radar-index.json 离线编译，零运行期外发请求（CSP: connect-src 'none'）。全部仓库星标、推送日期与链接均于 ${SNAPSHOT_DATE} 实测核验；规避检测类工具单独隔离在对照观察区。`,
-    "radar.allSections": "全部分栏",
-    "radar.allModalities": "全部模态",
-    "radar.allLocales": "全部语种",
-    "radar.detOnly": "仅看含确定性检查",
-    "radar.reset": "重置筛选",
-    "radar.colName": "资源名称与仓库",
-    "radar.colSection": "分栏与形态",
-    "radar.colTags": "模态 / 语种 / 确定性检查",
-    "radar.colSummary": "客观机制说明",
-    "radar.colMeta": "快照元数据",
-    "radar.contrastNote":
-      "中立与伦理边界：对照观察区（contrast-and-detection）同时隔离收录概率型 AI 文本检测器（如 Fast-DetectGPT、Pangram）与对抗式降检测率或去水印项目，仅作生态对照参考。dislop 专注去除 AI 味与事实保真，与规避生成标识法规保持清晰分界。",
-    "footer.snapshot": `核验快照：${SNAPSHOT_DATE} · 零运行期外发请求（CSP: connect-src 'none'）`,
-    "footer.home": "首页与工作台",
+    "nav.awesome": `精选清单 (${TOTAL_COUNT})`,
+    "awesome.index": `AWESOME ANTI-SLOP · ${TOTAL_COUNT} 条实测核验 · 核验快照 ${SNAPSHOT_DATE}`,
+    "awesome.heading": `去 AI 味精选清单（Awesome Anti-Slop）：${TOTAL_COUNT} 条跨媒介工具、规范与研究。`,
+    "awesome.sub":
+      `一份适合收藏、转发，也支持外部 Agent 直读的跨媒介目录。离线编译运行，不发外网请求（CSP: connect-src 'none'）。全部星标、推送日期与链接均于 ${SNAPSHOT_DATE} 实测核验；规避检测类工具单独隔离在对照观察区。`,
+    "awesome.allSections": "全部分栏",
+    "awesome.allModalities": "全部模态",
+    "awesome.allLocales": "全部语种",
+    "awesome.detOnly": "仅看含确定性检查",
+    "awesome.reset": "重置筛选",
+    "awesome.colName": "资源名称与仓库",
+    "awesome.colSection": "分栏与形态",
+    "awesome.colTags": "模态 / 语种 / 确定性检查",
+    "awesome.colSummary": "客观机制说明",
+    "awesome.colMeta": "快照元数据",
+    "awesome.contrastNote":
+      "中立边界：对照观察区（contrast-and-detection）同时隔离收录概率型 AI 文本检测器（如 Fast-DetectGPT、Pangram）与对抗式降检测率或去水印项目，仅作生态对照参考。dislop 专注去套话与改稿核对，与规避生成标识法规保持清晰分界。",
+    "footer.snapshot": `核验快照：${SNAPSHOT_DATE} · 标签页离线运行（CSP: connect-src 'none'）`,
+    "footer.home": "dislop 工作台",
     "footer.json": "原始 JSON",
     "theme.dark": "深色",
     "theme.light": "浅色",
@@ -116,13 +116,13 @@ function resetAllFilters() {
   deterministicOnly = false;
   searchQuery = "";
 
-  const searchEl = document.getElementById("radar-search");
+  const searchEl = document.getElementById("awesome-search");
   if (searchEl) searchEl.value = "";
-  const modEl = document.getElementById("radar-modality");
+  const modEl = document.getElementById("awesome-modality");
   if (modEl) modEl.value = "all";
-  const locEl = document.getElementById("radar-locale");
+  const locEl = document.getElementById("awesome-locale");
   if (locEl) locEl.value = "all";
-  const detBtn = document.getElementById("radar-det-btn");
+  const detBtn = document.getElementById("awesome-det-btn");
   if (detBtn) {
     detBtn.classList.remove("is-active");
     detBtn.setAttribute("aria-pressed", "false");
@@ -136,10 +136,10 @@ function resetAllFilters() {
 }
 
 function renderTable() {
-  const tbody = document.getElementById("radar-tbody");
-  const countEl = document.getElementById("radar-count");
+  const tbody = document.getElementById("awesome-tbody");
+  const countEl = document.getElementById("awesome-count");
   const q = searchQuery.trim().toLowerCase();
-  const entries = RADAR_DATA.entries || [];
+  const entries = AWESOME_DATA.entries || [];
   const filtered = entries.filter((e) => {
     if (activeSection !== "all" && e.section !== activeSection) return false;
     if (activeModality !== "all" && e.modality !== activeModality) return false;
@@ -161,12 +161,12 @@ function renderTable() {
       : `${filtered.length} / ${entries.length} entries`;
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" style="color:var(--ink-2);font-family:var(--font-mono);padding:18px;">${
-      currentLang === "zh" ? "无匹配资源。" : "No entries matched."
-    } <button type="button" class="ctrl-btn ctrl-btn-sm" id="radar-clear-empty-btn" style="margin-left:8px;">${
+    tbody.innerHTML = `<tr><td colspan="5" style="color:var(--ink-2);font-family:var(--font-sans);padding:18px;">${
+      currentLang === "zh" ? "没有匹配的资源。" : "No entries matched."
+    } <button type="button" class="ctrl-btn ctrl-btn-sm" id="awesome-clear-empty-btn" style="margin-left:8px;">${
       currentLang === "zh" ? "重置筛选" : "Clear filters"
     }</button></td></tr>`;
-    const clearBtn = document.getElementById("radar-clear-empty-btn");
+    const clearBtn = document.getElementById("awesome-clear-empty-btn");
     if (clearBtn) clearBtn.addEventListener("click", resetAllFilters);
     return;
   }
@@ -228,18 +228,18 @@ function applyI18n() {
   const langBtn = document.getElementById("lang-toggle");
   langBtn.textContent = currentLang === "en" ? "中文" : "EN";
   langBtn.setAttribute("aria-label", currentLang === "en" ? "切换到中文" : "Switch to English");
-  const searchEl = document.getElementById("radar-search");
+  const searchEl = document.getElementById("awesome-search");
   if (searchEl) {
     searchEl.placeholder =
       currentLang === "zh" ? "搜索项目名、仓库、机制或关键词..." : "Search name, repo, mechanism, or keyword...";
-    searchEl.setAttribute("aria-label", currentLang === "zh" ? "搜索生态雷达资源" : "Search radar resources");
+    searchEl.setAttribute("aria-label", currentLang === "zh" ? "搜索精选清单资源" : "Search Awesome Anti-Slop resources");
   }
   document.querySelectorAll("[data-section-filter]").forEach((btn) => {
     const sec = btn.getAttribute("data-section-filter");
     if (sec === "all") {
-      btn.textContent = `${dict["radar.allSections"]} (${(RADAR_DATA.entries || []).length})`;
+      btn.textContent = `${dict["awesome.allSections"]} (${(AWESOME_DATA.entries || []).length})`;
     } else if (SECTION_LABELS[sec]) {
-      const cnt = (RADAR_DATA.entries || []).filter((e) => e.section === sec).length;
+      const cnt = (AWESOME_DATA.entries || []).filter((e) => e.section === sec).length;
       btn.textContent = `${SECTION_LABELS[sec][currentLang]} (${cnt})`;
     }
   });
@@ -282,29 +282,29 @@ function init() {
     });
   });
 
-  document.getElementById("radar-search").addEventListener("input", (e) => {
+  document.getElementById("awesome-search").addEventListener("input", (e) => {
     searchQuery = e.target.value;
     renderTable();
   });
 
-  document.getElementById("radar-modality").addEventListener("change", (e) => {
+  document.getElementById("awesome-modality").addEventListener("change", (e) => {
     activeModality = e.target.value;
     renderTable();
   });
 
-  document.getElementById("radar-locale").addEventListener("change", (e) => {
+  document.getElementById("awesome-locale").addEventListener("change", (e) => {
     activeLocale = e.target.value;
     renderTable();
   });
 
-  document.getElementById("radar-det-btn").addEventListener("click", (e) => {
+  document.getElementById("awesome-det-btn").addEventListener("click", (e) => {
     deterministicOnly = !deterministicOnly;
     e.currentTarget.classList.toggle("is-active", deterministicOnly);
     e.currentTarget.setAttribute("aria-pressed", String(deterministicOnly));
     renderTable();
   });
 
-  const resetBtn = document.getElementById("radar-reset-btn");
+  const resetBtn = document.getElementById("awesome-reset-btn");
   if (resetBtn) resetBtn.addEventListener("click", resetAllFilters);
 
   applyI18n();

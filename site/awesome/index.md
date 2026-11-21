@@ -5,11 +5,11 @@ snapshot: 2026-11-21
 entries: 87
 ---
 
-# Anti-Slop Resource Radar (`dislop.radar/2`)
+# Awesome Anti-Slop (87 Curated Resources)
 
-Verified on 2026-11-21 via GitHub REST API and HTTP status checks. Machine-readable JSON: [`/radar/index.json`](./index.json). Interactive filter page: [`/radar/`](https://dislop.com/radar/).
+Verified on 2026-11-21 via GitHub REST API and HTTP status checks. Machine-readable JSON: [`/awesome/index.json`](./index.json). Interactive filter page: [`/awesome/`](https://dislop.com/awesome/).
 
-> Neutrality boundary: `contrast-and-detection` isolates both probabilistic AI-text detectors (e.g., Fast-DetectGPT, Pangram) and adversarial evasion tools strictly for ecosystem contrast.
+> Neutrality boundary: `contrast-and-detection` isolates both probabilistic AI-text detectors (Fast-DetectGPT, Pangram) and adversarial evasion tools strictly for reference.
 
 ## Standards, Research & Policy / 标准、研究与平台政策 (13)
 

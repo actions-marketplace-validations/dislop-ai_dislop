@@ -18,32 +18,34 @@ const I18N = {
     "nav.system": "System",
     "nav.rules": "Rules (29)",
     "nav.surfaces": "Integrate",
-    "nav.radar": "Radar (87)",
-    "lead.index": "00 / MULTI-MODAL DE-SLOP TOOLKIT · ANY MODEL, AGENT, OR DEV ENVIRONMENT",
+    "nav.awesome": "Awesome (87)",
+    "lead.index": "00 / multi-modal de-slop toolkit · any model, agent, or dev stack",
     "lead.titleStrong": "De-slop AI outputs.",
-    "lead.titleMuted":
-      "De-slop writing, Office docs, slide decks, PDF metadata, and Web UI across any model or dev stack. Catch stock phrasing and delivery defects deterministically, then verify edits kept every number, link, and citation intact.",
     "lead.sub":
-      "Drop into any workflow via browser workbench, static /llms.txt agent docs, Node.js/Python CLI, stdio MCP, Skill, or CI gates. Built on one zero-dependency dual-runtime engine with 29 deterministic rules, Stage-3 fact verification, draft positive-divergence protocols, and an 87-entry verified ecosystem radar.",
+      "Paste a draft, a deck, or a page. dislop strikes what can't ship, asks about what sounds canned, and checks that your edit kept numbers, links, and citations.",
     "lead.humanLabel": "Human:",
-    "lead.humanAction": "Live De-Slop Workbench ↓",
-    "lead.coverageAction": "Coverage Matrix ↓",
-    "lead.radarAction": "87-Entry Radar →",
+    "lead.humanAction": "Live Workbench ↓",
+    "lead.coverageAction": "Coverage ↓",
+    "lead.awesomeAction": "Awesome Anti-Slop (87) →",
     "lead.agentLabel": "Agent (Level 0):",
     "lead.runLabel": "START IN 10 SECONDS (NODE 20+, PYTHON 3.10+, MCP, OR AGENT FETCH)",
-    "lead.zeroDeps": "0 runtime deps · 29 rules · 101 test assertions · 87 radar entries",
-    "p1.title": "Negative rules, fact lock, positive pull & radar",
+    "lead.zeroDeps": "No runtime deps · 29 rules · 101 fixture assertions · Awesome (87)",
+    "p1.kicker": "01 / full-chain de-slop",
+    "p1.title": "Two pencils, edit guard & Awesome Anti-Slop",
     "p1.desc":
-      "29 deterministic rules across 4 packs + Stage-3 verify fact guard + draft voice/taste divergence protocols + 87-entry verified ecosystem index.",
-    "p2.title": "Prose, Office docs, slides, Web UI & PR handoffs",
+      "29 deterministic rules across 4 packs, Stage-3 revision comparison, draft voice/taste protocols, and 87 curated resources in /awesome/.",
+    "p2.kicker": "02 / multi-modal scope",
+    "p2.title": "Prose, Office docs, slides, Web UI & PR diffs",
     "p2.desc":
       "Live today on .md/.txt, .html/.css/.jsx/.svg, .docx, .pptx, .pdf metadata, and git diffs; 5 rhythm/chrome probes verified in the v0.3 prototype.",
+    "p3.kicker": "03 / any model or host",
     "p3.title": "Model-agnostic across agents, IDEs & CI",
     "p3.desc":
-      "Works on Claude, GPT, Gemini, DeepSeek, Qwen, and local outputs. Attach via browser, /llms.txt, CLI, stdio MCP, Skill, or GitHub Actions.",
-    "p4.title": "Deterministic parity, never silent rewrite drift",
+      "Works on Claude, GPT, Gemini, DeepSeek, Qwen, and local outputs. Attach via browser, /llms.txt, SKILL.md, CLI, stdio MCP, or GitHub Actions.",
+    "p4.kicker": "04 / honest boundaries",
+    "p4.title": "Deterministic parity, never silent rewrites",
     "p4.desc":
-      "0 external deps across Node and Python (101 pack fixtures + 12 conformance tests); verify locks numbers/qualifiers and blocks 2nd-order slogan traps.",
+      "Node and Python share 101 fixtures and 12 conformance tests with no external deps; verify compares edits against the original and catches overcorrection.",
     "btn.copy": "Copy",
     "btn.copied": "Copied",
     "wb.heading": "01 / LIVE DE-SLOP WORKBENCH (ZERO UPLOAD · SHARED src/core.mjs)",
@@ -51,16 +53,16 @@ const I18N = {
     "wb.openFile": "Inspect local file (.md/.html/.docx/.pptx/.pdf)",
     "wb.specimensTitle": "SPECIMENS",
     "wb.privacyNote":
-      "Runs 100% in browser memory via ./engine/core.mjs. Network egress is locked by CSP (connect-src 'none').",
+      "Your draft stays in this tab. The page's CSP sets connect-src 'none', so it couldn't phone home if it tried.",
     "wb.modeProof": "Proof Sheet",
     "wb.modeEdit": "Edit & Recheck",
-    "wb.applyClean": "Load Clean Revision",
-    "wb.tryTrap": "Try 2nd-Order Trap",
+    "wb.applyClean": "Show a clean edit",
+    "wb.tryTrap": "Try an overcorrection",
     "wb.reset": "Reset",
     "wb.voiceTitle": "LOCAL VOICE METER (RAM ONLY)",
-    "legend.error": "error: core invariant (solid red)",
-    "legend.warn": "warn/info: taste query (dashed blue)",
-    "legend.stet": "stet: protected fact locked by verify",
+    "legend.error": "Red, solid: can't ship (error)",
+    "legend.warn": "Blue, dashed: worth a second look (query)",
+    "legend.stet": "Green, dotted: span kept as written (stet)",
     "cov.index": "02 / UNIVERSAL COVERAGE MATRIX · MODALITIES, MODELS, AGENTS & ENVIRONMENTS",
     "cov.title": "Multi-modal de-slop coverage across formats, models, and dev stacks — with honest boundaries",
     "cov.desc":
@@ -173,23 +175,24 @@ const I18N = {
     "ep.taskEdit": "L1 bundle: editorial & literary essays",
     "ep.taskGate": "L1 bundle: core error gate & verify CI",
     "ep.skill": "L2 canonical SKILL.md workflow (check -> edit -> verify)",
-    "ep.radar": "L1 raw JSON of 87 verified ecosystem entries",
-    "ep.method": "L1 methodology pillar (Deletion Test & Positive Pull)",
+    "ep.awesome": "L1 raw JSON of 87 Awesome Anti-Slop entries",
+    "ep.method": "L1 methodology pillar (Deletion Test, Brand Voice & Positive Pull)",
     "ep.full": "L2 single-fetch curated bundle (zero test fixtures)",
     "theme.dark": "Dark",
     "theme.light": "Light",
-    "radar.title": "87 verified de-slop resources and 31 non-mainstream design & research references",
-    "radar.desc":
-      "Compiled directly from docs/research/anti-slop-radar-index.json and verified-positive-sources.json (snapshot verified 2026-11-21 via GitHub API and HTTP status checks). Zero hand-copied numbers.",
-    "radar.openFull": "Open Interactive 87-Entry Radar →",
-    "radar.ecoTitle": "De-Slop Resource Radar (dislop.radar/2)",
-    "radar.ecoDesc":
-      "Neutral cross-modality index spanning standards, English and Chinese writing tools, deterministic linters, UI/diagram rules, code/PR governance, and an isolated contrast-watch section for evasion tools.",
-    "radar.topologyNote":
-      "Maintained inside dislop-ai/dislop and served canonically at dislop.com/radar/ to keep community attention focused; structured under dislop.radar/3 specs for a clean standalone CC0-1.0 spin-out only if external PR volume justifies it.",
-    "radar.browseBtn": "Browse & Filter 87 Entries →",
-    "radar.posTitle": "Non-Mainstream Design & Anti-Convergence Sources",
-    "radar.posDesc":
+    "awesome.index": "06 / awesome anti-slop (87) & brand specimen",
+    "awesome.title": "Awesome Anti-Slop: 87 curated resources and 31 non-mainstream design references",
+    "awesome.desc":
+      "A standalone, bookmarkable directory for humans and agents—compiled offline from verified JSON snapshots checked on 2026-11-21. Built as a shared hub alongside dislop's own engine.",
+    "awesome.openFull": "Open Awesome Anti-Slop (87) →",
+    "awesome.ecoTitle": "Awesome Anti-Slop (87 Curated Entries)",
+    "awesome.ecoDesc":
+      "Neutral cross-modality directory spanning standards, English and Chinese writing tools, deterministic linters, UI/diagram rules, code/PR governance, and an isolated contrast-watch section for evasion tools.",
+    "awesome.topologyNote":
+      "Maintained inside dislop-ai/dislop (awesome/README.md) and served canonically at dislop.com/awesome/ so bookmarks, sharing, and workbench use stay together; structured for a standalone CC0-1.0 spin-out only if external PR volume justifies it.",
+    "awesome.browseBtn": "Browse & Filter 87 Entries →",
+    "awesome.posTitle": "Non-Mainstream Design & Anti-Convergence Sources",
+    "awesome.posDesc":
       "Selected from verified-positive-sources.json to study grid proportions, typographic roles, and paper-ink contrast outside SaaS templates (abstract principles only, never copying source code):",
     "ds.tokensHeading": "LIVE GALLEY TOKENS (WCAG AA VERIFIED · MONOTONIC DARK L* 4.6 → 8.1 → 12.6)",
     "ds.typeHeading": "TYPOGRAPHIC ROLES (ZERO EXTERNAL FONT CDN)",
@@ -203,49 +206,51 @@ const I18N = {
     "nav.system": "核心体系",
     "nav.rules": "规则目录 (29)",
     "nav.surfaces": "接入方式",
-    "nav.radar": "生态雷达 (87)",
-    "lead.index": "00 / 全场景多模态去 AI 味工具箱 · 适配任意模型、Agent 与开发环境",
+    "nav.awesome": "Awesome (87)",
+    "lead.index": "00 / 多模态去 AI 味工具箱 · 适配任意模型、Agent 与开发环境",
     "lead.titleStrong": "全面去 AI 味。",
-    "lead.titleMuted":
-      "覆盖写作、文档、PPT、PDF、前端 UI 与 Agent 交付的全套工具，适配任意模型、Agent 与开发环境：确定性标出套话与硬伤，改后复检保住每个数字、链接与引用。",
     "lead.sub":
-      "从浏览器零上传工作台、/llms.txt Agent 直读，到 Node/Python CLI、MCP、Skill 与 CI 门禁，一套零依赖双端内核全部接通；配套 29 条确定性规则、阶段 3 事实复检、正向差异化协议草案与 87 条实测核验生态雷达。",
+      "把稿子、PPT 或页面贴进来。不能发的硬伤，dislop 直接划掉；听着像套话的地方，它问你一句；改完再替你和原稿对一遍，数字、链接和引用一个不少。",
     "lead.humanLabel": "人类入口：",
     "lead.humanAction": "在线去味工作台 ↓",
-    "lead.coverageAction": "全场景覆盖矩阵 ↓",
-    "lead.radarAction": "87 条生态雷达 →",
+    "lead.coverageAction": "全场景覆盖 ↓",
+    "lead.awesomeAction": "Awesome Anti-Slop (87) →",
     "lead.agentLabel": "Agent 直读（Level 0）：",
     "lead.runLabel": "10 秒接入（NODE 20+、PYTHON 3.10+、MCP 或 AGENT 直读）",
-    "lead.zeroDeps": "零运行时依赖 · 29 条规则 · 101 项测试断言 · 87 条实测生态索引",
-    "p1.title": "负向识别 + 事实守卫 + 正向牵引 + 生态图谱",
+    "lead.zeroDeps": "无运行时依赖 · 29 条规则 · 101 项断言 · Awesome (87)",
+    "p1.kicker": "01 / 红蓝两笔 + 精选清单",
+    "p1.title": "确定性批注、改稿核对与 Awesome Anti-Slop",
     "p1.desc":
-      "4 套规则包 29 条确定性规则 + dislop verify 事实多重集锁死 + 正向声纹/设计协议草案 + 87 条已核验生态雷达。",
-    "p2.title": "写作、文档、PPT、PDF、前端 UI 与 PR 交付",
+      "4 套规则包 29 条规则、改后逐项核对、正向声纹协议草案，外加可独立收藏与转发的 87 条精选目录（/awesome/）。",
+    "p2.kicker": "02 / 跨媒介交付覆盖",
+    "p2.title": "写作、文档、PPT、PDF、前端 UI 与 PR 增量",
     "p2.desc":
       "现已覆盖 .md/.txt、.html/.css/.jsx/.svg、.docx、.pptx、.pdf 元数据与 Git 增量；5 条节奏/界面新探针已完成 v0.3 原型验证。",
-    "p3.title": "不绑模型、不挑 Agent、兼容主流开发环境",
+    "p3.kicker": "03 / 不挑模型与宿主",
+    "p3.title": "兼容主流模型、Agent、编辑器与 CI",
     "p3.desc":
-      "Claude、GPT、Gemini、DeepSeek、Qwen 与本地模型产物通用；支持浏览器、/llms.txt、CLI、MCP、Skill 与 GitHub Actions。",
-    "p4.title": "底层双端硬核打磨，改后不失真",
+      "Claude、GPT、Gemini、DeepSeek、Qwen 与本地模型产物通用；支持浏览器、/llms.txt、SKILL.md、CLI、MCP 与 GitHub Actions。",
+    "p4.kicker": "04 / 诚实边界与双端一致",
+    "p4.title": "双端确定性一致，绝不替人偷偷改稿",
     "p4.desc":
-      "Node 与 Python 零外部依赖双端一致（101 项样本断言 + 12 项契约测试）；verify 拒绝删改数字与滑向二阶口号陷阱。",
+      "Node 与 Python 无外部依赖双端一致（101 项样本断言 + 12 项契约测试）；verify 对照原稿拦截删改数字与二阶口号过矫。",
     "btn.copy": "复制",
     "btn.copied": "已复制",
-    "wb.heading": "01 / 在线去 AI 味工作台（浏览器本地零上传 · 与 CLI 共用 src/core.mjs）",
+    "wb.heading": "01 / 在线去 AI 味工作台（就在这个标签页里跑 · 共用 src/core.mjs）",
     "wb.packLabel": "审美包：",
-    "wb.openFile": "本地检查文件 (.md/.html/.docx/.pptx/.pdf)",
+    "wb.openFile": "打开本地文件 (.md/.html/.docx/.pptx/.pdf)",
     "wb.specimensTitle": "校样标本",
     "wb.privacyNote":
-      "100% 在浏览器内存中调用 ./engine/core.mjs 执行，并由 CSP (connect-src 'none') 物理锁死外发请求。",
+      "稿子只留在这个标签页里。页面的 CSP 把 connect-src 设成了 'none'，想往外发也发不出去。",
     "wb.modeProof": "清样批注视图",
     "wb.modeEdit": "编辑并复检",
-    "wb.applyClean": "载入合规改写稿",
-    "wb.tryTrap": "测试二阶套话陷阱",
+    "wb.applyClean": "看一版改好的",
+    "wb.tryTrap": "试一版改过头的",
     "wb.reset": "重置原稿",
     "wb.voiceTitle": "本地声纹统计（纯内存计算）",
-    "legend.error": "error：客观交付底线（朱红实线）",
-    "legend.warn": "warn/info：文体商榷提示（群青虚线）",
-    "legend.stet": "stet：verify 锁定的受保护事实（墨绿虚线）",
+    "legend.error": "红实线：硬伤，不能发（error）",
+    "legend.warn": "蓝虚线：商榷，你说了算（query）",
+    "legend.stet": "绿点线：受保护片段，原样保留（stet）",
     "cov.index": "02 / 全覆盖矩阵 · 目标产物、AI 模型、Agent 与开发环境",
     "cov.title": "覆盖全场景产物、全模型与主流开发环境，并明示已实装与演进边界",
     "cov.desc": "下表逐项区分 v0.2.0 现已实装可立即运行的能力，以及处于原型验证或 v0.3+ 规格演进中的探针与协议。",
@@ -351,23 +356,24 @@ const I18N = {
     "ep.taskEdit": "L1 场景组合包：非虚构散文与深度长文",
     "ep.taskGate": "L1 场景组合包：发布前客观底线门禁与 CI",
     "ep.skill": "L2 仓内标准 SKILL.md 工作流（先查 -> 局部改稿 -> verify 复检）",
-    "ep.radar": "L1 87 条实测核验生态雷达原始 JSON 数据",
-    "ep.method": "L1 方法论导航（删除测试与正向差异化协议）",
+    "ep.awesome": "L1 Awesome Anti-Slop 87 条精选清单原始 JSON 数据",
+    "ep.method": "L1 方法论导航（删除测试、品牌声纹基准与正向差异化）",
     "ep.full": "L2 单次抓取精选合集（剔除负例 fixtures）",
     "theme.dark": "深色",
     "theme.light": "浅色",
-    "radar.title": "87 条实测核验去 AI 味生态雷达与 31 条非主流设计/学术参考",
-    "radar.desc":
-      "直接由 docs/research/anti-slop-radar-index.json 与 verified-positive-sources.json 同源编译（2026-11-21 经 GitHub API 与 HTTP 实测核验），无手工抄录死数据。",
-    "radar.openFull": "进入 87 条可筛选生态雷达 →",
-    "radar.ecoTitle": "去 AI 味生态资源雷达（dislop.radar/2）",
-    "radar.ecoDesc":
+    "awesome.index": "06 / awesome anti-slop (87) 与品牌视觉标本",
+    "awesome.title": "Awesome Anti-Slop：87 条去 AI 味精选资源与 31 条非主流设计参考",
+    "awesome.desc":
+      "适合收藏、转发，也支持外部 Agent 直读的跨媒介目录（2026-11-21 实测核验）；作为独立可传播子模块与 dislop 主引擎并行演进。",
+    "awesome.openFull": "进入 Awesome Anti-Slop (87) →",
+    "awesome.ecoTitle": "去 AI 味精选清单 · Awesome Anti-Slop (87)",
+    "awesome.ecoDesc":
       "中立跨媒介目录，涵盖规范研究、中英文写作工具、确定性 Linter、前端与图表规则、代码 PR 治理，并将规避检测类工具单独隔离在对照观察区。",
-    "radar.topologyNote":
-      "当前随 dislop-ai/dislop 主仓同源维护并在 dislop.com/radar/ 规范发布，集中社区流量与注意力；数据结构已预留 dislop.radar/3 契约，仅在外部投稿进入高频阶段时再无损切出独立 CC0-1.0 仓库。",
-    "radar.browseBtn": "检索与筛选全部 87 条资源 →",
-    "radar.posTitle": "非主流高品位设计与印刷参考源",
-    "radar.posDesc":
+    "awesome.topologyNote":
+      "当前随 dislop-ai/dislop 主仓同源维护（awesome/README.md）并在 dislop.com/awesome/ 规范发布，集中收藏、转发与工作台转化；数据结构已预留 dislop.radar/3 契约，仅在外部投稿进入高频阶段时再无损切出独立 CC0-1.0 仓库。",
+    "awesome.browseBtn": "检索与筛选全部 87 条资源 →",
+    "awesome.posTitle": "非主流高品位设计与印刷参考源",
+    "awesome.posDesc":
       "精选自 verified-positive-sources.json，用于研习 SaaS 模板之外的网格比例、字体分工与纸墨对比（只抽抽象原则，不抄具体源码）：",
     "ds.tokensHeading": "实时清样令牌（全部通过 WCAG AA · 深色明度 L* 4.6 → 8.1 → 12.6）",
     "ds.typeHeading": "三级字体分工（零外部字体 CDN 请求）",
@@ -870,15 +876,18 @@ function renderWorkbench() {
     focusedFindingIdx = Math.max(0, findings.length - 1);
   }
 
-  // Summary strip
+  // Summary strip (natural plurals + honest numeric-span count before verify runs)
   const errCount = findings.filter((f) => f.severity === "error").length;
   const warnCount = findings.length - errCount;
   const facts = binaryAuditResult ? { numbers: [] } : extractProtectedFacts(currentText);
   const summaryEl = document.getElementById("wb-summary");
+  const errWord = errCount === 1 ? "error" : "errors";
+  const warnWord = warnCount === 1 ? "query" : "queries";
+  const spanWord = facts.numbers.length === 1 ? "numeric span" : "numeric spans";
   summaryEl.innerHTML =
     currentLang === "zh"
-      ? `<span>${errCount} 错误 · ${warnCount} 商榷 · ${facts.numbers.length} 项事实锁定</span><span>${elapsedMs} ms</span>`
-      : `<span>${errCount} error(s) · ${warnCount} query(s) · ${facts.numbers.length} stet fact(s)</span><span>${elapsedMs} ms</span>`;
+      ? `<span>${errCount} 处硬伤 · ${warnCount} 处商榷 · ${facts.numbers.length} 处数值片段</span><span>${elapsedMs} ms</span>`
+      : `<span>${errCount} ${errWord} · ${warnCount} ${warnWord} · ${facts.numbers.length} ${spanWord}</span><span>${elapsedMs} ms</span>`;
 
   // Voice meter
   const vmEl = document.getElementById("voice-meter-values");
@@ -972,14 +981,19 @@ function renderWorkbench() {
             .map((s) => `<div style="color:var(--ink-2);margin-top:6px;">[SKIP] ${escapeHtml(s.reason)}</div>`)
             .join("")
         : "";
+    const isBlankDraft = !binaryAuditResult && currentText.trim().length === 0;
     const isNearMissSpecimen = !binaryAuditResult && !lastUploadedFile && activeSpecimen?.id === "clean-nearmiss" && currentText === baselineText;
-    const cleanText = isNearMissSpecimen
+    const cleanText = isBlankDraft
       ? currentLang === "zh"
-        ? "✓ 零误报正例核验通过（0 findings）：专名（wool tapestry、Delve）、数字修正与高校并列均正常放行；可点击「测试二阶套话陷阱」对比拦截效果。"
-        : "✓ Clean near-miss verified (0 findings): real domain nouns (wool tapestry, Delve) and numeric corrections pass cleanly. Click 'Try 2nd-Order Trap' to compare."
-      : currentLang === "zh"
-        ? "✓ 清样无命中（0 findings）。受保护数字与专名已按保留号（stet）锁定。"
-        : "✓ Clean proof sheet (0 findings). Protected facts remain locked under stet.";
+        ? "校样单还是空的。贴一段稿子进来，或者从左边挑一份标本。"
+        : "Nothing on the sheet yet. Paste a draft, or pick a specimen on the left."
+      : isNearMissSpecimen
+        ? currentLang === "zh"
+          ? "可以付印。这里的 Delve 是调试器、wool tapestry 是真挂毯、数字修正也是真事实，全部原样留着；可点「试一版改过头的」看拦截对比。"
+          : "Pass for press. Delve is the debugger here, wool tapestry is literal, and numeric corrections stay untouched. Click 'Try an overcorrection' to compare."
+        : currentLang === "zh"
+          ? "可以付印。用这组规则查过了，没有批注。"
+          : "Pass for press. No marks from this rule pack.";
     notesEl.innerHTML = `<div class="clean-sheet-msg">${cleanText}${softSkipNote}</div>`;
   } else {
     const extraSkipCards = (binaryAuditResult?.skipped || [])
