@@ -97,12 +97,12 @@
         "zh": "发稿前填入核实后的真实数据；若数据尚未就绪，直接删去未完成段落而非保留占位标记。"
       },
       "exemplar": {
-        "bad": "Q3 settlement latency averaged [insert p95 latency] across 14 gateways.",
-        "trap": "Q3 settlement latency improved dramatically across 14 gateways.",
-        "good": "Q3 settlement latency averaged 180 ms (p95) across 14 gateways.",
+        "bad": "Q3 settlement ran across 14 gateways; p95 latency was [insert p95 latency].",
+        "trap": "Q3 settlement improved dramatically across 14 gateways.",
+        "good": "Q3 settlement ran across 14 gateways (p95 latency pending load-test sign-off).",
         "note": {
-          "en": "Replace the bracket with the measured figure rather than hiding the gap behind vague praise.",
-          "zh": "填入实测数值，不要用笼统形容词掩盖缺口。"
+          "en": "State what is still pending—or supply a measured figure from your own logs—rather than leaving a bracket or hiding the gap behind vague praise.",
+          "zh": "尚未测出的数据直说待补，或填入实测数值，不要留括号占位，也不要用空泛夸赞遮掩。"
         },
         "source": "original"
       },
