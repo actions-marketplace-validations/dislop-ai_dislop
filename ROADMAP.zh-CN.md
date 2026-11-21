@@ -65,12 +65,15 @@
 - [ ] 冷启动阶段继续把 `awesome/README.md`、`awesome/README.zh-CN.md` 与 `https://dislop.com/awesome/` 留在 `dislop-ai/dislop` 主仓内维护。
 - [ ] **拆仓阈值**：仅当外部有效目录 PR 持续达到 `>= 5 条/月` 时，再按 `docs/research/awesome-anti-slop-topology/` 的 `dislop.radar/3` 预案切出独立 CC0-1.0 仓库 `dislop-ai/awesome-anti-slop`，同时永久保持 `https://dislop.com/awesome/` 地址不变。
 
-### 轨道 E — `v0.4.0+` 本地个人声纹与外围形态（远期探索）
+### 轨道 E — Open-Core 云端增值与远期探索（`v0.4.0+`）
 
-- [ ] 离线 `dislop voice extract`（`dislop.voice/1`）：直接从作者过往稿件在本地算出句长变化区间、标点习惯与个人禁词，存入 Git 忽略的 `.dislop.local/voice.json`，全程不上云。
-- [ ] 抽象设计文法卡（`dislop.taste/1`）：让团队用静态断言约束自己的版式与配色预算，不照搬他人 DOM/CSS。
-- [ ] 强类型 JS/Python SDK 门面，以及基于 `src/core.mjs` 的无状态 HTTP API 封装。
-- [ ] 严格解耦的可选端侧小模型插件（ONNX/GGUF，仅作 `info` 建议，永不污染零依赖核心）。
+完整调研与定价测算见 [docs/research/business-model-and-open-core.zh-CN.md](./docs/research/business-model-and-open-core.zh-CN.md)。**开源底线**：CLI、Skill、Plugin、本地 stdio MCP、浏览器离线工作台、`Awesome Anti-Slop`、`dislop-bench` 与单机 BYOK `server/` 永久按 Apache-2.0 开源。云端托管与商业增值集中在难自建的多模态重能力与团队治理：
+
+- [ ] **阶段 0（需求验证）**：官方托管低额度大模型体验与远程 MCP（独立付费 Vertex AI / Gemini Key + 硬日限额），验证 Web 端 vs 远程 MCP 真实拉动。
+- [ ] **原排版文档一键洗稿（`.docx` / `.pptx` Round-Trip）**：拆解 OOXML、去 AI 味并复核数字保真后保留原样式导出。
+- [ ] **网页与 PPT 视觉多模态审查（Visual Anti-Slop）**：无头渲染截图 + VLM 审校版式密度、模板审美与连续同版式。
+- [ ] **个人与团队声纹库（`dislop.voice/1`）**：本地离线提取（`.dislop.local/voice.json`）与云端团队共享品牌语调库、GitHub App PR 自动巡检。
+- [ ] 抽象设计文法卡（`dislop.taste/1`）与强类型 JS/Python SDK 门面。
 
 ---
 

@@ -52,6 +52,42 @@ function summarizeNumericDiff(beforeText, afterText) {
   };
 }
 
+const CREDIT_WEIGHTS = {
+  dislop_check: 0,
+  dislop_explain: 0,
+  dislop_packs: 0,
+  dislop_review: 1,
+  dislop_deslop: 2,
+};
+
+function createDailyCounter(limitPerDay) {
+  let dayKey = new Date().toISOString().slice(0, 10);
+  let used = 0;
+  return {
+    consume(credits = 1) {
+      if (!limitPerDay || limitPerDay <= 0) return { allowed: true, used, limit: 0 };
+      const today = new Date().toISOString().slice(0, 10);
+      if (today !== dayKey) {
+        dayKey = today;
+        used = 0;
+      }
+      if (used + credits > limitPerDay) {
+        return { allowed: false, used, limit: limitPerDay };
+      }
+      used += credits;
+      return { allowed: true, used, limit: limitPerDay };
+    },
+    status() {
+      const today = new Date().toISOString().slice(0, 10);
+      if (today !== dayKey) {
+        dayKey = today;
+        used = 0;
+      }
+      return { used, limit: limitPerDay || 0 };
+    },
+  };
+}
+
 function createRateLimiter(limitPerMin) {
   const buckets = new Map();
   return function allow(ip) {
@@ -206,8 +242,17 @@ function runListPacks() {
   };
 }
 
-async function runLlmReview(llm, { text, filename = "draft.md", modality, pack = "business-brief", lang = "zh" }) {
+async function runLlmReview(llm, dailyQuota, { text, filename = "draft.md", modality, pack = "business-brief", lang = "zh" }) {
   const deterministic = runDeterministicCheck({ text, filename, modality, pack });
+  if (llm.isConfigured) {
+    const q = dailyQuota.consume(CREDIT_WEIGHTS.dislop_review);
+    if (!q.allowed) {
+      const err = new Error("Daily LLM quota reached on this server. Self-host with your own key or retry tomorrow.");
+      err.statusCode = 429;
+      err.code = "daily_limit_reached";
+      throw err;
+    }
+  }
   const llmReview = await llm.review({
     text,
     modality: deterministic.modality,
@@ -216,14 +261,28 @@ async function runLlmReview(llm, { text, filename = "draft.md", modality, pack =
   });
   return {
     mode: "hybrid",
-    model: llm.model,
+    model: llmReview.model || llm.model,
+    creditWeight: CREDIT_WEIGHTS.dislop_review,
     deterministic,
-    llmReview,
+    llmReview: {
+      summary: llmReview.summary,
+      aiFlavorLevel: llmReview.aiFlavorLevel,
+      issues: llmReview.issues,
+    },
   };
 }
 
-async function runLlmDeslop(llm, { text, filename = "draft.md", modality, pack = "business-brief", lang = "zh" }) {
+async function runLlmDeslop(llm, dailyQuota, { text, filename = "draft.md", modality, pack = "business-brief", lang = "zh" }) {
   const beforeCheck = runDeterministicCheck({ text, filename, modality, pack });
+  if (llm.isConfigured) {
+    const q = dailyQuota.consume(CREDIT_WEIGHTS.dislop_deslop);
+    if (!q.allowed) {
+      const err = new Error("Daily LLM quota reached on this server. Self-host with your own key or retry tomorrow.");
+      err.statusCode = 429;
+      err.code = "daily_limit_reached";
+      throw err;
+    }
+  }
   const llmOut = await llm.deslop({
     text,
     modality: beforeCheck.modality,
@@ -239,7 +298,8 @@ async function runLlmDeslop(llm, { text, filename = "draft.md", modality, pack =
   const numericDiff = summarizeNumericDiff(text, llmOut.revised);
   return {
     mode: "llm+deterministic-recheck",
-    model: llm.model,
+    model: llmOut.model || llm.model,
+    creditWeight: CREDIT_WEIGHTS.dislop_deslop,
     revised: llmOut.revised,
     changes: llmOut.changes,
     beforeFindingsCount: beforeCheck.findings.length,
@@ -314,30 +374,33 @@ const MCP_TOOLS = [
   },
 ];
 
-async function handleMcpRpc(rpc, llm) {
+async function handleMcpRpc(rpc, llm, dailyQuota) {
   const id = rpc?.id ?? null;
   if (!rpc || rpc.jsonrpc !== "2.0" || typeof rpc.method !== "string") {
-    return { jsonrpc: "2.0", id, error: { code: -32600, message: "Invalid JSON-RPC 2.0 request" } };
+    return { rpcResp: { jsonrpc: "2.0", id, error: { code: -32600, message: "Invalid JSON-RPC 2.0 request" } }, creditsUsed: 0 };
   }
 
   if (rpc.method === "initialize") {
     return {
-      jsonrpc: "2.0",
-      id,
-      result: {
-        protocolVersion: "2024-11-05",
-        capabilities: { tools: {} },
-        serverInfo: { name: "dislop-remote-mcp", version: PKG.version || "0.3.0" },
+      rpcResp: {
+        jsonrpc: "2.0",
+        id,
+        result: {
+          protocolVersion: "2024-11-05",
+          capabilities: { tools: {} },
+          serverInfo: { name: "dislop-remote-mcp", version: PKG.version || "0.3.0" },
+        },
       },
+      creditsUsed: 0,
     };
   }
 
   if (rpc.method === "notifications/initialized" || rpc.method === "ping") {
-    return { jsonrpc: "2.0", id, result: {} };
+    return { rpcResp: { jsonrpc: "2.0", id, result: {} }, creditsUsed: 0 };
   }
 
   if (rpc.method === "tools/list") {
-    return { jsonrpc: "2.0", id, result: { tools: MCP_TOOLS } };
+    return { rpcResp: { jsonrpc: "2.0", id, result: { tools: MCP_TOOLS } }, creditsUsed: 0 };
   }
 
   if (rpc.method === "tools/call") {
@@ -345,34 +408,48 @@ async function handleMcpRpc(rpc, llm) {
     const args = rpc.params?.arguments || {};
     try {
       let data;
-      if (name === "dislop_check") data = runDeterministicCheck(args);
-      else if (name === "dislop_explain") data = runExplainRule(args);
-      else if (name === "dislop_packs") data = runListPacks();
-      else if (name === "dislop_review") data = await runLlmReview(llm, args);
-      else if (name === "dislop_deslop") data = await runLlmDeslop(llm, args);
-      else {
-        return { jsonrpc: "2.0", id, error: { code: -32601, message: `Unknown MCP tool: ${name}` } };
+      let creditsUsed = 0;
+      if (name === "dislop_check") data = { ...runDeterministicCheck(args), creditWeight: 0 };
+      else if (name === "dislop_explain") data = { ...runExplainRule(args), creditWeight: 0 };
+      else if (name === "dislop_packs") data = { ...runListPacks(), creditWeight: 0 };
+      else if (name === "dislop_review") {
+        data = await runLlmReview(llm, dailyQuota, args);
+        creditsUsed = CREDIT_WEIGHTS.dislop_review;
+      } else if (name === "dislop_deslop") {
+        data = await runLlmDeslop(llm, dailyQuota, args);
+        creditsUsed = CREDIT_WEIGHTS.dislop_deslop;
+      } else {
+        return {
+          rpcResp: { jsonrpc: "2.0", id, error: { code: -32601, message: `Unknown MCP tool: ${name}` } },
+          creditsUsed: 0,
+        };
       }
       return {
-        jsonrpc: "2.0",
-        id,
-        result: {
-          content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+        rpcResp: {
+          jsonrpc: "2.0",
+          id,
+          result: {
+            content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
+          },
         },
+        creditsUsed,
       };
     } catch (err) {
       return {
-        jsonrpc: "2.0",
-        id,
-        result: {
-          isError: true,
-          content: [{ type: "text", text: JSON.stringify({ error: err.code || "error", message: err.message }) }],
+        rpcResp: {
+          jsonrpc: "2.0",
+          id,
+          result: {
+            isError: true,
+            content: [{ type: "text", text: JSON.stringify({ error: err.code || "error", message: err.message }) }],
+          },
         },
+        creditsUsed: 0,
       };
     }
   }
 
-  return { jsonrpc: "2.0", id, error: { code: -32601, message: `Method not found: ${rpc.method}` } };
+  return { rpcResp: { jsonrpc: "2.0", id, error: { code: -32601, message: `Method not found: ${rpc.method}` } }, creditsUsed: 0 };
 }
 
 // ---------- Server Factory (Testable Offline with Mock LLM Transport) ----------
@@ -380,6 +457,7 @@ async function handleMcpRpc(rpc, llm) {
 export function createDislopServer(options = {}) {
   const maxBodyBytes = Number(options.maxBodyBytes ?? process.env.DISLOP_MAX_BODY_BYTES ?? 65536);
   const rateLimitPerMin = Number(options.rateLimitPerMin ?? process.env.DISLOP_RATE_LIMIT_PER_MIN ?? 30);
+  const dailyLlmLimit = Number(options.dailyLlmLimit ?? process.env.DISLOP_DAILY_LLM_LIMIT ?? 0);
   const corsOrigin = options.corsOrigin ?? process.env.DISLOP_CORS_ORIGIN ?? "";
   const authToken = options.authToken ?? process.env.DISLOP_SERVER_AUTH_TOKEN ?? "";
   const apiKey = options.apiKey ?? process.env.DISLOP_LLM_API_KEY ?? "";
@@ -390,11 +468,14 @@ export function createDislopServer(options = {}) {
       apiKey,
       baseUrl: options.baseUrl ?? process.env.DISLOP_LLM_BASE_URL ?? "https://api.openai.com/v1",
       model: options.model ?? process.env.DISLOP_LLM_MODEL ?? "gpt-4o-mini",
+      reviewModel: options.reviewModel ?? process.env.DISLOP_LLM_MODEL_REVIEW ?? "",
+      deslopModel: options.deslopModel ?? process.env.DISLOP_LLM_MODEL_DESLOP ?? "",
       timeoutMs: options.timeoutMs ?? Number(process.env.DISLOP_LLM_TIMEOUT_MS || 30000),
       transport: options.transport || null,
     });
 
   const allowIp = createRateLimiter(rateLimitPerMin);
+  const dailyQuota = createDailyCounter(dailyLlmLimit);
 
   return http.createServer(async (req, res) => {
     const cors = buildCorsHeaders(req, corsOrigin);
@@ -419,6 +500,9 @@ export function createDislopServer(options = {}) {
           deterministic: true,
           llmConfigured: llm.isConfigured,
           model: llm.model,
+          models: llm.models,
+          creditWeights: CREDIT_WEIGHTS,
+          dailyQuota: dailyQuota.status(),
           endpoints: ["/health", "/v1/check", "/v1/review", "/v1/deslop", "/mcp"],
         },
         cors
@@ -452,20 +536,27 @@ export function createDislopServer(options = {}) {
       const body = await readJsonBody(req, maxBodyBytes);
 
       if (pathname === "/v1/check" || pathname === "/api/v1/check") {
-        sendJson(res, 200, runDeterministicCheck(body), cors);
+        sendJson(
+          res,
+          200,
+          { ...runDeterministicCheck(body), creditWeight: CREDIT_WEIGHTS.dislop_check },
+          { ...cors, "X-Dislop-Credits-Used": "0" }
+        );
         return;
       }
       if (pathname === "/v1/review" || pathname === "/api/v1/review") {
-        sendJson(res, 200, await runLlmReview(llm, body), cors);
+        const result = await runLlmReview(llm, dailyQuota, body);
+        sendJson(res, 200, result, { ...cors, "X-Dislop-Credits-Used": String(CREDIT_WEIGHTS.dislop_review) });
         return;
       }
       if (pathname === "/v1/deslop" || pathname === "/api/v1/deslop") {
-        sendJson(res, 200, await runLlmDeslop(llm, body), cors);
+        const result = await runLlmDeslop(llm, dailyQuota, body);
+        sendJson(res, 200, result, { ...cors, "X-Dislop-Credits-Used": String(CREDIT_WEIGHTS.dislop_deslop) });
         return;
       }
       if (pathname === "/mcp" || pathname === "/api/mcp") {
-        const rpcResp = await handleMcpRpc(body, llm);
-        sendJson(res, 200, rpcResp, cors);
+        const { rpcResp, creditsUsed } = await handleMcpRpc(body, llm, dailyQuota);
+        sendJson(res, 200, rpcResp, { ...cors, "X-Dislop-Credits-Used": String(creditsUsed) });
         return;
       }
 

@@ -1678,15 +1678,15 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 9540,
-      "approxTokens": 2385,
+      "bytes": 10132,
+      "approxTokens": 2533,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp",
         "skill"
       ],
-      "sha256": "3ccb855edda3d109082ce0c7b16fd3977f5903e68cb608dae537655512366193"
+      "sha256": "2870a2211e5ff4830284beee306f8dd233876c356a9d023f80eecbe00e266b1a"
     }
   ]
 }

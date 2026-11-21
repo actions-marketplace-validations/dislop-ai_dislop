@@ -65,12 +65,15 @@ Goal: keep the 87-entry directory accurate, neutral, and useful in both English 
 - [ ] Keep `awesome/README.md`, `awesome/README.zh-CN.md`, and `https://dislop.com/awesome/` inside `dislop-ai/dislop` while the project is in early growth.
 - [ ] **Split threshold**: spin out a standalone CC0-1.0 `dislop-ai/awesome-anti-slop` repository (using the deferred `dislop.radar/3` contract in `docs/research/awesome-anti-slop-topology/`) only once sustained external directory PRs reach `>= 5/month`, keeping `https://dislop.com/awesome/` canonical permanently.
 
-### Track E — `v0.4.0+` Local Voice Profiles & Integrations (Later / Exploratory)
+### Track E — Open-Core Cloud Value-Adds & Longer-Term (`v0.4.0+`)
 
-- [ ] Local `dislop voice extract` (`dislop.voice/1`): compute sentence-length variation, punctuation habits, and private bans from a writer's own drafts completely offline (stored in Git-ignored `.dislop.local/voice.json`).
-- [ ] Abstract design grammar cards (`dislop.taste/1`) for teams enforcing their own layout tokens without copying third-party sites.
-- [ ] Typed JS/Python SDK facades and an optional Fetch-standard stateless HTTP API wrapper around `src/core.mjs`.
-- [ ] Strictly decoupled, opt-in local small-model plugins (ONNX/GGUF, `info` advisory only — never inside the zero-dependency core).
+Full market pricing research and unit economics live in [docs/research/business-model-and-open-core.zh-CN.md](./docs/research/business-model-and-open-core.zh-CN.md). **Open-source commitment**: CLI, Skill, Plugin, local stdio MCP, offline browser workbench, `Awesome Anti-Slop`, `dislop-bench`, and the single-tenant BYOK `server/` remain Apache-2.0 open source. Hosted commercial offerings focus on hard-to-self-host multimodal pipelines and team governance:
+
+- [ ] **Phase 0 (Demand Validation)**: Official rate-limited LLM demo & hosted remote MCP on a dedicated zero-training Vertex AI / Gemini paid key with hard daily caps.
+- [ ] **Format-Preserving `.docx` / `.pptx` Round-Trip Rewrite**: Clean prose and slides while keeping native Office styles, masters, and numbers intact.
+- [ ] **Visual Multimodal Audit**: Headless screenshot rendering + VLM design critique for web pages and slide decks.
+- [ ] **Personal & Team Voice Profiles (`dislop.voice/1`)**: Local offline extraction (`.dislop.local/voice.json`) plus cloud team brand-voice libraries and a GitHub App PR reviewer.
+- [ ] Abstract design grammar cards (`dislop.taste/1`) and typed JS/Python SDK facades.
 
 ---
 

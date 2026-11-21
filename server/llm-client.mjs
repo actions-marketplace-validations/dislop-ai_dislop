@@ -93,13 +93,17 @@ export function createLlmClient({
   apiKey = process.env.DISLOP_LLM_API_KEY || "",
   baseUrl = process.env.DISLOP_LLM_BASE_URL || "https://api.openai.com/v1",
   model = process.env.DISLOP_LLM_MODEL || "gpt-4o-mini",
+  reviewModel = process.env.DISLOP_LLM_MODEL_REVIEW || "",
+  deslopModel = process.env.DISLOP_LLM_MODEL_DESLOP || "",
   timeoutMs = Number(process.env.DISLOP_LLM_TIMEOUT_MS || 30000),
   transport = null,
 } = {}) {
   const normalizedBase = String(baseUrl || "").replace(/\/+$/, "");
-  const isConfigured = Boolean(apiKey && normalizedBase && model);
+  const resolvedReviewModel = reviewModel || model;
+  const resolvedDeslopModel = deslopModel || model;
+  const isConfigured = Boolean(apiKey && normalizedBase && (resolvedReviewModel || resolvedDeslopModel));
 
-  async function completeJson(messages, { temperature = 0.2, maxTokens = 1600 } = {}) {
+  async function completeJson(messages, { targetModel = model, temperature = 0.2, maxTokens = 1600 } = {}) {
     if (!isConfigured) {
       const err = new Error("LLM backend is not configured (set DISLOP_LLM_API_KEY on the server).");
       err.code = "llm_not_configured";
@@ -109,7 +113,7 @@ export function createLlmClient({
 
     const endpoint = `${normalizedBase}/chat/completions`;
     const body = {
-      model,
+      model: targetModel,
       temperature,
       max_tokens: maxTokens,
       messages,
@@ -118,7 +122,7 @@ export function createLlmClient({
     try {
       let data;
       if (typeof transport === "function") {
-        data = await transport({ endpoint, model, messages, temperature, maxTokens });
+        data = await transport({ endpoint, model: targetModel, messages, temperature, maxTokens });
       } else {
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -157,21 +161,32 @@ export function createLlmClient({
 
   return {
     isConfigured,
-    model: isConfigured ? model : null,
+    model: isConfigured ? resolvedDeslopModel : null,
+    models: isConfigured ? { review: resolvedReviewModel, deslop: resolvedDeslopModel } : null,
     async review(params) {
-      const parsed = await completeJson(buildReviewMessages(params), { temperature: 0.2, maxTokens: 1400 });
+      const parsed = await completeJson(buildReviewMessages(params), {
+        targetModel: resolvedReviewModel,
+        temperature: 0.2,
+        maxTokens: 1400,
+      });
       return {
+        model: resolvedReviewModel,
         summary: String(parsed?.summary || ""),
         aiFlavorLevel: ["low", "medium", "high"].includes(parsed?.aiFlavorLevel) ? parsed.aiFlavorLevel : "medium",
         issues: Array.isArray(parsed?.issues) ? parsed.issues.slice(0, 20) : [],
       };
     },
     async deslop(params) {
-      const parsed = await completeJson(buildDeslopMessages(params), { temperature: 0.25, maxTokens: 2000 });
+      const parsed = await completeJson(buildDeslopMessages(params), {
+        targetModel: resolvedDeslopModel,
+        temperature: 0.25,
+        maxTokens: 2000,
+      });
       if (typeof parsed?.revised !== "string" || !parsed.revised.trim()) {
         throw new Error("Upstream LLM response missing 'revised' text.");
       }
       return {
+        model: resolvedDeslopModel,
         revised: parsed.revised,
         changes: Array.isArray(parsed?.changes) ? parsed.changes.map(String).slice(0, 20) : [],
       };

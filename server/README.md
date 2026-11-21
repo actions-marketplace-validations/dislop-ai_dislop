@@ -7,12 +7,13 @@
 - **Local zero-LLM layer**: CLI, `skills/dislop/SKILL.md`, local stdio MCP, and the offline browser workbench require no API key and make no outbound calls.
 - **LLM-backed server layer (this folder, open source for self-hosting or official hosting)**: Exposes HTTP endpoints and a Remote Streamable HTTP MCP endpoint (`/mcp`) that layer LLM-based 3rd-order review (`dislop_review`) and plain-voice rewriting (`dislop_deslop`, automatically re-checked by the deterministic engine) on top of `src/core.mjs`.
 
-## Security & Key Safety
+## Security, Tiered Routing & Key Safety
 
 - API keys are read **strictly from server environment variables** (`DISLOP_LLM_API_KEY`)—never committed to Git, never shipped to the browser, and never echoed in `/health` or logs.
-- User draft text is never written to disk or stdout logs; upstream error messages pass through `redactSecrets()` before returning.
-- Without `DISLOP_LLM_API_KEY`, `/health`, `/v1/check`, and deterministic MCP tools keep working while LLM endpoints return `503 llm_not_configured`.
-- Built-in safeguards: 64 KB body limit (`DISLOP_MAX_BODY_BYTES`), per-IP rate limiting (`DISLOP_RATE_LIMIT_PER_MIN`), strict CORS allowlist, and optional bearer auth (`DISLOP_SERVER_AUTH_TOKEN`).
+- **Privacy requirement**: For public or commercial hosting, use a paid API tier whose terms do **not** train on user prompts (for example Google Cloud Vertex AI or AI Studio Paid Tier), never a free training-eligible tier.
+- **Tiered model routing & credit weights**: Configure a fast model for `review` (`DISLOP_LLM_MODEL_REVIEW`, e.g. `gemini-2.5-flash-lite`) and a stronger model for `deslop` (`DISLOP_LLM_MODEL_DESLOP`, e.g. `gemini-2.5-flash`). Responses include `creditWeight` and `X-Dislop-Credits-Used` (`check = 0`, `review = 1`, `deslop = 2`) for cloud metering gateways.
+- **Hard budget & abuse caps**: Built-in 64 KB body limit (`DISLOP_MAX_BODY_BYTES`), per-IP rate limiting (`DISLOP_RATE_LIMIT_PER_MIN`), global daily hard credit cap (`DISLOP_DAILY_LLM_LIMIT`, returning `429 daily_limit_reached` while keeping `/v1/check` online), CORS allowlist, and optional bearer auth (`DISLOP_SERVER_AUTH_TOKEN`).
+- User draft text is never written to disk or stdout logs; upstream error messages pass through `redactSecrets()` before returning. Without `DISLOP_LLM_API_KEY`, deterministic endpoints keep working while LLM endpoints return `503 llm_not_configured`.
 
 ## 1. Self-Host with Your Own Key (BYOK)
 
