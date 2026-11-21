@@ -21,7 +21,6 @@ from .engine import (
     load_config,
     pick_pack_for_file,
     resolve_effective_pack,
-    verify_revision,
 )
 from .mcp_server import run_mcp_stdio
 
@@ -251,31 +250,6 @@ def _cmd_check(ns: argparse.Namespace, packs: dict[str, dict[str, Any]]) -> int:
     return 1 if should_fail else 0
 
 
-def _cmd_verify(ns: argparse.Namespace, packs: dict[str, dict[str, Any]]) -> int:
-    cwd = Path.cwd()
-    config = load_config(cwd, ns.config)
-    before_text = ns.before_text if ns.before_text is not None else (cwd / ns.before).read_text(encoding="utf-8") if ns.before else None
-    after_text = ns.after_text if ns.after_text is not None else (cwd / ns.after).read_text(encoding="utf-8") if ns.after else None
-    if before_text is None or after_text is None:
-        print("Usage: dislop verify <before> <after> [--pack <id>] [--allow-drop] [--json]", file=sys.stderr)
-        return 2
-
-    fn = ns.after or ns.before or "draft.md"
-    mod = detect_modality(fn) or "markdown"
-    pack_id = pick_pack_for_file(fn, mod, ns.pack, config)
-    pack = resolve_effective_pack(pack_id, packs, config)
-    res = verify_revision(before_text, after_text, filename=fn, modality=mod, pack=pack, config=config, allow_fact_drop=ns.allow_drop)
-    if ns.json:
-        print(json.dumps(res, ensure_ascii=False, indent=2))
-    elif res["ok"]:
-        print(f"dislop verify: ACCEPTED (findings {res['beforeCount']} -> {res['afterCount']}; all protected facts preserved)")
-    else:
-        print(f"dislop verify: REJECTED (findings {res['beforeCount']} -> {res['afterCount']})")
-        for reason in res["reasons"]:
-            print(f"  - {reason}")
-    return 0 if res["ok"] else 1
-
-
 def _cmd_explain(ns: argparse.Namespace, packs: dict[str, dict[str, Any]]) -> int:
     for pack in packs.values():
         for rule in pack.get("rules", []):
@@ -411,22 +385,12 @@ def main(argv: list[str] | None = None) -> None:
     p_check.add_argument("--report-unused", action="store_true")
     p_check.add_argument("--lang", default="en", choices=["en", "zh"])
 
-    p_ver = sub.add_parser("verify", help="Verify a candidate revision preserves protected facts and reduces findings")
-    p_ver.add_argument("before", nargs="?")
-    p_ver.add_argument("after", nargs="?")
-    p_ver.add_argument("--before-text", default=None)
-    p_ver.add_argument("--after-text", default=None)
-    p_ver.add_argument("--pack", default=None)
-    p_ver.add_argument("--config", default=None)
-    p_ver.add_argument("--allow-drop", action="store_true")
-    p_ver.add_argument("--json", action="store_true")
-
-    p_exp = sub.add_parser("explain", help="Show Deletion Test and before/trap/after exemplar for a rule")
+    p_exp = sub.add_parser("explain", help="Show check question and before/trap/after examples for a rule")
     p_exp.add_argument("rule_id")
     p_exp.add_argument("--lang", default="en", choices=["en", "zh"])
     p_exp.add_argument("--json", action="store_true")
 
-    p_packs = sub.add_parser("packs", help="List installed Taste Packs")
+    p_packs = sub.add_parser("packs", help="List installed rule packs")
     p_packs.add_argument("--json", action="store_true")
 
     sub.add_parser("pack-test", help="Validate Pack Schema v2 manifests and embedded fixtures")
@@ -441,8 +405,6 @@ def main(argv: list[str] | None = None) -> None:
 
     if ns.cmd == "check":
         sys.exit(_cmd_check(ns, packs))
-    if ns.cmd == "verify":
-        sys.exit(_cmd_verify(ns, packs))
     if ns.cmd == "explain":
         sys.exit(_cmd_explain(ns, packs))
     if ns.cmd == "packs":

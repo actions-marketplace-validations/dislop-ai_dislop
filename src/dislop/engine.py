@@ -9,25 +9,16 @@ import json
 import os
 import re
 import zipfile
-import zlib
 from pathlib import Path
 from typing import Any
 
-ENGINE_VERSION = "0.2.0"
+ENGINE_VERSION = "0.3.0"
 
 SEVERITY_RANK = {
     "info": 1,
     "warning": 2,
     "error": 3,
     "never": 99,
-}
-
-DISPLACEMENT_FAMILIES = {
-    "frame/negation-pivot",
-    "frame/staccato",
-    "frame/triad",
-    "frame/ending",
-    "frame/list-wall",
 }
 
 EXT_TO_MODALITY = {
@@ -42,7 +33,6 @@ EXT_TO_MODALITY = {
     ".svg": "svg",
     ".docx": "docx",
     ".pptx": "pptx",
-    ".pdf": "pdf",
 }
 
 DEFAULT_IGNORE_DIRS = {
@@ -570,24 +560,6 @@ def _parse_color_rgb(raw: str | None) -> tuple[int, int, int] | None:
     return None
 
 
-def _rel_lum(rgb: tuple[int, int, int]) -> float:
-    def ch(v: int) -> float:
-        s = v / 255.0
-        return s / 12.92 if s <= 0.04045 else ((s + 0.055) / 1.055) ** 2.4
-
-    return 0.2126 * ch(rgb[0]) + 0.7152 * ch(rgb[1]) + 0.0722 * ch(rgb[2])
-
-
-def _contrast_ratio(a: tuple[int, int, int], b: tuple[int, int, int]) -> float:
-    l1, l2 = _rel_lum(a), _rel_lum(b)
-    return (max(l1, l2) + 0.05) / (min(l1, l2) + 0.05)
-
-
-def _l_star(rgb: tuple[int, int, int]) -> float:
-    y = _rel_lum(rgb)
-    return y * 903.3 if y <= 0.008856 else (y ** (1.0 / 3.0)) * 116.0 - 16.0
-
-
 def _probe_ui_dead_control(raw_text: str) -> list[dict[str, Any]]:
     clean = re.sub(
         r"<!--\s*dislop-quote-start\s*-->[\s\S]*?<!--\s*dislop-quote-end\s*-->",
@@ -620,93 +592,6 @@ def _probe_ui_dead_control(raw_text: str) -> list[dict[str, Any]]:
         has_reason = bool(re.search(r"\b(?:title|aria-describedby|data-allow-disabled)\b", attrs, re.I))
         if static_disabled and not has_reason:
             hits.append({"index": m.start(), "length": m.end() - m.start(), "severity": "warning"})
-    return hits
-
-
-def _probe_ui_contrast_and_dark_inversion(raw_text: str) -> list[dict[str, Any]]:
-    clean = re.sub(
-        r"<!--\s*dislop-quote-start\s*-->[\s\S]*?<!--\s*dislop-quote-end\s*-->",
-        _preserve_lines_blank,
-        raw_text,
-        flags=re.I,
-    )
-    clean = re.sub(r"<!--[\s\S]*?-->", _preserve_lines_blank, clean)
-    clean = re.sub(r"/\*[\s\S]*?\*/", _preserve_lines_blank, clean)
-
-    root_vars: dict[str, tuple[int, int, int]] = {}
-    for rm in re.finditer(r":root\s*\{([^}]*)\}", clean, re.I):
-        for dm in re.finditer(r"(--[A-Za-z0-9_-]+)\s*:\s*([^;]+);?", rm.group(1)):
-            rgb = _parse_color_rgb(dm.group(2))
-            if rgb:
-                root_vars[dm.group(1)] = rgb
-
-    def resolve_token(val: str | None, lvars: dict[str, tuple[int, int, int]]) -> tuple[int, int, int] | None:
-        if not val:
-            return None
-        direct = _parse_color_rgb(val)
-        if direct:
-            return direct
-        vm = re.match(r"^var\(\s*(--[A-Za-z0-9_-]+)\s*\)$", val.strip())
-        if vm and vm.group(1) in lvars:
-            return lvars[vm.group(1)]
-        return None
-
-    def check_dark(lvars: dict[str, tuple[int, int, int]], body_str: str, idx: int, length: int, out: list[dict[str, Any]]) -> None:
-        bases: list[float] = []
-        raised: list[float] = []
-        for name, rgb in lvars.items():
-            if name not in body_str:
-                continue
-            low = name.lower()
-            if re.search(r"(?:inset|well|sunken|input|code|backdrop|overlay|shadow)", low):
-                continue
-            if re.match(r"^--(?:bg|background|page|paper|canvas|stage|ground)$", low):
-                bases.append(_l_star(rgb))
-            elif re.match(r"^--(?:surface|card|sheet|raised|panel|elevated|popover|modal)(?:-[12])?$", low):
-                raised.append(_l_star(rgb))
-        for b in bases:
-            for r in raised:
-                if b > r + 1.5:
-                    out.append({"index": idx, "length": length})
-                    return
-
-    hits: list[dict[str, Any]] = []
-    for bm in re.finditer(r"([^{};>\n][^{};\n]*)\{([^{}]+)\}|style\s*=\s*\"([^\"]+)\"", clean, re.I):
-        selector = (bm.group(1) or "").strip()
-        body = bm.group(2) or bm.group(3) or ""
-        props: dict[str, str] = {}
-        local_vars = dict(root_vars)
-        for dm in re.finditer(r"([A-Za-z_-][A-Za-z0-9_-]*|--[A-Za-z0-9_-]+)\s*:\s*([^;]+);?", body):
-            k = dm.group(1).strip().lower()
-            v = dm.group(2).strip()
-            props[k] = v
-            if k.startswith("--"):
-                rgb = _parse_color_rgb(v)
-                if rgb:
-                    local_vars[dm.group(1).strip()] = rgb
-
-        fg = resolve_token(props.get("color"), local_vars)
-        bg = resolve_token(props.get("background-color") or props.get("background"), local_vars)
-        if fg and bg:
-            ratio = _contrast_ratio(fg, bg)
-            fsm = re.match(r"^(\d+(?:\.\d+)?)px$", props.get("font-size", ""), re.I)
-            font_px = float(fsm.group(1)) if fsm else 16.0
-            is_bold = bool(re.match(r"^(?:bold|[6789]00)$", props.get("font-weight", "").strip(), re.I))
-            min_ratio = 3.0 if (font_px >= 24.0 or (font_px >= 18.66 and is_bold)) else 4.5
-            if ratio < min_ratio:
-                hits.append({"index": bm.start(), "length": bm.end() - bm.start()})
-
-        if re.search(r"(?:\.dark\b|data-theme\s*=\s*[\"']?dark|theme-dark)", selector, re.I):
-            check_dark(local_vars, body, bm.start(), bm.end() - bm.start(), hits)
-
-    for mm in re.finditer(r"@media\s*\(\s*prefers-color-scheme\s*:\s*dark\s*\)\s*\{([\s\S]*?\})\s*\}", clean, re.I):
-        inner_vars: dict[str, tuple[int, int, int]] = {}
-        for dm in re.finditer(r"(--[A-Za-z0-9_-]+)\s*:\s*([^;]+);?", mm.group(1)):
-            rgb = _parse_color_rgb(dm.group(2))
-            if rgb:
-                inner_vars[dm.group(1)] = rgb
-        check_dark(inner_vars, mm.group(1), mm.start(), mm.end() - mm.start(), hits)
-
     return hits
 
 
@@ -813,54 +698,10 @@ def _probe_ui_box_in_box(raw_text: str) -> list[dict[str, Any]]:
     return hits
 
 
-def _probe_svg_text_overflow(raw_text: str) -> list[dict[str, Any]]:
-    hits: list[dict[str, Any]] = []
-    sm = re.search(r"<svg\b([^>]*)>([\s\S]*?)</svg>", raw_text, re.I)
-    if not sm:
-        return hits
-    svg_attrs = sm.group(1) or ""
-    svg_body = sm.group(2) or ""
-    is_decorative = bool(re.search(r"\baria-hidden\s*=\s*[\"']true[\"']", svg_attrs, re.I))
-    has_a11y = bool(re.search(r"<title\b[^>]*>[^<]+</title>", svg_body, re.I)) or bool(
-        re.search(r"\baria-label\s*=\s*[\"'][^\"']+[\"']", svg_attrs, re.I)
-    )
-    if not is_decorative and not has_a11y:
-        hits.append({"index": sm.start(), "length": min(len(sm.group(0)), 80)})
-
-    vb = re.search(r"\bviewBox\s*=\s*[\"']\s*([-\d.]+)[,\s]+([-\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)\s*[\"']", svg_attrs, re.I)
-    if not vb:
-        return hits
-    min_x = float(vb.group(1))
-    max_x = min_x + float(vb.group(3))
-
-    for tm in re.finditer(r"<text\b([^>]*)>([\s\S]*?)</text>", raw_text, re.I):
-        attrs = tm.group(1) or ""
-        content = re.sub(r"<[^>]+>", "", tm.group(2) or "").strip()
-        if not content:
-            continue
-        xm = re.search(r"\bx\s*=\s*[\"']([\d.-]+)[\"']", attrs, re.I)
-        fsm = re.search(r"\bfont-size\s*=\s*[\"']([\d.]+)(?:px)?[\"']", attrs, re.I)
-        x = float(xm.group(1)) if xm else 0.0
-        fs = float(fsm.group(1)) if fsm else 16.0
-        am = re.search(r"\btext-anchor\s*=\s*[\"']([a-z]+)[\"']", attrs, re.I)
-        anchor = am.group(1) if am else "start"
-        est_w = sum(fs * 1.02 if re.match(r"[\u4e00-\u9fff\u3000-\u303f\uff00-\uffef]", ch) else fs * 0.58 for ch in content)
-        right_edge = x + est_w / 2 if anchor == "middle" else x if anchor == "end" else x + est_w
-        left_edge = x - est_w / 2 if anchor == "middle" else x - est_w if anchor == "end" else x
-        if right_edge > max_x * 0.99 or left_edge < min_x:
-            hits.append({"index": tm.start(), "length": tm.end() - tm.start()})
-    return hits
-
-
 def _eval_synthetic_binary_fixture(fixture: str, rule: dict[str, Any], thresholds: dict[str, Any]) -> list[dict[str, str]]:
     probe = rule.get("probe")
     if probe == "office-markdown-leak" and fixture.startswith("DOCX_RAW_MARKDOWN:"):
         return [{"location": "para 1", "match": "**Key Milestone**"}]
-    if probe == "office-pdf-hygiene":
-        if fixture == "PPTX_OFF_SLIDE:1":
-            return [{"location": "slide 1", "match": "off-slide shape"}]
-        if fixture == "DOCX_TRACKED_CHANGE:1":
-            return [{"location": "para 1", "match": "tracked change <w:ins>"}]
     if probe == "slide-word-wall" and fixture.startswith("PPTX_WORD_WALL:"):
         cnt = int(fixture.split(":")[1])
         if cnt > thresholds.get("maxSlideWords", 120):
@@ -951,16 +792,12 @@ def audit_text(
             ]
         elif probe == "ui-dead-control":
             raw_hits = _probe_ui_dead_control(text)
-        elif probe == "ui-contrast-and-dark-inversion":
-            raw_hits = _probe_ui_contrast_and_dark_inversion(text)
         elif probe == "ui-ai-gradient":
             raw_hits = _probe_ui_ai_gradient(text)
         elif probe == "ui-pill-soup":
             raw_hits = _probe_ui_pill_soup(text, thresholds.get("maxPillsPerFile", 6))
         elif probe == "ui-box-in-box":
             raw_hits = _probe_ui_box_in_box(text)
-        elif probe == "svg-text-overflow":
-            raw_hits = _probe_svg_text_overflow(text)
 
         raw_hits.sort(key=lambda h: (h["index"], -h["length"]))
         dedup_hits: list[dict[str, Any]] = []
@@ -1010,7 +847,7 @@ def audit_text(
     return {"findings": findings, "unusedSuppressions": unused}
 
 
-# ---------- OOXML & PDF Inspection ----------
+# ---------- OOXML Inspection (.docx / .pptx) ----------
 
 def _decode_xml_entities(s: str) -> str:
     return (
@@ -1034,35 +871,10 @@ def audit_ooxml_entries(
     skipped: list[dict[str, str]] = []
     rules_by_id = {r["id"]: r for r in pack.get("rules", [])}
 
-    path_rule = rules_by_id.get("local-path-leak")
-    if path_rule:
-        for entry_name, xml in entries.items():
-            if not entry_name.endswith(".rels"):
-                continue
-            for rm in re.finditer(
-                r'Target\s*=\s*"([^"]+)"[^>]*TargetMode\s*=\s*"External"|TargetMode\s*=\s*"External"[^>]*Target\s*=\s*"([^"]+)"',
-                xml,
-                re.I,
-            ):
-                target = rm.group(1) or rm.group(2) or ""
-                if re.match(r"^(?:file:|\\\\|/Users/|[A-Za-z]:\\)", target, re.I):
-                    findings.append(make_finding(rule=path_rule, filename=filename, modality=modality, location=entry_name, match=target[:120]))
-
     if modality == "docx":
         doc_xml = entries.get("word/document.xml")
         if not doc_xml:
             return {"findings": findings, "skipped": [{"file": filename, "reason": "Missing word/document.xml inside DOCX archive"}]}
-
-        hygiene_rule = rules_by_id.get("office-pdf-hygiene")
-        if hygiene_rule:
-            if re.search(r"<w:(?:ins|del)\b", doc_xml):
-                findings.append(
-                    make_finding(rule=hygiene_rule, filename=filename, modality=modality, location="document", match="Unaccepted tracked changes (<w:ins>/<w:del>)")
-                )
-            if "word/comments.xml" in entries and re.search(r"<w:comment\b", entries["word/comments.xml"]):
-                findings.append(
-                    make_finding(rule=hygiene_rule, filename=filename, modality=modality, location="comments", match="Unremoved review comments in word/comments.xml")
-                )
 
         md_leak_rule = rules_by_id.get("markdown-leak")
         para_idx = 0
@@ -1087,9 +899,6 @@ def audit_ooxml_entries(
     if modality == "pptx":
         pres_xml = entries.get("ppt/presentation.xml", "")
         pres_rels = entries.get("ppt/_rels/presentation.xml.rels", "")
-        sz_m = re.search(r'<p:sldSz\b[^>]*\bcx="(\d+)"[^>]*\bcy="(\d+)"', pres_xml)
-        slide_cx = int(sz_m.group(1)) if sz_m else 9144000
-        slide_cy = int(sz_m.group(2)) if sz_m else 6858000
 
         rel_map: dict[str, str] = {}
         for rm in re.finditer(r'<Relationship\b[^>]*\bId="([^"]+)"[^>]*\bTarget="([^"]+)"|<Relationship\b[^>]*\bTarget="([^"]+)"[^>]*\bId="([^"]+)"', pres_rels):
@@ -1112,7 +921,6 @@ def audit_ooxml_entries(
         if not ordered_slides:
             return {"findings": findings, "skipped": [{"file": filename, "reason": "Missing ppt/slides/*.xml inside PPTX archive"}]}
 
-        hygiene_rule = rules_by_id.get("office-pdf-hygiene")
         md_leak_rule = rules_by_id.get("markdown-leak")
         word_wall_rule = rules_by_id.get("slide-word-wall")
         bullet_rule = rules_by_id.get("slide-bullet-overload")
@@ -1159,25 +967,6 @@ def audit_ooxml_entries(
                 if not is_footer:
                     slide_paras.extend(paras)
 
-                if hygiene_rule:
-                    xfrm = re.search(
-                        r'<a:xfrm\b[^>]*>[\s\S]*?<a:off\b[^>]*\bx="(-?\d+)"[^>]*\by="(-?\d+)"[\s\S]*?<a:ext\b[^>]*\bcx="(\d+)"[^>]*\bcy="(\d+)"',
-                        sp,
-                    )
-                    if xfrm:
-                        x, y, cx, cy = (int(xfrm.group(k)) for k in (1, 2, 3, 4))
-                        if x + cx > slide_cx * 1.02 or y + cy > slide_cy * 1.02 or x < -slide_cx * 0.02 or y < -slide_cy * 0.02:
-                            findings.append(
-                                make_finding(
-                                    rule=hygiene_rule,
-                                    filename=filename,
-                                    modality=modality,
-                                    location=f"slide {slide_num}",
-                                    line=slide_num,
-                                    match=f'Off-slide text frame: "{paras[0][:48]}"',
-                                )
-                            )
-
             full_text = "\n".join(slide_paras)
             if md_leak_rule and (re.search(r"\*\*[^*\n]{1,80}\*\*", full_text) or re.search(r"^#{1,6}\s+\S", full_text, re.M)):
                 findings.append(
@@ -1221,93 +1010,6 @@ def audit_ooxml_entries(
 
         return {"findings": findings, "skipped": skipped}
 
-    return {"findings": findings, "skipped": skipped}
-
-
-def audit_pdf_bytes(data: bytes, *, filename: str, pack: dict[str, Any]) -> dict[str, Any]:
-    raw_latin1 = data.decode("latin-1")
-    if not raw_latin1.startswith("%PDF-"):
-        return {"findings": [], "skipped": [{"file": filename, "reason": "File does not begin with a %PDF- header"}]}
-    if re.search(r"/Encrypt\b", raw_latin1):
-        return {"findings": [], "skipped": [{"file": filename, "reason": "Encrypted PDF cannot be inspected without password"}]}
-
-    inflated: list[str] = []
-    for idx, sm in enumerate(re.finditer(r"<<[\s\S]{0,400}?/Filter\s*/FlateDecode[\s\S]{0,400}?>>\s*stream\r?\n", raw_latin1)):
-        if idx >= 80:
-            break
-        start = sm.end()
-        end_idx = raw_latin1.find("endstream", start)
-        if end_idx == -1:
-            break
-        slice_end = end_idx
-        if raw_latin1[slice_end - 1 : slice_end] == "\n":
-            slice_end -= 1
-        if raw_latin1[slice_end - 1 : slice_end] == "\r":
-            slice_end -= 1
-        try:
-            out = zlib.decompress(data[start:slice_end])
-            inflated.append(out.decode("latin-1"))
-        except Exception:
-            pass
-
-    combined = "\n".join([raw_latin1, *inflated])
-    findings: list[dict[str, Any]] = []
-    rules_by_id = {r["id"]: r for r in pack.get("rules", [])}
-    path_rule = rules_by_id.get("local-path-leak")
-    hygiene_rule = rules_by_id.get("office-pdf-hygiene")
-
-    for um in re.finditer(r"/URI\s*\(([^)]{1,240})\)", combined):
-        uri = um.group(1)
-        if re.match(r"^(?:file:|/Users/|/home/|[A-Za-z]:\\)", uri, re.I):
-            rule = path_rule or hygiene_rule
-            if rule:
-                findings.append(make_finding(rule=rule, filename=filename, modality="pdf", location="PDF /URI", match=uri))
-
-    if hygiene_rule:
-        tm = re.search(r"/Title\s*\(([^)]{1,200})\)", combined)
-        if tm:
-            title = tm.group(1).strip()
-            if re.search(r"^Microsoft (?:Word|PowerPoint)\s*-|\.(?:docx?|pptx?|key|pages)$", title, re.I):
-                findings.append(
-                    make_finding(rule={**hygiene_rule, "severity": "warning"}, filename=filename, modality="pdf", location="PDF /Info", match=f"/Title ({title})")
-                )
-        for fm in re.finditer(r"<<[\s\S]{0,600}?/Type\s*/FontDescriptor[\s\S]{0,600}?>>", combined):
-            if not re.search(r"/FontFile[23]?\b", fm.group(0)):
-                fn_m = re.search(r"/FontName\s*/([^\s/>]+)", fm.group(0))
-                fn = fn_m.group(1) if fn_m else "unknown-font"
-                findings.append(
-                    make_finding(
-                        rule={**hygiene_rule, "severity": "warning"},
-                        filename=filename,
-                        modality="pdf",
-                        location="PDF /FontDescriptor",
-                        match=f"Unembedded font: {fn}",
-                    )
-                )
-                break
-        boxes = [
-            (float(m.group(3)) - float(m.group(1)), float(m.group(4)) - float(m.group(2)))
-            for m in re.finditer(r"/MediaBox\s*\[\s*([-\d.]+)\s+([-\d.]+)\s+([\d.]+)\s+([\d.]+)\s*\]", combined)
-        ]
-        if len(boxes) >= 2:
-            w0, h0 = boxes[0]
-            if any(abs(w - w0) > 4 or abs(h - h0) > 4 for w, h in boxes[1:]):
-                findings.append(
-                    make_finding(
-                        rule={**hygiene_rule, "severity": "warning"},
-                        filename=filename,
-                        modality="pdf",
-                        location="PDF /MediaBox",
-                        match="Inconsistent page dimensions across PDF pages",
-                    )
-                )
-
-    skipped = [
-        {
-            "file": f"{filename}#prose",
-            "reason": "PDF structural/URI/font metadata checked; full CID prose extraction skipped in zero-dep mode",
-        }
-    ]
     return {"findings": findings, "skipped": skipped}
 
 
@@ -1364,11 +1066,6 @@ def inspect_file(
                 "skipped": [{"file": rel_posix, "reason": f"Uninspectable {modality.upper()} archive: {exc}"}],
             }
 
-    if modality == "pdf":
-        res = audit_pdf_bytes(abs_path.read_bytes(), filename=rel_posix, pack=pack)
-        hard_skip = any(not s["file"].endswith("#prose") for s in res["skipped"])
-        return {"checked": not hard_skip, "findings": res["findings"], "unusedSuppressions": [], "skipped": res["skipped"]}
-
     try:
         text = abs_path.read_text(encoding="utf-8")
     except UnicodeDecodeError:
@@ -1381,163 +1078,6 @@ def inspect_file(
 
     res = audit_text(text, filename=rel_posix, modality=modality, pack=pack, config=cfg)
     return {"checked": True, "findings": res["findings"], "unusedSuppressions": res["unusedSuppressions"], "skipped": []}
-
-
-# ---------- Stage 3: Revision Verification ----------
-
-def _multiset_counts(items: list[str]) -> dict[str, int]:
-    counts: dict[str, int] = {}
-    for item in items:
-        counts[item] = counts.get(item, 0) + 1
-    return counts
-
-
-def _diff_multisets(before_items: list[str], after_items: list[str]) -> dict[str, list[str]]:
-    b_map = _multiset_counts(before_items)
-    a_map = _multiset_counts(after_items)
-    removed: list[str] = []
-    added: list[str] = []
-    for k, bc in b_map.items():
-        ac = a_map.get(k, 0)
-        if bc > ac:
-            removed.extend([k] * (bc - ac))
-    for k, ac in a_map.items():
-        bc = b_map.get(k, 0)
-        if ac > bc:
-            added.extend([k] * (ac - bc))
-    return {"removed": removed, "added": added}
-
-
-def extract_protected_facts(text: str, remediated_basenames: set[str] | None = None) -> dict[str, list[str]]:
-    rem = remediated_basenames or set()
-    code_blocks = [m.group(0).strip() for m in re.finditer(r"```[\s\S]*?```", text)]
-    stripped_blocks = re.sub(r"```[\s\S]*?```", " ", text)
-    code_spans = [m.group(0).strip() for m in re.finditer(r"`[^`\n]+`", stripped_blocks)]
-    stripped = re.sub(r"`[^`\n]+`", " ", stripped_blocks)
-
-    md_links: list[str] = []
-    for m in re.finditer(r"\]\(([^)\s]+)\)", stripped):
-        target = m.group(1).strip()
-        base = re.split(r"[\\/]", target)[-1]
-        if re.match(r"^(?:file:|/Users/|/home/|[A-Za-z]:\\)", target, re.I) or base in rem:
-            md_links.append(f"asset:{base}")
-        else:
-            md_links.append(target)
-
-    urls = [re.sub(r"[.,;!?]+$", "", m.group(0)) for m in re.finditer(r"https?://[^\s)>\"'`]+", stripped)] + md_links
-
-    date_re = re.compile(
-        r"\b\d{4}-\d{2}-\d{2}\b"
-        r"|\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2}(?:,\s*\d{4})?\b"
-        r"|\d{4}\s*年\s*\d{1,2}\s*月(?:\s*\d{1,2}\s*日)?"
-        r"|\d{1,2}\s*月\s*\d{1,2}\s*日",
-        re.I,
-    )
-    dates = [re.sub(r"\s+", " ", m.group(0).lower()).strip() for m in date_re.finditer(stripped)]
-    no_dates = re.sub(r"\b\d{4}-\d{2}-\d{2}\b", " ", stripped)
-
-    citations = [
-        m.group(0).strip()
-        for m in re.finditer(r"\[\^?[A-Za-z0-9_.-]{1,32}\](?!\()|\([A-Z][A-Za-z\s.&]{1,30},\s*(?:19|20)\d{2}[a-z]?\)", stripped)
-    ]
-
-    num_re = re.compile(
-        r"(?<![A-Za-z0-9_/])(?:(?:\b(?:up to|at least|under|over|above|below|max|min)\s+|(?:最多|至少|不超过|低于|高于|约)\s*))?"
-        r"(?:[$¥€£]\s*)?\d+(?:,\d{3})*(?:\.\d+)?"
-        r"(?:\s*[-–~]\s*\d+(?:,\d{3})*(?:\.\d+)?)?"
-        r"(?:\s*(?:%|(?:ms|s|sec|seconds?|min|minutes?|hrs?|hours?|days?|weeks?|months?|years?|kb|mb|gb|tb|qps|rps|bps|mbps|gbps|hz|khz|mhz|ghz|fps|kg|lb|lbs|g|mg|km|cm|mm|m|w|kw|px|pt|rows?|nodes?|decks?|x)(?![A-Za-z])|倍|秒|分钟|小时|天|个月|年|万|亿|公斤|千克|克|公里|米|厘米|毫米|行|页|张|枚|条|个|所|人|次))?",
-        re.I,
-    )
-    numbers: list[str] = []
-    for nm in num_re.finditer(no_dates):
-        norm = re.sub(r"(\d),(\d{3})", r"\1\2", nm.group(0).lower())
-        norm = re.sub(r"\s+", " ", norm).strip()
-        if norm:
-            numbers.append(norm)
-
-    return {
-        "numbers": numbers,
-        "dates": dates,
-        "urls": urls,
-        "codeSpans": code_spans,
-        "codeBlocks": code_blocks,
-        "citations": citations,
-    }
-
-
-def verify_revision(
-    before_text: str,
-    after_text: str,
-    *,
-    filename: str = "draft.md",
-    modality: str | None = None,
-    pack: dict[str, Any],
-    config: dict[str, Any] | None = None,
-    allow_fact_drop: bool = False,
-) -> dict[str, Any]:
-    before_audit = audit_text(before_text, filename=filename, modality=modality, pack=pack, config=config)
-    after_audit = audit_text(after_text, filename=filename, modality=modality, pack=pack, config=config)
-
-    leaked_bases = {
-        re.split(r"[\\/]", m.group(1).strip())[-1]
-        for m in re.finditer(r"\]\(((?:file:|/Users/|/home/|[A-Za-z]:\\)[^)\s]+)\)", before_text, re.I)
-    }
-    b_facts = extract_protected_facts(before_text, leaked_bases)
-    a_facts = extract_protected_facts(after_text, leaked_bases)
-
-    invariants = {
-        key: _diff_multisets(b_facts[key], a_facts[key])
-        for key in ("numbers", "dates", "urls", "codeSpans", "codeBlocks", "citations")
-    }
-
-    b_rules = [f["ruleId"] for f in before_audit["findings"]]
-    a_rules = [f["ruleId"] for f in after_audit["findings"]]
-    rule_delta = _diff_multisets(b_rules, a_rules)
-
-    before_families = {f["family"] for f in before_audit["findings"]}
-    displaced = [
-        {"ruleId": f["ruleId"], "family": f["family"], "match": f["match"]}
-        for f in after_audit["findings"]
-        if f["family"] in DISPLACEMENT_FAMILIES and f["family"] not in before_families
-    ]
-
-    reasons: list[str] = []
-    if not allow_fact_drop:
-        for cat, delta in invariants.items():
-            if delta["removed"]:
-                reasons.append(f"Protected {cat} removed or altered: {', '.join(delta['removed'])}")
-            if delta["added"]:
-                reasons.append(f"Unverified {cat} invented in revision: {', '.join(delta['added'])}")
-
-    core_errors = [f for f in after_audit["findings"] if f.get("tier") == "invariant" or f.get("severity") == "error"]
-    if core_errors:
-        reasons.append(f"Revision contains {len(core_errors)} invariant error(s): {', '.join(f['ruleId'] for f in core_errors)}")
-
-    if displaced:
-        desc = "; ".join(f"{d['ruleId']}: \"{d['match']}\"" for d in displaced)
-        reasons.append(f"Second-order slop displacement detected ({desc})")
-
-    if before_audit["findings"] and len(after_audit["findings"]) >= len(before_audit["findings"]):
-        reasons.append(f"Finding count did not improve (before: {len(before_audit['findings'])}, after: {len(after_audit['findings'])})")
-
-    b_counts = _multiset_counts(b_rules)
-    for rid, cnt in _multiset_counts(a_rules).items():
-        if cnt > b_counts.get(rid, 0):
-            reasons.append(f"Introduced new finding '{rid}'")
-
-    ok = len(reasons) == 0
-    return {
-        "ok": ok,
-        "status": "accepted" if ok else "rejected",
-        "beforeCount": len(before_audit["findings"]),
-        "afterCount": len(after_audit["findings"]),
-        "invariants": invariants,
-        "resolved": rule_delta["removed"],
-        "introduced": rule_delta["added"],
-        "displaced": displaced,
-        "reasons": reasons,
-        "afterFindings": after_audit["findings"],
-    }
 
 
 def collect_target_files(targets: list[str], cwd: Path, config: dict[str, Any]) -> tuple[list[tuple[Path, str]], list[dict[str, str]]]:

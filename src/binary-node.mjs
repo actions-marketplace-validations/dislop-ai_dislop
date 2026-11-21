@@ -1,4 +1,4 @@
-import { inflateRawSync, inflateSync } from "node:zlib";
+import { inflateRawSync } from "node:zlib";
 
 const MAX_ZIP_ENTRIES = 3000;
 const MAX_UNCOMPRESSED_BYTES = 120 * 1024 * 1024; // 120 MB zip-bomb ceiling
@@ -82,31 +82,4 @@ export function readZipXmlEntries(buffer) {
   }
 
   return entries;
-}
-
-/**
- * Extract Latin1 raw text + inflated FlateDecode streams from a PDF buffer.
- */
-export function readPdfStreams(buffer) {
-  const rawLatin1 = buffer.toString("latin1");
-  const inflated = [];
-  const streamRe = /<<[\s\S]{0,400}?\/Filter\s*\/FlateDecode[\s\S]{0,400}?>>\s*stream\r?\n/g;
-  let m;
-  let count = 0;
-  while ((m = streamRe.exec(rawLatin1)) !== null && count < 80) {
-    const start = m.index + m[0].length;
-    const endIdx = rawLatin1.indexOf("endstream", start);
-    if (endIdx === -1) break;
-    let sliceEnd = endIdx;
-    if (rawLatin1[sliceEnd - 1] === "\n") sliceEnd -= 1;
-    if (rawLatin1[sliceEnd - 1] === "\r") sliceEnd -= 1;
-    try {
-      const out = inflateSync(buffer.subarray(start, sliceEnd), { maxOutputLength: 4 * 1024 * 1024 });
-      inflated.push(out.toString("latin1"));
-      count += 1;
-    } catch {
-      // Ignore individual stream decompression errors (e.g. predictor filters)
-    }
-  }
-  return { rawLatin1, inflated };
 }

@@ -12,12 +12,9 @@ import {
   resolveEffectivePack,
   auditText,
   auditOoxmlEntries,
-  auditPdfStructure,
-  extractProtectedFacts,
-  verifyRevision,
   formatReport,
 } from "../src/core.mjs";
-import { readZipXmlEntries, readPdfStreams } from "../src/binary-node.mjs";
+import { readZipXmlEntries } from "../src/binary-node.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..");
@@ -250,18 +247,6 @@ function inspectSingleFile({ absPath, rel, modality }, packs, explicitPack, conf
     }
   }
 
-  if (modality === "pdf") {
-    const { rawLatin1, inflated } = readPdfStreams(buf);
-    const res = auditPdfStructure(rawLatin1, inflated, { filename: rel, pack });
-    const hardUninspectable = res.skipped.some((s) => !s.file.endsWith("#prose"));
-    return {
-      checked: !hardUninspectable,
-      findings: res.findings,
-      unusedSuppressions: [],
-      skipped: res.skipped,
-    };
-  }
-
   let text;
   try {
     text = decodeUtf8Strict(buf);
@@ -424,55 +409,6 @@ function runCheck(args, packs) {
     allFindings.some((f) => SEVERITY_RANK[f.severity] >= SEVERITY_RANK[failOn]) ||
     (reportUnused && allUnused.length > 0);
   process.exit(shouldFail ? 1 : 0);
-}
-
-function runVerify(args, packs) {
-  const { flags, positional } = parseFlags(args);
-  const cwd = process.cwd();
-  const config = loadConfig(cwd, flags.config || null);
-  const beforeText =
-    flags["before-text"] !== undefined
-      ? flags["before-text"]
-      : positional[0]
-      ? fs.readFileSync(path.resolve(cwd, positional[0]), "utf8")
-      : null;
-  const afterText =
-    flags["after-text"] !== undefined
-      ? flags["after-text"]
-      : positional[1]
-      ? fs.readFileSync(path.resolve(cwd, positional[1]), "utf8")
-      : null;
-
-  if (beforeText === null || afterText === null) {
-    console.error("Usage: dislop verify <before-file> <after-file> [--pack <id>] [--allow-drop] [--json]");
-    process.exit(2);
-  }
-
-  const filename = positional[1] || positional[0] || flags.filename || "draft.md";
-  const modality = detectModality(filename) || "markdown";
-  const packId = pickPackForFile(filename, modality, flags.pack || null, config);
-  const pack = resolveEffectivePack(packId, packs, config);
-  const result = verifyRevision(beforeText, afterText, {
-    filename,
-    modality,
-    pack,
-    config,
-    allowFactDrop: Boolean(flags["allow-drop"]),
-  });
-
-  if (flags.json || flags.format === "json") {
-    console.log(JSON.stringify(result, null, 2));
-  } else if (result.ok) {
-    console.log(
-      `dislop verify: ACCEPTED (findings ${result.beforeCount} -> ${result.afterCount}; all protected facts preserved)`
-    );
-  } else {
-    console.log(`dislop verify: REJECTED (findings ${result.beforeCount} -> ${result.afterCount})`);
-    for (const reason of result.reasons) {
-      console.log(`  - ${reason}`);
-    }
-  }
-  process.exit(result.ok ? 0 : 1);
 }
 
 function runExplain(args, packs) {
@@ -642,36 +578,21 @@ function runMcpServer(packs) {
     {
       name: "dislop_check",
       description:
-        "Audit a draft (`text` or workspace-relative `path`) for publication invariants and genre Taste Pack signals. Workflow: check -> edit ONLY flagged spans while keeping `protectedFacts` untouched -> run `dislop_verify` before delivering.",
+        "Check a draft (`text` or workspace-relative `path`) for AI-generation artifacts, clichés, and template slop across Markdown, HTML/CSS/JSX/SVG, Word (.docx), and PowerPoint (.pptx). Edit only the flagged spans, then run `dislop_check` again.",
       inputSchema: {
         type: "object",
         properties: {
           text: { type: "string", description: "Draft text to inspect in memory" },
-          path: { type: "string", description: "Workspace-relative file path (.md, .html, .css, .svg, .docx, .pptx, .pdf)" },
-          pack: { type: "string", description: "Taste Pack ID (business-brief, literary-essay, deck-and-ui)" },
+          path: { type: "string", description: "Workspace-relative file path (.md, .html, .css, .jsx, .svg, .docx, .pptx)" },
+          pack: { type: "string", description: "Style pack ID (business-brief, literary-essay, deck-and-ui)" },
           filename: { type: "string", description: "Virtual filename hint when inspecting `text`" },
         },
       },
     },
     {
-      name: "dislop_verify",
-      description:
-        "Deterministic Stage-3 revision verifier. Compares `before` and `after` text to confirm all numbers, units, qualifiers, URLs, code spans, and citations survived intact, findings decreased, and no 2nd-order slop frame ('Not X, but Y', staccato slogans) was introduced.",
-      inputSchema: {
-        type: "object",
-        properties: {
-          before: { type: "string", description: "Original text before editing" },
-          after: { type: "string", description: "Candidate revised text" },
-          pack: { type: "string", description: "Taste Pack ID" },
-          filename: { type: "string", description: "Filename hint" },
-        },
-        required: ["before", "after"],
-      },
-    },
-    {
       name: "dislop_explain",
       description:
-        "Retrieve the rationale, Deletion Test, and before/trap/after editorial exemplar for a specific `ruleId`.",
+        "Retrieve the rationale, check question, and before/trap/after examples for a specific `ruleId`.",
       inputSchema: {
         type: "object",
         properties: {
@@ -683,7 +604,7 @@ function runMcpServer(packs) {
     },
     {
       name: "dislop_packs",
-      description: "List installed Taste Packs, supported modalities, and rule counts.",
+      description: "List installed rule packs, supported formats, and rule counts.",
       inputSchema: { type: "object", properties: {} },
     },
   ];
@@ -757,20 +678,6 @@ function runMcpServer(packs) {
           return;
         }
 
-        if (name === "dislop_verify") {
-          if (typeof args.before !== "string" || typeof args.after !== "string") {
-            toolResult(id, { error: "`dislop_verify` requires both `before` and `after` strings." }, true);
-            return;
-          }
-          const fn = args.filename || "draft.md";
-          const mod = detectModality(fn) || "markdown";
-          const packId = pickPackForFile(fn, mod, args.pack || null, config);
-          const pack = resolveEffectivePack(packId, packs, config);
-          const res = verifyRevision(args.before, args.after, { filename: fn, modality: mod, pack, config });
-          toolResult(id, res);
-          return;
-        }
-
         if (name === "dislop_check") {
           const hasText = typeof args.text === "string";
           const hasPath = typeof args.path === "string" && args.path.trim().length > 0;
@@ -795,7 +702,6 @@ function runMcpServer(packs) {
               checked: true,
               skipped: [],
               count: res.findings.length,
-              protectedFacts: extractProtectedFacts(args.text),
               findings: res.findings,
             });
             return;
@@ -825,17 +731,12 @@ function runMcpServer(packs) {
             args.pack || null,
             config
           );
-          let protectedFacts = null;
-          if (!["docx", "pptx", "pdf"].includes(mod) && res.checked) {
-            protectedFacts = extractProtectedFacts(fs.readFileSync(realTarget, "utf8"));
-          }
           toolResult(id, {
             pack: pickPackForFile(rel, mod, args.pack || null, config),
             modality: mod,
             checked: res.checked,
             skipped: res.skipped,
             count: res.findings.length,
-            protectedFacts,
             findings: res.findings,
           });
           return;
@@ -859,7 +760,6 @@ Usage:
   dislop check [paths... | -] [--pack <id>] [--fail-on error|warning|info|never]
                [--format text|json|sarif|github|md] [--changed [ref] | --staged]
                [--stdin-filename <name>] [--report-unused] [--lang en|zh]
-  dislop verify <before> <after> [--pack <id>] [--allow-drop] [--json]
   dislop explain <rule-id> [--lang en|zh] [--json]
   dislop packs [--json]
   dislop pack-test
@@ -887,7 +787,6 @@ function main() {
   const cmd = argv[0];
   const rest = argv.slice(1);
   if (cmd === "check") return runCheck(rest, packs);
-  if (cmd === "verify") return runVerify(rest, packs);
   if (cmd === "explain") return runExplain(rest, packs);
   if (cmd === "packs") return runPacks(rest, packs);
   if (cmd === "pack-test") return runPackTest(packs);
