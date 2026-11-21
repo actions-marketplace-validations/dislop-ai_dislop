@@ -39,7 +39,8 @@ Stage 3: Guarded Revision Verification (`dislop verify` / MCP `dislop_verify`)
 | Node CLI & MCP | `bin/dislop.mjs`, `bin/dislop-mcp.mjs` | CLI (`check`, `verify`, `explain`, `packs`, `pack-test`, `init`) and stdio MCP server |
 | Python Core, CLI & MCP | `src/dislop/{engine,cli,mcp_server}.py` | Pure Python 3.10+ stdlib implementation kept in lockstep via `tests/test_conformance.py` |
 | Rule Manifests | `packs/{core,business-brief,literary-essay,deck-and-ui}/pack.json` | Declarative `dislop.pack/2` rules, thresholds, Deletion Tests, exemplars, and `hit`/`clean` fixtures |
-| Browser Workbench | `site/` (`scripts/build_site.mjs`) | Static HTML/CSS/JS galley sheet using `DecompressionStream('deflate-raw')` for client-side `.docx`/`.pptx` inspection |
+| Dual-Native Site Compiler | `scripts/build_site.mjs` | Zero-dependency compiler turning `src/core.mjs`, `packs/`, and verified research JSON into `site/` (human workbench + `/llms.txt`, `/catalog.json`, `/radar/`, and `.md` endpoints) |
+| Research, Specs & Prototype | `docs/research/`, `docs/specs/`, `scripts/prototype_antipattern_lab.mjs` | Verified 87-entry ecosystem radar (`dislop.radar/2`), 31 design/academic references, multi-surface & positive-divergence studies, `v0.3` probe spec, and standalone self-tested prototype |
 
 ## 3. Coverage Honesty & Exit Codes
 
@@ -51,8 +52,11 @@ Uninspected inputs never masquerade as clean:
 
 When inspecting PDFs without external OCR/CID font decoders, `dislop` audits `/URI` links, `/Info` titles, `/FontDescriptor` embedding, and `/MediaBox` consistency, and explicitly records `[SKIP] <file>#prose` in the report.
 
-## 4. Official Static Hosting (`dislop.com`)
+## 4. Official Dual-Native Static Site (`dislop.com`)
 
-`site/` builds to plain static files with relative asset URLs and zero backend processes:
+`site/` compiles to plain static files with relative asset URLs and zero backend processes:
 
 - **Single Canonical Origin (`https://dislop.com`)**: Served directly by overseas static Nginx over HTTPS (`server_tokens off`, `Strict-Transport-Security`, and `Content-Security-Policy` locking `connect-src 'none'`, with zero third-party font or analytics requests). Visitors in both mainland China and overseas reach one canonical `.com` address without splitting links across a separate `github.io` domain.
+- **Human + Agent Dual-Native Surface (Level 0)**:
+  - **Humans**: Interactive zero-upload browser galley workbench (`/#workbench`), searchable 29-rule catalog (`/#rules`, stable `#rule-<id>` SARIF anchors), and offline-filterable 87-entry ecosystem radar (`/radar/`).
+  - **External Agents**: Static progressive-disclosure endpoints (`/llms.txt`, `/catalog.json`, `/index.md`, `/tasks/*.md`, `/methodology/*.md`, `/cases/*.md`, `/tools/*.md`, `/packs/*.md`, `/rules/*.md`, `/radar/index.{json,md}`, `/llms-full.txt`). Build-time assertions enforce byte budgets, valid links, zero leaked `fixtures.hit`, and stripped HTML comments / invisible Unicode characters.

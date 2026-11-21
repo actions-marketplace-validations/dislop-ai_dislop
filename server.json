@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
   "name": "io.github.dislop-ai/dislop",
-  "description": "Deterministic pre-publication linter and revision verifier for Markdown, HTML/CSS/SVG, DOCX, PPTX, and PDF metadata.",
+  "description": "Multi-modal de-slop toolkit and fact-preserving revision verifier for writing, Markdown, HTML/CSS/JSX/SVG, DOCX, PPTX, and PDF metadata.",
   "version": "0.2.0",
   "websiteUrl": "https://dislop.com",
   "repository": {

@@ -1,21 +1,24 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./assets/banner-dark.svg">
-    <img src="./assets/banner-light.svg" alt="dislop — 确定性交付物审校与改稿复检工具" width="100%">
+    <img src="./assets/banner-light.svg" alt="dislop — 全面去 AI 味并锁住每个事实" width="100%">
   </picture>
 </p>
 
 <p align="center">
   <a href="./README.md">English</a> ·
-  <a href="https://dislop.com">官网与清样工作台 (dislop.com)</a> ·
+  <a href="https://dislop.com">工作台 (dislop.com)</a> ·
+  <a href="https://dislop.com/radar/">生态雷达 (87)</a> ·
+  <a href="./docs/strategy-and-roadmap.zh-CN.md">全景蓝图</a> ·
   <a href="./docs/architecture.zh-CN.md">架构说明</a> ·
   <a href="./docs/design-system.zh-CN.md">设计规范</a> ·
+  <a href="./CHANGELOG.md">变更记录</a> ·
   <a href="./LICENSE">Apache-2.0</a>
 </p>
 
-`dislop` 是发稿前使用的交付物检查与改稿复检工具。它读取 Markdown、纯文本、HTML、CSS、JSX/TSX、SVG、Word（`.docx`）、PowerPoint（`.pptx`）与 PDF 结构元数据，标出命中规则的文件、行号、段落序号或幻灯片页码。
+**全面去 AI 味，覆盖写作、文档、PPT、PDF、前端 UI 与 Agent 交付。** `dislop` 基于零外部运行时依赖的双端内核读取 Markdown、纯文本、HTML、CSS、JSX/TSX、SVG、Word（`.docx`）、PowerPoint（`.pptx`）与 PDF 结构元数据，精确报出文件、行号、段落序号或幻灯片页码；适配任意 AI 模型、Agent 与开发环境，提供浏览器工作台、`/llms.txt`、`SKILL.md`、Node/Python CLI 与 stdio MCP 五类入口。
 
-`dislop` 不会在后台偷偷改写你的正文。作者或本地 Agent 修改命中片段后，运行 `dislop verify` 可逐项比对改前与改后文本，确认数字、限定词（如 `最多`、`至少`、`up to`）、单位、链接、代码片段与引用编号全部原样保留，并拦截把一阶公关词换成二阶口号句（如 `不是 A，而是 B` 或三连短句）的过矫改写。
+`dislop` 不会在后台偷偷改写正文。作者或本地 Agent 修改命中片段后，运行 `dislop verify` 逐项比对改前与改后文本，确认数字、限定词（`最多`、`至少`、`up to`、`at least`）、单位、日期、链接、代码片段与引用编号全部原样保留，并拦截把一阶公关词换成二阶口号句（如 `不是 A，而是 B` 或三连短句）的过矫改写。
 
 ## 为什么要做两层分治
 
@@ -68,6 +71,11 @@ cd dislop
 PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning --lang zh
 ```
 
+## Agent Skill 与 Level 0 官网直读
+
+- **跨宿主 Agent Skill（`skills/dislop/SKILL.md`）**：将 [skills/dislop/SKILL.md](./skills/dislop/SKILL.md) 接入 Claude Code、Codex、Cursor 或 Windsurf（`npx skills add dislop-ai/dislop`），按「先查 -> 局部改稿 -> verify 复检」三步交付。
+- **零安装 Level 0 静态端点**：任意联网 Agent 可直接读取 [https://dislop.com/llms.txt](https://dislop.com/llms.txt)（~2.4 KB）、[https://dislop.com/catalog.json](https://dislop.com/catalog.json)（`dislop.catalog/1`）、场景任务包（`/tasks/*.md`）与 29 张原子规则卡（`/rules/<id>.md`）。
+
 ## 接入 MCP（`Claude Code`、`Codex`、`Cursor`、`Windsurf`）
 
 将 `dislop` 注册为本地 stdio MCP 服务，让写作或研发 Agent 在交稿前自动执行“检查 -> 局部修订 -> `verify` 复检”：
@@ -117,9 +125,36 @@ PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning --lang zh
 
 本仓库在 GitHub Actions CI 中执行 `dislop pack-test`（Node 与 Python 双端各 101 项样本断言）、跨语言一致性测试（`tests/test_conformance.py`），并对仓库自身的 Markdown 文档、SVG 品牌资产与 `site/` 官网执行 `dislop check . --fail-on warning`（`packs/` 与 `tests/` 因存放反例样本默认排除）。
 
-## 官方网站
+## 官方网站与 Agent 直读服务（`dislop.com`）
 
-- 官网与交互式清样工作台：[https://dislop.com](https://dislop.com)（静态 Nginx 托管，零后端进程，响应头与页面级 CSP 双重锁定 `connect-src 'none'`）
+- **在线工作台与规则目录**：[https://dislop.com](https://dislop.com)（静态 Nginx 托管，零后端进程，响应头与页面级 CSP 双重锁定 `connect-src 'none'`，浏览器内存离线解析 `.docx`/`.pptx`）
+- **87 条实测生态雷达**：[https://dislop.com/radar/](https://dislop.com/radar/)（由 `docs/research/anti-slop-radar-index.json` 离线编译的跨媒介可筛选目录）
+- **Level 0 Agent 端点**：[https://dislop.com/llms.txt](https://dislop.com/llms.txt)（低 Token 路由索引）、[https://dislop.com/catalog.json](https://dislop.com/catalog.json)（`dislop.catalog/1`）、任务组合包（`/tasks/*.md`）与 29 张原子规则卡（`/rules/<id>.md`）
+
+## 仓库目录结构
+
+```text
+dislop/
+├── bin/               # Node.js CLI（dislop.mjs）与 stdio MCP 入口（dislop-mcp.mjs）
+├── src/
+│   ├── core.mjs       # 零依赖纯 ES 模块内核，由 Node CLI、MCP 与浏览器工作台共用
+│   ├── binary-node.mjs# Node.js 零依赖 ZIP 与 PDF 流解析层
+│   └── dislop/        # 零依赖 Python 3.10+ 核心引擎、CLI 与 MCP 服务
+├── packs/             # 声明式 dislop.pack/2 规则包（core + 3 套文体包，29 条规则）
+├── skills/dislop/     # 跨宿主标准 Agent Skill（SKILL.md）
+├── tests/             # 单元测试、Node/Python 跨运行时一致性测试与官网校验测试
+├── scripts/
+│   ├── build_site.mjs # 官网人机双读静态编译器
+│   └── prototype_antipattern_lab.mjs # v0.3 目录查询与节奏/UI 新探针验证原型
+├── site/              # 编译产物：工作台首页、87 条生态雷达与 /llms.txt 静态端点
+├── assets/            # 品牌删除号标识、浅/深色横幅与 1200x630 Open Graph 预览卡
+├── docs/
+│   ├── strategy-and-roadmap*.md            # 战略、视觉 VI、多形态产品与路线全景蓝图
+│   ├── architecture*.md, design-system*.md # 双语系统架构与视觉排版设计规范
+│   ├── research/      # 2026 生态全景、87 条雷达事实源、正向差异化与多形态架构研究
+│   └── specs/         # v0.3 反模式目录与新探针规格文档
+└── CHANGELOG.md       # 按时间线整理的开发与优化历程
+```
 
 ## 开源许可
 

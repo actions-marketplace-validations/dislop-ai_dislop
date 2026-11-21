@@ -20,25 +20,27 @@ Current AI-generated developer pages cluster around two recognizable defaults:
 
 - **The Mark (`assets/logo.svg`)**: A single continuous proofreader's delete stroke (*dele* / GB/T 14706 删除号) cutting horizontally across a muted manuscript rule and looping cleanly upward and down-right. Tested at `16×16` (favicon), `64×64` (organization avatar), and `512×512` so the inner counter of the loop stays open at tab-icon scale.
 - **Wordmark**: Lowercase `dislop` set in tight geometric sans (`font-weight: 700`, `letter-spacing: -0.025em`) without version pills, sparkles, or nested badge rings.
-- **Repository Banners (`assets/banner-light.svg`, `assets/banner-dark.svg`)**: Paired via HTML `<picture>` (`prefers-color-scheme`) so GitHub renders native light and dark galley proofs rather than a bright white rectangle on dark mode.
+- **Repository Banners (`assets/banner-light.svg`, `assets/banner-dark.svg`)**: Paired via HTML `<picture>` (`prefers-color-scheme`) so GitHub renders native light and dark galley proofs rather than a bright white rectangle on dark mode. Right-hand specimens strictly enforce the Two-Pencil rule: Carmin Red strikes only objective `core` errors (`chatbot-artifact`), while Press Green underscores locked `stet` facts.
+- **Social Preview Card (`assets/og-card.svg`, `assets/og-card.png`, `1200×630`)**: Architectural galley proof Open Graph card synced into `site/assets/` for X, GitHub, Slack, Discord, and messaging previews.
 
 ## 3. Color Tokens & Monotonic Dark Elevation
 
-All foreground/background combinations meet or exceed **WCAG 2.2 AA (`4.5:1` normal text, `3.0:1` large text)**. In dark mode, surface lightness (`L*`) increases strictly from outer stage to raised sheet—never inverting elevation (`inset` code/input wells are the sole recessed exception).
+All foreground/background text combinations meet or exceed **WCAG 2.2 AA (`4.5:1` normal text, `3.0:1` large text)**, and functional control borders (`--control-border`) exceed **WCAG 2.2 Non-Text Contrast (`3.0:1`)** against adjacent surfaces. In dark mode, surface lightness (`L*`) increases strictly from outer stage to raised sheet—never inverting elevation (`inset` code/input wells are the sole recessed exception).
 
 | Token | Role | Light Hex | Contrast on Sheet | Dark Hex | Dark `L*` / Contrast |
 |---|---|---|---|---|---|
-| `--stage` | Outer margin / viewport ground | `#F6F7F5` | — | `#0E1012` | `L* = 4.6` |
-| `--sheet` | Primary galley column / card | `#FFFFFF` | — | `#15181C` | `L* = 8.1` (`> stage`) |
-| `--raised` | Active control / hover / header | `#ECEEE9` | — | `#1D2127` | `L* = 12.6` (`> sheet`) |
-| `--inset` | Recessed code / raw input well | `#F1F3F0` | — | `#0A0C0E` | `L* = 3.1` (recessed) |
-| `--rule` | `1px` architectural hairlines | `#D5D7D2` | Decorative rule | `#2A2F37` | Decorative rule |
-| `--ink` | Primary copy & headlines | `#14171A` | `17.8 : 1` | `#ECEEF0` | `15.6 : 1` |
-| `--ink-2` | Secondary labels & descriptions | `#474C55` | `8.5 : 1` | `#A6ACB5` | `7.9 : 1` |
-| `--ink-3` | Line numbers & coordinates | `#5E646E` | `5.9 : 1` | `#8C939E` | `5.6 : 1` |
-| `--mark-error` | Invariant error (`dele` pencil) | `#B42318` | `6.8 : 1` | `#FF7A6B` | `7.0 : 1` |
-| `--mark-warn` | Taste query (`query` pencil) | `#1B52B0` | `7.2 : 1` | `#85B4FF` | `8.5 : 1` |
-| `--mark-stet` | Protected fact (`stet` lock) | `#1E6B47` | `6.6 : 1` | `#6CD49B` | `9.4 : 1` |
+| `--stage` | Outer margin / viewport ground | `#F6F7F5` | — (`L* = 97.1`) | `#0E1012` | `L* = 4.6` |
+| `--sheet` | Primary galley column / card | `#FFFFFF` | — (`L* = 100.0`) | `#15181C` | `L* = 8.1` (`> stage`) |
+| `--raised` | Active control / hover / header | `#ECEEE9` | — (`L* = 93.8`) | `#1D2127` | `L* = 12.6` (`> sheet`) |
+| `--inset` | Recessed code / raw input well | `#F1F3F0` | — | `#0A0C0E` | `L* = 3.2` (recessed) |
+| `--rule` | `1px` architectural hairlines | `#D5D7D2` | Decorative rail | `#2A2F37` | Decorative rail |
+| `--control-border` | Interactive inputs, selects & buttons | `#767C85` | `4.2 : 1` (`3.6:1` on raised) | `#6F7784` | `3.9 : 1` (`3.6:1` on raised) |
+| `--ink` | Primary copy & headlines | `#14171A` | `18.0 : 1` | `#ECEEF0` | `15.3 : 1` |
+| `--ink-2` | Secondary labels & descriptions | `#474C55` | `8.6 : 1` | `#A6ACB5` | `7.8 : 1` |
+| `--ink-3` | Line numbers & coordinates | `#5E646E` | `6.0 : 1` | `#8C939E` | `5.8 : 1` |
+| `--mark-error` | Invariant error (`dele` pencil) | `#B42318` | `6.6 : 1` | `#FF7A6B` | `7.0 : 1` |
+| `--mark-warn` | Taste query (`query` pencil) | `#1B52B0` | `7.3 : 1` | `#85B4FF` | `8.5 : 1` |
+| `--mark-stet` | Protected fact (`stet` lock) | `#1E6B47` | `6.5 : 1` | `#6CD49B` | `9.8 : 1` |
 
 ## 4. Two-Pencil + Stet Proofreading Semantics
 
