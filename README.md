@@ -1,21 +1,24 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./assets/banner-dark.svg">
-    <img src="./assets/banner-light.svg" alt="dislop — Deterministic deliverable linter and revision verifier" width="100%">
+    <img src="./assets/banner-light.svg" alt="dislop — De-slop AI outputs and verify every fact" width="100%">
   </picture>
 </p>
 
 <p align="center">
   <a href="./README.zh-CN.md">简体中文</a> ·
-  <a href="https://dislop.com">Website &amp; Workbench (dislop.com)</a> ·
+  <a href="https://dislop.com">Workbench (dislop.com)</a> ·
+  <a href="https://dislop.com/radar/">Radar (87)</a> ·
+  <a href="./docs/strategy-and-roadmap.md">Blueprint</a> ·
   <a href="./docs/architecture.md">Architecture</a> ·
   <a href="./docs/design-system.md">Design System</a> ·
+  <a href="./CHANGELOG.md">Changelog</a> ·
   <a href="./LICENSE">Apache-2.0</a>
 </p>
 
-`dislop` checks documents, slides, and web interfaces before publication. It reads Markdown, plain text, HTML, CSS, JSX/TSX, SVG, Word (`.docx`), PowerPoint (`.pptx`), and structural PDF metadata, then reports the file, line, paragraph, or slide where a defect matched.
+**De-slop AI outputs across writing, docs, decks, PDF, Web UI, and agent workflows.** `dislop` inspects Markdown, plain text, HTML, CSS, JSX/TSX, SVG, Word (`.docx`), PowerPoint (`.pptx`), and structural PDF metadata with zero external runtime dependencies, reporting exact files, lines, paragraphs, or slides. Works with any AI model (Claude, GPT, Gemini, DeepSeek, Qwen, local), any agent host, and any dev environment via browser workbench, `/llms.txt`, `SKILL.md`, Node/Python CLI, or stdio MCP.
 
-It does not rewrite prose behind your back. When you or an agent edits a flagged passage, `dislop verify` compares the original and revised text to confirm numbers, qualifiers (`up to`, `at least`), units, links, code spans, and citations survived intact—and that the edit did not trade corporate buzzwords for second-order slogan prose (`"It's not just X — it's Y"` or staccato three-word fragments).
+`dislop` never rewrites prose behind your back. When you or an agent revises a flagged span, `dislop verify` compares before and after text to confirm numbers, qualifiers (`up to`, `at least`), units, dates, links, code spans, and citations survived intact—and blocks second-order slogan displacement (`"It's not just X — it's Y"` or staccato three-word chains).
 
 ## Why Two Tiers Exist
 
@@ -70,6 +73,11 @@ cd dislop
 PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning
 ```
 
+## Agent Skill & Level 0 Web Service
+
+- **Agent Skill (`skills/dislop/SKILL.md`)**: Drop [skills/dislop/SKILL.md](./skills/dislop/SKILL.md) into Claude Code, Codex, Cursor, or Windsurf (`npx skills add dislop-ai/dislop`) for the three-step `check -> targeted edit -> verify` workflow.
+- **Zero-Install Level 0 Agent Endpoints**: Any web-capable agent can read [https://dislop.com/llms.txt](https://dislop.com/llms.txt) (~2.4 KB), [https://dislop.com/catalog.json](https://dislop.com/catalog.json) (`dislop.catalog/1`), task bundles (`/tasks/*.md`), or 29 atomic rule cards (`/rules/<id>.md`).
+
 ## MCP Server (`Claude Code`, `Codex`, `Cursor`, `Windsurf`)
 
 Attach `dislop` over stdio so coding and writing agents self-check drafts and verify edits locally:
@@ -122,9 +130,36 @@ For narrow one-off exceptions, place a reason-annotated comment above the line (
 
 GitHub Actions CI runs `dislop pack-test` (101 fixture assertions across both Node and Python), the cross-runtime conformance suite (`tests/test_conformance.py`), and `dislop check . --fail-on warning` across this repository's Markdown docs, SVG brand assets, and `site/` workbench (`packs/` and `tests/` are excluded because they intentionally store negative fixtures).
 
-## Website
+## Website & Agent Service (`dislop.com`)
 
-- Official homepage & interactive galley workbench: [https://dislop.com](https://dislop.com) (static Nginx origin, zero backend, `CSP: connect-src 'none'`)
+- **Interactive Workbench & Rule Catalog**: [https://dislop.com](https://dislop.com) (static Nginx origin, zero backend, `CSP: connect-src 'none'`, offline `.docx`/`.pptx` inspection in browser memory)
+- **87-Entry Ecosystem Radar**: [https://dislop.com/radar/](https://dislop.com/radar/) (offline-filterable directory compiled from `docs/research/anti-slop-radar-index.json`)
+- **Level 0 Agent Endpoints**: [https://dislop.com/llms.txt](https://dislop.com/llms.txt) (routing index), [https://dislop.com/catalog.json](https://dislop.com/catalog.json) (`dislop.catalog/1`), task bundles (`/tasks/*.md`), and 29 atomic rule cards (`/rules/<id>.md`)
+
+## Repository Layout
+
+```text
+dislop/
+├── bin/               # Node.js CLI (dislop.mjs) & stdio MCP launcher (dislop-mcp.mjs)
+├── src/
+│   ├── core.mjs       # Zero-dep ES module shared by Node CLI, MCP, and browser workbench
+│   ├── binary-node.mjs# Zero-dep ZIP & PDF stream reader for Node.js
+│   └── dislop/        # Zero-dep Python 3.10+ engine, CLI, and MCP server
+├── packs/             # Declarative dislop.pack/2 manifests (core + 3 genre packs, 29 rules)
+├── skills/dislop/     # Canonical cross-host Agent Skill (SKILL.md)
+├── tests/             # Unit tests, Node/Python conformance suite & site verification tests
+├── scripts/
+│   ├── build_site.mjs # Dual-native static compiler for site/
+│   └── prototype_antipattern_lab.mjs # v0.3 catalog & cadence/UI probe verification lab
+├── site/              # Compiled static website, workbench, radar, and /llms.txt endpoints
+├── assets/            # Logo mark, light/dark banners, and 1200x630 Open Graph card
+├── docs/
+│   ├── strategy-and-roadmap*.md            # Unified strategy, VI, multi-surface & roadmap blueprint
+│   ├── architecture*.md, design-system*.md # Bilingual architecture & visual design specs
+│   ├── research/      # 2026 landscape, 87-entry radar SSOT, positive-divergence & multi-surface studies
+│   └── specs/         # v0.3 anti-pattern catalog & probe specification
+└── CHANGELOG.md       # Chronological development & optimization history
+```
 
 ## License
 
