@@ -264,15 +264,16 @@ a:hover {
   font-size: 0.74rem;
 }
 
-/* Lead Galley Introduction (Asymmetric two-ink claim + command strip) */
+/* Lead Galley Introduction (Perform-the-product H1 + Live 3-State Proof Card) */
 .lead-band {
   display: grid;
-  grid-template-columns: 1.32fr 1fr;
+  grid-template-columns: 1.08fr 1fr;
   gap: 0;
 }
 
 .lead-copy,
 .lead-install,
+.hero-proof,
 .cmd-box,
 .galley-sheet,
 .margin-column,
@@ -286,12 +287,303 @@ a:hover {
 }
 
 .lead-copy {
-  padding: 28px 28px 24px;
+  padding: 40px 32px 32px;
   border-right: 1px solid var(--rule);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 20px;
+}
+
+.hero-strike-wrap {
+  display: inline-block;
+  position: relative;
+  margin: 0 0 10px;
+  max-width: 100%;
+}
+
+.hero-strike {
+  font-family: var(--font-serif);
+  font-size: clamp(1.02rem, 1.55vw, 1.24rem);
+  line-height: 1.45;
+  color: var(--ink-3);
+  text-decoration: none;
+  display: inline-block;
+  padding-right: 4px;
+}
+
+.hero-pen-svg {
+  position: absolute;
+  left: -4px;
+  top: 50%;
+  width: calc(100% + 10px);
+  height: 18px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  overflow: visible;
+}
+
+.hero-pen-path {
+  stroke: var(--pen);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  stroke-dasharray: 420;
+  stroke-dashoffset: 0;
+  animation: dislop-pen-draw 260ms ease-out 1;
+}
+
+@keyframes dislop-pen-draw {
+  from {
+    stroke-dashoffset: 420;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.lead-heading {
+  margin: 0 0 14px;
+  font-size: clamp(2.1rem, 3.8vw, 3.1rem);
+  font-weight: 700;
+  line-height: 1.14;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  max-width: 18ch;
+}
+
+.hero-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: var(--ink);
+  color: var(--sheet);
+  border: 1px solid var(--ink);
+  border-radius: var(--radius-ctrl);
+  padding: 9px 16px;
+  min-height: 38px;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 120ms ease;
+}
+
+.btn-primary:hover {
+  color: var(--sheet);
+  opacity: 0.88;
+}
+
+.hero-reassure {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--ink-3);
+}
+
+.hero-cli-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+}
+
+.hero-cli-label {
+  font-size: 0.78rem;
+  color: var(--ink-3);
+}
+
+/* Right column: Interactive 3-State Proof Card (flat, no nested box-in-box) */
+.hero-proof {
+  padding: 28px 28px 24px;
+  background-color: var(--stage);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   gap: 14px;
+}
+
+.hero-proof-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hero-proof-stage {
+  background-color: var(--sheet);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 18px 20px;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  line-height: 1.82;
+  color: var(--ink);
+}
+
+.hero-proof-notes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hero-proof-notes li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.hero-proof-notes strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.hero-note-dot {
+  display: inline-block;
+  width: 14px;
+  height: 0;
+  flex-shrink: 0;
+  transform: translateY(-2px);
+}
+
+.hero-note-dot.is-error {
+  border-bottom: 2.5px solid var(--mark-error);
+}
+
+.hero-note-dot.is-warn {
+  border-bottom: 2px dashed var(--mark-warn);
+}
+
+.hero-note-dot.is-stet {
+  border-bottom: 2.5px dotted var(--mark-stet);
+}
+
+.hero-proof-verdict {
+  padding: 10px 14px;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  border-top: 2px solid var(--mark-stet);
+  background-color: var(--mark-stet-wash);
+  color: var(--ink);
+}
+
+.hero-proof-verdict.is-rejected {
+  border-top-color: var(--mark-error);
+  background-color: var(--mark-error-wash);
+}
+
+.hero-proof-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--rule);
+  font-size: 0.8rem;
+  color: var(--ink-2);
+}
+
+/* Three-Mark Value Strip (replaces 4-pillar engineering strip) */
+.marks-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  background-color: var(--sheet);
+}
+
+.mark-pillar {
+  padding: 20px 26px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mark-pillar + .mark-pillar {
+  border-left: 1px solid var(--rule);
+}
+
+.mark-pillar-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mark-pillar-title {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 650;
+  color: var(--ink);
+}
+
+.mark-pillar-desc {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.58;
+  color: var(--ink-2);
+}
+
+/* Open unboxed integration grid */
+.where-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.where-item {
+  min-width: 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule-strong);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.where-item h3 {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 650;
+  color: var(--ink);
+}
+
+.where-item p {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.note-details {
+  margin-top: 6px;
+}
+
+.note-details summary {
+  cursor: pointer;
+  font-size: 0.78rem;
+  color: var(--ink-3);
+  user-select: none;
+}
+
+.note-details summary:hover {
+  color: var(--ink);
 }
 
 .section-index {
@@ -301,16 +593,6 @@ a:hover {
   margin: 0 0 10px;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
-}
-
-.lead-heading {
-  margin: 0 0 10px;
-  font-size: clamp(2rem, 3.6vw, 2.9rem);
-  font-weight: 700;
-  line-height: 1.14;
-  letter-spacing: -0.025em;
-  color: var(--ink);
-  max-width: 24ch;
 }
 
 html[lang^="zh"] .lead-heading,
@@ -924,7 +1206,7 @@ html[lang^="zh"] .proof-lines {
 
 /* Standard Content Sections */
 .section-block {
-  padding: 36px 28px;
+  padding: 52px 32px;
 }
 
 .section-header {
@@ -933,21 +1215,23 @@ html[lang^="zh"] .proof-lines {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 12px;
-  margin-bottom: 22px;
+  margin-bottom: 26px;
 }
 
 .section-title {
   margin: 0;
-  font-size: 1.4rem;
-  font-weight: 650;
+  font-size: clamp(1.45rem, 2.2vw, 1.85rem);
+  font-weight: 700;
+  line-height: 1.24;
   letter-spacing: -0.02em;
 }
 
 .section-desc {
-  margin: 6px 0 0;
+  margin: 8px 0 0;
   color: var(--ink-2);
-  font-size: 0.94rem;
-  max-width: 68ch;
+  font-size: 0.96rem;
+  line-height: 1.62;
+  max-width: 64ch;
 }
 
 .sub-heading {
@@ -1509,6 +1793,8 @@ html[lang^="zh"] .proof-lines {
   }
   .lead-band,
   .pillars-strip,
+  .marks-strip,
+  .where-grid,
   .compat-grid,
   .system-grid,
   .dogfood-grid,
@@ -1518,13 +1804,15 @@ html[lang^="zh"] .proof-lines {
     grid-template-columns: minmax(0, 1fr);
   }
   .pillar-cell + .pillar-cell,
+  .mark-pillar + .mark-pillar,
   .compat-col + .compat-col {
     border-left: none;
     border-top: 1px solid var(--rule);
   }
   .pillar-cell,
+  .mark-pillar,
   .compat-col {
-    padding: 14px 16px;
+    padding: 16px;
   }
   .brand-meta {
     display: none;
@@ -1532,10 +1820,11 @@ html[lang^="zh"] .proof-lines {
   .lead-copy {
     border-right: none;
     border-bottom: 1px solid var(--rule);
-    padding: 20px 16px;
+    padding: 24px 16px;
   }
-  .lead-install {
-    padding: 16px;
+  .lead-install,
+  .hero-proof {
+    padding: 18px 16px;
   }
   .workbench-header {
     padding: 12px 16px;
@@ -1620,6 +1909,7 @@ html[lang^="zh"] .proof-lines {
   *,
   *::before,
   *::after {
+    animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
   }

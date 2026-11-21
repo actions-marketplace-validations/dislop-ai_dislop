@@ -66,7 +66,7 @@ Verified on 2026-11-21 via GitHub REST API and HTTP status checks. Machine-reada
 - [sam-paech/slop-forensics](https://github.com/sam-paech/slop-forensics) (374★ · 2025-11-01 · prose · en · deterministic): 面向大模型输出语料的统计取证与高频词、三元组挖掘工具包。
 - [eric-tramel/slop-guard](https://github.com/eric-tramel/slop-guard) (168★ · 2026-07-09 · prose · en · deterministic): 零 LLM 裁判的规则驱动英文散文 0–100 打分器。
 - [FeedHive/ai-slop-detector](https://github.com/FeedHive/ai-slop-detector) (113★ · 2026-10-12 · prose · en · deterministic): 9 大类 120 条英文模式清单，提供浏览器在线检查页与配套 Agent Skill。
-- [dislop-ai/dislop (本仓库)](https://github.com/dislop-ai/dislop) (1★ · 2026-11-21 · multi-modal · multilingual · deterministic): 零依赖确定性交付物印前审校与改稿标记多重集复检工具，覆盖中英双语文稿、前端/SVG 及 .docx/.pptx/.pdf 结构检查，配零上传浏览器工作台与 MCP 服务。
+- [dislop-ai/dislop (本仓库)](https://github.com/dislop-ai/dislop) (1★ · 2026-11-21 · multi-modal · multilingual · deterministic): 给 AI 写的东西配一支红笔：零依赖检查中英文稿、网页/SVG、Word、PPT 和 PDF 元数据，改完拿原稿对一遍数字、链接和引用，附不上传的浏览器工作台与 MCP。
 
 ## UI, Design & Diagrams / 前端 UI、设计与图表 (12)
 

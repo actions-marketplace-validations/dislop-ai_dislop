@@ -36,9 +36,9 @@ Atomic card: [local-path-leak.md](../rules/local-path-leak.md)
 - Deletion Test (ZH): 发稿前填入核实后的真实数据；若数据尚未就绪，直接删去未完成段落而非保留占位标记。
 
 ```text
-bad:  Q3 settlement latency averaged [insert p95 latency] across 14 gateways.
-trap: Q3 settlement latency improved dramatically across 14 gateways.
-good: Q3 settlement latency averaged 180 ms (p95) across 14 gateways.
+bad:  Q3 settlement ran across 14 gateways; p95 latency was [insert p95 latency].
+trap: Q3 settlement improved dramatically across 14 gateways.
+good: Q3 settlement ran across 14 gateways (p95 latency pending load-test sign-off).
 ```
 
 Atomic card: [unfilled-placeholder.md](../rules/unfilled-placeholder.md)

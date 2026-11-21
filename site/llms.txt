@@ -1,23 +1,23 @@
 # dislop
 
-> Multi-modal de-slop toolkit for writing, Markdown, HTML/CSS/JSX/SVG, Word (.docx), PowerPoint (.pptx), PDF, and agent deliverables. Works with any model, agent, or dev environment — offline-first, zero runtime deps, deterministic checks + revision comparison.
+> A red pen for AI-written drafts, decks, and web pages. Strikes what can't ship, asks about what sounds canned, and checks edits against the original so numbers, qualifiers, dates, links, code spans, and citations stay put. Zero runtime dependencies; works offline in Node.js 20+, Python 3.10+, MCP, or a browser tab.
 
-Use this site directly as a static Level 0 de-slop service: fetch the smallest matching task bundle below (Methodology + Cases + Tools), or load `/catalog.json` to filter by modality, language, and token budget.
+Choose the page that matches the file you are reviewing. Each guide names the checks to run and shows an example edit. Use the local CLI or MCP server to check a file or compare a revision.
 
-## Quick Start by Task (~800-1,500 tokens each)
-- [Business Brief & Tech Proposal](https://dislop.com/tasks/business-doc.md): Core invariants, `business-brief` pack, and edit comparison.
-- [Web UI, SVG & Slide Decks](https://dislop.com/tasks/web-and-deck.md): Contrast and dark-elevation invariants, `deck-and-ui` rules, and design system tokens.
-- [Editorial & Literary Writing](https://dislop.com/tasks/editorial-writing.md): `literary-essay` pack, prose contrasts, and positive voice notes.
-- [Pre-Release Objective Gate](https://dislop.com/tasks/pre-release-gate.md): Core `error` probes, git diff CI gating, and `verify` workflow.
+## Start by task (~800-1,500 tokens each)
+- [Review a brief or proposal](https://dislop.com/tasks/business-doc.md): Core errors, `business-brief` rules, and edit comparison.
+- [Check a web page or slide deck](https://dislop.com/tasks/web-and-deck.md): Contrast, dark-mode elevation, `deck-and-ui` rules, and design tokens.
+- [Edit an essay](https://dislop.com/tasks/editorial-writing.md): `literary-essay` rules, contrasts, and voice notes.
+- [Check files before release](https://dislop.com/tasks/pre-release-gate.md): Core `error` checks, git diff CI gating, and `verify`.
 
-## Resource Pillars
-- [Methodology](https://dislop.com/methodology/index.md): Deletion Test, anti-pattern map, positive divergence (draft), brand voice guide, and galley design system.
-- [Cases](https://dislop.com/cases/index.md): `bad -> trap -> good` contrasts, self-dogfooding audit, and 31 verified design/typography/academic references.
-- [Tools](https://dislop.com/tools/index.md): Browser workbench, canonical `SKILL.md`, prompt checklists, shipped CLI (`npx`/`uvx`) and MCP, plus roadmap Hooks/SDK/API.
-- [Awesome Anti-Slop](https://dislop.com/awesome/index.md): 87 curated de-slop resources (`dislop.radar/2`, raw JSON at `/awesome/index.json`).
+## Browse by topic
+- [Methodology & Brand Guide](https://dislop.com/methodology/index.md): Deletion Test, anti-pattern notes, brand voice guide, and visual tokens.
+- [Examples & References](https://dislop.com/cases/index.md): Before / overcorrected / after contrasts and 31 print/type design references.
+- [Install & Integrations](https://dislop.com/tools/index.md): Browser workbench, `SKILL.md`, CLI (`npx`/`uvx`), MCP server, and CI hooks.
+- [Awesome Anti-Slop](https://dislop.com/awesome/index.md): 87 checked tools, guides, and papers (`dislop.radar/2`, raw JSON at `/awesome/index.json`).
 
-## Packs & Machine-Readable Index
-- [Structured Catalog (JSON)](https://dislop.com/catalog.json): Versioned manifest (`dislop.catalog/1`) with sha256 and token estimates.
-- [Agent Skill Workflow](https://dislop.com/tools/skill.md): Three-step `check -> targeted edit -> verify` instruction card.
-- [Pack Docs](https://dislop.com/packs/core.md): Also `/packs/business-brief.md`, `/packs/literary-essay.md`, `/packs/deck-and-ui.md`, and 29 atomic `/rules/<id>.md` cards.
-- [Optional Full Bundle](https://dislop.com/llms-full.txt): Single-fetch compilation of methodology and all 29 rules without test fixtures.
+## Machine index & packs
+- [JSON Catalog](https://dislop.com/catalog.json): Versioned manifest (`dislop.catalog/1`) with sha256 and token estimates.
+- [Agent Skill](https://dislop.com/tools/skill.md): `check -> edit -> verify` workflow instructions.
+- [Rule Packs](https://dislop.com/packs/core.md): Also `/packs/business-brief.md`, `/packs/literary-essay.md`, `/packs/deck-and-ui.md`, and 29 `/rules/<id>.md` cards.
+- [Single-Fetch Bundle](https://dislop.com/llms-full.txt): All 29 rules compiled without test fixtures.
