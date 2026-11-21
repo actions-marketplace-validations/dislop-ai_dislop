@@ -10,27 +10,32 @@ import { PACKS_BY_ID, RULE_UI_META } from "./engine/packs-data.mjs";
 
 const I18N = {
   zh: {
-    "page.title": "dislop — 发之前，把稿子里的 AI 味挑出来",
+    "page.title": "dislop — 发之前，把文案和设计里的 AI 味过一遍",
     "nav.skip": "跳至正文",
-    "nav.workbench": "试一试",
-    "nav.coverage": "支持格式",
+    "nav.cases": "案例",
+    "nav.workbench": "在线试",
+    "nav.surfaces": "怎么用",
+    "nav.awesome": "87 条清单",
     "nav.rules": "规则",
-    "nav.surfaces": "安装",
-    "nav.awesome": "工具清单",
+    "nav.github": "GitHub ★",
     "theme.dark": "深色",
     "theme.light": "浅色",
     "btn.copy": "复制",
     "btn.copied": "已复制",
 
     "lead.strike": "好的，以下是为您润色后的版本。",
-    "lead.title": "把稿子里的 AI 味挑出来",
+    "lead.title": "发之前，把文案和设计里的 AI 味过一遍",
     "lead.sub":
-      "AI 写完的文档、PPT 或网页，经常夹着开头寒暄、空话套话、满页字墙或默认紫粉渐变。dislop 只负责把这些问题标出来，不替你重写。你对照标出来的地方自己改就行。",
-    "lead.cta": "贴一段试试 ↓",
-    "lead.awesomeBtn": "87 条相关工具清单 →",
-    "lead.starBtn": "GitHub",
-    "lead.reassure": "只在当前浏览器标签页里跑，不上传文件。",
-    "lead.cliLabel": "或者直接命令行跑：",
+      "把靠谱的写作规矩、网页和 PPT 设计原则、离线检查工具和 87 条精选资源收在一起。复制下面这句话发给你的 AI 立刻就能用，也可以直接贴进来测，或装成 Skill、Plugin 和 MCP。",
+    "lead.promptLabel": "最快上手：复制这句话直接发给你的 AI / Agent（免安装）",
+    "lead.promptText":
+      "先读 https://dislop.com/llms.txt，按里面整理的文案和设计去 AI 味规矩与检查方法，帮我把接下来这份稿子发之前过一遍。",
+    "lead.copyPromptBtn": "复制发给 Agent",
+    "lead.cta": "贴一段在线试 ↓",
+    "lead.installBtn": "装 Skill / Plugin / MCP",
+    "lead.awesomeBtn": "87 条 Awesome 清单 →",
+    "lead.starBtn": "GitHub 点 Star ★",
+    "lead.reassure": "开源零依赖，在线试用只在当前标签页运行，不上传任何文件。",
 
     "hp.tabBad": "原稿",
     "hp.tabTrap": "换了种 AI 味",
@@ -38,14 +43,19 @@ const I18N = {
     "hp.meta": "用同一个检查引擎实时跑的",
     "hp.openWb": "在下面工作台打开 →",
 
-    "m1.title": "红线：AI 残留硬伤",
-    "m1.desc": "留在开头的寒暄、没填的占位符、贴进 Word/PPT 没渲染的 Markdown、网页空链接。",
-    "m2.title": "蓝线：文字里的 AI 味",
-    "m2.desc": "公文黑话、英文高频空词、“不是 A，而是 B”、四字排比、段尾说教、满屏加粗清单。",
-    "m3.title": "蓝线：PPT 和网页模板味",
-    "m3.desc": "单页字太多、要点超 6 条、文字自动缩排、默认紫粉渐变、满屏胶囊标签、三层套盒。",
+    "m1.title": "写前避坑：给 Agent 装规矩",
+    "m1.desc": "复制发给 AI，或装上 Skill / Plugin。让模型动笔前避开空话、三段分号推销句、段尾说教和默认紫粉页面。",
+    "m2.title": "交付前查：25 条离线规则",
+    "m2.desc": "浏览器、MCP 和命令行跑同一套引擎。挑出 AI 寒暄、占位符、裸 Markdown、套话、二阶口号和 PPT / 网页模板味。",
+    "m3.title": "看案例 + 87 条工具清单",
+    "m3.desc": "公开真实改稿对照、0 命中翻车复盘和 87 个核验过的去 AI 味工具与规范，自己查或者转发给团队都顺手。",
 
-    "wb.heading": "下面直接试试",
+    "cases.title": "三个真实案例：为什么删了套词还是像 AI",
+    "cases.desc":
+      "AI 味分三层：一阶是“抓手”“赋能”这类套词，二阶是“不是 A，而是 B”这类口号，三阶是就算工具报 0 问题、读起来依然像在念推销稿的写法。下面三组对照可以直接试，也可以一键复制分享。",
+    "cases.readAll": "看全部对照案例（.md）→",
+
+    "wb.heading": "直接在这里试一试",
     "wb.packLabel": "按哪种稿子查：",
     "pack.brief": "工作文档 / 方案",
     "pack.essay": "随笔 / 长文",
@@ -55,12 +65,76 @@ const I18N = {
     "wb.privacyNote": "内容只留在这个标签页里，页面禁止联网（connect-src 'none'）。",
     "wb.modeProof": "标出问题",
     "wb.modeEdit": "编辑原文",
+    "wb.pasteOwn": "贴我的稿子",
     "wb.applyClean": "看改好的",
     "wb.tryTrap": "看换了种 AI 味的",
     "wb.reset": "还原",
     "wb.voiceTitle": "句长统计",
+    "wb.nudgeText": "测完了觉得顺手？把 dislop 装给你的 Agent，以后交付前自动查一遍，也欢迎去 GitHub 点个 Star。",
+    "wb.nudgeInstall": "装给 Agent / 看安装 ↓",
+    "wb.nudgeCopy": "复制发给 AI",
+    "wb.nudgeStar": "GitHub 点 Star ★",
     "legend.error": "红实线：AI 残留硬伤",
     "legend.warn": "蓝虚线：套话与模板味",
+
+    "surf.title": "怎么用：发给你的 AI，或者装给编程 Agent",
+    "surf.desc":
+      "按你平时用的工具选一种就行。普通对话用户直接复制一句话就能用；用 Claude Code、Codex、Cursor 的开发者装一次 Skill 或 Plugin，以后写前自动避坑、写完自动复检。",
+    "surf.readTools": "完整接入文档（.md）→",
+    "surf.w1Title": "1. 直接发给 AI（免安装）",
+    "surf.w1Desc": "适合 ChatGPT、Claude、Kimi 等任意联网对话。复制一句话丢给它，它会自己读 dislop.com/llms.txt 按规矩审稿。",
+    "surf.w2Title": "2. Agent Skill（跨工具通用）",
+    "surf.w2Desc": "一行命令装进 Claude Code、Codex、Cursor、Windsurf 或 Antigravity。写之前防 AI 味，写完自动复检。",
+    "surf.w3Title": "3. Plugin 插件 / MCP 服务",
+    "surf.w3Desc": "Claude Code 一键装 Plugin，自动配好 Skill + 本地 MCP；其他 Agent 也可以直接接 stdio MCP 调本地引擎。",
+    "surf.w4Title": "4. 命令行与 PR 卡点",
+    "surf.w4Desc": "终端用 npx 或 uvx 查整个目录、Word、PPT 或本次 Git 改动，也能放进 GitHub Actions 卡住 AI 残留硬伤。",
+    "snip.prompt": "发给 AI",
+    "snip.cli": "命令行",
+    "ep.foldTitle": "给 Agent / 开发者看：静态 Markdown 与 JSON 接口",
+    "ep.foldSub": "/llms.txt · /catalog.json · 任务卡 · 规则卡（纯静态，展开查看）",
+    "ep.heading": "给 Agent 读的静态文档（纯 Markdown / JSON）",
+    "ep.llms": "Agent 入口索引",
+    "ep.catalog": "全部文档的 JSON 目录",
+    "ep.taskBiz": "任务卡：工作文档与技术方案",
+    "ep.taskWeb": "任务卡：网页与 PPT 模板味",
+    "ep.taskEdit": "任务卡：随笔与长文",
+    "ep.taskGate": "任务卡：发稿前 AI 残留硬伤检查",
+    "ep.skill": "跨宿主 Agent Skill",
+    "ep.awesome": "87 条工具清单 JSON",
+    "ep.method": "文案与设计基准",
+    "ep.full": "单次拉取的全部 25 条规则",
+
+    "awesome.title": "Awesome Anti-Slop：87 个去 AI 味工具与资料",
+    "awesome.desc":
+      "除了 dislop 自己，我们也维护了一份按场景整理的去 AI 味资源索引，包含 Vale、Impeccable 等成熟工具、中英文写作规范、代码 PR 治理规则和实证论文。全部链接在 2026-11-21 逐条核过一遍。",
+    "awesome.openFull": "打开完整清单 →",
+    "awesome.ecoTitle": "按用途筛选，也可以直接给 Agent 读",
+    "awesome.ecoDesc": "按写作、网页、代码、研究分类筛选，或者只看能本地自动检查的工具。AI 检测器和规避工具单独放在最下面做对照。",
+    "awesome.browseBtn": "在线筛选 87 条清单 →",
+    "awesome.ghBtn": "GitHub 中文版",
+    "awesome.shareBtn": "复制清单推荐语",
+    "awesome.posTitle": "不想长成 AI 模板？看看这些设计参考",
+    "awesome.posDesc": "除了去套话，还存了 31 个印刷、字体厂和独立出版站点，做网页或排版时拿来找灵感很管用。",
+    "awesome.posAll": "全部 31 个参考（.md）→",
+    "stat.entries": "条资料",
+    "stat.sections": "个分类",
+    "stat.det": "个可自动检查",
+    "stat.zh": "条中文 / 多语种",
+
+    "share.title": "觉得顺手？发给同事，或者去 GitHub 留个 Star",
+    "share.desc": "dislop 按 Apache-2.0 完全开源、零依赖、不收数据。如果你身边也有人天天给 AI 稿子改味道，下面三个入口最直接。",
+    "share.c1Title": "一键分享给团队或朋友",
+    "share.c1Desc": "复制一段直白不浮夸的介绍（带官网试用链接、案例页和 87 条清单），直接贴到群聊或文档里就行。",
+    "share.copySiteBtn": "复制项目推荐语",
+    "share.copyCasesBtn": "复制案例页链接",
+    "share.c2Title": "去 GitHub 点个 Star",
+    "share.c2Desc": "检查引擎、Agent Skill、Plugin、MCP 和 87 条 Awesome Anti-Slop 清单都在同一个仓库。点个 Star 方便以后找。",
+    "share.starCta": "GitHub 点 Star ★",
+    "share.c3Title": "一起补案例、规则和工具",
+    "share.c3Desc": "遇到特别典型的 AI 味翻车案例，或者发现好用的去 AI 味工具没进清单，欢迎在路线图或 Issue 里一起补。",
+    "share.roadmapCta": "看路线图 →",
+    "share.issueCta": "投稿案例 / 工具",
 
     "cov.title": "支持哪些文件，哪些还查不了",
     "cov.desc": "能查的和还没做的都写明白。损坏或读不出来的文档会直接报跳过，不会显示成 0 问题。",
@@ -83,41 +157,10 @@ const I18N = {
     "status.partial": "改动检查可用，AST 未做",
     "status.notYet": "还没上线（原型阶段）",
 
-    "why.title": "为什么只标不改",
-    "why.desc":
-      "很多自动“去 AI 味”改写工具会把平实的话改写成另一种套话（比如删了“抓手”，换成“这不是升级，而是革命”），或者把你的语气全洗成同一种腔调。dislop 只标出哪里像 AI 写的，怎么改由你自己定。",
-    "why.readBrand": "看文字与设计说明 →",
-    "dogfood.badTag": "原稿 · 标出 4 处",
-    "dogfood.goodTag": "改完 · 0 处问题",
-
-    "surf.title": "在哪里都能用",
-    "surf.desc": "不管稿子是哪个模型写的，Node.js、Python 和浏览器跑出来的结果一样，都不需要装额外依赖。",
-    "surf.readTools": "全部用法（.md）→",
-    "surf.w1Title": "浏览器",
-    "surf.w1Desc": "就在上面这个页面。直接拖进本地文件，断网也能查。",
-    "surf.w2Title": "命令行",
-    "surf.w2Desc": "用 npx 或 uvx 一行开跑，也可以只查这次 Git 改动。",
-    "surf.w3Title": "编程 Agent",
-    "surf.w3Desc": "接本地 MCP，或者装上 SKILL.md，让 Claude Code、Codex、Cursor 交稿前自己查一遍。",
-    "surf.w4Title": "直接给 Agent 读",
-    "surf.w4Desc": "不想装工具的话，让能上网的 Agent 直接读 /llms.txt 就行。",
-    "snip.cli": "命令行",
-    "snip.agent": "Agent 直读",
-    "ep.heading": "给 Agent 读的静态文档（纯 Markdown / JSON）",
-    "ep.llms": "Agent 入口索引",
-    "ep.catalog": "全部文档的 JSON 目录",
-    "ep.taskBiz": "任务卡：工作文档与技术方案",
-    "ep.taskWeb": "任务卡：网页与 PPT 模板味",
-    "ep.taskEdit": "任务卡：随笔与长文",
-    "ep.taskGate": "任务卡：发稿前 AI 残留硬伤检查",
-    "ep.skill": "跨宿主 Agent Skill",
-    "ep.awesome": "87 条工具清单 JSON",
-    "ep.method": "文案与设计基准",
-    "ep.full": "单次拉取的全部 25 条规则",
-
-    "rules.title": "规则列表",
-    "rules.desc": "中文页只列中文和通用规则，例子都是中文；切英文可以看到全部英文规则。点「试试 ↑」会直接装进上面的工作台。",
-    "rules.readCases": "看全部例子（.md）→",
+    "rules.title": "全部 25 条规则明细（Agent 与深度用户参考）",
+    "rules.desc": "平时不需要背规则，直接交给 Agent 或贴进工作台就行。想逐条查判断依据、看正反例或者点「试试 ↑」加载单条规则时，展开下面这张表。",
+    "rules.readCases": "单文件拉取全部规则（llms-full.txt）→",
+    "rules.foldTitle": "展开查看 25 条规则明细与在线筛选",
     "rules.modAll": "全部格式",
     "rules.sevAll": "全部级别",
     "rules.sevError": "硬伤（error）",
@@ -134,22 +177,6 @@ const I18N = {
     "rules.colWhy": "查什么 / 怎么判断",
     "rules.colEx": "原句 → 改坏 → 改好",
 
-    "awesome.title": "其他去 AI 味工具（Awesome Anti-Slop）",
-    "awesome.desc":
-      "我们也顺手整理了一份 87 条工具和资料清单，包括 Vale、Impeccable 这类成熟项目，以及中英文写作规范、PR 治理规则和论文。链接和仓库信息在 2026-11-21 核过一遍。",
-    "awesome.openFull": "打开清单 →",
-    "awesome.ecoTitle": "按用途筛选",
-    "awesome.ecoDesc": "可以按写作、网页、代码、研究分类找，也可以只看能本地自动检查的工具。检测器和规避工具单独放在最下面做对照。",
-    "awesome.browseBtn": "在线筛选 →",
-    "awesome.ghBtn": "GitHub 中文版",
-    "awesome.posTitle": "顺便存的设计参考",
-    "awesome.posDesc": "除了去套话，还存了 31 个印刷、字体厂和独立出版站点，做页面不想长成默认模板时可以翻翻。",
-    "awesome.posAll": "全部 31 个参考（.md）→",
-    "stat.entries": "条资料",
-    "stat.sections": "个分类",
-    "stat.det": "个可自动检查",
-    "stat.zh": "条中文 / 多语种",
-
     "pos.norm-zurich": "苏黎世独立设计事务所，以极克制的模数网格见长。",
     "pos.stiftung-buchkunst": "世界最美的书评选档案：看页边距、版心比例与长篇阅读怎么拉开呼吸感。",
     "pos.fonts-in-use": "真实印刷品与网页里的字体搭配库。",
@@ -164,27 +191,32 @@ const I18N = {
     "footer.design": "视觉规范",
   },
   en: {
-    "page.title": "dislop — Catch AI slop before you send it",
+    "page.title": "dislop — Clear the AI slop from your writing and design",
     "nav.skip": "Skip to main content",
+    "nav.cases": "Cases",
     "nav.workbench": "Try it",
-    "nav.coverage": "Formats",
+    "nav.surfaces": "How to use",
+    "nav.awesome": "87 tools",
     "nav.rules": "Rules",
-    "nav.surfaces": "Install",
-    "nav.awesome": "Awesome list",
+    "nav.github": "GitHub ★",
     "theme.dark": "Dark",
     "theme.light": "Light",
     "btn.copy": "Copy",
     "btn.copied": "Copied",
 
     "lead.strike": "Certainly! Here is your polished draft.",
-    "lead.title": "Catch the AI slop before you send it",
+    "lead.title": "Clear the AI slop from your writing and design",
     "lead.sub":
-      "AI-written docs, slides, and web pages often leave behind chat replies, stock phrasing, crowded slides, or purple-pink template chrome. dislop only marks what looks off so you can edit it yourself.",
-    "lead.cta": "Try a draft ↓",
-    "lead.awesomeBtn": "87 anti-slop tools →",
-    "lead.starBtn": "GitHub",
-    "lead.reassure": "Runs only in this browser tab. Nothing gets uploaded.",
-    "lead.cliLabel": "Or run it from a terminal:",
+      "Good writing habits, web and slide design rules, an offline checker, and 87 vetted tools—gathered in one place. Copy one line to hand dislop to your AI right now, test a draft below, or install it as a Skill, Plugin, or MCP.",
+    "lead.promptLabel": "Fastest start: copy this line to any AI / coding agent (no install)",
+    "lead.promptText":
+      "Read https://dislop.com/llms.txt and follow its writing and design anti-slop rules and checks before delivering my next doc, slide deck, or web page.",
+    "lead.copyPromptBtn": "Copy for Agent",
+    "lead.cta": "Try a draft here ↓",
+    "lead.installBtn": "Install Skill / Plugin / MCP",
+    "lead.awesomeBtn": "87 Awesome tools →",
+    "lead.starBtn": "Star on GitHub ★",
+    "lead.reassure": "Open source, zero dependencies. The live workbench runs only in this tab with zero uploads.",
 
     "hp.tabBad": "Original",
     "hp.tabTrap": "Still sounds like AI",
@@ -192,14 +224,19 @@ const I18N = {
     "hp.meta": "Running live on the same linter engine",
     "hp.openWb": "Open in workbench ↓",
 
-    "m1.title": "Red: AI artifacts",
-    "m1.desc": "Stray chat replies, unfilled placeholders, raw Markdown pasted into Word/PPT, and dead href='#' placeholder links.",
-    "m2.title": "Blue: prose clichés",
-    "m2.desc": "Throat-clearing openers, stock buzzwords, 'Not X, but Y' slogans, staccato chains, moralizing endings, and bold-lead bullet walls.",
-    "m3.title": "Blue: slide & UI templates",
-    "m3.desc": "Crowded slides, over 6 bullets, shrunk autofit text, purple-pink AI gradients, pill-badge walls, and 3-level nested cards.",
+    "m1.title": "Prevent while drafting",
+    "m1.desc": "Send the prompt or install the Skill / Plugin so your AI avoids stock phrasing, 3-part semicolon pitches, moralizing endings, and default AI chrome upfront.",
+    "m2.title": "Check before shipping",
+    "m2.desc": "Browser, MCP, and CLI run the same 25 offline rules to catch chat wrappers, placeholders, raw Markdown, clichés, 2nd-order slogans, and slide/UI slop.",
+    "m3.title": "Cases + 87 Awesome tools",
+    "m3.desc": "Real before/after rewrites, our own 0-finding copy autopsy, and 87 checked anti-slop tools, guides, and papers you can browse or share.",
 
-    "wb.heading": "Try it here",
+    "cases.title": "Three real cases: why cutting buzzwords still sounds like AI",
+    "cases.desc":
+      "AI slop shows up in three layers: 1st-order clichés, 2nd-order slogan frames ('Not X, but Y'), and 3rd-order pitch cadence that passes a linter with 0 findings. Try them live or copy any case to share.",
+    "cases.readAll": "All contrast cases (.md) →",
+
+    "wb.heading": "Try it right here",
     "wb.packLabel": "Check as:",
     "pack.brief": "Work doc / spec",
     "pack.essay": "Essay / longform",
@@ -209,12 +246,76 @@ const I18N = {
     "wb.privacyNote": "Everything stays in this tab. The page blocks outbound requests (connect-src 'none').",
     "wb.modeProof": "Highlights",
     "wb.modeEdit": "Edit text",
+    "wb.pasteOwn": "Paste my draft",
     "wb.applyClean": "Clean version",
     "wb.tryTrap": "2nd-order AI slop",
     "wb.reset": "Reset",
     "wb.voiceTitle": "Sentence stats",
+    "wb.nudgeText": "Done testing? Install dislop for your coding agent so every draft gets checked before shipping, or star it on GitHub.",
+    "wb.nudgeInstall": "Install for Agent ↓",
+    "wb.nudgeCopy": "Copy for AI",
+    "wb.nudgeStar": "Star on GitHub ★",
     "legend.error": "Red solid: AI artifact",
     "legend.warn": "Blue dashed: cliché / template slop",
+
+    "surf.title": "How to use it: hand it to your AI or install it for your agent",
+    "surf.desc":
+      "Pick whichever fits how you work. Everyday AI chat users can paste one sentence with zero setup; Claude Code, Codex, and Cursor users can install the Skill or Plugin once for automatic prevent-and-check.",
+    "surf.readTools": "Full setup guide (.md) →",
+    "surf.w1Title": "1. Send to any AI (zero install)",
+    "surf.w1Desc": "Works in ChatGPT, Claude, or any web-capable agent. Paste one sentence and it reads dislop.com/llms.txt directly.",
+    "surf.w2Title": "2. Agent Skill (cross-host)",
+    "surf.w2Desc": "One command for Claude Code, Codex, Cursor, Windsurf, or Antigravity. Covers plain writing habits plus local re-checking.",
+    "surf.w3Title": "3. Plugin bundle / MCP server",
+    "surf.w3Desc": "Install the Claude Code plugin to get Skill + local stdio MCP in one step, or attach MCP directly in any compatible host.",
+    "surf.w4Title": "4. CLI & PR gate",
+    "surf.w4Desc": "Run npx or uvx on folders, Word/PPT files, or git diffs, or block AI artifact bugs automatically in GitHub Actions.",
+    "snip.prompt": "Send to AI",
+    "snip.cli": "CLI",
+    "ep.foldTitle": "For Agents & Developers: Static Markdown & JSON Endpoints",
+    "ep.foldSub": "/llms.txt · /catalog.json · task guides · rule cards (click to expand)",
+    "ep.heading": "Plain Markdown & JSON pages for agents",
+    "ep.llms": "Entry index for agents",
+    "ep.catalog": "JSON index of all pages",
+    "ep.taskBiz": "Guide: work docs & specs",
+    "ep.taskWeb": "Guide: web pages & slides",
+    "ep.taskEdit": "Guide: essays & longform",
+    "ep.taskGate": "Guide: pre-release AI artifact checks",
+    "ep.skill": "Cross-host Agent Skill",
+    "ep.awesome": "Raw JSON for 87 anti-slop tools",
+    "ep.method": "Voice & design guide",
+    "ep.full": "All 25 rules in one file",
+
+    "awesome.title": "Awesome Anti-Slop: 87 checked tools, guides & papers",
+    "awesome.desc":
+      "Beyond dislop itself, we maintain a verified directory of anti-slop tools, writing guides, UI rules, PR policies, and papers—including Vale and Impeccable. Every link was checked on 2026-11-21.",
+    "awesome.openFull": "Open full list →",
+    "awesome.ecoTitle": "Filter by use case, or feed it to an agent",
+    "awesome.ecoDesc": "Filter by writing, web UI, code, or research, or show only tools with automated checks. Detectors and bypass tools are kept separate at the bottom.",
+    "awesome.browseBtn": "Filter all 87 entries →",
+    "awesome.ghBtn": "View on GitHub",
+    "awesome.shareBtn": "Copy list blurb",
+    "awesome.posTitle": "Design references that don't look like AI templates",
+    "awesome.posDesc": "31 public print, type foundry, and independent publishing sites worth browsing when you want a page to look grounded.",
+    "awesome.posAll": "All 31 references (.md) →",
+    "stat.entries": "entries",
+    "stat.sections": "topics",
+    "stat.det": "automated tools",
+    "stat.zh": "zh / multilingual",
+
+    "share.title": "Found this useful? Share it or star it on GitHub",
+    "share.desc": "dislop is Apache-2.0 open source, zero-dependency, and collects no data. If your team deals with AI slop every week, these three links help the most.",
+    "share.c1Title": "Share with a teammate or friend",
+    "share.c1Desc": "Copy a plain, no-hype blurb with the live workbench, real cases, and 87-entry Awesome list.",
+    "share.copySiteBtn": "Copy project blurb",
+    "share.copyCasesBtn": "Copy cases link",
+    "share.c2Title": "Star dislop on GitHub",
+    "share.c2Desc": "The engine, Agent Skill, Plugin, MCP server, and 87-entry Awesome Anti-Slop index all live in one repo.",
+    "share.starCta": "Star on GitHub ★",
+    "share.c3Title": "Add a case, rule, or tool",
+    "share.c3Desc": "Have a classic AI-slop before/after example or a solid anti-slop tool missing from the list? Drop it in our Roadmap or Issues.",
+    "share.roadmapCta": "View Roadmap →",
+    "share.issueCta": "Submit case / tool",
 
     "cov.title": "What it checks, and what it skips",
     "cov.desc": "Plain status for each file type. Unreadable archives are marked as skipped instead of 0 issues.",
@@ -237,41 +338,10 @@ const I18N = {
     "status.partial": "Diff checks work; no AST",
     "status.notYet": "Not shipped (prototype)",
 
-    "why.title": "Why it marks instead of rewriting",
-    "why.desc":
-      "Auto-humanizers often trade one cliché for another (dropping 'game-changer' only to write 'Not X, but Y') or flatten your voice into a generic template. dislop just points out what sounds AI-written and leaves the edits to you.",
-    "why.readBrand": "Read voice & style notes →",
-    "dogfood.badTag": "Original · 3 marks",
-    "dogfood.goodTag": "Cleaned up · 0 issues",
-
-    "surf.title": "Where to run it",
-    "surf.desc": "Works regardless of which model wrote the draft. Node.js, Python, and the browser run the same checks with zero external dependencies.",
-    "surf.readTools": "All install options (.md) →",
-    "surf.w1Title": "Browser",
-    "surf.w1Desc": "Right here on this page. Drop in a local file; works offline.",
-    "surf.w2Title": "Terminal",
-    "surf.w2Desc": "Run once with npx or uvx, or check only changed lines in Git.",
-    "surf.w3Title": "Coding agents",
-    "surf.w3Desc": "Attach the local MCP server or install SKILL.md in Claude Code, Codex, or Cursor.",
-    "surf.w4Title": "Plain pages for agents",
-    "surf.w4Desc": "No local install needed: point any web-capable agent at /llms.txt.",
-    "snip.cli": "Terminal",
-    "snip.agent": "Agent fetch",
-    "ep.heading": "Plain Markdown & JSON pages for agents",
-    "ep.llms": "Entry index for agents",
-    "ep.catalog": "JSON index of all pages",
-    "ep.taskBiz": "Guide: work docs & specs",
-    "ep.taskWeb": "Guide: web pages & slides",
-    "ep.taskEdit": "Guide: essays & longform",
-    "ep.taskGate": "Guide: pre-release AI artifact checks",
-    "ep.skill": "Cross-host Agent Skill",
-    "ep.awesome": "Raw JSON for 87 anti-slop tools",
-    "ep.method": "Voice & design guide",
-    "ep.full": "All 25 rules in one file",
-
-    "rules.title": "Rules",
-    "rules.desc": "The English page lists English and shared rules with English examples only. Switch to 中文 for Chinese-specific rules. Click 'Try ↑' to load any example into the workbench.",
-    "rules.readCases": "All examples (.md) →",
+    "rules.title": "All 25 rules (Agent & power-user reference)",
+    "rules.desc": "You don't need to memorize rules—just hand dislop to your agent or paste into the workbench. Expand the table below whenever you want exact rule details or to test a single rule.",
+    "rules.readCases": "Single-file rule digest (llms-full.txt) →",
+    "rules.foldTitle": "Expand all 25 rules and filter online",
     "rules.modAll": "All formats",
     "rules.sevAll": "All levels",
     "rules.sevError": "Hard bug (error)",
@@ -287,22 +357,6 @@ const I18N = {
     "rules.colMod": "Formats",
     "rules.colWhy": "What it checks / how to judge",
     "rules.colEx": "Before → Bad edit → After",
-
-    "awesome.title": "Other anti-slop tools (Awesome Anti-Slop)",
-    "awesome.desc":
-      "We also keep a list of 87 tools, guides, PR policies, and papers, including established linters like Vale and Impeccable. Every link and GitHub snapshot was checked on 2026-11-21.",
-    "awesome.openFull": "Open full list →",
-    "awesome.ecoTitle": "Filter by use case",
-    "awesome.ecoDesc": "Filter by writing, web UI, code, or research, or show only tools with automated checks. Detectors and bypass tools are kept separate at the bottom.",
-    "awesome.browseBtn": "Filter online →",
-    "awesome.ghBtn": "View on GitHub",
-    "awesome.posTitle": "Design references we saved",
-    "awesome.posDesc": "31 public print, type foundry, and independent publishing sites worth browsing when you do not want a page to look like a default template.",
-    "awesome.posAll": "All 31 references (.md) →",
-    "stat.entries": "entries",
-    "stat.sections": "topics",
-    "stat.det": "automated tools",
-    "stat.zh": "zh / multilingual",
 
     "pos.norm-zurich": "Strict modular graphic systems, micro-typographic rules, and structural restraint.",
     "pos.stiftung-buchkunst": "Book proportion, margin choreography, and pacing principles transferable to reports, PDFs, and decks.",
@@ -601,10 +655,224 @@ const SPECIMENS_BY_LANG = {
   ],
 };
 
+// ---------- Real Cases & Share Blurbs (100% Language-Pure) ----------
+
+const CASES_BY_LANG = {
+  zh: [
+    {
+      id: "doc",
+      kicker: "案例 01 · 工作文档与上线说明",
+      title: "删了“抓手”，结果换成了“不是……而是……”",
+      steps: [
+        {
+          cls: "is-bad",
+          label: "原稿（一阶套话 + AI 寒暄）",
+          text: "好的，以下是修改后的上线说明。值得注意的是，本次改造以队列分级为重要抓手，全面赋能一线运维团队，故障恢复时间最多 45 秒。",
+        },
+        {
+          cls: "is-trap",
+          label: "改过头（掉进二阶 AI 腔）",
+          text: "队列分级已经落地，故障恢复时间最多 45 秒。这不是一次简单的升级，而是一场效率革命。",
+        },
+        {
+          cls: "is-good",
+          label: "改干净（只留动作和结果）",
+          text: "这次改造给队列分了级，一线运维团队的故障恢复时间最多 45 秒。",
+        },
+      ],
+      loadSpecimenId: "brief",
+      loadLabel: "在工作台试一下 ↓",
+      shareLabel: "复制这段分享",
+      shareText: [
+        "看一个挺典型的去 AI 味对照：",
+        "原稿：好的，以下是修改后的上线说明。值得注意的是，本次改造以队列分级为重要抓手，全面赋能一线运维团队，故障恢复时间最多 45 秒。",
+        "改过头：队列分级已经落地，故障恢复时间最多 45 秒。这不是一次简单的升级，而是一场效率革命。",
+        "改干净：这次改造给队列分了级，一线运维团队的故障恢复时间最多 45 秒。",
+        "在线试查和 87 条去 AI 味工具清单：https://dislop.com/#cases",
+      ].join("\n"),
+    },
+    {
+      id: "autopsy",
+      kicker: "案例 02 · 真实自查（三阶结构味）",
+      title: "检查报 0 处问题，但我们自己上一版首屏照样像 AI",
+      steps: [
+        {
+          cls: "is-bad",
+          label: "翻车原稿（0 命中，却满屏 AI 味）",
+          text: "把稿子、PPT 或网页贴进来。不能发的硬伤，dislop 直接划掉；听着像套话的地方，它在页边问你一句；等你改完，再拿原稿逐条对一遍。它不替你改稿，笔一直在你手里。",
+        },
+        {
+          cls: "is-good",
+          label: "改回人话",
+          text: "AI 写完的文档、Word、PPT 和网页，经常留着开头寒暄、空话套话、满页字墙或默认紫粉模板。你可以直接复制一句话发给你的 AI，或者在这里在线试查。",
+        },
+      ],
+      note: "毛病不在单个词，在于“三段对称分号推销句 + 假装老校对 + 段尾金句收尾”。这就是为什么单靠脚本标红线不够，必须把写作规矩一起写进 Skill 和 Plugin。",
+      linkHref: "./methodology/brand-and-voice.md",
+      linkLabel: "看完整复盘 →",
+      shareLabel: "复制这段分享",
+      shareText: [
+        "为什么有时候把“赋能”“抓手”删完了，读起来还是满屏 AI 味？",
+        "我们拿自己上一版官网首屏做了次复盘：工具检查报 0 处问题，但三段对称分号推销句 + 校对戏服 + 段尾“笔一直在你手里”金句收尾，一眼还是 AI 写的。",
+        "完整前后对照与去 AI 味方法：https://dislop.com/#cases",
+      ].join("\n"),
+    },
+    {
+      id: "ui",
+      kicker: "案例 03 · 网页与 PPT 模板味",
+      title: "紫粉渐变 + 装饰徽章 + 点不动的空链接",
+      steps: [
+        {
+          cls: "is-bad",
+          label: "生成式模板原稿",
+          html: '<code>from-indigo via-purple to-pink</code> 渐变标题 + <code>AI 强力驱动</code> 徽章 + <code>href="#"</code> 假下载按钮。',
+        },
+        {
+          cls: "is-good",
+          label: "改干净",
+          html: "纯色纸面和 1px 分界线、去掉装饰徽章、按钮接上真实报告路径 <code>./report.html</code>。",
+        },
+      ],
+      note: "同一套引擎也能直接读 .pptx，挑出单页字墙（> 280 字）、要点超过 6 条、文字自动缩排和空泛标题。",
+      loadSpecimenId: "ui-chrome",
+      loadLabel: "在工作台试一下 ↓",
+      shareLabel: "复制这段分享",
+      shareText: [
+        "AI 写的网页和 PPT 常见老三样：紫粉渐变标题、AI 强力驱动徽章、点不动的 href=\"#\" 空链接，还有单页塞满 300 字的 PPT。",
+        "dislop 可以在浏览器或命令行直接离线挑出这些模板味：https://dislop.com/#cases",
+      ].join("\n"),
+    },
+  ],
+  en: [
+    {
+      id: "doc",
+      kicker: "Case 01 · Work docs & release notes",
+      title: "Cutting 'game-changer' only to write 'Not X — it's Y'",
+      steps: [
+        {
+          cls: "is-bad",
+          label: "Original (1st-order clichés + chat wrapper)",
+          text: "Certainly! Here is the launch note. It's worth noting that CSV exports are a game-changer, finishing in up to 12 minutes for workspaces above 500,000 rows.",
+        },
+        {
+          cls: "is-trap",
+          label: "Overcorrected (2nd-order AI slogan)",
+          text: "CSV exports finish in up to 12 minutes for workspaces above 500,000 rows. This isn't just an upgrade — it's a new standard.",
+        },
+        {
+          cls: "is-good",
+          label: "Cleaned up (just the fact)",
+          text: "CSV exports finish in up to 12 minutes for workspaces above 500,000 rows.",
+        },
+      ],
+      loadSpecimenId: "brief",
+      loadLabel: "Try in workbench ↓",
+      shareLabel: "Copy to share",
+      shareText: [
+        "Quick AI-slop before/after:",
+        "Before: Certainly! Here is the launch note. It's worth noting that CSV exports are a game-changer, finishing in up to 12 minutes for workspaces above 500,000 rows.",
+        "Overcorrected: CSV exports finish in up to 12 minutes for workspaces above 500,000 rows. This isn't just an upgrade — it's a new standard.",
+        "After: CSV exports finish in up to 12 minutes for workspaces above 500,000 rows.",
+        "Try drafts offline + 87 Awesome Anti-Slop tools: https://dislop.com/#cases",
+      ].join("\n"),
+    },
+    {
+      id: "autopsy",
+      kicker: "Case 02 · Real self-audit (3rd-order cadence)",
+      title: "0 linter findings, yet our own previous hero still sounded like AI",
+      steps: [
+        {
+          cls: "is-bad",
+          label: "Previous hero (0 findings, still pitchy AI)",
+          text: "Drop in a draft, deck, or page. Hard defects get crossed out; cliché lines get a margin query; once you edit, we check every number and link. It never rewrites for you—the pen stays in your hand.",
+        },
+        {
+          cls: "is-good",
+          label: "Plain rewrite",
+          text: "AI-written docs, Word files, slides, and web pages often ship with chat replies, stock phrasing, crowded slides, or purple-pink template chrome. Copy one line to hand dislop to your AI right now, or test a draft here.",
+        },
+      ],
+      note: "Zero buzzwords triggered a rule, yet the 3-part semicolon pitch, editor roleplay, and pull-quote closer still screamed AI. That's why we put plain writing rules into SKILL.md and the Plugin alongside the linter.",
+      linkHref: "./methodology/brand-and-voice.md",
+      linkLabel: "Read full autopsy →",
+      shareLabel: "Copy to share",
+      shareText: [
+        "Why a draft with 0 linter findings can still scream AI:",
+        "Our own previous hero had zero banned buzzwords, yet a 3-part semicolon pitch + editor costume + pull-quote closer ('the pen stays in your hand') still felt synthetic.",
+        "Full before/after & anti-slop Skill/Plugin: https://dislop.com/#cases",
+      ].join("\n"),
+    },
+    {
+      id: "ui",
+      kicker: "Case 03 · Web UI & slide templates",
+      title: "Purple-pink gradient + prompt badge + dead href='#' button",
+      steps: [
+        {
+          cls: "is-bad",
+          label: "Default generated template",
+          html: '<code>from-indigo via-purple to-pink</code> gradient heading + <code>AI-Powered</code> badge + dead <code>href="#"</code> download button.',
+        },
+        {
+          cls: "is-good",
+          label: "Cleaned up",
+          html: "Flat paper surfaces with 1px rules, no prompt-echo badge, and a working <code>./report.html</code> link.",
+        },
+      ],
+      note: "The same zero-dep engine inspects .pptx decks for slide word walls (> 120 words), > 6 bullets, autofit text shrink, and generic 'Overview' titles.",
+      loadSpecimenId: "ui-chrome",
+      loadLabel: "Try in workbench ↓",
+      shareLabel: "Copy to share",
+      shareText: [
+        "Classic AI UI & deck slop: indigo-purple-pink gradients, 'AI-Powered' badges, dead href=\"#\" buttons, and 150-word slides.",
+        "dislop catches all of them offline in your browser, CLI, or agent MCP: https://dislop.com/#cases",
+      ].join("\n"),
+    },
+  ],
+};
+
+const SHARE_BLURBS_BY_LANG = {
+  zh: {
+    site: "分享一个开源的去 AI 味工具箱 dislop：发文档、PPT 或网页前，可以直接复制一句话发给你的 AI 按规矩过一遍，也能装成 Claude Code / Codex / Cursor 的 Skill、Plugin 或 MCP，官网还附了一份核验过的 87 条 Awesome Anti-Slop 工具清单。官网：https://dislop.com GitHub：https://github.com/dislop-ai/dislop",
+    awesome: "整理了一份 87 条去 AI 味工具与资料清单（Awesome Anti-Slop），涵盖中英文写作规范、Vale / Impeccable 等自动检查器、网页设计规则、PR 治理和论文，支持在线筛选也提供给 Agent 读的 JSON：https://dislop.com/awesome/ （GitHub：https://github.com/dislop-ai/dislop/blob/main/awesome/README.zh-CN.md）",
+    cases: "https://dislop.com/#cases",
+  },
+  en: {
+    site: "Checking out dislop — an open-source, zero-dependency anti-slop kit for docs, slides, and web pages. You can paste one line into any AI chat, install it as a Skill / Plugin / MCP for Claude Code, Codex, or Cursor, try drafts offline, or browse 87 Awesome Anti-Slop tools: https://dislop.com (GitHub: https://github.com/dislop-ai/dislop)",
+    awesome: "Awesome Anti-Slop: 87 verified anti-slop tools, writing guides, UI standards, PR policies, and papers with an offline filter UI and agent-ready JSON: https://dislop.com/awesome/ (GitHub: https://github.com/dislop-ai/dislop/tree/main/awesome)",
+    cases: "https://dislop.com/#cases",
+  },
+};
+
 // ---------- Snippets by Language ----------
 
 const SNIPPETS_BY_LANG = {
   zh: {
+    prompt: `# 复制下面这段直接发给任意能联网的 AI / Agent（免安装）：
+请先读 https://dislop.com/llms.txt，按里面的去 AI 味写作规矩和检查方法，帮我把接下来这份稿子（文档 / PPT / 网页）交付前过一遍：
+1. 先删掉 AI 寒暄、没填的占位符和空链接；
+2. 把套话、二阶口号和三段分号推销句改回平实人话，不编造新数字；
+3. 改完再对照规则复检一遍。`,
+    skill: `# 一行安装跨宿主 Agent Skill（Claude Code / Codex / Cursor / Windsurf / Antigravity）
+npx skills add dislop-ai/dislop
+
+# 装完后你的 Agent 会按三步工作：
+# 1. 动笔前套用去 AI 味写作与 UI 规矩（避开一阶套词、二阶口号和三阶推销句）
+# 2. 写完调用本地 dislop 检查文档、HTML、Word 或 PPT
+# 3. 局部改干净后再复检一遍`,
+    plugin: `# 在 Claude Code 里一键安装 Plugin（同时装好 SKILL.md + 本地 MCP 服务）
+/plugin marketplace add dislop-ai/dislop
+/plugin install dislop@dislop-ai
+
+# 仓库根目录自带标准清单：
+# .claude-plugin/marketplace.json · .claude-plugin/plugin.json · .mcp.json`,
+    mcp: `{
+  "mcpServers": {
+    "dislop": {
+      "command": "npx",
+      "args": ["--yes", "github:dislop-ai/dislop", "--mcp"]
+    }
+  }
+}`,
     cli: `# 检查当前目录（命中硬伤时退出码为 1，同时标出套话提醒）
 npx --yes github:dislop-ai/dislop check .
 
@@ -616,23 +884,6 @@ uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review
 
 # 查看某条规则的判断方法和改前/改后示例
 npx --yes github:dislop-ai/dislop explain negation-pivot-frame --lang zh`,
-    mcp: `{
-  "mcpServers": {
-    "dislop": {
-      "command": "npx",
-      "args": ["--yes", "github:dislop-ai/dislop", "--mcp"]
-    }
-  }
-}`,
-    agent: `# 1. 先让联网 Agent 读入口索引（约 2.1 KB）
-curl -fsSL https://dislop.com/llms.txt
-
-# 2. 按手头的活儿挑一张任务卡
-curl -fsSL https://dislop.com/tasks/business-doc.md
-curl -fsSL https://dislop.com/tasks/web-and-deck.md
-
-# 3. 读取 87 条工具清单的 JSON 数据
-curl -fsSL https://dislop.com/awesome/index.json`,
     ci: `name: dislop
 on: [pull_request]
 jobs:
@@ -658,6 +909,32 @@ jobs:
 }`,
   },
   en: {
+    prompt: `# Copy and paste this into any web-capable AI chat or coding agent (zero install):
+Read https://dislop.com/llms.txt and follow its anti-slop rules before we ship this draft (doc, slide deck, or web page):
+1. Remove stray AI chat wrappers, unfilled placeholders, and dead links;
+2. Rewrite clichés, 2nd-order slogans, and 3-part semicolon pitches plainly without inventing facts;
+3. Run a final check against the rules before delivering.`,
+    skill: `# Install the cross-host Agent Skill (Claude Code, Codex, Cursor, Windsurf, Antigravity)
+npx skills add dislop-ai/dislop
+
+# Once installed, your agent runs a 3-step loop:
+# 1. Draft plainly using the anti-slop prose & UI rules
+# 2. Check the Markdown, HTML, DOCX, or PPTX locally
+# 3. Clean up flagged spans and re-check`,
+    plugin: `# Install as a Claude Code Plugin (bundles SKILL.md + local stdio MCP server)
+/plugin marketplace add dislop-ai/dislop
+/plugin install dislop@dislop-ai
+
+# Standard plugin manifests live in the repo root:
+# .claude-plugin/marketplace.json · .claude-plugin/plugin.json · .mcp.json`,
+    mcp: `{
+  "mcpServers": {
+    "dislop": {
+      "command": "npx",
+      "args": ["--yes", "github:dislop-ai/dislop", "--mcp"]
+    }
+  }
+}`,
     cli: `# Check the current folder (exits 1 on core errors, prints style warnings)
 npx --yes github:dislop-ai/dislop check .
 
@@ -669,23 +946,6 @@ uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review
 
 # Show the check question and examples for a rule
 npx --yes github:dislop-ai/dislop explain negation-pivot-frame`,
-    mcp: `{
-  "mcpServers": {
-    "dislop": {
-      "command": "npx",
-      "args": ["--yes", "github:dislop-ai/dislop", "--mcp"]
-    }
-  }
-}`,
-    agent: `# 1. Start with the compact task router (~2.1 KB)
-curl -fsSL https://dislop.com/llms.txt
-
-# 2. Fetch one ~1,000-token guide for your task
-curl -fsSL https://dislop.com/tasks/business-doc.md
-curl -fsSL https://dislop.com/tasks/web-and-deck.md
-
-# 3. Load all 87 Awesome Anti-Slop entries as JSON
-curl -fsSL https://dislop.com/awesome/index.json`,
     ci: `name: dislop
 on: [pull_request]
 jobs:
@@ -767,7 +1027,7 @@ let activeModalityFilter = "all";
 let activeSeverityFilter = "all";
 let activeRuleSearch = "";
 let highlightedRuleId = null;
-let activeSnippet = "cli";
+let activeSnippet = "prompt";
 const copyTimers = new WeakMap();
 
 // ---------- Browser-Native ZIP Reader (`DecompressionStream`) ----------
@@ -1224,39 +1484,95 @@ function renderWorkbench() {
       renderWorkbench();
     });
   });
+
+  const nudgeEl = document.getElementById("wb-nudge-text");
+  if (nudgeEl) {
+    if (!isEmptySheet && findings.length === 0 && skipped.length === 0) {
+      nudgeEl.textContent =
+        currentLang === "zh"
+          ? "检查通过（0 处问题）。装成 Skill / Plugin / MCP 让 Agent 下次自动跑，顺手去 GitHub 点个 Star 吧。"
+          : "Looks clean (0 issues). Install the Skill, Plugin, or MCP so your agent checks automatically next time, or star us on GitHub.";
+    } else if (!isEmptySheet && (lastUploadedFile || currentText !== baselineText)) {
+      nudgeEl.textContent =
+        currentLang === "zh"
+          ? `已标出 ${findings.length} 处问题。不想每次手动贴进来？把 dislop 装给你的 Agent，或去 GitHub 收藏仓库。`
+          : `Flagged ${findings.length} ${findings.length === 1 ? "issue" : "issues"}. Install dislop for your agent to run this automatically, or star the repo on GitHub.`;
+    } else {
+      nudgeEl.textContent = (I18N[currentLang] || I18N.zh)["wb.nudgeText"];
+    }
+  }
 }
 
-// ---------- Verified Language-Pure Dogfood Contrast ----------
+// ---------- Real Cases Showcase (Language-Pure + Interactive Load & Share) ----------
 
-function renderDogfood() {
-  const data = HERO_PROOF_BY_LANG[currentLang] || HERO_PROOF_BY_LANG.zh;
-  const pack = resolveEffectivePack(data.pack, PACKS_BY_ID);
-  const badRes = auditText(data.bad, { filename: data.filename, modality: data.modality, pack });
-  const goodRes = auditText(data.good, { filename: data.filename, modality: data.modality, pack });
+function loadSpecimenById(specimenId) {
+  const list = SPECIMENS_BY_LANG[currentLang] || SPECIMENS_BY_LANG.zh;
+  const idx = list.findIndex((s) => s.id === specimenId);
+  if (idx === -1) return;
+  const sp = list[idx];
+  uploadSeq += 1;
+  binaryAuditResult = null;
+  lastUploadedFile = null;
+  uploadedOriginalText = null;
+  customRuleTitle = null;
+  activeSpecimenIdx = idx;
+  activeSpecimen = sp;
+  currentPackId = sp.pack;
+  currentFilename = sp.filename;
+  currentModality = sp.modality;
+  baselineText = sp.bad;
+  currentText = sp.bad;
+  focusedFindingIdx = 0;
+  document.getElementById("pack-select").value = sp.pack;
+  setViewMode("proof");
+  updateSpecimenRailSelection();
+  renderWorkbench();
+  document.getElementById("workbench")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
-  const badTextEl = document.getElementById("dogfood-bad-text");
-  const badMetaEl = document.getElementById("dogfood-bad-meta");
-  const goodTextEl = document.getElementById("dogfood-good-text");
-  const goodMetaEl = document.getElementById("dogfood-good-meta");
-  if (!badTextEl || !goodTextEl) return;
+function renderCases() {
+  const grid = document.getElementById("cases-grid");
+  if (!grid) return;
+  const cases = CASES_BY_LANG[currentLang] || CASES_BY_LANG.zh;
+  grid.innerHTML = cases
+    .map((c) => {
+      const stepsHtml = c.steps
+        .map((st) => {
+          const body = st.html ? st.html : escapeHtml(st.text);
+          return `<div class="case-step ${escapeHtml(st.cls)}"><span class="case-step-label">${escapeHtml(st.label)}</span>${body}</div>`;
+        })
+        .join("");
+      const noteHtml = c.note ? `<p class="case-note">${escapeHtml(c.note)}</p>` : "";
+      const primaryAction = c.loadSpecimenId
+        ? `<button type="button" class="ctrl-btn ctrl-btn-sm" data-load-case="${escapeHtml(c.loadSpecimenId)}">${escapeHtml(c.loadLabel)}</button>`
+        : `<a href="${escapeHtml(c.linkHref)}" class="ctrl-btn ctrl-btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">${escapeHtml(c.linkLabel)}</a>`;
+      return `<article class="case-card">
+        <span class="case-kicker">${escapeHtml(c.kicker)}</span>
+        <h3 class="case-title">${escapeHtml(c.title)}</h3>
+        <div class="case-body">${stepsHtml}${noteHtml}</div>
+        <div class="case-actions">
+          ${primaryAction}
+          <button type="button" class="ctrl-btn ctrl-btn-sm" data-share-case="${escapeHtml(c.id)}">${escapeHtml(c.shareLabel)}</button>
+        </div>
+      </article>`;
+    })
+    .join("");
 
-  badTextEl.textContent = data.bad;
-  goodTextEl.textContent = data.good;
+  grid.querySelectorAll("[data-load-case]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      loadSpecimenById(btn.getAttribute("data-load-case"));
+    });
+  });
 
-  const errs = badRes.findings.filter((f) => f.severity === "error").length;
-  const warns = badRes.findings.length - errs;
-  if (badMetaEl) {
-    badMetaEl.textContent =
-      currentLang === "zh"
-        ? `实时检查：硬伤 ${errs} 处 · 提醒 ${warns} 处`
-        : `Live check: ${errs} error · ${warns} warnings`;
-  }
-  if (goodMetaEl) {
-    goodMetaEl.textContent =
-      currentLang === "zh"
-        ? `实时检查：${goodRes.findings.length} 处问题`
-        : `Live check: ${goodRes.findings.length} issues`;
-  }
+  grid.querySelectorAll("[data-share-case]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const caseId = btn.getAttribute("data-share-case");
+      const found = cases.find((x) => x.id === caseId);
+      if (found) {
+        await copyTextWithFeedback(btn, found.shareText);
+      }
+    });
+  });
 }
 
 // ---------- Rule Catalog (Strict Language Purity: ZH shows ZH+both; EN shows EN+both) ----------
@@ -1485,6 +1801,10 @@ function renderRulesTable() {
 
 function handleRuleHash() {
   const hash = window.location.hash || "";
+  const rulesFold = document.getElementById("rules-fold");
+  if (hash === "#rules" && rulesFold) {
+    rulesFold.open = true;
+  }
   if (!hash.startsWith("#rule-")) {
     if (highlightedRuleId) {
       highlightedRuleId = null;
@@ -1494,6 +1814,8 @@ function handleRuleHash() {
   }
   const ruleId = hash.slice("#rule-".length);
   if (!findRuleById(ruleId)) return;
+
+  if (rulesFold) rulesFold.open = true;
 
   activeRuleFilter = "all";
   activeModalityFilter = "all";
@@ -1536,7 +1858,7 @@ function selectSnippetTab(tabBtn, moveFocus = false) {
 
 function renderSnippet() {
   const map = SNIPPETS_BY_LANG[currentLang] || SNIPPETS_BY_LANG.zh;
-  document.getElementById("snippet-code").textContent = map[activeSnippet] || map.cli;
+  document.getElementById("snippet-code").textContent = map[activeSnippet] || map.prompt;
 }
 
 async function copyTextWithFeedback(btn, text) {
@@ -1565,14 +1887,21 @@ async function copyTextWithFeedback(btn, text) {
     document.body.removeChild(ta);
   }
   const prevTimer = copyTimers.get(btn);
-  if (prevTimer) clearTimeout(prevTimer);
+  if (prevTimer) {
+    clearTimeout(prevTimer);
+  } else {
+    btn.dataset.origLabel = btn.textContent;
+  }
+  const origLabel = btn.dataset.origLabel || I18N[currentLang]["btn.copy"];
   btn.textContent = copied
     ? I18N[currentLang]["btn.copied"]
     : currentLang === "zh"
       ? "复制失败"
       : "Copy failed";
   const timer = setTimeout(() => {
-    btn.textContent = I18N[currentLang]["btn.copy"];
+    const i18nKey = btn.getAttribute("data-i18n");
+    btn.textContent = (i18nKey && I18N[currentLang]?.[i18nKey]) || origLabel;
+    delete btn.dataset.origLabel;
     copyTimers.delete(btn);
   }, 1200);
   copyTimers.set(btn, timer);
@@ -1616,18 +1945,26 @@ function applyI18n(isUserSwitch = false) {
         ? "https://github.com/dislop-ai/dislop/blob/main/awesome/README.zh-CN.md"
         : "https://github.com/dislop-ai/dislop/tree/main/awesome";
   }
+  const roadmapHref =
+    currentLang === "zh"
+      ? "https://github.com/dislop-ai/dislop/blob/main/ROADMAP.zh-CN.md"
+      : "https://github.com/dislop-ai/dislop/blob/main/ROADMAP.md";
   const roadmapLink = document.getElementById("footer-roadmap-link");
-  if (roadmapLink) {
-    roadmapLink.href =
-      currentLang === "zh"
-        ? "https://github.com/dislop-ai/dislop/blob/main/ROADMAP.zh-CN.md"
-        : "https://github.com/dislop-ai/dislop/blob/main/ROADMAP.md";
-  }
+  if (roadmapLink) roadmapLink.href = roadmapHref;
+  const shareRoadmapLink = document.getElementById("share-roadmap-link");
+  if (shareRoadmapLink) shareRoadmapLink.href = roadmapHref;
 
   const searchEl = document.getElementById("rule-search");
   if (searchEl) {
     searchEl.placeholder = currentLang === "zh" ? "搜规则名、毛病或关键词…" : "Search rules or symptoms...";
     searchEl.setAttribute("aria-label", currentLang === "zh" ? "搜索规则" : "Search rules");
+  }
+  const editAreaEl = document.getElementById("edit-textarea");
+  if (editAreaEl) {
+    editAreaEl.placeholder =
+      currentLang === "zh"
+        ? "把你的文档、文案或 HTML 粘贴到这里，实时标出 AI 味…"
+        : "Paste your doc, copy, or HTML here to check for AI slop live...";
   }
 
   const langBtn = document.getElementById("lang-toggle");
@@ -1653,9 +1990,9 @@ function applyI18n(isUserSwitch = false) {
 
   updateThemeToggleLabel();
   renderHeroProof();
+  renderCases();
   renderSpecimenRail();
   renderWorkbench();
-  renderDogfood();
   renderSnippet();
   renderRulesTable();
 }
@@ -1745,6 +2082,24 @@ function init() {
     if (binaryAuditResult) return;
     currentText = e.target.value;
     renderWorkbench();
+  });
+
+  document.getElementById("btn-paste-own")?.addEventListener("click", () => {
+    uploadSeq += 1;
+    binaryAuditResult = null;
+    lastUploadedFile = null;
+    uploadedOriginalText = null;
+    customRuleTitle = "user-draft";
+    currentFilename = "my-draft.md";
+    currentModality = currentPackId === "deck-and-ui" ? "html" : "markdown";
+    baselineText = "";
+    currentText = "";
+    focusedFindingIdx = 0;
+    setViewMode("edit");
+    updateSpecimenRailSelection();
+    renderWorkbench();
+    const ta = document.getElementById("edit-textarea");
+    if (ta) ta.focus();
   });
 
   document.getElementById("btn-apply-good").addEventListener("click", () => {
@@ -1927,6 +2282,28 @@ function init() {
     const btn = e.currentTarget;
     const text = document.getElementById("snippet-code")?.textContent || "";
     await copyTextWithFeedback(btn, text);
+  });
+
+  document.getElementById("copy-awesome-share-btn")?.addEventListener("click", async (e) => {
+    const blurb = (SHARE_BLURBS_BY_LANG[currentLang] || SHARE_BLURBS_BY_LANG.zh).awesome;
+    await copyTextWithFeedback(e.currentTarget, blurb);
+  });
+
+  document.getElementById("copy-site-share-btn")?.addEventListener("click", async (e) => {
+    const blurb = (SHARE_BLURBS_BY_LANG[currentLang] || SHARE_BLURBS_BY_LANG.zh).site;
+    await copyTextWithFeedback(e.currentTarget, blurb);
+  });
+
+  document.getElementById("copy-cases-link-btn")?.addEventListener("click", async (e) => {
+    const blurb = (SHARE_BLURBS_BY_LANG[currentLang] || SHARE_BLURBS_BY_LANG.zh).cases;
+    await copyTextWithFeedback(e.currentTarget, blurb);
+  });
+
+  document.querySelectorAll('a[href="#rules"]').forEach((link) => {
+    link.addEventListener("click", () => {
+      const fold = document.getElementById("rules-fold");
+      if (fold) fold.open = true;
+    });
   });
 
   window.addEventListener("hashchange", handleRuleHash);

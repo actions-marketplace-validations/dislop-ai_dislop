@@ -30,4 +30,4 @@ Shipped MCP tools:
 ## Roadmap (Not Yet Shipped)
 
 - `P0`: npm & PyPI package releases, typed JS/Python SDK facades (`checkFile` / `checkBytes`), MCP `dislop_catalog`, Resources, and Prompts.
-- `P1`: Stateless Web-Standard Fetch HTTP API (`/v1/check`, `/v1/verify`, OpenAPI 3.1) sharing `src/core.mjs`.
+- `P1`: Stateless Web-Standard Fetch HTTP API (`/v1/check`, OpenAPI 3.1) sharing `src/core.mjs`.

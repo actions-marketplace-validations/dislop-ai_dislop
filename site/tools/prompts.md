@@ -17,8 +17,7 @@ version: 0.3.0
 ## Web UI & Slide Deck Checklist
 
 ```text
-1. Verify zero dead controls (<a href="#"> or unexplained disabled buttons) and WCAG AA text contrast (>= 4.5:1).
-2. Keep dark-mode surface luminance strictly monotonic (outer stage < sheet < raised control).
-3. Avoid default purple-pink neon gradients, pill-badge soup (> 6 pills per view), and 3-level nested bordered boxes.
-4. Cap slide copy at <= 120 English words (<= 280 Chinese chars), <= 6 bullets, and 100% font scale (no autofit shrink).
+1. Verify zero dead controls (<a href="#"> or unexplained disabled buttons).
+2. Avoid default purple-pink neon gradients, "AI-Powered" prompt-echo badges, pill-badge soup (> 6 pills per view), and 3-level nested bordered boxes.
+3. Cap slide copy at <= 120 English words (<= 280 Chinese chars), <= 6 bullets, 100% font scale (no autofit shrink), and a conclusion title instead of "Overview".
 ```

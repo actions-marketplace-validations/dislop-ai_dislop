@@ -3,11 +3,14 @@ content-type: reference-data
 version: 0.3.0
 ---
 
-# dislop Tools & Multi-Surface Escalation Ladder
+# dislop Tools & Usage Options
 
 Pick the lightest surface that fits your workflow:
 
-1. **Level 0 — Website-as-an-Agent-Service (Live)**: Read [`/llms.txt`](../llms.txt), [`/catalog.json`](../catalog.json), or open the offline [Browser Galley Workbench](https://dislop.com/#workbench).
-2. **Level 1 — Agent Skill & Lightweight Prompts**: Fetch [`/tools/skill.md`](./skill.md) or [`/tools/prompts.md`](./prompts.md) directly over HTTP.
-3. **Level 1/2 — CLI, Git Diff & Hooks**: See [`/tools/cli-and-hooks.md`](./cli-and-hooks.md) for Node (`npx`), Python (`uvx`), SARIF, GitHub Actions, and hook templates.
-4. **Level 2/3 — MCP Server, SDK & Planned HTTP API**: See [`/tools/mcp-sdk-api.md`](./mcp-sdk-api.md) for shipped stdio MCP tools and roadmap SDK/API specs.
+| Surface | Status | How to start |
+|---|---|---|
+| Zero-Install Prompt & Static Pages | Live | Hand [`/llms.txt`](../llms.txt) or [`/catalog.json`](../catalog.json) to any web-capable AI, or test drafts offline in the [Browser Workbench](https://dislop.com/#workbench). |
+| Agent Skill | Live | Install [`SKILL.md`](./skill.md) with `npx skills add dislop-ai/dislop` in Claude Code, Codex, Cursor, Windsurf, or Antigravity (or see [`/tools/prompts.md`](./prompts.md)). |
+| Claude Code Plugin | Live | Install Skill + local stdio MCP in one step using `.claude-plugin/marketplace.json` (`/plugin marketplace add dislop-ai/dislop` then `/plugin install dislop@dislop-ai`). |
+| CLI, Git Diff & Hooks | Live | See [`/tools/cli-and-hooks.md`](./cli-and-hooks.md) for Node (`npx`), Python (`uvx`), SARIF, GitHub Actions, and hook templates. |
+| MCP Server & JS Export | Live | See [`/tools/mcp-sdk-api.md`](./mcp-sdk-api.md) for stdio MCP tools and `src/core.mjs`. |

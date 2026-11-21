@@ -4,19 +4,20 @@
 
 `dislop` 是一个专注“去 AI 味”的确定性检查工具，基于统一的规则包清单协议（`schema: "dislop.pack/2"`）。它只查 AI 残留硬伤、高频套话与 PPT/网页模板味，不做通用安全路径扫描、WCAG 无障碍审计、PDF 预检或改稿事实比对。
 
-## 1. 检查 -> 改稿 -> 再查闭环
+## 1. 写前避坑 -> 检查 -> 改稿 -> 再查闭环
 
 ```text
-待发文件 (.md, .txt, .html, .css, .jsx, .tsx, .docx, .pptx)
+写前避坑 (`skills/dislop/SKILL.md` / `.claude-plugin/` / `/llms.txt`)
+   └── 文案与网页/PPT 去 AI 味写作规矩，先避开一阶套词、二阶口号、三阶推销句与默认模板
    │
    ▼
-检查 (`auditText` / `auditOoxmlEntries`)
+检查 (`auditText` / `auditOoxmlEntries`，CLI / MCP / 浏览器工作台同源)
    ├── AI 残留硬伤 (`packs/core/`，固定 `error`)
    └── 文体与模板包 (`business-brief` | `literary-essay` | `deck-and-ui`，`warning`/`info`)
    │
    ▼
-改稿参考 (`deletionTest` 判断方法 + `原句 -> 换了种 AI 味 -> 改好` 对照)
-   │   作者或 Agent 仅针对标出的片段改稿
+局部改稿 (`deletionTest` 判断方法 + `原句 -> 换了种 AI 味 -> 改好` 对照)
+   │   作者或 Agent 仅针对标出的片段改稿，不编造原稿没有的事实
    ▼
 再查一遍 (`dislop check` / MCP `dislop_check`)
    └── 确认旧套话已清干净，同时拦截换成二阶 AI 口号的情况
@@ -48,5 +49,5 @@
 
 `site/` 产物为纯静态文件（全部采用相对路径，零后端进程），直接通过 `https://dislop.com` 静态托管（配置 HSTS 与 `Content-Security-Policy` 锁死 `connect-src 'none'`，零第三方字体与统计外链）。官网与 `/awesome/` 默认呈现简体中文（`zh-CN`），右上角一键切原生英文（`en`），中英文页面的样稿、规则例句与 87 条清单摘要完全隔离、互不混排：
 
-- **面向人类**：首屏实时三态示例卡（`原稿` / `换了种 AI 味` / `改干净了`）、零上传浏览器工作台（`/#workbench`）、可检索 25 条规则表（`/#rules`，带稳定 `#rule-<id>` SARIF 锚点）、87 条离线筛选工具清单（`/awesome/`）以及同源编译的 `/roadmap.zh-CN.md` / `/roadmap.md`。
-- **面向外部 Agent**：渐进披露纯文本与结构化端点（`/llms.txt`、`/catalog.json`、`/index.md`、`/roadmap.md`、`/tasks/*.md`、`/methodology/*.md`、`/cases/*.md`、`/tools/*.md`、`/packs/*.md`、`/rules/*.md`、`/awesome/index.{json,md}`、`/llms-full.txt`）。构建期自动执行体积预算（`llms.txt <= 2,600 B`）、链接可达性、剔除 `fixtures.hit` 与去除 HTML 注释/不可见字符校验。
+- **面向人类**：首屏一键「复制发给 Agent」提示句、实时三态示例卡、3 组可复制分享的真实前后案例（`/#cases`）、零上传浏览器工作台（`/#workbench`，支持一键「贴我的稿子」和测后安装/GitHub 引导）、清晰的 5 种使用方式（`/#surfaces`）、87 条离线筛选工具清单（`/awesome/`）与分享/Star 引导区（`/#share`）。
+- **面向外部 Agent**：技术端点列表与 25 条规则明细表在页面中用 `<details>` 折叠（不打扰普通访客，同时在静态 HTML 与 DOM 中完整保留），并同步提供纯文本与结构化直连端点（`/llms.txt`、`/catalog.json`、`/index.md`、`/roadmap.md`、`/tasks/*.md`、`/methodology/*.md`、`/cases/*.md`、`/tools/*.md`、`/packs/*.md`、`/rules/*.md`、`/awesome/index.{json,md}`、`/llms-full.txt`）。构建期自动执行体积预算（`llms.txt <= 2,600 B`）、链接可达性、剔除 `fixtures.hit` 与去除 HTML 注释/不可见字符校验。

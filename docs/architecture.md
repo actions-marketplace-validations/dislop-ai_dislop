@@ -4,19 +4,20 @@
 
 `dislop` is a focused, deterministic anti-slop linter built around one shared rule manifest format (`schema: "dislop.pack/2"`). It checks only for AI-generation artifacts, clichés, and template chrome—not general security scanning, WCAG auditing, PDF preflight, or fact diffing.
 
-## 1. Check -> Edit -> Re-check Loop
+## 1. Prevent -> Check -> Clean Up -> Re-check Loop
 
 ```text
-Draft / File (.md, .txt, .html, .css, .jsx, .tsx, .docx, .pptx)
+Drafting (`skills/dislop/SKILL.md` / `.claude-plugin/` / `/llms.txt`)
+   └── Plain writing & anti-template UI rules prevent 1st-, 2nd-, and 3rd-order AI slop upfront
    │
    ▼
-Check (`auditText`, `auditOoxmlEntries`)
+Check (`auditText`, `auditOoxmlEntries` via CLI, MCP, or browser workbench)
    ├── AI Delivery Artifacts (`packs/core/`, severity: error)
    └── Style & Template Packs (`business-brief` | `literary-essay` | `deck-and-ui`, warning/info)
    │
    ▼
-Edit Context (`deletionTest` check question + `bad -> trap -> good` examples)
-   │   Author or agent edits ONLY the flagged spans
+Clean Up (`deletionTest` check question + `bad -> trap -> good` examples)
+   │   Author or agent edits ONLY the flagged spans without inventing facts
    ▼
 Re-check (`dislop check` / MCP `dislop_check`)
    └── Confirms AI artifacts and clichés are cleared and catches 2nd-order AI slogans
@@ -48,5 +49,5 @@ Uninspected inputs never masquerade as clean:
 
 `site/` compiles to plain static files with relative asset URLs and zero backend processes, served over HTTPS at `https://dislop.com` (`Content-Security-Policy` locking `connect-src 'none'`, zero third-party font or analytics requests). Both `dislop.com` and `/awesome/` default to Simplified Chinese (`zh-CN`) with one-click switching to native English (`en`), keeping all specimens, rule examples, and 87 directory summaries strictly separated by language:
 
-- **For humans**: Live 3-state Hero Proof Card (`Original` / `Still sounds like AI` / `Cleaned up`), zero-upload browser workbench (`/#workbench`), searchable 25-rule catalog (`/#rules`, stable `#rule-<id>` SARIF anchors), offline-filterable 87-entry Awesome Anti-Slop directory (`/awesome/`), and synced `/roadmap.md` / `/roadmap.zh-CN.md`.
-- **For external agents**: Static progressive-disclosure endpoints (`/llms.txt`, `/catalog.json`, `/index.md`, `/roadmap.md`, `/tasks/*.md`, `/methodology/*.md`, `/cases/*.md`, `/tools/*.md`, `/packs/*.md`, `/rules/*.md`, `/awesome/index.{json,md}`, `/llms-full.txt`). Build-time assertions enforce byte budgets (`llms.txt <= 2,600 B`), valid links, zero leaked `fixtures.hit`, and stripped HTML comments / invisible Unicode characters.
+- **For humans**: One-click "Copy for Agent" hero prompt, live 3-state Hero Proof Card, 3 shareable real before/after cases (`/#cases`), zero-upload browser workbench (`/#workbench`, with instant "Paste my draft" and post-test install/GitHub guidance), clear 5-way usage guide (`/#surfaces`), offline-filterable 87-entry Awesome Anti-Slop directory (`/awesome/`), and share/GitHub strip (`/#share`).
+- **For external agents**: Machine-readable endpoints folded cleanly out of humans' way in `<details>` while remaining 100% present in static HTML and served directly at `/llms.txt`, `/catalog.json`, `/index.md`, `/roadmap.md`, `/tasks/*.md`, `/methodology/*.md`, `/cases/*.md`, `/tools/*.md`, `/packs/*.md`, `/rules/*.md`, `/awesome/index.{json,md}`, and `/llms-full.txt`. Build-time assertions enforce byte budgets (`llms.txt <= 2,600 B`), valid links, zero leaked `fixtures.hit`, and stripped HTML comments / invisible Unicode characters.

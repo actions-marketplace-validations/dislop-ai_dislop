@@ -163,7 +163,7 @@ To filter the list offline, open [dislop.com/awesome](https://dislop.com/awesome
 
 9 entries
 
-> Listed strictly for reference: probabilistic AI-text detectors and adversarial bypass tools. `dislop` removes clichés and checks edits against the original rather than helping evade disclosure policies.
+> Listed strictly for reference: probabilistic AI-text detectors and adversarial bypass tools. `dislop` focuses on removing AI slop in writing and design rather than helping evade disclosure policies.
 
 | Resource | Topic / Locale | Automated check | Stars & last push | What it is |
 |---|---|---|---|---|

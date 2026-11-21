@@ -4,9 +4,9 @@ version: 0.3.0
 snapshot: 2026-11-21
 ---
 
-# dislop — Catch AI slop before you send it
+# dislop — Clear the AI slop from your writing and design
 
-Local, zero-dependency anti-slop linter for AI-written Markdown, plain text, HTML/CSS/JSX, Word (`.docx`), and PowerPoint (`.pptx`). Works with any AI model and any coding or writing agent.
+Good writing habits, web and slide design rules, an offline zero-dependency checker, and 87 vetted tools—gathered in one place. Hand `/llms.txt` to any AI chat, install the Agent Skill / Claude Code Plugin / MCP server, or test drafts offline in your browser.
 
 - Runtime dependencies: 0 (Node.js 20+ and Python 3.10+ parity verified by 88 pack fixtures and `tests/test_conformance.py`)
 - Live browser workbench: https://dislop.com/#workbench (offline in RAM, `CSP: connect-src 'none'`)
@@ -32,6 +32,6 @@ Local, zero-dependency anti-slop linter for AI-written Markdown, plain text, HTM
 ## Resource Pillars
 
 - [Methodology](./methodology/index.md): Deletion Test, anti-pattern map, positive divergence, and visual design system.
-- [Cases](./cases/index.md): `bad -> trap -> good` revision contrasts, repository self-dogfooding audit, and non-mainstream design references.
-- [Tools](./tools/index.md): Browser workbench, canonical `SKILL.md`, lightweight prompts, CLI, MCP, Hooks, SDK, and planned HTTP API.
-- [Awesome Anti-Slop](./awesome/index.md): 87 verified de-slop tools, standards, benchmarks, and policies (`dislop.radar/2`).
+- [Cases](./cases/index.md): `bad -> trap -> good` revision contrasts, repository self-dogfooding audit, and 31 non-mainstream design references.
+- [Tools](./tools/index.md): Browser workbench, canonical `SKILL.md`, Claude Code Plugin (`.claude-plugin/`), CLI, MCP, Hooks, and SDK.
+- [Awesome Anti-Slop](./awesome/index.md): 87 verified anti-slop tools, standards, benchmarks, and policies (`dislop.radar/2`).

@@ -10,10 +10,10 @@ Use this bundle when auditing or revising PRDs, architecture specs, memos, Word 
 
 ## 1. Core Principles
 
-1. Clear all `core` invariant errors first (paths, placeholders, chatbot residue, Office revisions/raw Markdown).
-2. Apply the Deletion Test to flagged prose phrases rather than swapping synonyms.
-3. Preserve every number, qualifier (`up to`, `at least`, `最多`, `至少`), unit, date, URL, code span, and citation verbatim.
-4. Reject second-order slogans (`"Not X, but Y"`, three-word staccato chains, 4-char Chinese slogan triads).
+1. Clear all `core` AI artifact errors first (chatbot wrappers, unfilled placeholders, raw Markdown pasted into Word/PPT).
+2. Apply each rule's check question to flagged prose phrases rather than swapping synonyms.
+3. Avoid 2nd-order slogans (`"Not X, but Y"`, three-word staccato chains, 4-char Chinese slogan triads) and 3rd-order 3-part semicolon pitches.
+4. Keep code spans, URLs, and quoted primary sources intact; never invent facts or numbers.
 
 ## 2. Active Rules
 

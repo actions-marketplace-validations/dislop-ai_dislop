@@ -7,8 +7,8 @@ version: 0.3.0
 
 Read only the focused document matching your current task:
 
-- [Deletion Test & Fact-Preserving Rewrites](./deletion-test.md): Why banning flat word lists causes second-order slogans, and how the three-stage `check -> edit -> verify` loop works.
-- [Cross-Modality Anti-Pattern Map](./anti-pattern-map.md): Four-tier problem model (L0 objective bugs through L3 factual density) across prose, UI, Office, and PDF.
+- [Deletion Test & Anti-Slop Loop](./deletion-test.md): Why banning flat word lists causes second-order slogans, and how the `prevent -> check -> clean up -> re-check` loop works.
+- [Cross-Modality Anti-Pattern Map](./anti-pattern-map.md): Four-tier anti-slop model across prose, Web UI, Word, and PowerPoint.
 - [Positive Divergence & Personalization (Draft)](./positive-divergence.md): Three-band entropy partition, `dislop.voice/1` offline stylometrics, and `dislop.taste/1` positive design cards.
 - [Brand & Voice Guide](./brand-and-voice.md): Plain maker voice grounded in Karpathy's 80% ASD-STE100 and our own copy before/after edits.
-- [Visual & Typographic Design System](./design-system.md): Architectural Galley Proof Sheet tokens, WCAG AA contrast table, and monotonic dark-mode luminance rules.
+- [Visual & Typographic Design System](./design-system.md): Architectural Galley Proof Sheet tokens and anti-template layout constraints.

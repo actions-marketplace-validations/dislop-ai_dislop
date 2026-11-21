@@ -8,12 +8,11 @@ version: 0.3.0
 
 Use this bundle when building or auditing HTML/CSS/JSX pages, SVG diagrams, or PowerPoint (`.pptx`) presentations.
 
-## 1. Hard Invariants & Layout Guards
+## 1. Hard AI Artifact & Template Guards
 
-1. Zero dead controls (`<a href="#">`, unlabeled buttons, unexplained `<button disabled>`).
-2. Meet WCAG 2.2 AA contrast (`>= 4.5:1` normal text) and strictly monotonic dark-mode elevation (`stage < sheet < raised`).
-3. Reject both Generator Default #1 (purple-pink neon gradients, pill soup > 6, 3-level nested boxes) and Generator Default #2 (warm cream + terracotta fallback).
-4. Keep PowerPoint slides readable: `<= 120` Latin words (`<= 280` Han chars), `<= 6` bullets, zero off-slide text shapes, and `normAutofit >= 80%`.
+1. Zero dead controls (`<a href="#">`, empty buttons, or unexplained `<button disabled>`).
+2. Avoid purple-pink AI gradients, `"AI-Powered"` prompt-echo badges, pill-badge walls (`> 6` pills per view), and 3-level nested bordered boxes.
+3. Keep PowerPoint slides readable: `<= 120` Latin words (`<= 280` Han chars), `<= 6` bullets, `normAutofit >= 80%`, and conclusion titles instead of `"Overview"`.
 
 ## 2. Active Rules
 
