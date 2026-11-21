@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="./README.zh-CN.md">简体中文</a> ·
-  <a href="https://dislop-ai.github.io">Interactive Galley Workbench</a> ·
+  <a href="https://dislop.com">Website &amp; Workbench (dislop.com)</a> ·
   <a href="./docs/architecture.md">Architecture</a> ·
   <a href="./docs/design-system.md">Design System</a> ·
   <a href="./LICENSE">Apache-2.0</a>
@@ -122,10 +122,9 @@ For narrow one-off exceptions, place a reason-annotated comment above the line (
 
 GitHub Actions CI runs `dislop pack-test` (101 fixture assertions across both Node and Python), the cross-runtime conformance suite (`tests/test_conformance.py`), and `dislop check . --fail-on warning` across this repository's Markdown docs, SVG brand assets, and `site/` workbench (`packs/` and `tests/` are excluded because they intentionally store negative fixtures).
 
-## Website & Mirror
+## Website
 
-- Primary domain: `https://dislop.com` (static Nginx origin, zero backend, `CSP: connect-src 'none'`)
-- Independent public mirror: [https://dislop-ai.github.io](https://dislop-ai.github.io) (built from `site/` via GitHub Actions)
+- Official homepage & interactive galley workbench: [https://dislop.com](https://dislop.com) (static Nginx origin, zero backend, `CSP: connect-src 'none'`)
 
 ## License
 

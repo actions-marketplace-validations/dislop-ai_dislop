@@ -51,9 +51,8 @@
 
 在零外部依赖模式下检查 PDF 时，`dislop` 会核验 `/URI` 本机路径泄露、`/Info` 原始文件名标题、`/FontDescriptor` 字体嵌入与跨页 `/MediaBox` 尺寸一致性，并将完整 CID 正文提取显式标记为 `[SKIP] <file>#prose`。
 
-## 4. 官网与双源静态部署
+## 4. 官网静态部署（`dislop.com`）
 
 `site/` 产物为纯静态文件（全部采用相对路径，零后端进程）：
 
-1. **主域名（`https://dislop.com`）**：由海外静态 Nginx 源站直接托管（关闭版本号暴露，配置 `Content-Security-Policy` 锁死 `connect-src 'none'`，全站零第三方字体与统计外链），兼顾中国大陆与海外访问速度。
-2. **独立公开镜像（`https://dislop-ai.github.io`）**：由 `dislop-ai.github.io` 组织级 GitHub Pages 仓库独立提供 HTTPS 访问（不绑定自定义域名以避免被重定向合并），页面内声明 `<link rel="canonical" href="https://dislop.com/">`。
+- **单一官方入口（`https://dislop.com`）**：由海外静态 Nginx 源站直接通过 HTTPS 托管（关闭版本号暴露，配置 HSTS 与 `Content-Security-Policy` 双重锁死 `connect-src 'none'`，全站零第三方字体与统计外链）。中国大陆与海外访问者统一经由 `.com` 主站进入，不再分流或并存 `github.io` 镜像入口。
