@@ -20,6 +20,9 @@ uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review
 
 # Explain a rule's check question and examples
 npx --yes github:dislop-ai/dislop explain negation-pivot-frame
+
+# List bundled offline packs and optional read-only static / cloud URLs (check makes 0 network calls)
+npx --yes github:dislop-ai/dislop resources --json
 ```
 
 ## Exit Codes

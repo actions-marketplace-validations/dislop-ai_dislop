@@ -440,8 +440,8 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 1099,
-      "approxTokens": 275,
+      "bytes": 1431,
+      "approxTokens": 358,
       "relatedTools": [
         "browser-workbench",
         "skill",
@@ -449,7 +449,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "9f6b3f950d0987825f985da7825afd7a8555c9d28dd8b3e60609833bbd7d349f"
+      "sha256": "5659df3d0ca2b5b36d03a6cd4ddfb1eddc638e5e4922a19829012d669c4c8578"
     },
     {
       "id": "tools-skill",
@@ -553,20 +553,20 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 1922,
-      "approxTokens": 481,
+      "bytes": 2076,
+      "approxTokens": 519,
       "relatedTools": [
         "cli"
       ],
-      "sha256": "85b12b6c214568cc0d7198fad4bb11ee2ca7a0cb04c0c335783b855c7e7709d3"
+      "sha256": "798be13c7c9f41923ba459f789e4aa00be1131562ad4b2f4278944a430a57d8e"
     },
     {
       "id": "tools-mcp-sdk-api",
       "pillar": "tools",
       "kind": "guide",
       "title": {
-        "en": "MCP Server, SDK & Planned HTTP API",
-        "zh": "MCP 服务、SDK 与规划中的 HTTP API"
+        "en": "Local MCP, Hosted Remote MCP & HTTP API",
+        "zh": "本地 MCP、托管远程 MCP 与 HTTP API"
       },
       "path": "/tools/mcp-sdk-api.md",
       "modalities": [
@@ -590,13 +590,13 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 1045,
-      "approxTokens": 261,
+      "bytes": 1917,
+      "approxTokens": 479,
       "relatedTools": [
         "mcp",
         "cli"
       ],
-      "sha256": "3665949bda41d017082e4e5e0373771e821403db4a8bb45dad9981f64b2f614d"
+      "sha256": "a767e26d257e79e477e30c4b9d3f27055ec9543e766490d5edbe97a9df2ab535"
     },
     {
       "id": "pack-core",
