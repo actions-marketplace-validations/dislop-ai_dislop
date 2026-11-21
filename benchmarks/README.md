@@ -1,6 +1,6 @@
 # dislop Anti-Slop Benchmark (`dislop-bench v1`)
 
-[简体中文](./README.zh-CN.md) · [Latest Measured Report](./REPORT.md)
+[简体中文](./README.zh-CN.md) · [Offline Baseline Report](./REPORT.md) · [Live 5-Model Comparison](./MODEL-COMPARISON.md)
 
 This benchmark measures two concrete things offline, without subjective hand-waving:
 

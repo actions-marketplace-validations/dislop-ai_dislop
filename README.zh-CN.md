@@ -154,6 +154,7 @@ node scripts/run_benchmark.mjs --assert
 
 - **检测基准（48 样本、6 类场景）**：准确率 `100.0%` · 召回率 `100.0%` · 干净原稿误报率 `0.0%` · 易误报近邻样本误报率 `0.0%` · 二阶 AI 口号召回率 `100.0%` · Node/Python 一致率 `100.0%`。
 - **端到端去 AI 味效果（12 题 × 3 组）**：模型原稿 `raw_ai` **61.4 / 100** → 普通改写 `naive_humanizer` **72.1 / 100**（三阶结构味翻倍且漏改/编造数字）→ 按 dislop 规矩改稿 `dislop_clean` **100.0 / 100**（`12/12` 全过）。
+- **5 模型真实在线对比（[benchmarks/MODEL-COMPARISON.md](./benchmarks/MODEL-COMPARISON.md)）**：实测 `Gemini 3.1/3.5 Flash-Lite`、`Gemini 3.5/3.8 Flash` 与 `Qwen 3.8 Flash`，裸 Prompt 仅得 `76.0–84.2 / 100`（`2/10–4/10` 全过），接入 `server/` 自愈流水线后全线提升 **+15.8 至 +22.3 分**（达 `97.0–100.0 / 100`、`8/10–10/10` 全过；其中 `Gemini 3.1 Flash-Lite` 中位延迟仅 `1.2 秒`、每千次调用约 `\$0.09`，得分 `98.5 / 100`）。
 
 详见 [benchmarks/README.zh-CN.md](./benchmarks/README.zh-CN.md)，支持评测任意模型/Prompt/Skill/后台（`--eval`）以及导出随机盲评表（`--export-blind-sheet`）。
 

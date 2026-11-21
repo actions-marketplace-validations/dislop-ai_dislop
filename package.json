@@ -41,6 +41,7 @@
     "src/binary-node.mjs",
     "server/index.mjs",
     "server/llm-client.mjs",
+    "server/probes.mjs",
     "server/.env.example",
     "server/Dockerfile",
     "server/README.md",
