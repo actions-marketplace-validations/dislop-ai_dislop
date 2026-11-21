@@ -209,6 +209,10 @@ for (const [mode, t] of [
 assert.ok(css.includes("--pen: #F04438;"), "Missing master Vermilion --pen token in site/styles.css");
 assert.ok(css.includes("border-bottom: 2px dotted var(--mark-stet);"), "Missing dotted stet underline in site/styles.css");
 assert.ok(fs.existsSync(path.join(SITE_DIR, "methodology", "brand-and-voice.md")), "Missing site/methodology/brand-and-voice.md");
+assert.ok(fs.existsSync(path.join(ROOT, "ROADMAP.md")), "Missing root ROADMAP.md");
+assert.ok(fs.existsSync(path.join(ROOT, "ROADMAP.zh-CN.md")), "Missing root ROADMAP.zh-CN.md");
+assert.ok(fs.existsSync(path.join(SITE_DIR, "roadmap.md")), "Missing site/roadmap.md");
+assert.ok(fs.existsSync(path.join(SITE_DIR, "roadmap.zh-CN.md")), "Missing site/roadmap.zh-CN.md");
 assert.ok(fs.existsSync(path.join(SITE_DIR, "assets", "og-card.png")), "Missing site/assets/og-card.png");
 assert.ok(fs.existsSync(path.join(SITE_DIR, "assets", "og-card.svg")), "Missing site/assets/og-card.svg");
 

@@ -15,6 +15,7 @@ Choose the page that matches the file you are reviewing. Each guide names the ch
 - [Examples & References](https://dislop.com/cases/index.md): Before / overcorrected / after contrasts and 31 print/type design references.
 - [Install & Integrations](https://dislop.com/tools/index.md): Browser workbench, `SKILL.md`, CLI (`npx`/`uvx`), MCP server, and CI hooks.
 - [Awesome Anti-Slop](https://dislop.com/awesome/index.md): 87 checked tools, guides, and papers (`dislop.radar/2`, raw JSON at `/awesome/index.json`).
+- [Roadmap & Open Questions](https://dislop.com/roadmap.md): Active tracks (`v0.2.x` -> `v0.4+`) and collaboration guide.
 
 ## Machine index & packs
 - [JSON Catalog](https://dislop.com/catalog.json): Versioned manifest (`dislop.catalog/1`) with sha256 and token estimates.

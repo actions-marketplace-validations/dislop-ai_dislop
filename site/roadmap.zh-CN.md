@@ -1,0 +1,113 @@
+---
+content-type: reference-data
+version: 0.2.0
+snapshot: 2026-11-21
+---
+
+# 路线图与协作计划（Roadmap）
+
+[English](./roadmap.md)
+
+最后更新：`2026-11-21` · 当前基线：`v0.2.0`（`dislop.com` 已上线）
+
+这份路线图记录 `dislop` 现在已经做到哪一步、接下来准备做什么，以及还没拍板、需要团队一起讨论的问题。认领方向、挑规则阈值的刺，或者提新点子，直接在 [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) 发起讨论，或开一个 [Issue](https://github.com/dislop-ai/dislop/issues) 认领任务即可。
+
+---
+
+## 1. 当前进度（`v0.2.x` 已上线）
+
+| 模块 | 现已实现 | 核心目录 |
+|---|---|---|
+| 双端零依赖内核 | Node.js 20+ 与 Python 3.10+ 双端零外部依赖，通过 101 项规则样本断言与 12 项跨运行时一致性测试 | `src/core.mjs`、`src/dislop/engine.py`、`tests/test_conformance.py` |
+| 规则与文体包 | 共 29 条规则：`core` 硬伤规则（7 条，固定 `error`）+ 3 套文体包（`business-brief`、`literary-essay`、`deck-and-ui`） | `packs/*/pack.json` |
+| 改稿核对 | `dislop verify` 与 MCP `dislop_verify`，核对数字、限定词、单位、日期、链接、代码与引用，并拦住二阶口号漂移 | `src/core.mjs`、`src/dislop/engine.py` |
+| 支持格式 | `.md`、`.mdx`、`.txt`、`.html`、`.css`、`.jsx`、`.tsx`、`.svg`、`.docx`、`.pptx` 及 `.pdf` 元数据（加密或未解析正文显式报 `[SKIP]`） | `src/binary-node.mjs`、`src/dislop/engine.py` |
+| 官网与在线工作台 | 默认简体中文的 `dislop.com`（一键切原生英文、严格零混排），带首屏三态红笔校样卡、离线浏览器工作台（`CSP: connect-src 'none'`）与 `/llms.txt` 端点 | `scripts/build_site.mjs`、`site/` |
+| Awesome Anti-Slop | 87 条双语核验清单（`dislop.radar/2`），同源生成纯英文 `awesome/README.md`、纯中文 `awesome/README.zh-CN.md` 与 `dislop.com/awesome/` 离线筛选页 | `docs/research/anti-slop-radar-index.json`、`awesome/` |
+| Agent 与开发集成 | 跨宿主 `skills/dislop/SKILL.md`、本地 stdio MCP 服务、Git 增量检查（`--changed`/`--staged`）、SARIF 2.1.0 与 GitHub PR 行内批注 | `skills/dislop/SKILL.md`、`bin/`、`server.json` |
+
+---
+
+## 2. 近期与中期工作轨道（支持多人并行）
+
+各条轨道按代码边界拆开，方便成员同时推进、少碰合并冲突。
+
+### 轨道 A — `v0.2.x` 发包、细节补齐与分发（当前优先）
+
+目标：让用户能用最短命令直接安装上手，同时修掉自审过程中发现的小边界。
+
+- [ ] 发布 `dislop` 到 npm 与 PyPI（支持直接 `npx dislop` / `uvx dislop`），并向 MCP Registry 提交 `server.json`。
+- [ ] 为 `dislop verify --lang zh` 补齐中文退回原因，同时在 JSON 输出中保留稳定的机器错误码 `reasonCodes`。
+- [ ] 补齐两条细粒度模式：英文单词级短句连发（`Faster. Leaner. Done.`）与更常见的中文寒暄开头（`好的，以下是你的稿子`），并补对应不误报样本。
+- [ ] 提供开箱即用的 `pre-commit` 配置与可复用的 GitHub Action 工作流模板。
+
+**验收标准**：从公共源直接运行 `npx dislop check .` 与 `uvx dislop check .` 可用，新增样本在 Node 与 Python 双端全绿。
+
+### 轨道 B — `v0.3.0` 内核深化与规则查询目录（下一里程碑）
+
+目标：把已跑通的 `v0.3` 原型正式并入双端主内核，继续保持零外部依赖。
+
+- [ ] 按 [docs/specs/anti-pattern-catalog-and-probes-v0.3.md](https://github.com/dislop-ai/dislop/blob/main/docs/specs/anti-pattern-catalog-and-probes-v0.3.md) 将 [scripts/prototype_antipattern_lab.mjs](https://github.com/dislop-ai/dislop/blob/main/scripts/prototype_antipattern_lab.mjs) 里验证通过的 5 条新探针（连环逗号句、句长单调、过渡路标簇、毛玻璃滥用、侧边粗彩条卡片）合入 `src/core.mjs` 与 `src/dislop/engine.py`。
+- [ ] 在双端 OOXML 解析器里实现 `pptx-layout-monotony`（检出连续 4 页以上完全雷同的幻灯片骨架）。
+- [ ] 新增 `dislop catalog` CLI 子命令与 `dislop_catalog` MCP 工具，支持按格式、语种、级别与文体包检索规则。
+- [ ] 抽离 Node 侧共用宿主模块（`src/node-host.mjs`、`src/mcp.mjs`），减少 CLI 与 MCP 的重复 I/O 代码。
+
+**验收标准**：35 条规则在 Node/Python 双端通过 `pack-test` 与 `test_conformance.py`，全仓通过 `dislop check . --fail-on warning`。
+
+### 轨道 C — 离线基准评测（事实保真与误报率，可并行）
+
+目标：用公开可复算的数据证明“不误伤好稿、不改丢数字”，而不是靠嘴说。
+
+- [ ] 整理 30–50 份原创或明确开源许可（`CC0` / `CC-BY`）的配对样本，覆盖中文工作简报、中文随笔/文章、英文技术文档、HTML 卡片与 `.pptx` 演示文稿。
+- [ ] 离线实测三项硬指标：干净人类原稿的误报率、典型 AI 套话的检出率，以及删改限定词（`最多`/`up to`）、数字或链接时 `dislop verify` 的拦截准确率。
+- [ ] 在 `scripts/` 下提供一键离线跑分脚本，并将复现结果写入文档。
+
+**验收标准**：任何协作者在断网环境下执行一条命令即可复现完整评测表。
+
+### 轨道 D — `Awesome Anti-Slop` 持续维护与拆仓阈值（持续推进，可并行）
+
+目标：保持 87 条中英文同路清单准确、中立、好查，同时不反噬核心引擎的开发精力。
+
+- [ ] 增加 GitHub Issue 投稿表单模板（链接、类别、语种、中英各一句用途说明）与按月巡检链接/星标的可选脚本。
+- [ ] 冷启动阶段继续把 `awesome/README.md`、`awesome/README.zh-CN.md` 与 `https://dislop.com/awesome/` 留在 `dislop-ai/dislop` 主仓内维护。
+- [ ] **拆仓阈值**：仅当外部有效目录 PR 持续达到 `>= 5 条/月` 时，再按 `docs/research/awesome-anti-slop-topology/` 的 `dislop.radar/3` 预案切出独立 CC0-1.0 仓库 `dislop-ai/awesome-anti-slop`，同时永久保持 `https://dislop.com/awesome/` 地址不变。
+
+### 轨道 E — `v0.4.0+` 本地个人声纹与外围形态（远期探索）
+
+- [ ] 离线 `dislop voice extract`（`dislop.voice/1`）：直接从作者过往稿件在本地算出句长变化区间、标点习惯与个人禁词，存入 Git 忽略的 `.dislop.local/voice.json`，全程不上云。
+- [ ] 抽象设计文法卡（`dislop.taste/1`）：让团队用静态断言约束自己的版式与配色预算，不照搬他人 DOM/CSS。
+- [ ] 强类型 JS/Python SDK 门面，以及基于 `src/core.mjs` 的无状态 HTTP API 封装。
+- [ ] 严格解耦的可选端侧小模型插件（ONNX/GGUF，仅作 `info` 建议，永不污染零依赖核心）。
+
+---
+
+## 3. 待讨论的 5 个开放问题（欢迎直接拍砖）
+
+以下 5 个问题尚未写死，欢迎协作者在 Discussions / Issue 里直接给意见：
+
+1. **`dislop verify` 的中文提示与返回契约**：`verify --lang zh` 是否直接输出中文退回原因，同时在 JSON 里增加稳定的 `reasonCodes`（如 `protected_number_changed`、`second_order_drift`）给 CI 和 MCP 使用？
+2. **`v0.3` 节奏探针的默认级别**：`comma-chain-cadence`（连环逗号句）与 `sentence-length-monotony`（句长单调）在 `literary-essay` 里是默认 `info` 提醒，还是默认关闭改为按需开启，避免误伤作者有意为之的文学节奏？
+3. **首版离线基准的样本配比**：首批 50 份公开配对样本，优先覆盖哪几类真实场景（中文周报/方案、公众号长文、英文 README/技术文档、PPT 演示稿）？
+4. **代码与 PR 治理的边界**：`dislop` 在 PR diff 里是继续专注文档、文案、PPT 与前端 UI 文件（把语言级 AST 交给 Oxlint/ESLint/Ruff），还是顺手加几条跨语言的空注释/假文档探针？
+5. **发包后的第一个日常入口**：npm / PyPI 上架后，优先做可复用 GitHub Action、`pre-commit` 钩子仓，还是先做一个轻量 VS Code / Cursor 插件？
+
+---
+
+## 4. 协作方式与合并前检查
+
+- **先聊方向再大改**：开放问题发在 [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions)，认领具体任务或报误报直接建 [Issue](https://github.com/dislop-ai/dislop/issues)。
+- **并行分工参考（少冲突）**：
+  - 规则与双端内核：`packs/`、`src/core.mjs`、`src/dislop/`、`tests/test_engine.py`、`tests/test_conformance.py`
+  - 官网与同路清单：`docs/research/anti-slop-radar-index.json`、`scripts/build_site.mjs`、`site/`、`tests/test_site.mjs`
+  - 评测基准与文档：`scripts/`、`docs/`、`README*.md`、`ROADMAP*.md`
+- **三条底线**：
+  - `src/core.mjs` 与 `src/dislop/` 保持零外部运行时依赖。
+  - 官网与工作台保持离线零上传（`CSP: connect-src 'none'`），不引入第三方字体与统计脚本。
+  - 所有写给访客看的文案遵守 [docs/brand-and-voice-guide.zh-CN.md](https://github.com/dislop-ai/dislop/blob/main/docs/brand-and-voice-guide.zh-CN.md) 与 [AGENTS.md](./AGENTS.md) §2，中英文严格不混排。
+- **提 PR 前本地跑一遍**：
+  ```bash
+  node scripts/build_site.mjs
+  node bin/dislop.mjs pack-test && PYTHONPATH=src python3 -m dislop.cli pack-test
+  node tests/test_site.mjs && PYTHONPATH=src python3 -m unittest discover -s tests -v
+  node bin/dislop.mjs check . --fail-on warning && PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning
+  ```

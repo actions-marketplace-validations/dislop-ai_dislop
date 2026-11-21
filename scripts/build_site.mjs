@@ -209,6 +209,8 @@ const voiceProfileExample = sanitizeJsonStrings(
 );
 const canonicalSkillMd = fs.readFileSync(path.join(ROOT, "skills", "dislop", "SKILL.md"), "utf8");
 const canonicalBrandMd = fs.readFileSync(path.join(ROOT, "docs", "brand-and-voice-guide.md"), "utf8");
+const canonicalRoadmapEn = fs.readFileSync(path.join(ROOT, "ROADMAP.md"), "utf8");
+const canonicalRoadmapZh = fs.readFileSync(path.join(ROOT, "ROADMAP.zh-CN.md"), "utf8");
 
 // ---------- 1. Sync Core Engine, Brand Assets & JS Data Modules ----------
 
@@ -1702,6 +1704,40 @@ ${awesomePreRenderedRows}
 `;
 fs.writeFileSync(path.join(AWESOME_OUT, "index.html"), awesomeHtml, "utf8");
 
+// 2h-bis. Collaboration Roadmap (/roadmap.md & /roadmap.zh-CN.md, compiled from root ROADMAP*.md)
+registerResource({
+  id: "roadmap-en",
+  pillar: "methodology",
+  kind: "guide",
+  titleEn: "dislop Roadmap & Collaboration Tracks",
+  titleZh: "dislop 路线图（英文）",
+  relPath: "roadmap.md",
+  modalities: ["markdown", "text", "html", "css", "jsx", "svg", "docx", "pptx", "pdf"],
+  languages: ["en"],
+  packs: PACK_ORDER,
+  relatedTools: ["browser-workbench", "cli", "mcp", "skill"],
+  content: `---
+content-type: reference-data
+version: ${VERSION}
+snapshot: ${SNAPSHOT_DATE}
+---
+
+${canonicalRoadmapEn.replace("./ROADMAP.zh-CN.md", "./roadmap.zh-CN.md").replace(/\(\.\/(docs|scripts)\//g, "(https://github.com/dislop-ai/dislop/blob/main/$1/")}
+`,
+});
+writeCleanFile(
+  "roadmap.zh-CN.md",
+  `---
+content-type: reference-data
+version: ${VERSION}
+snapshot: ${SNAPSHOT_DATE}
+---
+
+${canonicalRoadmapZh.replace("./ROADMAP.md", "./roadmap.md").replace(/\(\.\/(docs|scripts)\//g, "(https://github.com/dislop-ai/dislop/blob/main/$1/")}
+`,
+  { isAgentText: true }
+);
+
 // 2i. /llms.txt (compact routing index, <= 2.6 KB)
 const llmsTxt = writeCleanFile(
   "llms.txt",
@@ -1722,6 +1758,7 @@ Choose the page that matches the file you are reviewing. Each guide names the ch
 - [Examples & References](${BASE_URL}/cases/index.md): Before / overcorrected / after contrasts and 31 print/type design references.
 - [Install & Integrations](${BASE_URL}/tools/index.md): Browser workbench, \`SKILL.md\`, CLI (\`npx\`/\`uvx\`), MCP server, and CI hooks.
 - [Awesome Anti-Slop](${BASE_URL}/awesome/index.md): ${radarData.entries.length} checked tools, guides, and papers (\`dislop.radar/2\`, raw JSON at \`/awesome/index.json\`).
+- [Roadmap & Open Questions](${BASE_URL}/roadmap.md): Active tracks (\`v0.2.x\` -> \`v0.4+\`) and collaboration guide.
 
 ## Machine index & packs
 - [JSON Catalog](${BASE_URL}/catalog.json): Versioned manifest (\`dislop.catalog/1\`) with sha256 and token estimates.
