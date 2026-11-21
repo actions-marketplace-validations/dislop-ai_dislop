@@ -6,6 +6,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+### Changed
+
+- **Focused Scope on Direct Anti-Slop Only (`v0.3.0`)**:
+  - Removed features not directly tied to detecting AI slop: `dislop verify` / MCP `dislop_verify` (number/link revision diffing), PDF structural/font/MediaBox preflight, Word tracked-changes/comments hygiene, local filesystem path scanning (`local-path-leak`), WCAG contrast/dark-mode linting (`ui-contrast-and-dark-inversion`), and SVG `<title>`/fallback-clipping linting (`svg-text-overflow-or-a11y`).
+  - Narrowed the active catalog to **25 pure anti-slop rules** across 4 packs (`core` AI delivery artifacts + `business-brief`, `literary-essay`, `deck-and-ui`) and updated the Hero Proof Card, workbench, READMEs, `SKILL.md`, banners, and OG card to focus strictly on 1st- and 2nd-order AI slop.
+
 ### Added
 
 - **Plain-Voice Copy Rewrite (Karpathy 80% ASD-STE100 + Anti-Pull-Quote Discipline)**:

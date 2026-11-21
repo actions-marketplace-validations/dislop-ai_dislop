@@ -1,6 +1,6 @@
 {
   "schema": "dislop.catalog/1",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "snapshotDate": "2026-11-21",
   "baseUrl": "https://dislop.com",
   "pillars": [
@@ -11,13 +11,13 @@
   "entryPoints": {
     "llmsTxt": {
       "path": "/llms.txt",
-      "bytes": 2316,
-      "approxTokens": 579
+      "bytes": 2202,
+      "approxTokens": 551
     },
     "llmsFullTxt": {
       "path": "/llms-full.txt",
-      "bytes": 19355,
-      "approxTokens": 4839
+      "bytes": 16555,
+      "approxTokens": 4139
     },
     "awesomeJson": {
       "path": "/awesome/index.json",
@@ -56,15 +56,15 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 3014,
-      "approxTokens": 754,
+      "bytes": 2170,
+      "approxTokens": 543,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp",
         "skill"
       ],
-      "sha256": "ec56954c11baea2b044a2ab586f5bea15a4e1496bb276adf84cbfe375fdda564"
+      "sha256": "6fac3f38dab7b67f749cf98706c0dbba291d3733dbd0d2bdfb1ea412a7cbcaf6"
     },
     {
       "id": "methodology-index",
@@ -102,7 +102,7 @@
         "mcp",
         "skill"
       ],
-      "sha256": "5af8e730397f280767d94ab00b3dfc791007ef6a2b33de0e3412a88c67518d3d"
+      "sha256": "d87c821adb15e51a9c10ac45d21b64be671b2ed3b742c9bfbc7df5fe808da876"
     },
     {
       "id": "methodology-deletion-test",
@@ -135,7 +135,7 @@
         "mcp",
         "browser-workbench"
       ],
-      "sha256": "285e05795ac106e8c21d5ea2c0402a4f17f99621df5c5d32589b20373f74abee"
+      "sha256": "637d45d6364bb64ad6d28e8d9cb37a6387d999b274b816a8e774528262f1a4dc"
     },
     {
       "id": "methodology-anti-pattern-map",
@@ -173,7 +173,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "f0c0808ca2389fc3ebdd328e6a693374dbc06bee158687589d2880c6933d29d9"
+      "sha256": "2971df5cac22b3bc9c67d9463f97fc6f456e7f4c3057e426c8b17f1863bc007c"
     },
     {
       "id": "methodology-positive-divergence",
@@ -201,13 +201,13 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 2086,
-      "approxTokens": 522,
+      "bytes": 1976,
+      "approxTokens": 494,
       "relatedTools": [
         "browser-workbench",
         "skill"
       ],
-      "sha256": "1e0f3706b12dd1a586a981b852985fa002576a21a683c429743a8f45fb6e784e"
+      "sha256": "fb444598833f289ca754be328ea7d250532a48ebf008caff268299cdc196d65c"
     },
     {
       "id": "methodology-brand-voice",
@@ -235,13 +235,13 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 8180,
-      "approxTokens": 2045,
+      "bytes": 7838,
+      "approxTokens": 1960,
       "relatedTools": [
         "browser-workbench",
         "cli"
       ],
-      "sha256": "55a3f2be89f135646759322bc49feab17c33598fac737f0326b0e6e900fea399"
+      "sha256": "ac466f9c8a00bd7a2ff5bee224014660bb49f8d2b79691ce99c496b5eae18a80"
     },
     {
       "id": "methodology-design-system",
@@ -272,7 +272,7 @@
         "browser-workbench",
         "cli"
       ],
-      "sha256": "9667ab79873ca6262329e2e727437ae6200768454bb7aca08208dfe8bbf8bd11"
+      "sha256": "12f5baff0784b80201854b34974a89b22c3354678d51db3a7d698f8040b34de1"
     },
     {
       "id": "cases-index",
@@ -310,7 +310,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "1e10770b1896983d5193d47014c6a53b429eabd5959b5b5795dc11eb1b2ba539"
+      "sha256": "e69109c33687e903de9dc8b1b74b559fe38eace1b2e08affbe047face19ad9bc"
     },
     {
       "id": "cases-copy-contrasts",
@@ -341,14 +341,14 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 8110,
-      "approxTokens": 2028,
+      "bytes": 8091,
+      "approxTokens": 2023,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp"
       ],
-      "sha256": "29a4ec8062ca28a1f335c49806d2a149d9cd4a461056e4ac947ff7bc6d1dbf77"
+      "sha256": "1aa51ffc5d8e0dd6a254f1f1f1672e7bfa8ab73e7dc26b5c20b494df3122ca28"
     },
     {
       "id": "cases-dogfood-audit",
@@ -380,7 +380,7 @@
         "cli",
         "browser-workbench"
       ],
-      "sha256": "b4804e1d85a942a39ff20ad20dbac045d9f4ad8b47c6cfe2a35f0489cf373211"
+      "sha256": "00cbe4b0d2cb30a8c9f23f953b2d922d027775de8d5602249f3da07f7ecc8211"
     },
     {
       "id": "cases-ui-specimens",
@@ -409,7 +409,7 @@
       "relatedTools": [
         "browser-workbench"
       ],
-      "sha256": "6dcda0659a7e1f7340c971429e7202728c211eb19b7c4f5056cca80b4e08c455"
+      "sha256": "3c618da42b261d1f7b9756953f80e2c3b600a5c33f142059023db5c38921e4fd"
     },
     {
       "id": "tools-index",
@@ -449,7 +449,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "091025cb16ad40b770333377292fa4e9a99ebc0789839af3987c6ef1ee311921"
+      "sha256": "07f04a3a5a4a4d984bafc4783d163e9fb0a402f93f2750d4acd787f97649098f"
     },
     {
       "id": "tools-skill",
@@ -481,14 +481,14 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 3740,
-      "approxTokens": 935,
+      "bytes": 3041,
+      "approxTokens": 760,
       "relatedTools": [
         "skill",
         "cli",
         "mcp"
       ],
-      "sha256": "61d840ac693e26c4db2a4c5074f1a6e4b442b45095c2209816a7855fbc4d26d0"
+      "sha256": "a36c59fad1391f6b7c6bac48997b5d9045130bf19bb612cb50c0c0ca3983eca0"
     },
     {
       "id": "tools-prompts",
@@ -516,13 +516,13 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 1170,
-      "approxTokens": 293,
+      "bytes": 1009,
+      "approxTokens": 252,
       "relatedTools": [
         "browser-workbench",
         "skill"
       ],
-      "sha256": "0013c126572d5cbd9240095b924ca8de5a69332bc47acbcf7e9e3d9eeb24c0d1"
+      "sha256": "5938f247c271e2aaca9a72a7c2edcb5df8968671d7ae40a1ae7a5604e40e0eae"
     },
     {
       "id": "tools-cli-hooks",
@@ -554,12 +554,12 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 1940,
-      "approxTokens": 485,
+      "bytes": 1930,
+      "approxTokens": 483,
       "relatedTools": [
         "cli"
       ],
-      "sha256": "cd06b61b50bdc0e0f9e49f79b3c27a588e3680ce3fc0ebeaf944dc61f4abbd2b"
+      "sha256": "d052273d380ca001b0f89a79ed095428b941ff027a11387e418ac148ef07de97"
     },
     {
       "id": "tools-mcp-sdk-api",
@@ -591,21 +591,21 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 1258,
-      "approxTokens": 315,
+      "bytes": 1059,
+      "approxTokens": 265,
       "relatedTools": [
         "mcp",
         "cli"
       ],
-      "sha256": "ec64a3d8246a4ff93d610db3314c854942dca43814dea0616b500705857f950e"
+      "sha256": "9d997e49c56bb9730779c5486e928e2dcd8b4ae71809c57af84d9bcb23b036ef"
     },
     {
       "id": "pack-core",
       "pillar": "methodology",
       "kind": "pack",
       "title": {
-        "en": "Pack: Core Publication Invariants (7 rules)",
-        "zh": "规则包：基础发布底线（7 条）"
+        "en": "Pack: AI Delivery Artifacts (4 rules)",
+        "zh": "规则包：AI 残留硬伤（4 条）"
       },
       "path": "/packs/core.md",
       "modalities": [
@@ -616,8 +616,7 @@
         "jsx",
         "svg",
         "docx",
-        "pptx",
-        "pdf"
+        "pptx"
       ],
       "languages": [
         "en",
@@ -626,14 +625,14 @@
       "packs": [
         "core"
       ],
-      "bytes": 7105,
-      "approxTokens": 1776,
+      "bytes": 3882,
+      "approxTokens": 971,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp"
       ],
-      "sha256": "c7a503a794b0a687ffd782c01cf956f2ab03b96bb6d6ec61f11df1a1d57f7d12"
+      "sha256": "01cb23d1a46a97e133d922789cf4db8381cbe8e87e707d6355001f0a94f2bea7"
     },
     {
       "id": "pack-business-brief",
@@ -703,8 +702,8 @@
       "pillar": "methodology",
       "kind": "pack",
       "title": {
-        "en": "Pack: Slide Deck, Web UI & Graphic Layout (9 rules)",
-        "zh": "规则包：演示文稿、Web 界面与平面视觉（9 条）"
+        "en": "Pack: Slide Deck, Web UI & Graphic Layout (8 rules)",
+        "zh": "规则包：演示文稿、Web 界面与平面视觉（8 条）"
       },
       "path": "/packs/deck-and-ui.md",
       "modalities": [
@@ -721,50 +720,14 @@
       "packs": [
         "deck-and-ui"
       ],
-      "bytes": 9392,
-      "approxTokens": 2348,
+      "bytes": 8196,
+      "approxTokens": 2049,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp"
       ],
-      "sha256": "65408bf7cd11b105424478aea79a82577cfd0fba00d8189723ebb22c4648f00a"
-    },
-    {
-      "id": "rule-local-path-leak",
-      "pillar": "cases",
-      "kind": "rule",
-      "title": {
-        "en": "Rule: local-path-leak",
-        "zh": "规则：local-path-leak"
-      },
-      "path": "/rules/local-path-leak.md",
-      "modalities": [
-        "markdown",
-        "text",
-        "html",
-        "css",
-        "jsx",
-        "svg",
-        "docx",
-        "pptx",
-        "pdf"
-      ],
-      "languages": [
-        "en",
-        "zh"
-      ],
-      "packs": [
-        "core"
-      ],
-      "bytes": 1068,
-      "approxTokens": 267,
-      "relatedTools": [
-        "browser-workbench",
-        "cli",
-        "mcp"
-      ],
-      "sha256": "4ab7429ac96c5034b472e91c868161616344b937d4481b62bf4411374a4f4c09"
+      "sha256": "3b1f69f5536aae5e23014d62cc3e394637059508fbee4af758d794385457cc39"
     },
     {
       "id": "rule-unfilled-placeholder",
@@ -782,8 +745,7 @@
         "jsx",
         "svg",
         "docx",
-        "pptx",
-        "pdf"
+        "pptx"
       ],
       "languages": [
         "en",
@@ -792,14 +754,14 @@
       "packs": [
         "core"
       ],
-      "bytes": 1098,
-      "approxTokens": 275,
+      "bytes": 994,
+      "approxTokens": 249,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp"
       ],
-      "sha256": "bfb6202bb3a598109949a66345cc0346b9ccd7aa1a7cc34134b1e739f1d0721d"
+      "sha256": "222f4f3377ba889bf46e7632f02266a46faf2f3c62fde4fa7a5e5a75d685aef2"
     },
     {
       "id": "rule-chatbot-artifact",
@@ -816,8 +778,7 @@
         "html",
         "jsx",
         "docx",
-        "pptx",
-        "pdf"
+        "pptx"
       ],
       "languages": [
         "en",
@@ -826,14 +787,14 @@
       "packs": [
         "core"
       ],
-      "bytes": 1050,
-      "approxTokens": 263,
+      "bytes": 1025,
+      "approxTokens": 256,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp"
       ],
-      "sha256": "a189105c3c4e3527467dab69930cec1580a0063946997ba812eff3b08c9f9a3e"
+      "sha256": "0b139572be6c96b9e0319ca35d419eb5e6c31a7263435d98131e09e1c376eea6"
     },
     {
       "id": "rule-markdown-leak",
@@ -855,14 +816,14 @@
       "packs": [
         "core"
       ],
-      "bytes": 969,
-      "approxTokens": 242,
+      "bytes": 965,
+      "approxTokens": 241,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp"
       ],
-      "sha256": "a7624cee1b82b526cf5de920ebeddf85318ad84b48d04c8748669dc4faec9634"
+      "sha256": "73afa133e0e3f91741e5d22173fd54708b2614bd2105394056e25a8fa77baa7b"
     },
     {
       "id": "rule-ui-dead-control",
@@ -884,73 +845,14 @@
       "packs": [
         "core"
       ],
-      "bytes": 1136,
-      "approxTokens": 284,
+      "bytes": 1060,
+      "approxTokens": 265,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp"
       ],
-      "sha256": "6fc4f3a28eed5e926218b718000c9be53c1e5899bf9fc4d28aa2178b42cef1ef"
-    },
-    {
-      "id": "rule-ui-contrast-and-dark-inversion",
-      "pillar": "cases",
-      "kind": "rule",
-      "title": {
-        "en": "Rule: ui-contrast-and-dark-inversion",
-        "zh": "规则：ui-contrast-and-dark-inversion"
-      },
-      "path": "/rules/ui-contrast-and-dark-inversion.md",
-      "modalities": [
-        "html",
-        "css"
-      ],
-      "languages": [
-        "en",
-        "zh"
-      ],
-      "packs": [
-        "core"
-      ],
-      "bytes": 1234,
-      "approxTokens": 309,
-      "relatedTools": [
-        "browser-workbench",
-        "cli",
-        "mcp"
-      ],
-      "sha256": "83c8969656577e997a359de855849fafc870e89d4661054a7d2890430e5560c9"
-    },
-    {
-      "id": "rule-office-pdf-hygiene",
-      "pillar": "cases",
-      "kind": "rule",
-      "title": {
-        "en": "Rule: office-pdf-hygiene",
-        "zh": "规则：office-pdf-hygiene"
-      },
-      "path": "/rules/office-pdf-hygiene.md",
-      "modalities": [
-        "docx",
-        "pptx",
-        "pdf"
-      ],
-      "languages": [
-        "en",
-        "zh"
-      ],
-      "packs": [
-        "core"
-      ],
-      "bytes": 1221,
-      "approxTokens": 305,
-      "relatedTools": [
-        "browser-workbench",
-        "cli",
-        "mcp"
-      ],
-      "sha256": "0f916ff40f15210830f76c2e15e1838e24d924fcd7b24f206c90c52899443a07"
+      "sha256": "4e960915f6b91458dcff18137be9564a846fc93a4b0d39e82eed18de6737d8cb"
     },
     {
       "id": "rule-en-throat-clearing-opener",
@@ -1585,34 +1487,6 @@
       "sha256": "d8eebdb90ec6d25f63a282b1d9772111dfa81fb1429758e597d6cac440a55eb6"
     },
     {
-      "id": "rule-svg-text-overflow-or-a11y",
-      "pillar": "cases",
-      "kind": "rule",
-      "title": {
-        "en": "Rule: svg-text-overflow-or-a11y",
-        "zh": "规则：svg-text-overflow-or-a11y"
-      },
-      "path": "/rules/svg-text-overflow-or-a11y.md",
-      "modalities": [
-        "svg"
-      ],
-      "languages": [
-        "en",
-        "zh"
-      ],
-      "packs": [
-        "deck-and-ui"
-      ],
-      "bytes": 1357,
-      "approxTokens": 339,
-      "relatedTools": [
-        "browser-workbench",
-        "cli",
-        "mcp"
-      ],
-      "sha256": "719de6c606ebf037ab0ee86855d3db93a4490e54e1f739358f08116d7f7358d4"
-    },
-    {
       "id": "task-business-doc",
       "pillar": "methodology",
       "kind": "task-bundle",
@@ -1635,15 +1509,15 @@
         "core",
         "business-brief"
       ],
-      "bytes": 3911,
-      "approxTokens": 978,
+      "bytes": 3304,
+      "approxTokens": 826,
       "relatedTools": [
         "browser-workbench",
         "skill",
         "cli",
         "mcp"
       ],
-      "sha256": "43ac3e9879f999319c7a7c403030d730e610430e496cbbbc1ace602c9ada241a"
+      "sha256": "bb70259ccea1189085816b87c4926bb7011c8bbf5ac6f9bda7c1a306eaad7a21"
     },
     {
       "id": "task-web-and-deck",
@@ -1669,15 +1543,15 @@
         "core",
         "deck-and-ui"
       ],
-      "bytes": 4208,
-      "approxTokens": 1052,
+      "bytes": 3471,
+      "approxTokens": 868,
       "relatedTools": [
         "browser-workbench",
         "skill",
         "cli",
         "mcp"
       ],
-      "sha256": "a7fc858139dbfb5140e611b164bebc09d4649be6e6caeff6f2e6685c206b0419"
+      "sha256": "f701255d68f253782e9159b2a5f66a3d8e62f5bc9a6f047576ae8a707d592353"
     },
     {
       "id": "task-editorial-writing",
@@ -1702,15 +1576,15 @@
         "core",
         "literary-essay"
       ],
-      "bytes": 3500,
-      "approxTokens": 875,
+      "bytes": 2871,
+      "approxTokens": 718,
       "relatedTools": [
         "browser-workbench",
         "skill",
         "cli",
         "mcp"
       ],
-      "sha256": "91b99b36001725cc71519b1cf901646142ddc87f5ffbfcaf7d140dc8909e1ce4"
+      "sha256": "fb3e1a94fba7959f77e097b9475fec1b873da2332347a9ae4d335c1725459f60"
     },
     {
       "id": "task-pre-release-gate",
@@ -1739,13 +1613,13 @@
       "packs": [
         "core"
       ],
-      "bytes": 2057,
-      "approxTokens": 514,
+      "bytes": 1372,
+      "approxTokens": 343,
       "relatedTools": [
         "cli",
         "mcp"
       ],
-      "sha256": "8f55251d2d4a53d21c3af6faa0edf87ab1cfa16a9abaf5411c30245f630532ec"
+      "sha256": "a4ea94d4849513223e7a0c5aafe656f3fc37445e5481a033859aa00d6eaaeae2"
     },
     {
       "id": "awesome-anti-slop-md",
@@ -1805,15 +1679,15 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 9438,
-      "approxTokens": 2360,
+      "bytes": 8997,
+      "approxTokens": 2249,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp",
         "skill"
       ],
-      "sha256": "841c3479814dfa13ba5b3ec90e8e23e40fd7d66d807f93baa0d9b83c2d3895d2"
+      "sha256": "e1b0130f08ed3a835503ed250e05e12e81a8b84f13053ae8e87cdda9d1d87f0c"
     }
   ]
 }

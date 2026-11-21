@@ -14,11 +14,11 @@ family: hygiene/markdown-leak
 - Human anchor: https://dislop.com/#rule-markdown-leak
 
 ## What It Catches
-- EN: Raw Markdown syntax (`**bold**` or `## heading`) left unrendered inside an Office document.
+- EN: Raw Markdown syntax (`**bold**` or `## heading`) pasted unrendered into Word or PowerPoint.
 - ZH: Word 或 PowerPoint 文本中残留未渲染的原始 Markdown 标记（如 `**加粗**` 或 `## 标题`）。
 
 ## Deletion Test
-- EN: Convert the raw asterisks or hash marks into native Word/PowerPoint run formatting.
+- EN: Convert the raw asterisks or hash marks into native Word/PowerPoint formatting.
 - ZH: 去掉原始星号或井号，改用 Word/PowerPoint 原生样式或加粗格式。
 
 ## Exemplar (Reference Data)

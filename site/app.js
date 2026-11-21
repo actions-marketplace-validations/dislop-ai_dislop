@@ -1,10 +1,8 @@
 import {
   auditOoxmlEntries,
-  auditPdfStructure,
   auditText,
   detectModality,
   resolveEffectivePack,
-  verifyRevision,
 } from "./engine/core.mjs";
 import { PACKS_BY_ID, RULE_UI_META } from "./engine/packs-data.mjs";
 
@@ -27,7 +25,7 @@ const I18N = {
     "lead.strike": "好的，以下是为您润色后的版本。",
     "lead.title": "把稿子里的 AI 味挑出来",
     "lead.sub":
-      "AI 写完的文档、PPT 或网页，经常夹着客套话、空话、假链接，或者一改稿就把数字改丢了。dislop 只负责把这些问题标出来，不替你重写。改完拿原稿对一下，没漏数字和链接就行。",
+      "AI 写完的文档、PPT 或网页，经常夹着开头寒暄、空话套话、满页字墙或默认紫粉渐变。dislop 只负责把这些问题标出来，不替你重写。你对照标出来的地方自己改就行。",
     "lead.cta": "贴一段试试 ↓",
     "lead.awesomeBtn": "87 条相关工具清单 →",
     "lead.starBtn": "GitHub",
@@ -35,66 +33,62 @@ const I18N = {
     "lead.cliLabel": "或者直接命令行跑：",
 
     "hp.tabBad": "原稿",
-    "hp.tabGood": "改完",
-    "hp.tabTrap": "改漏了",
+    "hp.tabTrap": "换了种 AI 味",
+    "hp.tabGood": "改干净了",
     "hp.meta": "用同一个检查引擎实时跑的",
     "hp.openWb": "在下面工作台打开 →",
 
-    "m1.title": "红线：硬伤",
-    "m1.desc": "本机路径、没填的占位符、开头寒暄、空链接、跑出页面的 PPT 文本框。",
-    "m2.title": "蓝线：套话",
-    "m2.desc": "只标出来给你看，不搞一刀切黑名单，留不留你自己定。",
-    "m3.title": "绿点：数字和链接",
-    "m3.desc": "改完拿原稿对一遍，“最多”“至少”、单位、日期和链接不能漏。",
+    "m1.title": "红线：AI 残留硬伤",
+    "m1.desc": "留在开头的寒暄、没填的占位符、贴进 Word/PPT 没渲染的 Markdown、网页空链接。",
+    "m2.title": "蓝线：文字里的 AI 味",
+    "m2.desc": "公文黑话、英文高频空词、“不是 A，而是 B”、四字排比、段尾说教、满屏加粗清单。",
+    "m3.title": "蓝线：PPT 和网页模板味",
+    "m3.desc": "单页字太多、要点超 6 条、文字自动缩排、默认紫粉渐变、满屏胶囊标签、三层套盒。",
 
     "wb.heading": "下面直接试试",
     "wb.packLabel": "按哪种稿子查：",
     "pack.brief": "工作文档 / 方案",
     "pack.essay": "随笔 / 长文",
     "pack.ui": "PPT 和网页",
-    "wb.openFile": "打开本地文件（.md / .html / .docx / .pptx / .pdf）",
+    "wb.openFile": "打开本地文件（.md / .html / .docx / .pptx）",
     "wb.specimensTitle": "示例",
     "wb.privacyNote": "内容只留在这个标签页里，页面禁止联网（connect-src 'none'）。",
     "wb.modeProof": "标出问题",
     "wb.modeEdit": "编辑原文",
     "wb.applyClean": "看改好的",
-    "wb.tryTrap": "看改漏的",
+    "wb.tryTrap": "看换了种 AI 味的",
     "wb.reset": "还原",
     "wb.voiceTitle": "句长统计",
-    "legend.error": "红实线：硬伤",
-    "legend.warn": "蓝虚线：套话提醒",
-    "legend.stet": "绿点线：受保护的数字",
+    "legend.error": "红实线：AI 残留硬伤",
+    "legend.warn": "蓝虚线：套话与模板味",
 
     "cov.title": "支持哪些文件，哪些还查不了",
-    "cov.desc": "能查的和还没做的都写明白。加密或读不出来的 PDF 会报跳过，不会显示成 0 问题。",
+    "cov.desc": "能查的和还没做的都写明白。损坏或读不出来的文档会直接报跳过，不会显示成 0 问题。",
     "cov.readMd": "看纯文本说明（.md）→",
     "cov.colTarget": "文件类型",
     "cov.colFormat": "扩展名",
     "cov.colScope": "查什么",
     "cov.colStatus": "现状",
     "cov.r1Name": "文稿与笔记",
-    "cov.r1Scope": "开头寒暄、公文黑话、“不是 A，而是 B”套句、四字排比、段尾说教、没出处的统计、中文里混半角标点，以及改完后核对数字、限定词、日期、链接和引用。",
+    "cov.r1Scope": "开头寒暄、未填占位符、公文黑话、英文高频空词、“不是 A，而是 B”套句、连发短句和四字排比、段尾说教、没出处的统计、满屏加粗清单、破折号过密、中文里混半角标点。",
     "cov.r2Name": "Word 和 PPT",
-    "cov.r2Scope": "忘处理的修订痕迹和批注、贴进文档没渲染的 Markdown 星号、单页字太多、要点超 6 条、文字自动缩太小、文本框跑出页面、空泛标题。",
-    "cov.r3Name": "PDF 元数据与链接",
-    "cov.r3Scope": "指向本机硬盘的链接、标题里残留的原始文件名、未嵌入字体、跨页尺寸不一致。加密 PDF 和完整正文抽字会明确报跳过。",
-    "cov.r4Name": "网页与 SVG",
-    "cov.r4Scope": "空链接、无说明的禁用按钮、文字对比度不够、深色模式层级倒置、默认紫粉渐变、满屏胶囊标签、三层套盒、SVG 文字裁切。",
+    "cov.r2Scope": "贴进文档没渲染的 Markdown 星号、正文套话、PPT 单页字墙、要点超 6 条、文字自动缩太小、空泛标题（如“背景”“概述”）。",
+    "cov.r4Name": "网页与组件",
+    "cov.r4Scope": "点不动的空链接和占位按钮、默认紫粉渐变、满屏胶囊标签、三层套盒、把提示词口号印成装饰徽章。",
     "cov.r5Name": "Git 改动与 PR",
-    "cov.r5Scope": "只查本次改过的行，拦住本机路径、占位符、聊天残迹和页面套话，支持 GitHub PR 批注和 SARIF。代码语法树检查还没做。",
+    "cov.r5Scope": "只查本次改过的行，拦住残留寒暄、占位符和文字/页面里的 AI 味，支持 GitHub PR 批注和 SARIF。代码语法树检查还没做。",
     "cov.r6Name": "节奏单调与个人风格",
     "cov.r6Scope": "连环逗号句、句长过于均匀、PPT 连续同版式，以及从自己旧稿里统计句长习惯。原型已跑通，还没合进主程序。",
     "status.live": "可用",
-    "status.pdf": "查元数据，正文跳过",
     "status.partial": "改动检查可用，AST 未做",
     "status.notYet": "还没上线（原型阶段）",
 
     "why.title": "为什么只标不改",
     "why.desc":
-      "很多自动“去 AI 味”改写工具会把“最多 45 秒”改成“45 秒”，或者把平实的话改写成另一种套话。dislop 只标出问题在哪，改动交给你自己，改完再帮你核对数字和链接没丢。",
+      "很多自动“去 AI 味”改写工具会把平实的话改写成另一种套话（比如删了“抓手”，换成“这不是升级，而是革命”），或者把你的语气全洗成同一种腔调。dislop 只标出哪里像 AI 写的，怎么改由你自己定。",
     "why.readBrand": "看文字与设计说明 →",
-    "dogfood.badTag": "原稿 · 标出 5 处",
-    "dogfood.goodTag": "改完核对 · 通过",
+    "dogfood.badTag": "原稿 · 标出 4 处",
+    "dogfood.goodTag": "改完 · 0 处问题",
 
     "surf.title": "在哪里都能用",
     "surf.desc": "不管稿子是哪个模型写的，Node.js、Python 和浏览器跑出来的结果一样，都不需要装额外依赖。",
@@ -113,13 +107,13 @@ const I18N = {
     "ep.llms": "Agent 入口索引",
     "ep.catalog": "全部文档的 JSON 目录",
     "ep.taskBiz": "任务卡：工作文档与技术方案",
-    "ep.taskWeb": "任务卡：网页、SVG 与 PPT",
+    "ep.taskWeb": "任务卡：网页与 PPT 模板味",
     "ep.taskEdit": "任务卡：随笔与长文",
-    "ep.taskGate": "任务卡：发稿前硬伤检查与核对",
+    "ep.taskGate": "任务卡：发稿前 AI 残留硬伤检查",
     "ep.skill": "跨宿主 Agent Skill",
     "ep.awesome": "87 条工具清单 JSON",
     "ep.method": "文案与设计基准",
-    "ep.full": "单次拉取的全部 29 条规则",
+    "ep.full": "单次拉取的全部 25 条规则",
 
     "rules.title": "规则列表",
     "rules.desc": "中文页只列中文和通用规则，例子都是中文；切英文可以看到全部英文规则。点「试试 ↑」会直接装进上面的工作台。",
@@ -185,7 +179,7 @@ const I18N = {
     "lead.strike": "Certainly! Here is your polished draft.",
     "lead.title": "Catch the AI slop before you send it",
     "lead.sub":
-      "AI-written docs, slides, and web pages often leave behind chat replies, filler phrasing, and broken links. Auto-rewriters often quietly drop numbers when they clean things up. dislop just marks what looks off so you can edit it yourself, then checks that your numbers and links are still there.",
+      "AI-written docs, slides, and web pages often leave behind chat replies, stock phrasing, crowded slides, or purple-pink template chrome. dislop only marks what looks off so you can edit it yourself.",
     "lead.cta": "Try a draft ↓",
     "lead.awesomeBtn": "87 anti-slop tools →",
     "lead.starBtn": "GitHub",
@@ -193,66 +187,62 @@ const I18N = {
     "lead.cliLabel": "Or run it from a terminal:",
 
     "hp.tabBad": "Original",
-    "hp.tabGood": "Edited",
-    "hp.tabTrap": "Dropped a word",
+    "hp.tabTrap": "Still sounds like AI",
+    "hp.tabGood": "Cleaned up",
     "hp.meta": "Running live on the same linter engine",
     "hp.openWb": "Open in workbench ↓",
 
-    "m1.title": "Red: hard bugs",
-    "m1.desc": "Local file paths, unfilled brackets, stray chat replies, dead links, or off-slide PPTX text boxes.",
-    "m2.title": "Blue: stock phrasing",
-    "m2.desc": "Marked for review, not auto-replaced. No blunt banned-word list; you decide what stays.",
-    "m3.title": "Green: numbers & links",
-    "m3.desc": "Checked against the original after you edit so qualifiers (up to, at least), dates, and links survive.",
+    "m1.title": "Red: AI artifacts",
+    "m1.desc": "Stray chat replies, unfilled placeholders, raw Markdown pasted into Word/PPT, and dead href='#' placeholder links.",
+    "m2.title": "Blue: prose clichés",
+    "m2.desc": "Throat-clearing openers, stock buzzwords, 'Not X, but Y' slogans, staccato chains, moralizing endings, and bold-lead bullet walls.",
+    "m3.title": "Blue: slide & UI templates",
+    "m3.desc": "Crowded slides, over 6 bullets, shrunk autofit text, purple-pink AI gradients, pill-badge walls, and 3-level nested cards.",
 
     "wb.heading": "Try it here",
     "wb.packLabel": "Check as:",
     "pack.brief": "Work doc / spec",
     "pack.essay": "Essay / longform",
     "pack.ui": "Slides & UI",
-    "wb.openFile": "Open a local file (.md / .html / .docx / .pptx / .pdf)",
+    "wb.openFile": "Open a local file (.md / .html / .docx / .pptx)",
     "wb.specimensTitle": "Examples",
     "wb.privacyNote": "Everything stays in this tab. The page blocks outbound requests (connect-src 'none').",
     "wb.modeProof": "Highlights",
     "wb.modeEdit": "Edit text",
     "wb.applyClean": "Clean version",
-    "wb.tryTrap": "Bad edit",
+    "wb.tryTrap": "2nd-order AI slop",
     "wb.reset": "Reset",
     "wb.voiceTitle": "Sentence stats",
-    "legend.error": "Red solid: hard bug",
-    "legend.warn": "Blue dashed: cliché warning",
-    "legend.stet": "Green dotted: protected number",
+    "legend.error": "Red solid: AI artifact",
+    "legend.warn": "Blue dashed: cliché / template slop",
 
     "cov.title": "What it checks, and what it skips",
-    "cov.desc": "Plain status for each file type. Encrypted or unreadable PDFs are marked as skipped instead of 0 issues.",
+    "cov.desc": "Plain status for each file type. Unreadable archives are marked as skipped instead of 0 issues.",
     "cov.readMd": "Plain text overview (.md) →",
     "cov.colTarget": "File type",
     "cov.colFormat": "Extensions",
     "cov.colScope": "What gets checked",
     "cov.colStatus": "Status",
     "cov.r1Name": "Docs & notes",
-    "cov.r1Scope": "Chat replies, throat-clearing openers, buzzwords, 'Not X, but Y' frames, staccato slogan runs, moralizing endings, unsourced claims, plus edit checks for numbers, qualifiers, dates, links, and citations.",
+    "cov.r1Scope": "Chat replies, unfilled placeholders, throat-clearing openers, buzzwords, 'Not X, but Y' frames, staccato slogan runs, moralizing endings, unsourced claims, bold-lead bullet walls, and em-dash overuse.",
     "cov.r2Name": "Word & PowerPoint",
-    "cov.r2Scope": "Unaccepted tracked changes and comments, raw Markdown asterisks, crowded slides, more than 6 bullets, shrunk autofit text, off-slide boxes, and vague slide titles.",
-    "cov.r3Name": "PDF metadata & links",
-    "cov.r3Scope": "Local file:/// links, raw filename titles, unembedded fonts, and mixed page sizes. Encrypted PDFs and full text extraction are reported as skipped.",
-    "cov.r4Name": "Web pages & SVG",
-    "cov.r4Scope": "Dead href='#' links, unexplained disabled buttons, low contrast, inverted dark-mode surfaces, purple-pink AI gradients, pill walls, 3-level nested boxes, and clipped SVG text.",
+    "cov.r2Scope": "Raw Markdown asterisks pasted from chat, prose clichés, crowded slides, more than 6 bullets, shrunk autofit text, and vague slide titles ('Overview', 'Background').",
+    "cov.r4Name": "Web pages & components",
+    "cov.r4Scope": "Dead href='#' placeholder links, unexplained disabled buttons, purple-pink AI gradients, pill walls, 3-level nested boxes, and 'AI-Powered' prompt-echo badges.",
     "cov.r5Name": "Git diffs & PRs",
-    "cov.r5Scope": "Checks only modified lines for local paths, placeholders, chat wrappers, and UI clichés, with GitHub annotations and SARIF output. Code AST linting is not built.",
+    "cov.r5Scope": "Checks only modified lines for chat wrappers, placeholders, prose clichés, and UI template slop, with GitHub annotations and SARIF output. Code AST linting is not built.",
     "cov.r6Name": "Rhythm & voice stats",
     "cov.r6Scope": "Comma chains, uniform sentence length, repeated slide layouts, and local sentence stats from your own drafts. Prototype works, not merged into the core yet.",
     "status.live": "Works now",
-    "status.pdf": "Metadata only; body skipped",
     "status.partial": "Diff checks work; no AST",
     "status.notYet": "Not shipped (prototype)",
 
     "why.title": "Why it marks instead of rewriting",
     "why.desc":
-      "Auto-humanizers often turn 'up to 12 minutes' into '12 minutes', or swap one cliché for another. dislop only marks the lines that look off. You make the edits, and verify checks that your numbers and links made it through.",
+      "Auto-humanizers often trade one cliché for another (dropping 'game-changer' only to write 'Not X, but Y') or flatten your voice into a generic template. dislop just points out what sounds AI-written and leaves the edits to you.",
     "why.readBrand": "Read voice & style notes →",
-    "dogfood.badTag": "Original · 4 marks",
-    "dogfood.goodTag": "After edit · Passed",
+    "dogfood.badTag": "Original · 3 marks",
+    "dogfood.goodTag": "Cleaned up · 0 issues",
 
     "surf.title": "Where to run it",
     "surf.desc": "Works regardless of which model wrote the draft. Node.js, Python, and the browser run the same checks with zero external dependencies.",
@@ -271,13 +261,13 @@ const I18N = {
     "ep.llms": "Entry index for agents",
     "ep.catalog": "JSON index of all pages",
     "ep.taskBiz": "Guide: work docs & specs",
-    "ep.taskWeb": "Guide: web pages, SVG & slides",
+    "ep.taskWeb": "Guide: web pages & slides",
     "ep.taskEdit": "Guide: essays & longform",
-    "ep.taskGate": "Guide: pre-release checks & verify",
+    "ep.taskGate": "Guide: pre-release AI artifact checks",
     "ep.skill": "Cross-host Agent Skill",
     "ep.awesome": "Raw JSON for 87 anti-slop tools",
     "ep.method": "Voice & design guide",
-    "ep.full": "All 29 rules in one file",
+    "ep.full": "All 25 rules in one file",
 
     "rules.title": "Rules",
     "rules.desc": "The English page lists English and shared rules with English examples only. Switch to 中文 for Chinese-specific rules. Click 'Try ↑' to load any example into the workbench.",
@@ -336,31 +326,29 @@ const HERO_PROOF_BY_LANG = {
     filename: "launch-note.md",
     modality: "markdown",
     pack: "business-brief",
-    bad: "好的，以下是修改后的上线说明。值得注意的是，本次改造以队列分级为重要抓手，全面赋能一线运维团队，故障恢复时间最多 45 秒。这不是一次简单的升级，而是一场效率革命。",
+    bad: "好的，以下是修改后的上线说明。值得注意的是，本次改造以队列分级为重要抓手，全面赋能一线运维团队，故障恢复时间最多 45 秒。",
+    trap: "队列分级已经落地，故障恢复时间最多 45 秒。这不是一次简单的升级，而是一场效率革命。",
     good: "这次改造给队列分了级，一线运维团队的故障恢复时间最多 45 秒。",
-    trap: "这次改造给队列分了级，一线运维团队的故障恢复时间 45 秒。",
     badNotes: [
       { kind: "error", label: "红线：", text: "开头留着 AI 寒暄，删掉就行。" },
-      { kind: "warn", label: "蓝线：", text: "“抓手”“全面赋能”“不是……而是……”都是空话，可以直接说做了什么。" },
-      { kind: "stet", label: "绿点：", text: "“最多 45 秒”先记下来，改完会核对。" },
+      { kind: "warn", label: "蓝线：", text: "“值得注意的是”“抓手”“全面赋能”都是空话，可以直接说做了什么。" },
     ],
-    goodVerdict: "通过。5 处问题都清掉了，“最多 45 秒”没动。",
-    trapVerdict: "没通过。原稿写的是“最多 45 秒”，改完变成“45 秒”，意思变了。",
+    trapVerdict: "依然标出 1 处。旧套话删掉了，但换成了“不是……而是……”这种二阶 AI 腔。",
+    goodVerdict: "0 处问题。寒暄和空话都清掉了。",
   },
   en: {
     filename: "launch-note.md",
     modality: "markdown",
     pack: "business-brief",
-    bad: "Certainly! Here is the launch note. It's worth noting that exports now finish in up to 12 minutes for workspaces above 500,000 rows. This isn't just a speed bump — it's a game-changer.",
-    good: "Exports now finish in up to 12 minutes for workspaces above 500,000 rows.",
-    trap: "Exports now finish in 12 minutes for workspaces above 500,000 rows.",
+    bad: "Certainly! Here is the launch note. It's worth noting that CSV exports are a game-changer, finishing in up to 12 minutes for workspaces above 500,000 rows.",
+    trap: "CSV exports finish in up to 12 minutes for workspaces above 500,000 rows. This isn't just an upgrade — it's a new standard.",
+    good: "CSV exports finish in up to 12 minutes for workspaces above 500,000 rows.",
     badNotes: [
       { kind: "error", label: "Red:", text: "Stray chat reply on line one. Delete it." },
-      { kind: "warn", label: "Blue:", text: "Filler opener and slogan frame. Say the plain fact instead." },
-      { kind: "stet", label: "Green:", text: 'Tracked for verification: "up to 12 minutes", "above 500,000 rows".' },
+      { kind: "warn", label: "Blue:", text: "Filler opener and hype noun ('game-changer'). Say what changed instead." },
     ],
-    goodVerdict: 'Passed. 4 marks cleared, and "up to 12 minutes" and "above 500,000 rows" are still intact.',
-    trapVerdict: 'Rejected. The original said "up to 12 minutes", not "12 minutes".',
+    trapVerdict: "Still flagged (1 issue). Old buzzwords are gone, replaced by a 'Not X, but Y' AI slogan.",
+    goodVerdict: "0 issues. Chat wrapper and stock phrasing removed.",
   },
 };
 
@@ -378,19 +366,17 @@ const SPECIMENS_BY_LANG = {
       bad: [
         "好的，以下是修改后的上线说明。",
         "",
-        "详见 [架构图](file:///tmp/release-v3/arch.png)，压测延迟数据见【待补充】。",
+        "压测延迟数据见【待补充】。",
         "",
         "值得注意的是，本次改造以工单分级为重要抓手，全面赋能一线客服团队形成服务闭环，将首响时间压缩至最多 45 秒。",
-        "",
-        "这不是一次简单的升级，而是一场效率革命。",
       ].join("\n"),
       trap: [
-        "详见 [架构图](./docs/arch.png)，压测延迟待压测签字后补齐。",
+        "压测延迟待压测签字后补齐。",
         "",
-        "本次改造给工单分了级，一线客服首响时间压缩至 45 秒。这不是普通优化，而是行业标杆。",
+        "本次改造给工单分了级，一线客服首响时间压缩至最多 45 秒。这不是普通优化，而是行业标杆。",
       ].join("\n"),
       good: [
-        "详见 [架构图](./docs/arch.png)，压测延迟待压测签字后补齐。",
+        "压测延迟待压测签字后补齐。",
         "",
         "本次改造给工单分了级，一线客服首响时间压缩至最多 45 秒。",
       ].join("\n"),
@@ -410,11 +396,11 @@ const SPECIMENS_BY_LANG = {
         "傍晚 18:30，修表匠把拆下的 3 枚铜齿轮泡进煤油皿里，关掉台灯。这或许就是慢工出细活在喧嚣时代真正的意义所在。",
       ].join("\n"),
       trap: [
-        "冬至那天下了初雪，院子里的腊梅开了几朵；香气飘到走廊。",
+        "冬至那天下了初雪，院子里的腊梅开了 3 朵；香气一直飘到走廊。",
         "",
         "老周的旧刨子不是木头，而是时间本身。",
         "",
-        "修表匠泡好齿轮，关掉台灯。",
+        "傍晚 18:30，修表匠把拆下的 3 枚铜齿轮泡进煤油皿里，关掉台灯。",
       ].join("\n"),
       good: [
         "冬至那天下了初雪，院子里的腊梅开了 3 朵；香气一直飘到走廊。",
@@ -432,49 +418,45 @@ const SPECIMENS_BY_LANG = {
       filename: "landing-card.html",
       modality: "html",
       bad: [
-        '<div class="bg-gradient-to-r from-indigo via-purple to-pink bg-clip-text text-transparent">',
+        '<div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">',
+        '  <span class="badge">AI 强力驱动</span>',
         "  <h2>1.2 秒查完 48 份演示文稿</h2>",
         '  <a href="#">下载完整报告</a>',
-        '  <button disabled>立即导出</button>',
         "</div>",
       ].join("\n"),
       trap: [
         '<div class="surface-card">',
-        "  <h2>快速查完演示文稿</h2>",
-        '  <a href="./report.pdf">下载完整报告</a>',
+        '  <span class="badge">零幻觉保证</span>',
+        "  <h2>1.2 秒查完 48 份演示文稿</h2>",
+        '  <a href="./report.html">下载完整报告</a>',
         "</div>",
       ].join("\n"),
       good: [
         '<div class="surface-card">',
         "  <h2>1.2 秒查完 48 份演示文稿</h2>",
-        '  <a href="./report.pdf">下载完整报告</a>',
-        '  <button type="button" disabled title="请先选择要导出的文件">立即导出</button>',
+        '  <a href="./report.html">下载完整报告</a>',
         "</div>",
       ].join("\n"),
     },
     {
-      id: "verify-demo",
+      id: "second-order",
       num: "04",
-      label: "改稿核对演示",
+      label: "四字排比与二阶腔",
       pack: "business-brief",
       filename: "sla-update.md",
       modality: "markdown",
       bad: [
-        "好的，以下是修改后的公告。",
+        "新版网关具备精准高效、安全可靠、灵活易用的特性，单节点支持 8000 QPS。",
         "",
-        "新版网关具备精准高效、安全可靠、灵活易用的特性，单节点可支持至少 8000 次每秒请求，迁移窗口最多 300 毫秒，详情见 https://status.example.com/q3。",
-        "",
-        "值得注意的是，本次切换以灰度发布为抓手。",
+        "数据显示，大多数团队在发稿前都不会检查套话。",
       ].join("\n"),
       trap: [
-        "新版网关单节点支持 8000 次每秒请求，迁移窗口 300 毫秒，详情见 https://status.example.com/q3。",
-        "",
-        "这不是一次普通升级，而是系统架构的质变。",
+        "新版网关单节点支持 8000 QPS。这不是一次普通升级，而是系统架构的质变。",
       ].join("\n"),
       good: [
-        "新版网关单节点可支持至少 8000 次每秒请求，迁移窗口最多 300 毫秒，详情见 https://status.example.com/q3。",
+        "新版网关单节点支持 8000 QPS，上游超时 2 秒后自动熔断。",
         "",
-        "本次切换采用灰度发布。",
+        "我们在 2026 年 3 月抽查的 40 份发布说明里，有 28 份留着未清理的套话。",
       ].join("\n"),
     },
     {
@@ -485,17 +467,15 @@ const SPECIMENS_BY_LANG = {
       filename: "clean-chinese.md",
       modality: "markdown",
       bad: [
-        "她抓手机拍下黑板上的推导过程，顺手记下 2026-10-15 的压测结果。",
+        "她抓手机拍下黑板上的推导过程，默认超时不是 30 秒，而是 300 秒。",
         "",
         "北京大学、清华大学、复旦大学三校联合公开了这份语料，单次推理平均延迟降至 18 毫秒。",
       ].join("\n"),
       trap: [
-        "她拍下黑板上的推导过程，记下了压测结果。",
-        "",
         "这不是一份普通的语料，而是学术协作的新起点。",
       ].join("\n"),
       good: [
-        "她抓手机拍下黑板上的推导过程，顺手记下 2026-10-15 的压测结果。",
+        "她抓手机拍下黑板上的推导过程，默认超时不是 30 秒，而是 300 秒。",
         "",
         "北京大学、清华大学、复旦大学三校联合公开了这份语料，单次推理平均延迟降至 18 毫秒。",
       ].join("\n"),
@@ -512,17 +492,17 @@ const SPECIMENS_BY_LANG = {
       bad: [
         "Certainly! Here is the Q3 update.",
         "",
-        "See [Architecture](file:///tmp/release-v3/arch.png); p95 latency is [insert p95 latency].",
+        "p95 latency is [insert p95 latency].",
         "",
         "It is worth noting that CSV exports take up to 12 minutes for accounts above 500,000 rows. This is a game-changer that isn't just faster — it's a paradigm shift.",
       ].join("\n"),
       trap: [
-        "See [Architecture](./docs/arch.png); p95 latency is pending load-test sign-off.",
+        "p95 latency is pending load-test sign-off.",
         "",
-        "CSV exports take 12 minutes for accounts above 500,000 rows. Fast. Clean. Ready.",
+        "CSV exports take up to 12 minutes for accounts above 500,000 rows. Queues clear. Charts load. Teams ship.",
       ].join("\n"),
       good: [
-        "See [Architecture](./docs/arch.png); p95 latency is pending load-test sign-off.",
+        "p95 latency is pending load-test sign-off.",
         "",
         "CSV exports take up to 12 minutes for accounts above 500,000 rows.",
       ].join("\n"),
@@ -537,12 +517,12 @@ const SPECIMENS_BY_LANG = {
       bad: [
         "The station clock — brass-rimmed — stopped at 4:10 — right before the rain — leaving the platform quiet — and empty.",
         "",
-        "At 6:15 a.m., the ferry deck smelled of wet rope and diesel. And perhaps that is what quiet endurance really means in a noisy world.",
+        "At 6:15 a.m., the ferry deck smelled of wet rope and diesel. Ultimately, this reminds us that departures are always quieter than arrivals.",
       ].join("\n"),
       trap: [
-        "The station clock stopped before the rain, leaving the platform quiet.",
+        "The brass-rimmed station clock stopped at 4:10 right before the rain, leaving the platform quiet.",
         "",
-        "The ferry deck smelled of wet rope and diesel. It wasn't just a crossing — it was a reckoning.",
+        "At 6:15 a.m., the ferry deck smelled of wet rope and diesel. It wasn't just a crossing — it was a reckoning.",
       ].join("\n"),
       good: [
         "The brass-rimmed station clock stopped at 4:10 right before the rain, leaving the platform quiet.",
@@ -558,7 +538,7 @@ const SPECIMENS_BY_LANG = {
       filename: "hero-card.html",
       modality: "html",
       bad: [
-        '<div class="bg-gradient-to-r from-indigo via-purple to-pink bg-clip-text text-transparent">',
+        '<div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">',
         '  <span class="badge">AI-Powered · Zero Hallucination</span>',
         "  <h2>Audit 48 slide decks in 1.2 seconds</h2>",
         '  <a href="#">Download report</a>',
@@ -566,36 +546,35 @@ const SPECIMENS_BY_LANG = {
       ].join("\n"),
       trap: [
         '<div class="surface-card">',
-        "  <h2>Audit slide decks in seconds</h2>",
-        '  <a href="./report.pdf">Download report</a>',
+        '  <span class="badge">Supercharge Your Workflow</span>',
+        "  <h2>Audit 48 slide decks in 1.2 seconds</h2>",
+        '  <a href="./report.html">Download report</a>',
         "</div>",
       ].join("\n"),
       good: [
         '<div class="surface-card">',
         "  <h2>Audit 48 slide decks in 1.2 seconds</h2>",
-        '  <a href="./report.pdf">Download report</a>',
+        '  <a href="./report.html">Download report</a>',
         "</div>",
       ].join("\n"),
     },
     {
-      id: "verify-demo",
+      id: "second-order",
       num: "04",
-      label: "Edit comparison",
+      label: "Staccato & bullet walls",
       pack: "business-brief",
       filename: "sla-note.md",
       modality: "markdown",
       bad: [
-        "Certainly! Here is the revised notice.",
-        "",
-        "Studies show that 70% of decks fail contrast checks. Exports finish in up to 300 ms across 14 gateways; see https://status.example.com/q3.",
+        "Studies show that 70% of decks pack too much text onto one slide.",
         "",
         "Signals drop. Audits stall. Launches slip.",
       ].join("\n"),
       trap: [
-        "Our audit flagged decks for contrast failures. Exports finish in 300 ms across 14 gateways; see https://status.example.com/q3.",
+        "This isn't just a deck linter — it's a new standard for clear slides.",
       ].join("\n"),
       good: [
-        "Our internal audit flagged 70% of decks for contrast failures. Exports finish in up to 300 ms across 14 gateways; see https://status.example.com/q3.",
+        "In our audit of 48 internal Q3 decks, 31 had at least one slide over 120 words.",
       ].join("\n"),
     },
     {
@@ -608,17 +587,15 @@ const SPECIMENS_BY_LANG = {
       bad: [
         "The Delve debugger inspected a 19th-century wool tapestry archive on 2026-10-15.",
         "",
-        "Median query latency fell to 18 ms across 14 regions.",
+        "The bug is not in `parser.py`, but in `loader.py` line 42.",
       ].join("\n"),
       trap: [
-        "The debugger inspected an archive.",
-        "",
         "This isn't just speed — it's clarity.",
       ].join("\n"),
       good: [
         "The Delve debugger inspected a 19th-century wool tapestry archive on 2026-10-15.",
         "",
-        "Median query latency fell to 18 ms across 14 regions.",
+        "The bug is not in `parser.py`, but in `loader.py` line 42.",
       ].join("\n"),
     },
   ],
@@ -637,8 +614,8 @@ npx --yes github:dislop-ai/dislop check --changed origin/main --format sarif > d
 # 用 Python 3.10+ 检查 PPT 或 Word（零外部依赖）
 uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review.pptx
 
-# 改完和原稿对一遍：核对数字、限定词、链接与代码是否完好
-npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md`,
+# 查看某条规则的判断方法和改前/改后示例
+npx --yes github:dislop-ai/dislop explain negation-pivot-frame --lang zh`,
     mcp: `{
   "mcpServers": {
     "dislop": {
@@ -681,7 +658,7 @@ jobs:
 }`,
   },
   en: {
-    cli: `# Check the current folder (exits 1 on core errors, prints style queries)
+    cli: `# Check the current folder (exits 1 on core errors, prints style warnings)
 npx --yes github:dislop-ai/dislop check .
 
 # Check only lines changed against main and emit SARIF 2.1.0
@@ -690,8 +667,8 @@ npx --yes github:dislop-ai/dislop check --changed origin/main --format sarif > d
 # Inspect a PowerPoint deck or Word file with Python 3.10+ (zero external deps)
 uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review.pptx
 
-# Compare your revision against the original
-npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md`,
+# Show the check question and examples for a rule
+npx --yes github:dislop-ai/dislop explain negation-pivot-frame`,
     mcp: `{
   "mcpServers": {
     "dislop": {
@@ -938,28 +915,12 @@ function setViewMode(mode) {
   editBtn.disabled = Boolean(binaryAuditResult);
   editBtn.title = binaryAuditResult
     ? currentLang === "zh"
-      ? "Word / PPT / PDF 文件为只读体检，请修改原文件后重新打开"
-      : "Binary files (DOCX/PPTX/PDF) are read-only here; edit the source file and re-open"
+      ? "Word / PPT 文件为只读体检，请修改原文件后重新打开"
+      : "Binary files (DOCX/PPTX) are read-only here; edit the source file and re-open"
     : "";
 }
 
-function collectStetRanges(text, findingSpans) {
-  const ranges = [];
-  const numRe =
-    /(?<![A-Za-z0-9_/-])(?:(?:\b(?:up to|at least|under|over|above|below)\s+|(?:最多|至少|不超过|低于|高于)\s*))?(?:[$¥€£]\s*)?\d+(?:,\d{3})*(?:\.\d+)?(?:\s*(?:%|(?:ms|s|sec|seconds?|min|minutes?|hours?|days?|weeks?|rows?|nodes?|decks?|gateways?|regions?)(?![A-Za-z])|毫秒|秒|分钟|小时|天|周|次|页|条|行|枚|张|所|朵|份))?/giu;
-  let m;
-  while ((m = numRe.exec(text)) !== null) {
-    const start = m.index;
-    const end = m.index + m[0].length;
-    const overlapsFinding = findingSpans.some((fs) => start < fs.end && end > fs.start);
-    if (!overlapsFinding) {
-      ranges.push({ start, end, kind: "stet" });
-    }
-  }
-  return ranges;
-}
-
-function renderAnnotatedLine(lineText, lineGlobalStart, findings, stetRanges) {
+function renderAnnotatedLine(lineText, lineGlobalStart, findings) {
   const lineEnd = lineGlobalStart + lineText.length;
   const tokens = [];
 
@@ -978,23 +939,6 @@ function renderAnnotatedLine(lineText, lineGlobalStart, findings, stetRanges) {
     }
   });
 
-  stetRanges.forEach((r) => {
-    const s = Math.max(lineGlobalStart, r.start);
-    const e = Math.min(lineEnd, r.end);
-    if (s < e) {
-      const overlaps = tokens.some((t) => s - lineGlobalStart < t.end && e - lineGlobalStart > t.start);
-      if (!overlaps) {
-        tokens.push({
-          start: s - lineGlobalStart,
-          end: e - lineGlobalStart,
-          cls: "mark-stet",
-          findingIdx: -1,
-          title: currentLang === "zh" ? "原样保留的数字与限定词" : "Protected number / qualifier",
-        });
-      }
-    }
-  });
-
   tokens.sort((a, b) => a.start - b.start || b.end - a.end);
 
   let html = "";
@@ -1005,12 +949,8 @@ function renderAnnotatedLine(lineText, lineGlobalStart, findings, stetRanges) {
       html += escapeHtml(lineText.slice(cursor, t.start));
     }
     const piece = escapeHtml(lineText.slice(t.start, t.end));
-    if (t.findingIdx >= 0) {
-      const focused = t.findingIdx === focusedFindingIdx ? " is-focused" : "";
-      html += `<span class="${t.cls}${focused}" data-finding-idx="${t.findingIdx}" title="${escapeHtml(t.title)}" tabindex="0">${piece}</span>`;
-    } else {
-      html += `<span class="${t.cls}" title="${escapeHtml(t.title)}">${piece}</span>`;
-    }
+    const focused = t.findingIdx === focusedFindingIdx ? " is-focused" : "";
+    html += `<span class="${t.cls}${focused}" data-finding-idx="${t.findingIdx}" title="${escapeHtml(t.title)}" tabindex="0">${piece}</span>`;
     cursor = t.end;
   }
   if (cursor < lineText.length) {
@@ -1030,9 +970,7 @@ function renderHeroProof() {
   const pack = resolveEffectivePack(data.pack, PACKS_BY_ID);
   const text = data[heroProofState] || data.bad;
   const audit = auditText(text, { filename: data.filename, modality: data.modality, pack });
-  const spans = audit.findings.map((f) => f.span).filter(Boolean);
-  const stet = collectStetRanges(text, spans);
-  stageEl.innerHTML = renderAnnotatedLine(text, 0, audit.findings, stet);
+  stageEl.innerHTML = renderAnnotatedLine(text, 0, audit.findings);
 
   if (heroProofState === "bad") {
     fbEl.innerHTML = `<ul class="hero-proof-notes">${data.badNotes
@@ -1042,15 +980,9 @@ function renderHeroProof() {
       )
       .join("")}</ul>`;
   } else if (heroProofState === "good") {
-    const v = verifyRevision(data.bad, data.good, { filename: data.filename, modality: data.modality, pack });
-    fbEl.innerHTML = `<div class="hero-proof-verdict">${escapeHtml(
-      v.ok ? data.goodVerdict : v.reasons.join("; ")
-    )}</div>`;
+    fbEl.innerHTML = `<div class="hero-proof-verdict">${escapeHtml(data.goodVerdict)}</div>`;
   } else {
-    const v = verifyRevision(data.bad, data.trap, { filename: data.filename, modality: data.modality, pack });
-    fbEl.innerHTML = `<div class="hero-proof-verdict is-rejected">${escapeHtml(
-      !v.ok ? data.trapVerdict : ""
-    )}</div>`;
+    fbEl.innerHTML = `<div class="hero-proof-verdict is-rejected">${escapeHtml(data.trapVerdict)}</div>`;
   }
 
   document.querySelectorAll("[data-hero-state]").forEach((btn) => {
@@ -1149,7 +1081,6 @@ function renderWorkbench() {
   const proofView = document.getElementById("proof-view");
   const editArea = document.getElementById("edit-textarea");
   const summaryEl = document.getElementById("wb-summary");
-  const verifyBox = document.getElementById("verify-box");
   const notesEl = document.getElementById("notes-container");
 
   setViewMode(viewMode);
@@ -1192,13 +1123,11 @@ function renderWorkbench() {
     editArea.hidden = true;
 
     const lines = currentText.split("\n");
-    const findingSpans = findings.map((f) => f.span).filter(Boolean);
-    const stetRanges = binaryAuditResult ? [] : collectStetRanges(currentText, findingSpans);
     let offset = 0;
     const htmlLines = lines.map((line, i) => {
       const annotated = binaryAuditResult
         ? escapeHtml(line)
-        : renderAnnotatedLine(line, offset, findings, stetRanges);
+        : renderAnnotatedLine(line, offset, findings);
       offset += line.length + 1;
       return `<li class="proof-line"><span class="line-num">${i + 1}</span><span class="line-content">${annotated}</span></li>`;
     });
@@ -1221,32 +1150,7 @@ function renderWorkbench() {
     });
   }
 
-  // Edit comparison verdict
-  if (!binaryAuditResult && currentText !== baselineText) {
-    const v = verifyRevision(baselineText, currentText, {
-      filename: currentFilename,
-      modality: currentModality,
-      pack,
-    });
-    verifyBox.hidden = false;
-    verifyBox.className = "verify-banner " + (v.ok ? "is-accepted" : "is-rejected");
-    const title = v.ok
-      ? currentLang === "zh"
-        ? `通过（问题 ${v.beforeFindings} → ${v.afterFindings}，数字和链接没漏）`
-        : `Passed (marks ${v.beforeFindings} → ${v.afterFindings}; numbers, links & code intact)`
-      : currentLang === "zh"
-        ? `没通过（问题 ${v.beforeFindings} → ${v.afterFindings}）`
-        : `Rejected (marks ${v.beforeFindings} → ${v.afterFindings})`;
-    const reasonsHtml = v.reasons.length
-      ? `<ul>${v.reasons.map((r) => `<li>${escapeHtml(r)}</li>`).join("")}</ul>`
-      : "";
-    verifyBox.innerHTML = `<strong>${escapeHtml(title)}</strong>${reasonsHtml}`;
-  } else {
-    verifyBox.hidden = true;
-    verifyBox.innerHTML = "";
-  }
-
-  // Render Editor-Style Margin Notes
+  // Render Margin Notes
   const cards = [];
 
   for (const s of skipped) {
@@ -1263,8 +1167,8 @@ function renderWorkbench() {
         : "Nothing here yet. Click 'Edit text' to paste a draft, or pick an example on the left."
       : !lastUploadedFile && !customRuleTitle && activeSpecimen?.id === "clean-nearmiss" && currentText === baselineText
         ? currentLang === "zh"
-          ? "0 处问题。“抓手机”是动作，“北京大学、清华大学、复旦大学”是真实校名，不会被误伤。可以点「看改漏的」对比一下。"
-          : "0 issues. 'Delve' is a debugger and 'wool tapestry' is literal, so nothing gets flagged. Click 'Bad edit' to see what gets rejected."
+          ? "0 处问题。“抓手机”是动作，“默认超时不是 30 秒，而是 300 秒”是真实纠偏，“北京大学、清华大学、复旦大学”是真实校名，不会被误伤。"
+          : "0 issues. 'Delve' is a debugger, 'wool tapestry' is literal, and the line-42 correction is factual, so nothing gets flagged."
         : currentLang === "zh"
           ? "没查出问题。"
           : "No issues found.";
@@ -1329,7 +1233,6 @@ function renderDogfood() {
   const pack = resolveEffectivePack(data.pack, PACKS_BY_ID);
   const badRes = auditText(data.bad, { filename: data.filename, modality: data.modality, pack });
   const goodRes = auditText(data.good, { filename: data.filename, modality: data.modality, pack });
-  const ver = verifyRevision(data.bad, data.good, { filename: data.filename, modality: data.modality, pack });
 
   const badTextEl = document.getElementById("dogfood-bad-text");
   const badMetaEl = document.getElementById("dogfood-bad-meta");
@@ -1351,8 +1254,8 @@ function renderDogfood() {
   if (goodMetaEl) {
     goodMetaEl.textContent =
       currentLang === "zh"
-        ? `实时检查：${goodRes.findings.length} 处问题 · verify ${ver.ok ? "通过（“最多 45 秒”没动）" : "没通过"}`
-        : `Live check: ${goodRes.findings.length} issues · verify ${ver.ok ? 'passed ("up to 12 minutes" intact)' : "rejected"}`;
+        ? `实时检查：${goodRes.findings.length} 处问题`
+        : `Live check: ${goodRes.findings.length} issues`;
   }
 }
 
@@ -1412,12 +1315,12 @@ function loadRuleInWorkbench(ruleId) {
   }
 
   if (goodSample) {
-    const v = verifyRevision(badSample, goodSample, { filename: sampleFilename, modality, pack: effPack });
-    if (!v.ok) goodSample = null;
+    const gAudit = auditText(goodSample, { filename: sampleFilename, modality, pack: effPack });
+    if (gAudit.findings.length > 0) goodSample = null;
   }
   if (trapSample) {
-    const vt = verifyRevision(badSample, trapSample, { filename: sampleFilename, modality, pack: effPack });
-    if (vt.ok) trapSample = null;
+    const tAudit = auditText(trapSample, { filename: sampleFilename, modality, pack: effPack });
+    if (tAudit.findings.length === 0) trapSample = null;
   }
 
   uploadSeq += 1;
@@ -1920,28 +1823,6 @@ function init() {
           currentLang === "zh"
             ? `[已在标签页内存检查本地 ${mod.toUpperCase()}：${file.name}]\n检出：${res.findings.length} 处`
             : `[Inspected local ${mod.toUpperCase()} in browser memory: ${file.name}]\nFindings: ${res.findings.length}`;
-      } else if (mod === "pdf") {
-        const buf = await file.arrayBuffer();
-        const latin1 = new TextDecoder("latin1").decode(new Uint8Array(buf));
-        if (!latin1.startsWith("%PDF-") || (!/\bobj\b/.test(latin1) && !/xref/.test(latin1))) {
-          throw new Error("Missing %PDF- header or PDF object structure");
-        }
-        const res = auditPdfStructure(latin1, [], { filename: file.name, pack });
-        res.skipped = [
-          ...(res.skipped || []),
-          {
-            file: `${file.name}#compressed-streams`,
-            reason:
-              currentLang === "zh"
-                ? "浏览器模式只检查未压缩 PDF 元数据与链接；压缩流请用本机 Node.js 或 Python CLI。"
-                : "Browser mode checks uncompressed PDF metadata and /URI objects only; compressed streams require the Node.js or Python CLI.",
-          },
-        ];
-        nextBinaryResult = res;
-        nextCurrentText =
-          currentLang === "zh"
-            ? `[已在标签页内存检查本地 PDF 元数据与链接：${file.name}]\n检出：${res.findings.length} 处`
-            : `[Inspected local PDF metadata & /URI links in browser memory: ${file.name}]\nFindings: ${res.findings.length}`;
       } else {
         const buf = await file.arrayBuffer();
         let text;

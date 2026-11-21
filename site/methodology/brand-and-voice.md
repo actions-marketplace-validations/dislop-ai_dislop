@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.2.0
+version: 0.3.0
 ---
 
 # Voice, Copy, and Visual Guide
@@ -28,7 +28,7 @@ Strip the performance away and say what the tool actually does:
 ```text
 After (plain, direct):
 Catch the AI slop before you send it
-AI-written docs, slides, and web pages often leave behind chat replies, filler phrasing, and broken links. Auto-rewriters often quietly drop numbers when they clean things up. dislop just marks what looks off so you can edit it yourself, then checks that your numbers and links are still there.
+AI-written docs, slides, and web pages often leave behind chat replies, stock phrasing, crowded slides, or purple-pink template chrome. dislop only marks what looks off so you can edit it yourself.
 ```
 
 No metaphors, no quotable mic-drop at the end, and no three-way parallel bundle. A reader knows what it does in three seconds.
@@ -43,7 +43,7 @@ Andrej Karpathy's writing advice and READMEs (`nanoGPT`, `micrograd`) pair **80%
 2. **Use the same plain word for the same thing.** Do not rotate synonyms to sound lively. Stick to plain labels across the whole product: `hard bug`, `warning`, `passed`, `rejected`, `Awesome list` (in Chinese: `硬伤`, `提醒`, `通过`, `没通过`, `工具清单`).
 3. **Cut every pull-quote closer and roleplay metaphor.** If a line sounds like a poster slogan or a costumed persona (`Pass for press`, `the pen stays in your hand`, `the sheet is set by machine`), delete it or rewrite it flat.
 4. **Start with something concrete.** Open with an actual draft, file, number, or command instead of throat-clearing background.
-5. **State limits plainly.** Encrypted PDFs, skipped compressed streams, and unshipped work (like code AST linting) are marked as skipped or not built yet.
+5. **State limits plainly.** Unreadable archives and unshipped work (like code AST linting) are marked as skipped or not built yet.
 6. **Keep English and Chinese completely separate.** `dislop.com` and `/awesome/` default to Simplified Chinese with one-click switching to English. Chinese pages show only Chinese examples and notes; English pages show only English examples and notes. Keep internal design terms (`Level 0`, `L0–L3`, `Stage-3`, `Negative Defense`, `Positive Pull`, `Three-Band Entropy Partition`, `Dual-Native`) in `docs/research/`.
 
 ### Copy Table
@@ -51,16 +51,16 @@ Andrej Karpathy's writing advice and READMEs (`nanoGPT`, `micrograd`) pair **80%
 | Surface | Avoid (AI-flavored / performative) | Use (EN) | Use (ZH) |
 |---|---|---|---|
 | **Headline** | `Your draft, minus the slop.` | `Catch the AI slop before you send it` | `把稿子里的 AI 味挑出来` |
-| **Intro copy** | `dislop strikes what can't ship... the pen stays in your hand.` | `dislop just marks what looks off so you can edit it yourself, then checks that your numbers and links are still there.` | `dislop 只负责把这些问题标出来，不替你重写。改完拿原稿对一下，没漏数字和链接就行。` |
-| **Verify pass** | `Pass for press. 0 findings; protected spans stayed as written.` | `Passed. All 4 issues removed, and "up to 12 minutes" is intact.` | `通过。5 处问题都清掉了，“最多 45 秒”没动。` |
-| **Verify fail** | `Sent back: protected facts missing` | `Rejected. The original says "up to 12 minutes"; the edit dropped "up to".` | `没通过。原稿写的是“最多 45 秒”，改完变成“45 秒”，意思变了。` |
+| **Intro copy** | `dislop strikes what can't ship... the pen stays in your hand.` | `dislop only marks what looks off so you can edit it yourself.` | `dislop 只负责把这些问题标出来，不替你重写。你对照标出来的地方自己改就行。` |
+| **Clean check** | `Pass for press. 0 findings; protected spans stayed as written.` | `0 issues. Chat wrapper and stock phrasing removed.` | `0 处问题。寒暄和空话都清掉了。` |
+| **2nd-order slop** | `Sent back: displacement detected` | `Still flagged (1 issue). Old buzzwords are gone, replaced by a 'Not X, but Y' AI slogan.` | `依然标出 1 处。旧套话删掉了，但换成了“不是……而是……”这种二阶 AI 腔。` |
 | **Directory name** | `同路清单` | `Awesome list` / `Awesome Anti-Slop` | `工具清单` / `去 AI 味工具清单` |
 | **Privacy note** | `Physically locked from outbound requests` | `Runs only in this browser tab. Nothing gets uploaded.` | `只在当前浏览器标签页里跑，不上传文件。` |
 
 ### Honesty Boundaries
 
-- **Never promise "verify every fact"**: `dislop verify` checks that numbers, qualifiers (`up to`, `at least`, `最多`, `至少`), units, dates, URLs, code spans, and citations match the original text. It does not fact-check the outside world.
-- **Never report unread input as clean**: blank drafts, encrypted PDFs, and skipped streams always get their own explicit status.
+- **Stay focused on AI slop**: `dislop` does not pretend to be a general security scanner, PDF preflight tool, or WCAG accessibility auditor.
+- **Never report unread input as clean**: blank drafts, corrupted Office archives, and hidden slides always get their own explicit status.
 
 ---
 
@@ -72,11 +72,10 @@ Full contrast numbers live in [design-system.md](./design-system.md). Keep `1px`
 
 Use `--pen` (`#F04438`) on the logo loop and thick drawn strokes in both light and dark modes, `#B42318` (`6.6:1`) for small light-mode red text, and `#FF7A6B` (`7.0:1`) in dark mode, with a `1px` border around the logo tile in dark mode so it does not blend into the header. Keep `0px` radii on joined grid cells, `6px` on buttons (`5px` compact), `4px` on inputs, and no `999px` pill walls. Keep monospace for code, line numbers, rule IDs, and counts, use system sans for prose and controls, and keep `letter-spacing: 0` on Chinese headings.
 
-Three mark styles stay readable without color:
+Two mark styles stay readable without color:
 
-- Red solid underline (`2px solid`): hard bug (`error`)
-- Blue dashed underline (`1.5px dashed`): phrasing warning (`warning` / `info`)
-- Green dotted underline (`2px dotted`): protected number, qualifier, or link
+- Red solid underline (`2px solid`): AI delivery artifact (`error`)
+- Blue dashed underline (`1.5px dashed`): cliché or template warning (`warning` / `info`)
 
 ---
 

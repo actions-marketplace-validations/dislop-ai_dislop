@@ -329,16 +329,16 @@ export const PACKS_BY_ID = {
   "core": {
     "schema": "dislop.pack/2",
     "id": "core",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "tier": "invariant",
     "extends": [],
     "name": {
-      "en": "Core Publication Invariants",
-      "zh": "基础发布底线"
+      "en": "AI Delivery Artifacts",
+      "zh": "AI 残留硬伤"
     },
     "summary": {
-      "en": "Objective pre-publication checks enabled across every Taste Pack: leaked local paths, unfilled placeholders, AI chat residue, dead controls, contrast/dark-elevation defects, and Office/PDF hygiene.",
-      "zh": "所有审美包默认启用的客观交付检查：本机路径泄露、未填占位符、AI 对话残迹、死点击控件、对比度与深色层级倒置、Office 与 PDF 结构卫生。"
+      "en": "Clear AI-generation artifacts enabled across every pack: stray chatbot greetings, unfilled placeholders, raw Markdown pasted into Word/PowerPoint, and dead placeholder links/buttons in generated UI.",
+      "zh": "所有规则包默认开启的明显 AI 残留硬伤：留在正文里的 AI 寒暄、未填占位符、贴进 Word/PPT 没渲染的裸 Markdown，以及 AI 网页里的空链接与假按钮。"
     },
     "modalities": [
       "markdown",
@@ -348,64 +348,10 @@ export const PACKS_BY_ID = {
       "jsx",
       "svg",
       "docx",
-      "pptx",
-      "pdf"
+      "pptx"
     ],
-    "thresholds": {
-      "minNormalContrast": 4.5,
-      "minLargeContrast": 3
-    },
+    "thresholds": {},
     "rules": [
-      {
-        "id": "local-path-leak",
-        "tier": "invariant",
-        "severity": "error",
-        "family": "hygiene/path",
-        "probe": "regex",
-        "zones": [
-          "raw"
-        ],
-        "modalities": [
-          "markdown",
-          "text",
-          "html",
-          "css",
-          "jsx",
-          "svg",
-          "docx",
-          "pptx",
-          "pdf"
-        ],
-        "patterns": [
-          "file:///(?!(?:Users|home)/(?:example|demo|user|username|you|\\.{3})(?:/|\\b|$))[A-Za-z0-9_./:\\\\-]+",
-          "(?<![A-Za-z0-9_])/Users/(?!(?:example|demo|user|username|you|yourname|\\.{3})(?:/|\\b|$))[A-Za-z0-9._-]+/[A-Za-z0-9._/-]+",
-          "(?<![A-Za-z0-9_])/home/(?!(?:example|demo|user|username|you|runner|ubuntu|\\.{3})(?:/|\\b|$))[A-Za-z0-9._-]+/[A-Za-z0-9._/-]+",
-          "\\b[A-Za-z]:\\\\Users\\\\(?!(?:example|demo|user|Public)\\\\)[A-Za-z0-9._-]+\\\\",
-          "/private/var/folders/[A-Za-z0-9_./-]+"
-        ],
-        "message": {
-          "en": "Leaked local filesystem path or file:/// link.",
-          "zh": "残留本机文件系统路径或 file:/// 链接。"
-        },
-        "deletionTest": {
-          "en": "Replace the workstation path with a repository-relative path, a public HTTPS URL, or `/Users/example/...` if documenting a CLI.",
-          "zh": "将个人工作站路径改为仓库相对路径、公开 HTTPS 链接，或在命令示例中改用 `/Users/example/...`。"
-        },
-        "exemplar": {
-          "bad": "See [Architecture Diagram](file:///Users/example/Desktop/arch-v2.png) for the 3-node layout.",
-          "trap": "See the architecture diagram on my machine for the 3-node layout.",
-          "good": "See [Architecture Diagram](./docs/assets/arch-v2.png) for the 3-node layout.",
-          "note": {
-            "en": "Keep the link target inside the repository and preserve the 3-node detail.",
-            "zh": "改为仓库内相对路径，保留“3 节点”事实信息。"
-          },
-          "source": "original"
-        },
-        "demo": {
-          "bad": "See [Architecture Diagram](file:///tmp/build-42/arch-v2.png) for the 3-node layout.",
-          "good": "See [Architecture Diagram](./docs/assets/arch-v2.png) for the 3-node layout."
-        }
-      },
       {
         "id": "unfilled-placeholder",
         "tier": "invariant",
@@ -423,32 +369,30 @@ export const PACKS_BY_ID = {
           "jsx",
           "svg",
           "docx",
-          "pptx",
-          "pdf"
+          "pptx"
         ],
         "patterns": [
           "(?<![A-Za-z])(?:lorem ipsum|dolor sit amet)(?![A-Za-z])",
           "\\[(?:insert|add|your|placeholder|tbd|todo)(?:\\s+[^\\]\\n]{1,50})?\\]",
           "\\{\\{\\s*[A-Za-z_][A-Za-z0-9_.-]{0,40}\\s*\\}\\}",
           "【[^】\\n]{0,20}(?:待补充|待填写|此处插入|占位符)[^】\\n]{0,20}】",
-          "(?:Click to add (?:title|subtitle|text)|单击此处添加(?:标题|副标题|文本))",
-          "(?:Error! Reference source not found|Error! Bookmark not defined|错误!未找到引用源|错误!未定义书签)"
+          "(?:Click to add (?:title|subtitle|text)|单击此处添加(?:标题|副标题|文本))"
         ],
         "message": {
-          "en": "Unfilled template placeholder, broken Word reference field, or dummy copy.",
-          "zh": "存在未替换的模板占位符、损坏的交叉引用域或测试假文。"
+          "en": "Unfilled AI template placeholder or dummy copy.",
+          "zh": "存在未替换的模板占位符或测试假文。"
         },
         "deletionTest": {
-          "en": "Supply the verified value before shipping, or delete the unfinished section rather than leaving a bracketed marker.",
-          "zh": "发稿前填入核实后的真实数据；若数据尚未就绪，直接删去未完成段落而非保留占位标记。"
+          "en": "Supply the real value before sending, or delete the unfinished line instead of leaving a bracketed marker.",
+          "zh": "发稿前填入真实信息，或者直接删掉这一句，不要留括号占位。"
         },
         "exemplar": {
           "bad": "Q3 settlement ran across 14 gateways; p95 latency was [insert p95 latency].",
           "trap": "Q3 settlement improved dramatically across 14 gateways.",
           "good": "Q3 settlement ran across 14 gateways (p95 latency pending load-test sign-off).",
           "note": {
-            "en": "State what is still pending—or supply a measured figure from your own logs—rather than leaving a bracket or hiding the gap behind vague praise.",
-            "zh": "尚未测出的数据直说待补，或填入实测数值，不要留括号占位，也不要用空泛夸赞遮掩。"
+            "en": "State what is still pending or fill in the measured figure instead of leaving a bracket.",
+            "zh": "尚未测出的数据直说待补，或填入实测数值，不要留括号占位。"
           },
           "source": "original"
         }
@@ -469,8 +413,7 @@ export const PACKS_BY_ID = {
           "html",
           "jsx",
           "docx",
-          "pptx",
-          "pdf"
+          "pptx"
         ],
         "patterns": [
           "(?:^|\\n)\\s*(?:Certainly|Sure|Absolutely)[!,.]?\\s+[Hh]ere(?:'s| is| are)\\b",
@@ -488,16 +431,16 @@ export const PACKS_BY_ID = {
           "zh": "残留未清理的 AI 对话寒暄壳或检索引用内部标记。"
         },
         "deletionTest": {
-          "en": "Delete the conversational wrapper or internal citation token completely; the document starts at its actual subject.",
-          "zh": "直接删掉对话寒暄句或内部引用残迹，正文从事实内容直接开始。"
+          "en": "Delete the conversational wrapper or internal citation token completely; start at the actual subject.",
+          "zh": "直接删掉对话寒暄句或内部引用残迹，正文从实际内容开始。"
         },
         "exemplar": {
           "bad": "Certainly! Here is the revised rollout note: Cluster B migrates on November 24 at 02:00 UTC.",
           "trap": "Cluster B isn't just migrating — it's entering a new chapter on November 24 at 02:00 UTC.",
           "good": "Cluster B migrates on November 24 at 02:00 UTC.",
           "note": {
-            "en": "Strip the chat preamble and leave the rollout timestamp untouched.",
-            "zh": "删去对话开场白，原样保留迁移时间。"
+            "en": "Strip the chat preamble and leave the rollout note intact.",
+            "zh": "删去对话开场白，直接进入正题。"
           },
           "source": "original"
         }
@@ -513,11 +456,11 @@ export const PACKS_BY_ID = {
           "pptx"
         ],
         "message": {
-          "en": "Raw Markdown syntax (`**bold**` or `## heading`) left unrendered inside an Office document.",
+          "en": "Raw Markdown syntax (`**bold**` or `## heading`) pasted unrendered into Word or PowerPoint.",
           "zh": "Word 或 PowerPoint 文本中残留未渲染的原始 Markdown 标记（如 `**加粗**` 或 `## 标题`）。"
         },
         "deletionTest": {
-          "en": "Convert the raw asterisks or hash marks into native Word/PowerPoint run formatting.",
+          "en": "Convert the raw asterisks or hash marks into native Word/PowerPoint formatting.",
           "zh": "去掉原始星号或井号，改用 Word/PowerPoint 原生样式或加粗格式。"
         },
         "exemplar": {
@@ -542,79 +485,20 @@ export const PACKS_BY_ID = {
           "jsx"
         ],
         "message": {
-          "en": "Anchor with dead `href=\"#\"` / empty target, unlabeled button, or unexplained static `<button disabled>`.",
-          "zh": "存在空跳转链接（`href=\"#\"`）、无障碍名称缺失的按钮，或未说明原因的静态禁用按钮。"
+          "en": "Placeholder `href=\"#\"` link, empty button, or unexplained disabled button typical of generated UI mockups.",
+          "zh": "AI 生成网页常见的空跳转链接（`href=\"#\"`）、空按钮或未说明原因的占位禁用按钮。"
         },
         "deletionTest": {
-          "en": "Wire the control to a real target, explain why a disabled control is locked via `title`/`aria-describedby`, or omit unimplemented actions.",
-          "zh": "绑定真实跳转或交互处理函数；若确需禁用须通过 `title` 或 `aria-describedby` 说明原因，未实现的功能直接移除按钮。"
+          "en": "Wire the control to a real destination, explain why it is disabled via `title`/`aria-describedby`, or remove the fake button.",
+          "zh": "接上真实链接或交互，或者说明禁用原因；没做的功能直接删掉按钮。"
         },
         "exemplar": {
           "bad": "<a href=\"#\" class=\"btn\">Download report</a>",
           "trap": "<button disabled class=\"btn\">Download AI-Powered Insights</button>",
           "good": "<a href=\"./reports/q3-audit.pdf\" class=\"btn\">Download Q3 audit (PDF)</a>",
           "note": {
-            "en": "Point links to real resources and omit controls that do nothing when clicked.",
-            "zh": "链接指向真实资源，不要摆放点按无反应的假控件。"
-          },
-          "source": "original"
-        }
-      },
-      {
-        "id": "ui-contrast-and-dark-inversion",
-        "tier": "invariant",
-        "severity": "error",
-        "family": "ui/contrast",
-        "probe": "ui-contrast-and-dark-inversion",
-        "modalities": [
-          "html",
-          "css"
-        ],
-        "message": {
-          "en": "Resolvable foreground/background contrast fails WCAG AA (< 4.5:1), or dark-theme canvas is brighter than raised surface tokens.",
-          "zh": "可静态解析的前景/背景对比度低于 WCAG AA（< 4.5:1），或深色模式下底层画布比上层卡片更亮（Z 轴亮度倒置）。"
-        },
-        "deletionTest": {
-          "en": "Adjust ink/surface tokens until body text reaches >= 4.5:1 and dark-mode luminance rises strictly from page -> sheet -> raised card.",
-          "zh": "调整前景色与表面色令牌，确保正文对比度 >= 4.5:1，且深色模式亮度按“底层画布 < 内容面 < 浮层卡片”严格递增。"
-        },
-        "exemplar": {
-          "bad": ".badge { color: #D9381E; background: #F7F5F0; font-size: 12px; }",
-          "trap": ".badge { color: #A855F7; background: #FAF5FF; font-size: 12px; }",
-          "good": ".badge { color: #B42318; background: #F6F7F5; font-size: 12px; }",
-          "note": {
-            "en": "#D9381E on #F7F5F0 is 4.25:1 (fails AA for 12px text); #B42318 on #F6F7F5 is 6.32:1.",
-            "zh": "12px 文字下 #D9381E 配 #F7F5F0 仅 4.25:1 未达标；#B42318 配 #F6F7F5 达 6.32:1。"
-          },
-          "source": "original"
-        }
-      },
-      {
-        "id": "office-pdf-hygiene",
-        "tier": "invariant",
-        "severity": "error",
-        "family": "office/geometry",
-        "probe": "office-pdf-hygiene",
-        "modalities": [
-          "docx",
-          "pptx",
-          "pdf"
-        ],
-        "message": {
-          "en": "Off-slide text box in PPTX, unaccepted tracked changes/comments in Office docs, or PDF metadata/font/URI defect.",
-          "zh": "PPTX 文本框越出画布边界、Office 文档残留修订痕迹/批注，或 PDF 存在本机链接、未嵌入字体、原始文件名标题。"
-        },
-        "deletionTest": {
-          "en": "Accept or strip tracked changes and comments, bring off-slide text inside slide bounds, embed PDF fonts, and set a clean document title.",
-          "zh": "定稿前接受修订并清理批注，收回越界文本框，嵌入 PDF 字体并设置正式文档标题。"
-        },
-        "exemplar": {
-          "bad": "PDF /Title (Microsoft Word - final_v3_edited(2).docx) with external link file:///Users/example/draft.docx",
-          "trap": "PDF /Title (Untitled) with unembedded CIDFont",
-          "good": "PDF /Title (Q4 Settlement Architecture Specification) with embedded subset fonts and relative HTTPS links",
-          "note": {
-            "en": "Export PDFs with embedded fonts, an explicit document title, and no local file annotations.",
-            "zh": "导出 PDF 时嵌入字体子集、填写正式文档标题，并清除本机文件链接。"
+            "en": "Point links to real targets and drop placeholder buttons that do nothing.",
+            "zh": "链接指向真实地址，不要摆放点不动的假按钮。"
           },
           "source": "original"
         }
@@ -634,8 +518,8 @@ export const PACKS_BY_ID = {
       "zh": "演示文稿、Web 界面与平面视觉"
     },
     "summary": {
-      "en": "Audits PowerPoint slide word-walls, bullet caps, autofit text shrink, weak topic titles, default purple-pink AI gradients, pill-badge soup, triple nested cards, prompt-echo chrome, and SVG clipping.",
-      "zh": "检查幻灯片文字墙、项目符号超限、字号自动缩排、弱结论标题，以及界面紫粉渐变、胶囊徽章堆砌、三层套盒、提示词回声标签与 SVG 裁切风险。"
+      "en": "Flags PowerPoint slide word-walls, bullet overload, autofit text shrink, weak topic titles, default purple-pink AI gradients, pill-badge soup, triple nested cards, and prompt-echo chrome.",
+      "zh": "检查幻灯片文字墙、要点过多、字号自动缩排、空泛标题，以及网页里的默认紫粉渐变、满屏胶囊标签、三层套盒与提示词营销徽章。"
     },
     "modalities": [
       "html",
@@ -893,34 +777,6 @@ export const PACKS_BY_ID = {
           },
           "source": "original"
         }
-      },
-      {
-        "id": "svg-text-overflow-or-a11y",
-        "tier": "taste",
-        "severity": "warning",
-        "family": "ui/slop-chrome",
-        "probe": "svg-text-overflow",
-        "modalities": [
-          "svg"
-        ],
-        "message": {
-          "en": "Standalone SVG contains `<text>` likely to clip outside `viewBox` on fallback fonts, or omits `<title>`/`aria-label`.",
-          "zh": "独立 SVG 中的 `<text>` 在回退字体下存在超出 `viewBox` 裁切风险，或缺少 `<title>`/`aria-label` 无障碍说明。"
-        },
-        "deletionTest": {
-          "en": "Leave >= 12% horizontal safety margin for `<text>` inside `viewBox` (or convert wordmarks to `<path>` outlines) and include `<title>`.",
-          "zh": "为 SVG `<text>` 预留充足宽度余量（或将品牌字标转为 `<path>` 轮廓），并补充 `<title>`。"
-        },
-        "exemplar": {
-          "bad": "<svg viewBox=\"0 0 200 40\"><text x=\"10\" y=\"28\" font-size=\"24\">Long fallback string that clips past 200px</text></svg>",
-          "trap": "<svg viewBox=\"0 0 200 40\"><text x=\"10\" y=\"28\" font-size=\"5\">Tiny 5px unreadable text</text></svg>",
-          "good": "<svg viewBox=\"0 0 420 40\" role=\"img\" aria-label=\"Release timeline\"><title>Release timeline</title><text x=\"16\" y=\"26\" font-size=\"16\">Q1–Q4 rollout</text></svg>",
-          "note": {
-            "en": "Caught our own v0.1.0 banner overflow on Verdana fallback.",
-            "zh": "本规则曾检出本仓库 v0.1.0 横幅在 Linux 回退字体下的右侧裁切问题。"
-          },
-          "source": "original"
-        }
       }
     ]
   },
@@ -1137,22 +993,6 @@ export const PACKS_BY_ID = {
   }
 };
 export const RULE_UI_META = {
-  "local-path-leak": {
-    "lang": "both",
-    "title": {
-      "zh": "漏出了本机路径",
-      "en": "Leaked local path"
-    },
-    "zhEx": {
-      "bad": "详见 [架构图](file:///Users/example/docs/arch.png)，共 3 节点。",
-      "trap": "详见 [架构图](file:///Users/example/docs/arch.png)。",
-      "good": "详见 [架构图](./docs/arch.png)，共 3 节点。"
-    },
-    "enEx": {
-      "bad": "See [Architecture Diagram](file:///Users/example/docs/arch-v2.png) for the 3-node layout.",
-      "good": "See [Architecture Diagram](./docs/assets/arch-v2.png) for the 3-node layout."
-    }
-  },
   "unfilled-placeholder": {
     "lang": "both",
     "title": {
@@ -1191,34 +1031,12 @@ export const RULE_UI_META = {
   "ui-dead-control": {
     "lang": "both",
     "title": {
-      "zh": "点不动的按钮或空链接",
-      "en": "Dead link or unexplained disabled button"
+      "zh": "点不动的假按钮或空链接",
+      "en": "Dead placeholder link or button"
     },
     "zhEx": {
       "bad": "<a href=\"#\" class=\"btn\">下载完整报告</a>",
-      "good": "<a href=\"./report.pdf\" class=\"btn\">下载完整报告</a>"
-    }
-  },
-  "ui-contrast-and-dark-inversion": {
-    "lang": "both",
-    "title": {
-      "zh": "字看不清，或深色层级倒置",
-      "en": "Low contrast or dark-mode inversion"
-    },
-    "zhEx": {
-      "bad": ".badge { color: #888888; background: #FFFFFF; font-size: 12px; }",
-      "good": ".badge { color: #474C55; background: #FFFFFF; font-size: 12px; }"
-    }
-  },
-  "office-pdf-hygiene": {
-    "lang": "both",
-    "title": {
-      "zh": "文档带修订痕迹或异常元数据",
-      "en": "Office/PDF hygiene defect"
-    },
-    "zhEx": {
-      "bad": "PDF 标题残留原始文件名（最终版_修改3.docx），且含未嵌入字体。",
-      "good": "导正 PDF 标题为「2026 第三季度产品说明」，导出时勾选嵌入全部字体。"
+      "good": "<a href=\"./report.html\" class=\"btn\">下载完整报告</a>"
     }
   },
   "en-throat-clearing-opener": {
@@ -1417,17 +1235,6 @@ export const RULE_UI_META = {
     "zhEx": {
       "bad": "<span class=\"eyebrow\">AI-Powered · Zero Hallucination</span>",
       "good": "<span class=\"section-meta\">本地离线运行</span>"
-    }
-  },
-  "svg-text-overflow-or-a11y": {
-    "lang": "both",
-    "title": {
-      "zh": "SVG 文字可能被裁切",
-      "en": "SVG text overflow or missing title"
-    },
-    "zhEx": {
-      "bad": "<svg viewBox=\"0 0 200 40\"><text x=\"10\" y=\"28\" font-size=\"24\">跨模态实时审校工作流示意图</text></svg>",
-      "good": "<svg viewBox=\"0 0 420 48\" role=\"img\" aria-label=\"审校流程\"><title>审校流程</title><text x=\"16\" y=\"30\" font-size=\"18\">本地审校流程</text></svg>"
     }
   }
 };

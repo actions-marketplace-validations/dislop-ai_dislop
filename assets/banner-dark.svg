@@ -8,7 +8,7 @@
   <line x1="0" y1="36" x2="1200" y2="36" stroke="#2A2F37" stroke-width="1"/>
   <line x1="0" y1="264" x2="1200" y2="264" stroke="#2A2F37" stroke-width="1"/>
 
-  <!-- Left column: Master Vermilion Mark (same #F04438 across both themes) + Wordmark -->
+  <!-- Left column: Master Vermilion Mark + Wordmark -->
   <g transform="translate(84, 76)">
     <rect width="56" height="56" rx="10.5" fill="#1D2127" stroke="#3E4551" stroke-width="1"/>
     <line x1="9" y1="33" x2="47" y2="33" stroke="#ECEEF0" stroke-width="4" stroke-linecap="round" stroke-opacity="0.28"/>
@@ -17,23 +17,22 @@
   </g>
 
   <text x="84" y="176" fill="#ECEEF0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="21" font-weight="600">Catch AI slop before you send it.</text>
-  <text x="84" y="210" fill="#A6ACB5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13.5">Docs · Slides · Web UI · PDF  |  Web · Skill · CLI · MCP</text>
+  <text x="84" y="210" fill="#A6ACB5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13.5">Docs · Word · Slides · Web UI  |  Web · Skill · CLI · MCP</text>
 
   <!-- Right column: Monotonic raised sheet (#15181C > #0E1012) -->
   <rect x="621" y="37" width="530" height="226" fill="#15181C"/>
-  <text x="652" y="76" fill="#A6ACB5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5">Proof check  ·  1 cut  ·  2 numbers kept</text>
+  <text x="652" y="76" fill="#A6ACB5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12.5">dislop check  ·  1 artifact  ·  1 cliché</text>
 
-  <!-- Struck core invariant error (Vermilion stroke) -->
+  <!-- Struck AI chat opener -->
   <text x="652" y="128" fill="#8C939E" font-family="Georgia, 'Times New Roman', serif" font-size="21">Certainly! Here is:</text>
   <line x1="648" y1="121" x2="824" y2="121" stroke="#F04438" stroke-width="2.6" stroke-linecap="round"/>
-  <text x="836" y="128" fill="#ECEEF0" font-family="Georgia, 'Times New Roman', serif" font-size="21">CSV exports take</text>
+  <text x="836" y="128" fill="#ECEEF0" font-family="Georgia, 'Times New Roman', serif" font-size="21">This release is</text>
 
-  <!-- Protected spans (Press Green round stet dots covering qualifiers + numbers) -->
-  <text x="652" y="166" fill="#ECEEF0" font-family="Georgia, 'Times New Roman', serif" font-size="21">up to 12 minutes above 500,000 rows.</text>
-  <line x1="654" y1="175" x2="808" y2="175" stroke="#6CD49B" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1 6"/>
-  <line x1="816" y1="175" x2="1000" y2="175" stroke="#6CD49B" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1 6"/>
+  <!-- Dashed blue cliché mark -->
+  <text x="652" y="166" fill="#ECEEF0" font-family="Georgia, 'Times New Roman', serif" font-size="21">not just faster — it's a paradigm shift.</text>
+  <line x1="652" y1="175" x2="1014" y2="175" stroke="#85B4FF" stroke-width="2.2" stroke-dasharray="6 4"/>
 
-  <!-- Margin proof legend -->
-  <text x="652" y="216" fill="#FF7A6B" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="600">cut: chatbot greeting</text>
-  <text x="864" y="216" fill="#6CD49B" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="600">kept: 2 numeric spans</text>
+  <!-- Legend -->
+  <text x="652" y="216" fill="#FF7A6B" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="600">red: chatbot greeting</text>
+  <text x="864" y="216" fill="#85B4FF" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="600">blue: AI slogan frame</text>
 </svg>

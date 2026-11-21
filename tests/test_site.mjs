@@ -5,7 +5,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { auditText, contrastRatio, resolveEffectivePack, verifyRevision } from "../src/core.mjs";
+import { auditText, resolveEffectivePack } from "../src/core.mjs";
 import { PACKS_BY_ID } from "../site/engine/packs-data.mjs";
 import { AWESOME_DATA } from "../site/awesome/awesome-data.mjs";
 
@@ -21,6 +21,20 @@ function sha256(text) {
 
 function parseHex(hex) {
   return [parseInt(hex.slice(1, 3), 16), parseInt(hex.slice(3, 5), 16), parseInt(hex.slice(5, 7), 16)];
+}
+
+function relativeLuminance([r, g, b]) {
+  const chan = [r, g, b].map((v) => {
+    const s = v / 255;
+    return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * chan[0] + 0.7152 * chan[1] + 0.0722 * chan[2];
+}
+
+function contrastRatio(rgbA, rgbB) {
+  const l1 = relativeLuminance(rgbA);
+  const l2 = relativeLuminance(rgbB);
+  return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
 }
 
 // 1. Verify packs-data.mjs ships zero raw fixtures arrays & all 23 Try rules trigger cleanly
@@ -64,8 +78,8 @@ for (const [pid, pack] of Object.entries(PACKS_BY_ID)) {
     }
   }
 }
-assert.equal(totalRules, 29, `Expected 29 total rules, got ${totalRules}`);
-assert.equal(tryRulesChecked, 23, `Expected 23 Try rules, got ${tryRulesChecked}`);
+assert.equal(totalRules, 25, `Expected 25 total rules, got ${totalRules}`);
+assert.equal(tryRulesChecked, 20, `Expected 20 Try rules, got ${tryRulesChecked}`);
 
 // 2. Verify Hero Proof Cards (ZH + EN) and all 10 language-pure specimens (5 ZH + 5 EN)
 const appSource = fs.readFileSync(path.join(SITE_DIR, "app.js"), "utf8");
@@ -79,13 +93,11 @@ for (const lang of ["zh", "en"]) {
   const hp = heroProof[lang];
   const pack = resolveEffectivePack(hp.pack, PACKS_BY_ID);
   const badRes = auditText(hp.bad, { filename: hp.filename, modality: hp.modality, pack });
+  const trapRes = auditText(hp.trap, { filename: hp.filename, modality: hp.modality, pack });
   const goodRes = auditText(hp.good, { filename: hp.filename, modality: hp.modality, pack });
-  const vGood = verifyRevision(hp.bad, hp.good, { filename: hp.filename, modality: hp.modality, pack });
-  const vTrap = verifyRevision(hp.bad, hp.trap, { filename: hp.filename, modality: hp.modality, pack });
-  assert.ok(badRes.findings.length >= 4, `Hero proof (${lang}) bad should have >= 4 findings`);
+  assert.ok(badRes.findings.length >= 3, `Hero proof (${lang}) bad should have >= 3 findings`);
+  assert.ok(trapRes.findings.length >= 1, `Hero proof (${lang}) trap should still trigger 2nd-order slop`);
   assert.equal(goodRes.findings.length, 0, `Hero proof (${lang}) good had ${goodRes.findings.length} findings`);
-  assert.equal(vGood.ok, true, `Hero proof (${lang}) good rejected: ${vGood.reasons.join("; ")}`);
-  assert.equal(vTrap.ok, false, `Hero proof (${lang}) trap unexpectedly accepted`);
   if (lang === "en") {
     assert.equal(/[\u4E00-\u9FFF]/.test(hp.bad + hp.good + hp.trap), false, "English hero proof leaked Chinese characters");
   }
@@ -99,16 +111,14 @@ for (const lang of ["zh", "en"]) {
     specimenCount += 1;
     const pack = resolveEffectivePack(sp.pack, PACKS_BY_ID);
     const badRes = auditText(sp.bad, { filename: sp.filename, modality: sp.modality, pack });
+    const trapRes = auditText(sp.trap, { filename: sp.filename, modality: sp.modality, pack });
     const goodRes = auditText(sp.good, { filename: sp.filename, modality: sp.modality, pack });
-    const vTrap = verifyRevision(sp.bad, sp.trap, { filename: sp.filename, modality: sp.modality, pack });
     assert.equal(goodRes.findings.length, 0, `Specimen ${lang}/${sp.id} good had ${goodRes.findings.length} findings`);
-    assert.equal(vTrap.ok, false, `Specimen ${lang}/${sp.id} trap was unexpectedly accepted by verifyRevision`);
+    assert.ok(trapRes.findings.length >= 1, `Specimen ${lang}/${sp.id} trap should still trigger AI slop`);
     if (sp.id === "clean-nearmiss") {
       assert.equal(badRes.findings.length, 0, `Specimen ${lang}/clean-nearmiss should have 0 findings`);
     } else {
       assert.ok(badRes.findings.length > 0, `Specimen ${lang}/${sp.id} bad draft should have >= 1 finding`);
-      const vGood = verifyRevision(sp.bad, sp.good, { filename: sp.filename, modality: sp.modality, pack });
-      assert.equal(vGood.ok, true, `Specimen ${lang}/${sp.id} good rejected: ${vGood.reasons.join("; ")}`);
     }
     if (lang === "en") {
       assert.equal(/[\u4E00-\u9FFF]/.test(sp.bad + sp.good + sp.trap), false, `EN specimen ${sp.id} leaked Chinese chars`);

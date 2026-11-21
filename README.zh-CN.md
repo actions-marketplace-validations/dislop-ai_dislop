@@ -13,38 +13,26 @@
   <a href="./LICENSE">Apache-2.0</a>
 </p>
 
-`dislop` 是一个本地运行、零依赖的检查工具，用来挑出 AI 写完的文档、PPT 和网页里的硬伤和套话。它只负责标出问题，不替你重写。改完后再拿原稿对一遍，确认数字和链接没丢就行。
+`dislop` 是一个本地运行、零依赖的检查工具，专门用来挑出 AI 写完的文档、Word、PPT 和网页里的残留硬伤、套话和模板味。它只负责标出问题，不替你重写。
 
 拿一段模型刚写完的上线说明来举个例子：
 
 ```text
-好的，以下是修改后的上线说明。值得注意的是，本次改造以队列分级为重要抓手，全面赋能一线运维团队，故障恢复时间最多 45 秒。这不是一次简单的升级，而是一场效率革命。
+好的，以下是修改后的上线说明。值得注意的是，本次改造以队列分级为重要抓手，全面赋能一线运维团队，故障恢复时间最多 45 秒。
 ```
 
-跑 `dislop check launch-note.md --lang zh`，会标出五处：
+跑 `dislop check launch-note.md --lang zh`，会标出四处：
 
 ```text
 [ERROR]   launch-note.md:1:1   chatbot-artifact         "好的，以下是修改后"
 [WARNING] launch-note.md:1:16  zh-bureaucratic-padding  "值得注意的是，"
 [WARNING] launch-note.md:1:35  zh-bureaucratic-padding  "抓手"
 [WARNING] launch-note.md:1:38  zh-bureaucratic-padding  "全面赋能"
-[WARNING] launch-note.md:1:63  negation-pivot-frame     "这不是一次简单的升级，而是一场效率革命"
 ```
 
-你自己改完，再用 `dislop verify` 和原稿对一遍：
+如果删掉了旧套话，却顺手换成了另一种 AI 腔（例如“这不是一次简单的升级，而是一场效率革命”），再跑一遍 `dislop check` 一样会被标出来。改回平实的话，检查直接通过。
 
-```text
-dislop verify: ACCEPTED (findings 5 -> 0; all protected facts preserved)
-```
-
-要是改稿时顺手把“最多”删掉了，校验会直接拦截：
-
-```text
-dislop verify: REJECTED (findings 5 -> 0)
-  - Protected numbers removed or altered: 最多 45 秒
-```
-
-大致就做这些。Markdown、纯文本、HTML/CSS/JSX/SVG、Word、PPT 和 PDF 元数据都能查。在 [dislop.com](https://dislop.com) 浏览器里、命令行用 `npx` 或 `uvx`、接 MCP、装成 Agent Skill 跑出来的结果一样，都不需要装额外依赖，也不联网。
+大致就做这些。Markdown、纯文本、HTML/CSS/JSX、Word（`.docx`）和 PPT（`.pptx`）都能查。在 [dislop.com](https://dislop.com) 浏览器里、命令行用 `npx` 或 `uvx`、接 MCP、装成 Agent Skill 跑出来的结果一样，都不需要装额外依赖，也不联网。
 
 ## 上手
 
@@ -59,9 +47,6 @@ npx --yes github:dislop-ai/dislop check --changed origin/main --format github
 
 # 查看某条规则的判断方法和改前/改后示例
 npx --yes github:dislop-ai/dislop explain negation-pivot-frame --lang zh
-
-# 改完和原稿对一遍：核对数字、限定词、链接与代码是否完好
-npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
 ```
 
 ### Python 3.10+（零外部依赖）
@@ -76,14 +61,14 @@ cd dislop
 PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning --lang zh
 ```
 
-## 硬伤和提醒分开查
+## AI 残留硬伤和套话提醒分开查
 
-很多自动“去 AI 味”改写工具会把“最多 45 秒”改成“45 秒”，或者顺手改丢数字。单纯用黑名单也有毛病，既容易误伤正常句子（比如「抓手机拍照」「北京大学、清华大学、复旦大学」），又容易把模型逼成另一种故作深沉的口号腔。
+很多自动“去 AI 味”改写工具容易把旧套话换成另一种腔调，或者把你的语气全洗成同一种模版。单纯用黑名单也有毛病，容易误伤正常句子（比如「抓手机拍照」「北京大学、清华大学、复旦大学」）。
 
-`dislop` 把规则分成两层：
+`dislop` 把 25 条规则分成两层：
 
-1. **硬伤规则（`packs/core/`，固定 `error`，所有文体包默认开启）**：换谁来看都不能发的疏漏，比如本机路径泄露（`file:///Users/example/spec.pdf`）、没填的占位符（`[insert ...]`、`{{var}}`、`【待补充】`）、留在第一行的 AI 寒暄、贴进 Word/PPT 没渲染的裸 Markdown、空链接 `<a href="#">`、低于 WCAG AA（`< 4.5:1`）的对比度、深色模式层级倒置，以及越出画布的 PPT 文本框。
-2. **文体包（`warning` / `info`，默认提示不阻断）**：按场景分的 JSON 规则包（`business-brief`、`literary-essay`、`deck-and-ui`）。每条都附判断方法、原句 / 改过头 / 改好三段示例，以及正反测试样本。
+1. **AI 残留硬伤（`packs/core/`，固定 `error`，所有文体包默认开启）**：一眼就能看出的 AI 生成残迹——留在第一行的 AI 寒暄（`好的，以下是…`、`[oaicite:1]`）、没填的占位符（`[insert ...]`、`{{var}}`、`【待补充】`）、贴进 Word/PPT 没渲染的裸 Markdown，以及 AI 网页里的空链接 `<a href="#">` 与占位禁用按钮。
+2. **文体与模板包（`warning` / `info`，默认提示不阻断）**：按场景分的 JSON 规则包（`business-brief`、`literary-essay`、`deck-and-ui`）。每条都附判断方法、原句 / 改过头 / 改好三段示例，以及正反测试样本。
 
 ## 它读得了什么
 
@@ -91,11 +76,10 @@ Node.js 版（`bin/dislop.mjs`）和 Python 版（`src/dislop/`）都零外部�
 
 | 手头的文件 | 扩展名 | 能替你挑出什么 | 明确边界 |
 |---|---|---|---|
-| 文稿与长文 | `.md`, `.mdx`, `.txt` | 硬伤 + 开场白寒暄、公文黑话、“不是 A，而是 B”套句、四字排比、段尾说教、无出处数据、中文里混半角标点 | 代码块、行内代码、URL、引用块与 `dislop-quote` 示例区对文风规则自动屏蔽 |
-| 网页与矢量图 | `.html`, `.css`, `.jsx`, `.tsx`, `.svg` | 空链接、无说明的禁用按钮、单文件对比度、深色模式表面明度顺序、默认紫粉渐变、满屏胶囊标签、三层套盒、SVG 文字裁切 | 只做单文件静态分析；动态渲染后的 DOM 需配合浏览器测试 |
-| Word 文档 | `.docx` | 合并同段落文本运行、未接受的修订与残留批注、损坏引用域、裸 Markdown 残留、外部 `file:` 链接及正文套话（定位至 `para N`） | 报段落序号，不计算排版页码 |
-| 演示文稿 | `.pptx` | 按真实放映顺序定位页码、单页字数墙（中文 > 280 字 / 英文 > 120 词）、要点超过 6 条、自动缩排低于 80%、文本框越界、空泛标题 | 隐藏幻灯片跳过密度检查并显式报 `[SKIP]` |
-| PDF 文档 | `.pdf` | 本机 `/URI` 链接、残留原始文件名 `/Title`、未嵌入字体、跨页尺寸不一致 | 加密 PDF 与完整正文抽字显式报 `[SKIP]`，绝不假装“0 问题” |
+| 文稿与长文 | `.md`, `.mdx`, `.txt` | AI 残留硬伤 + 开场白寒暄、公文黑话、“不是 A，而是 B”套句、连发短句和四字排比、段尾说教、无出处数据、满屏加粗清单、破折号过密、中文里混半角标点 | 代码块、行内代码、URL、引用块与 `dislop-quote` 示例区对文风规则自动屏蔽 |
+| 网页与组件 | `.html`, `.css`, `.jsx`, `.tsx` | 空链接与无说明禁用按钮、默认紫粉渐变、满屏胶囊标签、三层套盒、`AI-Powered` 提示词营销徽章 | 只做单文件静态分析；动态渲染后的 DOM 需配合浏览器测试 |
+| Word 文档 | `.docx` | 合并同段落文本运行、贴进文档没渲染的裸 Markdown 星号及正文套话（定位至 `para N`） | 报段落序号，不计算排版页码 |
+| 演示文稿 | `.pptx` | 按真实放映顺序定位页码、裸 Markdown、单页字数墙（中文 > 280 字 / 英文 > 120 词）、要点超过 6 条、自动缩排低于 80%、空泛标题（“背景”“概述”）及正文套话 | 隐藏幻灯片跳过密度检查并显式报 `[SKIP]` |
 
 ## Awesome Anti-Slop 工具清单
 
@@ -103,7 +87,7 @@ Node.js 版（`bin/dislop.mjs`）和 Python 版（`src/dislop/`）都零外部�
 
 ## 让 Agent 来用
 
-- **Agent Skill**：把 [skills/dislop/SKILL.md](./skills/dislop/SKILL.md) 装进 Claude Code、Codex、Cursor 或 Windsurf（`npx skills add dislop-ai/dislop`），按「先查 -> 局部改稿 -> 对照原稿」三步交稿。
+- **Agent Skill**：把 [skills/dislop/SKILL.md](./skills/dislop/SKILL.md) 装进 Claude Code、Codex、Cursor 或 Windsurf（`npx skills add dislop-ai/dislop`），按「先查 -> 局部改稿 -> 再查一遍」交稿。
 - **不装本地工具也能读**：让联网 Agent 直接读 [dislop.com/llms.txt](https://dislop.com/llms.txt)（约 2.2 KB）、[dislop.com/catalog.json](https://dislop.com/catalog.json)、按场景挑一张任务卡（`/tasks/*.md`）或单条规则页（`/rules/<id>.md`）。
 
 ### 接入 MCP（`Claude Code`、`Codex`、`Cursor`、`Windsurf`）
@@ -119,7 +103,7 @@ Node.js 版（`bin/dislop.mjs`）和 Python 版（`src/dislop/`）都零外部�
 }
 ```
 
-提供 4 个工具：`dislop_check`、`dislop_verify`、`dislop_explain`、`dislop_packs`。
+提供 3 个工具：`dislop_check`、`dislop_explain`、`dislop_packs`。
 
 ## 配置，以及什么时候不听它的
 
@@ -146,7 +130,7 @@ Node.js 版（`bin/dislop.mjs`）和 Python 版（`src/dislop/`）都零外部�
 
 ## 这个仓库自己也过这道门
 
-GitHub Actions CI 在每次提交时跑完双端 `dislop pack-test`（101 项样本断言）、跨运行时一致性测试（`tests/test_conformance.py`）、官网校验测试（`tests/test_site.mjs`），并对仓库自己的文档、SVG、`awesome/` 与 `site/` 执行 `dislop check . --fail-on warning`。
+GitHub Actions CI 在每次提交时跑完双端 `dislop pack-test`（88 项样本断言）、跨运行时一致性测试（`tests/test_conformance.py`）、官网校验测试（`tests/test_site.mjs`），并对仓库自己的文档、`awesome/` 与 `site/` 执行 `dislop check . --fail-on warning`。
 
 ## 文档与目录
 
@@ -160,9 +144,9 @@ dislop/
 ├── bin/               # Node.js CLI（dislop.mjs）与 stdio MCP（dislop-mcp.mjs）
 ├── src/
 │   ├── core.mjs       # 零依赖纯 ES 模块内核，由 Node CLI、MCP 与浏览器工作台共用
-│   ├── binary-node.mjs# Node.js 零依赖 ZIP 与 PDF 解析层
+│   ├── binary-node.mjs# Node.js 零依赖 ZIP 解析层（.docx / .pptx）
 │   └── dislop/        # 零依赖 Python 3.10+ 核心引擎、CLI 与 MCP 服务
-├── packs/             # 声明式 dislop.pack/2 规则包（core + 3 套文体包，29 条规则）
+├── packs/             # 声明式 dislop.pack/2 规则包（core + 3 套文体包，25 条规则）
 ├── skills/dislop/     # 跨宿主标准 Agent Skill（SKILL.md）
 ├── tests/             # 单元测试、Node/Python 跨运行时一致性测试与官网校验测试
 ├── scripts/           # 官网静态编译器（build_site.mjs）与 v0.3 探针原型

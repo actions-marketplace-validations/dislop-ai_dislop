@@ -1,24 +1,24 @@
 # dislop
 
-> Offline linter for AI-written docs, slides, and web pages. Flags hard bugs and stock phrasing without rewriting your text, then verifies your edit kept every number, qualifier, date, link, code span, and citation. Zero runtime dependencies across Node.js 20+, Python 3.10+, MCP, and the browser.
+> Local, zero-dependency anti-slop linter for AI-written docs, Word/PowerPoint files, and web pages. Marks stray chat wrappers, placeholders, prose clichés, and AI slide/UI templates without rewriting your text. Works offline in Node.js 20+, Python 3.10+, MCP, and the browser.
 
-Choose the page that matches the file you are reviewing. Each guide lists the checks to run and includes an example edit. Use the local CLI or MCP server to check a file or verify a revision.
+Choose the page that matches the file you are reviewing. Each guide lists the checks to run and includes an example edit. Use the local CLI or MCP server to check a file.
 
 ## Start by task (~800-1,500 tokens each)
-- [Review a brief or proposal](https://dislop.com/tasks/business-doc.md): Core errors, `business-brief` rules, and edit comparison.
-- [Check a web page or slide deck](https://dislop.com/tasks/web-and-deck.md): Contrast, dark-mode elevation, `deck-and-ui` rules, and design tokens.
-- [Edit an essay](https://dislop.com/tasks/editorial-writing.md): `literary-essay` rules, contrasts, and voice notes.
-- [Check files before release](https://dislop.com/tasks/pre-release-gate.md): Core `error` checks, git diff CI gating, and `verify`.
+- [Review a brief or proposal](https://dislop.com/tasks/business-doc.md): AI artifacts and `business-brief` rules.
+- [Check a web page or slide deck](https://dislop.com/tasks/web-and-deck.md): `deck-and-ui` rules and design tokens.
+- [Edit an essay](https://dislop.com/tasks/editorial-writing.md): `literary-essay` rules and contrasts.
+- [Check files before release](https://dislop.com/tasks/pre-release-gate.md): Core `error` checks and git diff CI gating.
 
 ## Browse by topic
-- [Methodology & Brand Guide](https://dislop.com/methodology/index.md): Deletion Test, anti-pattern notes, brand voice guide, and visual tokens.
+- [Methodology & Voice Guide](https://dislop.com/methodology/index.md): Deletion Test, anti-pattern notes, plain voice guide, and visual tokens.
 - [Examples & References](https://dislop.com/cases/index.md): Before / overcorrected / after contrasts and 31 print/type design references.
 - [Install & Integrations](https://dislop.com/tools/index.md): Browser workbench, `SKILL.md`, CLI (`npx`/`uvx`), MCP server, and CI hooks.
 - [Awesome Anti-Slop](https://dislop.com/awesome/index.md): 87 checked tools, guides, and papers (`dislop.radar/2`, raw JSON at `/awesome/index.json`).
-- [Roadmap & Open Questions](https://dislop.com/roadmap.md): Active tracks (`v0.2.x` -> `v0.4+`) and collaboration guide.
+- [Roadmap & Open Questions](https://dislop.com/roadmap.md): Active tracks (`v0.3` -> `v0.4+`) and collaboration guide.
 
 ## Machine index & packs
 - [JSON Catalog](https://dislop.com/catalog.json): Versioned manifest (`dislop.catalog/1`) with sha256 and token estimates.
-- [Agent Skill](https://dislop.com/tools/skill.md): `check -> edit -> verify` workflow instructions.
-- [Rule Packs](https://dislop.com/packs/core.md): Also `/packs/business-brief.md`, `/packs/literary-essay.md`, `/packs/deck-and-ui.md`, and 29 `/rules/<id>.md` cards.
-- [Single-Fetch Bundle](https://dislop.com/llms-full.txt): All 29 rules compiled without test fixtures.
+- [Agent Skill](https://dislop.com/tools/skill.md): `check -> edit -> re-check` workflow instructions.
+- [Rule Packs](https://dislop.com/packs/core.md): Also `/packs/business-brief.md`, `/packs/literary-essay.md`, `/packs/deck-and-ui.md`, and 25 `/rules/<id>.md` cards.
+- [Single-Fetch Bundle](https://dislop.com/llms-full.txt): All 25 rules compiled without test fixtures.

@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.2.0
+version: 0.3.0
 status: draft-protocol
 ---
 
@@ -10,7 +10,7 @@ Empirical studies (Padmakumar & He, ICLR 2024; Doshi & Hauser, Science Advances 
 
 ## Three-Band Entropy Partition
 
-1. **Band 1 — Zero-Entropy Invariants**: Lock numbers, units, qualifiers, dates, URLs, code spans, citations, WCAG AA contrast, dark-mode luminance order, and slide bounds (`dislop core` + `dislop verify`).
+1. **Band 1 — Zero-Entropy Invariants**: Clear hard AI delivery artifacts first (`dislop core`).
 2. **Band 2 — Bounded Divergence Band**: Vary mid-layer structure using Verbalized Sampling (Zhang et al., 2025) and orthogonal prose skeletons:
    - `S1 Decision Ledger`: 1-sentence conclusion -> measured sample & metrics -> explicit limitation -> concrete next action.
    - `S2 Mechanism Teardown`: observed anomaly -> flawed intuition -> underlying mechanism -> bounded fix.

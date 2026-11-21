@@ -1,7 +1,7 @@
 ---
 content-type: reference-data
 task: web-and-deck
-version: 0.2.0
+version: 0.3.0
 ---
 
 # Task Bundle: Web UI, SVG & Slide Decks
@@ -18,13 +18,10 @@ Use this bundle when building or auditing HTML/CSS/JSX pages, SVG diagrams, or P
 ## 2. Active Rules
 
 ### Pack `core`
-- [`local-path-leak`](../rules/local-path-leak.md) (`error`): Leaked local filesystem path or file:/// link.
-- [`unfilled-placeholder`](../rules/unfilled-placeholder.md) (`error`): Unfilled template placeholder, broken Word reference field, or dummy copy.
+- [`unfilled-placeholder`](../rules/unfilled-placeholder.md) (`error`): Unfilled AI template placeholder or dummy copy.
 - [`chatbot-artifact`](../rules/chatbot-artifact.md) (`error`): Unstripped chatbot wrapper sentence or AI search citation token.
-- [`markdown-leak`](../rules/markdown-leak.md) (`error`): Raw Markdown syntax (`**bold**` or `## heading`) left unrendered inside an Office document.
-- [`ui-dead-control`](../rules/ui-dead-control.md) (`error`): Anchor with dead `href="#"` / empty target, unlabeled button, or unexplained static `<button disabled>`.
-- [`ui-contrast-and-dark-inversion`](../rules/ui-contrast-and-dark-inversion.md) (`error`): Resolvable foreground/background contrast fails WCAG AA (< 4.5:1), or dark-theme canvas is brighter than raised surface tokens.
-- [`office-pdf-hygiene`](../rules/office-pdf-hygiene.md) (`error`): Off-slide text box in PPTX, unaccepted tracked changes/comments in Office docs, or PDF metadata/font/URI defect.
+- [`markdown-leak`](../rules/markdown-leak.md) (`error`): Raw Markdown syntax (`**bold**` or `## heading`) pasted unrendered into Word or PowerPoint.
+- [`ui-dead-control`](../rules/ui-dead-control.md) (`error`): Placeholder `href="#"` link, empty button, or unexplained disabled button typical of generated UI mockups.
 
 ### Pack `deck-and-ui`
 - [`slide-word-wall`](../rules/slide-word-wall.md) (`warning`): Slide exceeds readable copy budget (> 120 Latin words or > 280 Chinese characters).
@@ -35,7 +32,6 @@ Use this bundle when building or auditing HTML/CSS/JSX pages, SVG diagrams, or P
 - [`ui-pill-soup`](../rules/ui-pill-soup.md) (`warning`): Excessive `rounded-full` / `999px` text pills (> 6 per view) turn interface metadata into badge soup.
 - [`ui-box-in-box`](../rules/ui-box-in-box.md) (`warning`): Three or more nested bordered/rounded containers wrap the same content (`box-in-box-in-box`).
 - [`ui-prompt-echo-badge`](../rules/ui-prompt-echo-badge.md) (`warning`): Interface chrome echoes prompt-engineering hype (`AI-Powered`, `Zero Hallucination`) instead of naming the function.
-- [`svg-text-overflow-or-a11y`](../rules/svg-text-overflow-or-a11y.md) (`warning`): Standalone SVG contains `<text>` likely to clip outside `viewBox` on fallback fonts, or omits `<title>`/`aria-label`.
 
 ## 3. Reference Contrast
 

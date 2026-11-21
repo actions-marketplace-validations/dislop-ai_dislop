@@ -13,54 +13,39 @@
   <a href="./LICENSE">Apache-2.0</a>
 </p>
 
-`dislop` is a local, zero-dependency linter for AI-written docs, slides, and web pages. It marks what looks off without rewriting your text, then checks your edited draft against the original so numbers and links do not get dropped.
+`dislop` is a local, zero-dependency anti-slop linter for AI-written docs, Word/PowerPoint files, and web pages. It marks AI artifacts, clichés, and template chrome without rewriting your text.
 
 Here is a short launch note straight from a model:
 
 ```text
-Certainly! Here is the launch note. It's worth noting that exports now finish in up to 12 minutes for workspaces above 500,000 rows. This isn't just a speed bump — it's a game-changer.
+Certainly! Here is the launch note. It's worth noting that exports are a game-changer, finishing in up to 12 minutes for workspaces above 500,000 rows.
 ```
 
-`dislop check launch-note.md` flags four things:
+`dislop check launch-note.md` flags three things:
 
 ```text
-[ERROR]   launch-note.md:1:1    chatbot-artifact           "Certainly! Here is"
-[WARNING] launch-note.md:1:37   en-throat-clearing-opener  "It's worth noting that"
-[WARNING] launch-note.md:1:134  negation-pivot-frame       "This isn't just a speed bump — it's a game-changer"
-[INFO]    launch-note.md:1:172  en-cliche-lexicon          "game-changer"
+[ERROR]   launch-note.md:1:1   chatbot-artifact           "Certainly! Here is"
+[WARNING] launch-note.md:1:37  en-throat-clearing-opener  "It's worth noting that"
+[INFO]    launch-note.md:1:75  en-cliche-lexicon          "game-changer"
 ```
 
-You edit the text yourself. Then `dislop verify` checks your version against the original:
+If you rewrite it into a second-order AI slogan (`This isn't just an upgrade — it's a new standard.`), running `dislop check` catches that too. Clean it up into plain prose and `dislop check` exits `0`.
 
-```text
-dislop verify: ACCEPTED (findings 4 -> 0; all protected facts preserved)
-```
-
-Drop `"up to"` while cleaning up, and `verify` catches it:
-
-```text
-dislop verify: REJECTED (findings 4 -> 0)
-  - Protected numbers removed or altered: up to 12 minutes
-```
-
-That's it. It reads Markdown, plain text, HTML/CSS/JSX/SVG, Word, PowerPoint, and PDF metadata. Node.js (`npx`), Python (`uvx`), MCP, and the browser page at [dislop.com](https://dislop.com) run the same rules offline with no external dependencies.
+That's it. It reads Markdown, plain text, HTML/CSS/JSX, Word (`.docx`), and PowerPoint (`.pptx`). Node.js (`npx`), Python (`uvx`), MCP, and the browser page at [dislop.com](https://dislop.com) run the same 25 rules offline with no external dependencies.
 
 ## Quick start
 
 ### Node.js 20+ (zero dependencies)
 
 ```bash
-# Check the current folder (exits 1 on core errors; prints style queries)
+# Check the current folder (exits 1 on core AI artifact errors; prints cliché warnings)
 npx --yes github:dislop-ai/dislop check .
 
 # Check only lines changed against main and emit GitHub PR annotations
 npx --yes github:dislop-ai/dislop check --changed origin/main --format github
 
-# Explain a rule's question and before / overcorrected / after examples
+# Explain a rule's check question and before / overcorrected / after examples
 npx --yes github:dislop-ai/dislop explain negation-pivot-frame
-
-# Compare your edit against the original
-npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
 ```
 
 ### Python 3.10+ (zero dependencies)
@@ -75,14 +60,14 @@ cd dislop
 PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning
 ```
 
-## Hard bugs vs. style warnings
+## AI artifacts vs. style warnings
 
-Auto-rewriters often quietly drop qualifiers or alter numbers while trying to sound natural. Flat banned-word lists also cause false alarms on ordinary nouns (`Delve` debugger, `wool tapestry`) and push models into dramatic slogans instead.
+Auto-rewriters often trade one AI cliché for another or flatten your voice into a generic template. Flat banned-word lists also cause false alarms on ordinary nouns (`Delve` debugger, `wool tapestry`).
 
-`dislop` splits rules into two layers:
+`dislop` splits its 25 rules into two layers:
 
-1. **Hard bugs (`packs/core/`, `severity: error`, always on)**: Clear defects that should fail a build. Examples include leaked local paths (`file:///Users/example/spec.pdf`), unfilled `[insert ...]` or `{{var}}` placeholders, stray chatbot greetings, raw Markdown left inside `.docx`/`.pptx`, dead `<a href="#">` links, WCAG AA contrast failures (`< 4.5:1`), dark-mode surface inversions, and off-slide PowerPoint text boxes.
-2. **Style packs (`warning` / `info`, advisory by default)**: Optional JSON packs (`business-brief`, `literary-essay`, `deck-and-ui`). Each rule includes a short check question, before / overcorrected / after examples, and automated hit/clean tests.
+1. **AI delivery artifacts (`packs/core/`, `severity: error`, always on)**: Clear leftovers from AI generation—stray chatbot greetings (`Certainly! Here is...`, `[oaicite:1]`), unfilled `[insert ...]` / `{{var}}` / `【待补充】` placeholders, raw Markdown asterisks pasted unrendered into `.docx`/`.pptx`, and dead `<a href="#">` placeholder buttons.
+2. **Style & template packs (`warning` / `info`, advisory by default)**: Optional JSON packs (`business-brief`, `literary-essay`, `deck-and-ui`). Each rule includes a short check question, before / overcorrected / after examples, and automated hit/clean tests.
 
 ## What it reads
 
@@ -90,11 +75,10 @@ Both the Node.js CLI (`bin/dislop.mjs`) and the Python CLI (`src/dislop/`) run w
 
 | What you bring | Extensions | What `dislop` catches | Known boundary |
 |---|---|---|---|
-| Drafts & docs | `.md`, `.mdx`, `.txt` | Core errors + throat-clearing openers, `"Not X, but Y"` pivots, staccato slogan runs, Chinese bureaucratic padding, 4-char triads, moralizing endings, unsourced claims, half-width CJK punctuation | Code blocks, inline code, URLs, blockquotes, and `dislop-quote` blocks are masked for style rules |
-| Web pages & SVG | `.html`, `.css`, `.jsx`, `.tsx`, `.svg` | Dead `<a href="#">` controls, unexplained `<button disabled>`, static WCAG contrast, dark-mode surface order, purple-pink gradients, pill-badge walls, 3-level nested boxes, clipped SVG labels | Static per-file inspection; runtime DOM state still needs browser tests |
-| Word | `.docx` | Joined `<w:t>` runs, unaccepted tracked changes (`<w:ins>`/`<w:del>`), leftover comments, broken reference fields, raw Markdown asterisks, external `file:` links, and prose rules (`para N`) | Reports paragraph number rather than rendered page number |
-| PowerPoint | `.pptx` | Presentation slide order (`p:sldIdLst`), joined `<a:t>` runs, slide word-walls (`> 120` words / `> 280` Han chars), bullet caps (`> 6`), `<a:normAutofit>` shrink (`< 80%`), off-slide shapes, generic titles | Hidden slides (`show="0"`) are reported as `[SKIP]` for density checks |
-| PDF | `.pdf` | Local `/URI` links, raw filename `/Title` (`Microsoft Word - ...`), unembedded `/FontDescriptor` fonts, mixed `/MediaBox` page sizes | Encrypted PDFs and full body text extraction are explicitly reported as `[SKIP]`, never silently marked clean |
+| Drafts & docs | `.md`, `.mdx`, `.txt` | AI artifacts + throat-clearing openers, `"Not X, but Y"` pivots, staccato slogan runs, Chinese bureaucratic padding, 4-char triads, moralizing endings, unsourced claims, bold-lead bullet walls, em-dash overuse, half-width CJK punctuation | Code blocks, inline code, URLs, blockquotes, and `dislop-quote` blocks are masked for style rules |
+| Web pages & components | `.html`, `.css`, `.jsx`, `.tsx` | Dead `<a href="#">` placeholder links, unexplained `<button disabled>`, purple-pink AI gradients, pill-badge walls, 3-level nested boxes, `AI-Powered` prompt-echo badges | Static per-file inspection; runtime DOM state still needs browser tests |
+| Word | `.docx` | Joined `<w:t>` runs, raw Markdown asterisks pasted from chat, and prose slop rules (`para N`) | Reports paragraph number rather than rendered page number |
+| PowerPoint | `.pptx` | Presentation slide order (`p:sldIdLst`), joined `<a:t>` runs, raw Markdown, slide word-walls (`> 120` words / `> 280` Han chars), bullet caps (`> 6`), `<a:normAutofit>` shrink (`< 80%`), generic titles (`Overview`, `Background`), and prose rules | Hidden slides (`show="0"`) are reported as `[SKIP]` for density checks |
 
 ## Awesome Anti-Slop
 
@@ -102,12 +86,12 @@ Looking for other tools, style guides, design rules, PR policies, and papers in 
 
 ## Use it from an agent
 
-- **Agent Skill**: Install [skills/dislop/SKILL.md](./skills/dislop/SKILL.md) in Claude Code, Codex, Cursor, or Windsurf (`npx skills add dislop-ai/dislop`) for the `check -> edit -> verify` loop.
+- **Agent Skill**: Install [skills/dislop/SKILL.md](./skills/dislop/SKILL.md) in Claude Code, Codex, Cursor, or Windsurf (`npx skills add dislop-ai/dislop`) for the `check -> edit -> re-check` loop.
 - **No shell and no MCP**: Point any web-capable agent at [dislop.com/llms.txt](https://dislop.com/llms.txt) (~2.2 KB), [dislop.com/catalog.json](https://dislop.com/catalog.json), one task guide (`/tasks/*.md`), or any single rule page (`/rules/<id>.md`).
 
 ### MCP server (`Claude Code`, `Codex`, `Cursor`, `Windsurf`)
 
-Attach `dislop` over stdio so coding and writing agents check drafts and compare edits locally:
+Attach `dislop` over stdio so coding and writing agents check drafts locally:
 
 ```json
 {
@@ -120,7 +104,7 @@ Attach `dislop` over stdio so coding and writing agents check drafts and compare
 }
 ```
 
-Exposed MCP tools: `dislop_check`, `dislop_verify`, `dislop_explain`, and `dislop_packs`.
+Exposed MCP tools: `dislop_check`, `dislop_explain`, and `dislop_packs`.
 
 ## Configure it, or overrule it
 
@@ -150,7 +134,7 @@ For a narrow one-off exception, add a reason above the line (`--report-unused` f
 
 ## dislop checks dislop
 
-GitHub Actions CI runs `dislop pack-test` (101 fixture assertions in both Node and Python), cross-runtime conformance tests (`tests/test_conformance.py`), site verification tests (`tests/test_site.mjs`), and `dislop check . --fail-on warning` across this repository's docs, SVG assets, `awesome/`, and `site/`.
+GitHub Actions CI runs `dislop pack-test` (88 fixture assertions in both Node and Python), cross-runtime conformance tests (`tests/test_conformance.py`), and site checks (`tests/test_site.mjs`). It also runs `dislop check . --fail-on warning` across this repository's docs, `awesome/`, and `site/`.
 
 ## Docs & layout
 
@@ -164,9 +148,9 @@ dislop/
 ├── bin/               # Node.js CLI (dislop.mjs) & stdio MCP launcher (dislop-mcp.mjs)
 ├── src/
 │   ├── core.mjs       # Zero-dep ES module shared by Node CLI, MCP, and browser workbench
-│   ├── binary-node.mjs# Zero-dep ZIP & PDF stream reader for Node.js
+│   ├── binary-node.mjs# Zero-dep ZIP reader for Node.js (.docx / .pptx)
 │   └── dislop/        # Zero-dep Python 3.10+ engine, CLI, and MCP server
-├── packs/             # Declarative dislop.pack/2 manifests (core + 3 style packs, 29 rules)
+├── packs/             # Declarative dislop.pack/2 manifests (core + 3 style packs, 25 rules)
 ├── skills/dislop/     # Cross-host Agent Skill (SKILL.md)
 ├── tests/             # Unit, Node/Python conformance, and site verification tests
 ├── scripts/           # Static site compiler (build_site.mjs) & v0.3 probe prototype

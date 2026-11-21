@@ -10,16 +10,16 @@ family: hygiene/placeholder
 # Rule: `unfilled-placeholder`
 
 - Pack: [`core`](../packs/core.md) · Tier: `invariant` · Severity: `error`
-- Modalities: `markdown, text, html, jsx, svg, docx, pptx, pdf`
+- Modalities: `markdown, text, html, jsx, svg, docx, pptx`
 - Human anchor: https://dislop.com/#rule-unfilled-placeholder
 
 ## What It Catches
-- EN: Unfilled template placeholder, broken Word reference field, or dummy copy.
-- ZH: 存在未替换的模板占位符、损坏的交叉引用域或测试假文。
+- EN: Unfilled AI template placeholder or dummy copy.
+- ZH: 存在未替换的模板占位符或测试假文。
 
 ## Deletion Test
-- EN: Supply the verified value before shipping, or delete the unfinished section rather than leaving a bracketed marker.
-- ZH: 发稿前填入核实后的真实数据；若数据尚未就绪，直接删去未完成段落而非保留占位标记。
+- EN: Supply the real value before sending, or delete the unfinished line instead of leaving a bracketed marker.
+- ZH: 发稿前填入真实信息，或者直接删掉这一句，不要留括号占位。
 
 ## Exemplar (Reference Data)
 
