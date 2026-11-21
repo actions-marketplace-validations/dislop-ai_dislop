@@ -853,7 +853,7 @@ function runMcpServer(packs) {
 }
 
 function printHelp() {
-  console.log(`dislop v${ENGINE_VERSION} — A red pen for AI-written drafts, decks, and pages
+  console.log(`dislop v${ENGINE_VERSION} — Local linter for AI-written docs, slides, and web pages
 
 Usage:
   dislop check [paths... | -] [--pack <id>] [--fail-on error|warning|info|never]
