@@ -22,7 +22,7 @@ The balance is already drawn inside [assets/logo.svg](../assets/logo.svg).
 |---|---|
 | Rounded carbon tile (`#14171A`, `12/64` corner radius) | **Grounded engineering base**: numbers, line coordinates, exit codes, and `[SKIP]` honesty stay flat and literal. |
 | Muted gray manuscript line visible beneath the red stroke | **Start with the author's words**: quote the span before speaking; never erase the writer or rewrite behind their back. |
-| One generous vermilion loop (`#F04438`) | **One flourish per surface**: light wit is welcome only in neutral or resolved states, at most once per screen. |
+| One generous vermilion loop (`#F04438`) | **One flourish per page**: light wit is welcome only in neutral or resolved states, at most once per page. |
 | Round stroke caps (`stroke-linecap="round"`, `6/64` weight) | **Gentle, never vague**: confident strokes with no sharp barbs; describe the span, never scold the author. |
 | Clean bottom-right flick leaving the rest of the line untouched | **Know when to lift the pen**: give the next concrete step and leave the rest of the draft alone. |
 
@@ -53,6 +53,8 @@ Step one desk over from a mechanical proofreader. `dislop` speaks like a calm, s
 One rule anchors every surface: **two pencils, two registers**. Red states a fact and a fix; blue asks one question; green echoes the author's protected span verbatim.
 
 Write English and Chinese independently from meaning rather than translating word for word. On a clean sheet, English says `Pass for press.` while Chinese says `可以付印。`—each using its own pressroom idiom.
+
+**Default Chinese & zero language mixing**: `dislop.com` and `/awesome/` open in Simplified Chinese (`zh-CN`) by default, with one-click switching to English (`en`). Keep the two editions strictly separated: Chinese pages use native Chinese specimens, rule examples, and summaries only; English pages use native English specimens, examples, and summaries only. Keep internal architecture labels (`Level 0`, `L0–L3`, `Stage-3`, `Negative Defense`, `Positive Pull`, `Three-Band Entropy Partition`, `Dual-Native`) inside `docs/research/`, never on visitor-facing headings or buttons.
 
 ### Voice Across Five Surfaces (Before → Brand Baseline)
 
