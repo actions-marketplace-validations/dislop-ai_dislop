@@ -158,6 +158,7 @@ Latest measured baseline ([benchmarks/REPORT.md](./benchmarks/REPORT.md)):
 
 - **Detection (48 samples, 6 domains)**: Precision `100.0%` · Recall `100.0%` · Clean FPR `0.0%` · Adversarial Near-Miss FPR `0.0%` · 2nd-Order Trap Recall `100.0%` · Node/Python Parity `100.0%`.
 - **End-to-end de-slop (12 tasks × 3 arms)**: `raw_ai` **61.4 / 100** → `naive_humanizer` **72.1 / 100** (doubles 3rd-order slop and drops/invents numbers) → `dislop_clean` **100.0 / 100** (`12/12` all-clear).
+- **Live 5-model comparison ([benchmarks/MODEL-COMPARISON.md](./benchmarks/MODEL-COMPARISON.md))**: Across `Gemini 3.1/3.5 Flash-Lite`, `Gemini 3.5/3.8 Flash`, and `Qwen 3.8 Flash`, bare prompts averaged `76.0–84.2 / 100` (`2/10–4/10` all-clear), while our `server/` self-healing pipeline lifted every model by **+15.8 to +22.3 points** (`97.0–100.0 / 100`, `8/10–10/10` all-clear; `Gemini 3.1 Flash-Lite` reached `98.5 / 100` in `1.2s` at `~$0.09 / 1k calls`).
 
 See [benchmarks/README.md](./benchmarks/README.md) to score your own model, Skill, or `server/` deployment (`--eval`) or export randomized blind human A/B review sheets (`--export-blind-sheet`).
 

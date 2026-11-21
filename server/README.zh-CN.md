@@ -38,15 +38,18 @@ docker run --rm -p 8787:8787 \
   dislop-server
 ```
 
-## 2. 接口一览
+## 2. 接口与大模型能力一览
 
-| 路径 | 方法 | 是否需要大模型 Key | 用途 |
+| 路径 | 方法 | 权重 | 用途 |
 |---|---|---|---|
-| `/health` | `GET` | 否 | 健康检查与能力状态（不返回密钥） |
-| `/v1/check` | `POST` | 否 | 确定性检查（同 `src/core.mjs`） |
-| `/v1/review` | `POST` | 是 | 确定性检查 + 大模型三阶结构味/设计味审校 |
-| `/v1/deslop` | `POST` | 是 | 大模型去 AI 味改写 + 自动确定性复检 + 数字变动核对 |
-| `/mcp` | `POST` | 按工具区分 | 远程 HTTP MCP（`dislop_check`、`dislop_review`、`dislop_deslop`、`dislop_explain`、`dislop_packs`） |
+| `/health` | `GET` | `0` | 健康检查与能力状态（不返回密钥） |
+| `/v1/check` | `POST` | `0` | 确定性检查（同 `src/core.mjs`，免 Key） |
+| `/v1/review` | `POST` | `1` | 确定性检查 + 三阶结构探针 + 大模型深度审校（默认路由 `gemini-3.5-flash-lite`） |
+| `/v1/deslop` | `POST` | `2` | **自愈去 AI 味流水线**：预检 → 按规矩改写 → 确定性/三阶/数字保真门禁 → 未过自动定点修复（默认路由 `gemini-3.5-flash`） |
+| `/v1/voice/extract` | `POST` | `2` | 从 1–5 篇人类样稿提取可复用的个人声纹卡（`dislop.voice/1`：离线句长节奏 + 大模型语气/习惯），可传入 `/v1/deslop` |
+| `/mcp` | `POST` | 按工具 | 远程 HTTP MCP（`dislop_check`、`dislop_review`、`dislop_deslop`、`dislop_voice_extract`、`dislop_explain`、`dislop_packs`） |
+
+跨 5 款真实模型的在线对比实测（裸 Prompt vs. 本后台自愈流水线，含延迟与千次成本）见 [benchmarks/MODEL-COMPARISON.md](../benchmarks/MODEL-COMPARISON.md)。
 
 ## 3. 远程 HTTP MCP 接入示例
 

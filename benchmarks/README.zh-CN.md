@@ -1,6 +1,6 @@
 # dislop 去 AI 味效果测试基准（`dislop-bench v1`）
 
-[English](./README.md) · [最新离线实测报告](./REPORT.md)
+[English](./README.md) · [离线基线报告](./REPORT.md) · [5 模型真实在线对比](./MODEL-COMPARISON.md)
 
 这套基准用来回答两个硬问题，不靠主观感觉：
 

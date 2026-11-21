@@ -1,18 +1,21 @@
 #!/usr/bin/env node
 // Open-source, zero-dependency HTTP API + Remote Streamable HTTP MCP server for dislop.
-// Supports both deterministic checks (no key required) and optional LLM-backed deep review &
-// de-slop rewriting using server-side environment variables (BYOK self-host or official hosted).
-//
-// Security invariants:
-//   - API keys live ONLY in server env (DISLOP_LLM_API_KEY); never returned in responses or logs.
-//   - User draft payloads are NEVER written to disk or stdout logs.
-//   - Payload size limit + per-IP sliding-window rate limit + optional server bearer token.
+// Supports deterministic checks (zero LLM) plus LLM-backed services:
+//   - /v1/review & dislop_review: deterministic + 3rd-order structural + LLM critique
+//   - /v1/deslop & dislop_deslop: self-healing Check -> Rewrite -> Re-Check & Auto-Repair pipeline
+//   - /v1/voice/extract & dislop_voice_extract: offline stylometrics + LLM dislop.voice/1 extraction
 import fs from "node:fs";
 import http from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { auditText, detectModality, resolveEffectivePack } from "../src/core.mjs";
 import { createLlmClient, redactSecrets } from "./llm-client.mjs";
+import {
+  computeOfflineStylometrics,
+  extractKeyNumbers,
+  runThirdOrderProbes,
+  summarizeNumericDiff,
+} from "./probes.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -34,31 +37,22 @@ function loadPacksById() {
 const PKG = JSON.parse(fs.readFileSync(path.join(ROOT, "package.json"), "utf8"));
 const PACKS_BY_ID = loadPacksById();
 
-function extractNumbers(text) {
-  const cleaned = String(text || "")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/\b(?:from|via|to|p|px|py|mt|mb|rounded|border|slate|indigo|purple|pink|gray|zinc)-\d+(?:\/\d+)?\b/gi, " ");
-  return Array.from(new Set(Array.from(cleaned.matchAll(/\b\d+(?:[.,]\d+)?%?\b/g), (m) => m[0].replace(/,/g, ""))));
-}
-
-function summarizeNumericDiff(beforeText, afterText) {
-  const before = extractNumbers(beforeText);
-  const after = extractNumbers(afterText);
-  const afterSet = new Set(after);
-  const beforeSet = new Set(before);
-  return {
-    missing: before.filter((n) => !afterSet.has(n)),
-    added: after.filter((n) => !beforeSet.has(n)),
-  };
-}
-
-const CREDIT_WEIGHTS = {
+export const CREDIT_WEIGHTS = {
   dislop_check: 0,
   dislop_explain: 0,
   dislop_packs: 0,
   dislop_review: 1,
   dislop_deslop: 2,
+  dislop_voice_extract: 2,
 };
+
+function addUsage(a, b) {
+  return {
+    promptTokens: (a?.promptTokens || 0) + (b?.promptTokens || 0),
+    completionTokens: (a?.completionTokens || 0) + (b?.completionTokens || 0),
+    totalTokens: (a?.totalTokens || 0) + (b?.totalTokens || 0),
+  };
+}
 
 function createDailyCounter(limitPerDay) {
   let dayKey = new Date().toISOString().slice(0, 10);
@@ -146,9 +140,7 @@ function readJsonBody(req, maxBytes) {
         reject(err);
       }
     });
-    req.on("error", (err) => {
-      reject(err);
-    });
+    req.on("error", (err) => reject(err));
   });
 }
 
@@ -185,9 +177,9 @@ function buildCorsHeaders(req, allowedOrigin) {
   return {};
 }
 
-// ---------- Core Operation Handlers (Shared by REST API & Remote HTTP MCP) ----------
+// ---------- Core Operation Handlers (Shared by REST API, Remote HTTP MCP & Live Benchmark) ----------
 
-function runDeterministicCheck({ text, filename = "draft.md", modality, pack = "business-brief" }) {
+export function runDeterministicCheck({ text, filename = "draft.md", modality, pack = "business-brief" }) {
   if (typeof text !== "string") {
     const err = new Error("'text' must be a string.");
     err.statusCode = 400;
@@ -242,9 +234,14 @@ function runListPacks() {
   };
 }
 
-async function runLlmReview(llm, dailyQuota, { text, filename = "draft.md", modality, pack = "business-brief", lang = "zh" }) {
+export async function runLlmReview(
+  llm,
+  dailyQuota,
+  { text, filename = "draft.md", modality, pack = "business-brief", lang = "zh" }
+) {
   const deterministic = runDeterministicCheck({ text, filename, modality, pack });
-  if (llm.isConfigured) {
+  const thirdOrderHits = runThirdOrderProbes(text, { modality: deterministic.modality, lang });
+  if (llm.isConfigured && dailyQuota) {
     const q = dailyQuota.consume(CREDIT_WEIGHTS.dislop_review);
     if (!q.allowed) {
       const err = new Error("Daily LLM quota reached on this server. Self-host with your own key or retry tomorrow.");
@@ -258,12 +255,15 @@ async function runLlmReview(llm, dailyQuota, { text, filename = "draft.md", moda
     modality: deterministic.modality,
     lang,
     findings: deterministic.findings,
+    thirdOrderHits,
   });
   return {
     mode: "hybrid",
     model: llmReview.model || llm.model,
     creditWeight: CREDIT_WEIGHTS.dislop_review,
+    usage: llmReview.usage,
     deterministic,
+    thirdOrderHits,
     llmReview: {
       summary: llmReview.summary,
       aiFlavorLevel: llmReview.aiFlavorLevel,
@@ -272,9 +272,24 @@ async function runLlmReview(llm, dailyQuota, { text, filename = "draft.md", moda
   };
 }
 
-async function runLlmDeslop(llm, dailyQuota, { text, filename = "draft.md", modality, pack = "business-brief", lang = "zh" }) {
+export async function runLlmDeslop(
+  llm,
+  dailyQuota,
+  {
+    text,
+    filename = "draft.md",
+    modality,
+    pack = "business-brief",
+    lang = "zh",
+    voiceProfile = null,
+    autoRepair = true,
+  }
+) {
   const beforeCheck = runDeterministicCheck({ text, filename, modality, pack });
-  if (llm.isConfigured) {
+  const beforeThirdOrder = runThirdOrderProbes(text, { modality: beforeCheck.modality, lang });
+  const lockedNumbers = extractKeyNumbers(text);
+
+  if (llm.isConfigured && dailyQuota) {
     const q = dailyQuota.consume(CREDIT_WEIGHTS.dislop_deslop);
     if (!q.allowed) {
       const err = new Error("Daily LLM quota reached on this server. Self-host with your own key or retry tomorrow.");
@@ -283,28 +298,116 @@ async function runLlmDeslop(llm, dailyQuota, { text, filename = "draft.md", moda
       throw err;
     }
   }
-  const llmOut = await llm.deslop({
+
+  const pass1 = await llm.deslop({
     text,
     modality: beforeCheck.modality,
     lang,
     findings: beforeCheck.findings,
+    thirdOrderHits: beforeThirdOrder,
+    lockedNumbers,
+    voiceProfile,
   });
-  const afterCheck = runDeterministicCheck({
-    text: llmOut.revised,
-    filename,
-    modality: beforeCheck.modality,
-    pack,
-  });
-  const numericDiff = summarizeNumericDiff(text, llmOut.revised);
+
+  let revised = pass1.revised;
+  let changes = [...pass1.changes];
+  let totalUsage = pass1.usage || { promptTokens: 0, completionTokens: 0, totalTokens: 0 };
+  let afterCheck = runDeterministicCheck({ text: revised, filename, modality: beforeCheck.modality, pack });
+  let thirdOrderHits = runThirdOrderProbes(revised, { modality: beforeCheck.modality, lang });
+  let numericDiff = summarizeNumericDiff(text, revised, beforeCheck.modality);
+  let attempts = 1;
+  let repaired = false;
+
+  const needsRepair =
+    afterCheck.findings.length > 0 ||
+    thirdOrderHits.length > 0 ||
+    numericDiff.missing.length > 0 ||
+    numericDiff.added.length > 0;
+
+  if (autoRepair && needsRepair && typeof llm.repair === "function") {
+    attempts = 2;
+    const pass2 = await llm.repair({
+      sourceText: text,
+      previousRevised: revised,
+      modality: beforeCheck.modality,
+      lang,
+      remainingFindings: afterCheck.findings,
+      remainingThirdOrder: thirdOrderHits,
+      numericDiff,
+    });
+    totalUsage = addUsage(totalUsage, pass2.usage);
+    const repairedCheck = runDeterministicCheck({
+      text: pass2.revised,
+      filename,
+      modality: beforeCheck.modality,
+      pack,
+    });
+    const repairedThird = runThirdOrderProbes(pass2.revised, { modality: beforeCheck.modality, lang });
+    const repairedNum = summarizeNumericDiff(text, pass2.revised, beforeCheck.modality);
+
+    const scorePenalty = (c, t, n) =>
+      c.findings.length * 10 + t.length * 10 + n.missing.length * 8 + n.added.length * 8;
+
+    if (
+      scorePenalty(repairedCheck, repairedThird, repairedNum) <=
+      scorePenalty(afterCheck, thirdOrderHits, numericDiff)
+    ) {
+      revised = pass2.revised;
+      changes = [...changes, ...pass2.changes];
+      afterCheck = repairedCheck;
+      thirdOrderHits = repairedThird;
+      numericDiff = repairedNum;
+      repaired = true;
+    }
+  }
+
   return {
-    mode: "llm+deterministic-recheck",
-    model: llmOut.model || llm.model,
+    mode: "self-healing-pipeline",
+    model: pass1.model || llm.model,
     creditWeight: CREDIT_WEIGHTS.dislop_deslop,
-    revised: llmOut.revised,
-    changes: llmOut.changes,
+    attempts,
+    repaired,
+    usage: totalUsage,
+    revised,
+    changes,
     beforeFindingsCount: beforeCheck.findings.length,
     afterCheck,
+    thirdOrderHits,
     numericDiff,
+  };
+}
+
+export async function runVoiceExtract(llm, dailyQuota, { samples, lang = "zh" }) {
+  if (!Array.isArray(samples) || samples.length === 0 || samples.some((s) => typeof s !== "string" || !s.trim())) {
+    const err = new Error("'samples' must be a non-empty array of writing sample strings.");
+    err.statusCode = 400;
+    err.code = "invalid_input";
+    throw err;
+  }
+  const stylometrics = computeOfflineStylometrics(samples.slice(0, 5), lang);
+  if (llm.isConfigured && dailyQuota) {
+    const q = dailyQuota.consume(CREDIT_WEIGHTS.dislop_voice_extract);
+    if (!q.allowed) {
+      const err = new Error("Daily LLM quota reached on this server. Self-host with your own key or retry tomorrow.");
+      err.statusCode = 429;
+      err.code = "daily_limit_reached";
+      throw err;
+    }
+  }
+  const voiceCard = await llm.extractVoice({ samples: samples.slice(0, 5), lang, stylometrics });
+  return {
+    schema: "dislop.voice/1",
+    lang,
+    model: voiceCard.model || llm.model,
+    creditWeight: CREDIT_WEIGHTS.dislop_voice_extract,
+    usage: voiceCard.usage,
+    stylometrics,
+    profile: {
+      tone: voiceCard.tone,
+      sentenceHabits: voiceCard.sentenceHabits,
+      preferredPatterns: voiceCard.preferredPatterns,
+      avoidPatterns: voiceCard.avoidPatterns,
+    },
   };
 }
 
@@ -313,7 +416,7 @@ async function runLlmDeslop(llm, dailyQuota, { text, filename = "draft.md", moda
 const MCP_TOOLS = [
   {
     name: "dislop_check",
-    description: "Deterministic offline-grade check for AI artifacts, clichés, 2nd-order slogans, and AI UI templates (zero LLM cost).",
+    description: "Deterministic offline-grade check for AI artifacts, clichés, 2nd-order slogans, and AI UI templates (0 credits).",
     inputSchema: {
       type: "object",
       required: ["text"],
@@ -327,7 +430,7 @@ const MCP_TOOLS = [
   },
   {
     name: "dislop_review",
-    description: "Hybrid deterministic + LLM anti-slop review catching 3rd-order structural pitch habits and subtle AI tone.",
+    description: "Hybrid deterministic + 3rd-order structural + LLM anti-slop review catching subtle pitch cadence and AI UI chrome (1 credit).",
     inputSchema: {
       type: "object",
       required: ["text"],
@@ -342,7 +445,7 @@ const MCP_TOOLS = [
   },
   {
     name: "dislop_deslop",
-    description: "LLM-backed plain-voice anti-slop rewrite followed by automatic deterministic re-check and key-number drift audit.",
+    description: "Self-healing LLM rewrite pipeline: pre-check -> plain-voice rewrite -> deterministic & 3rd-order gate -> numeric fidelity check -> auto-repair (2 credits).",
     inputSchema: {
       type: "object",
       required: ["text"],
@@ -352,12 +455,25 @@ const MCP_TOOLS = [
         modality: { type: "string", enum: ["markdown", "text", "html", "css", "jsx", "svg"] },
         pack: { type: "string", enum: ["core", "business-brief", "literary-essay", "deck-and-ui"] },
         lang: { type: "string", enum: ["zh", "en"] },
+        voiceProfile: { type: "object" },
+      },
+    },
+  },
+  {
+    name: "dislop_voice_extract",
+    description: "Extract a reusable dislop.voice/1 author style profile (offline stylometrics + LLM tone/habit card) from 1-5 human drafts (2 credits).",
+    inputSchema: {
+      type: "object",
+      required: ["samples"],
+      properties: {
+        samples: { type: "array", items: { type: "string" } },
+        lang: { type: "string", enum: ["zh", "en"] },
       },
     },
   },
   {
     name: "dislop_explain",
-    description: "Explain a dislop rule with its check question and before/overcorrected/after examples.",
+    description: "Explain a dislop rule with its check question and before/overcorrected/after examples (0 credits).",
     inputSchema: {
       type: "object",
       required: ["ruleId"],
@@ -369,7 +485,7 @@ const MCP_TOOLS = [
   },
   {
     name: "dislop_packs",
-    description: "List available dislop rule packs.",
+    description: "List available dislop rule packs (0 credits).",
     inputSchema: { type: "object", properties: {} },
   },
 ];
@@ -418,6 +534,9 @@ async function handleMcpRpc(rpc, llm, dailyQuota) {
       } else if (name === "dislop_deslop") {
         data = await runLlmDeslop(llm, dailyQuota, args);
         creditsUsed = CREDIT_WEIGHTS.dislop_deslop;
+      } else if (name === "dislop_voice_extract") {
+        data = await runVoiceExtract(llm, dailyQuota, args);
+        creditsUsed = CREDIT_WEIGHTS.dislop_voice_extract;
       } else {
         return {
           rpcResp: { jsonrpc: "2.0", id, error: { code: -32601, message: `Unknown MCP tool: ${name}` } },
@@ -452,7 +571,7 @@ async function handleMcpRpc(rpc, llm, dailyQuota) {
   return { rpcResp: { jsonrpc: "2.0", id, error: { code: -32601, message: `Method not found: ${rpc.method}` } }, creditsUsed: 0 };
 }
 
-// ---------- Server Factory (Testable Offline with Mock LLM Transport) ----------
+// ---------- Server Factory ----------
 
 export function createDislopServer(options = {}) {
   const maxBodyBytes = Number(options.maxBodyBytes ?? process.env.DISLOP_MAX_BODY_BYTES ?? 65536);
@@ -470,7 +589,7 @@ export function createDislopServer(options = {}) {
       model: options.model ?? process.env.DISLOP_LLM_MODEL ?? "gpt-4o-mini",
       reviewModel: options.reviewModel ?? process.env.DISLOP_LLM_MODEL_REVIEW ?? "",
       deslopModel: options.deslopModel ?? process.env.DISLOP_LLM_MODEL_DESLOP ?? "",
-      timeoutMs: options.timeoutMs ?? Number(process.env.DISLOP_LLM_TIMEOUT_MS || 30000),
+      timeoutMs: options.timeoutMs ?? Number(process.env.DISLOP_LLM_TIMEOUT_MS || 45000),
       transport: options.transport || null,
     });
 
@@ -488,7 +607,6 @@ export function createDislopServer(options = {}) {
     const url = new URL(req.url || "/", "http://127.0.0.1");
     const pathname = url.pathname.replace(/\/+$/, "") || "/";
 
-    // Health check (never leaks secrets)
     if (req.method === "GET" && (pathname === "/health" || pathname === "/api/health")) {
       sendJson(
         res,
@@ -503,14 +621,13 @@ export function createDislopServer(options = {}) {
           models: llm.models,
           creditWeights: CREDIT_WEIGHTS,
           dailyQuota: dailyQuota.status(),
-          endpoints: ["/health", "/v1/check", "/v1/review", "/v1/deslop", "/mcp"],
+          endpoints: ["/health", "/v1/check", "/v1/review", "/v1/deslop", "/v1/voice/extract", "/mcp"],
         },
         cors
       );
       return;
     }
 
-    // Optional bearer token protection for private/team deployments
     if (authToken) {
       const provided = String(req.headers.authorization || "");
       if (provided !== `Bearer ${authToken}`) {
@@ -519,7 +636,6 @@ export function createDislopServer(options = {}) {
       }
     }
 
-    // Rate limiting
     const clientIp =
       String(req.headers["x-forwarded-for"] || "").split(",")[0].trim() || req.socket.remoteAddress || "unknown";
     if (!allowIp(clientIp)) {
@@ -528,7 +644,7 @@ export function createDislopServer(options = {}) {
     }
 
     if (req.method !== "POST") {
-      sendJson(res, 405, { error: "method_not_allowed", message: "Use POST for check, review, deslop, and MCP endpoints." }, cors);
+      sendJson(res, 405, { error: "method_not_allowed", message: "Use POST for API and MCP endpoints." }, cors);
       return;
     }
 
@@ -554,6 +670,11 @@ export function createDislopServer(options = {}) {
         sendJson(res, 200, result, { ...cors, "X-Dislop-Credits-Used": String(CREDIT_WEIGHTS.dislop_deslop) });
         return;
       }
+      if (pathname === "/v1/voice/extract" || pathname === "/api/v1/voice/extract") {
+        const result = await runVoiceExtract(llm, dailyQuota, body);
+        sendJson(res, 200, result, { ...cors, "X-Dislop-Credits-Used": String(CREDIT_WEIGHTS.dislop_voice_extract) });
+        return;
+      }
       if (pathname === "/mcp" || pathname === "/api/mcp") {
         const { rpcResp, creditsUsed } = await handleMcpRpc(body, llm, dailyQuota);
         sendJson(res, 200, rpcResp, { ...cors, "X-Dislop-Credits-Used": String(creditsUsed) });
@@ -575,8 +696,8 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const server = createDislopServer();
   server.listen(port, host, () => {
     const llmStatus = process.env.DISLOP_LLM_API_KEY
-      ? `enabled (model=${process.env.DISLOP_LLM_MODEL || "gpt-4o-mini"})`
-      : "disabled (deterministic endpoints only; set DISLOP_LLM_API_KEY to enable LLM review/deslop)";
+      ? `enabled (review=${process.env.DISLOP_LLM_MODEL_REVIEW || process.env.DISLOP_LLM_MODEL || "gpt-4o-mini"}, deslop=${process.env.DISLOP_LLM_MODEL_DESLOP || process.env.DISLOP_LLM_MODEL || "gpt-4o-mini"})`
+      : "disabled (deterministic endpoints only; set DISLOP_LLM_API_KEY to enable LLM services)";
     console.log(`dislop-server listening on http://${host}:${port} | LLM: ${llmStatus}`);
   });
 }

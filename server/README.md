@@ -38,15 +38,18 @@ docker run --rm -p 8787:8787 \
   dislop-server
 ```
 
-## 2. Endpoints
+## 2. Endpoints & LLM-Backed Services
 
-| Path | Method | Needs LLM Key | Purpose |
+| Path | Method | Credits | Purpose |
 |---|---|---|---|
-| `/health` | `GET` | No | Health & capability check (never returns keys) |
-| `/v1/check` | `POST` | No | Deterministic `src/core.mjs` anti-slop check |
-| `/v1/review` | `POST` | Yes | Deterministic check + LLM 3rd-order prose & design review |
-| `/v1/deslop` | `POST` | Yes | LLM plain-voice rewrite + automatic deterministic re-check + numeric diff |
-| `/mcp` | `POST` | Per tool | Remote HTTP MCP (`dislop_check`, `dislop_review`, `dislop_deslop`, `dislop_explain`, `dislop_packs`) |
+| `/health` | `GET` | `0` | Health & capability check (never returns keys) |
+| `/v1/check` | `POST` | `0` | Deterministic `src/core.mjs` anti-slop check (no key needed) |
+| `/v1/review` | `POST` | `1` | Deterministic + 3rd-order structural probes + LLM critique (routes to `gemini-3.5-flash-lite`) |
+| `/v1/deslop` | `POST` | `2` | **Self-healing de-slop pipeline**: pre-check -> rewrite -> deterministic/3rd-order/numeric gate -> automatic surgical repair (routes to `gemini-3.5-flash`) |
+| `/v1/voice/extract` | `POST` | `2` | Extract a reusable `dislop.voice/1` style profile (offline stylometrics + LLM tone card) from 1–5 author drafts to pass into `/v1/deslop` |
+| `/mcp` | `POST` | Per tool | Remote HTTP MCP (`dislop_check`, `dislop_review`, `dislop_deslop`, `dislop_voice_extract`, `dislop_explain`, `dislop_packs`) |
+
+See [benchmarks/MODEL-COMPARISON.md](../benchmarks/MODEL-COMPARISON.md) for live 5-model benchmark results (Bare Prompt vs. this self-healing pipeline, including latency and cost per 1,000 calls).
 
 ## 3. Connect Remote HTTP MCP
 
