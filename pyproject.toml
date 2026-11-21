@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dislop"
-version = "0.2.0"
-description = "Local zero-dependency linter for AI-written docs, slides, and web pages that checks your edit kept every number, link, and citation."
+version = "0.3.0"
+description = "Local zero-dependency anti-slop linter for AI-written docs, Word/PowerPoint files, and web pages."
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.10"

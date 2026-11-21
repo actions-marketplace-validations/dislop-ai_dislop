@@ -11,13 +11,11 @@ from .engine import (
     ENGINE_VERSION,
     audit_text,
     detect_modality,
-    extract_protected_facts,
     inspect_file,
     load_all_packs,
     load_config,
     pick_pack_for_file,
     resolve_effective_pack,
-    verify_revision,
 )
 
 
@@ -43,39 +41,22 @@ TOOLS = [
     {
         "name": "dislop_check",
         "description": (
-            "Audit a draft (`text` or workspace-relative `path`) for publication invariants and genre Taste Pack signals. "
-            "Workflow: check -> edit ONLY flagged spans while keeping `protectedFacts` untouched -> run `dislop_verify` before delivering."
+            "Check a draft (`text` or workspace-relative `path`) for AI-generation artifacts, clichés, and template slop "
+            "across Markdown, HTML/CSS/JSX/SVG, Word (.docx), and PowerPoint (.pptx). Edit only the flagged spans, then run `dislop_check` again."
         ),
         "inputSchema": {
             "type": "object",
             "properties": {
                 "text": {"type": "string", "description": "Draft text to inspect in memory"},
-                "path": {"type": "string", "description": "Workspace-relative file path (.md, .html, .css, .svg, .docx, .pptx, .pdf)"},
-                "pack": {"type": "string", "description": "Taste Pack ID (business-brief, literary-essay, deck-and-ui)"},
+                "path": {"type": "string", "description": "Workspace-relative file path (.md, .html, .css, .jsx, .svg, .docx, .pptx)"},
+                "pack": {"type": "string", "description": "Style pack ID (business-brief, literary-essay, deck-and-ui)"},
                 "filename": {"type": "string", "description": "Virtual filename hint when inspecting `text`"},
             },
         },
     },
     {
-        "name": "dislop_verify",
-        "description": (
-            "Deterministic Stage-3 revision verifier. Compares `before` and `after` text to confirm all numbers, units, qualifiers, "
-            "URLs, code spans, and citations survived intact, findings decreased, and no 2nd-order slop frame was introduced."
-        ),
-        "inputSchema": {
-            "type": "object",
-            "properties": {
-                "before": {"type": "string"},
-                "after": {"type": "string"},
-                "pack": {"type": "string"},
-                "filename": {"type": "string"},
-            },
-            "required": ["before", "after"],
-        },
-    },
-    {
         "name": "dislop_explain",
-        "description": "Retrieve the rationale, Deletion Test, and before/trap/after editorial exemplar for a specific `ruleId`.",
+        "description": "Retrieve the rationale, check question, and before/trap/after examples for a specific `ruleId`.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -87,7 +68,7 @@ TOOLS = [
     },
     {
         "name": "dislop_packs",
-        "description": "List installed Taste Packs, supported modalities, and rule counts.",
+        "description": "List installed rule packs, supported formats, and rule counts.",
         "inputSchema": {"type": "object", "properties": {}},
     },
 ]
@@ -172,20 +153,6 @@ def run_mcp_stdio() -> None:
                         _tool_result(req_id, {"error": f"Unknown ruleId '{rid}'"}, True)
                     continue
 
-                if name == "dislop_verify":
-                    before = args.get("before")
-                    after = args.get("after")
-                    if not isinstance(before, str) or not isinstance(after, str):
-                        _tool_result(req_id, {"error": "`dislop_verify` requires both `before` and `after` strings."}, True)
-                        continue
-                    fn = args.get("filename") or "draft.md"
-                    mod = detect_modality(fn) or "markdown"
-                    pack_id = pick_pack_for_file(fn, mod, args.get("pack"), config)
-                    pack = resolve_effective_pack(pack_id, packs, config)
-                    res = verify_revision(before, after, filename=fn, modality=mod, pack=pack, config=config)
-                    _tool_result(req_id, res)
-                    continue
-
                 if name == "dislop_check":
                     has_text = isinstance(args.get("text"), str)
                     has_path = isinstance(args.get("path"), str) and bool(args["path"].strip())
@@ -211,7 +178,6 @@ def run_mcp_stdio() -> None:
                                 "checked": True,
                                 "skipped": [],
                                 "count": len(res["findings"]),
-                                "protectedFacts": extract_protected_facts(args["text"]),
                                 "findings": res["findings"],
                             },
                         )
@@ -231,9 +197,6 @@ def run_mcp_stdio() -> None:
                         _tool_result(req_id, {"error": f"Unsupported file extension for '{args['path']}'"}, True)
                         continue
                     res = inspect_file(resolved, rel, packs, args.get("pack"), config)
-                    protected_facts = None
-                    if mod not in {"docx", "pptx", "pdf"} and res["checked"]:
-                        protected_facts = extract_protected_facts(resolved.read_text(encoding="utf-8"))
                     _tool_result(
                         req_id,
                         {
@@ -242,7 +205,6 @@ def run_mcp_stdio() -> None:
                             "checked": res["checked"],
                             "skipped": res["skipped"],
                             "count": len(res["findings"]),
-                            "protectedFacts": protected_facts,
                             "findings": res["findings"],
                         },
                     )

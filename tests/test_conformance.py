@@ -43,7 +43,7 @@ class ConformanceParityTests(unittest.TestCase):
         self.assertEqual(r_py.returncode, 0, r_py.stderr)
         self.assertEqual(r_node.stdout.strip(), r_py.stdout.strip())
 
-    def test_verify_dates_units_links_citations_and_cjk_lorem_parity(self) -> None:
+    def test_cjk_lorem_prefix_safety_and_empty_pptx_parity(self) -> None:
         # 1. CJK-adjacent lorem ipsum must fail identically in Node and Python
         cjk_lorem = "这是中文lorem ipsum示例\n"
         rn = run_node(["check", "-", "--stdin-filename", "x.md"], stdin_text=cjk_lorem)
@@ -58,22 +58,7 @@ class ConformanceParityTests(unittest.TestCase):
         self.assertEqual(rn2.returncode, 1)
         self.assertEqual(rp2.returncode, 1)
 
-        # 3. Verify rejects changed date, unit, citation, and relative link in both runtimes
-        before = "It is worth noting that on 2026-11-21 payload was 12 kg [Smith2024] (see [spec](./one.md))."
-        after_bad = "On 2026-12-31 payload was 12 lb [Brown2024] (see [spec](./two.md))."
-        vn = run_node(["verify", "--before-text", before, "--after-text", after_bad, "--json"])
-        vp = run_py(["verify", "--before-text", before, "--after-text", after_bad, "--json"])
-        self.assertEqual(vn.returncode, 1)
-        self.assertEqual(vp.returncode, 1)
-        jn = json.loads(vn.stdout)
-        jp = json.loads(vp.stdout)
-        self.assertTrue(jn["invariants"]["dates"]["removed"])
-        self.assertTrue(jp["invariants"]["dates"]["removed"])
-        self.assertTrue(jn["invariants"]["numbers"]["removed"])
-        self.assertTrue(jn["invariants"]["citations"]["removed"])
-        self.assertTrue(jn["invariants"]["urls"]["removed"])
-
-        # 4. Incomplete PPTX archive (missing slides) exits 2 in both runtimes
+        # 3. Incomplete PPTX archive (missing slides) exits 2 in both runtimes
         with tempfile.TemporaryDirectory() as tmp:
             bad_pptx = Path(tmp) / "empty.pptx"
             with zipfile.ZipFile(bad_pptx, "w") as zf:
@@ -123,7 +108,7 @@ class ConformanceParityTests(unittest.TestCase):
                     "<p:sp><p:nvSpPr><p:nvPr><p:ph type=\"title\"/></p:nvPr></p:nvSpPr>"
                     "<p:txBody><a:bodyPr><a:normAutofit fontScale=\"62000\"/></a:bodyPr>"
                     "<a:p><a:r><a:t>Overview</a:t></a:r></a:p></p:txBody></p:sp>"
-                    "<p:sp><p:spPr><a:xfrm><a:off x=\"8500000\" y=\"0\"/><a:ext cx=\"2000000\" cy=\"500000\"/></a:xfrm></p:spPr>"
+                    "<p:sp>"
                     f"<p:txBody><a:p><a:r><a:t>[insert</a:t></a:r><a:r><a:t> owner] {many_words}</a:t></a:r></a:p></p:txBody></p:sp>"
                     "</p:sld>",
                 )
@@ -148,9 +133,9 @@ class ConformanceParityTests(unittest.TestCase):
             self.assertIn(("unfilled-placeholder", "slide 1"), node_rules)
             self.assertIn(("slide-word-wall", "slide 1"), node_rules)
             self.assertIn(("slide-autofit-shrink", "slide 1"), node_rules)
-            self.assertIn(("office-pdf-hygiene", "slide 1"), node_rules)
+            self.assertIn(("slide-weak-topic-title", "slide 1"), node_rules)
 
-    def test_docx_tracked_changes_and_markdown_leak_parity(self) -> None:
+    def test_docx_markdown_leak_and_prose_slop_parity(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             docx_path = Path(tmp) / "draft.docx"
             with zipfile.ZipFile(docx_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
@@ -158,7 +143,8 @@ class ConformanceParityTests(unittest.TestCase):
                     "word/document.xml",
                     '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
                     "<w:body>"
-                    "<w:p><w:r><w:t>**Unrendered Bold**</w:t></w:r><w:ins><w:r><w:t> added</w:t></w:r></w:ins></w:p>"
+                    "<w:p><w:r><w:t>Certainly! </w:t></w:r><w:r><w:t>Here is the update.</w:t></w:r></w:p>"
+                    "<w:p><w:r><w:t>**Unrendered Bold**: </w:t></w:r><w:r><w:t>Ship on Friday.</w:t></w:r></w:p>"
                     "</w:body></w:document>",
                 )
             r_node = run_node(["check", str(docx_path), "--json"], cwd=Path(tmp))
@@ -169,23 +155,24 @@ class ConformanceParityTests(unittest.TestCase):
             p_ids = {f["ruleId"] for f in json.loads(r_py.stdout)["findings"]}
             self.assertEqual(n_ids, p_ids)
             self.assertIn("markdown-leak", n_ids)
-            self.assertIn("office-pdf-hygiene", n_ids)
+            self.assertIn("chatbot-artifact", n_ids)
 
     def test_mcp_protocol_parity_and_input_validation(self) -> None:
         requests = "\n".join(
             [
                 json.dumps({"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2025-06-18"}}),
-                json.dumps({"jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": {"name": "dislop_check", "arguments": {}}}),
+                json.dumps({"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}}),
+                json.dumps({"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "dislop_check", "arguments": {}}}),
                 json.dumps(
                     {
                         "jsonrpc": "2.0",
-                        "id": 3,
+                        "id": 4,
                         "method": "tools/call",
                         "params": {
-                            "name": "dislop_verify",
+                            "name": "dislop_check",
                             "arguments": {
-                                "before": "It is worth noting that latency is up to 12 ms.",
-                                "after": "Latency is up to 12 ms.",
+                                "text": "Certainly! Here is the update. It is worth noting that latency dropped.",
+                                "filename": "note.md",
                             },
                         },
                     }
@@ -200,14 +187,18 @@ class ConformanceParityTests(unittest.TestCase):
 
         self.assertEqual(node_msgs[0]["result"]["protocolVersion"], "2025-06-18")
         self.assertEqual(py_msgs[0]["result"]["protocolVersion"], "2025-06-18")
-        # Empty dislop_check must return isError=True instead of pretending 0 findings!
-        self.assertTrue(node_msgs[1]["result"]["isError"])
-        self.assertTrue(py_msgs[1]["result"]["isError"])
-        # Valid dislop_verify must accept in both!
-        n_ver = json.loads(node_msgs[2]["result"]["content"][0]["text"])
-        p_ver = json.loads(py_msgs[2]["result"]["content"][0]["text"])
-        self.assertTrue(n_ver["ok"])
-        self.assertTrue(p_ver["ok"])
+        node_tool_names = [t["name"] for t in node_msgs[1]["result"]["tools"]]
+        py_tool_names = [t["name"] for t in py_msgs[1]["result"]["tools"]]
+        self.assertEqual(node_tool_names, ["dislop_check", "dislop_explain", "dislop_packs"])
+        self.assertEqual(py_tool_names, node_tool_names)
+        # Empty dislop_check must return isError=True
+        self.assertTrue(node_msgs[2]["result"]["isError"])
+        self.assertTrue(py_msgs[2]["result"]["isError"])
+        # Valid dislop_check returns identical rule hits
+        n_chk = json.loads(node_msgs[3]["result"]["content"][0]["text"])
+        p_chk = json.loads(py_msgs[3]["result"]["content"][0]["text"])
+        self.assertEqual(n_chk["count"], p_chk["count"])
+        self.assertEqual([f["ruleId"] for f in n_chk["findings"]], [f["ruleId"] for f in p_chk["findings"]])
 
 
 if __name__ == "__main__":

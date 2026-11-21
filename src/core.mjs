@@ -3,7 +3,7 @@
  * Shared identically by Node CLI, Node MCP server, and Browser Workbench (`site/`).
  */
 
-export const ENGINE_VERSION = "0.2.0";
+export const ENGINE_VERSION = "0.3.0";
 
 export const SEVERITY_RANK = {
   info: 1,
@@ -11,14 +11,6 @@ export const SEVERITY_RANK = {
   error: 3,
   never: 99,
 };
-
-export const DISPLACEMENT_FAMILIES = new Set([
-  "frame/negation-pivot",
-  "frame/staccato",
-  "frame/triad",
-  "frame/ending",
-  "frame/list-wall",
-]);
 
 const EXT_TO_MODALITY = {
   ".md": "markdown",
@@ -32,7 +24,6 @@ const EXT_TO_MODALITY = {
   ".svg": "svg",
   ".docx": "docx",
   ".pptx": "pptx",
-  ".pdf": "pdf",
 };
 
 export function detectModality(filename = "") {
@@ -498,27 +489,6 @@ function parseColorRgb(raw) {
   return null;
 }
 
-export function relativeLuminance([r, g, b]) {
-  const chan = [r, g, b].map((v) => {
-    const s = v / 255;
-    return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-  });
-  return 0.2126 * chan[0] + 0.7152 * chan[1] + 0.0722 * chan[2];
-}
-
-export function contrastRatio(rgbA, rgbB) {
-  const l1 = relativeLuminance(rgbA);
-  const l2 = relativeLuminance(rgbB);
-  const hi = Math.max(l1, l2);
-  const lo = Math.min(l1, l2);
-  return (hi + 0.05) / (lo + 0.05);
-}
-
-function lightnessStar(rgb) {
-  const y = relativeLuminance(rgb);
-  return y <= 0.008856 ? y * 903.3 : Math.cbrt(y) * 116 - 16;
-}
-
 function rgbToHsl([r, g, b]) {
   const rn = r / 255;
   const gn = g / 255;
@@ -573,120 +543,6 @@ function probeUiDeadControl(rawText) {
     }
   }
   return hits;
-}
-
-function collectCssVars(cssText) {
-  const vars = new Map();
-  const rootRe = /:root\s*\{([^}]*)\}/gi;
-  let m;
-  while ((m = rootRe.exec(cssText)) !== null) {
-    const body = m[1];
-    const declRe = /(--[A-Za-z0-9_-]+)\s*:\s*([^;]+);?/g;
-    let dm;
-    while ((dm = declRe.exec(body)) !== null) {
-      const rgb = parseColorRgb(dm[2]);
-      if (rgb) vars.set(dm[1], rgb);
-    }
-  }
-  return vars;
-}
-
-function resolveColorToken(rawVal, vars) {
-  if (!rawVal) return null;
-  const direct = parseColorRgb(rawVal);
-  if (direct) return direct;
-  const vm = rawVal.trim().match(/^var\(\s*(--[A-Za-z0-9_-]+)\s*\)$/);
-  if (vm && vars.has(vm[1])) return vars.get(vm[1]);
-  return null;
-}
-
-function probeUiContrastAndDarkInversion(rawText) {
-  const clean = rawText
-    .replace(/<!--\s*dislop-quote-start\s*-->[\s\S]*?<!--\s*dislop-quote-end\s*-->/gi, preserveLinesBlank)
-    .replace(/<!--[\s\S]*?-->/g, preserveLinesBlank)
-    .replace(/\/\*[\s\S]*?\*\//g, preserveLinesBlank);
-
-  const hits = [];
-  const rootVars = collectCssVars(clean);
-
-  // 1. Check CSS declaration blocks and inline style="..." pairs
-  const blockRe = /([^{};>\n][^{};\n]*)\{([^{}]+)\}|style\s*=\s*"([^"]+)"/gi;
-  let bm;
-  while ((bm = blockRe.exec(clean)) !== null) {
-    const selector = (bm[1] || "").trim();
-    const body = bm[2] || bm[3] || "";
-    const props = new Map();
-    const localVars = new Map(rootVars);
-
-    const declRe = /([A-Za-z_-][A-Za-z0-9_-]*|--[A-Za-z0-9_-]+)\s*:\s*([^;]+);?/g;
-    let dm;
-    while ((dm = declRe.exec(body)) !== null) {
-      const key = dm[1].trim().toLowerCase();
-      const val = dm[2].trim();
-      props.set(key, val);
-      if (key.startsWith("--")) {
-        const rgb = parseColorRgb(val);
-        if (rgb) localVars.set(dm[1].trim(), rgb);
-      }
-    }
-
-    const fg = resolveColorToken(props.get("color"), localVars);
-    const bg = resolveColorToken(props.get("background-color") || props.get("background"), localVars);
-    if (fg && bg) {
-      const ratio = contrastRatio(fg, bg);
-      const fsMatch = (props.get("font-size") || "").match(/^(\d+(?:\.\d+)?)px$/i);
-      const fontPx = fsMatch ? Number(fsMatch[1]) : 16;
-      const isBold = /^(?:bold|[6789]00)$/i.test((props.get("font-weight") || "").trim());
-      const minRatio = fontPx >= 24 || (fontPx >= 18.66 && isBold) ? 3.0 : 4.5;
-      if (ratio < minRatio) {
-        hits.push({ index: bm.index, length: bm[0].length });
-      }
-    }
-
-    // 2. Dark-mode Z-luminance inversion check on custom property blocks
-    if (/(?:\.dark\b|data-theme\s*=\s*["']?dark|theme-dark)/i.test(selector)) {
-      checkDarkElevationBlock(localVars, body, bm.index, bm[0].length, hits);
-    }
-  }
-
-  // Also check @media (prefers-color-scheme: dark) { :root { ... } }
-  const mediaDarkRe = /@media\s*\(\s*prefers-color-scheme\s*:\s*dark\s*\)\s*\{([\s\S]*?\})\s*\}/gi;
-  let mm;
-  while ((mm = mediaDarkRe.exec(clean)) !== null) {
-    const innerVars = new Map();
-    const declRe = /(--[A-Za-z0-9_-]+)\s*:\s*([^;]+);?/g;
-    let dm;
-    while ((dm = declRe.exec(mm[1])) !== null) {
-      const rgb = parseColorRgb(dm[2]);
-      if (rgb) innerVars.set(dm[1], rgb);
-    }
-    checkDarkElevationBlock(innerVars, mm[1], mm.index, mm[0].length, hits);
-  }
-
-  return hits;
-}
-
-function checkDarkElevationBlock(varMap, bodyText, index, length, hits) {
-  const baseRoles = [];
-  const raisedRoles = [];
-  for (const [name, rgb] of varMap.entries()) {
-    if (!bodyText.includes(name)) continue;
-    const lower = name.toLowerCase();
-    if (/(?:inset|well|sunken|input|code|backdrop|overlay|shadow)/.test(lower)) continue;
-    if (/^--(?:bg|background|page|paper|canvas|stage|ground)$/.test(lower)) {
-      baseRoles.push({ name, lStar: lightnessStar(rgb) });
-    } else if (/^--(?:surface|card|sheet|raised|panel|elevated|popover|modal)(?:-[12])?$/.test(lower)) {
-      raisedRoles.push({ name, lStar: lightnessStar(rgb) });
-    }
-  }
-  for (const base of baseRoles) {
-    for (const raised of raisedRoles) {
-      if (base.lStar > raised.lStar + 1.5) {
-        hits.push({ index, length });
-        return;
-      }
-    }
-  }
 }
 
 function probeUiAiGradient(rawText) {
@@ -790,48 +646,6 @@ function probeUiBoxInBox(rawText) {
   return hits;
 }
 
-function probeSvgTextOverflow(rawText) {
-  const hits = [];
-  const svgMatch = rawText.match(/<svg\b([^>]*)>([\s\S]*?)<\/svg>/i);
-  if (!svgMatch) return hits;
-  const svgAttrs = svgMatch[1] || "";
-  const svgBody = svgMatch[2] || "";
-  const isDecorative = /\baria-hidden\s*=\s*["']true["']/i.test(svgAttrs);
-  const hasA11y = /<title\b[^>]*>[^<]+<\/title>/i.test(svgBody) || /\baria-label\s*=\s*["'][^"']+["']/i.test(svgAttrs);
-  if (!isDecorative && !hasA11y) {
-    hits.push({ index: svgMatch.index, length: Math.min(svgMatch[0].length, 80) });
-  }
-
-  const vb = svgAttrs.match(/\bviewBox\s*=\s*["']\s*([-\d.]+)[,\s]+([-\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)\s*["']/i);
-  if (!vb) return hits;
-  const minX = Number(vb[1]);
-  const vbWidth = Number(vb[3]);
-  const maxX = minX + vbWidth;
-
-  const textRe = /<text\b([^>]*)>([\s\S]*?)<\/text>/gi;
-  let tm;
-  while ((tm = textRe.exec(rawText)) !== null) {
-    const attrs = tm[1] || "";
-    const content = (tm[2] || "").replace(/<[^>]+>/g, "").trim();
-    if (!content) continue;
-    const xMatch = attrs.match(/\bx\s*=\s*["']([\d.-]+)["']/i);
-    const fsMatch = attrs.match(/\bfont-size\s*=\s*["']([\d.]+)(?:px)?["']/i);
-    const x = xMatch ? Number(xMatch[1]) : 0;
-    const fontSize = fsMatch ? Number(fsMatch[1]) : 16;
-    const anchor = (attrs.match(/\btext-anchor\s*=\s*["']([a-z]+)["']/i) || [])[1] || "start";
-    let estWidth = 0;
-    for (const ch of content) {
-      estWidth += /[\u4e00-\u9fff\u3000-\u303f\uff00-\uffef]/u.test(ch) ? fontSize * 1.02 : fontSize * 0.58;
-    }
-    const rightEdge = anchor === "middle" ? x + estWidth / 2 : anchor === "end" ? x : x + estWidth;
-    const leftEdge = anchor === "middle" ? x - estWidth / 2 : anchor === "end" ? x - estWidth : x;
-    if (rightEdge > maxX * 0.99 || leftEdge < minX) {
-      hits.push({ index: tm.index, length: tm[0].length });
-    }
-  }
-  return hits;
-}
-
 // ---------- Core Text Auditor ----------
 
 export function auditText(text, { filename = "<memory>", modality = null, pack, config = {}, allowSyntheticFixtures = false } = {}) {
@@ -895,16 +709,12 @@ export function auditText(text, { filename = "<memory>", modality = null, pack, 
       rawHits = probeZhHalfwidthPunctuation(zoneText);
     } else if (rule.probe === "ui-dead-control") {
       rawHits = probeUiDeadControl(text);
-    } else if (rule.probe === "ui-contrast-and-dark-inversion") {
-      rawHits = probeUiContrastAndDarkInversion(text);
     } else if (rule.probe === "ui-ai-gradient") {
       rawHits = probeUiAiGradient(text);
     } else if (rule.probe === "ui-pill-soup") {
       rawHits = probeUiPillSoup(text, pack.thresholds?.maxPillsPerFile || 6);
     } else if (rule.probe === "ui-box-in-box") {
       rawHits = probeUiBoxInBox(text);
-    } else if (rule.probe === "svg-text-overflow") {
-      rawHits = probeSvgTextOverflow(text);
     }
 
     // Sort and deduplicate overlapping spans emitted by multiple patterns of the same rule
@@ -967,10 +777,6 @@ function evaluateSyntheticBinaryFixture(fixture, rule, thresholds) {
   if (rule.probe === "office-markdown-leak" && fixture.startsWith("DOCX_RAW_MARKDOWN:")) {
     return [{ location: "para 1", match: "**Key Milestone**" }];
   }
-  if (rule.probe === "office-pdf-hygiene") {
-    if (fixture === "PPTX_OFF_SLIDE:1") return [{ location: "slide 1", match: "off-slide shape" }];
-    if (fixture === "DOCX_TRACKED_CHANGE:1") return [{ location: "para 1", match: "tracked change <w:ins>" }];
-  }
   if (rule.probe === "slide-word-wall" && fixture.startsWith("PPTX_WORD_WALL:")) {
     const count = Number(fixture.split(":")[1] || 0);
     if (count > (thresholds.maxSlideWords || 120)) return [{ location: "slide 1", match: `${count} words` }];
@@ -1012,7 +818,7 @@ export function makeFinding({ rule, filename, modality, location, line = 1, col 
   };
 }
 
-// ---------- Structured DOCX / PPTX / PDF Document Auditor ----------
+// ---------- Structured DOCX / PPTX Document Auditor ----------
 
 function decodeXmlEntities(str) {
   return str
@@ -1032,35 +838,10 @@ export function auditOoxmlEntries(entries, { filename, modality, pack, config = 
   const skipped = [];
   const rulesById = new Map((pack.rules || []).map((r) => [r.id, r]));
 
-  // Check all .rels files for leaked external `file:` links
-  const pathRule = rulesById.get("local-path-leak");
-  if (pathRule) {
-    for (const [entryName, xml] of Object.entries(entries)) {
-      if (!entryName.endsWith(".rels")) continue;
-      const relRe = /Target\s*=\s*"([^"]+)"[^>]*TargetMode\s*=\s*"External"|TargetMode\s*=\s*"External"[^>]*Target\s*=\s*"([^"]+)"/gi;
-      let rm;
-      while ((rm = relRe.exec(xml)) !== null) {
-        const target = rm[1] || rm[2] || "";
-        if (/^(?:file:|\\\\|\/Users\/|[A-Za-z]:\\)/i.test(target)) {
-          findings.push(makeFinding({ rule: pathRule, filename, modality, location: entryName, match: target.slice(0, 120) }));
-        }
-      }
-    }
-  }
-
   if (modality === "docx") {
     const docXml = entries["word/document.xml"];
     if (!docXml) {
       return { findings, skipped: [{ file: filename, reason: "Missing word/document.xml inside DOCX archive" }] };
-    }
-    const hygieneRule = rulesById.get("office-pdf-hygiene");
-    if (hygieneRule) {
-      if (/<w:(?:ins|del)\b/.test(docXml)) {
-        findings.push(makeFinding({ rule: hygieneRule, filename, modality, location: "document", match: "Unaccepted tracked changes (<w:ins>/<w:del>)" }));
-      }
-      if (entries["word/comments.xml"] && /<w:comment\b/.test(entries["word/comments.xml"])) {
-        findings.push(makeFinding({ rule: hygieneRule, filename, modality, location: "comments", match: "Unremoved review comments in word/comments.xml" }));
-      }
     }
 
     // Extract paragraphs joining <w:t> runs cleanly while excluding <w:delText>
@@ -1097,11 +878,6 @@ export function auditOoxmlEntries(entries, { filename, modality, pack, config = 
     const presXml = entries["ppt/presentation.xml"] || "";
     const presRels = entries["ppt/_rels/presentation.xml.rels"] || "";
 
-    // Parse slide size (default 9144000 x 6858000 EMU)
-    const szMatch = presXml.match(/<p:sldSz\b[^>]*\bcx="(\d+)"[^>]*\bcy="(\d+)"/);
-    const slideCx = szMatch ? Number(szMatch[1]) : 9144000;
-    const slideCy = szMatch ? Number(szMatch[2]) : 6858000;
-
     // Resolve presentation slide order via p:sldIdLst -> r:id -> Target
     const relMap = new Map();
     const relRe = /<Relationship\b[^>]*\bId="([^"]+)"[^>]*\bTarget="([^"]+)"|<Relationship\b[^>]*\bTarget="([^"]+)"[^>]*\bId="([^"]+)"/g;
@@ -1130,7 +906,6 @@ export function auditOoxmlEntries(entries, { filename, modality, pack, config = 
       return { findings, skipped: [{ file: filename, reason: "Missing ppt/slides/*.xml inside PPTX archive" }] };
     }
 
-    const hygieneRule = rulesById.get("office-pdf-hygiene");
     const mdLeakRule = rulesById.get("markdown-leak");
     const wordWallRule = rulesById.get("slide-word-wall");
     const bulletRule = rulesById.get("slide-bullet-overload");
@@ -1155,7 +930,7 @@ export function auditOoxmlEntries(entries, { filename, modality, pack, config = 
         }
       }
 
-      // Inspect shapes (<p:sp>) for off-slide text, title, bullets, and joined paragraphs
+      // Inspect shapes (<p:sp>) for title, bullets, and joined paragraphs
       const spRe = /<p:sp\b[\s\S]*?<\/p:sp>/g;
       const slideParagraphs = [];
       let titleText = "";
@@ -1186,20 +961,6 @@ export function auditOoxmlEntries(entries, { filename, modality, pack, config = 
         if (paras.length === 0) continue;
         if (isTitle && !titleText) titleText = paras.join(" ");
         if (!isFooterOrNum) slideParagraphs.push(...paras);
-
-        // Off-slide text shape geometry check
-        if (hygieneRule) {
-          const xfrm = sp.match(/<a:xfrm\b[^>]*>[\s\S]*?<a:off\b[^>]*\bx="(-?\d+)"[^>]*\by="(-?\d+)"[\s\S]*?<a:ext\b[^>]*\bcx="(\d+)"[^>]*\bcy="(\d+)"/);
-          if (xfrm) {
-            const x = Number(xfrm[1]);
-            const y = Number(xfrm[2]);
-            const cx = Number(xfrm[3]);
-            const cy = Number(xfrm[4]);
-            if (x + cx > slideCx * 1.02 || y + cy > slideCy * 1.02 || x < -slideCx * 0.02 || y < -slideCy * 0.02) {
-              findings.push(makeFinding({ rule: hygieneRule, filename, modality, location: `slide ${slideNum}`, line: slideNum, match: `Off-slide text frame: "${paras[0].slice(0, 48)}"` }));
-            }
-          }
-        }
       }
 
       const fullSlideText = slideParagraphs.join("\n");
@@ -1236,279 +997,6 @@ export function auditOoxmlEntries(entries, { filename, modality, pack, config = 
   }
 
   return { findings, skipped };
-}
-
-/**
- * Structural PDF inspector over Latin1-decoded raw PDF bytes + optional inflated stream strings.
- * Explicitly marks prose extraction as skipped unless extracted text is supplied (honest coverage!).
- */
-export function auditPdfStructure(rawLatin1, inflatedStreams = [], { filename, pack }) {
-  const findings = [];
-  const skipped = [];
-  const rulesById = new Map((pack.rules || []).map((r) => [r.id, r]));
-  const pathRule = rulesById.get("local-path-leak");
-  const hygieneRule = rulesById.get("office-pdf-hygiene");
-
-  if (!rawLatin1.startsWith("%PDF-")) {
-    return {
-      findings,
-      skipped: [{ file: filename, reason: "File does not begin with a %PDF- header" }],
-    };
-  }
-  if (/\/Encrypt\b/.test(rawLatin1)) {
-    return {
-      findings,
-      skipped: [{ file: filename, reason: "Encrypted PDF cannot be inspected without password" }],
-    };
-  }
-
-  const combined = [rawLatin1, ...inflatedStreams].join("\n");
-
-  // 1. URI link annotations pointing to local files
-  const uriRe = /\/URI\s*\(([^)]{1,240})\)/g;
-  let um;
-  while ((um = uriRe.exec(combined)) !== null) {
-    const uri = um[1];
-    if (/^(?:file:|\/Users\/|\/home\/|[A-Za-z]:\\)/i.test(uri)) {
-      const rule = pathRule || hygieneRule;
-      if (rule) {
-        findings.push(makeFinding({ rule, filename, modality: "pdf", location: "PDF /URI", match: uri }));
-      }
-    }
-  }
-
-  if (hygieneRule) {
-    // 2. Raw Word/PPTX filename left in /Title
-    const titleMatch = combined.match(/\/Title\s*\(([^)]{1,200})\)/);
-    if (titleMatch) {
-      const title = titleMatch[1].trim();
-      if (/^Microsoft (?:Word|PowerPoint)\s*-|\.(?:docx?|pptx?|key|pages)$/i.test(title)) {
-        findings.push(
-          makeFinding({
-            rule: { ...hygieneRule, severity: "warning" },
-            filename,
-            modality: "pdf",
-            location: "PDF /Info",
-            match: `/Title (${title})`,
-          })
-        );
-      }
-    }
-
-    // 3. FontDescriptor missing embedded /FontFile*
-    const fdRe = /<<[\s\S]{0,600}?\/Type\s*\/FontDescriptor[\s\S]{0,600}?>>/g;
-    let fm;
-    while ((fm = fdRe.exec(combined)) !== null) {
-      if (!/\/FontFile[23]?\b/.test(fm[0])) {
-        const fn = (fm[0].match(/\/FontName\s*\/([^\s/>]+)/) || [])[1] || "unknown-font";
-        findings.push(
-          makeFinding({
-            rule: { ...hygieneRule, severity: "warning" },
-            filename,
-            modality: "pdf",
-            location: "PDF /FontDescriptor",
-            match: `Unembedded font: ${fn}`,
-          })
-        );
-        break;
-      }
-    }
-
-    // 4. Mixed /MediaBox sizes across pages
-    const mbRe = /\/MediaBox\s*\[\s*([-\d.]+)\s+([-\d.]+)\s+([\d.]+)\s+([\d.]+)\s*\]/g;
-    const boxes = [];
-    let mbm;
-    while ((mbm = mbRe.exec(combined)) !== null) {
-      boxes.push([Number(mbm[3]) - Number(mbm[1]), Number(mbm[4]) - Number(mbm[2])]);
-    }
-    if (boxes.length >= 2) {
-      const [w0, h0] = boxes[0];
-      if (boxes.some(([w, h]) => Math.abs(w - w0) > 4 || Math.abs(h - h0) > 4)) {
-        findings.push(
-          makeFinding({
-            rule: { ...hygieneRule, severity: "warning" },
-            filename,
-            modality: "pdf",
-            location: "PDF /MediaBox",
-            match: "Inconsistent page dimensions across PDF pages",
-          })
-        );
-      }
-    }
-  }
-
-  skipped.push({
-    file: `${filename}#prose`,
-    reason: "PDF structural/URI/font metadata checked; full CID prose extraction skipped in zero-dep mode",
-  });
-  return { findings, skipped };
-}
-
-// ---------- Stage 3: Deterministic Revision Verifier (`dislop verify`) ----------
-
-function multisetCounts(items) {
-  const map = new Map();
-  for (const item of items) {
-    map.set(item, (map.get(item) || 0) + 1);
-  }
-  return map;
-}
-
-function diffMultisets(beforeItems, afterItems) {
-  const bMap = multisetCounts(beforeItems);
-  const aMap = multisetCounts(afterItems);
-  const removed = [];
-  const added = [];
-  for (const [k, bCount] of bMap.entries()) {
-    const aCount = aMap.get(k) || 0;
-    for (let i = 0; i < bCount - aCount; i += 1) removed.push(k);
-  }
-  for (const [k, aCount] of aMap.entries()) {
-    const bCount = bMap.get(k) || 0;
-    for (let i = 0; i < aCount - bCount; i += 1) added.push(k);
-  }
-  return { removed, added };
-}
-
-export function extractProtectedFacts(text, { remediatedBasenames = new Set() } = {}) {
-  const codeBlocks = (text.match(/```[\s\S]*?```/g) || []).map((s) => s.trim());
-  const strippedBlocks = text.replace(/```[\s\S]*?```/g, " ");
-  const codeSpans = (strippedBlocks.match(/`[^`\n]+`/g) || []).map((s) => s.trim());
-  const strippedCode = strippedBlocks.replace(/`[^`\n]+`/g, " ");
-
-  const urls = [
-    ...(strippedCode.match(/https?:\/\/[^\s)>"'`]+/g) || []).map((u) => u.replace(/[.,;!?]+$/, "")),
-    ...Array.from(strippedCode.matchAll(/\]\(([^)\s]+)\)/g), (m) => {
-      const target = m[1].trim();
-      const base = target.split(/[\\/]/).pop();
-      if (/^(?:file:|\/Users\/|\/home\/|[A-Za-z]:\\)/i.test(target) || remediatedBasenames.has(base)) {
-        return `asset:${base}`;
-      }
-      return target;
-    }),
-  ];
-
-  const dates = (
-    strippedCode.match(
-      /\b\d{4}-\d{2}-\d{2}\b|\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2}(?:,\s*\d{4})?\b|\d{4}\s*年\s*\d{1,2}\s*月(?:\s*\d{1,2}\s*日)?|\d{1,2}\s*月\s*\d{1,2}\s*日/giu
-    ) || []
-  ).map((d) => d.toLowerCase().replace(/\s+/g, " ").trim());
-
-  // Mask ISO dates before number scan so 2026-11-21 isn't double-split
-  const noDates = strippedCode.replace(/\b\d{4}-\d{2}-\d{2}\b/g, " ");
-
-  const citations = (
-    strippedCode.match(/\[\^?[A-Za-z0-9_.-]{1,32}\](?!\()|\([A-Z][A-Za-z\s.&]{1,30},\s*(?:19|20)\d{2}[a-z]?\)/g) || []
-  ).map((s) => s.trim());
-
-  // Extract numbers together with immediately attached qualifier ("up to", "最多") and unit ("%", "kg", "ms", "分钟")
-  const numRe = /(?<![A-Za-z0-9_/])(?:(?:\b(?:up to|at least|under|over|above|below|max|min)\s+|(?:最多|至少|不超过|低于|高于|约)\s*))?(?:[$¥€£]\s*)?\d+(?:,\d{3})*(?:\.\d+)?(?:\s*[-–~]\s*\d+(?:,\d{3})*(?:\.\d+)?)?(?:\s*(?:%|(?:ms|s|sec|seconds?|min|minutes?|hrs?|hours?|days?|weeks?|months?|years?|kb|mb|gb|tb|qps|rps|bps|mbps|gbps|hz|khz|mhz|ghz|fps|kg|lb|lbs|g|mg|km|cm|mm|m|w|kw|px|pt|rows?|nodes?|decks?|x)(?![A-Za-z])|倍|秒|分钟|小时|天|个月|年|万|亿|公斤|千克|克|公里|米|厘米|毫米|行|页|张|枚|条|个|所|人|次))?/giu;
-  const numbers = [];
-  let nm;
-  while ((nm = numRe.exec(noDates)) !== null) {
-    const normalized = nm[0]
-      .toLowerCase()
-      .replace(/(\d),(\d{3})/g, "$1$2")
-      .replace(/\s+/g, " ")
-      .trim();
-    if (normalized) numbers.push(normalized);
-  }
-
-  return {
-    numbers,
-    dates,
-    urls,
-    codeSpans,
-    codeBlocks,
-    citations,
-  };
-}
-
-export function verifyRevision(beforeText, afterText, { filename = "draft.md", modality = null, pack, config = {}, allowFactDrop = false } = {}) {
-  const beforeAudit = auditText(beforeText, { filename, modality, pack, config });
-  const afterAudit = auditText(afterText, { filename, modality, pack, config });
-
-  const leakedBasenames = new Set(
-    Array.from(beforeText.matchAll(/\]\(((?:file:|\/Users\/|\/home\/|[A-Za-z]:\\)[^)\s]+)\)/gi), (m) =>
-      m[1].trim().split(/[\\/]/).pop()
-    )
-  );
-  const beforeFacts = extractProtectedFacts(beforeText, { remediatedBasenames: leakedBasenames });
-  const afterFacts = extractProtectedFacts(afterText, { remediatedBasenames: leakedBasenames });
-
-  const invariants = {
-    numbers: diffMultisets(beforeFacts.numbers, afterFacts.numbers),
-    dates: diffMultisets(beforeFacts.dates, afterFacts.dates),
-    urls: diffMultisets(beforeFacts.urls, afterFacts.urls),
-    codeSpans: diffMultisets(beforeFacts.codeSpans, afterFacts.codeSpans),
-    codeBlocks: diffMultisets(beforeFacts.codeBlocks, afterFacts.codeBlocks),
-    citations: diffMultisets(beforeFacts.citations, afterFacts.citations),
-  };
-
-  const beforeRuleCounts = multisetCounts(beforeAudit.findings.map((f) => f.ruleId));
-  const afterRuleCounts = multisetCounts(afterAudit.findings.map((f) => f.ruleId));
-  const resolved = diffMultisets(
-    Array.from(beforeAudit.findings, (f) => f.ruleId),
-    Array.from(afterAudit.findings, (f) => f.ruleId)
-  ).removed;
-  const introduced = diffMultisets(
-    Array.from(beforeAudit.findings, (f) => f.ruleId),
-    Array.from(afterAudit.findings, (f) => f.ruleId)
-  ).added;
-
-  const beforeFamilies = new Set(beforeAudit.findings.map((f) => f.family));
-  const displaced = afterAudit.findings
-    .filter((f) => DISPLACEMENT_FAMILIES.has(f.family) && !beforeFamilies.has(f.family))
-    .map((f) => ({ ruleId: f.ruleId, family: f.family, match: f.match }));
-
-  const reasons = [];
-  if (!allowFactDrop) {
-    for (const [category, delta] of Object.entries(invariants)) {
-      if (delta.removed.length > 0) {
-        reasons.push(`Protected ${category} removed or altered: ${delta.removed.join(", ")}`);
-      }
-      if (delta.added.length > 0) {
-        reasons.push(`Unverified ${category} invented in revision: ${delta.added.join(", ")}`);
-      }
-    }
-  }
-
-  const afterCoreErrors = afterAudit.findings.filter((f) => f.tier === "invariant" || f.severity === "error");
-  if (afterCoreErrors.length > 0) {
-    reasons.push(`Revision contains ${afterCoreErrors.length} invariant error(s): ${afterCoreErrors.map((f) => f.ruleId).join(", ")}`);
-  }
-
-  if (displaced.length > 0) {
-    reasons.push(
-      `Second-order slop displacement detected (${displaced.map((d) => `${d.ruleId}: "${d.match}"`).join("; ")})`
-    );
-  }
-
-  if (beforeAudit.findings.length > 0 && afterAudit.findings.length >= beforeAudit.findings.length) {
-    reasons.push(
-      `Finding count did not improve (before: ${beforeAudit.findings.length}, after: ${afterAudit.findings.length})`
-    );
-  }
-
-  for (const [ruleId, count] of afterRuleCounts.entries()) {
-    if (count > (beforeRuleCounts.get(ruleId) || 0)) {
-      reasons.push(`Introduced new finding '${ruleId}'`);
-    }
-  }
-
-  const ok = reasons.length === 0;
-  return {
-    ok,
-    status: ok ? "accepted" : "rejected",
-    beforeCount: beforeAudit.findings.length,
-    afterCount: afterAudit.findings.length,
-    invariants,
-    resolved,
-    introduced,
-    displaced,
-    reasons,
-    afterFindings: afterAudit.findings,
-  };
 }
 
 // ---------- Output Formatters (text, json, sarif, github, md) ----------

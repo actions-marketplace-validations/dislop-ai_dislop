@@ -9,8 +9,8 @@
     "zh": "演示文稿、Web 界面与平面视觉"
   },
   "summary": {
-    "en": "Audits PowerPoint slide word-walls, bullet caps, autofit text shrink, weak topic titles, default purple-pink AI gradients, pill-badge soup, triple nested cards, prompt-echo chrome, and SVG clipping.",
-    "zh": "检查幻灯片文字墙、项目符号超限、字号自动缩排、弱结论标题，以及界面紫粉渐变、胶囊徽章堆砌、三层套盒、提示词回声标签与 SVG 裁切风险。"
+    "en": "Flags PowerPoint slide word-walls, bullet overload, autofit text shrink, weak topic titles, default purple-pink AI gradients, pill-badge soup, triple nested cards, and prompt-echo chrome.",
+    "zh": "检查幻灯片文字墙、要点过多、字号自动缩排、空泛标题，以及网页里的默认紫粉渐变、满屏胶囊标签、三层套盒与提示词营销徽章。"
   },
   "modalities": ["html", "css", "jsx", "svg", "pptx"],
   "thresholds": {
@@ -281,42 +281,8 @@
           "<p>Supercharge Your Workflow today</p>"
         ],
         "clean": [
-          "<span>Checks Markdown, HTML, SVG, DOCX, PPTX, and PDF metadata</span>",
-          "<button type=\"submit\">Verify revision</button>"
-        ]
-      }
-    },
-    {
-      "id": "svg-text-overflow-or-a11y",
-      "tier": "taste",
-      "severity": "warning",
-      "family": "ui/slop-chrome",
-      "probe": "svg-text-overflow",
-      "modalities": ["svg"],
-      "message": {
-        "en": "Standalone SVG contains `<text>` likely to clip outside `viewBox` on fallback fonts, or omits `<title>`/`aria-label`.",
-        "zh": "独立 SVG 中的 `<text>` 在回退字体下存在超出 `viewBox` 裁切风险，或缺少 `<title>`/`aria-label` 无障碍说明。"
-      },
-      "deletionTest": {
-        "en": "Leave >= 12% horizontal safety margin for `<text>` inside `viewBox` (or convert wordmarks to `<path>` outlines) and include `<title>`.",
-        "zh": "为 SVG `<text>` 预留充足宽度余量（或将品牌字标转为 `<path>` 轮廓），并补充 `<title>`。"
-      },
-      "exemplar": {
-        "bad": "<svg viewBox=\"0 0 200 40\"><text x=\"10\" y=\"28\" font-size=\"24\">Long fallback string that clips past 200px</text></svg>",
-        "trap": "<svg viewBox=\"0 0 200 40\"><text x=\"10\" y=\"28\" font-size=\"5\">Tiny 5px unreadable text</text></svg>",
-        "good": "<svg viewBox=\"0 0 420 40\" role=\"img\" aria-label=\"Release timeline\"><title>Release timeline</title><text x=\"16\" y=\"26\" font-size=\"16\">Q1–Q4 rollout</text></svg>",
-        "note": {
-          "en": "Caught our own v0.1.0 banner overflow on Verdana fallback.",
-          "zh": "本规则曾检出本仓库 v0.1.0 横幅在 Linux 回退字体下的右侧裁切问题。"
-        },
-        "source": "original"
-      },
-      "fixtures": {
-        "hit": [
-          "<svg viewBox=\"0 0 180 40\"><text x=\"20\" y=\"25\" font-size=\"20\">Overflowing fallback headline text</text></svg>"
-        ],
-        "clean": [
-          "<svg viewBox=\"0 0 320 48\" role=\"img\" aria-label=\"dislop mark\"><title>dislop mark</title><text x=\"16\" y=\"30\" font-size=\"16\">dislop</text></svg>"
+          "<span>Checks Markdown, HTML, DOCX, and PPTX</span>",
+          "<button type=\"submit\">Run check</button>"
         ]
       }
     }
