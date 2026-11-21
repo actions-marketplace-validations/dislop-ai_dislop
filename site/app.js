@@ -186,7 +186,7 @@ const I18N = {
     "radar.ecoDesc":
       "Neutral cross-modality index spanning standards, English and Chinese writing tools, deterministic linters, UI/diagram rules, code/PR governance, and an isolated contrast-watch section for evasion tools.",
     "radar.topologyNote":
-      "Community topology plan: after npm/PyPI publication, the dataset graduates to a standalone CC0-1.0 repository (dislop-ai/awesome-anti-slop, one JSON file per entry) synced back to dislop.com/radar/ via auditable offline snapshots.",
+      "Maintained inside dislop-ai/dislop and served canonically at dislop.com/radar/ to keep community attention focused; structured under dislop.radar/3 specs for a clean standalone CC0-1.0 spin-out only if external PR volume justifies it.",
     "radar.browseBtn": "Browse & Filter 87 Entries →",
     "radar.posTitle": "Non-Mainstream Design & Anti-Convergence Sources",
     "radar.posDesc":
@@ -364,7 +364,7 @@ const I18N = {
     "radar.ecoDesc":
       "中立跨媒介目录，涵盖规范研究、中英文写作工具、确定性 Linter、前端与图表规则、代码 PR 治理，并将规避检测类工具单独隔离在对照观察区。",
     "radar.topologyNote":
-      "社区拓扑规划：待主引擎发布 npm/PyPI 后，将结构化数据迁入独立 CC0-1.0 仓库（dislop-ai/awesome-anti-slop，单条目单文件 JSON），再经离线快照 PR 同步回 dislop.com/radar/。",
+      "当前随 dislop-ai/dislop 主仓同源维护并在 dislop.com/radar/ 规范发布，集中社区流量与注意力；数据结构已预留 dislop.radar/3 契约，仅在外部投稿进入高频阶段时再无损切出独立 CC0-1.0 仓库。",
     "radar.browseBtn": "检索与筛选全部 87 条资源 →",
     "radar.posTitle": "非主流高品位设计与印刷参考源",
     "radar.posDesc":
