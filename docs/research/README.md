@@ -31,7 +31,7 @@
 
 在**多形态集成与官网即服务**上，以单一零依赖核心（`src/core.mjs` + `src/dislop/`）驱动全部形态，差异化只留在触发时机与交互壳。官网 `dislop.com` 升级为 Level 0 人机双读入口：人类获得零上传浏览器清样工作台（`CSP: connect-src 'none'`）与可检索规则/资源目录，外部 Agent 通过 `/llms.txt`、`/catalog.json` 与纯 `.md` 端点按需低 Token 读取方法论、案例与工具。
 
-在**生态资源雷达的双仓联动拓扑**上，待主引擎完成正式发包后，以独立 `dislop-ai/awesome-anti-slop` 仓库（单条目 JSON + CC0-1.0 + 自动巡检）承接 GitHub 搜索与中立社区 PR，再经由离线快照同步至 `dislop.com/radar/`，并以离线可复算的事实保真与二阶漂移基准建立差异化参考系。
+在**生态资源雷达的演进拓扑**上，经冷启动期流量与注意力复盘，现阶段坚持**单仓沉淀优先**：继续由主仓维护单一事实源并直出 `dislop.com/radar/`（集中 GitHub 星标、外链与“清单 -> 工作台 -> CLI/MCP”转化，同时以平等入列和隔离对照观察区守住中立性）；仅当外部有效 PR 持续 `>= 5 条/月` 时，再按 `dislop.radar/3` 契约无损切出独立 CC0-1.0 仓库 `dislop-ai/awesome-anti-slop`，永久保留 `dislop.com/radar/` 规范地址。
 
 ## 3. 维护与自审门禁
 

@@ -37,7 +37,7 @@
 | **阶段 3 改稿复检（`verify`）** | 数字+限定词+单位、日期、URL、行内/围栏代码、引用标记多重集校验 + 二阶口号漂移拦截 | — | 离线可复算的事实保真与二阶漂移公开评测基准 |
 | **反模式查询目录（Catalog）** | 官网 29 条静态预渲染规则表（多维筛选、中英搜索、`#rule-<id>` SARIF 锚点、23 条一键工作台试跑） | 原型 CLI 多维查询已验证 | 正式落地 `dislop catalog` CLI 与 `dislop_catalog` MCP 工具 |
 | **正向差异化与个性化** | 官网工作台内置浏览器纯内存声纹统计条 + 31 条非主流设计/学术参考源 | `dislop.voice/1`、`dislop.taste/1` JSON 草案与三带可控熵边界设计 | 离线 `dislop voice extract`、S1–S4 正向骨架卡与跨文档趋同检测 |
-| **生态资源雷达** | 87 条实测核验索引（`dislop.radar/2`）与官网 `/radar/` 离线筛选目录 | `dislop.radar/3` 单条目契约与建仓模板 | 主引擎发布 npm/PyPI 后迁出独立 CC0-1.0 仓库 `dislop-ai/awesome-anti-slop`，经离线快照 PR 同步回官网 |
+| **生态资源雷达** | 87 条实测核验索引（`dislop.radar/2`）与官网 `/radar/` 离线筛选目录（随主仓维护，集中星标与流量转化） | `dislop.radar/3` 单条目契约与建仓模板（按需启用） | **冷启动期坚持单仓沉淀**；仅当外部目录 PR 持续 `>= 5 条/月` 或外部维护者明确需要独立 CC0 治理时，再平滑切出 `dislop-ai/awesome-anti-slop`，同时永久保持 `dislop.com/radar/` 规范 URL 不变 |
 
 ---
 
@@ -83,8 +83,8 @@
 
 ## 5. 分阶段演进与纪律门禁
 
-1. **G0（当前收尾与发包准备）**：完成双端引擎、官网人机双读升级、仓内 `SKILL.md`、品牌 VI 与文档整合，完成 npm 与 PyPI 正式发包，随后建仓发布 `dislop-ai/awesome-anti-slop` `v0.1.0`。
-2. **G1（`v0.3.0` 能力深化）**：将 `src/node-host.mjs` 与 `src/mcp.mjs` 从 CLI 解耦，合入 6 条新确定性探针、`dislop catalog` / `dislop_catalog`，并落地离线 `dislop verify` 基准集。
+1. **G0（当前收尾与发包准备）**：完成双端引擎、官网人机双读升级、仓内 `SKILL.md`、品牌 VI 与文档整合，完成 npm 与 PyPI 正式发包；**生态雷达留在主仓与 `dislop.com/radar/` 集中承接流量、星标与工作台转化，不提前拆仓分散注意力**。
+2. **G1（`v0.3.0` 能力深化）**：将 `src/node-host.mjs` 与 `src/mcp.mjs` 从 CLI 解耦，合入 6 条新确定性探针、`dislop catalog` / `dislop_catalog`，并落地离线 `dislop verify` 基准集；若此时雷达外部 PR 持续 `>= 5 条/月`，再按 `dislop.radar/3` 契约无损切出独立 CC0 仓。
 3. **G2（正向引擎与服务化扩展）**：推进 `dislop.voice/1` 离线提取器、`dislop.taste/1` 设计参考卡、无状态 Web Standard Fetch HTTP API 及严格解耦的端侧小模型可选插件。
 
 ### 防过度设计红线

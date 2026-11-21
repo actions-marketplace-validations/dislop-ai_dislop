@@ -6,9 +6,12 @@
 >
 > 配套草案：[radar-v3-contract.json](./awesome-anti-slop-topology/radar-v3-contract.json)（`dislop.radar/3` 契约示例） · [mvp-starter-templates.md](./awesome-anti-slop-topology/mvp-starter-templates.md)（目录树、CI 流水线、Issue/PR 模板与同步脚本边界）
 
-## 核心结论
+## 核心结论（2026-11-21 决策修订：冷启动期单仓优先，达阈值再拆仓）
 
-首选拓扑为 **方案 D（独立 `dislop-ai/awesome-anti-slop` 仓库 + `dislop.com/radar/` 人机双读目录 + 主仓 `dislop-ai/dislop` 双向联动）**。经 8 组真实开源项目实测复盘，`awesome-*` 独立仓库承担 GitHub 搜索入口、星标复利与外部 PR 协作，官网静态目录承担多维筛选、SEO/GEO 与 Agent 消费（`/llms.txt` + `/radar/index.json`），主工具仓保持内核纯净与议题零噪音。三者由同一份结构化数据驱动，避免手工双份维护。
+> [!IMPORTANT]
+> **执行时序修订**：经早期流量、星标动量与维护带宽复盘，**当前冷启动阶段暂不拆分独立 `awesome-anti-slop` 仓库**。87 条雷达事实源继续留在 `dislop-ai/dislop` 主仓并编译至统一规范入口 `https://dislop.com/radar/`，让所有搜索反 AI 味清单的访客直接为主仓积累星标并自然转化至清样工作台与 CLI/MCP。本文保留的方案 D 与 `dislop.radar/3` 契约作为**触发式拆仓预案**——当外部有效目录 PR 持续 `>= 5 条/月`、或社区维护者明确需要独立 CC0 中立仓时，再按以下设计无损切出，同时 `dislop.com/radar/` 规范 URL 权重零损失。
+
+远期目标拓扑为 **方案 D（独立 `dislop-ai/awesome-anti-slop` 仓库 + `dislop.com/radar/` 人机双读目录 + 主仓 `dislop-ai/dislop` 双向联动）**。经 8 组真实开源项目实测复盘，在社区投稿进入高频阶段后，`awesome-*` 独立仓库承担 GitHub 搜索入口、星标复利与外部 PR 协作，官网静态目录承担多维筛选、SEO/GEO 与 Agent 消费（`/llms.txt` + `/radar/index.json`），主工具仓保持内核纯净与议题零噪音。三者由同一份结构化数据驱动，避免手工双份维护。
 
 当前存在清晰的命名空间窗口。2026-11-21 GitHub Search API 实测显示，全站匹配 `awesome-anti-slop` 的公开仓库仅 3 个（最高 12★），匹配 `awesome-deslop` 为 0 个，`awesome-slop` 最高仅 28★（且为反讽列表）。`dislop` 手握 87 条已核验的跨媒介双语索引，具备以 `dislop-ai/awesome-anti-slop` 建立品类标准索引的先发条件。
 

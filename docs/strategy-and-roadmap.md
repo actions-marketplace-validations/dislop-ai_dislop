@@ -37,7 +37,7 @@ As upstream prompt skills add deterministic linters and hooks while probabilisti
 | **Revision Guard (`verify`)** | Multiset verification for numbers+qualifiers+units, dates, URLs, code, citations + second-order slogan guard | — | Public offline benchmark for fact retention & second-order drift |
 | **Anti-Pattern Catalog** | Pre-rendered 29-rule catalog on `dislop.com` with multi-facet search, `#rule-<id>` SARIF anchors, and 23 one-click `Try ↑` probes | Standalone CLI catalog query verified in prototype | Ship `dislop catalog` CLI and `dislop_catalog` MCP tool |
 | **Positive Divergence & Voice** | Browser-RAM stylometric meter preview + 31 verified non-mainstream design/academic references | Draft `dislop.voice/1`, `dislop.taste/1`, and Three-Band Entropy Partition | Local `dislop voice extract`, S1–S4 skeleton cards, and cross-document repetition checks |
-| **Ecosystem Radar** | 87 verified entries (`dislop.radar/2`) + offline filterable `/radar/` directory | `dislop.radar/3` per-entry JSON contract & starter templates | Graduate to standalone CC0-1.0 `dislop-ai/awesome-anti-slop` after npm/PyPI publish, synced via offline snapshot PRs |
+| **Ecosystem Radar** | 87 verified entries (`dislop.radar/2`) + offline filterable `/radar/` directory hosted in the main repo | `dislop.radar/3` per-entry JSON contract & starter templates (ready on demand) | **Single-repo-first during early growth** to keep star momentum and workbench conversion focused; spin out a standalone CC0-1.0 `dislop-ai/awesome-anti-slop` repo only when external radar PR volume reaches `>= 5/month` (keeping `dislop.com/radar/` canonical) |
 
 ---
 
@@ -72,8 +72,8 @@ Full visual tokens and ratios live in [design-system.md](./design-system.md). Ke
 
 ## 5. Phased Execution & Anti-Overengineering Guardrails
 
-1. **G0 (Current Packaging & Launch)**: Finalize dual-native site, canonical `SKILL.md`, VI suite, and npm/PyPI publication, then launch `dislop-ai/awesome-anti-slop` `v0.1.0`.
-2. **G1 (`v0.3.0` Deepening)**: Extract `src/node-host.mjs` and `src/mcp.mjs`, ship the 6 new deterministic probes and `dislop catalog` / `dislop_catalog`, and publish the offline `verify` benchmark.
+1. **G0 (Current Packaging & Launch)**: Finalize dual-native site, canonical `SKILL.md`, VI suite, and npm/PyPI publication while keeping the 87-entry radar inside `dislop-ai/dislop` + `dislop.com/radar/` to avoid splitting stars and attention.
+2. **G1 (`v0.3.0` Deepening)**: Extract `src/node-host.mjs` and `src/mcp.mjs`, ship the 6 new deterministic probes and `dislop catalog` / `dislop_catalog`, and publish the offline `verify` benchmark. Spin out `awesome-anti-slop` only once external PR demand crosses the threshold (`>= 5/month`).
 3. **G2 (Positive Engine & Service Layer)**: Ship offline `dislop.voice/1` extraction, `dislop.taste/1` cards, Fetch-standard stateless HTTP API, and strictly decoupled local small-model plugins.
 
 ### Hard Engineering Guardrails
