@@ -36,8 +36,8 @@
       </a>
 
       <nav class="nav-links" aria-label="主导航">
-        <a href="#cases" data-i18n="nav.cases">案例</a>
         <a href="#workbench" data-i18n="nav.workbench">在线试</a>
+        <a href="#cases" data-i18n="nav.cases">案例</a>
         <a href="#surfaces" data-i18n="nav.surfaces">怎么用</a>
         <a href="#pricing" data-i18n="nav.pricing">开源与云端</a>
         <a href="./awesome/" data-i18n="nav.awesome">87 条清单</a>
@@ -67,26 +67,26 @@
             <!-- dislop-quote-end -->
             <h1 class="lead-heading" data-i18n="lead.title">发之前，把文案和设计里的 AI 味过一遍</h1>
             <p class="lead-sub" data-i18n="lead.sub">
-              把靠谱的写作规矩、网页和 PPT 设计原则、离线检查工具和 87 条精选资源收在一起。复制下面这句话发给你的 AI 立刻就能用，也可以直接贴进来测，或装成 Skill、Plugin 和 MCP。
+              开源的 Skill 与 CLI 完全本地离线运行、零上传，免费查文档、Word、PPT 和网页；需要大模型深度审校与一键去味时，也能按需直连官方云端与远程 MCP（每月 30 免费额度）。
             </p>
-          </div>
-
-          <div class="hero-cli-inline">
-            <span class="hero-cli-label" data-i18n="lead.promptLabel">最快上手：复制这句话直接发给你的 AI / Agent（免安装）</span>
-            <div class="cmd-box is-prompt">
-              <code id="hero-prompt" data-i18n="lead.promptText">先读 https://dislop.com/llms.txt，按里面整理的文案和设计去 AI 味规矩与检查方法，帮我把接下来这份稿子发之前过一遍。</code>
-              <button type="button" class="btn-primary" style="min-height:32px;padding:6px 12px;font-size:0.8rem;flex-shrink:0;" data-copy-target="hero-prompt" data-i18n="lead.copyPromptBtn">复制发给 Agent</button>
-            </div>
           </div>
 
           <div style="display:flex;flex-direction:column;gap:10px;">
             <div class="hero-cta-row">
-              <a href="#workbench" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="lead.cta">贴一段在线试 ↓</a>
-              <a href="#surfaces" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="lead.installBtn">装 Skill / Plugin / MCP</a>
-              <a href="./awesome/" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="lead.awesomeBtn">87 条 Awesome 清单 →</a>
-              <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="lead.starBtn">GitHub 点 Star ★</a>
+              <a href="#workbench" class="btn-primary" style="min-height:36px;padding:7px 16px;font-size:0.86rem;" data-i18n="lead.cta">立刻贴一段在线试 ↓</a>
+              <a href="#cloud-token-box" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="lead.cloudBtn">免费领 30 额度远程 MCP 密钥</a>
+              <a href="#surfaces" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="lead.installBtn">装开源 Skill / CLI</a>
+              <a href="./awesome/" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="lead.awesomeBtn">工具清单 →</a>
             </div>
-            <p class="hero-reassure" data-i18n="lead.reassure">Skill 与 CLI 完全开源、默认本地离线零上传；需要大模型一键去味时，可按需调用官方云端与远程 MCP。</p>
+            <p class="hero-reassure" data-i18n="lead.reassure">默认离线查 0 上传；仅在你主动点击 AI 按钮时发往付费级零训练端点，不存草稿。</p>
+          </div>
+
+          <div class="hero-cli-inline">
+            <span class="hero-cli-label" data-i18n="lead.promptLabel">或者免安装：复制这句话直接发给任意联网 AI / Agent</span>
+            <div class="cmd-box is-prompt">
+              <code id="hero-prompt" data-i18n="lead.promptText">先读 https://dislop.com/llms.txt，按里面整理的文案和设计去 AI 味规矩与检查方法，帮我把接下来这份稿子发之前过一遍。</code>
+              <button type="button" class="ctrl-btn" style="min-height:32px;padding:5px 12px;font-size:0.8rem;flex-shrink:0;" data-copy-target="hero-prompt" data-i18n="lead.copyPromptBtn">复制发给 AI</button>
+            </div>
           </div>
         </div>
 
@@ -121,97 +121,37 @@
         </div>
       </div>
 
-      <!-- Three Areas: One-Stop Pre-Delivery Workflow -->
-      <div class="marks-strip" aria-label="三步完成交付前去 AI 味">
-        <div class="mark-pillar">
-          <div class="mark-pillar-head">
-            <span class="swatch-line swatch-warn"></span>
-            <h2 class="mark-pillar-title" data-i18n="m1.title">写前避坑：给 Agent 装规矩</h2>
-          </div>
-          <p class="mark-pillar-desc" data-i18n="m1.desc">复制发给 AI，或装上 Skill / Plugin。让模型动笔前避开空话、三段分号推销句、段尾说教和默认紫粉页面。</p>
-        </div>
+      <!-- Three Areas: Open-Core Strategy & Proven Product Value -->
+      <div class="marks-strip" aria-label="三层能力与开源云端边界">
         <div class="mark-pillar">
           <div class="mark-pillar-head">
             <span class="swatch-line swatch-error"></span>
-            <h2 class="mark-pillar-title" data-i18n="m2.title">交付前查：25 条离线规则</h2>
+            <h2 class="mark-pillar-title" data-i18n="m1.title">开源本地：Skill + CLI 零上传</h2>
           </div>
-          <p class="mark-pillar-desc" data-i18n="m2.desc">浏览器、MCP 和命令行跑同一套引擎。挑出 AI 寒暄、占位符、裸 Markdown、套话、二阶口号和 PPT / 网页模板味。</p>
+          <p class="mark-pillar-desc" data-i18n="m1.desc">Apache-2.0 永久免费。25 条离线规则在 64 份公开对抗样本上达 100% 检出与 0% 误报，直接查文档、Word、PPT、网页与 PR。</p>
+        </div>
+        <div class="mark-pillar">
+          <div class="mark-pillar-head">
+            <span class="swatch-line swatch-warn"></span>
+            <h2 class="mark-pillar-title" data-i18n="m2.title">自愈云端 AI：一键去味保数字</h2>
+          </div>
+          <p class="mark-pillar-desc" data-i18n="m2.desc">5 模型实测相比裸提示词提分 +15.8 至 +22.3。先查再改再复检，自带数字核对防漏防编，上游异常自动退额度，远程 MCP 每月 30 免费额度。</p>
         </div>
         <div class="mark-pillar">
           <div class="mark-pillar-head">
             <span class="swatch-line swatch-stet"></span>
-            <h2 class="mark-pillar-title" data-i18n="m3.title">看案例 + 87 条工具清单</h2>
+            <h2 class="mark-pillar-title" data-i18n="m3.title">免费静态资源 + 87 条精选清单</h2>
           </div>
-          <p class="mark-pillar-desc" data-i18n="m3.desc">公开真实改稿对照、0 命中翻车复盘和 87 个核验过的去 AI 味工具与规范，自己查或者转发给团队都顺手。</p>
+          <p class="mark-pillar-desc" data-i18n="m3.desc">/llms.txt、按场景切好的任务卡、真实翻车复盘和 87 个核验过的去 AI 味工具与设计参考，人读或给 Agent 读都零门槛。</p>
         </div>
       </div>
-    </section>
-
-    <!-- Real Cases Showcase (Human-first credibility & shareable content) -->
-    <section id="cases" class="section-block band-rule" aria-labelledby="cases-heading">
-      <div class="section-header">
-        <div>
-          <h2 class="section-title" id="cases-heading" data-i18n="cases.title">三个真实案例：为什么删了套词还是像 AI</h2>
-          <p class="section-desc" data-i18n="cases.desc">
-            AI 味分三层：一阶是“抓手”“赋能”这类套词，二阶是“不是 A，而是 B”这类口号，三阶是就算工具报 0 问题、读起来依然像在念推销稿的写法。下面三组对照可以直接试，也可以一键复制分享。
-          </p>
-        </div>
-        <a href="./cases/copy-contrasts.md" data-i18n="cases.readAll">看全部对照案例（.md）→</a>
-      </div>
-
-      <!-- dislop-quote-start -->
-      <div class="cases-grid" id="cases-grid">
-        <article class="case-card">
-          <span class="case-kicker">案例 01 · 工作文档与上线说明</span>
-          <h3 class="case-title">删了“抓手”，结果换成了“不是……而是……”</h3>
-          <div class="case-body">
-            <!-- dislop-ignore-next-line chatbot-artifact -- intentional before-edit case example -->
-            <div class="case-step is-bad"><span class="case-step-label">原稿（一阶套话 + AI 寒暄）</span>好的，以下是修改后的上线说明。值得注意的是，本次改造以队列分级为重要抓手，全面赋能一线运维团队，故障恢复时间最多 45 秒。</div>
-            <div class="case-step is-trap"><span class="case-step-label">改过头（掉进二阶 AI 腔）</span>队列分级已经落地，故障恢复时间最多 45 秒。这不是一次简单的升级，而是一场效率革命。</div>
-            <div class="case-step is-good"><span class="case-step-label">改干净（只留动作和结果）</span>这次改造给队列分了级，一线运维团队的故障恢复时间最多 45 秒。</div>
-          </div>
-          <div class="case-actions">
-            <button type="button" class="ctrl-btn ctrl-btn-sm" data-load-case="brief">在工作台试一下 ↓</button>
-            <button type="button" class="ctrl-btn ctrl-btn-sm" data-share-case="doc">复制这段分享</button>
-          </div>
-        </article>
-
-        <article class="case-card">
-          <span class="case-kicker">案例 02 · 真实自查（三阶结构味）</span>
-          <h3 class="case-title">检查报 0 处问题，但我们自己上一版首屏照样像 AI</h3>
-          <div class="case-body">
-            <div class="case-step is-bad"><span class="case-step-label">翻车原稿（0 命中，却满屏 AI 味）</span>把稿子、PPT 或网页贴进来。不能发的硬伤，dislop 直接划掉；听着像套话的地方，它在页边问你一句；等你改完，再拿原稿逐条对一遍。它不替你改稿，笔一直在你手里。</div>
-            <p class="case-note">毛病不在单个词，在于“三段对称分号推销句 + 假装老校对 + 段尾金句收尾”。这就是为什么单靠脚本标红线不够，必须把写作规矩一起写进 Skill 和 Plugin。</p>
-            <div class="case-step is-good"><span class="case-step-label">改回人话</span>AI 写完的文档、Word、PPT 和网页，经常留着开头寒暄、空话套话、满页字墙或默认紫粉模板。你可以直接复制一句话发给你的 AI，或者在这里在线试查。</div>
-          </div>
-          <div class="case-actions">
-            <a href="./methodology/brand-and-voice.md" class="ctrl-btn ctrl-btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">看完整复盘 →</a>
-            <button type="button" class="ctrl-btn ctrl-btn-sm" data-share-case="autopsy">复制这段分享</button>
-          </div>
-        </article>
-
-        <article class="case-card">
-          <span class="case-kicker">案例 03 · 网页与 PPT 模板味</span>
-          <h3 class="case-title">紫粉渐变 + 装饰徽章 + 点不动的空链接</h3>
-          <div class="case-body">
-            <div class="case-step is-bad"><span class="case-step-label">生成式模板原稿</span><code>from-indigo via-purple to-pink</code> 渐变标题 + <code>AI 强力驱动</code> 徽章 + <code>href=&quot;#&quot;</code> 假下载按钮。</div>
-            <div class="case-step is-good"><span class="case-step-label">改干净</span>纯色纸面和 1px 分界线、去掉装饰徽章、按钮接上真实报告路径 <code>./report.html</code>。</div>
-            <p class="case-note">同一套引擎也能直接读 `.pptx`，挑出单页字墙（&gt; 280 字）、要点超过 6 条、文字自动缩排和空泛标题。</p>
-          </div>
-          <div class="case-actions">
-            <button type="button" class="ctrl-btn ctrl-btn-sm" data-load-case="ui-chrome">在工作台试一下 ↓</button>
-            <button type="button" class="ctrl-btn ctrl-btn-sm" data-share-case="ui">复制这段分享</button>
-          </div>
-        </article>
-      </div>
-      <!-- dislop-quote-end -->
     </section>
 
     <!-- Workbench -->
     <section id="workbench" class="band-rule" aria-labelledby="wb-heading">
       <div class="workbench-header band-rule">
         <div>
-          <h2 class="sub-heading" id="wb-heading" style="margin:0;" data-i18n="wb.heading">直接在这里试一试</h2>
+          <h2 class="sub-heading" id="wb-heading" tabindex="-1" style="margin:0;" data-i18n="wb.heading">直接在这里试一试（支持粘贴或拖拽本地文件）</h2>
         </div>
         <div class="workbench-toolbar">
           <label for="pack-select" style="font-size:0.82rem;color:var(--ink-2);" data-i18n="wb.packLabel">按哪种稿子查：</label>
@@ -239,19 +179,21 @@
         </aside>
 
         <!-- Center Galley Sheet -->
-        <div class="galley-sheet">
+        <div class="galley-sheet" id="galley-dropzone">
           <div class="galley-bar">
             <div class="mode-tabs" role="group" aria-label="视图切换">
               <button type="button" id="mode-proof-btn" class="ctrl-btn is-active" aria-pressed="true" data-i18n="wb.modeProof">标出问题</button>
               <button type="button" id="mode-edit-btn" class="ctrl-btn" aria-pressed="false" data-i18n="wb.modeEdit">编辑原文</button>
             </div>
             <div class="quick-actions">
-              <button type="button" id="btn-paste-own" class="ctrl-btn" data-i18n="wb.pasteOwn">贴我的稿子</button>
+              <button type="button" id="btn-paste-own" class="btn-primary" style="min-height:30px;padding:4px 11px;font-size:0.8rem;" data-i18n="wb.pasteOwn">贴我的稿子</button>
               <button type="button" id="btn-apply-good" class="ctrl-btn" data-i18n="wb.applyClean">看改好的</button>
               <button type="button" id="btn-apply-trap" class="ctrl-btn" data-i18n="wb.tryTrap">看换了种 AI 味的</button>
               <button type="button" id="btn-reset" class="ctrl-btn" data-i18n="wb.reset">还原</button>
             </div>
           </div>
+
+          <div id="wb-applied-banner" class="wb-applied-banner" hidden aria-live="polite"></div>
 
           <div class="manuscript-stage">
             <ol id="proof-view" class="proof-lines" aria-live="polite"></ol>
@@ -269,8 +211,8 @@
               <button type="button" id="btn-ai-deslop" class="btn-primary ai-deslop-btn" data-i18n="ai.deslopBtn">AI 一键去味（2 额度）</button>
             </div>
             <div class="ai-assist-meta">
-              <span id="ai-quota-label" data-i18n="ai.anonHint">免登录每天 5 次试用额度 · 登录后每月 30 次</span>
-              <a href="#cloud-token-box" id="ai-token-link" data-i18n="ai.claimLink">领免费 Token →</a>
+              <span id="ai-quota-label" data-i18n="ai.anonHint">免登录每天 5 试用额度 · 登录后每月 30 额度</span>
+              <a href="#cloud-token-box" id="ai-token-link" data-i18n="ai.claimLink">领免费密钥 →</a>
             </div>
           </div>
 
@@ -309,13 +251,73 @@
       </div>
 
       <div class="wb-nudge">
-        <span id="wb-nudge-text" data-i18n="wb.nudgeText">测完了觉得顺手？把 dislop 装给你的 Agent，以后交付前自动查一遍，也欢迎去 GitHub 点个 Star。</span>
+        <span id="wb-nudge-text" data-i18n="wb.nudgeText">试完觉得顺手？重视隐私可装开源 Skill / CLI 本地离线跑；想免装环境直接用大模型，10 秒领免费 30 额度远程 MCP。</span>
         <div class="quick-actions">
-          <a href="#surfaces" class="btn-primary" style="min-height:30px;padding:5px 12px;font-size:0.8rem;" data-i18n="wb.nudgeInstall">装给 Agent / 看安装 ↓</a>
-          <button type="button" class="ctrl-btn ctrl-btn-sm" data-copy-target="hero-prompt" data-i18n="wb.nudgeCopy">复制发给 AI</button>
-          <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener" class="ctrl-btn ctrl-btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="wb.nudgeStar">GitHub 点 Star ★</a>
+          <a href="#cloud-token-box" class="btn-primary" style="min-height:30px;padding:5px 12px;font-size:0.8rem;" data-i18n="wb.nudgeCloud">领免费 30 额度 ↓</a>
+          <a href="#surfaces" class="ctrl-btn ctrl-btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="wb.nudgeInstall">装开源 Skill / CLI ↓</a>
+          <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener" class="ctrl-btn ctrl-btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="wb.nudgeStar">GitHub ★</a>
         </div>
       </div>
+    </section>
+
+    <!-- Real Cases Showcase -->
+    <section id="cases" class="section-block band-rule" aria-labelledby="cases-heading">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" id="cases-heading" data-i18n="cases.title">三个真实案例：为什么删了套词还是像 AI</h2>
+          <p class="section-desc" data-i18n="cases.desc">
+            AI 味分三层：一阶是“抓手”“赋能”这类套词，二阶是“不是 A，而是 B”这类口号，三阶是就算工具报 0 问题、读起来依然像在念推销稿的写法。下面三组对照可以直接试，也可以一键复制分享。
+          </p>
+        </div>
+        <a href="./cases/copy-contrasts.md" data-i18n="cases.readAll">看全部对照案例（.md）→</a>
+      </div>
+
+      <!-- dislop-quote-start -->
+      <div class="cases-grid" id="cases-grid">
+        <article class="case-card">
+          <span class="case-kicker">案例 01 · 发版简报（自愈去味 + 数字保真）</span>
+          <h3 class="case-title">清掉寒暄、官话与口号，四个核心指标一个不丢</h3>
+          <div class="case-body">
+            <!-- dislop-ignore-next-line chatbot-artifact -- intentional before-edit case example -->
+            <div class="case-step is-bad"><span class="case-step-label">原稿（AI 寒暄 + 黑话 + 喊口号）</span>好的，以下是 Q4 结算引擎升级说明。值得注意的是，本次以异步化为核心抓手，全面赋能商户体验。峰值 TPS 从 1,200 升至 4,800，P99 延迟从 210ms 降至 42ms，一致性达 99.99%。</div>
+            <div class="case-step is-trap"><span class="case-step-label">改过头（掉进二阶 AI 腔）</span>这绝非一次普通升级，而是结算架构的效率跃迁，性能实现数倍提升。</div>
+            <div class="case-step is-good"><span class="case-step-label">改干净（只留动作和真实数字）</span>Q4 结算引擎改为全链路异步化后，峰值 TPS 从 1,200 升至 4,800，P99 延迟从 210ms 降至 42ms，数据一致性 99.99%。</div>
+          </div>
+          <div class="case-actions">
+            <button type="button" class="ctrl-btn ctrl-btn-sm" data-load-case="brief">在工作台试一下 ↑</button>
+            <button type="button" class="ctrl-btn ctrl-btn-sm" data-share-case="doc">复制这段分享</button>
+          </div>
+        </article>
+
+        <article class="case-card">
+          <span class="case-kicker">案例 02 · 真实自查（三阶结构味）</span>
+          <h3 class="case-title">检查报 0 处问题，但我们自己上一版首屏照样像 AI</h3>
+          <div class="case-body">
+            <div class="case-step is-bad"><span class="case-step-label">翻车原稿（0 命中，却满屏 AI 味）</span>把稿子、PPT 或网页贴进来。不能发的硬伤，dislop 直接划掉；听着像套话的地方，它在页边问你一句；等你改完，再拿原稿逐条对一遍。它不替你改稿，笔一直在你手里。</div>
+            <p class="case-note">毛病不在单个词，在于“三段对称分号推销句 + 假装老校对 + 段尾金句收尾”。这就是为什么单靠脚本标红线不够，必须把写作规矩一起写进 Skill，并在云端叠加三阶审校。</p>
+            <div class="case-step is-good"><span class="case-step-label">改回人话</span>开源的 Skill 与 CLI 完全本地离线运行、零上传，免费查文档、Word、PPT 和网页；需要大模型深度审校与一键去味时，也能按需直连官方云端与远程 MCP。</div>
+          </div>
+          <div class="case-actions">
+            <a href="./methodology/brand-and-voice.md" class="ctrl-btn ctrl-btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">看完整复盘 →</a>
+            <button type="button" class="ctrl-btn ctrl-btn-sm" data-share-case="autopsy">复制这段分享</button>
+          </div>
+        </article>
+
+        <article class="case-card">
+          <span class="case-kicker">案例 03 · 网页与 PPT 模板味</span>
+          <h3 class="case-title">紫粉渐变 + 装饰徽章 + 点不动的空链接</h3>
+          <div class="case-body">
+            <div class="case-step is-bad"><span class="case-step-label">生成式模板原稿</span><code>from-indigo via-purple to-pink</code> 渐变标题 + <code>AI 强力驱动</code> 徽章 + <code>href=&quot;#&quot;</code> 假下载按钮。</div>
+            <div class="case-step is-good"><span class="case-step-label">改干净</span>纯色纸面和 1px 分界线、去掉装饰徽章、按钮接上真实报告路径 <code>./report.html</code>。</div>
+            <p class="case-note">同一套引擎也能直接读 `.pptx`，挑出单页字墙（&gt; 280 字）、要点超过 6 条、文字自动缩排和空泛标题。</p>
+          </div>
+          <div class="case-actions">
+            <button type="button" class="ctrl-btn ctrl-btn-sm" data-load-case="ui-chrome">在工作台试一下 ↑</button>
+            <button type="button" class="ctrl-btn ctrl-btn-sm" data-share-case="ui">复制这段分享</button>
+          </div>
+        </article>
+      </div>
+      <!-- dislop-quote-end -->
     </section>
 
     <!-- How to Use & Install (Human-friendly guide + Folded Agent technical details) -->
@@ -520,7 +522,7 @@
           </div>
           <p class="pricing-sub" data-i18n="price.t3Sub">高频写作选 Pro 更划算（比按量省 36%）；低频偶尔用可选永不过期的按量包。</p>
           <ul class="pricing-list">
-            <li data-i18n="price.t3F1">Pro（$12/月）：1,500 额度/月（约 $0.008/次），长文不限字数 + 10 份个人文风</li>
+            <li data-i18n="price.t3F1">Pro（$12/月）：1,500 额度/月（约 $0.008/额度），长文不限字数 + 10 份个人文风</li>
             <li data-i18n="price.t3F2">按量额度包（$10 / 800 额度）：一次购买永不过期，低频重度用户友好</li>
             <li data-i18n="price.t3F3">Team（$29/席位/月）：5,000 额度 + 团队共享品牌文风与 PR 审核</li>
             <li data-i18n="price.t3F4">统一使用 Google Gemini 付费级端点，不存草稿、绝不用于模型训练</li>
