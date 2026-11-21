@@ -18,7 +18,7 @@ async function postJson(url, body, headers = {}) {
     headers: { "Content-Type": "application/json", ...headers },
     body: typeof body === "string" ? body : JSON.stringify(body),
   });
-  return { status: resp.status, json: await resp.json() };
+  return { status: resp.status, headers: resp.headers, json: await resp.json() };
 }
 
 // 1. Secret redaction test (pure function)
@@ -56,7 +56,9 @@ assert.equal(redacted.includes("tok_abcdef123456"), false, "Failed to redact Bea
 // 3. Full Hybrid + Remote HTTP MCP mode with mocked LLM transport
 {
   const fakeKey = "sk-fake-unit-test-key-1234567890";
-  const mockTransport = async ({ messages }) => {
+  const seenModels = [];
+  const mockTransport = async ({ model, messages }) => {
+    seenModels.push(model);
     const sys = messages[0].content;
     if (sys.includes("aiFlavorLevel")) {
       return {
@@ -96,14 +98,18 @@ assert.equal(redacted.includes("tok_abcdef123456"), false, "Failed to redact Bea
 
   const { server, baseUrl } = await startServer({
     apiKey: fakeKey,
-    model: "mock-llm-v1",
+    reviewModel: "mock-flash-lite",
+    deslopModel: "mock-flash",
+    dailyLlmLimit: 5,
     transport: mockTransport,
     rateLimitPerMin: 50,
   });
   try {
     const health = await (await fetch(`${baseUrl}/health`)).json();
     assert.equal(health.llmConfigured, true);
-    assert.equal(health.model, "mock-llm-v1");
+    assert.equal(health.model, "mock-flash");
+    assert.deepEqual(health.models, { review: "mock-flash-lite", deslop: "mock-flash" });
+    assert.equal(health.dailyQuota.limit, 5);
     assert.equal(JSON.stringify(health).includes(fakeKey), false, "Health endpoint leaked API key!");
 
     const rev = await postJson(`${baseUrl}/v1/review`, {
@@ -111,6 +117,9 @@ assert.equal(redacted.includes("tok_abcdef123456"), false, "Failed to redact Bea
       lang: "zh",
     });
     assert.equal(rev.status, 200);
+    assert.equal(rev.json.model, "mock-flash-lite");
+    assert.equal(rev.json.creditWeight, 1);
+    assert.equal(rev.headers.get("x-dislop-credits-used"), "1");
     assert.equal(rev.json.llmReview.aiFlavorLevel, "high");
     assert.equal(rev.json.llmReview.issues.length, 1);
 
@@ -119,10 +128,13 @@ assert.equal(redacted.includes("tok_abcdef123456"), false, "Failed to redact Bea
       lang: "zh",
     });
     assert.equal(deslop.status, 200);
+    assert.equal(deslop.json.model, "mock-flash");
+    assert.equal(deslop.json.creditWeight, 2);
+    assert.equal(deslop.headers.get("x-dislop-credits-used"), "2");
     assert.equal(deslop.json.afterCheck.summary.total, 0);
     assert.deepEqual(deslop.json.numericDiff, { missing: [], added: [] });
 
-    // Remote HTTP MCP handshake + tools/list + tools/call
+    // Remote HTTP MCP handshake + tools/list + tools/call (consumes 2 more credits -> 5/5 used)
     const initResp = await postJson(`${baseUrl}/mcp`, { jsonrpc: "2.0", id: 1, method: "initialize", params: {} });
     assert.equal(initResp.status, 200);
     assert.equal(initResp.json.result.serverInfo.name, "dislop-remote-mcp");
@@ -144,8 +156,18 @@ assert.equal(redacted.includes("tok_abcdef123456"), false, "Failed to redact Bea
       },
     });
     assert.equal(callDeslop.status, 200);
+    assert.equal(callDeslop.headers.get("x-dislop-credits-used"), "2");
     const parsedTool = JSON.parse(callDeslop.json.result.content[0].text);
     assert.equal(parsedTool.afterCheck.summary.total, 0);
+    assert.deepEqual(seenModels, ["mock-flash-lite", "mock-flash", "mock-flash"]);
+
+    // Exceeding hard daily credit limit -> 429 daily_limit_reached (deterministic /v1/check still works!)
+    const overDaily = await postJson(`${baseUrl}/v1/review`, { text: "hello" });
+    assert.equal(overDaily.status, 429);
+    assert.equal(overDaily.json.error, "daily_limit_reached");
+    const stillWorks = await postJson(`${baseUrl}/v1/check`, { text: "Certainly! Here is your draft." });
+    assert.equal(stillWorks.status, 200);
+    assert.equal(stillWorks.json.creditWeight, 0);
   } finally {
     server.close();
   }
