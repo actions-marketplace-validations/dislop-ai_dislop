@@ -294,8 +294,8 @@ function probeNegationPivot(proseText, rawText) {
     hits.push({ index: m.index, length: m[0].length });
   }
 
-  // English: It's not (just) X — it's Y / This isn't a X (. / —) it's Y
-  const enRegex = /\b(?:(?:it|this|that)(?:'s| is| was| isn't| wasn't)|they(?:'re| are| aren't))\s+(?:not\s+)?(?:just|merely|simply|only)\s+([^.;!?\n—–]{2,50}?)(?:[,;—–-]\s*(?:but|it(?:'s| is| was)|that(?:'s| is| was)|they(?:'re| are))\s+)([^.!?\n]{2,70})|\b(?:It|This|That)\s+(?:isn't|wasn't|is not|was not)\s+(?:a\s+|an\s+|just\s+)?([A-Za-z][A-Za-z0-9 -]{1,32}?)\s*(?:[.!]\s+|[—–-]\s*)(?:it's|it is|it was|that's)\s+([^.!?\n]{2,70})/giu;
+  // English: (It/This/That/subject) isn't/wasn't (just) X — it's Y / This isn't a X (. / —) it's Y
+  const enRegex = /\b(?:(?:(?:it|this|that)(?:'s| is| was)|they(?:'re| are))\s+not|(?:(?:it|this|that|they)\s+)?(?:isn't|wasn't|aren't|is not|was not|are not))\s+(?:just|merely|simply|only)\s+([^.;!?\n—–]{2,50}?)(?:[,;—–-]\s*(?:but|it(?:'s| is| was)|that(?:'s| is| was)|they(?:'re| are))\s+)([^.!?\n]{2,70})|\b(?:It|This|That)\s+(?:isn't|wasn't|is not|was not)\s+(?:a\s+|an\s+|just\s+)?([A-Za-z][A-Za-z0-9 -]{1,32}?)\s*(?:[.!]\s+|[—–-]\s*)(?:it's|it is|it was|that's)\s+([^.!?\n]{2,70})/giu;
   while ((m = enRegex.exec(proseText)) !== null) {
     const clauseA = m[1] || m[3] || "";
     const clauseB = m[2] || m[4] || "";

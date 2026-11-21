@@ -14,6 +14,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ### Added
 
+- **Anti-Slop Benchmark Suite (`dislop-bench v1`) & Open-Source LLM Backend / Remote HTTP MCP (`server/`)**:
+  - Added [benchmarks/](./benchmarks/README.md) (`48` original `CC0-1.0` detection samples across 6 writing & design domains + `12` end-to-end revision tasks × 3 arms) and [scripts/run_benchmark.mjs](./scripts/run_benchmark.mjs) with Node/Python parity verification, 3rd-order structural probes, key-number retention scoring, external model/Skill evaluation (`--eval`), blind A/B sheet export (`--export-blind-sheet`), and CI regression gates (`--assert`).
+  - Fixed two real recall gaps caught by the benchmark across both JS and Python runtimes: `zh-essay-moralizing-ending` matching `这或许就是...` and English named-subject `negation-pivot` clauses (`wasn't just ... — it was ...`).
+  - Added zero-dependency open-source LLM backend & Remote Streamable HTTP MCP ([server/](./server/README.md)) supporting BYOK self-hosting and official deployment (`/health`, `/v1/check`, `/v1/review`, `/v1/deslop`, `/mcp`) with strict server-only env keys, secret redaction, rate limiting, payload caps, and offline unit tests ([tests/test_server.mjs](./tests/test_server.mjs)).
 - **Agent Plugin Bundle, Full Prevent-and-Check Skill & Hub Redesign (`dislop.com`)**:
   - Added standard Claude Code / Agent plugin manifests (`.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.mcp.json`) bundling `skills/dislop/SKILL.md` with the local zero-dependency stdio MCP server.
   - Upgraded `skills/dislop/SKILL.md` from a check-only wrapper to a full `prevent -> check -> clean up -> re-check` anti-slop workflow covering 1st-order clichés, 2nd-order slogans, 3rd-order structural pitch habits, and UI/slide template rules.

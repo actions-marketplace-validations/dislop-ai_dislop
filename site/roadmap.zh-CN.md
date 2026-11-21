@@ -52,15 +52,16 @@ snapshot: 2026-11-21
 
 **验收标准**：31 条规则在 Node/Python 双端通过 `pack-test` 与 `test_conformance.py`，全仓通过 `dislop check . --fail-on warning`。
 
-### 轨道 C — 离线去 AI 味基准评测（可并行）
+### 轨道 C — 离线去 AI 味基准评测（首版已落地，持续扩充）
 
-目标：用公开可复算的数据测出误报率与检出率，而不是靠嘴说。
+目标：用公开可复算的数据测出误报率、检出率与端到端去 AI 味效果，而不是靠嘴说。
 
-- [ ] 整理 30–50 份原创或明确开源许可（`CC0` / `CC-BY`）的样本，覆盖中文工作简报、中文随笔/文章、英文技术文档、HTML 卡片与 `.pptx` 演示文稿。
-- [ ] 离线实测两项硬指标：干净人类原稿的误报率，以及一阶/二阶 AI 味的检出率。
-- [ ] 在 `scripts/` 下提供一键离线跑分脚本，并将复现结果写入文档。
+- [x] 整理 48 份原创 `CC0-1.0` 检测样本（中文工作简报、中文随笔、英文技术文档、英文随笔、HTML/CSS 卡片、`.pptx` 幻灯片）与 12 组端到端改稿对照任务（[benchmarks/](./benchmarks/README.zh-CN.md)）。
+- [x] 离线实测准确率（`100%`）、召回率（`100%`）、干净原稿误报率（`0%`）、二阶陷阱召回率（`100%`）、Node/Python 一致率（`100%`）以及 `raw_ai` vs `naive_humanizer` vs `dislop_clean` 综合得分。
+- [x] 提供一键离线跑分、CI 回归门禁（`node scripts/run_benchmark.mjs --assert`）、外部模型/Skill 评测（`--eval`）与随机 A/B 盲评表导出（`--export-blind-sheet`），并自动生成 [benchmarks/REPORT.md](./benchmarks/REPORT.md)。
+- [ ] 持续扩充真实长文、多页 PPT 与开源大模型后台（`server/`）跨模型 A/B 评测数据。
 
-**验收标准**：任何协作者在断网环境下执行一条命令即可复现完整评测表。
+**验收标准**：已合入 CI，任何协作者在断网环境下执行 `node scripts/run_benchmark.mjs --assert` 即可复现。
 
 ### 轨道 D — `Awesome Anti-Slop` 持续维护与拆仓阈值（持续推进，可并行）
 

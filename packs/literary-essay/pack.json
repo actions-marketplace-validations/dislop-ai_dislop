@@ -27,7 +27,7 @@
       "modalities": ["markdown", "text", "html", "docx"],
       "patterns": [
         "(?:总而言之|综上所述|归根结底|说到底)[，,][^。！？\\n]{2,40}",
-        "这(?:正|就|或许)是[^，。！？\\n]{1,18}的(?:意义|真谛|答案)所在",
+        "这(?:正|就|或许(?:就)?)是[^，。！？\\n]{1,18}的(?:意义|真谛|答案)所在",
         "唯有[^，。！？\\n]{1,16}[，,]\\s*(?:我们)?(?:方能|才能)[^。！？\\n]{1,24}",
         "愿我们(?:都能|在)[^。！？\\n]{2,36}"
       ],
@@ -52,6 +52,7 @@
       "fixtures": {
         "hit": [
           "雨停之后巷口只剩积水，这正是平凡生活的意义所在。",
+          "这或许就是慢工出细活在喧嚣时代真正的意义所在。",
           "唯有守住内心的平静，我们才能在快节奏里找到方向。"
         ],
         "clean": [
@@ -129,7 +130,8 @@
       "fixtures": {
         "hit": [
           "那盏台灯不是照明器具，而是深夜里的陪伴。",
-          "It wasn't just rain — it was a reckoning."
+          "It wasn't just rain — it was a reckoning.",
+          "His grandfather's hand plane wasn't just a tool — it was a quiet testament to patience."
         ],
         "clean": [
           "那班绿皮车停靠的不是三号站台，而是最北边的五号货运站台。",

@@ -24,7 +24,11 @@
     "dislop-mcp": "./bin/dislop-mcp.mjs"
   },
   "scripts": {
-    "test": "node bin/dislop.mjs pack-test && node tests/test_site.mjs",
+    "test": "node bin/dislop.mjs pack-test && node tests/test_site.mjs && node tests/test_server.mjs",
+    "test:server": "node tests/test_server.mjs",
+    "bench": "node scripts/run_benchmark.mjs",
+    "bench:assert": "node scripts/run_benchmark.mjs --assert",
+    "server": "node server/index.mjs",
     "build:site": "node scripts/build_site.mjs",
     "test:prototype": "node scripts/prototype_antipattern_lab.mjs self-test",
     "dogfood": "node bin/dislop.mjs check . --fail-on warning && node bin/dislop.mjs check site/ --fail-on info"
@@ -35,6 +39,12 @@
     "bin/",
     "src/core.mjs",
     "src/binary-node.mjs",
+    "server/index.mjs",
+    "server/llm-client.mjs",
+    "server/.env.example",
+    "server/Dockerfile",
+    "server/README.md",
+    "server/README.zh-CN.md",
     "packs/",
     "skills/",
     "assets/",
