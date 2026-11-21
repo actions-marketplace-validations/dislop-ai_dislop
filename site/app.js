@@ -68,6 +68,10 @@ const I18N = {
     "ai.deslopBtn": "AI 一键去味（2 额度）",
     "ai.anonHint": "免登录每天 5 次试用额度 · 登录后每月 30 次",
     "ai.claimLink": "领免费 Token →",
+    "voice.drawerTitle": "可选：提取个人文风（2 额度 · 需免费密钥）",
+    "voice.drawerDesc": "贴入 1–3 段你自己写过的干净文字（用空行隔开），提取文风后会保存在本机浏览器，后续点击「AI 一键去味」时自动按你的口吻改写。",
+    "voice.extractBtn": "提取我的文风（2 额度）",
+    "voice.clearBtn": "清除已保存文风",
     "wb.modeProof": "标出问题",
     "wb.modeEdit": "编辑原文",
     "wb.pasteOwn": "贴我的稿子",
@@ -105,36 +109,36 @@ const I18N = {
     "price.benchLink": "看 5 模型实测对比 →",
     "price.t1Name": "开源本地（Skill + CLI）",
     "price.t1Price": "$0 · 永久免费",
-    "price.t1Sub": "适合重视数据隐私的个人与开发团队，所有代码和 25 条规则完全透明。",
-    "price.t1F1": "Agent Skill、Node/Python CLI 与本地 stdio MCP（Apache-2.0）",
+    "price.t1Sub": "适合重视数据隐私的个人与开发团队，规则与代码全部开源透明。",
+    "price.t1F1": "Agent Skill、命令行与本地离线 MCP（Apache-2.0）",
     "price.t1F2": "100% 离线确定性检查，支持 Markdown、HTML/CSS、Word、PPT 与 Git Diff",
-    "price.t1F3": "免费读取 dislop.com 静态任务卡与 87 条 Awesome 工具清单",
+    "price.t1F3": "免费读取官网静态任务卡与工具清单",
     "price.t1F4": "零联网、零上传、零大模型 API 成本",
     "price.t1Cta": "安装 Skill / CLI ↑",
     "price.t2Name": "云端免费版（远程 MCP）",
     "price.t2Price": "$0 · 30 额度 / 月",
-    "price.t2Sub": "邮箱领取专属 Token，无需绑卡，立即接通远程 MCP 与官网 AI 工作台。",
-    "price.t2F1": "远程 HTTP MCP（https://dislop.com/mcp），免本地装环境",
-    "price.t2F2": "AI 深度审校（1 额度）：三阶结构诊断 + 确定性规则联合审查",
-    "price.t2F3": "AI 一键去味（2 额度）：改写 + 数字保真校验 + 自动二次修复",
-    "price.t2F4": "个人文风提取（2 额度）：1–5 篇旧稿提炼专属文风档案",
-    "price.t2Cta": "下方 10 秒免费领 Token ↓",
-    "price.t3Name": "Pro · 按量包 · Team",
-    "price.t3Price": "$12/月 · $10/千次",
-    "price.t3Sub": "高频写作、长文与团队品牌口吻治理，按月订阅或按量购买均可。",
-    "price.t3F1": "Pro（$12/月）：1,000 额度/月，多份个人文风档案与长文无字数上限",
-    "price.t3F2": "按量额度包（$10 / 1,000 额度）：一次购买永不过期，低频重度用户友好",
-    "price.t3F3": "Team（$29/席位/月）：5,000 额度 + 团队共享品牌文风卡与 PR 审核",
-    "price.t3F4": "统一付费级模型端点，不留存草稿、绝不用于模型训练",
+    "price.t2Sub": "邮箱领取免费密钥，无需绑卡，立即在官网工作台或远程 MCP 使用。",
+    "price.t2F1": "直连 https://dislop.com/mcp，免本地装环境（单次最长 12,000 字）",
+    "price.t2F2": "AI 深度审校（1 额度）：查出推销腔、官话与套话，给出具体改法",
+    "price.t2F3": "AI 一键去味（2 额度）：自动改写、核对原数字不丢失、二次兜底修复",
+    "price.t2F4": "个人文风提取（2 额度）：1–3 篇旧稿提炼专属文风，工作台与远程 MCP 均可用",
+    "price.t2Cta": "下方 10 秒免费领密钥 ↓",
+    "price.t3Name": "Pro · 按量包 · Team（早鸟预约）",
+    "price.t3Price": "$12/月 · $10 按量",
+    "price.t3Sub": "高频写作选 Pro 更划算（比按量省 36%）；低频偶尔用可选永不过期的按量包。",
+    "price.t3F1": "Pro（$12/月）：1,500 额度/月（约 $0.008/次），长文不限字数 + 10 份个人文风",
+    "price.t3F2": "按量额度包（$10 / 800 额度）：一次购买永不过期，低频重度用户友好",
+    "price.t3F3": "Team（$29/席位/月）：5,000 额度 + 团队共享品牌文风与 PR 审核",
+    "price.t3F4": "统一使用 Google Gemini 付费级端点，不存草稿、绝不用于模型训练",
     "price.t3Cta": "预约开通通知 ↓",
 
-    "cloud.tokenTitle": "免费领取 30 额度 + 远程 MCP Token",
-    "cloud.tokenDesc": "输入邮箱立即生成 Bearer Token（服务端仅存 SHA-256 哈希，不存明文），并自动同步到上方工作台。",
-    "cloud.tokenBtn": "领取免费 Token",
+    "cloud.tokenTitle": "免费领取 30 额度 + 远程 MCP 密钥",
+    "cloud.tokenDesc": "输入邮箱立即生成专属密钥，自动同步到上方工作台，无需绑卡（服务端不存明文与草稿，详见页面底部隐私说明）。",
+    "cloud.tokenBtn": "领取免费密钥",
     "cloud.wlTitle": "预约 Pro / 按量包 / Team",
     "cloud.wlDesc": "自助支付即将上线。留下邮箱和需要的方案，上线第一时间通知并附赠早鸟体验额度。",
-    "cloud.planPro": "Pro（$12/月 · 1,000 额度）",
-    "cloud.planCredits": "按量包（$10 / 1,000 额度）",
+    "cloud.planPro": "Pro（$12/月 · 1,500 额度）",
+    "cloud.planCredits": "按量包（$10 / 800 额度 · 永不过期）",
     "cloud.planTeam": "Team（$29/席位 · 团队文风）",
     "cloud.wlBtn": "提交预约",
     "ep.foldTitle": "给 Agent / 开发者看：静态 Markdown 与 JSON 接口",
@@ -168,14 +172,14 @@ const I18N = {
     "stat.det": "个可自动检查",
     "stat.zh": "条中文 / 多语种",
 
-    "share.title": "觉得顺手？发给同事，或者去 GitHub 留个 Star",
-    "share.desc": "dislop 按 Apache-2.0 完全开源、零依赖、不收数据。如果你身边也有人天天给 AI 稿子改味道，下面三个入口最直接。",
+    "share.title": "觉得顺手？发给同事，或者去 GitHub 收藏",
+    "share.desc": "Skill、CLI 与 25 条确定性规则按 Apache-2.0 永久开源、离线零上传；云端 AI 仅在你主动点击时调用且不存草稿。如果团队里有人天天给 AI 稿子改味道，下面三个入口最直接。",
     "share.c1Title": "一键分享给团队或朋友",
-    "share.c1Desc": "复制一段直白不浮夸的介绍（带官网试用链接、案例页和 87 条清单），直接贴到群聊或文档里就行。",
+    "share.c1Desc": "复制一段直白不浮夸的介绍（带官网试用链接、案例页和工具清单），直接贴到群聊或文档里就行。",
     "share.copySiteBtn": "复制项目推荐语",
     "share.copyCasesBtn": "复制案例页链接",
-    "share.c2Title": "去 GitHub 点个 Star",
-    "share.c2Desc": "检查引擎、Agent Skill、Plugin、MCP 和 87 条 Awesome Anti-Slop 清单都在同一个仓库。点个 Star 方便以后找。",
+    "share.c2Title": "去 GitHub 收藏仓库",
+    "share.c2Desc": "检查引擎、Agent Skill、Plugin、本地 MCP 和 Awesome Anti-Slop 清单都在同一个仓库，点个 Star 方便以后找。",
     "share.starCta": "GitHub 点 Star ★",
     "share.c3Title": "一起补案例、规则和工具",
     "share.c3Desc": "遇到特别典型的 AI 味翻车案例，或者发现好用的去 AI 味工具没进清单，欢迎在路线图或 Issue 里一起补。",
@@ -197,10 +201,11 @@ const I18N = {
     "cov.r4Scope": "点不动的空链接和占位按钮、默认紫粉渐变、满屏胶囊标签、三层套盒、把提示词口号印成装饰徽章。",
     "cov.r5Name": "Git 改动与 PR",
     "cov.r5Scope": "只查本次改过的行，拦住残留寒暄、占位符和文字/页面里的 AI 味，支持 GitHub PR 批注和 SARIF。代码语法树检查还没做。",
-    "cov.r6Name": "节奏单调与个人风格",
-    "cov.r6Scope": "连环逗号句、句长过于均匀、PPT 连续同版式，以及从自己旧稿里统计句长习惯。原型已跑通，还没合进主程序。",
+    "cov.r6Name": "个人文风与节奏单调",
+    "cov.r6Scope": "云端 Remote MCP / API 已支持从 1–5 篇旧稿提取个人文风并带入改写；本地离线节奏单调与 PPT 连同版式探针处于原型阶段。",
     "status.live": "可用",
     "status.partial": "改动检查可用，AST 未做",
+    "status.partialVoice": "云端文风可用，本地原型中",
     "status.notYet": "还没上线（原型阶段）",
 
     "rules.title": "全部 25 条规则明细（Agent 与深度用户参考）",
@@ -232,6 +237,7 @@ const I18N = {
 
     "footer.selfAudit": "这个页面自己也跑过 dislop check site/，0 处问题。",
     "footer.awesome": "工具清单",
+    "footer.privacy": "隐私与数据边界",
     "footer.roadmap": "路线图",
     "footer.brand": "文案基准",
     "footer.design": "视觉规范",
@@ -295,6 +301,10 @@ const I18N = {
     "ai.deslopBtn": "AI Rewrite (2 credits)",
     "ai.anonHint": "5 free anonymous credits/day · 30/mo with free token",
     "ai.claimLink": "Get free token →",
+    "voice.drawerTitle": "Optional: extract your personal voice (2 credits · free key required)",
+    "voice.drawerDesc": "Paste 1-3 clean paragraphs you wrote (separated by blank lines). The extracted voice profile stays in this browser and is automatically passed into AI Rewrite.",
+    "voice.extractBtn": "Extract my voice (2 credits)",
+    "voice.clearBtn": "Clear saved voice",
     "wb.modeProof": "Highlights",
     "wb.modeEdit": "Edit text",
     "wb.pasteOwn": "Paste my draft",
@@ -333,35 +343,35 @@ const I18N = {
     "price.t1Name": "Open Source Local (Skill + CLI)",
     "price.t1Price": "$0 · Forever free",
     "price.t1Sub": "Built for privacy-first writers and engineering teams. Full transparency, zero uploads.",
-    "price.t1F1": "Agent Skill, Node/Python CLI, and local stdio MCP (Apache-2.0)",
+    "price.t1F1": "Agent Skill, Node/Python CLI, and local offline MCP (Apache-2.0)",
     "price.t1F2": "100% offline deterministic checks for Markdown, HTML/CSS, DOCX, PPTX, and git diffs",
-    "price.t1F3": "Free read-only access to dislop.com static task guides and 87 Awesome tools",
+    "price.t1F3": "Free read-only access to static task guides and the curated tool directory",
     "price.t1F4": "Zero network calls during check, zero uploads, zero API keys",
     "price.t1Cta": "Install Skill / CLI ↑",
     "price.t2Name": "Cloud Free (Remote MCP)",
     "price.t2Price": "$0 · 30 credits / mo",
-    "price.t2Sub": "Claim a Bearer token with your email—no card required—for Remote MCP and the web workbench.",
-    "price.t2F1": "Hosted Remote HTTP MCP at https://dislop.com/mcp with zero local setup",
-    "price.t2F2": "AI Review (1 credit): hybrid deterministic + 3rd-order structural critique",
-    "price.t2F3": "AI Rewrite (2 credits): self-healing rewrite with numeric fidelity guard and auto-repair",
-    "price.t2F4": "Voice Extract (2 credits): build a reusable dislop.voice/1 profile from 1-5 human samples",
-    "price.t2Cta": "Claim free token below ↓",
-    "price.t3Name": "Pro · Credit Packs · Team",
-    "price.t3Price": "$12/mo · $10/1k credits",
-    "price.t3Sub": "For regular writers, long documents, and teams enforcing one shared brand voice.",
-    "price.t3F1": "Pro ($12/mo): 1,000 monthly credits, multiple voice profiles, and long-draft support",
-    "price.t3F2": "PAYGO Pack ($10 / 1,000 credits): one-time credit top-up that never expires",
+    "price.t2Sub": "Enter your email for a free key—no card required—for Remote MCP and the web workbench.",
+    "price.t2F1": "Direct https://dislop.com/mcp endpoint with zero local setup (up to 12,000 chars/call)",
+    "price.t2F2": "AI Review (1 credit): catches pitch cadence, filler, and clichés with concrete edits",
+    "price.t2F3": "AI Rewrite (2 credits): plain rewrite with numeric fidelity guard and auto-repair",
+    "price.t2F4": "Voice Extract (2 credits): build a reusable style profile in the workbench or Remote MCP",
+    "price.t2Cta": "Claim free key below ↓",
+    "price.t3Name": "Pro · Credit Packs · Team (Early Access)",
+    "price.t3Price": "$12/mo · $10 PAYGO",
+    "price.t3Sub": "Regular writers save 36% with Pro; occasional heavy users can buy credits that never expire.",
+    "price.t3F1": "Pro ($12/mo): 1,500 monthly credits (~$0.008/cr), unlimited length + 10 voice profiles",
+    "price.t3F2": "PAYGO Pack ($10 / 800 credits): one-time credit top-up that never expires",
     "price.t3F3": "Team ($29/seat/mo): 5,000 credits, shared brand voice cards, and PR review tooling",
-    "price.t3F4": "Paid-tier model API only—no draft logging and never used for training",
+    "price.t3F4": "Paid-tier Google Gemini API only—no draft logging and never used for training",
     "price.t3Cta": "Join early access ↓",
 
-    "cloud.tokenTitle": "Claim 30 free credits + Remote MCP token",
-    "cloud.tokenDesc": "Enter your email to generate a Bearer token immediately (only its SHA-256 hash is stored on our server) and unlock 30 monthly credits in the workbench above.",
-    "cloud.tokenBtn": "Get free token",
+    "cloud.tokenTitle": "Claim 30 free credits + Remote MCP key",
+    "cloud.tokenDesc": "Enter your email to generate a free key immediately and unlock 30 monthly credits in the workbench above (no card, no draft storage—see Privacy in the footer).",
+    "cloud.tokenBtn": "Get free key",
     "cloud.wlTitle": "Join Pro / Credit Pack / Team waitlist",
     "cloud.wlDesc": "Self-serve billing opens shortly. Leave your email and preferred plan to get early access and bonus launch credits.",
-    "cloud.planPro": "Pro ($12/mo · 1,000 credits)",
-    "cloud.planCredits": "PAYGO Pack ($10 / 1,000 credits)",
+    "cloud.planPro": "Pro ($12/mo · 1,500 credits)",
+    "cloud.planCredits": "PAYGO Pack ($10 / 800 credits · never expires)",
     "cloud.planTeam": "Team ($29/seat · shared voice)",
     "cloud.wlBtn": "Join waitlist",
     "ep.foldTitle": "For Agents & Developers: Static Markdown & JSON Endpoints",
@@ -395,14 +405,14 @@ const I18N = {
     "stat.det": "automated tools",
     "stat.zh": "zh / multilingual",
 
-    "share.title": "Found this useful? Share it or star it on GitHub",
-    "share.desc": "dislop is Apache-2.0 open source, zero-dependency, and collects no data. If your team deals with AI slop every week, these three links help the most.",
+    "share.title": "Found this useful? Share it or bookmark the repo",
+    "share.desc": "The Skill, CLI, and 25 deterministic rules are Apache-2.0 open source and run 100% offline; optional cloud AI runs only when clicked and stores no drafts. If your team deals with AI slop every week, these three links help the most.",
     "share.c1Title": "Share with a teammate or friend",
-    "share.c1Desc": "Copy a plain, no-hype blurb with the live workbench, real cases, and 87-entry Awesome list.",
+    "share.c1Desc": "Copy a plain, no-hype blurb with the live workbench, real cases, and curated tool directory.",
     "share.copySiteBtn": "Copy project blurb",
     "share.copyCasesBtn": "Copy cases link",
     "share.c2Title": "Star dislop on GitHub",
-    "share.c2Desc": "The engine, Agent Skill, Plugin, MCP server, and 87-entry Awesome Anti-Slop index all live in one repo.",
+    "share.c2Desc": "The engine, Agent Skill, Plugin, local MCP server, and Awesome Anti-Slop index all live in one repo.",
     "share.starCta": "Star on GitHub ★",
     "share.c3Title": "Add a case, rule, or tool",
     "share.c3Desc": "Have a classic AI-slop before/after example or a solid anti-slop tool missing from the list? Drop it in our Roadmap or Issues.",
@@ -424,10 +434,11 @@ const I18N = {
     "cov.r4Scope": "Dead href='#' placeholder links, unexplained disabled buttons, purple-pink AI gradients, pill walls, 3-level nested boxes, and 'AI-Powered' prompt-echo badges.",
     "cov.r5Name": "Git diffs & PRs",
     "cov.r5Scope": "Checks only modified lines for chat wrappers, placeholders, prose clichés, and UI template slop, with GitHub annotations and SARIF output. Code AST linting is not built.",
-    "cov.r6Name": "Rhythm & voice stats",
-    "cov.r6Scope": "Comma chains, uniform sentence length, repeated slide layouts, and local sentence stats from your own drafts. Prototype works, not merged into the core yet.",
+    "cov.r6Name": "Voice profiles & rhythm probes",
+    "cov.r6Scope": "Cloud Remote MCP / API extracts personal dislop.voice/1 profiles from 1-5 samples; local offline rhythm monotony and slide layout probes are in prototype.",
     "status.live": "Works now",
     "status.partial": "Diff checks work; no AST",
+    "status.partialVoice": "Cloud voice live; local prototype",
     "status.notYet": "Not shipped (prototype)",
 
     "rules.title": "All 25 rules (Agent & power-user reference)",
@@ -459,6 +470,7 @@ const I18N = {
 
     "footer.selfAudit": "This site passes dislop check site/ with 0 issues.",
     "footer.awesome": "Awesome list",
+    "footer.privacy": "Privacy",
     "footer.roadmap": "Roadmap",
     "footer.brand": "Voice guide",
     "footer.design": "Design tokens",
@@ -965,19 +977,16 @@ npx skills add dislop-ai/dislop
     }
   }
 }`,
-    cloud: `// 官方托管远程 HTTP MCP（免装本地环境，每月 30 次免费额度）
-// 先在下方 #pricing 输入邮箱领免费 Token，再把下面配置粘进 Claude Code / Cursor / Codex：
-{
+    cloud: `{
   "mcpServers": {
     "dislop-cloud": {
       "url": "https://dislop.com/mcp",
       "headers": {
-        "Authorization": "Bearer dslp_你的免费Token"
+        "Authorization": "Bearer dslp_REPLACE_WITH_FREE_KEY"
       }
     }
   }
-}
-// 包含工具：dislop_check（0 额度）、dislop_review（1 额度）、dislop_deslop（2 额度）、dislop_voice_extract（2 额度）`,
+}`,
     cli: `# 检查当前目录（命中硬伤时退出码为 1，同时标出套话提醒）
 npx --yes github:dislop-ai/dislop check .
 
@@ -1040,19 +1049,16 @@ npx skills add dislop-ai/dislop
     }
   }
 }`,
-    cloud: `// Hosted Remote HTTP MCP (zero local install, 30 free credits/month)
-// Claim a free Bearer token in #pricing below, then add this to Claude Code / Cursor / Codex:
-{
+    cloud: `{
   "mcpServers": {
     "dislop-cloud": {
       "url": "https://dislop.com/mcp",
       "headers": {
-        "Authorization": "Bearer dslp_YOUR_FREE_TOKEN"
+        "Authorization": "Bearer dslp_REPLACE_WITH_FREE_KEY"
       }
     }
   }
-}
-// Tools: dislop_check (0 cr), dislop_review (1 cr), dislop_deslop (2 cr), dislop_voice_extract (2 cr)`,
+}`,
     cli: `# Check the current folder (exits 1 on core errors, prints style warnings)
 npx --yes github:dislop-ai/dislop check .
 
@@ -1123,7 +1129,21 @@ function safeSetStorage(key, value) {
   }
 }
 
-let currentLang = safeGetStorage("dislop-lang") === "en" ? "en" : "zh";
+function detectInitialLang() {
+  try {
+    const param = new URLSearchParams(window.location.search).get("lang");
+    if (param === "en" || param === "zh") return param;
+  } catch {
+    // ignore URL parsing errors
+  }
+  const stored = safeGetStorage("dislop-lang");
+  if (stored === "en" || stored === "zh") return stored;
+  const navLang = String(window.navigator?.language || "").toLowerCase();
+  if (navLang && !navLang.startsWith("zh")) return "en";
+  return "zh";
+}
+
+let currentLang = detectInitialLang();
 let currentTheme = "light";
 let heroProofState = "bad";
 let activeSpecimenIdx = 0;
@@ -1529,6 +1549,7 @@ function renderWorkbench() {
   }
 
   // Render Margin Notes
+  syncAiButtonsForBinary();
   const cards = [];
 
   for (const s of skipped) {
@@ -2100,6 +2121,13 @@ function applyI18n(isUserSwitch = false) {
         ? "选填：主要场景（如周报 / PPT / 公众号 / 团队文档）"
         : "Optional: main use case (specs, slides, blog, team docs)";
   }
+  const voiceSamplesEl = document.getElementById("voice-samples-input");
+  if (voiceSamplesEl) {
+    voiceSamplesEl.placeholder =
+      currentLang === "zh"
+        ? "粘贴 1–3 段你自己写过的段落，段与段之间留一个空行…"
+        : "Paste 1-3 paragraphs you wrote, separated by blank lines...";
+  }
 
   const langBtn = document.getElementById("lang-toggle");
   langBtn.textContent = currentLang === "zh" ? "EN" : "中文";
@@ -2122,6 +2150,15 @@ function applyI18n(isUserSwitch = false) {
     }
   }
 
+  if (isUserSwitch) {
+    safeSetStorage("dislop-lang", currentLang);
+    const aiPanel = document.getElementById("ai-result-panel");
+    if (aiPanel) {
+      aiPanel.hidden = true;
+      aiPanel.innerHTML = "";
+    }
+  }
+
   updateThemeToggleLabel();
   renderHeroProof();
   renderCases();
@@ -2130,12 +2167,137 @@ function applyI18n(isUserSwitch = false) {
   renderSnippet();
   renderRulesTable();
   renderCloudAccountState();
+  renderSavedVoiceState();
+  syncAiButtonsForBinary();
+}
+
+function syncAiButtonsForBinary() {
+  const revBtn = document.getElementById("btn-ai-review");
+  const desBtn = document.getElementById("btn-ai-deslop");
+  const isBin = Boolean(binaryAuditResult);
+  const tip =
+    currentLang === "zh"
+      ? "Word / PPT 文件仅在本地离线检查；请切换到文本或 HTML 样稿再使用云端 AI。"
+      : "Word/PowerPoint files run offline only; switch to a text or HTML draft to use Cloud AI.";
+  for (const btn of [revBtn, desBtn]) {
+    if (!btn) continue;
+    if (isBin) {
+      btn.disabled = true;
+      btn.title = tip;
+    } else if (!cloudBusy) {
+      btn.disabled = false;
+      btn.removeAttribute("title");
+    }
+  }
 }
 
 // ---------- Opt-In Cloud AI Workbench & Free Token / Waitlist ----------
 
 const CLOUD_STORE_KEY = "dislop_cloud_account_v1";
+const VOICE_STORE_KEY = "dislop_voice_profile_v1";
 let cloudBusy = false;
+
+function loadSavedVoiceProfile() {
+  try {
+    const raw = safeGetStorage(VOICE_STORE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return parsed && parsed.tone ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveVoiceProfile(profile) {
+  if (!profile) {
+    try {
+      window.localStorage.removeItem(VOICE_STORE_KEY);
+    } catch {
+      // ignore storage errors
+    }
+    return;
+  }
+  safeSetStorage(VOICE_STORE_KEY, JSON.stringify(profile));
+}
+
+function renderSavedVoiceState() {
+  const saved = loadSavedVoiceProfile();
+  const badge = document.getElementById("voice-active-badge");
+  const clearBtn = document.getElementById("btn-voice-clear");
+  const outBox = document.getElementById("voice-output-box");
+  const isZh = currentLang === "zh";
+  if (saved) {
+    if (badge) {
+      badge.hidden = false;
+      badge.textContent = isZh ? "已启用个人文风" : "Personal voice active";
+    }
+    if (clearBtn) clearBtn.hidden = false;
+    if (outBox && outBox.hidden) {
+      outBox.hidden = false;
+      outBox.innerHTML = `<strong>${isZh ? "当前生效文风：" : "Active voice profile:"}</strong> ${escapeHtmlSafe(saved.tone)}${saved.sentenceHabits ? ` · ${escapeHtmlSafe(saved.sentenceHabits)}` : ""}`;
+    }
+  } else {
+    if (badge) badge.hidden = true;
+    if (clearBtn) clearBtn.hidden = true;
+    if (outBox) {
+      outBox.hidden = true;
+      outBox.innerHTML = "";
+    }
+  }
+}
+
+async function handleVoiceExtractClick() {
+  const isZh = currentLang === "zh";
+  const savedAcct = loadSavedCloudAccount();
+  const outBox = document.getElementById("voice-output-box");
+  const btn = document.getElementById("btn-voice-extract");
+  if (!outBox) return;
+
+  if (!savedAcct?.token) {
+    outBox.hidden = false;
+    outBox.innerHTML = `<p class="ai-error-msg" style="margin:0 0 8px;">${
+      isZh ? "提取个人文风需要先领取免费 30 额度密钥。" : "Claim a free 30-credit key first to extract a personal voice profile."
+    }</p><a href="#cloud-token-box" class="btn-primary" style="min-height:30px;padding:5px 12px;font-size:0.8rem;">${
+      isZh ? "去下方 10 秒免费领密钥 ↓" : "Claim free key below ↓"
+    }</a>`;
+    return;
+  }
+
+  const raw = String(document.getElementById("voice-samples-input")?.value || "").trim();
+  const samples = raw.split(/\n\s*\n/).map((s) => s.trim()).filter(Boolean).slice(0, 5);
+  if (samples.length === 0) {
+    outBox.hidden = false;
+    outBox.innerHTML = `<p class="ai-error-msg" style="margin:0;">${isZh ? "请先贴入至少 1 段你自己的文字样稿。" : "Paste at least 1 paragraph of your own writing first."}</p>`;
+    return;
+  }
+
+  if (btn) btn.disabled = true;
+  outBox.hidden = false;
+  outBox.textContent = isZh ? "正在分析句长习惯与文风特征…" : "Analyzing sentence rhythm and voice profile...";
+
+  try {
+    const resp = await fetch("/api/v1/voice/extract", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${savedAcct.token}` },
+      body: JSON.stringify({ samples, lang: isZh ? "zh" : "en" }),
+    });
+    const data = await resp.json().catch(() => ({}));
+    if (!resp.ok) {
+      outBox.innerHTML = `<p class="ai-error-msg" style="margin:0;">${escapeHtmlSafe(data.message || `HTTP ${resp.status}`)}</p>`;
+      return;
+    }
+    updateCreditsFromBilling(data.billing);
+    saveVoiceProfile(data.profile);
+    outBox.hidden = false;
+    outBox.innerHTML = `<div><strong>${isZh ? "个人文风已保存，后续「AI 一键去味」将自动套用：" : "Personal voice saved and wired into AI Rewrite:"}</strong></div>
+      <div style="margin-top:4px;">${escapeHtmlSafe(data.profile?.tone || "")}${data.profile?.sentenceHabits ? ` · ${escapeHtmlSafe(data.profile.sentenceHabits)}` : ""}</div>`;
+    renderSavedVoiceState();
+  } catch (err) {
+    outBox.innerHTML = `<p class="ai-error-msg" style="margin:0;">${escapeHtmlSafe(err.message || "Network error")}</p>`;
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
 
 function loadSavedCloudAccount() {
   try {
@@ -2289,6 +2451,7 @@ async function runCloudAction(kind) {
   );
 
   try {
+    const savedVoice = kind === "deslop" ? loadSavedVoiceProfile() : null;
     const resp = await fetch(endpoint, {
       method: "POST",
       headers,
@@ -2298,6 +2461,7 @@ async function runCloudAction(kind) {
         modality: currentModality || "markdown",
         pack: currentPackId || "business-brief",
         lang: currentLang === "zh" ? "zh" : "en",
+        ...(savedVoice ? { voiceProfile: savedVoice } : {}),
       }),
     });
     const data = await resp.json().catch(() => ({}));
@@ -2432,6 +2596,7 @@ async function handleFreeTokenSubmit(e) {
       <div style="margin-top:6px;font-size:0.78rem;color:var(--ink-2);">${isZh ? "远程 HTTP MCP 配置（粘进 Claude Code / Cursor / Codex）：" : "Remote HTTP MCP config (paste into Claude Code / Cursor / Codex):"}</div>
       <pre class="cloud-output-pre" id="generated-mcp-config">${escapeHtmlSafe(mcpJsonStr)}</pre>
       <div class="quick-actions" style="margin-top:8px;">
+        <a href="#workbench" class="btn-primary" style="min-height:30px;padding:5px 12px;font-size:0.8rem;">${isZh ? "返回工作台立即试用 ↑" : "Back to workbench ↑"}</a>
         <button type="button" id="btn-copy-mcp-cfg" class="ctrl-btn ctrl-btn-sm">${isZh ? "复制远程 MCP 配置" : "Copy Remote MCP JSON"}</button>
       </div>`;
     document.getElementById("btn-copy-mcp-cfg")?.addEventListener("click", async (ev) => {
@@ -2794,6 +2959,11 @@ function init() {
 
   document.getElementById("btn-ai-review")?.addEventListener("click", () => runCloudAction("review"));
   document.getElementById("btn-ai-deslop")?.addEventListener("click", () => runCloudAction("deslop"));
+  document.getElementById("btn-voice-extract")?.addEventListener("click", handleVoiceExtractClick);
+  document.getElementById("btn-voice-clear")?.addEventListener("click", () => {
+    saveVoiceProfile(null);
+    renderSavedVoiceState();
+  });
   document.getElementById("free-token-form")?.addEventListener("submit", handleFreeTokenSubmit);
   document.getElementById("waitlist-form")?.addEventListener("submit", handleWaitlistSubmit);
 

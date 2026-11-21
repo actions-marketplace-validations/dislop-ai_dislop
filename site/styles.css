@@ -1149,6 +1149,62 @@ html[lang^="zh"] .proof-lines {
   margin: 0 0 8px;
 }
 
+.voice-drawer {
+  border-top: 1px solid var(--rule);
+  background-color: var(--sheet);
+}
+
+.voice-drawer-summary {
+  padding: 9px 20px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--ink-2);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.voice-drawer-summary:hover {
+  color: var(--ink);
+}
+
+.voice-active-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--mark-stet);
+  font-weight: 600;
+}
+
+.voice-active-badge[hidden] {
+  display: none;
+}
+
+.voice-drawer-body {
+  padding: 0 20px 14px;
+}
+
+.voice-drawer-desc {
+  margin: 0 0 8px;
+  font-size: 0.8rem;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+
+.voice-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  background-color: var(--inset);
+  color: var(--ink);
+  border: 1px solid var(--control-border);
+  border-radius: 3px;
+  font-family: var(--font-sans);
+  font-size: 0.84rem;
+  line-height: 1.55;
+  resize: vertical;
+}
+
 /* Open-Core Pricing & Cloud Forms */
 .pricing-grid {
   display: grid;
@@ -1417,9 +1473,12 @@ html[lang^="zh"] .proof-lines {
   color: var(--mark-error);
 }
 
-.sev-warning,
-.sev-info {
+.sev-warning {
   color: var(--mark-warn);
+}
+
+.sev-info {
+  color: var(--ink-2);
 }
 
 .sev-stet {
@@ -2256,7 +2315,12 @@ html[lang^="zh"] .proof-lines {
     width: 100%;
     flex-wrap: nowrap;
     overflow-x: auto;
+    scrollbar-width: none;
     padding-top: 8px;
+  }
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
     border-top: 1px solid var(--rule);
     gap: 14px;
   }

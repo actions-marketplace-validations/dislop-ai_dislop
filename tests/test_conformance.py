@@ -200,6 +200,23 @@ class ConformanceParityTests(unittest.TestCase):
         self.assertEqual(n_chk["count"], p_chk["count"])
         self.assertEqual([f["ruleId"] for f in n_chk["findings"]], [f["ruleId"] for f in p_chk["findings"]])
 
+    def test_resources_and_stdin_parity(self):
+        n_res = run_node(["resources", "--json"])
+        p_res = run_py(["resources", "--json"])
+        self.assertEqual(n_res.returncode, 0)
+        self.assertEqual(p_res.returncode, 0)
+        self.assertEqual(json.loads(n_res.stdout), json.loads(p_res.stdout))
+
+        sample = "好的，以下是本周进展：延迟降到 120ms。"
+        n_in = run_node(["check", "-", "--stdin-filename", "draft.md", "--format", "json"], stdin_text=sample)
+        p_in = run_py(["check", "-", "--stdin-filename", "draft.md", "--format", "json"], stdin_text=sample)
+        self.assertEqual(n_in.returncode, 1)
+        self.assertEqual(p_in.returncode, 1)
+        self.assertEqual(
+            [f["ruleId"] for f in json.loads(n_in.stdout)["findings"]],
+            [f["ruleId"] for f in json.loads(p_in.stdout)["findings"]],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

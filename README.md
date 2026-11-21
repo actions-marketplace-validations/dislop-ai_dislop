@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="./README.zh-CN.md">简体中文</a> ·
-  <a href="https://dislop.com">Try it at dislop.com</a> ·
+  <a href="https://dislop.com/?lang=en">Try it at dislop.com</a> ·
   <a href="./awesome/README.md">Awesome Anti-Slop</a> ·
   <a href="./ROADMAP.md">Roadmap</a> ·
   <a href="./LICENSE">Apache-2.0</a>
@@ -31,7 +31,7 @@ Certainly! Here is the launch note. It's worth noting that exports are a game-ch
 
 If you rewrite it into a second-order AI slogan (`This isn't just an upgrade — it's a new standard.`), running `dislop check` catches that too. Clean it up into plain prose and `dislop check` exits `0`.
 
-That's it. It reads Markdown, plain text, HTML/CSS/JSX, Word (`.docx`), and PowerPoint (`.pptx`). Node.js (`npx`), Python (`uvx`), MCP, and the browser page at [dislop.com](https://dislop.com) run the same 25 rules offline with no external dependencies.
+That's it. It reads Markdown, plain text, HTML/CSS/JSX, Word (`.docx`), and PowerPoint (`.pptx`). Node.js, Python, local stdio MCP, and the default browser workbench at [dislop.com](https://dislop.com/?lang=en) run the same 25 rules 100% offline with zero uploads (and when you want one-click LLM rewriting or Remote HTTP MCP, our optional hosted cloud is one click away).
 
 ## Quick start
 
@@ -141,10 +141,22 @@ For a narrow one-off exception, add a reason above the line (`--report-unused` f
 <!-- dislop-ignore-next-line en-cliche-lexicon -- quoting vendor press release verbatim -->
 ```
 
+### Install once locally (true air-gapped / fast hooks)
+
+```bash
+# Node.js 20+ (global binary, zero network after install)
+npm install -g github:dislop-ai/dislop
+dislop check .
+
+# Or Python 3.10+ (zero external dependencies)
+git clone https://github.com/dislop-ai/dislop.git
+PYTHONPATH=dislop/src python3 -m dislop.cli check .
+```
+
 ### Open-Source Local (`Skill` + `CLI`) vs. Hosted Cloud (`dislop.com/mcp`)
 
 - **Open Source (`dislop-ai/dislop`, Apache-2.0)**: `SKILL.md`, Node/Python CLI (`dislop check`, `dislop explain`, `dislop packs`, `dislop resources`), local stdio MCP (`--mcp`), 25 deterministic rules, `Awesome Anti-Slop`, and `dislop-bench`. Zero LLM calls, zero API keys, and 100% offline during `check` so private drafts never leave your machine.
-- **Hosted Cloud Remote MCP & Web AI (`https://dislop.com/mcp`, `https://dislop.com/#pricing`)**: Optional closed-source cloud backend powered by a paid-tier zero-training model endpoint (no draft logging). Exposes `dislop_review` (1 credit, hybrid 3rd-order review), `dislop_deslop` (2 credits, self-healing rewrite with numeric fidelity guard and automatic repair), and `dislop_voice_extract` (2 credits, `dislop.voice/1`). Includes 5 free anonymous web demo credits/day, **30 free monthly credits** after 1-step email token signup, and Pro (`$12/mo`), PAYGO (`$10 / 1,000 credits`), and Team (`$29/seat/mo`) plans.
+- **Hosted Cloud Remote MCP & Web AI (`https://dislop.com/mcp`, `https://dislop.com/?lang=en#pricing`)**: Optional closed-source cloud backend powered by a paid-tier zero-training Google Gemini endpoint (no draft logging; see [privacy.md](https://dislop.com/privacy.md)). Exposes `dislop_review` (1 credit, hybrid 3rd-order review), `dislop_deslop` (2 credits, self-healing rewrite with numeric fidelity guard and automatic repair), and `dislop_voice_extract` (2 credits, `dislop.voice/1`). Includes 5 free anonymous web demo credits/day, **30 free monthly credits** after email token signup, and early-access waitlists for Pro (`$12/mo`, 1,500 credits), PAYGO (`$10 / 800 credits`), and Team (`$29/seat/mo`).
 
 ## Anti-slop benchmark (`dislop-bench v1`)
 
@@ -156,7 +168,7 @@ node scripts/run_benchmark.mjs --assert
 
 Latest measured baseline ([benchmarks/REPORT.md](./benchmarks/REPORT.md)):
 
-- **Detection (48 samples, 6 domains)**: Precision `100.0%` · Recall `100.0%` · Clean FPR `0.0%` · Adversarial Near-Miss FPR `0.0%` · 2nd-Order Trap Recall `100.0%` · Node/Python Parity `100.0%`.
+- **Detection (64 samples across 6 domains: 48 core + 16 adversarial holdout)**: Precision `100.0%` · Recall `100.0%` · Clean FPR `0.0%` · Adversarial Near-Miss FPR `0.0%` · 2nd-Order Trap Recall `100.0%` · Node/Python Parity `100.0%`.
 - **End-to-end de-slop (12 tasks × 3 arms)**: `raw_ai` **61.4 / 100** → `naive_humanizer` **72.1 / 100** (doubles 3rd-order slop and drops/invents numbers) → `dislop_clean` **100.0 / 100** (`12/12` all-clear).
 - **Live 5-model comparison ([benchmarks/MODEL-COMPARISON.md](./benchmarks/MODEL-COMPARISON.md))**: Across `Gemini 3.1/3.5 Flash-Lite`, `Gemini 3.5/3.8 Flash`, and `Qwen 3.8 Flash`, bare prompts averaged `76.0–84.2 / 100` (`2/10–4/10` all-clear), while the `dislop` self-healing cloud pipeline lifted every model by **+15.8 to +22.3 points** (`97.0–100.0 / 100`, `8/10–10/10` all-clear; `Gemini 3.1 Flash-Lite` reached `98.5 / 100` in `1.2s` at `~$0.09 / 1k calls`).
 

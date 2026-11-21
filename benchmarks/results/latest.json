@@ -2,10 +2,10 @@
   "schema": "dislop.bench-report/1",
   "detection": {
     "schema": "dislop.bench-detection/1",
-    "totalSamples": 48,
-    "tp": 24,
+    "totalSamples": 64,
+    "tp": 32,
     "fp": 0,
-    "tn": 24,
+    "tn": 32,
     "fn": 0,
     "precision": 1,
     "recall": 1,
@@ -19,32 +19,32 @@
     "parityRate": 1,
     "byDomain": {
       "zh-brief": {
-        "tp": 5,
+        "tp": 8,
         "fp": 0,
-        "tn": 5,
+        "tn": 8,
         "fn": 0,
-        "total": 10
+        "total": 16
       },
       "zh-essay": {
-        "tp": 4,
+        "tp": 5,
         "fp": 0,
         "tn": 4,
         "fn": 0,
-        "total": 8
+        "total": 9
       },
       "en-brief": {
-        "tp": 5,
+        "tp": 8,
         "fp": 0,
-        "tn": 5,
+        "tn": 7,
         "fn": 0,
-        "total": 10
+        "total": 15
       },
       "en-essay": {
         "tp": 3,
         "fp": 0,
-        "tn": 3,
+        "tn": 4,
         "fn": 0,
-        "total": 6
+        "total": 7
       },
       "web-ui": {
         "tp": 4,
@@ -59,12 +59,19 @@
         "tn": 3,
         "fn": 0,
         "total": 6
+      },
+      "html-ui": {
+        "tp": 1,
+        "fp": 0,
+        "tn": 2,
+        "fn": 0,
+        "total": 3
       }
     },
     "byCategory": {
       "artifact": {
-        "hit": 5,
-        "total": 5
+        "hit": 9,
+        "total": 9
       },
       "1st-order": {
         "hit": 3,
@@ -85,6 +92,22 @@
       "design-slop": {
         "hit": 5,
         "total": 5
+      },
+      "second-order": {
+        "hit": 2,
+        "total": 2
+      },
+      "slop": {
+        "hit": 2,
+        "total": 2
+      },
+      "near-miss": {
+        "hit": 0,
+        "total": 5
+      },
+      "clean": {
+        "hit": 0,
+        "total": 3
       }
     },
     "details": [
@@ -742,6 +765,216 @@
         "domain": "pptx-deck",
         "expected": "clean",
         "category": "clean-nearmiss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "ho-01-zh-chat-closer",
+        "domain": "zh-brief",
+        "expected": "slop",
+        "category": "artifact",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "chatbot-artifact"
+        ],
+        "pyRuleIds": [
+          "chatbot-artifact"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "ho-02-zh-pivot-juefei",
+        "domain": "zh-brief",
+        "expected": "slop",
+        "category": "second-order",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "negation-pivot-frame"
+        ],
+        "pyRuleIds": [
+          "negation-pivot-frame"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "ho-03-zh-moral-guigen",
+        "domain": "zh-essay",
+        "expected": "slop",
+        "category": "slop",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "literary-negation-pivot",
+          "zh-essay-moralizing-ending"
+        ],
+        "pyRuleIds": [
+          "literary-negation-pivot",
+          "zh-essay-moralizing-ending"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "ho-04-en-chat-happy",
+        "domain": "en-brief",
+        "expected": "slop",
+        "category": "artifact",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "chatbot-artifact"
+        ],
+        "pyRuleIds": [
+          "chatbot-artifact"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "ho-05-en-pivot-merely",
+        "domain": "en-brief",
+        "expected": "slop",
+        "category": "second-order",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "negation-pivot-frame"
+        ],
+        "pyRuleIds": [
+          "negation-pivot-frame"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "ho-06-en-landscape",
+        "domain": "en-brief",
+        "expected": "slop",
+        "category": "slop",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "en-throat-clearing-opener"
+        ],
+        "pyRuleIds": [
+          "en-throat-clearing-opener"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "ho-07-html-jsvoid",
+        "domain": "html-ui",
+        "expected": "slop",
+        "category": "artifact",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "ui-dead-control"
+        ],
+        "pyRuleIds": [
+          "ui-dead-control"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "ho-08-zh-ascii-placeholder",
+        "domain": "zh-brief",
+        "expected": "slop",
+        "category": "artifact",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "unfilled-placeholder"
+        ],
+        "pyRuleIds": [
+          "unfilled-placeholder"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "ho-09-fenced-code-clean",
+        "domain": "zh-brief",
+        "expected": "clean",
+        "category": "near-miss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "ho-10-en-numeric-pivot-clean",
+        "domain": "en-brief",
+        "expected": "clean",
+        "category": "near-miss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "ho-11-zh-factual-pivot-clean",
+        "domain": "zh-brief",
+        "expected": "clean",
+        "category": "near-miss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "ho-12-en-go-debugger-clean",
+        "domain": "en-brief",
+        "expected": "clean",
+        "category": "clean",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "ho-13-html-disabled-explained-clean",
+        "domain": "html-ui",
+        "expected": "clean",
+        "category": "near-miss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "ho-14-html-real-anchor-clean",
+        "domain": "html-ui",
+        "expected": "clean",
+        "category": "near-miss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "ho-15-zh-clean-metrics",
+        "domain": "zh-brief",
+        "expected": "clean",
+        "category": "clean",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "ho-16-en-single-emdash-clean",
+        "domain": "en-essay",
+        "expected": "clean",
+        "category": "clean",
         "predicted": "clean",
         "correct": true,
         "nodeRuleIds": [],

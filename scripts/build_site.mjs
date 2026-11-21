@@ -949,9 +949,15 @@ npx --yes github:dislop-ai/dislop resources --json
 - \`1\`: Findings met or exceeded \`--fail-on\`.
 - \`2\`: Invalid flags, missing path, or explicitly specified file was uninspectable (e.g., corrupted archive or non-UTF-8 file).
 
-## Claude Code PostToolUse Hook Template (Using Shipped CLI)
+## Claude Code PostToolUse Hook Template (Fast Local Install Recommended)
 
-Note: \`PostToolUse\` fires **after** \`Write\`/\`Edit\` completes and receives tool context as JSON on stdin (\`tool_input.file_path\`). Parse and validate that path before invoking \`dislop check\` so empty values never scan the entire working directory; map CLI exit \`1\` to exit \`2\` to return structured post-write feedback to Claude Code.
+Install once locally so hooks run offline with zero network fetch latency:
+
+\`\`\`bash
+npm install -g github:dislop-ai/dislop
+\`\`\`
+
+Note: \`PostToolUse\` fires **after** \`Write\`/\`Edit\` completes and receives tool context as JSON on stdin (\`tool_input.file_path\`). Parse and validate that path before invoking \`dislop check\`, and map CLI exit \`1\` to exit \`2\` to return structured post-write feedback to Claude Code:
 
 \`\`\`json
 {
@@ -962,7 +968,7 @@ Note: \`PostToolUse\` fires **after** \`Write\`/\`Edit\` completes and receives 
         "hooks": [
           {
             "type": "command",
-            "command": "node -e 'const d=JSON.parse(require(\"fs\").readFileSync(0,\"utf8\"));const f=d.tool_input?.file_path;if(!f)process.exit(0);const r=require(\"child_process\").spawnSync(\"npx\",[\"--yes\",\"github:dislop-ai/dislop\",\"check\",f,\"--fail-on\",\"error\"],{stdio:\"inherit\"});process.exit(r.status===1?2:(r.status??0));'"
+            "command": "node -e 'const fs=require(\\"node:fs\\"),cp=require(\\"node:child_process\\");const d=JSON.parse(fs.readFileSync(0,\\"utf8\\"));const f=d.tool_input&&d.tool_input.file_path;if(!f)process.exit(0);const r=cp.spawnSync(\\"dislop\\",[\\"check\\",f,\\"--fail-on\\",\\"error\\"],{stdio:\\"inherit\\"});process.exit(r.status===1?2:(r.status||0));'"
           }
         ]
       }
@@ -993,6 +999,7 @@ version: ${VERSION}
 
 ## 1. Local Offline Stdio MCP (Open Source, Zero LLM, Zero Upload)
 
+Node.js 20+:
 \`\`\`json
 {
   "mcpServers": {
@@ -1004,15 +1011,33 @@ version: ${VERSION}
 }
 \`\`\`
 
+Python 3.10+ (zero external deps):
+\`\`\`json
+{
+  "mcpServers": {
+    "dislop": {
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/dislop-ai/dislop", "dislop", "--mcp"]
+    }
+  }
+}
+\`\`\`
+
 Local deterministic tools:
-- \`dislop_check\`: Checks \`text\` or workspace-relative \`path\`, returning flagged spans, check questions, and examples (0 network calls).
-- \`dislop_explain\`: Returns rationale and \`bad -> trap -> good\` examples for a \`ruleId\`.
-- \`dislop_packs\`: Lists installed packs (\`core\`, \`business-brief\`, \`literary-essay\`, \`deck-and-ui\`).
+- \`dislop_check\`: Arguments \`{ "text"?: string, "path"?: string, "filename"?: string, "pack"?: "core"|"business-brief"|"literary-essay"|"deck-and-ui" }\`. Returns \`{ pack, modality, count, findings }\` with 0 network calls.
+- \`dislop_explain\`: Arguments \`{ "ruleId": string, "lang"?: "en"|"zh" }\`. Returns rationale and \`bad -> trap -> good\` examples.
+- \`dislop_packs\`: Arguments \`{}\`. Lists installed packs.
 
 ## 2. Hosted Remote HTTP MCP (Cloud LLM, Free 30 Credits/Month)
 
-Claim a free Bearer token (\`dslp_...\`) at \`${BASE_URL}/#pricing\` (only its SHA-256 hash is stored; paid-tier zero-training model endpoint, no draft logging):
+Claim a free Bearer token (\`dslp_...\`) at \`${BASE_URL}/#cloud-token-box\` (paid-tier zero-training Google Gemini endpoint, no draft logging; see [\`/privacy.md\`](../privacy.md)).
 
+### Claude Code
+\`\`\`bash
+claude mcp add --transport http dislop-cloud ${BASE_URL}/mcp --header "Authorization: Bearer dslp_YOUR_FREE_TOKEN"
+\`\`\`
+
+### Cursor / Windsurf (\`mcp.json\`)
 \`\`\`json
 {
   "mcpServers": {
@@ -1026,16 +1051,71 @@ Claim a free Bearer token (\`dslp_...\`) at \`${BASE_URL}/#pricing\` (only its S
 }
 \`\`\`
 
-Remote MCP tools:
-- \`dislop_check\`, \`dislop_explain\`, \`dislop_packs\` (0 credits, no token required).
-- \`dislop_review\` (1 credit): hybrid deterministic + 3rd-order structural + LLM review.
-- \`dislop_deslop\` (2 credits): self-healing rewrite with deterministic post-check, numeric fidelity guard, and automatic repair pass.
-- \`dislop_voice_extract\` (2 credits): extract a reusable \`dislop.voice/1\` style profile from 1-5 human samples.
+### Codex (\`~/.codex/config.toml\`)
+\`\`\`toml
+[mcp_servers.dislop_cloud]
+url = "${BASE_URL}/mcp"
+http_headers = { Authorization = "Bearer dslp_YOUR_FREE_TOKEN" }
+\`\`\`
+
+### Remote MCP Tools & Example Payloads
+
+- \`dislop_check\`, \`dislop_explain\`, \`dislop_packs\` (0 credits, no token required; note remote \`dislop_check\` accepts \`text\` only, not local filesystem \`path\`).
+- \`dislop_review\` (1 credit, requires Bearer token):
+  - Input: \`{ "text": "...", "pack"?: "business-brief", "lang"?: "en"|"zh" }\`
+  - Output: \`{ mode, model, deterministic, thirdOrderHits, llmReview: { summary, aiFlavorLevel, issues }, billing }\`
+- \`dislop_deslop\` (2 credits, requires Bearer token):
+  - Input: \`{ "text": "...", "pack"?: "business-brief", "lang"?: "en"|"zh", "voiceProfile"?: object }\`
+  - Output: \`{ mode, model, revised, changes, afterCheck, numericDiff, attempts, repaired, billing }\`
+- \`dislop_voice_extract\` (2 credits, requires Bearer token):
+  - Input: \`{ "samples": ["Sample 1...", "Sample 2..."], "lang"?: "en"|"zh" }\`
+  - Output: \`{ schema: "dislop.voice/1", stylometrics, profile }\` — pass \`output.profile\` as \`voiceProfile\` in \`dislop_deslop\`.
 
 ## 3. Cloud HTTP API & JS Core Export
 
 - Same-origin HTTP endpoints: \`GET /api/health\`, \`POST /api/v1/check\`, \`POST /api/v1/review\`, \`POST /api/v1/deslop\`, \`POST /api/v1/voice/extract\`, \`POST /api/v1/auth/register\`, \`GET /api/v1/account/me\`, and \`POST /api/v1/waitlist\`.
 - \`package.json\` exports the zero-I/O pure ES module \`src/core.mjs\` (\`auditText\`, \`auditOoxmlEntries\`, \`resolveEffectivePack\`).
+`,
+});
+
+registerResource({
+  id: "privacy-policy",
+  pillar: "tools",
+  kind: "guide",
+  titleEn: "Privacy, Data Boundaries & Subprocessors",
+  titleZh: "隐私与数据边界说明",
+  relPath: "privacy.md",
+  modalities: ["markdown", "text"],
+  languages: ["en", "zh"],
+  packs: [],
+  relatedTools: ["browser-workbench", "cli", "mcp"],
+  content: `---
+content-type: reference-data
+version: ${VERSION}
+snapshot: ${SNAPSHOT_DATE}
+---
+
+# Privacy & Data Boundaries
+
+\`dislop\` separates its **open-source offline tools** from its **optional hosted cloud service** so you always know whether text leaves your machine.
+
+## 1. Open-Source Offline Tools (Zero Uploads, Zero Telemetry)
+
+- **CLI (\`dislop check\`, \`explain\`, \`packs\`, \`resources\`)**, **Agent Skill (\`SKILL.md\`)**, **Local stdio MCP (\`--mcp\`)**, and the **default browser workbench** run 100% locally.
+- \`dislop check\` makes zero network calls.
+- \`dislop.com\` loads zero third-party fonts, analytics, or external scripts (\`Content-Security-Policy: connect-src 'self'\`).
+
+## 2. Optional Hosted Cloud AI (\`/api/v1/*\` & \`/mcp\`)
+
+Data is sent to \`dislop.com\` **only** when you explicitly click an AI button in the workbench, claim a free token, submit the early-access waitlist, or call an authenticated Remote MCP tool:
+
+- **Upstream Model Provider**: Google Gemini API on a **paid-tier key** (prompts and outputs are not used to train Google models under paid-tier terms).
+- **Zero Draft Storage**: Draft text is processed in memory and never written to disk or server logs.
+- **Account & Abuse-Control Records**:
+  - When you claim a free token (\`POST /api/v1/auth/register\`), we store your email, a one-way **SHA-256 hash** of your Bearer token (never the plaintext key), and your monthly credit counter.
+  - For anonymous web demos (5 credits/day), we keep an in-memory/ephemeral daily counter keyed by \`YYYY-MM-DD:<client-ip>\` that is pruned after the day ends.
+  - Re-registering with the same email rotates and invalidates the previous token immediately.
+- **Confidential Drafts**: Never send confidential, regulated, or unreleased source documents to any hosted cloud endpoint; use the local offline CLI or local stdio MCP instead.
 `,
 });
 
@@ -1735,9 +1815,11 @@ Choose the page matching your task below. Follow the Skill rules while drafting,
 
 ## Machine index & packs
 - [JSON Catalog](${BASE_URL}/catalog.json): Versioned manifest (\`dislop.catalog/1\`) with sha256 and token estimates.
-- [Agent Skill](${BASE_URL}/tools/skill.md): Full \`prevent -> check -> clean up -> re-check\` writing & UI playbook.
+- [Agent Skill](${BASE_URL}/tools/skill.md): Mirror of \`skills/dislop/SKILL.md\` (\`v${VERSION}\`); skip if already loaded locally.
+- [Hosted Remote MCP](${BASE_URL}/tools/mcp-sdk-api.md): Optional \`${BASE_URL}/mcp\` (\`dislop_review\`, \`dislop_deslop\`, \`dislop_voice_extract\`; 30 free credits/mo at \`/#cloud-token-box\`).
 - [Rule Packs](${BASE_URL}/packs/core.md): Also \`/packs/business-brief.md\`, \`/packs/literary-essay.md\`, \`/packs/deck-and-ui.md\`, and ${allRules.length} \`/rules/<id>.md\` cards.
 - [Single-Fetch Bundle](${BASE_URL}/llms-full.txt): All ${allRules.length} rules compiled without test fixtures.
+- [Privacy & Data Boundaries](${BASE_URL}/privacy.md): Offline core vs. optional zero-training cloud endpoint.
 `,
   { isAgentText: true }
 );
@@ -1829,7 +1911,7 @@ const preRenderedRules = allRules
   .map(({ packId, rule: r }) => {
     const meta = RULE_UI_META[r.id] || { lang: "both", title: { zh: r.id, en: r.id } };
     const isEnOnly = meta.lang === "en";
-    const sevCls = r.severity === "error" ? "sev-error" : "sev-warning";
+    const sevCls = r.severity === "error" ? "sev-error" : r.severity === "info" ? "sev-info" : "sev-warning";
     const sevTextZh = r.severity === "error" ? "硬伤" : r.severity === "warning" ? "提醒" : "轻提示";
     const canTry = r.exemplar && (r.modalities || []).some((m) => textMods.has(m));
     const ex = isEnOnly ? r.exemplar : meta.zhEx || r.exemplar;
@@ -2000,8 +2082,10 @@ for (const res of catalogResources) {
   }
 }
 
-// Verify every dislop.com URL in llms.txt resolves to a file in site/
-for (const m of llmsTxt.matchAll(/https:\/\/dislop\.com(\/[^\s)]+)/g)) {
+// Verify every dislop.com URL in llms.txt resolves to a file in site/ or known dynamic cloud route
+const DYNAMIC_CLOUD_PATHS = new Set(["/mcp", "/api/health"]);
+for (const m of llmsTxt.matchAll(/https:\/\/dislop\.com(\/[^\s)`]+)/g)) {
+  if (DYNAMIC_CLOUD_PATHS.has(m[1])) continue;
   const target = m[1].replace(/\/$/, "/index.html");
   const full = path.join(SITE_DIR, target.replace(/^\//, ""));
   if (!fs.existsSync(full)) {

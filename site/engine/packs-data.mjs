@@ -374,6 +374,7 @@ export const PACKS_BY_ID = {
         "patterns": [
           "(?<![A-Za-z])(?:lorem ipsum|dolor sit amet)(?![A-Za-z])",
           "\\[(?:insert|add|your|placeholder|tbd|todo)(?:\\s+[^\\]\\n]{1,50})?\\]",
+          "\\[(?:待补充|待填写|此处插入|占位符)\\]",
           "\\{\\{\\s*[A-Za-z_][A-Za-z0-9_.-]{0,40}\\s*\\}\\}",
           "【[^】\\n]{0,20}(?:待补充|待填写|此处插入|占位符)[^】\\n]{0,20}】",
           "(?:Click to add (?:title|subtitle|text)|单击此处添加(?:标题|副标题|文本))"
@@ -416,10 +417,12 @@ export const PACKS_BY_ID = {
           "pptx"
         ],
         "patterns": [
-          "(?:^|\\n)\\s*(?:Certainly|Sure|Absolutely)[!,.]?\\s+[Hh]ere(?:'s| is| are)\\b",
+          "(?:^|\\n)\\s*(?:Certainly|Sure|Absolutely|Of course|Happy to help|Glad to help)[!,.]?\\s+(?:[Hh]ere(?:'s| is| are)|[Bb]elow is)\\b",
           "\\bAs an AI(?: language model| assistant)?\\b",
           "\\bI hope this helps[!.]?",
-          "(?:^|\\n)\\s*(?:好的|当然可以|没问题)[，,！!]?\\s*(?:以下|下面)是(?:为您|修改后|润色后|整理后)",
+          "\\bFeel free to (?:reach out|let me know|ask) if you (?:need|have) (?:anything|any (?:other |further )?questions)[!.]?",
+          "(?:^|\\n)\\s*(?:好的|当然可以|没问题)[，,！!]?\\s*(?:以下|下面)是",
+          "(?:希望这对(?:你|您)有(?:所)?帮助|如果(?:你|您)(?:还有|需要)(?:任何|其他)?(?:问题|帮助)[，,]?请随时告诉我)[！!。.]?",
           "\\b作为一个?\\s*AI(?:\\s*语言模型|\\s*助手)?",
           "\\[oaicite:\\d+\\]",
           "contentReference\\[oaicite:\\d+\\]",

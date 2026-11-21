@@ -205,7 +205,11 @@ function measureNumericRetention(sourcePayload, candPayload, modality) {
 
 function runDetectionSuite() {
   const dataset = JSON.parse(fs.readFileSync(path.join(DATASETS_DIR, "detection-v1.json"), "utf8"));
-  const samples = dataset.samples || [];
+  const holdoutPath = path.join(DATASETS_DIR, "holdout-v1.json");
+  const holdoutSamples = fs.existsSync(holdoutPath)
+    ? JSON.parse(fs.readFileSync(holdoutPath, "utf8")).samples || []
+    : [];
+  const samples = [...(dataset.samples || []), ...holdoutSamples];
   const pyBatch = runPythonBatchAudit(samples);
 
   let tp = 0;

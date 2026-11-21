@@ -375,20 +375,23 @@ def make_finding(
 def _probe_negation_pivot(prose_text: str, raw_text: str) -> list[dict[str, Any]]:
     hits: list[dict[str, Any]] = []
     zh_re = re.compile(
-        r"(?:(?:这|那|它)?(?:并)?不(?:是|只是|仅仅?是)|与其说是?)([^，。！？；\n]{1,22})[，,；—]+\s*(?:而是|更是|不如说是?)([^。！？；\n]{1,28})"
+        r"(?:(?:这|那|它)?(?:(?:并)?不(?:是|只是|仅仅?是)|绝非|并非(?:只是)?)|与其说是?)([^，。！？；\n]{1,22})[，,；—]+\s*(?:而是|更是|不如说是?)([^。！？；\n]{1,28})"
     )
+    zh_rhet_head = re.compile(r"^(?:(?:这|那|它)|绝非|并非|与其|并?不(?:只是|仅仅?是))")
+    zh_factual_cause = re.compile(r"(?:报错|故障|原因|超时|磁盘|内存|耗尽|端口|进程|导致|因为|[A-Za-z_][A-Za-z0-9_-]{2,})")
     for m in zh_re.finditer(prose_text):
-        clause_a, clause_b = m.group(1) or "", m.group(2) or ""
+        clause_a, clause_b = (m.group(1) or "").strip(), (m.group(2) or "").strip()
         raw_slice = raw_text[m.start() : m.end()]
+        context_before = raw_text[max(0, m.start() - 12) : m.start()]
         both_concrete = (
             (bool(re.search(r"\d", clause_a)) and bool(re.search(r"\d", clause_b)))
             or "`" in raw_slice
             or bool(re.search(r"\.[a-z]{2,4}\b", raw_slice, re.I))
             or bool(re.search(r"(?:第一次|第二次|站台|号楼|排第|星期|周[一二三四五六日天])", raw_slice))
         )
-        if both_concrete or len(clause_b.strip()) > 26:
+        if both_concrete or len(clause_b) > 26 or not clause_a or not clause_b:
             continue
-        if not clause_a.strip() or not clause_b.strip():
+        if not zh_rhet_head.search(m.group(0)) and zh_factual_cause.search(context_before + raw_slice):
             continue
         hits.append({"index": m.start(), "length": m.end() - m.start()})
 
