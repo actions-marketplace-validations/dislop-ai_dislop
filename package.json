@@ -1,7 +1,7 @@
 {
   "name": "dislop",
-  "version": "0.3.0",
-  "description": "Local zero-dependency anti-slop linter for AI-written docs, Word/PowerPoint files, and web pages.",
+  "version": "0.4.0",
+  "description": "Open-source zero-dependency anti-slop Skill, CLI, and offline checker for AI-written docs, Word/PowerPoint files, and web pages.",
   "license": "Apache-2.0",
   "homepage": "https://dislop.com",
   "repository": {
@@ -24,11 +24,9 @@
     "dislop-mcp": "./bin/dislop-mcp.mjs"
   },
   "scripts": {
-    "test": "node bin/dislop.mjs pack-test && node tests/test_site.mjs && node tests/test_server.mjs",
-    "test:server": "node tests/test_server.mjs",
+    "test": "node bin/dislop.mjs pack-test && node tests/test_site.mjs",
     "bench": "node scripts/run_benchmark.mjs",
     "bench:assert": "node scripts/run_benchmark.mjs --assert",
-    "server": "node server/index.mjs",
     "build:site": "node scripts/build_site.mjs",
     "test:prototype": "node scripts/prototype_antipattern_lab.mjs self-test",
     "dogfood": "node bin/dislop.mjs check . --fail-on warning && node bin/dislop.mjs check site/ --fail-on info"
@@ -39,13 +37,6 @@
     "bin/",
     "src/core.mjs",
     "src/binary-node.mjs",
-    "server/index.mjs",
-    "server/llm-client.mjs",
-    "server/probes.mjs",
-    "server/.env.example",
-    "server/Dockerfile",
-    "server/README.md",
-    "server/README.zh-CN.md",
     "packs/",
     "skills/",
     "assets/",

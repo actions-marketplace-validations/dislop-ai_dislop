@@ -30,9 +30,6 @@ jobs:
       - name: Run website specimen, Try-demo, catalog, URL & WCAG tests
         run: node tests/test_site.mjs
 
-      - name: Run open-source LLM backend & Remote HTTP MCP unit tests (offline)
-        run: node tests/test_server.mjs
-
       - name: Run anti-slop benchmark regression gates (48 detection + 12 revision tasks, Node & Python parity)
         run: node scripts/run_benchmark.mjs --assert
 

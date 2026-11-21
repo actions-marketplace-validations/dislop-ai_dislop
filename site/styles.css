@@ -1055,6 +1055,245 @@ html[lang^="zh"] .proof-lines {
   color: var(--ink-2);
 }
 
+/* Opt-in Cloud AI Assist Bar & Result Panel */
+.ai-assist-bar {
+  padding: 10px 20px;
+  border-top: 1px solid var(--rule);
+  background-color: var(--sheet);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+}
+
+.ai-assist-actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.ai-deslop-btn {
+  min-height: 32px;
+  padding: 5px 12px;
+  font-size: 0.81rem;
+}
+
+.ai-assist-meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--ink-2);
+}
+
+.ai-result-panel {
+  border-top: 1px solid var(--rule);
+  background-color: var(--stage);
+  padding: 16px 20px;
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
+.ai-result-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  margin-bottom: 10px;
+}
+
+.ai-result-title {
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 0.9rem;
+}
+
+.ai-result-meta {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--ink-2);
+}
+
+.ai-result-text {
+  background-color: var(--sheet);
+  border: 1px solid var(--rule);
+  padding: 12px 14px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: var(--font-serif);
+  font-size: 0.96rem;
+  line-height: 1.7;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+
+.ai-changes-list {
+  margin: 0 0 12px;
+  padding-left: 18px;
+  color: var(--ink-2);
+  font-size: 0.82rem;
+}
+
+.ai-changes-list li {
+  margin-bottom: 4px;
+}
+
+.ai-error-msg {
+  color: var(--mark-error);
+  font-size: 0.84rem;
+  margin: 0 0 8px;
+}
+
+/* Open-Core Pricing & Cloud Forms */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 20px;
+}
+
+.pricing-col {
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--sheet);
+}
+
+.pricing-col + .pricing-col {
+  border-left: 1px solid var(--rule);
+}
+
+.pricing-col.is-featured {
+  background-color: var(--stage);
+}
+
+.pricing-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.pricing-head h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+.pricing-amount {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.pricing-sub {
+  margin: 0 0 12px;
+  font-size: 0.83rem;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+
+.pricing-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.82rem;
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.pricing-list li {
+  margin-bottom: 5px;
+}
+
+.cloud-forms-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  background-color: var(--sheet);
+}
+
+.cloud-form-pane {
+  padding: 18px;
+}
+
+.cloud-form-pane + .cloud-form-pane {
+  border-left: 1px solid var(--rule);
+}
+
+.cloud-form-desc {
+  margin: 0 0 12px;
+  font-size: 0.83rem;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+
+.cloud-inline-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.cloud-stack-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cloud-input {
+  flex: 1 1 200px;
+  min-height: 36px;
+  padding: 6px 10px;
+  background-color: var(--inset);
+  color: var(--ink);
+  border: 1px solid var(--control-border);
+  border-radius: 3px;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+}
+
+.cloud-status-bar {
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  background-color: var(--mark-stet-wash);
+  border-left: 3px solid var(--mark-stet);
+  font-size: 0.8rem;
+  color: var(--ink);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cloud-output-box {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background-color: var(--stage);
+  border-left: 3px solid var(--ink);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.cloud-output-pre {
+  margin: 8px 0 0;
+  padding: 10px;
+  background-color: var(--inset);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
 .legend-item {
   display: inline-flex;
   align-items: center;
@@ -2107,9 +2346,15 @@ html[lang^="zh"] .proof-lines {
   .system-col + .system-col,
   .dogfood-col + .dogfood-col,
   .radar-split-col + .radar-split-col,
+  .pricing-col + .pricing-col,
+  .cloud-form-pane + .cloud-form-pane,
   .ds-cell + .ds-cell {
     border-left: none;
     border-top: 1px solid var(--rule);
+  }
+  .pricing-grid,
+  .cloud-forms-grid {
+    grid-template-columns: 1fr;
   }
   .filter-group {
     flex-wrap: nowrap;

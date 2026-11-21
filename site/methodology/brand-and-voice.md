@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.3.0
+version: 0.4.0
 ---
 
 # Voice, Copy, and Visual Guide
@@ -68,7 +68,7 @@ Andrej Karpathy's writing advice and READMEs (`nanoGPT`, `micrograd`) pair **80%
 
 Plain copy does not mean a dull interface. The lightness lives in the graphic mark itself, drawn from [assets/logo.svg](https://dislop.com/assets/logo.svg): a rounded carbon tile (`#14171A`), a light manuscript line underneath, and a single vermilion round-capped loop (`#F04438`) taking out the extra bit while leaving the rest alone. The struck AI greeting at the top of the homepage shows that action directly so the copy does not have to narrate a "red pen" metaphor.
 
-Full contrast numbers live in [design-system.md](./design-system.md). Keep `1px` rules, cool neutral paper (`#F6F7F5` / `#FFFFFF`), monotonic dark surfaces (`#0E1012 → #15181C → #1D2127`), no external font CDNs, and `CSP: connect-src 'none'`. Skip both purple-pink neon gradients and warm-cream terracotta templates.
+Full contrast numbers live in [design-system.md](./design-system.md). Keep `1px` rules, cool neutral paper (`#F6F7F5` / `#FFFFFF`), monotonic dark surfaces (`#0E1012 → #15181C → #1D2127`), no external font CDNs, and `CSP: connect-src 'self'` (zero third-party requests; offline checking stays zero-upload by default). Skip both purple-pink neon gradients and warm-cream terracotta templates.
 
 Use `--pen` (`#F04438`) on the logo loop and thick drawn strokes in both light and dark modes, `#B42318` (`6.6:1`) for small light-mode red text, and `#FF7A6B` (`7.0:1`) in dark mode, with a `1px` border around the logo tile in dark mode so it does not blend into the header. Keep `0px` radii on joined grid cells, `6px` on buttons (`5px` compact), `4px` on inputs, and no `999px` pill walls. Keep monospace for code, line numbers, rule IDs, and counts, use system sans for prose and controls, and keep `letter-spacing: 0` on Chinese headings.
 

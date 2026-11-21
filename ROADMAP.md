@@ -15,7 +15,7 @@ This roadmap tracks what `dislop` ships today, what we are building next, and th
 | Core engine & parity | Zero-dependency Node.js 20+ and Python 3.10+ engines passing 88 rule fixtures and 10 cross-runtime conformance/unit tests | `src/core.mjs`, `src/dislop/engine.py`, `tests/test_conformance.py` |
 | Rules & packs | 25 pure anti-slop rules across `core` (4 AI delivery artifacts, `error`) and 3 style/template packs (`business-brief`, `literary-essay`, `deck-and-ui`) | `packs/*/pack.json` |
 | Formats | `.md`, `.mdx`, `.txt`, `.html`, `.css`, `.jsx`, `.tsx`, `.docx`, `.pptx` | `src/binary-node.mjs`, `src/dislop/engine.py` |
-| Website & Workbench | Default-Chinese `dislop.com` with native English toggle, zero language mixing, live 3-state hero proof card (`Original` / `Still sounds like AI` / `Cleaned up`), offline browser workbench (`CSP: connect-src 'none'`), and `/llms.txt` endpoints | `scripts/build_site.mjs`, `site/` |
+| Website & Workbench | Default-Chinese `dislop.com` with native English toggle, zero language mixing, live 3-state hero proof card (`Original` / `Still sounds like AI` / `Cleaned up`), offline-first browser workbench + opt-in same-origin cloud AI (`CSP: connect-src 'self'`), and `/llms.txt` endpoints | `scripts/build_site.mjs`, `site/` |
 | Awesome Anti-Slop | 87 checked bilingual entries (`dislop.radar/2`), pure English `awesome/README.md`, pure Chinese `awesome/README.zh-CN.md`, and offline filter at `dislop.com/awesome/` | `docs/research/anti-slop-radar-index.json`, `awesome/` |
 | Agent & editor entry points | Cross-host `skills/dislop/SKILL.md`, stdio MCP server (`dislop_check`, `dislop_explain`, `dislop_packs`), Git diff gating (`--changed`/`--staged`), SARIF 2.1.0 & GitHub PR annotations | `skills/dislop/SKILL.md`, `bin/`, `server.json` |
 
@@ -53,7 +53,7 @@ Goal: measure false-positive rate, recall, and end-to-end de-slop quality with r
 - [x] Curate 48 original `CC0-1.0` detection samples across Chinese briefs, Chinese essays, English specs, English essays, HTML/CSS components, and `.pptx` decks plus 12 end-to-end revision tasks ([benchmarks/](./benchmarks/README.md)).
 - [x] Measure precision (`100%`), recall (`100%`), clean FPR (`0%`), adversarial near-miss FPR (`0%`), 2nd-order trap recall (`100%`), Node/Python parity (`100%`), and `raw_ai` vs. `naive_humanizer` vs. `dislop_clean` scores offline.
 - [x] Ship one-command offline evaluation, CI regression gates (`node scripts/run_benchmark.mjs --assert`), external model/Skill evaluation (`--eval`), randomized blind human A/B review sheets (`--export-blind-sheet`), and generated [benchmarks/REPORT.md](./benchmarks/REPORT.md).
-- [ ] Expand with longer real-world drafts, multi-slide decks, and cross-model A/B runs via `server/`.
+- [ ] Expand with longer real-world drafts, multi-slide decks, and cross-model A/B runs via `dislop-cloud`.
 
 **Done when**: gated in CI; anyone can run `node scripts/run_benchmark.mjs --assert` offline to reproduce the exact score tables.
 
@@ -67,12 +67,12 @@ Goal: keep the 87-entry directory accurate, neutral, and useful in both English 
 
 ### Track E — Open-Core Cloud Value-Adds & Longer-Term (`v0.4.0+`)
 
-Full market pricing research and unit economics live in [docs/research/business-model-and-open-core.zh-CN.md](./docs/research/business-model-and-open-core.zh-CN.md). **Open-source commitment**: CLI, Skill, Plugin, local stdio MCP, offline browser workbench, `Awesome Anti-Slop`, `dislop-bench`, and the single-tenant BYOK `server/` remain Apache-2.0 open source. Hosted commercial offerings focus on hard-to-self-host multimodal pipelines and team governance:
+Full market pricing research and unit economics live in [docs/research/business-model-and-open-core.zh-CN.md](./docs/research/business-model-and-open-core.zh-CN.md). **Open-source boundary**: `SKILL.md`, Node/Python CLI, Plugin, local stdio MCP, 25 deterministic rules, offline browser workbench, `Awesome Anti-Slop`, and `dislop-bench` remain Apache-2.0 open source (`dislop-ai/dislop`). The hosted LLM backend and Remote Streamable HTTP MCP live in the private `dislop-cloud` service:
 
-- [ ] **Phase 0 (Demand Validation)**: Official rate-limited LLM demo & hosted remote MCP on a dedicated zero-training Vertex AI / Gemini paid key with hard daily caps.
+- [x] **Phase 0 (Live Hosted Cloud & Demand Validation)**: Hosted `dislop-cloud` live at `https://dislop.com/mcp` and `/api/v1/*` with tiered Gemini routing (`gemini-3.1-flash-lite` review + `gemini-3.5-flash` self-healing rewrite), 5 anonymous web demo credits/day, 30 free monthly credits after email token registration, global daily budget cap, and Pro / PAYGO / Team waitlist.
 - [ ] **Format-Preserving `.docx` / `.pptx` Round-Trip Rewrite**: Clean prose and slides while keeping native Office styles, masters, and numbers intact.
 - [ ] **Visual Multimodal Audit**: Headless screenshot rendering + VLM design critique for web pages and slide decks.
-- [ ] **Personal & Team Voice Profiles (`dislop.voice/1`)**: Local offline extraction (`.dislop.local/voice.json`) plus cloud team brand-voice libraries and a GitHub App PR reviewer.
+- [ ] **Team Brand Voice Libraries & GitHub App PR Reviewer**: Shared `dislop.voice/1` profiles across teams and automated PR anti-slop review comments.
 - [ ] Abstract design grammar cards (`dislop.taste/1`) and typed JS/Python SDK facades.
 
 ---
@@ -98,7 +98,7 @@ These five questions are open for co-maintainers and contributors to weigh in on
   - Benchmarks & docs: `scripts/`, `docs/`, `README*.md`, `ROADMAP*.md`
 - **Hard guardrails (always on)**:
   - Zero external runtime dependencies in `src/core.mjs` and `src/dislop/`.
-  - Zero external font CDNs, analytics, or network calls on `dislop.com` (`CSP: connect-src 'none'`).
+  - Zero external font CDNs, analytics, or third-party requests on `dislop.com` (`CSP: connect-src 'self'`; offline check stays 0-upload by default).
   - Visitor-facing copy follows [docs/brand-and-voice-guide.md](./docs/brand-and-voice-guide.md) and keeps Chinese and English examples strictly separated.
 - **Run before opening a PR**:
   ```bash

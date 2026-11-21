@@ -338,6 +338,46 @@ def _cmd_pack_test(packs: dict[str, dict[str, Any]]) -> int:
     return 0
 
 
+def _cmd_resources(ns: argparse.Namespace, packs: dict[str, Any]) -> int:
+    payload = {
+        "schema": "dislop.resources/1",
+        "offlineCheck": True,
+        "note": "'dislop check' runs 100% locally with zero network requests and zero file uploads.",
+        "bundledPacks": sorted(packs.keys()),
+        "staticResources": {
+            "llmsIndex": "https://dislop.com/llms.txt",
+            "catalog": "https://dislop.com/catalog.json",
+            "awesomeIndex": "https://dislop.com/awesome/index.json",
+            "tasks": [
+                "https://dislop.com/tasks/business-doc.md",
+                "https://dislop.com/tasks/web-and-deck.md",
+                "https://dislop.com/tasks/editorial-writing.md",
+                "https://dislop.com/tasks/pre-release-gate.md",
+            ],
+            "ruleTemplate": "https://dislop.com/rules/<rule-id>.md",
+        },
+        "optionalCloudMcp": {
+            "url": "https://dislop.com/mcp",
+            "pricingAndFreeToken": "https://dislop.com/#pricing",
+            "tools": ["dislop_review", "dislop_deslop", "dislop_voice_extract"],
+        },
+    }
+    if ns.json:
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+        return 0
+    print(f"dislop v{ENGINE_VERSION} resources (dislop check makes 0 network requests)")
+    print(f"\nBundled offline packs: {', '.join(payload['bundledPacks'])}")
+    print("\nFree read-only static resources (dislop.com):")
+    print(f"  - Agent index : {payload['staticResources']['llmsIndex']}")
+    print(f"  - Full catalog: {payload['staticResources']['catalog']}")
+    print(f"  - Awesome 87  : {payload['staticResources']['awesomeIndex']}")
+    print(f"  - Rule card   : {payload['staticResources']['ruleTemplate']}")
+    print("\nOptional hosted Cloud Remote MCP (login + 30 free credits/mo):")
+    print(f"  - Endpoint    : {payload['optionalCloudMcp']['url']}")
+    print(f"  - Free token  : {payload['optionalCloudMcp']['pricingAndFreeToken']}")
+    return 0
+
+
 def _cmd_init() -> int:
     cwd = Path.cwd()
     cfg = cwd / ".dislop.json"
@@ -393,6 +433,9 @@ def main(argv: list[str] | None = None) -> None:
     p_packs = sub.add_parser("packs", help="List installed rule packs")
     p_packs.add_argument("--json", action="store_true")
 
+    p_res = sub.add_parser("resources", help="Show bundled offline packs and optional static/cloud resource links")
+    p_res.add_argument("--json", action="store_true")
+
     sub.add_parser("pack-test", help="Validate Pack Schema v2 manifests and embedded fixtures")
     sub.add_parser("init", help="Create starter .dislop.json config")
 
@@ -409,6 +452,8 @@ def main(argv: list[str] | None = None) -> None:
         sys.exit(_cmd_explain(ns, packs))
     if ns.cmd == "packs":
         sys.exit(_cmd_packs(ns, packs))
+    if ns.cmd == "resources":
+        sys.exit(_cmd_resources(ns, packs))
     if ns.cmd == "pack-test":
         sys.exit(_cmd_pack_test(packs))
     if ns.cmd == "init":

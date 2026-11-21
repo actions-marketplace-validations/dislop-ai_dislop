@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>dislop — 发之前，把文案和设计里的 AI 味过一遍</title>
   <meta name="description" content="把全网靠谱的写作规矩、网页和 PPT 设计原则、离线检查工具和 87 条精选资源收在一起。复制一句话发给你的 AI 立刻就能用，也可以在线试查，或装成 Skill / Plugin / MCP / CLI。">
   <meta property="og:type" content="website">
@@ -39,6 +39,7 @@
         <a href="#cases" data-i18n="nav.cases">案例</a>
         <a href="#workbench" data-i18n="nav.workbench">在线试</a>
         <a href="#surfaces" data-i18n="nav.surfaces">怎么用</a>
+        <a href="#pricing" data-i18n="nav.pricing">开源与云端</a>
         <a href="./awesome/" data-i18n="nav.awesome">87 条清单</a>
         <a href="#rules" data-i18n="nav.rules">规则</a>
         <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener" data-i18n="nav.github">GitHub ★</a>
@@ -85,7 +86,7 @@
               <a href="./awesome/" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="lead.awesomeBtn">87 条 Awesome 清单 →</a>
               <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="lead.starBtn">GitHub 点 Star ★</a>
             </div>
-            <p class="hero-reassure" data-i18n="lead.reassure">开源零依赖，在线试用只在当前标签页运行，不上传任何文件。</p>
+            <p class="hero-reassure" data-i18n="lead.reassure">Skill 与 CLI 完全开源、默认本地离线零上传；需要大模型一键去味时，可按需调用官方云端与远程 MCP。</p>
           </div>
         </div>
 
@@ -233,7 +234,7 @@
           <div class="rail-title" data-i18n="wb.specimensTitle">示例</div>
           <!-- Populated by app.js -->
           <div class="privacy-note" data-i18n="wb.privacyNote">
-            内容只留在这个标签页里，页面禁止联网（connect-src 'none'）。
+            离线检查默认留在当前标签页，0 上传；仅在你主动点击下方 AI 按钮时发往官方同源模型端点，不用于训练、不落盘留存。
           </div>
         </aside>
 
@@ -261,6 +262,19 @@
             <span class="voice-meter-title" data-i18n="wb.voiceTitle">句长统计</span>
             <span class="voice-meter-metrics" id="voice-meter-values">句数：— · 均长：— · 句长变化：— · 破折号：—</span>
           </div>
+
+          <div class="ai-assist-bar" id="ai-assist-bar">
+            <div class="ai-assist-actions">
+              <button type="button" id="btn-ai-review" class="ctrl-btn" data-i18n="ai.reviewBtn">AI 深度审校（1 额度）</button>
+              <button type="button" id="btn-ai-deslop" class="btn-primary ai-deslop-btn" data-i18n="ai.deslopBtn">AI 一键去味（2 额度）</button>
+            </div>
+            <div class="ai-assist-meta">
+              <span id="ai-quota-label" data-i18n="ai.anonHint">免登录每天 5 次试用额度 · 登录后每月 30 次</span>
+              <a href="#pricing" id="ai-token-link" data-i18n="ai.claimLink">领免费 Token →</a>
+            </div>
+          </div>
+
+          <div class="ai-result-panel" id="ai-result-panel" hidden aria-live="polite"></div>
 
           <div class="legend-strip">
             <span class="legend-item"><span class="swatch-line swatch-error"></span> <span data-i18n="legend.error">红实线：AI 残留硬伤</span></span>
@@ -310,12 +324,12 @@
           <p data-i18n="surf.w2Desc">一行命令装进 Claude Code、Codex、Cursor、Windsurf 或 Antigravity。写之前防 AI 味，写完自动复检。</p>
         </div>
         <div class="where-item">
-          <h3 data-i18n="surf.w3Title">3. Plugin 与 MCP（本地 / 在线）</h3>
-          <p data-i18n="surf.w3Desc">本地 stdio MCP 与 Plugin 零依赖免 Key；需要大模型深度改写或三阶审校时，可接入官方/自托管开源后台的远程 HTTP MCP。</p>
+          <h3 data-i18n="surf.w3Title">3. 远程 MCP 与本地 Plugin</h3>
+          <p data-i18n="surf.w3Desc">注重隐私用开源本地 stdio MCP；需要大模型深度改写、三阶审校和文风提取，直接填官方远程 MCP 地址 https://dislop.com/mcp（每月 30 次免费）。</p>
         </div>
         <div class="where-item">
-          <h3 data-i18n="surf.w4Title">4. 命令行与 PR 卡点</h3>
-          <p data-i18n="surf.w4Desc">终端用 npx 或 uvx 查整个目录、Word、PPT 或本次 Git 改动，也能放进 GitHub Actions 卡住 AI 残留硬伤。</p>
+          <h3 data-i18n="surf.w4Title">4. 开源命令行与 PR 卡点</h3>
+          <p data-i18n="surf.w4Desc">终端用 npx 或 uvx 完全离线查整个目录、Word、PPT 或本次 Git 改动，也能放进 GitHub Actions 卡住 AI 残留硬伤。</p>
         </div>
       </div>
 
@@ -325,9 +339,9 @@
           <div class="mode-tabs" id="snippet-tabs" role="tablist" aria-label="用法与安装示例">
             <button type="button" id="tab-prompt" role="tab" aria-selected="true" aria-controls="snippet-panel" tabindex="0" class="ctrl-btn is-active" data-snippet="prompt" data-i18n="snip.prompt">发给 AI</button>
             <button type="button" id="tab-skill" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="skill">Skill</button>
+            <button type="button" id="tab-cloud" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="cloud" data-i18n="snip.cloud">远程 MCP（云端）</button>
             <button type="button" id="tab-plugin" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="plugin">Plugin</button>
-            <button type="button" id="tab-mcp" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="mcp">MCP</button>
-            <button type="button" id="tab-server" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="server" data-i18n="snip.server">自托管后台</button>
+            <button type="button" id="tab-mcp" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="mcp" data-i18n="snip.localMcp">本地 MCP</button>
             <button type="button" id="tab-cli" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="cli" data-i18n="snip.cli">命令行</button>
             <button type="button" id="tab-ci" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="ci">GitHub Actions</button>
             <button type="button" id="tab-config" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="config">.dislop.json</button>
@@ -406,7 +420,7 @@
               <a class="endpoint-path" href="./tools/skill.md">/tools/skill.md</a>
               <div class="endpoint-desc" data-i18n="ep.skill">跨宿主 Agent Skill</div>
             </div>
-            <span class="endpoint-meta">4.7 KB · ~1196 tok</span>
+            <span class="endpoint-meta">6.2 KB · ~1578 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
@@ -420,7 +434,7 @@
               <a class="endpoint-path" href="./methodology/brand-and-voice.md">/methodology/brand-and-voice.md</a>
               <div class="endpoint-desc" data-i18n="ep.method">文案与设计基准</div>
             </div>
-            <span class="endpoint-meta">7.7 KB · ~1960 tok</span>
+            <span class="endpoint-meta">7.7 KB · ~1978 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
@@ -434,6 +448,109 @@
           </div>
         </div>
       </details>
+    </section>
+
+    <!-- Open Source vs. Hosted Cloud Pricing & Free MCP Token -->
+    <section id="pricing" class="section-block band-rule" aria-labelledby="pricing-heading">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" id="pricing-heading" data-i18n="price.title">开源本地免费，云端按需升级</h2>
+          <p class="section-desc" data-i18n="price.desc">
+            Skill、CLI 与规则库按 Apache-2.0 完全开源、离线运行、零上传。需要大模型三阶审校、自愈一键去味和远程 HTTP MCP 时，可以直接用官方托管云端（免费版每月 30 次额度，付费用量级接口绝不用于模型训练）。
+          </p>
+        </div>
+        <a href="https://github.com/dislop-ai/dislop/blob/main/benchmarks/MODEL-COMPARISON.md" target="_blank" rel="noopener" data-i18n="price.benchLink">看 5 模型实测对比 →</a>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-col">
+          <div class="pricing-head">
+            <h3 data-i18n="price.t1Name">开源本地（Skill + CLI）</h3>
+            <span class="pricing-amount" data-i18n="price.t1Price">$0 · 永久免费</span>
+          </div>
+          <p class="pricing-sub" data-i18n="price.t1Sub">适合重视数据隐私的个人与开发团队，所有代码和 25 条规则完全透明。</p>
+          <ul class="pricing-list">
+            <li data-i18n="price.t1F1">Agent Skill、Node/Python CLI 与本地 stdio MCP（Apache-2.0）</li>
+            <li data-i18n="price.t1F2">100% 离线确定性检查，支持 Markdown、HTML/CSS、Word、PPT 与 Git Diff</li>
+            <li data-i18n="price.t1F3">免费读取 dislop.com 静态任务卡与 87 条 Awesome 工具清单</li>
+            <li data-i18n="price.t1F4">零联网、零上传、零大模型 API 成本</li>
+          </ul>
+          <div class="quick-actions" style="margin-top:auto;padding-top:12px;">
+            <a href="#surfaces" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="price.t1Cta">安装 Skill / CLI ↑</a>
+          </div>
+        </div>
+
+        <div class="pricing-col is-featured">
+          <div class="pricing-head">
+            <h3 data-i18n="price.t2Name">云端免费版（远程 MCP）</h3>
+            <span class="pricing-amount" data-i18n="price.t2Price">$0 · 30 额度 / 月</span>
+          </div>
+          <p class="pricing-sub" data-i18n="price.t2Sub">邮箱领取专属 Token，无需绑卡，立即接通远程 MCP 与官网 AI 工作台。</p>
+          <ul class="pricing-list">
+            <li data-i18n="price.t2F1">远程 HTTP MCP（https://dislop.com/mcp），免本地装环境</li>
+            <li data-i18n="price.t2F2">AI 深度审校（1 额度）：三阶结构诊断 + 确定性规则联合审查</li>
+            <li data-i18n="price.t2F3">AI 一键去味（2 额度）：改写 + 数字保真校验 + 自动二次修复</li>
+            <li data-i18n="price.t2F4">个人文风提取（2 额度）：1–5 篇旧稿提炼专属文风档案</li>
+          </ul>
+          <div class="quick-actions" style="margin-top:auto;padding-top:12px;">
+            <a href="#cloud-token-box" class="btn-primary" style="min-height:32px;padding:6px 14px;font-size:0.82rem;" data-i18n="price.t2Cta">下方 10 秒免费领 Token ↓</a>
+          </div>
+        </div>
+
+        <div class="pricing-col">
+          <div class="pricing-head">
+            <h3 data-i18n="price.t3Name">Pro · 按量包 · Team</h3>
+            <span class="pricing-amount" data-i18n="price.t3Price">$12/月 · $10/千次</span>
+          </div>
+          <p class="pricing-sub" data-i18n="price.t3Sub">高频写作、长文与团队品牌口吻治理，按月订阅或按量购买均可。</p>
+          <ul class="pricing-list">
+            <li data-i18n="price.t3F1">Pro（$12/月）：1,000 额度/月，多份个人文风档案与长文无字数上限</li>
+            <li data-i18n="price.t3F2">按量额度包（$10 / 1,000 额度）：一次购买永不过期，低频重度用户友好</li>
+            <li data-i18n="price.t3F3">Team（$29/席位/月）：5,000 额度 + 团队共享品牌文风卡与 PR 审核</li>
+            <li data-i18n="price.t3F4">统一付费级模型端点，不留存草稿、绝不用于模型训练</li>
+          </ul>
+          <div class="quick-actions" style="margin-top:auto;padding-top:12px;">
+            <a href="#cloud-waitlist-box" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="price.t3Cta">预约开通通知 ↓</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cloud-forms-grid">
+        <div class="cloud-form-pane" id="cloud-token-box">
+          <h3 class="sub-heading" style="margin:0 0 6px;" data-i18n="cloud.tokenTitle">免费领取 30 额度 + 远程 MCP Token</h3>
+          <p class="cloud-form-desc" data-i18n="cloud.tokenDesc">
+            输入邮箱立即生成 Bearer Token（服务端仅存 SHA-256 哈希，不存明文），并自动同步到上方工作台。
+          </p>
+          <div id="cloud-account-status" class="cloud-status-bar" hidden></div>
+          <form id="free-token-form" class="cloud-inline-form">
+            <input type="email" id="token-email-input" class="cloud-input" required placeholder="输入你的常用邮箱，例如 you@company.com" aria-label="邮箱地址">
+            <button type="submit" id="token-submit-btn" class="btn-primary" style="min-height:36px;padding:6px 14px;font-size:0.84rem;" data-i18n="cloud.tokenBtn">领取免费 Token</button>
+          </form>
+          <div id="token-output-box" class="cloud-output-box" hidden></div>
+        </div>
+
+        <div class="cloud-form-pane" id="cloud-waitlist-box">
+          <h3 class="sub-heading" style="margin:0 0 6px;" data-i18n="cloud.wlTitle">预约 Pro / 按量包 / Team</h3>
+          <p class="cloud-form-desc" data-i18n="cloud.wlDesc">
+            自助支付即将上线。留下邮箱和需要的方案，上线第一时间通知并附赠早鸟体验额度。
+          </p>
+          <form id="waitlist-form" class="cloud-stack-form">
+            <div class="cloud-inline-form">
+              <select id="wl-plan-select" class="pack-select" aria-label="选择方案">
+                <option value="pro" data-i18n="cloud.planPro">Pro（$12/月 · 1,000 额度）</option>
+                <option value="credits" data-i18n="cloud.planCredits">按量包（$10 / 1,000 额度）</option>
+                <option value="team" data-i18n="cloud.planTeam">Team（$29/席位 · 团队文风）</option>
+              </select>
+              <input type="email" id="wl-email-input" class="cloud-input" required placeholder="联系邮箱" aria-label="预约邮箱">
+            </div>
+            <div class="cloud-inline-form">
+              <input type="text" id="wl-note-input" class="cloud-input" maxlength="200" placeholder="选填：主要场景（如周报 / PPT / 公众号 / 团队文档）" aria-label="使用场景备注">
+              <button type="submit" id="wl-submit-btn" class="ctrl-btn" style="min-height:36px;padding:6px 14px;" data-i18n="cloud.wlBtn">提交预约</button>
+            </div>
+          </form>
+          <div id="wl-output-box" class="cloud-output-box" hidden></div>
+        </div>
+      </div>
     </section>
 
     <!-- Awesome Anti-Slop (Curated Content & Ecosystem Hub) -->

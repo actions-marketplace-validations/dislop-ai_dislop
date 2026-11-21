@@ -753,6 +753,47 @@ function runMcpServer(packs) {
   });
 }
 
+function runResources(rest, packs) {
+  const asJson = rest.includes("--json");
+  const payload = {
+    schema: "dislop.resources/1",
+    offlineCheck: true,
+    note: "'dislop check' runs 100% locally with zero network requests and zero file uploads.",
+    bundledPacks: Object.keys(packs).sort(),
+    staticResources: {
+      llmsIndex: "https://dislop.com/llms.txt",
+      catalog: "https://dislop.com/catalog.json",
+      awesomeIndex: "https://dislop.com/awesome/index.json",
+      tasks: [
+        "https://dislop.com/tasks/business-doc.md",
+        "https://dislop.com/tasks/web-and-deck.md",
+        "https://dislop.com/tasks/editorial-writing.md",
+        "https://dislop.com/tasks/pre-release-gate.md",
+      ],
+      ruleTemplate: "https://dislop.com/rules/<rule-id>.md",
+    },
+    optionalCloudMcp: {
+      url: "https://dislop.com/mcp",
+      pricingAndFreeToken: "https://dislop.com/#pricing",
+      tools: ["dislop_review", "dislop_deslop", "dislop_voice_extract"],
+    },
+  };
+  if (asJson) {
+    console.log(JSON.stringify(payload, null, 2));
+    return;
+  }
+  console.log(`dislop v${ENGINE_VERSION} resources (dislop check makes 0 network requests)`);
+  console.log(`\nBundled offline packs: ${payload.bundledPacks.join(", ")}`);
+  console.log(`\nFree read-only static resources (dislop.com):`);
+  console.log(`  - Agent index : ${payload.staticResources.llmsIndex}`);
+  console.log(`  - Full catalog: ${payload.staticResources.catalog}`);
+  console.log(`  - Awesome 87  : ${payload.staticResources.awesomeIndex}`);
+  console.log(`  - Rule card   : ${payload.staticResources.ruleTemplate}`);
+  console.log(`\nOptional hosted Cloud Remote MCP (login + 30 free credits/mo):`);
+  console.log(`  - Endpoint    : ${payload.optionalCloudMcp.url}`);
+  console.log(`  - Free token  : ${payload.optionalCloudMcp.pricingAndFreeToken}`);
+}
+
 function printHelp() {
   console.log(`dislop v${ENGINE_VERSION} — Local linter for AI-written docs, slides, and web pages
 
@@ -762,6 +803,7 @@ Usage:
                [--stdin-filename <name>] [--report-unused] [--lang en|zh]
   dislop explain <rule-id> [--lang en|zh] [--json]
   dislop packs [--json]
+  dislop resources [--json]
   dislop pack-test
   dislop init
   dislop --mcp`);
@@ -789,6 +831,7 @@ function main() {
   if (cmd === "check") return runCheck(rest, packs);
   if (cmd === "explain") return runExplain(rest, packs);
   if (cmd === "packs") return runPacks(rest, packs);
+  if (cmd === "resources") return runResources(rest, packs);
   if (cmd === "pack-test") return runPackTest(packs);
   if (cmd === "init") return runInit();
 

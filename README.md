@@ -141,10 +141,10 @@ For a narrow one-off exception, add a reason above the line (`--report-unused` f
 <!-- dislop-ignore-next-line en-cliche-lexicon -- quoting vendor press release verbatim -->
 ```
 
-### Local MCP vs. Open-Source LLM Backend (`server/`)
+### Open-Source Local (`Skill` + `CLI`) vs. Hosted Cloud (`dislop.com/mcp`)
 
-- **CLI, Skill, and local stdio MCP (`--mcp`)**: Zero-LLM, zero-key, 100% offline.
-- **Open-source LLM backend & Remote HTTP MCP ([server/](./server/README.md))**: Self-host with your own API key (OpenAI, DeepSeek, Gemini compat, OpenRouter, Ollama) or deploy as an official backend. Exposes `/v1/check`, `/v1/review` (3rd-order prose & design review), `/v1/deslop` (plain-voice rewrite + automatic deterministic re-check), and Remote HTTP `/mcp` (`dislop_check`, `dislop_review`, `dislop_deslop`, `dislop_explain`, `dislop_packs`). API keys live strictly in server environment variables (`DISLOP_LLM_API_KEY`) and are never logged or sent to the browser.
+- **Open Source (`dislop-ai/dislop`, Apache-2.0)**: `SKILL.md`, Node/Python CLI (`dislop check`, `dislop explain`, `dislop packs`, `dislop resources`), local stdio MCP (`--mcp`), 25 deterministic rules, `Awesome Anti-Slop`, and `dislop-bench`. Zero LLM calls, zero API keys, and 100% offline during `check` so private drafts never leave your machine.
+- **Hosted Cloud Remote MCP & Web AI (`https://dislop.com/mcp`, `https://dislop.com/#pricing`)**: Optional closed-source cloud backend powered by a paid-tier zero-training model endpoint (no draft logging). Exposes `dislop_review` (1 credit, hybrid 3rd-order review), `dislop_deslop` (2 credits, self-healing rewrite with numeric fidelity guard and automatic repair), and `dislop_voice_extract` (2 credits, `dislop.voice/1`). Includes 5 free anonymous web demo credits/day, **30 free monthly credits** after 1-step email token signup, and Pro (`$12/mo`), PAYGO (`$10 / 1,000 credits`), and Team (`$29/seat/mo`) plans.
 
 ## Anti-slop benchmark (`dislop-bench v1`)
 
@@ -158,9 +158,9 @@ Latest measured baseline ([benchmarks/REPORT.md](./benchmarks/REPORT.md)):
 
 - **Detection (48 samples, 6 domains)**: Precision `100.0%` · Recall `100.0%` · Clean FPR `0.0%` · Adversarial Near-Miss FPR `0.0%` · 2nd-Order Trap Recall `100.0%` · Node/Python Parity `100.0%`.
 - **End-to-end de-slop (12 tasks × 3 arms)**: `raw_ai` **61.4 / 100** → `naive_humanizer` **72.1 / 100** (doubles 3rd-order slop and drops/invents numbers) → `dislop_clean` **100.0 / 100** (`12/12` all-clear).
-- **Live 5-model comparison ([benchmarks/MODEL-COMPARISON.md](./benchmarks/MODEL-COMPARISON.md))**: Across `Gemini 3.1/3.5 Flash-Lite`, `Gemini 3.5/3.8 Flash`, and `Qwen 3.8 Flash`, bare prompts averaged `76.0–84.2 / 100` (`2/10–4/10` all-clear), while our `server/` self-healing pipeline lifted every model by **+15.8 to +22.3 points** (`97.0–100.0 / 100`, `8/10–10/10` all-clear; `Gemini 3.1 Flash-Lite` reached `98.5 / 100` in `1.2s` at `~$0.09 / 1k calls`).
+- **Live 5-model comparison ([benchmarks/MODEL-COMPARISON.md](./benchmarks/MODEL-COMPARISON.md))**: Across `Gemini 3.1/3.5 Flash-Lite`, `Gemini 3.5/3.8 Flash`, and `Qwen 3.8 Flash`, bare prompts averaged `76.0–84.2 / 100` (`2/10–4/10` all-clear), while the `dislop` self-healing cloud pipeline lifted every model by **+15.8 to +22.3 points** (`97.0–100.0 / 100`, `8/10–10/10` all-clear; `Gemini 3.1 Flash-Lite` reached `98.5 / 100` in `1.2s` at `~$0.09 / 1k calls`).
 
-See [benchmarks/README.md](./benchmarks/README.md) to score your own model, Skill, or `server/` deployment (`--eval`) or export randomized blind human A/B review sheets (`--export-blind-sheet`).
+See [benchmarks/README.md](./benchmarks/README.md) to score your own model, Skill, or cloud endpoint (`--eval`) or export randomized blind human A/B review sheets (`--export-blind-sheet`).
 
 ## dislop checks dislop
 
@@ -178,8 +178,7 @@ dislop/
 ├── .mcp.json          # Standard stdio MCP server manifest
 ├── awesome/           # Awesome Anti-Slop (README.md & README.zh-CN.md, 87 entries)
 ├── benchmarks/        # Offline anti-slop benchmark datasets (CC0-1.0) & reproducible report
-├── bin/               # Node.js CLI (dislop.mjs) & stdio MCP launcher (dislop-mcp.mjs)
-├── server/            # Open-source BYOK LLM backend + Remote Streamable HTTP MCP (/mcp)
+├── bin/               # Node.js CLI (dislop.mjs) & local stdio MCP launcher (dislop-mcp.mjs)
 ├── src/
 │   ├── core.mjs       # Zero-dep ES module shared by Node CLI, MCP, and browser workbench
 │   ├── binary-node.mjs# Zero-dep ZIP reader for Node.js (.docx / .pptx)

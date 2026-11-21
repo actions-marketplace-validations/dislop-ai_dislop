@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.3.0
+version: 0.4.0
 snapshot: 2026-11-21
 ---
 
@@ -21,7 +21,7 @@ snapshot: 2026-11-21
 | 双端零依赖内核 | Node.js 20+ 与 Python 3.10+ 双端零外部依赖，通过 88 项规则样本断言与 10 项跨运行时一致性/单元测试 | `src/core.mjs`、`src/dislop/engine.py`、`tests/test_conformance.py` |
 | 规则与文体包 | 共 25 条纯去 AI 味规则：`core` AI 残留硬伤（4 条，固定 `error`）+ 3 套文体与模板包（`business-brief`、`literary-essay`、`deck-and-ui`） | `packs/*/pack.json` |
 | 支持格式 | `.md`、`.mdx`、`.txt`、`.html`、`.css`、`.jsx`、`.tsx`、`.docx`、`.pptx` | `src/binary-node.mjs`、`src/dislop/engine.py` |
-| 官网与在线工作台 | 默认简体中文的 `dislop.com`（一键切原生英文、严格零混排），带首屏三态示例卡（`原稿` / `换了种 AI 味` / `改干净了`）、离线浏览器工作台（`CSP: connect-src 'none'`）与 `/llms.txt` 端点 | `scripts/build_site.mjs`、`site/` |
+| 官网与在线工作台 | 默认简体中文的 `dislop.com`（一键切原生英文、严格零混排），带首屏三态示例卡（`原稿` / `换了种 AI 味` / `改干净了`）、离线优先浏览器工作台 + 可选同源云端 AI（`CSP: connect-src 'self'`）与 `/llms.txt` 端点 | `scripts/build_site.mjs`、`site/` |
 | Awesome Anti-Slop | 87 条双语核验清单（`dislop.radar/2`），同源生成纯英文 `awesome/README.md`、纯中文 `awesome/README.zh-CN.md` 与 `dislop.com/awesome/` 离线筛选页 | `docs/research/anti-slop-radar-index.json`、`awesome/` |
 | Agent 与开发集成 | 跨宿主 `skills/dislop/SKILL.md`、本地 stdio MCP 服务（`dislop_check`、`dislop_explain`、`dislop_packs`）、Git 增量检查（`--changed`/`--staged`）、SARIF 2.1.0 与 GitHub PR 行内批注 | `skills/dislop/SKILL.md`、`bin/`、`server.json` |
 
@@ -59,7 +59,7 @@ snapshot: 2026-11-21
 - [x] 整理 48 份原创 `CC0-1.0` 检测样本（中文工作简报、中文随笔、英文技术文档、英文随笔、HTML/CSS 卡片、`.pptx` 幻灯片）与 12 组端到端改稿对照任务（[benchmarks/](./benchmarks/README.zh-CN.md)）。
 - [x] 离线实测准确率（`100%`）、召回率（`100%`）、干净原稿误报率（`0%`）、二阶陷阱召回率（`100%`）、Node/Python 一致率（`100%`）以及 `raw_ai` vs `naive_humanizer` vs `dislop_clean` 综合得分。
 - [x] 提供一键离线跑分、CI 回归门禁（`node scripts/run_benchmark.mjs --assert`）、外部模型/Skill 评测（`--eval`）与随机 A/B 盲评表导出（`--export-blind-sheet`），并自动生成 [benchmarks/REPORT.md](./benchmarks/REPORT.md)。
-- [ ] 持续扩充真实长文、多页 PPT 与开源大模型后台（`server/`）跨模型 A/B 评测数据。
+- [ ] 持续扩充真实长文、多页 PPT 与 `dislop-cloud` 跨模型 A/B 评测数据。
 
 **验收标准**：已合入 CI，任何协作者在断网环境下执行 `node scripts/run_benchmark.mjs --assert` 即可复现。
 
@@ -73,12 +73,12 @@ snapshot: 2026-11-21
 
 ### 轨道 E — Open-Core 云端增值与远期探索（`v0.4.0+`）
 
-完整调研与定价测算见 [docs/research/business-model-and-open-core.zh-CN.md](https://github.com/dislop-ai/dislop/blob/main/docs/research/business-model-and-open-core.zh-CN.md)。**开源底线**：CLI、Skill、Plugin、本地 stdio MCP、浏览器离线工作台、`Awesome Anti-Slop`、`dislop-bench` 与单机 BYOK `server/` 永久按 Apache-2.0 开源。云端托管与商业增值集中在难自建的多模态重能力与团队治理：
+完整调研与定价测算见 [docs/research/business-model-and-open-core.zh-CN.md](https://github.com/dislop-ai/dislop/blob/main/docs/research/business-model-and-open-core.zh-CN.md)。**开源与闭源边界**：`SKILL.md`、Node/Python CLI、Plugin、本地 stdio MCP、25 条确定性规则、浏览器离线工作台、`Awesome Anti-Slop` 与 `dislop-bench` 永久按 Apache-2.0 开源（`dislop-ai/dislop`）；官方托管大模型后台与远程 HTTP MCP 独立在闭源 `dislop-cloud` 维护与运营：
 
-- [ ] **阶段 0（需求验证）**：官方托管低额度大模型体验与远程 MCP（独立付费 Vertex AI / Gemini Key + 硬日限额），验证 Web 端 vs 远程 MCP 真实拉动。
+- [x] **阶段 0（云端上线与需求验证）**：官方 `dislop-cloud` 已上线 `https://dislop.com/mcp` 与 `/api/v1/*`，采用分层模型路由（`gemini-3.1-flash-lite` 审校 + `gemini-3.5-flash` 自愈改写），支持网页每日 5 次匿名试用、邮箱注册每月 30 次免费额度、全局日限额硬熔断与 Pro / 按量包 / Team 预约登记。
 - [ ] **原排版文档一键洗稿（`.docx` / `.pptx` Round-Trip）**：拆解 OOXML、去 AI 味并复核数字保真后保留原样式导出。
 - [ ] **网页与 PPT 视觉多模态审查（Visual Anti-Slop）**：无头渲染截图 + VLM 审校版式密度、模板审美与连续同版式。
-- [ ] **个人与团队声纹库（`dislop.voice/1`）**：本地离线提取（`.dislop.local/voice.json`）与云端团队共享品牌语调库、GitHub App PR 自动巡检。
+- [ ] **团队共享声纹库与 GitHub App PR 自动巡检**：跨成员复用 `dislop.voice/1` 品牌口吻卡并在 PR 自动批注。
 - [ ] 抽象设计文法卡（`dislop.taste/1`）与强类型 JS/Python SDK 门面。
 
 ---
@@ -104,7 +104,7 @@ snapshot: 2026-11-21
   - 评测基准与文档：`scripts/`、`docs/`、`README*.md`、`ROADMAP*.md`
 - **三条底线**：
   - `src/core.mjs` 与 `src/dislop/` 保持零外部运行时依赖。
-  - 官网与工作台保持离线零上传（`CSP: connect-src 'none'`），不引入第三方字体与统计脚本。
+  - 官网禁止加载第三方字体、统计脚本与外域请求（`CSP: connect-src 'self'`），默认离线检查 0 上传。
   - 所有写给访客看的文案遵守 [docs/brand-and-voice-guide.zh-CN.md](https://github.com/dislop-ai/dislop/blob/main/docs/brand-and-voice-guide.zh-CN.md) 与 [AGENTS.md](./AGENTS.md) §2，中英文严格不混排。
 - **提 PR 前本地跑一遍**：
   ```bash

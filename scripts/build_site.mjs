@@ -451,7 +451,8 @@ snapshot: ${SNAPSHOT_DATE}
 Good writing habits, web and slide design rules, an offline zero-dependency checker, and 87 vetted tools—gathered in one place. Hand \`/llms.txt\` to any AI chat, install the Agent Skill / Claude Code Plugin / MCP server, or test drafts offline in your browser.
 
 - Runtime dependencies: 0 (Node.js 20+ and Python 3.10+ parity verified by 88 pack fixtures and \`tests/test_conformance.py\`)
-- Live browser workbench: ${BASE_URL}/#workbench (offline in RAM, \`CSP: connect-src 'none'\`)
+- Live browser workbench: ${BASE_URL}/#workbench (offline in RAM by default + opt-in same-origin cloud AI, \`CSP: connect-src 'self'\`)
+- Hosted Remote HTTP MCP: ${BASE_URL}/mcp (30 free monthly credits via ${BASE_URL}/#pricing)
 - Agent routing index: ${BASE_URL}/llms.txt
 - Machine-readable catalog: ${BASE_URL}/catalog.json
 - Awesome Anti-Slop (87 curated entries): ${BASE_URL}/awesome/
@@ -678,7 +679,7 @@ version: ${VERSION}
 
 ## Structural Rules Enforced on \`site/\`
 
-- Zero external font CDNs or analytics (\`CSP: connect-src 'none'\`).
+- Zero external font CDNs, analytics, or third-party requests (\`CSP: connect-src 'self'\`; offline checks stay 0-upload by default).
 - Continuous \`1px\` structural rails (\`max-width: 1200px\`); \`0px\` shared cell radii, \`4px\` control radii; zero \`rounded-full\` badge soup.
 - Red (\`--mark-error\`) is reserved strictly for objective invariant defects.
 - Measure capped at \`65ch\` (Latin) / \`36\` Han chars; line height \`1.68\` EN / \`1.82\` ZH; \`tabular-nums\` on coordinates and metrics.
