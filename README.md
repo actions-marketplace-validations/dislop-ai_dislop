@@ -1,36 +1,91 @@
-# dislop
+<p align="center">
+  <img src="./assets/banner.svg" alt="dislop — Cross-Modal Quality Gate & Pluggable Taste Packs" width="100%" />
+</p>
 
-**Cross-modal anti-AI-slop quality gate and pluggable Taste Packs (CLI & MCP).**
+<p align="center">
+  <strong>English</strong> · <a href="./README.zh-CN.md">简体中文</a> · <a href="./docs/architecture.md">Architecture</a> · <a href="./CONTRIBUTING.md">Contributing</a> · <a href="https://dislop.com">dislop.com</a>
+</p>
 
-在文章、网页、图文卡片与办公文档（PDF / DOCX / PPTX）交付前，定位版式、数字、修辞与结构上的生成痕迹，提供同体裁改稿先例对照，并在严格语义与版式约束下完成修订。
+---
 
-## 核心设计
+**`dislop`** is an open-source, cross-modal quality gate that inspects prose, web interfaces, slide decks, and office documents before delivery. Instead of feeding drafts into an opaque "AI humanizer" that introduces grammar errors or alters facts, `dislop` runs deterministic probes first, pairs every flagged pattern with concrete before/after editorial exemplars, and keeps domain taste modular through pluggable **Taste Packs**.
 
-- **先查证，再动笔（Zero-Degradation Pipeline）**
-  1. `audit`：确定性规则与跨模态几何/视觉探针先行，定位套话句式、虚构凑整数字、排版溢出、字号层级失衡与图表伪饰。
-  2. `exemplar`：按文体与媒介检索高质量人工样本与正反改稿对照，替代抽象空泛的“请写得更自然”。
-  3. `rewrite`（可选）：锁定事实、数字、专名、引用与版式边界，只重写命中的问题片段，改后自动复检，未达标不覆盖原稿。
-- **引擎与审美解耦（`engine/` + `packs/`）**
-  - `engine/`：跨模态解析器（Markdown / HTML / PDF / DOCX / PPTX）、确定性检查器、几何渲染探针与最小改动重写护栏。
-  - `packs/`：可插拔的 **Taste Packs（审美包）**——将不同领域创作者、编辑与设计师的具体审美判断编码为可复用的规则、词表与正反样本（如商业方案交付包、长篇非虚构/文学公众号包、演示文稿与信息图包）。
-- **双入口接入（`interfaces/`）**
-  - **CLI（`dislop`）**：面向本地脚本、Git 提交门禁与 CI 流水线的确定性检查与批处理。
-  - **MCP Server（`dislop-mcp`）**：面向 Claude Code、Codex、Cursor 等本地 Agent 的“出街前最后一步”工具调用闭环。
+## Why `dislop` Exists
 
-## 仓库目录规划
+First-generation "anti-AI" rewriters fail in real production work for three reasons:
+
+1. **Blind full-text rewriting degrades facts**: Unconstrained LLM rewrites frequently mutate numbers, units, proper nouns, and citations to dodge statistical detectors.
+2. **Text-only tools miss visual and structural tells**: A deck with 260 words crammed onto Slide 4, a landing page wrapped in default indigo-purple-pink gradients, or a PDF leaking local filesystem paths fails reader trust before anyone reads paragraph two.
+3. **Good taste is domain-specific, not universal**: What makes a client research brief crisp is different from what gives a 6,000-word literary essay breathing room.
+
+`dislop` separates **deterministic inspection (`src/dislop/`, `bin/`)** from **curated editorial standards (`packs/`)**, exposing both a fast local CLI and a stdio **Model Context Protocol (MCP)** server for coding and writing agents.
+
+## Quick Start
+
+### Node.js / `npx` (Zero External Dependencies)
+
+```bash
+# Audit a Markdown file, HTML page, or entire repository
+node ./bin/dislop.mjs check README.md
+node ./bin/dislop.mjs check ./docs --pack business-brief
+
+# List installed Taste Packs or inspect a rule's editorial rationale
+node ./bin/dislop.mjs packs
+node ./bin/dislop.mjs explain zh-cliche-connector
+```
+
+### Python / `uv` (Includes Zero-Dependency `.docx` & `.pptx` Inspection)
+
+```bash
+# Run directly from source or install into a virtual environment
+PYTHONPATH=src python3 -m dislop.cli check ./README.md
+PYTHONPATH=src python3 -m dislop.cli check ./proposal.pptx --pack deck-and-ui
+```
+
+### Connect as an MCP Server (Claude Code, Codex, Cursor, Antigravity)
+
+Add `dislop` to your MCP client configuration so your agent checks drafts and pulls editorial exemplars before handing files back to you:
+
+```json
+{
+  "mcpServers": {
+    "dislop": {
+      "command": "node",
+      "args": ["/path/to/dislop/bin/dislop-mcp.mjs"]
+    }
+  }
+}
+```
+
+Exposed MCP tools:
+- `dislop_check`: Audit raw text, a single file (`.md`, `.html`, `.svg`, `.docx`, `.pptx`), or a directory against a Taste Pack.
+- `dislop_packs`: List installed Taste Packs, supported modalities, and rule counts.
+- `dislop_exemplars`: Retrieve annotated `bad -> good` rewrites and editorial rationales so the calling agent can revise flagged passages without corrupting surrounding facts.
+
+## Built-in Taste Packs
+
+| Pack ID | Target Modality | What It Catches |
+| :--- | :--- | :--- |
+| `business-brief` | Proposals, memos, research reports (`.md`, `.docx`, `.pdf`) | Filler transitions, inflated verbs, local path leaks, excessive em-dash cadence |
+| `literary-essay` | Long-form essays, columns, non-fiction (`.md`, `.html`) | Moralizing paragraph endings, forced triadic symmetry, translationese passive scaffolds |
+| `deck-and-ui` | Slide decks & web UI (`.pptx`, `.html`, `.svg`, `.css`) | Per-slide word walls (`>120` words / `>280` CJK chars), default purple-pink gradients, emoji confetti, unfinished placeholders |
+
+## Dogfooding Standard
+
+Every Markdown document, SVG asset, and release note in this repository is checked by `dislop` itself in CI (`.github/workflows/ci.yml`). Pull requests that trigger slop findings in repository docs fail the build until rewritten cleanly.
+
+## Repository Layout
 
 ```text
 dislop/
-├── AGENTS.md              # 仓库协作与工程质量红线
-├── docs/
-│   └── architecture.md    # 三层架构、跨模态检查项与 Taste Pack 规范
-├── engine/                # 跨模态解析、确定性探针与护栏式修订核心（建设中）
-├── packs/                 # 可插拔审美包（规则 + 正反对照样本）
-└── interfaces/            # CLI 与 MCP Server 入口（建设中）
+├── assets/                # Brand mark (logo.svg) and masthead banner (banner.svg)
+├── bin/                   # Zero-dependency Node.js CLI & stdio MCP server
+├── src/dislop/            # Zero-dependency Python CLI, OOXML (.docx/.pptx) inspector & MCP server
+├── packs/                 # Pluggable Taste Packs (rules + before/after exemplars)
+├── docs/                  # English & Chinese architecture specifications
+└── tests/                 # Unit, OOXML fixture, and self-dogfooding test suite
 ```
 
-## 演进路线
+## License
 
-1. **阶段一（内部共创与高频自用）**：跑通日常高频交付材料（方案书、长文、演示稿、网页）的 `audit + exemplar + guarded rewrite` 闭环，沉淀首批核心审美包与黄金测试集。
-2. **阶段二（开源 CLI + MCP 与审美包生态）**：开放核心检查器、CLI 与 MCP Server，支持外部作者与设计师贡献独立 Taste Packs。
-3. **阶段三（跨模态工作台与团队门禁）**：面向非技术团队与企业交付场景提供拖拽式审校工作台、品牌专属规则托管与 API 门禁服务。
+Licensed under the [Apache License 2.0](./LICENSE).

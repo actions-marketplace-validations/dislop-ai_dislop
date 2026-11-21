@@ -1,0 +1,66 @@
+{
+  "id": "business-brief",
+  "name": "商业方案与研究简报",
+  "version": "0.0.1",
+  "languages": ["zh", "en"],
+  "modalities": ["markdown", "html", "pdf", "docx", "pptx"],
+  "description": "面向项目策划书、商业分析与客户交付文档：严查拔高套话、三段式水词、无出处凑整数字与版式溢出。",
+  "rules": [
+    {
+      "id": "zh-cliche-connector",
+      "severity": "warning",
+      "category": "prose",
+      "description": "高频生成式套话连接词与宏大叙事填充词",
+      "patterns": [
+        "总而言之",
+        "综上所述",
+        "值得注意的是",
+        "不言而喻",
+        "毋庸置疑",
+        "赋能",
+        "抓手",
+        "闭环生态",
+        "范式转移",
+        "无缝衔接",
+        "颠覆性",
+        "不仅仅.*更是"
+      ]
+    },
+    {
+      "id": "en-cliche-lexicon",
+      "severity": "warning",
+      "category": "prose",
+      "description": "Overused LLM filler vocabulary in English prose",
+      "patterns": [
+        "\\bdelve\\b",
+        "\\btapestry\\b",
+        "\\btestament to\\b",
+        "\\bunderscores\\b",
+        "\\bpivotal\\b",
+        "\\bseamless(?:ly)?\\b",
+        "\\bparadigm shift\\b",
+        "\\bit is worth noting\\b",
+        "\\bin conclusion\\b"
+      ]
+    },
+    {
+      "id": "local-path-leak",
+      "severity": "error",
+      "category": "artifact-hygiene",
+      "description": "残留本机文件系统绝对路径或 file:// 协议链接",
+      "patterns": [
+        "file:///",
+        "/Users/[A-Za-z0-9._-]+/",
+        "C:\\\\Users\\\\"
+      ]
+    }
+  ],
+  "exemplars": [
+    {
+      "ruleId": "zh-cliche-connector",
+      "bad": "值得注意的是，该工作流不仅仅是简单的格式检查，更是为内容团队全面赋能、构建端到端质量闭环生态的关键抓手。",
+      "good": "这套流程在成稿发出前做两件事：先按规则标出套话与排版越界，再附上同类文体的改稿样本供作者对照修改。",
+      "rationale": "删掉拔高定语和抽象动词，直接写出系统具体执行的动作与输入输出。"
+    }
+  ]
+}

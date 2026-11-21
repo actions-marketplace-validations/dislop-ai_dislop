@@ -1,0 +1,69 @@
+{
+  "id": "deck-and-ui",
+  "name": "Slide Decks, Web UI & Cards / 演示稿与界面卡片",
+  "version": "0.1.0",
+  "languages": ["en", "zh"],
+  "modalities": ["pptx", "html", "svg", "css", "markdown"],
+  "description": "Catch AI UI palette clichés, hero buzzwords, emoji clusters, and slide word-walls in decks and web pages.",
+  "structural": {
+    "maxSlideWords": 120,
+    "maxSlideCjkChars": 280,
+    "maxSlideBullets": 6
+  },
+  "rules": [
+    {
+      "id": "ui-purple-gradient-cliche",
+      "severity": "warning",
+      "category": "visual-cliche",
+      "description": "Default AI-generated purple/indigo/pink Tailwind or CSS gradient palette",
+      "patterns": [
+        "from-(?:indigo|purple|violet)-[0-9]{3}\\s+(?:via-[a-z]+-[0-9]{3}\\s+)?to-(?:purple|pink|fuchsia|indigo)-[0-9]{3}",
+        "linear-gradient\\([^)]*#(?:6366f1|8b5cf6|a855f7|ec4899)[^)]*#(?:8b5cf6|a855f7|ec4899|6366f1)"
+      ]
+    },
+    {
+      "id": "ui-hero-buzzword",
+      "severity": "warning",
+      "category": "copywriting",
+      "description": "Generic SaaS landing-page AI hero slogan",
+      "patterns": [
+        "supercharge your workflow",
+        "unleash the power of",
+        "revolutionize the way you",
+        "next-generation ai-powered",
+        "开启.*新纪元",
+        "重塑.*新范式",
+        "一站式智能赋能"
+      ]
+    },
+    {
+      "id": "emoji-confetti",
+      "severity": "warning",
+      "category": "visual-cliche",
+      "description": "Decorative AI emoji cluster (sparkles, rockets, fire)",
+      "patterns": [
+        "[✨🚀🔥💡🎯🌟]{2,}"
+      ]
+    },
+    {
+      "id": "placeholder-remnant",
+      "severity": "error",
+      "category": "artifact-hygiene",
+      "description": "Unfinished placeholder copy left in deliverable",
+      "patterns": [
+        "lorem ipsum",
+        "\\[insert\\s+[^\\]]+\\]",
+        "your company name here",
+        "待补充数据"
+      ]
+    }
+  ],
+  "exemplars": [
+    {
+      "ruleId": "ui-hero-buzzword",
+      "bad": "✨ Supercharge Your Content Workflow with Our Next-Generation AI-Powered Platform 🚀",
+      "good": "Check prose, layout bounds, and slide density before you ship a document.",
+      "rationale": "Name the concrete input and check performed instead of promising vague transformation."
+    }
+  ]
+}

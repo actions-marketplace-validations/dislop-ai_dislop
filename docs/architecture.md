@@ -1,59 +1,42 @@
-# Architecture
+# Architecture Specification
 
-## 1. 为什么采用三层架构
+**English** · [简体中文](./architecture.zh-CN.md)
 
-市面上第一代“去 AI 味（Humanizer）”工具普遍直接让大模型通篇改写，存在三个结构性缺陷：
-1. **高误报与机械降智**：为规避统计检测器故意插入语病或口水话，拉低专业文本与技术方案的可读性；
-2. **事实与数字漂移**：重写时篡改金额、百分比、专有名词与引用出处；
-3. **跨模态盲区**：只看纯文本，对网页撞脸布局、卡片文字溢出、PDF 孤行断页、PPT 字墙与虚构图表毫无感知。
+## 1. Design Premise: Audit First, Rewrite Only Under Guardrails
 
-`dislop` 将流程拆解为可独立调用、也可串联执行的三层流水线：
+`dislop` replaces opaque one-shot "humanizers" with a three-stage, inspectable pipeline:
 
 ```text
-Input (MD / HTML / PDF / DOCX / PPTX / Image)
+Input (Markdown / HTML / SVG / DOCX / PPTX)
   │
   ▼
-[Layer 1: Cross-Modal Audit]  ──► 结构化问题清单（坐标 / 行号 / 规则 ID / 严重度）
+[Stage 1: Deterministic Audit]  ──► Exact line / slide coordinates, rule ID, severity
   │
   ▼
-[Layer 2: Exemplar Match]     ──► 匹配当前 Taste Pack 的同体裁正反改稿先例
+[Stage 2: Exemplar Retrieval]   ──► Domain-matched bad -> good rewrites & rationale
   │
   ▼
-[Layer 3: Guarded Rewrite]    ──► 局部重写 + 事实/数字不变量校验 + 版式复检门禁
+[Stage 3: Guarded Revision]     ──► Minimal span edit + fact/number invariant check
 ```
 
-## 2. 跨模态探针矩阵（`engine/`）
+1. **Stage 1 (`dislop check`)** runs locally in milliseconds with zero API calls and zero network egress. Code fences and inline code spans in Markdown are masked automatically so technical documentation does not trigger false positives on quoted examples.
+2. **Stage 2 (`dislop explain` / `dislop_exemplars`)** supplies human-edited before/after pairs from the active Taste Pack so an author or local coding agent sees *how* a seasoned editor fixes the issue rather than receiving vague advice.
+3. **Stage 3 (Guarded Revision)** keeps every number, date, identifier, URL, and citation immutable, re-running Stage 1 afterward to confirm net defect reduction.
 
-| 模态 | 确定性探针（零 API 成本） | 多模态/模型辅助审校（按需触发） |
+## 2. Cross-Modal Probe Matrix
+
+| Modality | Deterministic Probes (Zero API Cost) | Planned Deep Probes |
 | :--- | :--- | :--- |
-| **文本与修辞** | 高频套话词表、三段式排比密度、连接词堆砌率、破折号/引号滥用、空洞副词、句长方差过低、可疑凑整百分比 | 论证跳步、语境失当腔调、同义反复 |
-| **网页与图文卡片** | Playwright DOM 包围盒重叠/截断检测、对比度、字阶比、留白占比、模板化渐变紫色/圆角卡片指纹 | 视觉重心失衡、图文语义脱节 |
-| **PDF / 版式文档** | 页面文字层与图片页提取、孤行/寡行、页脚越界、`file://` 或本地路径残留、字体嵌入完整性 | 跨页阅读节奏、图表信息密度评估 |
-| **DOCX / PPTX** | OOXML 样式表一致性、单页字数上限（字墙检测）、文本框溢出风险、内嵌截图分辨率检查 | 标题结论性（Action Title）与叙事递进 |
+| **Prose (`.md`, `.txt`)** | Filler transitions, buzzword verbs, moralizing endings, em-dash density (`>10` per `1,000` chars), placeholder remnants, local path leaks | Clause-length monotony, unsupported round-number claims |
+| **Web & Cards (`.html`, `.svg`, `.css`)** | Default purple-indigo-pink gradient palettes, generic SaaS hero slogans, decorative emoji clusters | Headless DOM bounding-box overlap & contrast ratio checks |
+| **Word (`.docx`)** | Pure-stdlib OOXML paragraph & table extraction, embedded media inventory (`word/media/*`), prose & hygiene checks | Heading hierarchy & style-sheet drift |
+| **Slides (`.pptx`)** | Pure-stdlib per-slide XML inspection, slide word-wall detection (`>120` words or `>280` CJK chars per slide), slide-indexed prose checks | Action-title specificity & text-box overflow |
 
-## 3. Taste Packs 规范（`packs/`）
+## 3. Taste Pack Manifest (`packs/<id>/pack.json`)
 
-每个审美包是一个自包含目录，负责表达特定人群或场景下的“什么是好作品、什么不能忍”：
+Each Taste Pack is a self-contained JSON manifest encoding editorial standards for a specific genre:
 
-```text
-packs/<pack-id>/
-├── pack.yaml          # 元数据：适用媒介、语种、目标受众、继承关系、默认阈值
-├── rules/             # 词法/结构/版式规则参数与权重覆写
-└── exemplars/         # 带批注的 bad -> good 对照样本（含为何这样改的编辑理由）
-```
-
-首批规划内置包：
-- `business-brief`：商业策划书、研究报告与对客方案（强调数字有据、结论前置、版式克制）。
-- `literary-essay`：长篇公众号、随笔与深度特稿（保护个人语感、节奏呼吸与具象细节，精准剔除翻译腔与总结陈词）。
-- `deck-and-card`：演示文稿与社媒图文卡片（严控单屏字数、层级对比与视觉伪饰）。
-
-## 4. 接口契约（`interfaces/`）
-
-### CLI（规划）
-- `dislop check <path> [--pack <id>] [--format text|json|sarif]`：只读体检，适合本地写作自查、Git pre-commit 与 CI 门禁。
-- `dislop explain <rule-id>`：展示该规则背后的审美依据与正反改稿样本。
-- `dislop fix <path> [--pack <id>] [--diff]`：在护栏约束下生成最小修订补丁并通过复检。
-
-### MCP Server（规划）
-- `dislop_check`：供本地 Agent 在交付文档/代码前自检并拿到精确行号与元素坐标。
-- `dislop_exemplars`：按命中问题拉取对应 Taste Pack 的改稿范例注入 Agent 上下文，让主控模型自己改对，无需二次全量搬运文档。
+- `id`, `name`, `version`, `languages`, `modalities`, `description`
+- `structural`: numeric density thresholds (for example `maxSlideWords`, `maxSlideCjkChars`)
+- `rules[]`: `id`, `severity` (`error` | `warning` | `info`), `category`, `description`, `patterns[]`
+- `exemplars[]`: `ruleId`, `bad`, `good`, `rationale`

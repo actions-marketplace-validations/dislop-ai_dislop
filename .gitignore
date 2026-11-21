@@ -1,5 +1,9 @@
 # Private & local workspace state
 .private/
+.claude/
+.codex/
+.agents/
+CLAUDE.local.md
 .env
 .env.*
 !.env.example

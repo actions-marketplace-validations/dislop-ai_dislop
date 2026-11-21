@@ -1,0 +1,41 @@
+{
+  "name": "dislop",
+  "version": "0.1.0",
+  "description": "Cross-modal anti-AI-slop quality gate and pluggable Taste Packs (CLI & MCP server)",
+  "license": "Apache-2.0",
+  "homepage": "https://dislop.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dislop-ai/dislop.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dislop-ai/dislop/issues"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "bin": {
+    "dislop": "./bin/dislop.mjs",
+    "dislop-mcp": "./bin/dislop-mcp.mjs"
+  },
+  "files": [
+    "bin/",
+    "packs/",
+    "assets/logo.svg",
+    "README.md",
+    "README.zh-CN.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "anti-slop",
+    "ai-slop",
+    "linter",
+    "mcp",
+    "model-context-protocol",
+    "editorial",
+    "typography",
+    "quality-gate"
+  ],
+  "mcpName": "io.github.dislop-ai/dislop"
+}

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
+  <rect width="512" height="512" rx="108" fill="#141413"/>
+  <rect x="20" y="20" width="472" height="472" rx="90" stroke="#292826" stroke-width="3"/>
+
+  <!-- Top anchored editorial headline bar -->
+  <rect x="112" y="134" width="288" height="38" rx="7" fill="#F7F5F0"/>
+
+  <!-- Middle noisy draft bar (muted ash, split by proofreader strike) -->
+  <rect x="112" y="237" width="288" height="38" rx="7" fill="#6B6661"/>
+
+  <!-- Bottom clean typographic baseline + vermilion period -->
+  <rect x="112" y="340" width="218" height="38" rx="7" fill="#F7F5F0"/>
+  <circle cx="380" cy="359" r="20" fill="#D9381E"/>
+
+  <!-- Knockout halo + Vermilion proofreader red-pen slash -->
+  <line x1="342" y1="110" x2="170" y2="402" stroke="#141413" stroke-width="60" stroke-linecap="round"/>
+  <line x1="342" y1="110" x2="170" y2="402" stroke="#D9381E" stroke-width="34" stroke-linecap="round"/>
+</svg>

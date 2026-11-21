@@ -1,0 +1,43 @@
+{
+  "id": "literary-essay",
+  "name": "长篇非虚构与文学随笔",
+  "version": "0.0.1",
+  "languages": ["zh"],
+  "modalities": ["markdown", "html"],
+  "description": "面向长篇公众号、随笔与人物特稿：保护个人语感与叙事留白，精准识别翻译腔、排比总结陈词与情绪点题。",
+  "rules": [
+    {
+      "id": "zh-essay-moralizing-ending",
+      "severity": "warning",
+      "category": "prose",
+      "description": "段末强行升华、鸡汤式点题或对称排比收束",
+      "patterns": [
+        "在这个快节奏的时代",
+        "时间会给出答案",
+        "唯有.*方能",
+        "或许这就是.*的意义",
+        "是一场关于.*的修行",
+        "不仅是一次.*更是一场"
+      ]
+    },
+    {
+      "id": "zh-translationese-pronoun",
+      "severity": "info",
+      "category": "prose",
+      "description": "生硬翻译腔结构与冗余被动句",
+      "patterns": [
+        "被认为是.*的一个缩影",
+        "在很大程度上取决于",
+        "展现出了一种令人.*的张力"
+      ]
+    }
+  ],
+  "exemplars": [
+    {
+      "ruleId": "zh-essay-moralizing-ending",
+      "bad": "在这个快节奏的时代，老街的消失不仅是一次城市更新的阵痛，更是一场关于记忆与告别漫长的修行。或许这就是时间留给我们最后的答案。",
+      "good": "拆迁队进场那天是周四，巷口修表铺的玻璃柜台搬空了，墙上只留下一道颜色发浅的方框。",
+      "rationale": "收尾停在具体物象和动作上，把判断留给读者，不在段末替读者总结意义。"
+    }
+  ]
+}
