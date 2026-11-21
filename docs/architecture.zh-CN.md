@@ -1,4 +1,4 @@
-# 系统架构说明（`v0.3.0`）
+# 系统架构说明（`v0.4.0`）
 
 [English](./architecture.md)
 
@@ -31,10 +31,10 @@
 |---|---|---|
 | JS 共享核心 | `src/core.mjs` | 纯标准 ES 模块（零 `node:*` 与 DOM 依赖），由 Node CLI、MCP 与浏览器工作台直接共用 |
 | Node 二进制解析层 | `src/binary-node.mjs` | 基于标准库 `zlib.inflateRawSync` 解析 `.docx`/`.pptx` ZIP 中央目录 |
-| Node CLI 与 MCP | `bin/dislop.mjs`, `bin/dislop-mcp.mjs` | 命令行（`check`、`explain`、`packs`、`pack-test`、`init`）与 stdio MCP 服务（`dislop_check`、`dislop_explain`、`dislop_packs`） |
+| Node CLI 与 MCP | `bin/dislop.mjs`, `bin/dislop-mcp.mjs` | 离线命令行（`check`、`explain`、`packs`、`resources`、`pack-test`、`init`）与本地 stdio MCP 服务（`dislop_check`、`dislop_explain`、`dislop_packs`） |
 | Python 核心与接口 | `src/dislop/{engine,cli,mcp_server}.py` | 纯 Python 3.10+ 标准库实现，通过 `tests/test_conformance.py` 与 Node 保持行为一致 |
 | 规则包清单 | `packs/{core,business-brief,literary-essay,deck-and-ui}/pack.json` | 声明式 `dislop.pack/2` 规则（共 25 条）、阈值、判断方法、三段样本与正反用例 |
-| 开源大模型后台与远程 MCP | `server/{index,llm-client}.mjs`、`server/Dockerfile` | 可选零依赖 HTTP API（`/v1/check`、`/v1/review`、`/v1/deslop`）与远程 HTTP `/mcp`；Key 仅存服务端环境变量（`DISLOP_LLM_API_KEY`），支持官方部署与 BYOK 自托管 |
+| 官方托管云端与远程 MCP | 独立闭源 `dislop-cloud`（`https://dislop.com/mcp`、`/api/v1/*`） | 付费级零训练模型分层路由、哈希 `dslp_*` 账号 Token、每月 30 次免费额度、自愈 `dislop_deslop`、`dislop_review` 与 `dislop_voice_extract` |
 | 离线效果基准评测 | `benchmarks/`、`scripts/run_benchmark.mjs` | 48 份 `CC0-1.0` 跨媒介检测样本（含 Node/Python 一致性）+ 12 组端到端文案/设计改稿任务、三阶探针、数字保真评分、`--eval` 与盲评表导出 |
 | 官网静态编译器 | `scripts/build_site.mjs` | 零依赖编译器，将 `src/core.mjs`、`packs/`、`skills/`、`docs/brand*`、`ROADMAP*.md` 与已核验研究 JSON 同源编译为 `site/` 与 `awesome/README*.md` |
 | 专题研究、规格与原型 | `docs/research/`, `docs/specs/`, `scripts/prototype_antipattern_lab.mjs` | 87 条实测核验 Awesome Anti-Slop 数据源（`dislop.radar/2`）、31 条设计/学术参考、多形态与正向差异化研究、`v0.3` 探针规格及可独立自测的验证原型 |
@@ -49,7 +49,7 @@
 
 ## 4. 官网静态部署（`dislop.com`）
 
-`site/` 产物为纯静态文件（全部采用相对路径，零后端进程），直接通过 `https://dislop.com` 静态托管（配置 HSTS 与 `Content-Security-Policy` 锁死 `connect-src 'none'`，零第三方字体与统计外链）。官网与 `/awesome/` 默认呈现简体中文（`zh-CN`），右上角一键切原生英文（`en`），中英文页面的样稿、规则例句与 87 条清单摘要完全隔离、互不混排：
+`site/` 产物为纯静态文件，通过 `https://dislop.com` 静态托管（配置 HSTS 与 `Content-Security-Policy` 锁死 `connect-src 'self'`，零第三方字体、统计与外域请求）。默认离线确定性检查完全在浏览器内存中完成、零上传；仅当用户主动点击工作台 AI 按钮、领取免费 Token 或连接远程 MCP 时，才经由同源 `/api/v1/*` 或 `/mcp` 转发至托管 `dislop-cloud` 服务。官网与 `/awesome/` 默认呈现简体中文（`zh-CN`），右上角一键切原生英文（`en`），中英文页面的样稿、规则例句与 87 条清单摘要完全隔离、互不混排：
 
 - **面向人类**：首屏一键「复制发给 Agent」提示句、实时三态示例卡、3 组可复制分享的真实前后案例（`/#cases`）、零上传浏览器工作台（`/#workbench`，支持一键「贴我的稿子」和测后安装/GitHub 引导）、清晰的 5 种使用方式（`/#surfaces`）、87 条离线筛选工具清单（`/awesome/`）与分享/Star 引导区（`/#share`）。
 - **面向外部 Agent**：技术端点列表与 25 条规则明细表在页面中用 `<details>` 折叠（不打扰普通访客，同时在静态 HTML 与 DOM 中完整保留），并同步提供纯文本与结构化直连端点（`/llms.txt`、`/catalog.json`、`/index.md`、`/roadmap.md`、`/tasks/*.md`、`/methodology/*.md`、`/cases/*.md`、`/tools/*.md`、`/packs/*.md`、`/rules/*.md`、`/awesome/index.{json,md}`、`/llms-full.txt`）。构建期自动执行体积预算（`llms.txt <= 2,600 B`）、链接可达性、剔除 `fixtures.hit` 与去除 HTML 注释/不可见字符校验。

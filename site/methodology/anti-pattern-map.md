@@ -1,11 +1,11 @@
 ---
 content-type: reference-data
-version: 0.3.0
+version: 0.4.0
 ---
 
 # Cross-Modality Anti-Pattern Map
 
-| Layer | Definition | Shipped `v0.3.0` Deterministic Coverage | Roadmap Extensions (`v0.3+` Spec) |
+| Layer | Definition | Shipped `v0.4.0` Deterministic Coverage | Roadmap Extensions (`v0.3+` Spec) |
 |---|---|---|---|
 | **L0 AI Delivery Artifacts** | Obvious AI leftovers (`severity: error`) | Stray chatbot wrappers, unfilled placeholders, raw Markdown in DOCX/PPTX, dead `href="#"` placeholder controls | Baseline suppression ledgers |
 | **L1 First-Order Lexicon & Default UI** | Stock filler words and default generator chrome | `en-cliche-lexicon`, `en-throat-clearing-opener`, `zh-bureaucratic-padding`, `ui-ai-gradient`, `ui-pill-soup`, `ui-box-in-box`, `ui-prompt-echo-badge` | `ui-glassmorphism-overuse`, `ui-accent-stripe-card` |

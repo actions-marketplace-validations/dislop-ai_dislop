@@ -1,11 +1,11 @@
 ---
 content-type: reference-data
-version: 0.3.0
+version: 0.4.0
 ---
 
 # MCP Server, SDK & Planned HTTP API
 
-## Stdio MCP Server (Shipped `v0.3.0`)
+## Stdio MCP Server (Shipped `v0.4.0`)
 
 ```json
 {
@@ -23,7 +23,7 @@ Shipped MCP tools:
 - `dislop_explain`: Returns rationale and `bad -> trap -> good` examples for a `ruleId`.
 - `dislop_packs`: Lists installed packs (`core`, `business-brief`, `literary-essay`, `deck-and-ui`).
 
-## JavaScript Core Export (Shipped `v0.3.0`)
+## JavaScript Core Export (Shipped `v0.4.0`)
 
 `package.json` exports the zero-I/O pure ES module `src/core.mjs` (`auditText`, `auditOoxmlEntries`, `resolveEffectivePack`).
 

@@ -498,7 +498,7 @@ ${armRows}
 
 ## 3. How to Benchmark Your Own Model, Prompt, or Backend
 
-1. Run your model or backend (\`No Skill\` vs. \`dislop Skill\` vs. \`server/ LLM API\`) on the 12 source inputs in [datasets/revision-v1.json](./datasets/revision-v1.json).
+1. Run your model, Skill, or hosted cloud endpoint (\`No Skill\` vs. \`dislop Skill\` vs. \`dislop-cloud /api/v1/deslop\`) on the 12 source inputs in [datasets/revision-v1.json](./datasets/revision-v1.json).
 2. Save outputs as \`schema: "dislop.bench-run/1"\` and score them locally:
    \`\`\`bash
    node scripts/run_benchmark.mjs --eval path/to/run.json

@@ -8,6 +8,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ### Changed
 
+- **Clean Open-Source vs. Closed-Source Cloud Split (`v0.4.0`)**:
+  - Kept the public Apache-2.0 repository (`dislop-ai/dislop`) strictly open-source, zero-LLM, and zero-network during checks: `SKILL.md` (3-tier progressive funnel with on-demand read-only links to free static `dislop.com` guides), Node/Python CLI (`check`, `explain`, `packs`, `resources`, `pack-test`, `init`), local stdio MCP, 25 deterministic rules, `Awesome Anti-Slop`, and `dislop-bench`.
+  - Moved the closed-source hosted LLM backend and Remote Streamable HTTP MCP (`/mcp`, `/api/v1/*`) into the private `dislop-cloud` repository (live at `https://dislop.com/mcp`, powered by tiered zero-training paid Gemini routing with hashed `dslp_*` tokens, 5 anonymous web trial credits/day, 30 free monthly credits on signup, global daily budget cap, and Pro / PAYGO / Team waitlist).
+  - Upgraded `https://dislop.com` to `CSP: connect-src 'self'` (still zero third-party fonts/analytics/hosts; offline checks remain 0-upload by default), adding opt-in `AI Review` (`1 credit`) and self-healing `AI Rewrite` (`2 credits`) buttons in `#workbench` plus the `#pricing` section with instant free 30-credit Remote MCP token registration and Pro/Credits/Team waitlist capture.
+
 - **Focused Scope on Direct Anti-Slop Only (`v0.3.0`)**:
   - Removed features not directly tied to detecting AI slop: `dislop verify` / MCP `dislop_verify` (number/link revision diffing), PDF structural/font/MediaBox preflight, Word tracked-changes/comments hygiene, local filesystem path scanning (`local-path-leak`), WCAG contrast/dark-mode linting (`ui-contrast-and-dark-inversion`), and SVG `<title>`/fallback-clipping linting (`svg-text-overflow-or-a11y`).
   - Narrowed the active catalog to **25 pure anti-slop rules** across 4 packs (`core` AI delivery artifacts + `business-brief`, `literary-essay`, `deck-and-ui`) and updated the Hero Proof Card, workbench, READMEs, `SKILL.md`, banners, and OG card to focus strictly on 1st- and 2nd-order AI slop.

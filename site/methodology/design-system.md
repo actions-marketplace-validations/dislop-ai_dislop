@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.3.0
+version: 0.4.0
 ---
 
 # Architectural Galley Proof Design System
@@ -24,7 +24,7 @@ version: 0.3.0
 
 ## Structural Rules Enforced on `site/`
 
-- Zero external font CDNs or analytics (`CSP: connect-src 'none'`).
+- Zero external font CDNs, analytics, or third-party requests (`CSP: connect-src 'self'`; offline checks stay 0-upload by default).
 - Continuous `1px` structural rails (`max-width: 1200px`); `0px` shared cell radii, `4px` control radii; zero `rounded-full` badge soup.
 - Red (`--mark-error`) is reserved strictly for objective invariant defects.
 - Measure capped at `65ch` (Latin) / `36` Han chars; line height `1.68` EN / `1.82` ZH; `tabular-nums` on coordinates and metrics.

@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.3.0
+version: 0.4.0
 snapshot: 2026-11-21
 ---
 
@@ -9,7 +9,8 @@ snapshot: 2026-11-21
 Good writing habits, web and slide design rules, an offline zero-dependency checker, and 87 vetted tools—gathered in one place. Hand `/llms.txt` to any AI chat, install the Agent Skill / Claude Code Plugin / MCP server, or test drafts offline in your browser.
 
 - Runtime dependencies: 0 (Node.js 20+ and Python 3.10+ parity verified by 88 pack fixtures and `tests/test_conformance.py`)
-- Live browser workbench: https://dislop.com/#workbench (offline in RAM, `CSP: connect-src 'none'`)
+- Live browser workbench: https://dislop.com/#workbench (offline in RAM by default + opt-in same-origin cloud AI, `CSP: connect-src 'self'`)
+- Hosted Remote HTTP MCP: https://dislop.com/mcp (30 free monthly credits via https://dislop.com/#pricing)
 - Agent routing index: https://dislop.com/llms.txt
 - Machine-readable catalog: https://dislop.com/catalog.json
 - Awesome Anti-Slop (87 curated entries): https://dislop.com/awesome/
@@ -18,9 +19,9 @@ Good writing habits, web and slide design rules, an offline zero-dependency chec
 
 | Target | Formats / Scope | Status |
 |---|---|---|
-| Writing, Copy & Longform | `.md`, `.mdx`, `.txt` (EN & ZH) | LIVE `v0.3.0` |
-| Word & PowerPoint | `.docx`, `.pptx` | LIVE `v0.3.0` |
-| Web UI & Components | `.html`, `.css`, `.jsx`, `.tsx` | LIVE `v0.3.0` |
+| Writing, Copy & Longform | `.md`, `.mdx`, `.txt` (EN & ZH) | LIVE `v0.4.0` |
+| Word & PowerPoint | `.docx`, `.pptx` | LIVE `v0.4.0` |
+| Web UI & Components | `.html`, `.css`, `.jsx`, `.tsx` | LIVE `v0.4.0` |
 | Git Diffs & PRs | `--changed` / `--staged` & SARIF 2.1.0 | LIVE (diff check) · Roadmap (code AST) |
 | Rhythm, Layout Monotony & Voice | 5 prototype probes, `dislop.voice/1`, `dislop.taste/1` | Prototype / Spec `v0.3+` |
 

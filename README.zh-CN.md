@@ -137,10 +137,10 @@ Node.js 版（`bin/dislop.mjs`）和 Python 版（`src/dislop/`）都零外部�
 <!-- dislop-ignore-next-line zh-bureaucratic-padding -- 原样摘录外部招标文件条款 -->
 ```
 
-### 本地零大模型 vs. 开源大模型后台（`server/`）
+### 开源本地（`Skill` + `CLI`）vs. 官方托管云端（`dislop.com/mcp`）
 
-- **CLI、Skill 与本地 stdio MCP（`--mcp`）**：纯确定性规则，不涉及大模型、不需要 API Key、完全离线。
-- **开源大模型后台与远程 HTTP MCP（[server/](./server/README.zh-CN.md)）**：支持用自己的 Key 自托管（OpenAI、DeepSeek、Gemini 兼容端点、OpenRouter、Ollama），也支持官方部署。提供 `/v1/check`、`/v1/review`（三阶结构味与设计味审校）、`/v1/deslop`（去 AI 味改写 + 自动确定性复检）与远程 HTTP `/mcp`（5 个工具）。API Key 只放服务端环境变量（`DISLOP_LLM_API_KEY`），绝不进前端、仓库或错误日志。
+- **开源本地（`dislop-ai/dislop`，Apache-2.0）**：`SKILL.md`、Node/Python 命令行（`dislop check`、`dislop explain`、`dislop packs`、`dislop resources`）、本地 stdio MCP（`--mcp`）、25 条确定性规则、`Awesome Anti-Slop` 与 `dislop-bench`。不涉及大模型、不需要 API Key、`check` 全程零联网，私密文档绝不离开本机。
+- **官方托管云端与远程 HTTP MCP（`https://dislop.com/mcp` · [开源与云端方案](https://dislop.com/#pricing)）**：独立闭源云端后台，使用付费级零训练模型端点（不落盘留存草稿）。提供 `dislop_review`（1 额度，三阶结构诊断 + 规则联查）、`dislop_deslop`（2 额度，自愈一键去味 + 数字保真 + 自动二次修复）与 `dislop_voice_extract`（2 额度，提取 `dislop.voice/1` 个人文风）。网页免登录每天 5 次试用额度，邮箱领取免费 Token 即享 **每月 30 次免费额度**，并支持 Pro（`$12/月`）、按量额度包（`$10 / 1,000 额度`）与 Team（`$29/席位/月`）。
 
 ## 去 AI 味效果基准测试（`dislop-bench v1`）
 
@@ -154,9 +154,9 @@ node scripts/run_benchmark.mjs --assert
 
 - **检测基准（48 样本、6 类场景）**：准确率 `100.0%` · 召回率 `100.0%` · 干净原稿误报率 `0.0%` · 易误报近邻样本误报率 `0.0%` · 二阶 AI 口号召回率 `100.0%` · Node/Python 一致率 `100.0%`。
 - **端到端去 AI 味效果（12 题 × 3 组）**：模型原稿 `raw_ai` **61.4 / 100** → 普通改写 `naive_humanizer` **72.1 / 100**（三阶结构味翻倍且漏改/编造数字）→ 按 dislop 规矩改稿 `dislop_clean` **100.0 / 100**（`12/12` 全过）。
-- **5 模型真实在线对比（[benchmarks/MODEL-COMPARISON.md](./benchmarks/MODEL-COMPARISON.md)）**：实测 `Gemini 3.1/3.5 Flash-Lite`、`Gemini 3.5/3.8 Flash` 与 `Qwen 3.8 Flash`，裸 Prompt 仅得 `76.0–84.2 / 100`（`2/10–4/10` 全过），接入 `server/` 自愈流水线后全线提升 **+15.8 至 +22.3 分**（达 `97.0–100.0 / 100`、`8/10–10/10` 全过；其中 `Gemini 3.1 Flash-Lite` 中位延迟仅 `1.2 秒`、每千次调用约 `\$0.09`，得分 `98.5 / 100`）。
+- **5 模型真实在线对比（[benchmarks/MODEL-COMPARISON.md](./benchmarks/MODEL-COMPARISON.md)）**：实测 `Gemini 3.1/3.5 Flash-Lite`、`Gemini 3.5/3.8 Flash` 与 `Qwen 3.8 Flash`，裸 Prompt 仅得 `76.0–84.2 / 100`（`2/10–4/10` 全过），接入 `dislop` 云端自愈流水线后全线提升 **+15.8 至 +22.3 分**（达 `97.0–100.0 / 100`、`8/10–10/10` 全过；其中 `Gemini 3.1 Flash-Lite` 中位延迟仅 `1.2 秒`、每千次调用约 `\$0.09`，得分 `98.5 / 100`）。
 
-详见 [benchmarks/README.zh-CN.md](./benchmarks/README.zh-CN.md)，支持评测任意模型/Prompt/Skill/后台（`--eval`）以及导出随机盲评表（`--export-blind-sheet`）。
+详见 [benchmarks/README.zh-CN.md](./benchmarks/README.zh-CN.md)，支持评测任意模型/Prompt/Skill/云端端点（`--eval`）以及导出随机盲评表（`--export-blind-sheet`）。
 
 ## 这个仓库自己也过这道门
 
@@ -174,8 +174,7 @@ dislop/
 ├── .mcp.json          # 标准 stdio MCP 配置清单
 ├── awesome/           # Awesome Anti-Slop 中英文工具清单（87 条）
 ├── benchmarks/        # 去 AI 味效果基准测试数据集（CC0-1.0）与离线实测报告
-├── bin/               # Node.js CLI（dislop.mjs）与 stdio MCP（dislop-mcp.mjs）
-├── server/            # 开源大模型后台与远程 HTTP MCP（BYOK 自托管 / 官方可部署）
+├── bin/               # Node.js CLI（dislop.mjs）与本地 stdio MCP（dislop-mcp.mjs）
 ├── src/
 │   ├── core.mjs       # 零依赖纯 ES 模块内核，由 Node CLI、MCP 与浏览器工作台共用
 │   ├── binary-node.mjs# Node.js 零依赖 ZIP 解析层（.docx / .pptx）
