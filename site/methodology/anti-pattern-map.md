@@ -1,11 +1,11 @@
 ---
 content-type: reference-data
-version: 0.2.0
+version: 0.3.0
 ---
 
 # Cross-Modality Anti-Pattern Map
 
-| Layer | Definition | Shipped `v0.2.0` Deterministic Coverage | Roadmap Extensions (`v0.3+` Spec) |
+| Layer | Definition | Shipped `v0.3.0` Deterministic Coverage | Roadmap Extensions (`v0.3+` Spec) |
 |---|---|---|---|
 | **L0 Objective Delivery Defects** | Hard publication bugs (`severity: error`) | Leaked local paths, unfilled placeholders, AI chat residue, raw Markdown in DOCX/PPTX, unaccepted Office revisions/comments, dead `href="#"`, WCAG AA contrast (`< 4.5:1`), dark Z-elevation inversion, off-slide PPTX, PDF font/title/URI checks | Expanded PDF metadata checks and baseline suppression ledgers |
 | **L1 First-Order Lexicon & Default UI** | Stock filler words and default generator chrome | `en-cliche-lexicon`, `zh-bureaucratic-padding`, `ui-ai-gradient`, `ui-pill-soup`, `ui-box-in-box`, `ui-prompt-echo-badge`, `svg-text-overflow-or-a11y` | `ui-glassmorphism-overuse`, `ui-accent-stripe-card` |

@@ -7,9 +7,9 @@ version: 0.2.0
 
 # Pack: `deck-and-ui` — Slide Deck, Web UI & Graphic Layout
 
-> Audits PowerPoint slide word-walls, bullet caps, autofit text shrink, weak topic titles, default purple-pink AI gradients, pill-badge soup, triple nested cards, prompt-echo chrome, and SVG clipping.
+> Flags PowerPoint slide word-walls, bullet overload, autofit text shrink, weak topic titles, default purple-pink AI gradients, pill-badge soup, triple nested cards, and prompt-echo chrome.
 
-检查幻灯片文字墙、项目符号超限、字号自动缩排、弱结论标题，以及界面紫粉渐变、胶囊徽章堆砌、三层套盒、提示词回声标签与 SVG 裁切风险。
+检查幻灯片文字墙、要点过多、字号自动缩排、空泛标题，以及网页里的默认紫粉渐变、满屏胶囊标签、三层套盒与提示词营销徽章。
 
 ## `slide-word-wall`
 - Tier: `taste` · Severity: `warning` · Family: `deck/density`
@@ -138,19 +138,3 @@ good: <h2>Document Linter for Markdown, HTML, DOCX & PPTX</h2>
 ```
 
 Atomic card: [ui-prompt-echo-badge.md](../rules/ui-prompt-echo-badge.md)
-
-## `svg-text-overflow-or-a11y`
-- Tier: `taste` · Severity: `warning` · Family: `ui/slop-chrome`
-- Modalities: `svg`
-- EN: Standalone SVG contains `<text>` likely to clip outside `viewBox` on fallback fonts, or omits `<title>`/`aria-label`.
-- ZH: 独立 SVG 中的 `<text>` 在回退字体下存在超出 `viewBox` 裁切风险，或缺少 `<title>`/`aria-label` 无障碍说明。
-- Deletion Test (EN): Leave >= 12% horizontal safety margin for `<text>` inside `viewBox` (or convert wordmarks to `<path>` outlines) and include `<title>`.
-- Deletion Test (ZH): 为 SVG `<text>` 预留充足宽度余量（或将品牌字标转为 `<path>` 轮廓），并补充 `<title>`。
-
-```text
-bad:  <svg viewBox="0 0 200 40"><text x="10" y="28" font-size="24">Long fallback string that clips past 200px</text></svg>
-trap: <svg viewBox="0 0 200 40"><text x="10" y="28" font-size="5">Tiny 5px unreadable text</text></svg>
-good: <svg viewBox="0 0 420 40" role="img" aria-label="Release timeline"><title>Release timeline</title><text x="16" y="26" font-size="16">Q1–Q4 rollout</text></svg>
-```
-
-Atomic card: [svg-text-overflow-or-a11y.md](../rules/svg-text-overflow-or-a11y.md)

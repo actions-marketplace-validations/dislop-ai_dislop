@@ -4,11 +4,9 @@
 
 ## 1. 规则放哪一层
 
-能从词法与句法结构、HTML/CSS/SVG 标记、PDF 对象与链接字典、Office Open XML 结构判定的问题，都写成确定性探针，在 JS 核心 `src/core.mjs` 与 Python 实现 `src/dislop/engine.py` 里各实现一遍。基础体检离线运行，不交给高波动的大模型主观打分。
+`dislop` 只做跟**去 AI 味**直接相关的确定性检查，不做通用的 WCAG 无障碍审计、PDF 预检、安全路径扫描或改稿事实比对。能从词法与句法结构、HTML/CSS/JSX 标记、Word/PPT Open XML 结构判定的 AI 味与残留问题，都写成确定性探针，在 JS 核心 `src/core.mjs` 与 Python 实现 `src/dislop/engine.py` 里各实现一遍，离线运行，不交给高波动的大模型主观打分。
 
-换谁来看都不能发的交付疏漏，放进 `packs/core/`：本机路径泄露、未填占位符、AI 寒暄残迹、点不动的控件、对比度不足、深色层级倒置、幻灯片越界。这一层固定为 `error`，所有文体包默认开启。因文体而异的表达与版式提醒，放进各自的 `packs/<pack-id>/`，默认 `warning` 或 `info`，每条写清删掉会损失什么，并附原句、改过头与改好三段对照。
-
-改完稿必须过 `dislop verify`（或 MCP `dislop_verify`）：数值、限定词、单位、日期、链接、代码片段与引用标记不能丢，也不能凭空编造；一阶套话不能换成二阶口号句式（如 `不是 A，而是 B` 或三连短句）。
+明显的 AI 交付残留放进 `packs/core/`：留在正文里的 AI 寒暄、未填占位符、贴进 Word/PPT 没渲染的裸 Markdown、AI 网页里的空链接与占位禁用按钮。这一层固定为 `error`，所有文体包默认开启。因场景而异的 AI 套话与模板味放进各自的 `packs/<pack-id>/`，默认 `warning` 或 `info`，每条写清删掉会损失什么，并附原句、换了种 AI 味的改过头版本，以及改干净版本三段对照。
 
 三个运行时要给出同一个结果。浏览器工作台（`site/`）与 Node CLI/MCP（`bin/`）共用零依赖 ES 模块 `src/core.mjs`；Python CLI/MCP（`src/dislop/`）须通过 `tests/test_conformance.py`，与 Node 跑同一组公开样本与 `dislop pack-test`。仓库自身的文档、网站（`site/`）、`awesome/`、SVG 资产与 CLI 输出均受 `dislop check . --fail-on warning` 约束。
 

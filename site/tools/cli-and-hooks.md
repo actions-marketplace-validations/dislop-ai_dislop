@@ -1,9 +1,9 @@
 ---
 content-type: reference-data
-version: 0.2.0
+version: 0.3.0
 ---
 
-# CLI, Git Diff, Hooks & CI (`v0.2.0`)
+# CLI, Git Diff, Hooks & CI (`v0.3.0`)
 
 ## Node.js 20+ & Python 3.10+ (Shipped, Zero Dependencies)
 
@@ -15,11 +15,11 @@ npx --yes github:dislop-ai/dislop check .
 npx --yes github:dislop-ai/dislop check --changed origin/main --format github
 npx --yes github:dislop-ai/dislop check --changed origin/main --format sarif > dislop.sarif
 
-# Inspect DOCX/PPTX/PDF with Python
+# Inspect DOCX/PPTX with Python
 uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review.pptx
 
-# Verify revision preserved protected facts
-npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
+# Explain a rule's check question and examples
+npx --yes github:dislop-ai/dislop explain negation-pivot-frame
 ```
 
 ## Exit Codes

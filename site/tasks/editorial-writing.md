@@ -1,7 +1,7 @@
 ---
 content-type: reference-data
 task: editorial-writing
-version: 0.2.0
+version: 0.3.0
 ---
 
 # Task Bundle: Editorial & Literary Writing
@@ -18,13 +18,10 @@ Use this bundle for longform essays, non-fiction reporting, and narrative drafts
 ## 2. Active Rules
 
 ### Pack `core`
-- [`local-path-leak`](../rules/local-path-leak.md) (`error`): Leaked local filesystem path or file:/// link.
-- [`unfilled-placeholder`](../rules/unfilled-placeholder.md) (`error`): Unfilled template placeholder, broken Word reference field, or dummy copy.
+- [`unfilled-placeholder`](../rules/unfilled-placeholder.md) (`error`): Unfilled AI template placeholder or dummy copy.
 - [`chatbot-artifact`](../rules/chatbot-artifact.md) (`error`): Unstripped chatbot wrapper sentence or AI search citation token.
-- [`markdown-leak`](../rules/markdown-leak.md) (`error`): Raw Markdown syntax (`**bold**` or `## heading`) left unrendered inside an Office document.
-- [`ui-dead-control`](../rules/ui-dead-control.md) (`error`): Anchor with dead `href="#"` / empty target, unlabeled button, or unexplained static `<button disabled>`.
-- [`ui-contrast-and-dark-inversion`](../rules/ui-contrast-and-dark-inversion.md) (`error`): Resolvable foreground/background contrast fails WCAG AA (< 4.5:1), or dark-theme canvas is brighter than raised surface tokens.
-- [`office-pdf-hygiene`](../rules/office-pdf-hygiene.md) (`error`): Off-slide text box in PPTX, unaccepted tracked changes/comments in Office docs, or PDF metadata/font/URI defect.
+- [`markdown-leak`](../rules/markdown-leak.md) (`error`): Raw Markdown syntax (`**bold**` or `## heading`) pasted unrendered into Word or PowerPoint.
+- [`ui-dead-control`](../rules/ui-dead-control.md) (`error`): Placeholder `href="#"` link, empty button, or unexplained disabled button typical of generated UI mockups.
 
 ### Pack `literary-essay`
 - [`zh-essay-moralizing-ending`](../rules/zh-essay-moralizing-ending.md) (`warning`): Moralizing summary formula flattens concrete scene observation at the end of a passage.
@@ -45,7 +42,6 @@ good: 傍晚六点半，修表匠把拆下的三枚铜齿轮泡进煤油皿里�
 
 ```bash
 npx --yes github:dislop-ai/dislop check essay.md --pack literary-essay --lang zh
-npx --yes github:dislop-ai/dislop verify essay.before.md essay.after.md --pack literary-essay
 ```
 
 Deep dives: [Pack `literary-essay`](../packs/literary-essay.md) · [Positive Divergence](../methodology/positive-divergence.md)

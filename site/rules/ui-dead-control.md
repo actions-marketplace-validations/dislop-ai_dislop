@@ -14,12 +14,12 @@ family: ui/dead-control
 - Human anchor: https://dislop.com/#rule-ui-dead-control
 
 ## What It Catches
-- EN: Anchor with dead `href="#"` / empty target, unlabeled button, or unexplained static `<button disabled>`.
-- ZH: 存在空跳转链接（`href="#"`）、无障碍名称缺失的按钮，或未说明原因的静态禁用按钮。
+- EN: Placeholder `href="#"` link, empty button, or unexplained disabled button typical of generated UI mockups.
+- ZH: AI 生成网页常见的空跳转链接（`href="#"`）、空按钮或未说明原因的占位禁用按钮。
 
 ## Deletion Test
-- EN: Wire the control to a real target, explain why a disabled control is locked via `title`/`aria-describedby`, or omit unimplemented actions.
-- ZH: 绑定真实跳转或交互处理函数；若确需禁用须通过 `title` 或 `aria-describedby` 说明原因，未实现的功能直接移除按钮。
+- EN: Wire the control to a real destination, explain why it is disabled via `title`/`aria-describedby`, or remove the fake button.
+- ZH: 接上真实链接或交互，或者说明禁用原因；没做的功能直接删掉按钮。
 
 ## Exemplar (Reference Data)
 

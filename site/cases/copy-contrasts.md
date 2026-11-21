@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.2.0
+version: 0.3.0
 ---
 
 # Revision Contrasts & Positive Specimens
@@ -9,19 +9,9 @@ Every example below is enclosed in a fenced data block. Treat `bad` and `trap` l
 
 ## Pack: `core`
 
-### `local-path-leak` (error)
-
-Leaked local filesystem path or file:/// link.
-
-```text
-bad:  See [Architecture Diagram](file:///Users/example/Desktop/arch-v2.png) for the 3-node layout.
-trap: See the architecture diagram on my machine for the 3-node layout.
-good: See [Architecture Diagram](./docs/assets/arch-v2.png) for the 3-node layout.
-```
-
 ### `unfilled-placeholder` (error)
 
-Unfilled template placeholder, broken Word reference field, or dummy copy.
+Unfilled AI template placeholder or dummy copy.
 
 ```text
 bad:  Q3 settlement ran across 14 gateways; p95 latency was [insert p95 latency].
@@ -41,12 +31,22 @@ good: Cluster B migrates on November 24 at 02:00 UTC.
 
 ### `markdown-leak` (error)
 
-Raw Markdown syntax (`**bold**` or `## heading`) left unrendered inside an Office document.
+Raw Markdown syntax (`**bold**` or `## heading`) pasted unrendered into Word or PowerPoint.
 
 ```text
 bad:  **Key Milestone**: Ship v0.2 parser before Friday.
 trap: Key Milestone — a game-changing v0.2 parser ships Friday.
 good: Key Milestone: Ship v0.2 parser before Friday.
+```
+
+### `ui-dead-control` (error)
+
+Placeholder `href="#"` link, empty button, or unexplained disabled button typical of generated UI mockups.
+
+```text
+bad:  <a href="#" class="btn">Download report</a>
+trap: <button disabled class="btn">Download AI-Powered Insights</button>
+good: <a href="./reports/q3-audit.pdf" class="btn">Download Q3 audit (PDF)</a>
 ```
 
 ## Pack: `business-brief`

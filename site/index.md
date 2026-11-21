@@ -1,14 +1,14 @@
 ---
 content-type: reference-data
-version: 0.2.0
+version: 0.3.0
 snapshot: 2026-11-21
 ---
 
-# dislop — De-slop AI outputs
+# dislop — Catch AI slop before you send it
 
-Complete multi-modal de-slop toolkit for writing, Markdown, HTML/CSS/JSX/SVG, Word (`.docx`), PowerPoint (`.pptx`), PDF structural metadata, and agent handoffs. Works with any AI model (Claude, GPT, Gemini, DeepSeek, Qwen, local), any agent (Claude Code, Codex, Cursor, Windsurf, custom), and any dev or publishing environment.
+Local, zero-dependency anti-slop linter for AI-written Markdown, plain text, HTML/CSS/JSX, Word (`.docx`), and PowerPoint (`.pptx`). Works with any AI model and any coding or writing agent.
 
-- Runtime dependencies: 0 (Node.js 20+ and Python 3.10+ parity verified by 101 pack fixtures and `tests/test_conformance.py`)
+- Runtime dependencies: 0 (Node.js 20+ and Python 3.10+ parity verified by 88 pack fixtures and `tests/test_conformance.py`)
 - Live browser workbench: https://dislop.com/#workbench (offline in RAM, `CSP: connect-src 'none'`)
 - Agent routing index: https://dislop.com/llms.txt
 - Machine-readable catalog: https://dislop.com/catalog.json
@@ -18,20 +18,16 @@ Complete multi-modal de-slop toolkit for writing, Markdown, HTML/CSS/JSX/SVG, Wo
 
 | Target | Formats / Scope | Status |
 |---|---|---|
-| Writing, Copy & Longform | `.md`, `.mdx`, `.txt` (EN & ZH) | LIVE `v0.2.0` |
-| Office Docs & Decks | `.docx`, `.pptx`, `.pdf` metadata/URI/fonts | LIVE `v0.2.0` |
-| Web UI, Layout & SVG | `.html`, `.css`, `.jsx`, `.tsx`, `.svg` | LIVE `v0.2.0` |
-| Code Repos & Agent PRs | `--changed` / `--staged` hygiene & SARIF 2.1.0 | LIVE (hygiene/diff) · Roadmap (code AST) |
-| Rhythm, Layout Monotony & Voice | 5 prototype probes, `dislop.voice/1`, `dislop.taste/1`, optional local ONNX/GGUF | Prototype / Spec `v0.3+` |
+| Writing, Copy & Longform | `.md`, `.mdx`, `.txt` (EN & ZH) | LIVE `v0.3.0` |
+| Word & PowerPoint | `.docx`, `.pptx` | LIVE `v0.3.0` |
+| Web UI & Components | `.html`, `.css`, `.jsx`, `.tsx` | LIVE `v0.3.0` |
+| Git Diffs & PRs | `--changed` / `--staged` & SARIF 2.1.0 | LIVE (diff check) · Roadmap (code AST) |
+| Rhythm, Layout Monotony & Voice | 5 prototype probes, `dislop.voice/1`, `dislop.taste/1` | Prototype / Spec `v0.3+` |
 
-## Complete De-Slop System
+## Rule Layers
 
-1. **Negative Defense + Fact Guard (Shipped `v0.2.0`)**:
-   - Core Invariants (`packs/core`, `error`): leaked workstation paths, unfilled placeholders, unstripped chatbot wrappers, raw Markdown inside Office docs, dead `href="#"` controls, WCAG AA contrast failures, dark-mode Z-luminance inversions, and off-slide PPTX text frames.
-   - Genre Taste Packs (`warning` / `info`): `business-brief`, `literary-essay`, and `deck-and-ui`, each pairing rules with a Deletion Test and `bad -> trap -> good` exemplars.
-   - Revision Guard (`dislop verify`): checks that numbers, qualifiers (`up to`, `at least`, `最多`, `至少`), units, dates, URLs, code spans, and citations survived an edit while blocking second-order slogan displacement.
-2. **Positive Pull (Draft Protocols, Roadmap P0/P1)**:
-   - Three-Band Entropy Partition: lock factual and WCAG invariants at zero entropy, vary mid-layer argument skeletons and cadence (`dislop.voice/1`, `dislop.taste/1`), and prune drift deterministically.
+1. **AI Delivery Artifacts (`packs/core`, `error`)**: stray chatbot wrappers, unfilled placeholders, raw Markdown pasted into Word/PPT, and dead `href="#"` placeholder controls.
+2. **Style & Template Packs (`warning` / `info`)**: `business-brief`, `literary-essay`, and `deck-and-ui` (25 rules total), each pairing a check question with `bad -> trap -> good` examples.
 
 ## Resource Pillars
 

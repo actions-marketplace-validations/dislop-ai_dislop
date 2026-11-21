@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.2.0
+version: 0.3.0
 ---
 
 # Zero-Install Audit Checklists (When Local CLI/MCP Is Unavailable)
@@ -8,11 +8,10 @@ version: 0.2.0
 ## Prose & Technical Brief Checklist
 
 ```text
-1. Remove leaked workstation paths, unfilled placeholders, and chatbot wrappers.
+1. Remove unfilled placeholders and chatbot wrappers.
 2. Cut throat-clearing openers, stock promotional adjectives, and moralizing endings.
-3. Preserve every number, qualifier (up to / at least / 最多 / 至少), unit, date, URL, code span, and citation verbatim.
-4. Do not replace cut filler with binary negation slogans ("Not X, but Y") or three-word staccato fragments.
-5. Verify the revised draft locally with: npx --yes github:dislop-ai/dislop verify before.md after.md
+3. Do not replace cut filler with binary negation slogans ("Not X, but Y") or three-word staccato fragments.
+4. Re-check the revised draft locally with: npx --yes github:dislop-ai/dislop check draft.md
 ```
 
 ## Web UI & Slide Deck Checklist

@@ -2,23 +2,22 @@
 
 [简体中文](./ROADMAP.zh-CN.md)
 
-Last updated: `2026-11-21` · Current baseline: `v0.2.0` (`dislop.com` live)
+Last updated: `2026-11-21` · Current baseline: `v0.3.0` (`dislop.com` live)
 
 This roadmap tracks what `dislop` ships today, what we are building next, and the open design questions we want to decide together. If you want to pick up a track, push back on a threshold, or propose a rule, open a thread in [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) or claim an [Issue](https://github.com/dislop-ai/dislop/issues).
 
 ---
 
-## 1. Where We Are (`v0.2.x` Shipped)
+## 1. Where We Are (`v0.3.0` Shipped)
 
 | Area | Shipped today | Key files |
 |---|---|---|
-| Core engine & parity | Zero-dependency Node.js 20+ and Python 3.10+ engines passing 101 rule fixtures and 12 cross-runtime conformance tests | `src/core.mjs`, `src/dislop/engine.py`, `tests/test_conformance.py` |
-| Rules & packs | 29 rules across `core` (7 `error` invariants) and 3 style packs (`business-brief`, `literary-essay`, `deck-and-ui`) | `packs/*/pack.json` |
-| Edit verification | `dislop verify` & MCP `dislop_verify` guarding numbers, qualifiers, units, dates, URLs, code spans, citations, and 2nd-order slogan drift | `src/core.mjs`, `src/dislop/engine.py` |
-| Formats | `.md`, `.mdx`, `.txt`, `.html`, `.css`, `.jsx`, `.tsx`, `.svg`, `.docx`, `.pptx`, `.pdf` structural metadata (`[SKIP]` on encrypted/unparsed layers) | `src/binary-node.mjs`, `src/dislop/engine.py` |
-| Website & Workbench | Default-Chinese `dislop.com` with native English toggle, zero language mixing, live 3-state hero proof card, offline browser workbench (`CSP: connect-src 'none'`), and `/llms.txt` endpoints | `scripts/build_site.mjs`, `site/` |
+| Core engine & parity | Zero-dependency Node.js 20+ and Python 3.10+ engines passing 88 rule fixtures and 10 cross-runtime conformance/unit tests | `src/core.mjs`, `src/dislop/engine.py`, `tests/test_conformance.py` |
+| Rules & packs | 25 pure anti-slop rules across `core` (4 AI delivery artifacts, `error`) and 3 style/template packs (`business-brief`, `literary-essay`, `deck-and-ui`) | `packs/*/pack.json` |
+| Formats | `.md`, `.mdx`, `.txt`, `.html`, `.css`, `.jsx`, `.tsx`, `.docx`, `.pptx` | `src/binary-node.mjs`, `src/dislop/engine.py` |
+| Website & Workbench | Default-Chinese `dislop.com` with native English toggle, zero language mixing, live 3-state hero proof card (`Original` / `Still sounds like AI` / `Cleaned up`), offline browser workbench (`CSP: connect-src 'none'`), and `/llms.txt` endpoints | `scripts/build_site.mjs`, `site/` |
 | Awesome Anti-Slop | 87 checked bilingual entries (`dislop.radar/2`), pure English `awesome/README.md`, pure Chinese `awesome/README.zh-CN.md`, and offline filter at `dislop.com/awesome/` | `docs/research/anti-slop-radar-index.json`, `awesome/` |
-| Agent & editor entry points | Cross-host `skills/dislop/SKILL.md`, stdio MCP server (`bin/dislop-mcp.mjs`, `src/dislop/mcp_server.py`), Git diff gating (`--changed`/`--staged`), SARIF 2.1.0 & GitHub PR annotations | `skills/dislop/SKILL.md`, `bin/`, `server.json` |
+| Agent & editor entry points | Cross-host `skills/dislop/SKILL.md`, stdio MCP server (`dislop_check`, `dislop_explain`, `dislop_packs`), Git diff gating (`--changed`/`--staged`), SARIF 2.1.0 & GitHub PR annotations | `skills/dislop/SKILL.md`, `bin/`, `server.json` |
 
 ---
 
@@ -26,34 +25,33 @@ This roadmap tracks what `dislop` ships today, what we are building next, and th
 
 Tracks are scoped so maintainers can work in parallel with minimal merge conflicts.
 
-### Track A — `v0.2.x` Packaging, Polish & Distribution (Now)
+### Track A — `v0.3.x` Packaging, Polish & Distribution (Now)
 
-Goal: make `dislop` one command away from standard registries and fix small edge cases caught during dogfooding.
+Goal: make `dislop` one command away from standard registries and tighten anti-slop coverage.
 
 - [ ] Publish `dislop` to npm and PyPI (`npx dislop` / `uvx dislop`), and register `server.json` in the MCP registry.
-- [ ] Add localized Chinese rejection messages to `dislop verify --lang zh` alongside stable machine-readable `reasonCodes` in JSON output.
-- [ ] Catch 1-word English staccato chains (`Faster. Leaner. Done.`) and broader Chinese chatbot openings (`好的，以下是你的稿子`) with clean near-miss fixtures.
+- [ ] Catch 1-word English staccato chains (`Faster. Leaner. Done.`), broader Chinese chatbot openings (`好的，以下是你的稿子`), and 3-part symmetrical semicolon pitch sentences with clean near-miss fixtures.
 - [ ] Ship copy-ready `pre-commit` hook config and a thin reusable GitHub Action workflow.
 
 **Done when**: `npx dislop check .` and `uvx dislop check .` work from public registries, and all new fixtures pass in both Node and Python.
 
-### Track B — `v0.3.0` Core Deepening & Rule Catalog (Next)
+### Track B — `v0.3.x` Rhythm & Template Probes (Next)
 
-Goal: promote our verified `v0.3` prototype into both production runtimes without adding dependencies.
+Goal: promote our verified cadence and UI template probes into both production runtimes without adding dependencies.
 
 - [ ] Merge the 5 prototype-verified probes from [scripts/prototype_antipattern_lab.mjs](./scripts/prototype_antipattern_lab.mjs) (`comma-chain-cadence`, `sentence-length-monotony`, `discourse-marker-cluster`, `ui-glassmorphism-overuse`, `ui-accent-stripe-card`) into `src/core.mjs` and `src/dislop/engine.py` per [docs/specs/anti-pattern-catalog-and-probes-v0.3.md](./docs/specs/anti-pattern-catalog-and-probes-v0.3.md).
 - [ ] Implement `pptx-layout-monotony` (detecting 4+ consecutive identical slide templates) in both Node and Python OOXML readers.
 - [ ] Ship `dislop catalog` CLI subcommand and `dislop_catalog` MCP tool for structured filtering by modality, language, severity, and pack.
 - [ ] Extract shared host helpers (`src/node-host.mjs`, `src/mcp.mjs`) so CLI and MCP do not duplicate I/O or config loading.
 
-**Done when**: Node and Python pass identical `pack-test` and `test_conformance.py` assertions on all 35 rules, and the repository passes `dislop check . --fail-on warning`.
+**Done when**: Node and Python pass identical `pack-test` and `test_conformance.py` assertions on all 31 rules, and the repository passes `dislop check . --fail-on warning`.
 
-### Track C — Offline Benchmark for Fact Retention & False Positives (Next, Parallel)
+### Track C — Offline Anti-Slop Benchmark (Next, Parallel)
 
-Goal: back our editorial claims with reproducible offline numbers rather than opinions.
+Goal: measure false-positive rate and AI-slop recall with reproducible offline numbers rather than opinions.
 
-- [ ] Curate 30–50 original or open-licensed (`CC0` / `CC-BY`) paired drafts across Chinese business briefs, Chinese essays, English technical specs, HTML cards, and `.pptx` decks.
-- [ ] Measure three concrete numbers offline: false-positive rate on clean human writing, recall on obvious AI slop, and rejection accuracy of `dislop verify` when qualifiers (`up to` / `最多`), numbers, or links are altered.
+- [ ] Curate 30–50 original or open-licensed (`CC0` / `CC-BY`) drafts across Chinese business briefs, Chinese essays, English technical specs, HTML cards, and `.pptx` decks.
+- [ ] Measure two concrete numbers offline: false-positive rate on clean human writing and recall on 1st- and 2nd-order AI slop.
 - [ ] Publish the benchmark runner under `scripts/` and report results in docs.
 
 **Done when**: anyone can run one offline command and reproduce the exact score table.
@@ -79,7 +77,7 @@ Goal: keep the 87-entry directory accurate, neutral, and useful in both English 
 
 These five questions are open for co-maintainers and contributors to weigh in on before we lock code:
 
-1. **`dislop verify` localization & JSON contract**: Should `verify --lang zh` localize human-readable reasons while adding a stable `reasonCodes` array (e.g. `protected_number_changed`, `second_order_drift`) for CI and MCP callers?
+1. **3rd-order structural AI slop probes**: Can we reliably detect symmetrical 3-part semicolon pitches or pull-quote closers deterministically without false positives on normal human writing?
 2. **Default severity for `v0.3` rhythm probes**: Should `comma-chain-cadence` and `sentence-length-monotony` default to `info` in both `business-brief` and `literary-essay`, or stay opt-in on `literary-essay` so intentional stylistic repetition is never nagged?
 3. **Offline benchmark scope**: Which 3–4 document genres matter most for our first public 50-sample benchmark (e.g., Chinese product/weekly reports, WeChat/newsletter articles, English READMEs/specs, `.pptx` decks)?
 4. **Code-comment & PR hygiene boundary**: Should `dislop` stay focused on prose, docs, decks, and UI files inside PR diffs (leaving language AST linting to Oxlint/ESLint/Ruff), or add lightweight comment/stub-doc probes?
