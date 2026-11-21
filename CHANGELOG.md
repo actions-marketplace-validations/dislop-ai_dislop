@@ -8,6 +8,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ### Added
 
+- **Plain-Voice Copy Rewrite (Karpathy 80% ASD-STE100 + Anti-Pull-Quote Discipline)**:
+  - Rewrote the website (`dislop.com`, `/awesome/`, `/llms.txt`), `README.md`, `README.zh-CN.md`, `awesome/README*.md`, `docs/brand-and-voice-guide*.md`, `docs/brand/voice.json`, `AGENTS.md`, CLI help strings, package descriptions, and social/banner SVGs (`assets/og-card.{svg,png}`, `assets/banner-*.svg`) to drop 3-part semicolon pitches, pull-quote closers, and performative copy-editor roleplay in favor of plain, relaxed, direct prose.
 - **Collaboration Roadmap (`ROADMAP.md` & `ROADMAP.zh-CN.md`)**:
   - Consolidated project milestones, 5 parallel workstreams (`v0.2.x` -> `v0.4+`), 5 open design questions for GitHub Discussions, and collaborator pre-PR checks into root [ROADMAP.md](./ROADMAP.md) & [ROADMAP.zh-CN.md](./ROADMAP.zh-CN.md) (replacing `docs/strategy-and-roadmap*.md`), synced to `https://dislop.com/roadmap.md` and `/roadmap.zh-CN.md`.
 - **Deep Brand Voice, UI/Visual Polish & Pure Bilingual Experience (`dislop.com` & GitHub)**:

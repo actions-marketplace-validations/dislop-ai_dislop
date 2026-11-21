@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./assets/banner-dark.svg">
-    <img src="./assets/banner-light.svg" alt="dislop — A red pen for whatever your AI wrote" width="100%">
+    <img src="./assets/banner-light.svg" alt="dislop — Catch AI slop before you send it" width="100%">
   </picture>
 </p>
 
@@ -13,15 +13,15 @@
   <a href="./LICENSE">Apache-2.0</a>
 </p>
 
-**A red pen for whatever your AI wrote.**
+`dislop` is a local, zero-dependency linter for AI-written docs, slides, and web pages. It marks what looks off without rewriting your text, then checks your edited draft against the original so numbers and links do not get dropped.
 
-Here is a launch note, the way a model hands it over:
+Here is a short launch note straight from a model:
 
 ```text
 Certainly! Here is the launch note. It's worth noting that exports now finish in up to 12 minutes for workspaces above 500,000 rows. This isn't just a speed bump — it's a game-changer.
 ```
 
-`dislop check launch-note.md` puts four marks on it:
+`dislop check launch-note.md` flags four things:
 
 ```text
 [ERROR]   launch-note.md:1:1    chatbot-artifact           "Certainly! Here is"
@@ -30,22 +30,20 @@ Certainly! Here is the launch note. It's worth noting that exports now finish in
 [INFO]    launch-note.md:1:172  en-cliche-lexicon          "game-changer"
 ```
 
-You do the editing. Then `dislop verify` reads your version against the original:
+You edit the text yourself. Then `dislop verify` checks your version against the original:
 
 ```text
 dislop verify: ACCEPTED (findings 4 -> 0; all protected facts preserved)
 ```
 
-Lose the `"up to"` while you tidy, and the edit comes back:
+Drop `"up to"` while cleaning up, and `verify` catches it:
 
 ```text
 dislop verify: REJECTED (findings 4 -> 0)
   - Protected numbers removed or altered: up to 12 minutes
 ```
 
-That is the whole tool. It strikes what can't ship, asks about what sounds canned, and checks that your edit kept every number, qualifier, date, link, code span, and citation. It never rewrites a word; the pen stays in your hand.
-
-`dislop` reads Markdown, plain text, HTML/CSS/JSX/SVG, Word, PowerPoint, and PDF metadata. It gives the same answer in a browser tab at [dislop.com](https://dislop.com), from `npx` or `uvx`, over MCP, or as an agent skill, with no external dependencies to install and no network calls.
+That's it. It reads Markdown, plain text, HTML/CSS/JSX/SVG, Word, PowerPoint, and PDF metadata. Node.js (`npx`), Python (`uvx`), MCP, and the browser page at [dislop.com](https://dislop.com) run the same rules offline with no external dependencies.
 
 ## Quick start
 
@@ -77,14 +75,14 @@ cd dislop
 PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning
 ```
 
-## Red pencil, blue pencil
+## Hard bugs vs. style warnings
 
-Tools that auto-rewrite drafts to "sound human" routinely drop qualifiers or alter numbers, while flat banned-word lists punish real nouns (`Delve` debugger, `wool tapestry`) and push models into fake-dramatic slogans.
+Auto-rewriters often quietly drop qualifiers or alter numbers while trying to sound natural. Flat banned-word lists also cause false alarms on ordinary nouns (`Delve` debugger, `wool tapestry`) and push models into dramatic slogans instead.
 
-`dislop` splits rules into two explicit tiers:
+`dislop` splits rules into two layers:
 
-1. **Can't-ship rules (`packs/core/`, `severity: error`, always on)**: Objective defects that warrant failing a build—leaked local paths (`file:///Users/example/spec.pdf`), unfilled `[insert ...]` or `{{var}}` placeholders, stray chatbot greetings, raw Markdown left inside `.docx`/`.pptx`, dead `<a href="#">` links, WCAG AA contrast failures (`< 4.5:1`), dark-mode surface inversions, and off-slide PowerPoint text boxes.
-2. **Style packs (`warning` / `info`, advisory by default)**: Pluggable JSON packs (`business-brief`, `literary-essay`, `deck-and-ui`). Every rule carries a plain question to ask yourself, a before / overcorrected / after contrast, and automated hit/clean fixtures.
+1. **Hard bugs (`packs/core/`, `severity: error`, always on)**: Clear defects that should fail a build. Examples include leaked local paths (`file:///Users/example/spec.pdf`), unfilled `[insert ...]` or `{{var}}` placeholders, stray chatbot greetings, raw Markdown left inside `.docx`/`.pptx`, dead `<a href="#">` links, WCAG AA contrast failures (`< 4.5:1`), dark-mode surface inversions, and off-slide PowerPoint text boxes.
+2. **Style packs (`warning` / `info`, advisory by default)**: Optional JSON packs (`business-brief`, `literary-essay`, `deck-and-ui`). Each rule includes a short check question, before / overcorrected / after examples, and automated hit/clean tests.
 
 ## What it reads
 

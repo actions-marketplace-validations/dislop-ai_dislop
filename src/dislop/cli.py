@@ -394,7 +394,7 @@ def main(argv: list[str] | None = None) -> None:
         run_mcp_stdio()
         return
 
-    parser = argparse.ArgumentParser(prog="dislop", description="A red pen for AI-written drafts, decks, and pages")
+    parser = argparse.ArgumentParser(prog="dislop", description="Local linter for AI-written docs, slides, and web pages")
     parser.add_argument("-v", "--version", action="version", version=ENGINE_VERSION)
     sub = parser.add_subparsers(dest="cmd")
 
