@@ -282,7 +282,33 @@ for (const lang of ["zh", "en"]) {
 assert.ok(checkedJsonBlocks >= 10, `Expected >= 10 validated JSON snippets, got ${checkedJsonBlocks}`);
 assert.ok(fs.existsSync(path.join(SITE_DIR, "privacy.md")), "Missing site/privacy.md");
 
+// 9. Verify CSS brace balance (blocks early-closed @media queries) and complete data-i18n coverage
+const cssNoComments = css.replace(/\/\*[\s\S]*?\*\//g, "");
+let braceDepth = 0;
+for (let i = 0; i < cssNoComments.length; i += 1) {
+  const ch = cssNoComments[i];
+  if (ch === "{") braceDepth += 1;
+  else if (ch === "}") {
+    braceDepth -= 1;
+    assert.ok(braceDepth >= 0, `Unmatched closing '}' in site/styles.css around char ${i}`);
+  }
+}
+assert.equal(braceDepth, 0, `Unclosed '{' in site/styles.css (remaining depth: ${braceDepth})`);
+
+const i18nBlock = appSource.match(/const I18N = \{[\s\S]*?\n\};/);
+assert.ok(i18nBlock, "Could not locate I18N in site/app.js");
+const i18nDict = new Function(`${i18nBlock[0]}\nreturn I18N;`)();
+const htmlI18nKeys = [...new Set([...indexHtml.matchAll(/data-i18n="([^"]+)"/g)].map((m) => m[1]))];
+for (const key of htmlI18nKeys) {
+  assert.ok(key in i18nDict.zh, `Missing ZH I18N key for data-i18n="${key}"`);
+  assert.ok(key in i18nDict.en, `Missing EN I18N key for data-i18n="${key}"`);
+}
+const htmlIds = new Set([...indexHtml.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]));
+for (const m of indexHtml.matchAll(/href="#([^"]+)"/g)) {
+  assert.ok(htmlIds.has(m[1]), `Broken internal anchor href="#${m[1]}" in site/index.html`);
+}
+
 console.log(
   `dislop site-test: ok (${totalRules} rules, ${tryRulesChecked} Try demos, ${specimenCount} ZH/EN specimens + 2 hero proofs + 6 cases, ` +
-    `${catalog.resources.length} catalog resources, ${checkedJsonBlocks} valid JSON configs, ${AWESOME_DATA.entries.length} bilingual Awesome entries, plugin manifests & WCAG AA passed)`
+    `${catalog.resources.length} catalog resources, ${checkedJsonBlocks} valid JSON configs, ${htmlI18nKeys.length} bilingual i18n keys, CSS braces balanced, ${AWESOME_DATA.entries.length} Awesome entries & WCAG AA passed)`
 );

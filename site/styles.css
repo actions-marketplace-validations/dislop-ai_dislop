@@ -914,6 +914,30 @@ html[lang^="zh"] .lead-heading {
   border-right: 1px solid var(--rule);
   display: flex;
   flex-direction: column;
+  transition: outline-color 0.12s ease;
+}
+
+.galley-sheet.is-drop-active {
+  outline: 2px dashed var(--mark-warn);
+  outline-offset: -4px;
+  background-color: var(--mark-warn-wash);
+}
+
+.wb-applied-banner {
+  padding: 8px 20px;
+  background-color: var(--mark-stet-wash);
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+  font-size: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.wb-applied-banner[hidden] {
+  display: none;
 }
 
 .galley-bar {
@@ -2317,12 +2341,11 @@ html[lang^="zh"] .proof-lines {
     overflow-x: auto;
     scrollbar-width: none;
     padding-top: 8px;
+    border-top: 1px solid var(--rule);
+    gap: 14px;
   }
   .nav-links::-webkit-scrollbar {
     display: none;
-  }
-    border-top: 1px solid var(--rule);
-    gap: 14px;
   }
   .lead-band,
   .pillars-strip,
