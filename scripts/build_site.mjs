@@ -433,22 +433,22 @@ registerResource({
   id: "site-index",
   pillar: "methodology",
   kind: "site-mirror",
-  titleEn: "dislop — Complete Multi-Modal De-Slop Toolkit",
-  titleZh: "dislop — 全场景多模态去 AI 味工具箱",
+  titleEn: "dislop — Clear the AI slop from your writing and design",
+  titleZh: "dislop — 发之前，把文案和设计里的 AI 味过一遍",
   relPath: "index.md",
-  modalities: ["markdown", "text", "html", "css", "jsx", "svg", "docx", "pptx", "pdf"],
+  modalities: ["markdown", "text", "html", "css", "jsx", "svg", "docx", "pptx"],
   languages: ["en", "zh"],
   packs: PACK_ORDER,
-  relatedTools: ["browser-workbench", "cli", "mcp", "skill"],
+  relatedTools: ["browser-workbench", "skill", "plugin", "mcp", "cli"],
   content: `---
 content-type: reference-data
 version: ${VERSION}
 snapshot: ${SNAPSHOT_DATE}
 ---
 
-# dislop — Catch AI slop before you send it
+# dislop — Clear the AI slop from your writing and design
 
-Local, zero-dependency anti-slop linter for AI-written Markdown, plain text, HTML/CSS/JSX, Word (\`.docx\`), and PowerPoint (\`.pptx\`). Works with any AI model and any coding or writing agent.
+Good writing habits, web and slide design rules, an offline zero-dependency checker, and 87 vetted tools—gathered in one place. Hand \`/llms.txt\` to any AI chat, install the Agent Skill / Claude Code Plugin / MCP server, or test drafts offline in your browser.
 
 - Runtime dependencies: 0 (Node.js 20+ and Python 3.10+ parity verified by 88 pack fixtures and \`tests/test_conformance.py\`)
 - Live browser workbench: ${BASE_URL}/#workbench (offline in RAM, \`CSP: connect-src 'none'\`)
@@ -474,9 +474,9 @@ Local, zero-dependency anti-slop linter for AI-written Markdown, plain text, HTM
 ## Resource Pillars
 
 - [Methodology](./methodology/index.md): Deletion Test, anti-pattern map, positive divergence, and visual design system.
-- [Cases](./cases/index.md): \`bad -> trap -> good\` revision contrasts, repository self-dogfooding audit, and non-mainstream design references.
-- [Tools](./tools/index.md): Browser workbench, canonical \`SKILL.md\`, lightweight prompts, CLI, MCP, Hooks, SDK, and planned HTTP API.
-- [Awesome Anti-Slop](./awesome/index.md): 87 verified de-slop tools, standards, benchmarks, and policies (\`dislop.radar/2\`).
+- [Cases](./cases/index.md): \`bad -> trap -> good\` revision contrasts, repository self-dogfooding audit, and 31 non-mainstream design references.
+- [Tools](./tools/index.md): Browser workbench, canonical \`SKILL.md\`, Claude Code Plugin (\`.claude-plugin/\`), CLI, MCP, Hooks, and SDK.
+- [Awesome Anti-Slop](./awesome/index.md): 87 verified anti-slop tools, standards, benchmarks, and policies (\`dislop.radar/2\`).
 `,
 });
 
@@ -488,10 +488,10 @@ registerResource({
   titleEn: "Methodology Index",
   titleZh: "方法论导航",
   relPath: "methodology/index.md",
-  modalities: ["markdown", "text", "html", "css", "svg", "docx", "pptx", "pdf"],
+  modalities: ["markdown", "text", "html", "css", "svg", "docx", "pptx"],
   languages: ["en", "zh"],
   packs: PACK_ORDER,
-  relatedTools: ["cli", "mcp", "skill"],
+  relatedTools: ["skill", "plugin", "cli", "mcp"],
   content: `---
 content-type: reference-data
 version: ${VERSION}
@@ -501,11 +501,11 @@ version: ${VERSION}
 
 Read only the focused document matching your current task:
 
-- [Deletion Test & Fact-Preserving Rewrites](./deletion-test.md): Why banning flat word lists causes second-order slogans, and how the three-stage \`check -> edit -> verify\` loop works.
-- [Cross-Modality Anti-Pattern Map](./anti-pattern-map.md): Four-tier problem model (L0 objective bugs through L3 factual density) across prose, UI, Office, and PDF.
+- [Deletion Test & Anti-Slop Loop](./deletion-test.md): Why banning flat word lists causes second-order slogans, and how the \`prevent -> check -> clean up -> re-check\` loop works.
+- [Cross-Modality Anti-Pattern Map](./anti-pattern-map.md): Four-tier anti-slop model across prose, Web UI, Word, and PowerPoint.
 - [Positive Divergence & Personalization (Draft)](./positive-divergence.md): Three-band entropy partition, \`dislop.voice/1\` offline stylometrics, and \`dislop.taste/1\` positive design cards.
 - [Brand & Voice Guide](./brand-and-voice.md): Plain maker voice grounded in Karpathy's 80% ASD-STE100 and our own copy before/after edits.
-- [Visual & Typographic Design System](./design-system.md): Architectural Galley Proof Sheet tokens, WCAG AA contrast table, and monotonic dark-mode luminance rules.
+- [Visual & Typographic Design System](./design-system.md): Architectural Galley Proof Sheet tokens and anti-template layout constraints.
 `,
 });
 
@@ -513,38 +513,39 @@ registerResource({
   id: "methodology-deletion-test",
   pillar: "methodology",
   kind: "guide",
-  titleEn: "Deletion Test & Fact-Preserving Rewrites",
-  titleZh: "删除测试与事实守恒改写原则",
+  titleEn: "Deletion Test & Anti-Slop Editing Loop",
+  titleZh: "删除测试与去 AI 味改稿闭环",
   relPath: "methodology/deletion-test.md",
   modalities: ["markdown", "text", "docx", "pptx"],
   languages: ["en", "zh"],
   packs: ["core", "business-brief", "literary-essay"],
-  relatedTools: ["cli", "mcp", "browser-workbench"],
+  relatedTools: ["skill", "cli", "mcp", "browser-workbench"],
   content: `---
 content-type: reference-data
 version: ${VERSION}
 ---
 
-# Deletion Test & Fact-Preserving Rewrites
+# Deletion Test & Anti-Slop Editing Loop
 
 ## Why Flat Banned-Word Lists Fail
 
 1. **False positives on real domain nouns**: Flat word lists flag \`Delve\` (Go debugger), \`wool tapestry\`, or literal numeric corrections (\`重试窗口不是 5 秒，而是 60 秒\`).
 2. **Second-order displacement**: When models lose stock adjectives, they pivot to structural templates such as binary contrast slogans (\`"It's not just X — it's Y"\`) or three-word staccato chains (\`"Signals drop. Photos vanish. Trust dies."\`).
-3. **Silent fact drift**: Blind "humanizer" rewrites frequently drop qualifiers (\`up to 12 minutes\` -> \`12 minutes\`), alter units, or break links.
+3. **Third-order cadence slop**: Even with \`0\` linter findings, 3-part semicolon pitches, editorial roleplay, and pull-quote closers still sound synthetic.
 
-## Three-Stage Loop
+## Four-Step Loop
 
-1. **Stage 1 — Deterministic Audit (\`check\`)**:
-   - Resolve every \`packs/core\` \`error\` first (leaked paths, unfilled placeholders, chat residue, Office revisions, dead controls, contrast, off-slide shapes).
-   - Treat Taste Pack \`warning\` / \`info\` findings as localized editorial queries.
-2. **Stage 2 — Deletion Test**:
-   - Apply each rule's Deletion Test question to the flagged span only.
+1. **Step 1 — Prevent while drafting (\`SKILL.md\`)**:
+   - Lead with a concrete fact, example, number, or command; avoid 3-part semicolon pitches, pull-quote closers, and default AI UI templates upfront.
+2. **Step 2 — Deterministic Check (\`dislop check\` / \`dislop_check\`)**:
+   - Resolve every \`packs/core\` \`error\` first (stray chat wrappers, unfilled placeholders, raw Markdown in Word/PPT, dead \`href="#"\` links).
+   - Review style and template \`warning\` / \`info\` findings locally.
+3. **Step 3 — Deletion Test**:
+   - Apply each rule's check question to the flagged span only.
    - Ask what concrete mechanism, measurement, or boundary remains if the filler phrase is deleted.
-   - Keep code blocks, inline code, URLs, and quoted primary sources intact.
-3. **Stage 3 — Revision Verification (\`verify\`)**:
-   - Compare before and after multisets for numbers (including qualifiers and units), dates, URLs, code spans, code blocks, and citation markers.
-   - Reject edits that introduce core errors, drop protected facts, or shift hits into second-order slogan families (\`frame/negation-pivot\`, \`frame/staccato\`, \`frame/triad\`, \`frame/ending\`, \`frame/list-wall\`).
+   - Keep code blocks, inline code, URLs, and quoted primary sources intact; never invent facts or numbers.
+4. **Step 4 — Re-Check**:
+   - Run \`dislop check\` again to confirm no second-order slogan families (\`frame/negation-pivot\`, \`frame/staccato\`, \`frame/triad\`, \`frame/ending\`, \`frame/list-wall\`) were introduced during editing.
 `,
 });
 
@@ -555,7 +556,7 @@ registerResource({
   titleEn: "Cross-Modality Anti-Pattern Map",
   titleZh: "跨媒介反模式图谱",
   relPath: "methodology/anti-pattern-map.md",
-  modalities: ["markdown", "text", "html", "css", "jsx", "svg", "docx", "pptx", "pdf"],
+  modalities: ["markdown", "text", "html", "css", "jsx", "svg", "docx", "pptx"],
   languages: ["en", "zh"],
   packs: PACK_ORDER,
   relatedTools: ["cli", "mcp"],
@@ -568,14 +569,14 @@ version: ${VERSION}
 
 | Layer | Definition | Shipped \`v${VERSION}\` Deterministic Coverage | Roadmap Extensions (\`v0.3+\` Spec) |
 |---|---|---|---|
-| **L0 Objective Delivery Defects** | Hard publication bugs (\`severity: error\`) | Leaked local paths, unfilled placeholders, AI chat residue, raw Markdown in DOCX/PPTX, unaccepted Office revisions/comments, dead \`href="#"\`, WCAG AA contrast (\`< 4.5:1\`), dark Z-elevation inversion, off-slide PPTX, PDF font/title/URI checks | Expanded PDF metadata checks and baseline suppression ledgers |
-| **L1 First-Order Lexicon & Default UI** | Stock filler words and default generator chrome | \`en-cliche-lexicon\`, \`zh-bureaucratic-padding\`, \`ui-ai-gradient\`, \`ui-pill-soup\`, \`ui-box-in-box\`, \`ui-prompt-echo-badge\`, \`svg-text-overflow-or-a11y\` | \`ui-glassmorphism-overuse\`, \`ui-accent-stripe-card\` |
-| **L2 Second-Order Cadence & Layout** | Structural fallback after banning stock words | \`negation-pivot-frame\`, \`staccato-slogan-run\`, \`zh-four-char-triad\`, \`zh/en-essay-moralizing-ending\`, \`bold-lead-list-wall\`, \`excessive-em-dash-density\`, \`zh-halfwidth-punctuation\`, slide word-walls/bullets/autofit | 5 prototype-verified probes (\`comma-chain-cadence\`, \`sentence-length-monotony\`, \`discourse-marker-cluster\`, \`ui-glassmorphism-overuse\`, \`ui-accent-stripe-card\`) + \`pptx-layout-monotony\` in v0.3 spec |
-| **L3 Deep Context & Visual Composition** | Subtle semantic padding or page-level visual balance | Requires primary facts and human judgment | Optional decoupled local small-model plugins (P2: \`mmBERT\` / \`Qwen3\` / lightweight VLM), always \`info\` advisory only |
+| **L0 AI Delivery Artifacts** | Obvious AI leftovers (\`severity: error\`) | Stray chatbot wrappers, unfilled placeholders, raw Markdown in DOCX/PPTX, dead \`href="#"\` placeholder controls | Baseline suppression ledgers |
+| **L1 First-Order Lexicon & Default UI** | Stock filler words and default generator chrome | \`en-cliche-lexicon\`, \`en-throat-clearing-opener\`, \`zh-bureaucratic-padding\`, \`ui-ai-gradient\`, \`ui-pill-soup\`, \`ui-box-in-box\`, \`ui-prompt-echo-badge\` | \`ui-glassmorphism-overuse\`, \`ui-accent-stripe-card\` |
+| **L2 Second-Order Cadence & Layout** | Structural fallback after banning stock words | \`negation-pivot-frame\`, \`staccato-slogan-run\`, \`zh-four-char-triad\`, \`zh/en-essay-moralizing-ending\`, \`bold-lead-list-wall\`, \`excessive-em-dash-density\`, \`zh-halfwidth-punctuation\`, slide word-walls/bullets/autofit/weak-titles | 5 prototype-verified probes (\`comma-chain-cadence\`, \`sentence-length-monotony\`, \`discourse-marker-cluster\`, \`ui-glassmorphism-overuse\`, \`ui-accent-stripe-card\`) + \`pptx-layout-monotony\` in v0.3 spec |
+| **L3 Structural Voice & Visual Craft** | 3-part semicolon pitches, roleplay tone, page-level craft | Handled by \`SKILL.md\` plain writing & UI rules + 31 positive design references | Local \`dislop.voice/1\` stylometrics & optional local small-model plugins (advisory \`info\` only) |
 
 ## Coverage Honesty Principle
 
-Uninspectable artifacts (encrypted PDFs, corrupted archives, non-UTF-8 files) are reported explicitly as \`[SKIP]\` and exit \`2\` on single-file checks. \`dislop\` never reports an uninspected artifact as clean.
+Uninspectable artifacts (corrupted archives, non-UTF-8 files) are reported explicitly as \`[SKIP]\` and exit \`2\` on single-file checks. \`dislop\` never reports an uninspected artifact as clean.
 `,
 });
 
@@ -773,20 +774,20 @@ version: ${VERSION}
 
 # Repository Self-Dogfooding Audit
 
-Every Markdown document, SVG brand asset, and HTML/CSS file in \`dislop\` runs through \`dislop check . --fail-on warning\` in CI, and \`site/\` plus \`docs/research/\` pass \`--fail-on info\` across both Node.js and Python runtimes.
+Every Markdown document, SVG brand asset, and HTML/CSS file in \`dislop\` runs through \`dislop check . --fail-on warning\` in CI, and \`site/\` plus \`docs/\` pass \`--fail-on info\` across both Node.js and Python runtimes.
 
 ## English Contrast
 
 \`\`\`text
 bad:  Certainly! In today's fast-paced AI landscape, dislop isn't just a linter — it's a game-changer for quality. Signals drop. Bugs ship. Trust dies. Studies show 80% of teams struggle with slop.
-good: dislop de-slops Markdown, HTML/CSS/JSX/SVG, DOCX, PPTX, and PDF outputs across any model or dev environment. It flags stock phrasing, leaked paths, unfilled placeholders, and overloaded slides deterministically, then verifies edits kept numbers, links, and citations intact.
+good: dislop checks AI-written Markdown, HTML/CSS/JSX, Word, and PowerPoint files for chat wrappers, unfilled placeholders, prose clichés, crowded slides, and default AI UI templates.
 \`\`\`
 
 ## Chinese Contrast
 
 \`\`\`text
 bad:  好的，以下是为您撰写的介绍：值得注意的是，dislop 不仅仅是一款检查工具，更是高质量交付的底气。它以确定性规则为重要抓手，全面赋能内容团队实现精准高效、安全可靠、灵活易用的审校闭环。
-good: dislop 覆盖写作、Markdown、HTML/CSS/JSX/SVG、DOCX、PPTX 与 PDF，适配任意模型与开发环境；确定性标出高频套话、本机路径泄露、未填占位符与超载幻灯片，改后复检确认数字、单位、链接与引用原样保留。
+good: dislop 把靠谱的写作规矩、网页和 PPT 设计原则、离线检查工具和 87 条精选资源收在一起，覆盖 Markdown、Word、PPT 和网页。
 \`\`\`
 `,
 });
@@ -828,23 +829,26 @@ registerResource({
   titleEn: "Tools & Multi-Surface Integration Guide",
   titleZh: "工具与多形态渐进接入导航",
   relPath: "tools/index.md",
-  modalities: ["markdown", "text", "html", "css", "jsx", "svg", "docx", "pptx", "pdf"],
+  modalities: ["markdown", "text", "html", "css", "jsx", "svg", "docx", "pptx"],
   languages: ["en", "zh"],
   packs: PACK_ORDER,
-  relatedTools: ["browser-workbench", "skill", "cli", "mcp"],
+  relatedTools: ["browser-workbench", "skill", "plugin", "cli", "mcp"],
   content: `---
 content-type: reference-data
 version: ${VERSION}
 ---
 
-# dislop Tools & Multi-Surface Escalation Ladder
+# dislop Tools & Usage Options
 
 Pick the lightest surface that fits your workflow:
 
-1. **Level 0 — Website-as-an-Agent-Service (Live)**: Read [\`/llms.txt\`](../llms.txt), [\`/catalog.json\`](../catalog.json), or open the offline [Browser Galley Workbench](${BASE_URL}/#workbench).
-2. **Level 1 — Agent Skill & Lightweight Prompts**: Fetch [\`/tools/skill.md\`](./skill.md) or [\`/tools/prompts.md\`](./prompts.md) directly over HTTP.
-3. **Level 1/2 — CLI, Git Diff & Hooks**: See [\`/tools/cli-and-hooks.md\`](./cli-and-hooks.md) for Node (\`npx\`), Python (\`uvx\`), SARIF, GitHub Actions, and hook templates.
-4. **Level 2/3 — MCP Server, SDK & Planned HTTP API**: See [\`/tools/mcp-sdk-api.md\`](./mcp-sdk-api.md) for shipped stdio MCP tools and roadmap SDK/API specs.
+| Surface | Status | How to start |
+|---|---|---|
+| Zero-Install Prompt & Static Pages | Live | Hand [\`/llms.txt\`](../llms.txt) or [\`/catalog.json\`](../catalog.json) to any web-capable AI, or test drafts offline in the [Browser Workbench](${BASE_URL}/#workbench). |
+| Agent Skill | Live | Install [\`SKILL.md\`](./skill.md) with \`npx skills add dislop-ai/dislop\` in Claude Code, Codex, Cursor, Windsurf, or Antigravity (or see [\`/tools/prompts.md\`](./prompts.md)). |
+| Claude Code Plugin | Live | Install Skill + local stdio MCP in one step using \`.claude-plugin/marketplace.json\` (\`/plugin marketplace add dislop-ai/dislop\` then \`/plugin install dislop@dislop-ai\`). |
+| CLI, Git Diff & Hooks | Live | See [\`/tools/cli-and-hooks.md\`](./cli-and-hooks.md) for Node (\`npx\`), Python (\`uvx\`), SARIF, GitHub Actions, and hook templates. |
+| MCP Server & JS Export | Live | See [\`/tools/mcp-sdk-api.md\`](./mcp-sdk-api.md) for stdio MCP tools and \`src/core.mjs\`. |
 `,
 });
 
@@ -892,10 +896,9 @@ version: ${VERSION}
 ## Web UI & Slide Deck Checklist
 
 \`\`\`text
-1. Verify zero dead controls (<a href="#"> or unexplained disabled buttons) and WCAG AA text contrast (>= 4.5:1).
-2. Keep dark-mode surface luminance strictly monotonic (outer stage < sheet < raised control).
-3. Avoid default purple-pink neon gradients, pill-badge soup (> 6 pills per view), and 3-level nested bordered boxes.
-4. Cap slide copy at <= 120 English words (<= 280 Chinese chars), <= 6 bullets, and 100% font scale (no autofit shrink).
+1. Verify zero dead controls (<a href="#"> or unexplained disabled buttons).
+2. Avoid default purple-pink neon gradients, "AI-Powered" prompt-echo badges, pill-badge soup (> 6 pills per view), and 3-level nested bordered boxes.
+3. Cap slide copy at <= 120 English words (<= 280 Chinese chars), <= 6 bullets, 100% font scale (no autofit shrink), and a conclusion title instead of "Overview".
 \`\`\`
 `,
 });
@@ -907,7 +910,7 @@ registerResource({
   titleEn: "CLI, Git Diff, Hooks & GitHub Actions",
   titleZh: "CLI、Git 增量、Hooks 与 CI 接入",
   relPath: "tools/cli-and-hooks.md",
-  modalities: ["markdown", "text", "html", "css", "jsx", "svg", "docx", "pptx", "pdf"],
+  modalities: ["markdown", "text", "html", "css", "jsx", "svg", "docx", "pptx"],
   languages: ["en", "zh"],
   packs: PACK_ORDER,
   relatedTools: ["cli"],
@@ -921,10 +924,10 @@ version: ${VERSION}
 ## Node.js 20+ & Python 3.10+ (Shipped, Zero Dependencies)
 
 \`\`\`bash
-# Audit directory (exits 1 on core invariant errors)
+# Check a folder (exits 1 on core AI artifact errors)
 npx --yes github:dislop-ai/dislop check .
 
-# Gate only modified git lines and output GitHub PR annotations or SARIF 2.1.0
+# Check only modified git lines and output GitHub PR annotations or SARIF 2.1.0
 npx --yes github:dislop-ai/dislop check --changed origin/main --format github
 npx --yes github:dislop-ai/dislop check --changed origin/main --format sarif > dislop.sarif
 
@@ -938,8 +941,8 @@ npx --yes github:dislop-ai/dislop explain negation-pivot-frame
 ## Exit Codes
 
 - \`0\`: Checked cleanly with zero findings at or above \`--fail-on\`.
-- \`1\`: Findings met or exceeded \`--fail-on\` (or \`verify\` rejected the edit).
-- \`2\`: Invalid flags, missing path, or explicitly specified file was uninspectable (e.g., encrypted PDF).
+- \`1\`: Findings met or exceeded \`--fail-on\`.
+- \`2\`: Invalid flags, missing path, or explicitly specified file was uninspectable (e.g., corrupted archive or non-UTF-8 file).
 
 ## Claude Code PostToolUse Hook Template (Using Shipped CLI)
 
@@ -1008,7 +1011,7 @@ Shipped MCP tools:
 ## Roadmap (Not Yet Shipped)
 
 - \`P0\`: npm & PyPI package releases, typed JS/Python SDK facades (\`checkFile\` / \`checkBytes\`), MCP \`dislop_catalog\`, Resources, and Prompts.
-- \`P1\`: Stateless Web-Standard Fetch HTTP API (\`/v1/check\`, \`/v1/verify\`, OpenAPI 3.1) sharing \`src/core.mjs\`.
+- \`P1\`: Stateless Web-Standard Fetch HTTP API (\`/v1/check\`, OpenAPI 3.1) sharing \`src/core.mjs\`.
 `,
 });
 
@@ -1146,10 +1149,10 @@ Use this bundle when auditing or revising PRDs, architecture specs, memos, Word 
 
 ## 1. Core Principles
 
-1. Clear all \`core\` invariant errors first (paths, placeholders, chatbot residue, Office revisions/raw Markdown).
-2. Apply the Deletion Test to flagged prose phrases rather than swapping synonyms.
-3. Preserve every number, qualifier (\`up to\`, \`at least\`, \`最多\`, \`至少\`), unit, date, URL, code span, and citation verbatim.
-4. Reject second-order slogans (\`"Not X, but Y"\`, three-word staccato chains, 4-char Chinese slogan triads).
+1. Clear all \`core\` AI artifact errors first (chatbot wrappers, unfilled placeholders, raw Markdown pasted into Word/PPT).
+2. Apply each rule's check question to flagged prose phrases rather than swapping synonyms.
+3. Avoid 2nd-order slogans (\`"Not X, but Y"\`, three-word staccato chains, 4-char Chinese slogan triads) and 3rd-order 3-part semicolon pitches.
+4. Keep code spans, URLs, and quoted primary sources intact; never invent facts or numbers.
 
 ## 2. Active Rules
 
@@ -1190,12 +1193,11 @@ version: ${VERSION}
 
 Use this bundle when building or auditing HTML/CSS/JSX pages, SVG diagrams, or PowerPoint (\`.pptx\`) presentations.
 
-## 1. Hard Invariants & Layout Guards
+## 1. Hard AI Artifact & Template Guards
 
-1. Zero dead controls (\`<a href="#">\`, unlabeled buttons, unexplained \`<button disabled>\`).
-2. Meet WCAG 2.2 AA contrast (\`>= 4.5:1\` normal text) and strictly monotonic dark-mode elevation (\`stage < sheet < raised\`).
-3. Reject both Generator Default #1 (purple-pink neon gradients, pill soup > 6, 3-level nested boxes) and Generator Default #2 (warm cream + terracotta fallback).
-4. Keep PowerPoint slides readable: \`<= 120\` Latin words (\`<= 280\` Han chars), \`<= 6\` bullets, zero off-slide text shapes, and \`normAutofit >= 80%\`.
+1. Zero dead controls (\`<a href="#">\`, empty buttons, or unexplained \`<button disabled>\`).
+2. Avoid purple-pink AI gradients, \`"AI-Powered"\` prompt-echo badges, pill-badge walls (\`> 6\` pills per view), and 3-level nested bordered boxes.
+3. Keep PowerPoint slides readable: \`<= 120\` Latin words (\`<= 280\` Han chars), \`<= 6\` bullets, \`normAutofit >= 80%\`, and conclusion titles instead of \`"Overview"\`.
 
 ## 2. Active Rules
 
@@ -1392,7 +1394,7 @@ const githubTablesEn = GITHUB_SECTION_META.map((sec) => {
   const items = radarData.entries.filter((e) => e.section === sec.id);
   const note =
     sec.id === "contrast-and-detection"
-      ? "\n\n> Listed strictly for reference: probabilistic AI-text detectors and adversarial bypass tools. `dislop` removes clichés and checks edits against the original rather than helping evade disclosure policies."
+      ? "\n\n> Listed strictly for reference: probabilistic AI-text detectors and adversarial bypass tools. `dislop` focuses on removing AI slop in writing and design rather than helping evade disclosure policies."
       : "";
   const rows = items
     .map((e) => {
@@ -1456,7 +1458,7 @@ const githubTablesZh = GITHUB_SECTION_META.map((sec) => {
   const items = radarData.entries.filter((e) => e.section === sec.id);
   const note =
     sec.id === "contrast-and-detection"
-      ? "\n\n> 以下仅作行业对照参考，集中收录概率型 AI 文本检测器与规避工具。`dislop` 专注去套话与改稿核对，不用于规避披露规范。"
+      ? "\n\n> 以下仅作行业对照参考，集中收录概率型 AI 文本检测器与规避工具。`dislop` 专注清理文案和设计里的 AI 味，不用于规避披露规范。"
       : "";
   const rows = items
     .map((e) => {
@@ -1690,9 +1692,9 @@ const llmsTxt = writeCleanFile(
   "llms.txt",
   `# dislop
 
-> Local, zero-dependency anti-slop linter for AI-written docs, Word/PowerPoint files, and web pages. Marks stray chat wrappers, placeholders, prose clichés, and AI slide/UI templates without rewriting your text. Works offline in Node.js 20+, Python 3.10+, MCP, and the browser.
+> Clear the AI slop from your writing and design. Gathers proven writing habits, web and slide design rules, an offline zero-dependency checker (Node, Python, MCP, browser), and 87 vetted anti-slop tools in one place.
 
-Choose the page that matches the file you are reviewing. Each guide lists the checks to run and includes an example edit. Use the local CLI or MCP server to check a file.
+Choose the page matching your task below. Follow the Skill rules while drafting, then run \`dislop_check\` (MCP) or \`dislop check\` (CLI) before shipping.
 
 ## Start by task (~800-1,500 tokens each)
 - [Review a brief or proposal](${BASE_URL}/tasks/business-doc.md): AI artifacts and \`business-brief\` rules.
@@ -1701,15 +1703,15 @@ Choose the page that matches the file you are reviewing. Each guide lists the ch
 - [Check files before release](${BASE_URL}/tasks/pre-release-gate.md): Core \`error\` checks and git diff CI gating.
 
 ## Browse by topic
-- [Methodology & Voice Guide](${BASE_URL}/methodology/index.md): Deletion Test, anti-pattern notes, plain voice guide, and visual tokens.
+- [Methodology & Voice Guide](${BASE_URL}/methodology/index.md): Plain writing guide, anti-pattern notes, and visual tokens.
 - [Examples & References](${BASE_URL}/cases/index.md): Before / overcorrected / after contrasts and 31 print/type design references.
-- [Install & Integrations](${BASE_URL}/tools/index.md): Browser workbench, \`SKILL.md\`, CLI (\`npx\`/\`uvx\`), MCP server, and CI hooks.
-- [Awesome Anti-Slop](${BASE_URL}/awesome/index.md): ${radarData.entries.length} checked tools, guides, and papers (\`dislop.radar/2\`, raw JSON at \`/awesome/index.json\`).
+- [Install & Integrations](${BASE_URL}/tools/index.md): Prompt, \`SKILL.md\`, Claude Code Plugin, MCP server, CLI (\`npx\`/\`uvx\`), and CI hooks.
+- [Awesome Anti-Slop](${BASE_URL}/awesome/index.md): ${radarData.entries.length} checked tools, guides, and papers (\`dislop.radar/2\`, JSON at \`/awesome/index.json\`).
 - [Roadmap & Open Questions](${BASE_URL}/roadmap.md): Active tracks (\`v0.3\` -> \`v0.4+\`) and collaboration guide.
 
 ## Machine index & packs
 - [JSON Catalog](${BASE_URL}/catalog.json): Versioned manifest (\`dislop.catalog/1\`) with sha256 and token estimates.
-- [Agent Skill](${BASE_URL}/tools/skill.md): \`check -> edit -> re-check\` workflow instructions.
+- [Agent Skill](${BASE_URL}/tools/skill.md): Full \`prevent -> check -> clean up -> re-check\` writing & UI playbook.
 - [Rule Packs](${BASE_URL}/packs/core.md): Also \`/packs/business-brief.md\`, \`/packs/literary-essay.md\`, \`/packs/deck-and-ui.md\`, and ${allRules.length} \`/rules/<id>.md\` cards.
 - [Single-Fetch Bundle](${BASE_URL}/llms-full.txt): All ${allRules.length} rules compiled without test fixtures.
 `,
@@ -1884,18 +1886,12 @@ const endpointsHtml = featuredEndpoints
 
 indexHtml = replaceBuildBlock(indexHtml, "ENDPOINTS", endpointsHtml);
 
-// 3c. Default CLI snippet pre-rendered in Chinese
-const defaultSnippet = `# 检查当前目录（命中硬伤时退出码为 1，同时标出套话提醒）
-npx --yes github:dislop-ai/dislop check .
-
-# 只查相对 main 新改的行，并输出 SARIF 报告
-npx --yes github:dislop-ai/dislop check --changed origin/main --format sarif > dislop.sarif
-
-# 用 Python 3.10+ 检查 PPT 或 Word（零外部依赖）
-uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review.pptx
-
-# 查看某条规则的判断方法和改前/改后示例
-npx --yes github:dislop-ai/dislop explain negation-pivot-frame --lang zh`;
+// 3c. Default Prompt snippet pre-rendered in Chinese
+const defaultSnippet = `# 复制下面这段直接发给任意能联网的 AI / Agent（免安装）：
+请先读 https://dislop.com/llms.txt，按里面的去 AI 味写作规矩和检查方法，帮我把接下来这份稿子（文档 / PPT / 网页）交付前过一遍：
+1. 先删掉 AI 寒暄、没填的占位符和空链接；
+2. 把套话、二阶口号和三段分号推销句改回平实人话，不编造新数字；
+3. 改完再对照规则复检一遍。`;
 
 indexHtml = replaceBuildBlock(indexHtml, "DEFAULT_SNIPPET", escapeHtml(defaultSnippet));
 

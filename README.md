@@ -13,7 +13,7 @@
   <a href="./LICENSE">Apache-2.0</a>
 </p>
 
-`dislop` is a local, zero-dependency anti-slop linter for AI-written docs, Word/PowerPoint files, and web pages. It marks AI artifacts, clichés, and template chrome without rewriting your text.
+`dislop` gathers proven anti-slop writing habits, web and slide design rules, an offline zero-dependency checker, and 87 vetted tools in one place—so you and your AI agent can clear AI slop before shipping docs, Word/PowerPoint decks, or web pages.
 
 Here is a short launch note straight from a model:
 
@@ -86,8 +86,17 @@ Looking for other tools, style guides, design rules, PR policies, and papers in 
 
 ## Use it from an agent
 
-- **Agent Skill**: Install [skills/dislop/SKILL.md](./skills/dislop/SKILL.md) in Claude Code, Codex, Cursor, or Windsurf (`npx skills add dislop-ai/dislop`) for the `check -> edit -> re-check` loop.
-- **No shell and no MCP**: Point any web-capable agent at [dislop.com/llms.txt](https://dislop.com/llms.txt) (~2.2 KB), [dislop.com/catalog.json](https://dislop.com/catalog.json), one task guide (`/tasks/*.md`), or any single rule page (`/rules/<id>.md`).
+- **Any AI chat (zero install)**: Paste one line into ChatGPT, Claude, or any web-capable agent:
+  ```text
+  Read https://dislop.com/llms.txt and follow its writing and design anti-slop rules and checks before delivering my next doc, slide deck, or web page.
+  ```
+- **Agent Skill (Claude Code, Codex, Cursor, Windsurf, Antigravity)**: Install [skills/dislop/SKILL.md](./skills/dislop/SKILL.md) with `npx skills add dislop-ai/dislop` for the full `prevent -> check -> clean up -> re-check` loop (covers 1st-order clichés, 2nd-order slogans, and 3rd-order structural pitch habits plus UI/slide rules).
+- **Claude Code Plugin (Skill + local MCP bundled)**:
+  ```text
+  /plugin marketplace add dislop-ai/dislop
+  /plugin install dislop@dislop-ai
+  ```
+- **Static pages for agents**: Point any web-capable agent at [dislop.com/llms.txt](https://dislop.com/llms.txt) (~2.2 KB), [dislop.com/catalog.json](https://dislop.com/catalog.json), one task guide (`/tasks/*.md`), or any single rule page (`/rules/<id>.md`).
 
 ### MCP server (`Claude Code`, `Codex`, `Cursor`, `Windsurf`)
 
@@ -144,6 +153,8 @@ GitHub Actions CI runs `dislop pack-test` (88 fixture assertions in both Node an
 
 ```text
 dislop/
+├── .claude-plugin/    # Claude Code plugin & marketplace manifests (bundles Skill + MCP)
+├── .mcp.json          # Standard stdio MCP server manifest
 ├── awesome/           # Awesome Anti-Slop (README.md & README.zh-CN.md, 87 entries)
 ├── bin/               # Node.js CLI (dislop.mjs) & stdio MCP launcher (dislop-mcp.mjs)
 ├── src/

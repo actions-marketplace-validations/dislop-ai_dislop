@@ -8,10 +8,10 @@ version: 0.3.0
 ## Node.js 20+ & Python 3.10+ (Shipped, Zero Dependencies)
 
 ```bash
-# Audit directory (exits 1 on core invariant errors)
+# Check a folder (exits 1 on core AI artifact errors)
 npx --yes github:dislop-ai/dislop check .
 
-# Gate only modified git lines and output GitHub PR annotations or SARIF 2.1.0
+# Check only modified git lines and output GitHub PR annotations or SARIF 2.1.0
 npx --yes github:dislop-ai/dislop check --changed origin/main --format github
 npx --yes github:dislop-ai/dislop check --changed origin/main --format sarif > dislop.sarif
 
@@ -25,8 +25,8 @@ npx --yes github:dislop-ai/dislop explain negation-pivot-frame
 ## Exit Codes
 
 - `0`: Checked cleanly with zero findings at or above `--fail-on`.
-- `1`: Findings met or exceeded `--fail-on` (or `verify` rejected the edit).
-- `2`: Invalid flags, missing path, or explicitly specified file was uninspectable (e.g., encrypted PDF).
+- `1`: Findings met or exceeded `--fail-on`.
+- `2`: Invalid flags, missing path, or explicitly specified file was uninspectable (e.g., corrupted archive or non-UTF-8 file).
 
 ## Claude Code PostToolUse Hook Template (Using Shipped CLI)
 

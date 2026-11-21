@@ -14,6 +14,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ### Added
 
+- **Agent Plugin Bundle, Full Prevent-and-Check Skill & Hub Redesign (`dislop.com`)**:
+  - Added standard Claude Code / Agent plugin manifests (`.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.mcp.json`) bundling `skills/dislop/SKILL.md` with the local zero-dependency stdio MCP server.
+  - Upgraded `skills/dislop/SKILL.md` from a check-only wrapper to a full `prevent -> check -> clean up -> re-check` anti-slop workflow covering 1st-order clichés, 2nd-order slogans, 3rd-order structural pitch habits, and UI/slide template rules.
+  - Restructured `https://dislop.com` as a human-first, agent-friendly one-stop anti-slop hub: one-click "Copy for Agent" prompt right in the hero, 3 shareable real before/after cases (including our own 0-finding copy autopsy), instant "Paste my draft" workbench with post-test install & GitHub Star guidance, clear 5-way usage tabs (`Send to AI` / `Skill` / `Plugin` / `MCP` / `CLI` / `CI` / `.dislop.json`), folded `<details>` drawers for Agent technical endpoints and the 25-rule table, and a dedicated Share & GitHub Star band.
 - **Plain-Voice Copy Rewrite (Karpathy 80% ASD-STE100 + Anti-Pull-Quote Discipline)**:
   - Rewrote the website (`dislop.com`, `/awesome/`, `/llms.txt`), `README.md`, `README.zh-CN.md`, `awesome/README*.md`, `docs/brand-and-voice-guide*.md`, `docs/brand/voice.json`, `AGENTS.md`, CLI help strings, package descriptions, and social/banner SVGs (`assets/og-card.{svg,png}`, `assets/banner-*.svg`) to drop 3-part semicolon pitches, pull-quote closers, and performative copy-editor roleplay in favor of plain, relaxed, direct prose.
 - **Collaboration Roadmap (`ROADMAP.md` & `ROADMAP.zh-CN.md`)**:

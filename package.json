@@ -30,6 +30,8 @@
     "dogfood": "node bin/dislop.mjs check . --fail-on warning && node bin/dislop.mjs check site/ --fail-on info"
   },
   "files": [
+    ".claude-plugin/",
+    ".mcp.json",
     "bin/",
     "src/core.mjs",
     "src/binary-node.mjs",

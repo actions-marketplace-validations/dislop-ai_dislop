@@ -13,7 +13,7 @@
   <a href="./LICENSE">Apache-2.0</a>
 </p>
 
-`dislop` 是一个本地运行、零依赖的检查工具，专门用来挑出 AI 写完的文档、Word、PPT 和网页里的残留硬伤、套话和模板味。它只负责标出问题，不替你重写。
+`dislop` 把靠谱的写作规矩、网页和 PPT 设计原则、离线零依赖检查引擎和 87 条精选工具收在一起。交付文档、Word、PPT 或网页前，可以发给你的 AI 直接用、在线试查，或装成 Agent 的 Skill、Plugin 和 MCP。
 
 拿一段模型刚写完的上线说明来举个例子：
 
@@ -85,10 +85,19 @@ Node.js 版（`bin/dislop.mjs`）和 Python 版（`src/dislop/`）都零外部�
 
 我们也顺手整理了 87 个去 AI 味相关的中英文工具、写作规范、前端设计规则、代码 PR 治理和论文。可以直接看 **[awesome/README.zh-CN.md](./awesome/README.zh-CN.md)**（[English](./awesome/README.md)），或者在 **[dislop.com/awesome/](https://dislop.com/awesome/)** 离线筛选（也提供 [index.json](https://dislop.com/awesome/index.json) 和 [index.md](https://dislop.com/awesome/index.md) 给 Agent 读取）。
 
-## 让 Agent 来用
+## 让你的 AI / Agent 来用
 
-- **Agent Skill**：把 [skills/dislop/SKILL.md](./skills/dislop/SKILL.md) 装进 Claude Code、Codex、Cursor 或 Windsurf（`npx skills add dislop-ai/dislop`），按「先查 -> 局部改稿 -> 再查一遍」交稿。
-- **不装本地工具也能读**：让联网 Agent 直接读 [dislop.com/llms.txt](https://dislop.com/llms.txt)（约 2.2 KB）、[dislop.com/catalog.json](https://dislop.com/catalog.json)、按场景挑一张任务卡（`/tasks/*.md`）或单条规则页（`/rules/<id>.md`）。
+- **任意联网 AI 对话（免安装）**：直接复制这句话发给 ChatGPT、Claude、Kimi 等工具：
+  ```text
+  先读 https://dislop.com/llms.txt，按里面整理的文案和设计去 AI 味规矩与检查方法，帮我把接下来这份稿子发之前过一遍。
+  ```
+- **Agent Skill（跨宿主通用）**：用 `npx skills add dislop-ai/dislop` 把 [skills/dislop/SKILL.md](./skills/dislop/SKILL.md) 装进 Claude Code、Codex、Cursor、Windsurf 或 Antigravity。装完后 Agent 会先按去 AI 味规矩动笔（避开一阶套词、二阶口号、三阶分号推销句和模板 UI），写完再跑检查并收尾。
+- **Claude Code Plugin 插件包（一键装 Skill + 本地 MCP）**：
+  ```text
+  /plugin marketplace add dislop-ai/dislop
+  /plugin install dislop@dislop-ai
+  ```
+- **静态文档接口（零安装）**：让联网 Agent 直接读 [dislop.com/llms.txt](https://dislop.com/llms.txt)（约 2.2 KB）、[dislop.com/catalog.json](https://dislop.com/catalog.json)、按场景挑一张任务卡（`/tasks/*.md`）或单条规则页（`/rules/<id>.md`）。
 
 ### 接入 MCP（`Claude Code`、`Codex`、`Cursor`、`Windsurf`）
 
@@ -140,6 +149,8 @@ GitHub Actions CI 在每次提交时跑完双端 `dislop pack-test`（88 项样�
 
 ```text
 dislop/
+├── .claude-plugin/    # Claude Code 插件与市场清单（打包 Skill + 本地 MCP）
+├── .mcp.json          # 标准 stdio MCP 配置清单
 ├── awesome/           # Awesome Anti-Slop 中英文工具清单（87 条）
 ├── bin/               # Node.js CLI（dislop.mjs）与 stdio MCP（dislop-mcp.mjs）
 ├── src/

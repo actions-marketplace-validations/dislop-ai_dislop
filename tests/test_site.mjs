@@ -239,7 +239,24 @@ assert.equal(appSource.includes("rulesById"), false, "site/app.js must look up r
 assert.equal(appSource.includes("f.column"), false, "site/app.js must use f.col, not f.column");
 assert.equal(appSource.includes("f.snippet"), false, "site/app.js must use f.match, not f.snippet");
 
+// 7. Verify Agent Plugin & MCP manifests plus Cases language purity
+const pluginJson = JSON.parse(fs.readFileSync(path.join(ROOT, ".claude-plugin", "plugin.json"), "utf8"));
+const marketplaceJson = JSON.parse(fs.readFileSync(path.join(ROOT, ".claude-plugin", "marketplace.json"), "utf8"));
+const mcpJson = JSON.parse(fs.readFileSync(path.join(ROOT, ".mcp.json"), "utf8"));
+assert.equal(pluginJson.name, "dislop", "plugin.json name should be dislop");
+assert.equal(pluginJson.skills, "./skills/", "plugin.json should point to ./skills/");
+assert.equal(pluginJson.mcpServers, "./.mcp.json", "plugin.json should point to ./.mcp.json");
+assert.equal(marketplaceJson.plugins?.[0]?.name, "dislop", "marketplace.json should list dislop plugin");
+assert.ok(mcpJson.mcpServers?.dislop?.command, ".mcp.json should define dislop stdio MCP command");
+
+const casesBlock = appSource.match(/const CASES_BY_LANG = \{[\s\S]*?\n\};/);
+assert.ok(casesBlock, "Could not locate CASES_BY_LANG in site/app.js");
+const casesByLang = new Function(`${casesBlock[0]}\nreturn CASES_BY_LANG;`)();
+assert.equal(casesByLang.zh.length, 3, "Expected 3 ZH showcase cases");
+assert.equal(casesByLang.en.length, 3, "Expected 3 EN showcase cases");
+assert.equal(/[\u4E00-\u9FFF]/.test(JSON.stringify(casesByLang.en)), false, "English showcase cases leaked Chinese chars");
+
 console.log(
-  `dislop site-test: ok (${totalRules} rules, ${tryRulesChecked} Try demos, ${specimenCount} ZH/EN specimens + 2 hero proofs, ` +
-    `${catalog.resources.length} catalog resources, ${AWESOME_DATA.entries.length} bilingual Awesome entries, WCAG AA & 3:1 control contrast passed)`
+  `dislop site-test: ok (${totalRules} rules, ${tryRulesChecked} Try demos, ${specimenCount} ZH/EN specimens + 2 hero proofs + 6 cases, ` +
+    `${catalog.resources.length} catalog resources, ${AWESOME_DATA.entries.length} bilingual Awesome entries, plugin manifests & WCAG AA passed)`
 );

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "dislop": {
+      "command": "npx",
+      "args": [
+        "--yes",
+        "github:dislop-ai/dislop",
+        "--mcp"
+      ]
+    }
+  }
+}

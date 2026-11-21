@@ -11,8 +11,8 @@
   "entryPoints": {
     "llmsTxt": {
       "path": "/llms.txt",
-      "bytes": 2202,
-      "approxTokens": 551
+      "bytes": 2134,
+      "approxTokens": 534
     },
     "llmsFullTxt": {
       "path": "/llms-full.txt",
@@ -31,8 +31,8 @@
       "pillar": "methodology",
       "kind": "site-mirror",
       "title": {
-        "en": "dislop — Complete Multi-Modal De-Slop Toolkit",
-        "zh": "dislop — 全场景多模态去 AI 味工具箱"
+        "en": "dislop — Clear the AI slop from your writing and design",
+        "zh": "dislop — 发之前，把文案和设计里的 AI 味过一遍"
       },
       "path": "/index.md",
       "modalities": [
@@ -43,8 +43,7 @@
         "jsx",
         "svg",
         "docx",
-        "pptx",
-        "pdf"
+        "pptx"
       ],
       "languages": [
         "en",
@@ -56,15 +55,16 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 2170,
-      "approxTokens": 543,
+      "bytes": 2262,
+      "approxTokens": 566,
       "relatedTools": [
         "browser-workbench",
-        "cli",
+        "skill",
+        "plugin",
         "mcp",
-        "skill"
+        "cli"
       ],
-      "sha256": "6fac3f38dab7b67f749cf98706c0dbba291d3733dbd0d2bdfb1ea412a7cbcaf6"
+      "sha256": "a89312b6f982687a82b31bc795dd2e6c37707bee9ac833f909bcff4f15035339"
     },
     {
       "id": "methodology-index",
@@ -82,8 +82,7 @@
         "css",
         "svg",
         "docx",
-        "pptx",
-        "pdf"
+        "pptx"
       ],
       "languages": [
         "en",
@@ -95,22 +94,23 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 982,
-      "approxTokens": 246,
+      "bytes": 913,
+      "approxTokens": 228,
       "relatedTools": [
+        "skill",
+        "plugin",
         "cli",
-        "mcp",
-        "skill"
+        "mcp"
       ],
-      "sha256": "d87c821adb15e51a9c10ac45d21b64be671b2ed3b742c9bfbc7df5fe808da876"
+      "sha256": "65ca6eb62353e780f8826793e251f82b856641b84cd0d810d554ea98cd0643b9"
     },
     {
       "id": "methodology-deletion-test",
       "pillar": "methodology",
       "kind": "guide",
       "title": {
-        "en": "Deletion Test & Fact-Preserving Rewrites",
-        "zh": "删除测试与事实守恒改写原则"
+        "en": "Deletion Test & Anti-Slop Editing Loop",
+        "zh": "删除测试与去 AI 味改稿闭环"
       },
       "path": "/methodology/deletion-test.md",
       "modalities": [
@@ -128,14 +128,15 @@
         "business-brief",
         "literary-essay"
       ],
-      "bytes": 1716,
-      "approxTokens": 429,
+      "bytes": 1755,
+      "approxTokens": 439,
       "relatedTools": [
+        "skill",
         "cli",
         "mcp",
         "browser-workbench"
       ],
-      "sha256": "637d45d6364bb64ad6d28e8d9cb37a6387d999b274b816a8e774528262f1a4dc"
+      "sha256": "8af7a96f568985514bbc1707316b511a53562cd5a15e1b8164878eaa816a74d1"
     },
     {
       "id": "methodology-anti-pattern-map",
@@ -154,8 +155,7 @@
         "jsx",
         "svg",
         "docx",
-        "pptx",
-        "pdf"
+        "pptx"
       ],
       "languages": [
         "en",
@@ -167,13 +167,13 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 1907,
-      "approxTokens": 477,
+      "bytes": 1752,
+      "approxTokens": 438,
       "relatedTools": [
         "cli",
         "mcp"
       ],
-      "sha256": "2971df5cac22b3bc9c67d9463f97fc6f456e7f4c3057e426c8b17f1863bc007c"
+      "sha256": "60a66e3292f303dbe786a2a9fdb0f6ef806c05853101391028f3b1e95cce50ec"
     },
     {
       "id": "methodology-positive-divergence",
@@ -374,13 +374,13 @@
         "business-brief",
         "deck-and-ui"
       ],
-      "bytes": 1404,
-      "approxTokens": 351,
+      "bytes": 1195,
+      "approxTokens": 299,
       "relatedTools": [
         "cli",
         "browser-workbench"
       ],
-      "sha256": "00cbe4b0d2cb30a8c9f23f953b2d922d027775de8d5602249f3da07f7ecc8211"
+      "sha256": "6c63d5d06f07271d991b5a2307d99942b4647eb111fbb37f7a3656a0bc9774fd"
     },
     {
       "id": "cases-ui-specimens",
@@ -428,8 +428,7 @@
         "jsx",
         "svg",
         "docx",
-        "pptx",
-        "pdf"
+        "pptx"
       ],
       "languages": [
         "en",
@@ -441,15 +440,16 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 842,
-      "approxTokens": 211,
+      "bytes": 1099,
+      "approxTokens": 275,
       "relatedTools": [
         "browser-workbench",
         "skill",
+        "plugin",
         "cli",
         "mcp"
       ],
-      "sha256": "07f04a3a5a4a4d984bafc4783d163e9fb0a402f93f2750d4acd787f97649098f"
+      "sha256": "73c2789c7d371220f6e0d4ec65c92f44002c8a6fbfe4fb8ecd029180cc9ee831"
     },
     {
       "id": "tools-skill",
@@ -481,14 +481,14 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 3041,
-      "approxTokens": 760,
+      "bytes": 4782,
+      "approxTokens": 1196,
       "relatedTools": [
         "skill",
         "cli",
         "mcp"
       ],
-      "sha256": "a36c59fad1391f6b7c6bac48997b5d9045130bf19bb612cb50c0c0ca3983eca0"
+      "sha256": "c5b0534bc7cbc993a36f85e5f4ce2f0408f5a3ffe6a0cf177c207f58d26e64d2"
     },
     {
       "id": "tools-prompts",
@@ -516,13 +516,13 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 1009,
-      "approxTokens": 252,
+      "bytes": 952,
+      "approxTokens": 238,
       "relatedTools": [
         "browser-workbench",
         "skill"
       ],
-      "sha256": "5938f247c271e2aaca9a72a7c2edcb5df8968671d7ae40a1ae7a5604e40e0eae"
+      "sha256": "6872a5b3603eefb705e08c858e736f129410a1636293749cf17bbee06f1d09b5"
     },
     {
       "id": "tools-cli-hooks",
@@ -541,8 +541,7 @@
         "jsx",
         "svg",
         "docx",
-        "pptx",
-        "pdf"
+        "pptx"
       ],
       "languages": [
         "en",
@@ -554,12 +553,12 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 1930,
-      "approxTokens": 483,
+      "bytes": 1922,
+      "approxTokens": 481,
       "relatedTools": [
         "cli"
       ],
-      "sha256": "d052273d380ca001b0f89a79ed095428b941ff027a11387e418ac148ef07de97"
+      "sha256": "e88d230e8d85bed64b41c153730a33e9868bc37c3e09a330cfa77f51c8d8df36"
     },
     {
       "id": "tools-mcp-sdk-api",
@@ -591,13 +590,13 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 1059,
-      "approxTokens": 265,
+      "bytes": 1045,
+      "approxTokens": 261,
       "relatedTools": [
         "mcp",
         "cli"
       ],
-      "sha256": "9d997e49c56bb9730779c5486e928e2dcd8b4ae71809c57af84d9bcb23b036ef"
+      "sha256": "241fd1ebf88e1306617c502ff47e764d194ccbb531f99f8e228c2c00324af4e4"
     },
     {
       "id": "pack-core",
@@ -1509,15 +1508,15 @@
         "core",
         "business-brief"
       ],
-      "bytes": 3304,
-      "approxTokens": 826,
+      "bytes": 3319,
+      "approxTokens": 830,
       "relatedTools": [
         "browser-workbench",
         "skill",
         "cli",
         "mcp"
       ],
-      "sha256": "bb70259ccea1189085816b87c4926bb7011c8bbf5ac6f9bda7c1a306eaad7a21"
+      "sha256": "20da182b0b5a437fefdaeff5f8b3ef80f0d2ff5bc13e00bebc6c90493eb8d6f8"
     },
     {
       "id": "task-web-and-deck",
@@ -1543,15 +1542,15 @@
         "core",
         "deck-and-ui"
       ],
-      "bytes": 3471,
-      "approxTokens": 868,
+      "bytes": 3346,
+      "approxTokens": 837,
       "relatedTools": [
         "browser-workbench",
         "skill",
         "cli",
         "mcp"
       ],
-      "sha256": "f701255d68f253782e9159b2a5f66a3d8e62f5bc9a6f047576ae8a707d592353"
+      "sha256": "6bb04829d832f9fc66ee156cb3652243ab5e4bfab0f5cd383a98e3d60bb97936"
     },
     {
       "id": "task-editorial-writing",
