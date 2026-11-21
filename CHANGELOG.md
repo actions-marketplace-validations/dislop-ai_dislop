@@ -8,6 +8,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ### Added
 
+- **Brand Identity, Voice Baseline & `Awesome Anti-Slop` (`/awesome/`)**:
+  - Added [docs/brand-and-voice-guide.md](./docs/brand-and-voice-guide.md), [docs/brand-and-voice-guide.zh-CN.md](./docs/brand-and-voice-guide.zh-CN.md), and the draft self-voice profile [docs/brand/voice.json](./docs/brand/voice.json) anchored in `assets/logo.svg` ("the sheet is set by machine; the marks are made by hand").
+  - Promoted the 87-entry curated directory to **Awesome Anti-Slop** ([awesome/README.md](./awesome/README.md) & `https://dislop.com/awesome/`, with `/radar/` redirecting via HTTP 301) as an independently shareable traffic and mindshare hub inside the main repo.
+  - Applied Brand Baseline visual/voice updates: unified `#F04438` Vermilion (`--pen`) across light/dark logo tiles, switched `stet` marks to round `2px dotted` underlines (distinct from dashed `query`), added `--radius-ctrl: 6px`, fixed Han heading tracking, and replaced clinical/overclaimed copy with warm, literal desk-editor wording.
 - **Human + Agent Dual-Native Website (`https://dislop.com`)**:
   - Upgraded `scripts/build_site.mjs` into a zero-dependency dual-native static compiler generating both the pre-rendered browser workbench (`site/index.html`), an interactive 87-entry ecosystem radar (`site/radar/index.html`), and progressive-disclosure static Agent endpoints (`/llms.txt`, `/llms-full.txt`, `/catalog.json`, `/index.md`, `/methodology/*.md`, `/cases/*.md`, `/tools/*.md`, `/tasks/*.md`, `/packs/*.md`, `/rules/*.md`, `/radar/index.{json,md}`).
   - Added build-time sanitization (stripping HTML comments, invisible/bidi Unicode characters, and negative test fixtures from Agent-facing outputs) plus byte-budget and link-integrity assertions.

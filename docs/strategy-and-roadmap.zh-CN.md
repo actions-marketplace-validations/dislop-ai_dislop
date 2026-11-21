@@ -10,20 +10,26 @@
 
 ### 1.1 一级定位与核心主张
 
-- **中文主标**：**全面去 AI 味。** 覆盖写作、文档、PPT、PDF、前端 UI 与 Agent 交付的全套工具，适配任意模型、Agent 与开发环境：确定性标出套话与硬伤，改后复检保住每个数字、链接与引用。
-- **英文主标**：**De-slop AI outputs.** A complete toolkit for writing, docs, decks, PDF, Web UI, and agent deliverables across any model or dev environment: catch stock phrasing and delivery defects deterministically, then verify edits kept every number, link, and citation intact.
+- **中文主标**：**全面去 AI 味。** 把稿子、PPT 或页面贴进来。不能发的硬伤，dislop 直接划掉；听着像套话的地方，它问你一句；改完再替你和原稿对一遍，数字、链接和引用一个不少。
+- **英文主标**：**De-slop AI outputs.** Paste a draft, a deck, or a page. dislop strikes what can't ship, asks about what sounds canned, and checks that your edit kept numbers, links, and citations.
+- **品牌人格与表达基准**：以图标 [assets/logo.svg](../assets/logo.svg) 为参照，确立「**底盘如机印般沉稳，落笔如手批般轻快**」的责任编辑风格（详见 [brand-and-voice-guide.zh-CN.md](./brand-and-voice-guide.zh-CN.md) 与 [docs/brand/voice.json](./brand/voice.json)）。
 
-### 1.2 为什么能站稳差异化位置
+### 1.2 双引擎增长与长期护城河
 
-2026 年的开源去 AI 味生态已出现显著分化：上游提示词技能开始自带规则脚本与钩子（如 `pbakaus/impeccable` 的 62 条前端规则与 `Leonxlnx/taste-skill` 的 Stop hook），而纯概率“降 AI 率 / 拟人化”工具常为绕过检测器篡改数字与限定条件。`dislop` 锚定三条可验证的工程护城河：
+`dislop` 采用清晰分工的**双引擎结构**，主次分明、合而不混：
 
-1. **跨媒介交付物确定性体检（零外部依赖双端一致）**：单一零依赖内核覆盖 `.md`/`.txt`、`.html`/`.css`/`.jsx`/`.tsx`/`.svg`、`.docx`、`.pptx` 与 `.pdf` 结构元数据，Node.js 与 Python 双运行时通过同一套 101 项样本断言与 12 项跨语言契约测试。
-2. **三阶段事实守恒复检闭环（`check -> edit -> verify`）**：`check` 只定位不越权改稿，输出删除测试（Deletion Test）与 `bad -> trap -> good` 对照；`verify` 以多重集校验锁死数字、限定词（`up to`/`at least`/`最多`/`至少`）、单位、日期、URL、代码与引用，并拦截把公关词替换成二阶口号句式（如 `不是 A，而是 B` 或三连短句）的过矫漂移。
-3. **负向防线 + 正向牵引 + 实测生态雷达的闭环**：在零 LLM 确定性门禁之上，通过离线声纹（`dislop.voice/1`）与抽象设计参考卡（`dislop.taste/1`）对抗跨模型均值回归，并以 87 条实测核验资源雷达建立开放参考系。
+1. **早期流量、GitHub 聚星与宣发落地页：`Awesome Anti-Slop`（[awesome/README.md](../awesome/README.md) · `https://dislop.com/awesome/`）**
+   - 这是一个**独立可传播、可收藏、人类可预览、Agent 可直读**的核心子模块（收录 87 条实测核验的去 AI 味工具、标准、论文与对照观察区），在主引擎尚未建立广泛心智的早期阶段承担流量入口、GitHub 吸引 Star 与对外宣发落地页的角色。
+   - 现阶段以 `awesome/README.md` 作为 GitHub 仓库内的精选目录落地页（搭配 `https://dislop.com/awesome/` 离线交互预览与 Agent 直读端点），留在 `dislop-ai/dislop` 主仓内以集中星标动量与工具转化；仅当外部有效 PR 持续 `>= 5 条/月` 时再按 `dislop.radar/3` 契约无损切出独立 CC0 仓，规范地址永久锚定 `https://dislop.com/awesome/`。
+2. **不可替代的长期壁垒：`dislop` 主引擎与多形态工具**
+   - `Awesome Anti-Slop` 是早期增长楔子，但不是全部，更不是终点。访客与 Agent 被清单吸引进来后，真正留住他们的是 `dislop` 自己的三项硬能力：
+     1. **跨媒介确定性双端内核（零外部依赖）**：覆盖 `.md`/`.txt`、`.html`/`.css`/`.jsx`/`.tsx`/`.svg`、`.docx`、`.pptx` 与 `.pdf` 结构元数据，Node.js 与 Python 双端通过 101 项样本断言与 12 项一致性测试。
+     2. **三阶段核对闭环（`check -> edit -> verify`）**：红笔划硬伤、蓝笔问商榷、绿点标出受保护片段；改完与原稿逐项核对数字、限定词（`up to`/`at least`/`最多`/`至少`）、单位、日期、URL、代码与引用，并拦截二阶口号漂移。
+     3. **负向防线 + 正向声纹牵引**：在零 LLM 内核之上，通过离线声纹（`dislop.voice/1`）与抽象设计文法（`dislop.taste/1`）帮作者保住自己的声音。
 
 ### 1.3 伦理与覆盖诚实底线
 
-- **反套话，不反披露**：专注提升表达精度、版式可读性与交付质量；与对抗式“降 AI 率 / 去水印”工具保持明确边界，生态雷达中将检测器与规避工具隔离在对照观察区（`contrast-and-detection`）。
+- **反套话，不反披露**：专注提升表达精度、版式可读性与交付质量；与对抗式“降 AI 率 / 去水印”工具保持明确边界，精选清单中将检测器与规避工具隔离在对照观察区（`contrast-and-detection`）。
 - **覆盖诚实原则**：加密 PDF、受损压缩包或未实现深解析的文本层均显式输出 `[SKIP]`（单文件检查退出码 `2`），绝不将未检查对象伪装为“0 问题”。
 
 ---
@@ -37,7 +43,7 @@
 | **阶段 3 改稿复检（`verify`）** | 数字+限定词+单位、日期、URL、行内/围栏代码、引用标记多重集校验 + 二阶口号漂移拦截 | — | 离线可复算的事实保真与二阶漂移公开评测基准 |
 | **反模式查询目录（Catalog）** | 官网 29 条静态预渲染规则表（多维筛选、中英搜索、`#rule-<id>` SARIF 锚点、23 条一键工作台试跑） | 原型 CLI 多维查询已验证 | 正式落地 `dislop catalog` CLI 与 `dislop_catalog` MCP 工具 |
 | **正向差异化与个性化** | 官网工作台内置浏览器纯内存声纹统计条 + 31 条非主流设计/学术参考源 | `dislop.voice/1`、`dislop.taste/1` JSON 草案与三带可控熵边界设计 | 离线 `dislop voice extract`、S1–S4 正向骨架卡与跨文档趋同检测 |
-| **生态资源雷达** | 87 条实测核验索引（`dislop.radar/2`）与官网 `/radar/` 离线筛选目录（随主仓维护，集中星标与流量转化） | `dislop.radar/3` 单条目契约与建仓模板（按需启用） | **冷启动期坚持单仓沉淀**；仅当外部目录 PR 持续 `>= 5 条/月` 或外部维护者明确需要独立 CC0 治理时，再平滑切出 `dislop-ai/awesome-anti-slop`，同时永久保持 `dislop.com/radar/` 规范 URL 不变 |
+| **Awesome Anti-Slop 精选清单** | 87 条实测核验索引（`dislop.radar/2`）、仓库入口 [awesome/README.md](../awesome/README.md) 与官网 `/awesome/` 离线筛选目录（随主仓维护，集中星标与流量转化） | `dislop.radar/3` 单条目契约与建仓模板（按需启用） | **冷启动期坚持单仓沉淀**；仅当外部目录 PR 持续 `>= 5 条/月` 或外部维护者明确需要独立 CC0 治理时，再平滑切出 `dislop-ai/awesome-anti-slop`，同时永久保持 `dislop.com/awesome/` 规范 URL 不变 |
 
 ---
 
@@ -47,7 +53,7 @@
 
 | 层级 | 产品形态 | 当前状态 | 目标用户与触发时机 | 入口与交付件 |
 |---|---|---|---|---|
-| **L0** | **人机双读官网（`dislop.com`）** | **已上线** | 首次访问者在线试用、审校本地文件，以及无本地安装的联网 Agent 零配置按需读取 | 静态 Nginx 单规范域名；工作台 `/#workbench`、雷达 `/radar/`、Agent 端点 `/llms.txt`、`/catalog.json`、`/tasks/*.md`、`/rules/*.md` |
+| **L0** | **人机双读官网（`dislop.com`）** | **已上线** | 首次访问者在线试用、审校本地文件，以及无本地安装的联网 Agent 零配置按需读取 | 静态 Nginx 单规范域名；工作台 `/#workbench`、精选清单 `/awesome/`、Agent 端点 `/llms.txt`、`/catalog.json`、`/tasks/*.md`、`/rules/*.md` |
 | **L1** | **Agent Skill（`SKILL.md`）** | **已落地仓内 SSOT** | Claude Code、Codex、Cursor、Windsurf 等支持标准 Skill 的写作/研发 Agent | [skills/dislop/SKILL.md](../skills/dislop/SKILL.md)（同源编译至 `/tools/skill.md`） |
 | **L1** | **Node.js & Python CLI** | **已发布 `v0.2.0`** | 本地目录/文件/stdin 检查、Git 增量门禁（`--changed`/`--staged`）、SARIF 2.1.0、GitHub PR 注解与 `verify` | `npx --yes github:dislop-ai/dislop` / `uvx --from git+https://github.com/dislop-ai/dislop` |
 | **L2** | **Stdio MCP Server** | **已发布 `v0.2.0`** | 接入主流 Agent 客户端执行结构化 `dislop_check` / `dislop_verify` / `dislop_explain` / `dislop_packs` | `bin/dislop-mcp.mjs`、`src/dislop/mcp_server.py`、`server.json` |
@@ -64,13 +70,13 @@
 
 - **设计隐喻**：**建筑网格上的印刷校样单（Architectural Galley Proof）**——同时避开「深蓝紫粉霓虹渐变 + 胶囊堆砌」（第一代默认模板）与「暖米白 + 暖黑 + 陶土红」（第二代默认模板）。
 - **品牌标识（[assets/logo.svg](../assets/logo.svg)）**：取自中西共通校对删除号（*dele* / GB/T 14706），实测适配 `16px` favicon、`64px` 头像与 `512px` 图标。
-- **自适应仓库横幅**：[assets/banner-light.svg](../assets/banner-light.svg) 与 [assets/banner-dark.svg](../assets/banner-dark.svg)（已清理旧版重复 `banner.svg`），右侧校样标本严格遵守「朱红仅标 `core error`、墨绿虚线标 `stet` 锁定事实」的语义铁律。
+- **自适应仓库横幅**：[assets/banner-light.svg](../assets/banner-light.svg) 与 [assets/banner-dark.svg](../assets/banner-dark.svg)（已清理旧版重复 `banner.svg`），右侧校样标本严格遵守「朱红实线标 `core error`、墨绿点线标 `stet` 受保护片段」的语义纪律。
 - **社交分享图（Open Graph）**：[assets/og-card.svg](../assets/og-card.svg) 与光栅版 [assets/og-card.png](../assets/og-card.png)（`1200×630`），在 X、GitHub、Slack、Discord 与微信转发时呈现统一印刷校样识别。
 
 ### 4.2 色彩、对比度与排印约束
 
 - **全量通过 WCAG 2.2 AA**：基于 `src/core.mjs` 精确复算，浅色清样（`#FFFFFF`）对比度 `--ink 18.0:1`、`--ink-2 8.6:1`、`--ink-3 6.0:1`、`--mark-error 6.6:1`、`--mark-warn 7.3:1`、`--mark-stet 6.5:1`；深色清样（`#15181C`）表面明度按 `--stage (L* 4.6) < --sheet (L* 8.1) < --raised (L* 12.6)` 单调递增，零 Z 轴倒置。
-- **红蓝绿三语义绑定线型**：朱红实线（`error` 客观错误）、群青虚线（`warn/info` 审美商榷）、墨绿虚线（`stet` 受保护事实），绝不单靠颜色传意，也绝不将红色用于纯装饰。
+- **红蓝绿三语义绑定线型**：朱红实线（`error` 客观错误）、群青虚线（`warn/info` 审美商榷）、墨绿点线（`stet` 受保护片段），绝不单靠颜色传意，也绝不将红色用于纯装饰。
 - **零外部字体与零外发请求**：纯系统级中英混排三字体栈（衬线文稿 / 无衬线界面 / 等宽 `tabular-nums` 坐标），全站由 HTTP 响应头与 `<meta>` 双重锁定 `CSP: connect-src 'none'`。
 
 ### 4.3 官网交互设计原则
@@ -83,7 +89,7 @@
 
 ## 5. 分阶段演进与纪律门禁
 
-1. **G0（当前收尾与发包准备）**：完成双端引擎、官网人机双读升级、仓内 `SKILL.md`、品牌 VI 与文档整合，完成 npm 与 PyPI 正式发包；**生态雷达留在主仓与 `dislop.com/radar/` 集中承接流量、星标与工作台转化，不提前拆仓分散注意力**。
+1. **G0（当前收尾与发包准备）**：完成双端引擎、官网人机双读升级、品牌表达基准（[brand-and-voice-guide.zh-CN.md](./brand-and-voice-guide.zh-CN.md)）、仓内 `SKILL.md`、品牌 VI 与文档整合，完成 npm 与 PyPI 正式发包；**`Awesome Anti-Slop` 留在主仓（`awesome/README.md` + `dislop.com/awesome/`）集中承接流量、星标与工作台转化，不提前拆仓分散注意力**。
 2. **G1（`v0.3.0` 能力深化）**：将 `src/node-host.mjs` 与 `src/mcp.mjs` 从 CLI 解耦，合入 6 条新确定性探针、`dislop catalog` / `dislop_catalog`，并落地离线 `dislop verify` 基准集；若此时雷达外部 PR 持续 `>= 5 条/月`，再按 `dislop.radar/3` 契约无损切出独立 CC0 仓。
 3. **G2（正向引擎与服务化扩展）**：推进 `dislop.voice/1` 离线提取器、`dislop.taste/1` 设计参考卡、无状态 Web Standard Fetch HTTP API 及严格解耦的端侧小模型可选插件。
 

@@ -8,22 +8,28 @@
 
 ## 1. Strategic Positioning & Differentiation
 
-### 1.1 Primary Positioning
+### 1.1 Primary Positioning & Brand Voice
 
-- **English**: **De-slop AI outputs.** A complete toolkit for writing, docs, decks, PDF, Web UI, and agent deliverables across any model or dev environment: catch stock phrasing and delivery defects deterministically, then verify edits kept every number, link, and citation intact.
-- **Chinese**: **全面去 AI 味。** 覆盖写作、文档、PPT、PDF、前端 UI 与 Agent 交付的全套工具，适配任意模型、Agent 与开发环境：确定性标出套话与硬伤，改后复检保住每个数字、链接与引用。
+- **English**: **De-slop AI outputs.** Paste a draft, a deck, or a page. dislop strikes what can't ship, asks about what sounds canned, and checks that your edit kept numbers, links, and citations.
+- **Chinese**: **全面去 AI 味。** 把稿子、PPT 或页面贴进来。不能发的硬伤，dislop 直接划掉；听着像套话的地方，它问你一句；改完再替你和原稿对一遍，数字、链接和引用一个不少。
+- **Brand Baseline**: Anchored in [assets/logo.svg](../assets/logo.svg) — *the sheet is set by machine; the marks are made by hand* (see [brand-and-voice-guide.md](./brand-and-voice-guide.md) and [docs/brand/voice.json](./brand/voice.json)).
 
-### 1.2 Engineering Moat
+### 1.2 Two-Engine Growth Model & Long-Term Moat
 
-As upstream prompt skills add deterministic linters and hooks while probabilistic "humanizers" routinely distort facts to evade AI detectors, `dislop` anchors on three verifiable strengths:
+`dislop` pairs two clearly scoped engines:
 
-1. **Cross-Modality Deterministic Parity (Zero Runtime Dependencies)**: One zero-dependency core covers `.md`/`.txt`, `.html`/`.css`/`.jsx`/`.tsx`/`.svg`, `.docx`, `.pptx`, and `.pdf` structural metadata. Node.js and Python runtimes share 101 pack fixture assertions and 12 cross-runtime conformance tests.
-2. **Three-Stage Fact-Preserving Loop (`check -> edit -> verify`)**: `check` flags defects without silent rewrites, returning Deletion Tests and `bad -> trap -> good` contrasts; `verify` enforces multiset preservation of numbers, qualifiers (`up to`/`at least`/`最多`/`至少`), units, dates, URLs, code spans, and citations while blocking second-order slogan displacement.
-3. **Negative Defense + Positive Pull + Verified Radar**: Built on a zero-LLM core, `dislop` combines shipped preflight guardrails with draft offline voice (`dislop.voice/1`) and abstract design grammar (`dislop.taste/1`) protocols plus an 87-entry verified ecosystem radar (`dislop.radar/2`).
+1. **Early Traffic, GitHub Star Magnet & Campaign Landing Page — `Awesome Anti-Slop` ([awesome/README.md](../awesome/README.md) · `https://dislop.com/awesome/`)**:
+   - An independently shareable, bookmarkable, human-previewable, and Agent-readable curated directory of 87 verified de-slop resources, benchmarks, and standards. During early growth—while core engine mindshare is still building—it serves as the primary discovery, bookmarking, and campaign landing wedge.
+   - Maintained inside `dislop-ai/dislop` right now (`awesome/README.md` as the GitHub star-magnet landing page, paired with `https://dislop.com/awesome/` for interactive offline preview and Agent fetches) so stars and workbench conversions concentrate in one repo; structured under `dislop.radar/3` specs for a clean standalone CC0-1.0 spin-out only if sustained external PR volume reaches `>= 5/month`, keeping `https://dislop.com/awesome/` canonical permanently.
+2. **Irreplaceable Core Product — `dislop` Engine & Multi-Surface Toolkit**:
+   - `Awesome Anti-Slop` brings people and Agents in, but it is not the whole product or the final moat. Retention rests on `dislop`'s own capabilities:
+     1. **Cross-Modality Deterministic Parity (Zero Runtime Dependencies)**: `.md`/`.txt`, `.html`/`.css`/`.jsx`/`.tsx`/`.svg`, `.docx`, `.pptx`, and structural `.pdf` metadata with Node.js and Python parity (101 fixtures + 12 conformance tests).
+     2. **Three-Stage Revision Loop (`check -> edit -> verify`)**: Red pencil for objective defects, blue pencil for editorial queries, green `stet` dots for protected spans—comparing edits against the original so numbers, qualifiers, units, dates, URLs, code spans, and citations stay intact without second-order slogan drift.
+     3. **Negative Defense + Positive Voice Pull**: Zero-LLM deterministic checks paired with offline voice (`dislop.voice/1`) and abstract design grammar (`dislop.taste/1`) protocols.
 
 ### 1.3 Ethics & Coverage Honesty
 
-- **Quality over evasion**: `dislop` removes template noise and preserves factual accuracy rather than helping evade AI disclosure policies. Probabilistic detectors and adversarial bypass tools are isolated inside the radar's `contrast-and-detection` section.
+- **Quality over evasion**: `dislop` removes template noise and preserves factual accuracy rather than helping evade AI disclosure policies. Probabilistic detectors and adversarial bypass tools are isolated inside Awesome Anti-Slop's `contrast-and-detection` section.
 - **Coverage honesty**: Uninspectable inputs (encrypted PDFs, corrupted archives, unextracted CID text layers) are reported explicitly as `[SKIP]` (and exit `2` on single-file checks), never silently marked clean.
 
 ---
@@ -37,7 +43,7 @@ As upstream prompt skills add deterministic linters and hooks while probabilisti
 | **Revision Guard (`verify`)** | Multiset verification for numbers+qualifiers+units, dates, URLs, code, citations + second-order slogan guard | — | Public offline benchmark for fact retention & second-order drift |
 | **Anti-Pattern Catalog** | Pre-rendered 29-rule catalog on `dislop.com` with multi-facet search, `#rule-<id>` SARIF anchors, and 23 one-click `Try ↑` probes | Standalone CLI catalog query verified in prototype | Ship `dislop catalog` CLI and `dislop_catalog` MCP tool |
 | **Positive Divergence & Voice** | Browser-RAM stylometric meter preview + 31 verified non-mainstream design/academic references | Draft `dislop.voice/1`, `dislop.taste/1`, and Three-Band Entropy Partition | Local `dislop voice extract`, S1–S4 skeleton cards, and cross-document repetition checks |
-| **Ecosystem Radar** | 87 verified entries (`dislop.radar/2`) + offline filterable `/radar/` directory hosted in the main repo | `dislop.radar/3` per-entry JSON contract & starter templates (ready on demand) | **Single-repo-first during early growth** to keep star momentum and workbench conversion focused; spin out a standalone CC0-1.0 `dislop-ai/awesome-anti-slop` repo only when external radar PR volume reaches `>= 5/month` (keeping `dislop.com/radar/` canonical) |
+| **Awesome Anti-Slop** | 87 verified entries (`dislop.radar/2`), shareable [awesome/README.md](../awesome/README.md) + offline filterable `/awesome/` directory hosted in the main repo | `dislop.radar/3` per-entry JSON contract & starter templates (ready on demand) | **Single-repo-first during early growth** to keep star momentum and workbench conversion focused; spin out a standalone CC0-1.0 `dislop-ai/awesome-anti-slop` repo only when external PR volume reaches `>= 5/month` (keeping `dislop.com/awesome/` canonical) |
 
 ---
 
@@ -47,7 +53,7 @@ All surfaces share one zero-dependency core (`src/core.mjs` + `src/dislop/`) and
 
 | Level | Surface | Status | Target Workflow | Entry Point |
 |---|---|---|---|---|
-| **L0** | **Dual-Native Website (`dislop.com`)** | **Live** | Zero-install human workbench, 87-entry radar, and HTTP-only external agents | `https://dislop.com`, `/radar/`, `/llms.txt`, `/catalog.json`, `/tasks/*.md`, `/rules/*.md` |
+| **L0** | **Dual-Native Website (`dislop.com`)** | **Live** | Zero-install human workbench, Awesome Anti-Slop (87), and HTTP-only external agents | `https://dislop.com`, `/awesome/`, `/llms.txt`, `/catalog.json`, `/tasks/*.md`, `/rules/*.md` |
 | **L1** | **Agent Skill (`SKILL.md`)** | **Shipped in Repo (SSOT)** | Claude Code, Codex, Cursor, Windsurf, and `skills.sh`-compatible hosts | [skills/dislop/SKILL.md](../skills/dislop/SKILL.md) (compiled to `/tools/skill.md`) |
 | **L1** | **Node.js & Python CLI** | **Shipped (`v0.2.0`)** | Local audits, git diff gating (`--changed`/`--staged`), SARIF 2.1.0, GitHub annotations, `verify` | `npx --yes github:dislop-ai/dislop` / `uvx --from git+https://github.com/dislop-ai/dislop` |
 | **L2** | **Stdio MCP Server** | **Shipped (`v0.2.0`)** | Structured `dislop_check`, `dislop_verify`, `dislop_explain`, `dislop_packs` inside AI editors | `bin/dislop-mcp.mjs`, `src/dislop/mcp_server.py`, `server.json` |
@@ -63,7 +69,7 @@ Full visual tokens and ratios live in [design-system.md](./design-system.md). Ke
 - **Visual System**: **Architectural Galley Proof Sheet** — rejecting both Generator Default #1 (purple-pink neon gradients + pill soup) and Generator Default #2 (warm cream `#F7F5F0` + terracotta fallback).
 - **Brand Assets**:
   - Mark: [assets/logo.svg](../assets/logo.svg) — proofreader's delete mark (*dele* / GB/T 14706), verified at `16px`, `64px`, and `512px`.
-  - Adaptive Banners: [assets/banner-light.svg](../assets/banner-light.svg) & [assets/banner-dark.svg](../assets/banner-dark.svg) (redundant duplicate `banner.svg` removed). Right-hand specimens strictly reserve Carmin Red for `core` `error` defects and Press Green for `stet` locked facts.
+  - Adaptive Banners: [assets/banner-light.svg](../assets/banner-light.svg) & [assets/banner-dark.svg](../assets/banner-dark.svg) (redundant duplicate `banner.svg` removed). Right-hand specimens reserve Vermilion solid marks for `core` `error` defects and Press Green dotted underlines for `stet` protected spans.
   - Social Preview Card: [assets/og-card.svg](../assets/og-card.svg) & rasterized [assets/og-card.png](../assets/og-card.png) (`1200×630`) for Open Graph and Twitter/X sharing.
 - **Exact WCAG 2.2 AA & Dark Monotonicity**: Verified via `src/core.mjs` (`--ink` `18.0:1`/`15.3:1`, `--mark-error` `6.6:1`/`7.0:1`, `--mark-warn` `7.3:1`/`8.5:1`, `--mark-stet` `6.5:1`/`9.8:1`; dark lightness rises monotonically `L* 4.6 -> 8.1 -> 12.6`).
 - **Zero-Upload & Progressive Disclosure**: Zero external font CDNs or analytics (`CSP: connect-src 'none'`); static pre-rendered HTML matches hydrated UI; Agent endpoints strip `fixtures.hit`, HTML comments, and invisible Unicode characters at build time.
@@ -72,7 +78,7 @@ Full visual tokens and ratios live in [design-system.md](./design-system.md). Ke
 
 ## 5. Phased Execution & Anti-Overengineering Guardrails
 
-1. **G0 (Current Packaging & Launch)**: Finalize dual-native site, canonical `SKILL.md`, VI suite, and npm/PyPI publication while keeping the 87-entry radar inside `dislop-ai/dislop` + `dislop.com/radar/` to avoid splitting stars and attention.
+1. **G0 (Current Packaging & Launch)**: Finalize dual-native site, Brand & Voice Guide ([brand-and-voice-guide.md](./brand-and-voice-guide.md)), canonical `SKILL.md`, VI suite, and npm/PyPI publication while keeping `Awesome Anti-Slop` inside `dislop-ai/dislop` (`awesome/README.md` + `dislop.com/awesome/`) to avoid splitting stars and attention.
 2. **G1 (`v0.3.0` Deepening)**: Extract `src/node-host.mjs` and `src/mcp.mjs`, ship the 6 new deterministic probes and `dislop catalog` / `dislop_catalog`, and publish the offline `verify` benchmark. Spin out `awesome-anti-slop` only once external PR demand crosses the threshold (`>= 5/month`).
 3. **G2 (Positive Engine & Service Layer)**: Ship offline `dislop.voice/1` extraction, `dislop.taste/1` cards, Fetch-standard stateless HTTP API, and strictly decoupled local small-model plugins.
 

@@ -3,7 +3,7 @@
 本目录汇总围绕 `dislop` 开展的五组专题研究、结构化数据原型与规格文档，覆盖生态全景、反模式识别与查询、正向差异化与个性化、多形态集成（含官网即 Agent 服务）以及 `awesome-anti-slop` 载体拓扑设计。
 
 > [!TIP]
-> 如需直接查阅整合后的最新战略、功能边界、视觉 VI 与多形态产品蓝图，请先读 [strategy-and-roadmap.zh-CN.md](../strategy-and-roadmap.zh-CN.md)（[English](../strategy-and-roadmap.md)）；本目录保留各专题的一手调研数据、出处与推导过程。
+> 如需直接查阅整合后的最新战略与双引擎蓝图，请读 [strategy-and-roadmap.zh-CN.md](../strategy-and-roadmap.zh-CN.md)（[English](../strategy-and-roadmap.md)）；品牌风格与表达基准见 [brand-and-voice-guide.zh-CN.md](../brand-and-voice-guide.zh-CN.md)（[English](../brand-and-voice-guide.md)）；87 条精选目录分享入口见 [awesome/README.md](../../awesome/README.md)。本目录保留各专题的一手调研数据、出处与推导过程。
 
 > [!NOTE]
 > 所有 GitHub 仓库星标、最近推送日期与外部链接均在 **2026-11-21** 通过 GitHub REST API 与 HTTP 请求实测核验（星标与活跃度随时间动态变化）。本目录全部 Markdown 文档均通过 Node 与 Python 双端 `dislop check docs/research --fail-on info` 零命中自审；JSON 索引与原型文件单独通过结构校验。
