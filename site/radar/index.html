@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>dislop Radar — 87 Verified De-Slop Resources (dislop.radar/2)</title>
+  <meta name="description" content="Neutral cross-modality index of 87 verified anti-slop linters, writing skills, UI design rules, code governance policies, and research papers.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="dislop">
+  <meta property="og:url" content="https://dislop.com/radar/">
+  <meta property="og:title" content="dislop Radar — 87 Verified De-Slop Resources">
+  <meta property="og:description" content="Neutral cross-modality index of 87 verified anti-slop tools, skills, design rules, and standards (dislop.radar/2).">
+  <meta property="og:image" content="https://dislop.com/assets/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://dislop.com/assets/og-card.png">
+  <link rel="canonical" href="https://dislop.com/radar/">
+  <link rel="alternate" type="text/markdown" href="./index.md" title="Radar Markdown Directory">
+  <link rel="alternate" type="application/json" href="./index.json" title="Radar JSON (dislop.radar/2)">
+  <link rel="alternate" type="text/plain" href="../llms.txt" title="LLMs Resource Index">
+  <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content" data-i18n="nav.skip">Skip to main content</a>
+  <div class="rail-shell">
+    <header class="topbar band-rule">
+      <a class="brand-lockup" href="../">
+        <img src="../assets/logo.svg" width="28" height="28" alt="dislop dele mark">
+        <span class="brand-wordmark">dislop</span>
+        <span class="brand-meta">radar · dislop.radar/2</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Radar navigation">
+        <a href="../" data-i18n="nav.workbench">De-Slop Home</a>
+        <a href="./" aria-current="page" data-i18n="nav.radar">Radar (87)</a>
+        <a href="./index.json" class="nav-agent-link">index.json</a>
+        <a href="./index.md" class="nav-agent-link">index.md</a>
+        <a href="../llms.txt" class="nav-agent-link">llms.txt</a>
+        <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+
+      <div class="top-controls">
+        <button type="button" id="lang-toggle" class="ctrl-btn" aria-label="Switch language">中文</button>
+        <button type="button" id="theme-toggle" class="ctrl-btn" aria-label="Toggle color theme">Dark</button>
+      </div>
+    </header>
+
+    <main id="main-content">
+    <section class="section-block band-rule">
+      <p class="section-index" data-i18n="radar.index">DE-SLOP ECOSYSTEM RADAR · SCHEMA dislop.radar/2 · SNAPSHOT 2026-11-21</p>
+      <h1 class="lead-heading" style="max-width:34ch;" data-i18n="radar.heading">87 verified de-slop resources across writing, UI, decks, code, and standards.</h1>
+      <p class="section-desc" data-i18n="radar.sub">
+        Compiled offline from docs/research/anti-slop-radar-index.json with zero runtime network calls (CSP: connect-src 'none'). Every GitHub star count, push date, and URL was checked on 2026-11-21. Evasion tools are isolated in the Contrast Watch section.
+      </p>
+
+      <div class="catalog-controls" style="margin-top:20px;">
+        <input type="search" id="radar-search" class="search-input" placeholder="Search name, repo, mechanism, or keyword..." aria-label="Search radar resources">
+        <select id="radar-modality" class="filter-select" aria-label="Filter by modality">
+          <option value="all" data-i18n="radar.allModalities">All modalities</option>
+          <option value="prose">prose</option><option value="ui-design">ui-design</option><option value="diagram-media">diagram-media</option><option value="code-pr">code-pr</option><option value="academic">academic</option><option value="multi-modal">multi-modal</option>
+        </select>
+        <select id="radar-locale" class="filter-select" aria-label="Filter by locale">
+          <option value="all" data-i18n="radar.allLocales">All locales</option>
+          <option value="en">en</option><option value="zh">zh</option><option value="multilingual">multilingual</option><option value="ko">ko</option><option value="ja">ja</option><option value="tr">tr</option>
+        </select>
+        <button type="button" id="radar-det-btn" class="ctrl-btn" aria-pressed="false" data-i18n="radar.detOnly">Deterministic check only</button>
+        <button type="button" id="radar-reset-btn" class="ctrl-btn" data-i18n="radar.reset">Reset filters</button>
+      </div>
+
+      <div class="filter-bar">
+        <div class="filter-group" role="group" aria-label="Filter by section">
+          <button type="button" class="ctrl-btn is-active" aria-pressed="true" data-section-filter="all">All Sections (87)</button>
+          <button type="button" class="ctrl-btn" aria-pressed="false" data-section-filter="standards-research-policy">Standards, Research &amp; Policy (13)</button>
+          <button type="button" class="ctrl-btn" aria-pressed="false" data-section-filter="prose-en-multilingual">Prose (EN &amp; Multilingual) (14)</button>
+          <button type="button" class="ctrl-btn" aria-pressed="false" data-section-filter="prose-zh">Chinese Writing &amp; Localization (9)</button>
+          <button type="button" class="ctrl-btn" aria-pressed="false" data-section-filter="deterministic-prose-linters">Deterministic Linters (9)</button>
+          <button type="button" class="ctrl-btn" aria-pressed="false" data-section-filter="ui-design-and-media">UI, Design &amp; Diagrams (12)</button>
+          <button type="button" class="ctrl-btn" aria-pressed="false" data-section-filter="code-and-pr-governance">Code &amp; PR Governance (8)</button>
+          <button type="button" class="ctrl-btn" aria-pressed="false" data-section-filter="contrast-and-detection">Contrast Watch (Evasion / Detectors) (9)</button>
+          <button type="button" class="ctrl-btn" aria-pressed="false" data-section-filter="awesome-and-registries">Awesome Lists &amp; Registries (13)</button>
+        </div>
+        <span class="catalog-count" id="radar-count" aria-live="polite">87 / 87 entries</span>
+      </div>
+
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Verified anti-slop ecosystem radar table">
+        <table class="radar-table">
+          <thead>
+            <tr>
+              <th data-i18n="radar.colName">Resource &amp; Repository</th>
+              <th data-i18n="radar.colSection">Section &amp; Format</th>
+              <th data-i18n="radar.colTags">Modality / Locale / Check</th>
+              <th data-i18n="radar.colSummary">Objective Summary</th>
+              <th data-i18n="radar.colMeta">Snapshot Meta</th>
+            </tr>
+          </thead>
+          <tbody id="radar-tbody">
+<tr>
+              <td><a href="https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing" target="_blank" rel="noopener"><strong>Wikipedia: Signs of AI writing (WP:AISIGNS)</strong></a></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Standards, Research &amp; Policy</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">policy-standard</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">英语维基百科 WikiProject AI Cleanup 维护的活规范，归类夸大意义、高频词、三段式、否定平行、残留寒暄与标记瑕疵，是多个开源写作技能的共同语料源头。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">—</td>
+            </tr>
+<tr>
+              <td><a href="https://simonwillison.net/2024/May/8/slop/" target="_blank" rel="noopener"><strong>Simon Willison: Slop 概念源文</strong></a></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Standards, Research &amp; Policy</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">policy-standard</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>multi-modal · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">2024-05-08 发布，提出将未经请求且未经审阅的 AI 生成内容称为 slop（类比垃圾邮件 spam），奠定行业讨论口径。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">—</td>
+            </tr>
+<tr>
+              <td><a href="https://arxiv.org/abs/2406.07016" target="_blank" rel="noopener"><strong>Kobak et al. (arXiv:2406.07016 / Science Advances)</strong></a></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Standards, Research &amp; Policy</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">benchmark-dataset</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>academic · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">分析 1,500 万篇 PubMed 摘要的超额词汇，推算 2024 年至少 13.5% 的生物医学摘要经 LLM 处理或辅助（下界估计，2025-07 刊于 Science Advances）。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">—</td>
+            </tr>
+<tr>
+              <td><a href="https://eqbench.com/slop-score.html" target="_blank" rel="noopener"><strong>EQ-Bench Slop Score</strong></a></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Standards, Research &amp; Policy</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">benchmark-dataset</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">公开可解释的复合指标（60% 高频词 + 25% 对比句式 + 15% 高频三元组），用于跨模型横向对照文本模板化程度。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">—</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/sam-paech/slop-score" target="_blank" rel="noopener"><strong>sam-paech/slop-score</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">sam-paech/slop-score</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Standards, Research &amp; Policy</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">cli-linter</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">EQ-Bench Slop Score 的公开评分实现代码。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">43★ · 2025-11-22</td>
+            </tr>
+<tr>
+              <td><a href="https://arxiv.org/abs/2604.03136" target="_blank" rel="noopener"><strong>StoryScope (arXiv:2604.03136)</strong></a></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Standards, Research &amp; Policy</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">benchmark-dataset</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">面向虚构叙事结构修复的研究框架，被多语种技能 Nanako0129/sepia 用作叙事层理论依据。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">—</td>
+            </tr>
+<tr>
+              <td><a href="https://agentskills.io/specification" target="_blank" rel="noopener"><strong>Agent Skills Specification</strong></a></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Standards, Research &amp; Policy</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">policy-standard</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>multi-modal · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">跨 Agent 工具通用的 SKILL.md 目录与清单格式规范，独立于各家分发注册中心。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">—</td>
+            </tr>
+<tr>
+              <td><a href="https://skills.sh/docs" target="_blank" rel="noopener"><strong>skills.sh Registry &amp; CLI Docs</strong></a></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Standards, Research &amp; Policy</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">policy-standard</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>multi-modal · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">面向 Agent Skills 的公共注册中心与安装量榜单文档，已承接大量写作与前端去 AI 味技能的发现层流量。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">—</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/ghostty-org/ghostty/blob/main/AI_POLICY.md" target="_blank" rel="noopener"><strong>Ghostty AI_POLICY.md</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">ghostty-org/ghostty</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Standards, Research &amp; Policy</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">policy-standard</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>code-pr · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">Mitchell Hashimoto 确立的开源 AI 贡献政策：仅限预批准 Issue、强制工具披露，且贡献者必须独立理解全部代码。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">64,293★ · 2026-11-20 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://daniel.haxx.se/blog/2026/01/26/the-end-of-the-curl-bug-bounty/" target="_blank" rel="noopener"><strong>Daniel Stenberg: The end of the curl bug bounty</strong></a></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Standards, Research &amp; Policy</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">policy-standard</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>code-pr · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">curl 维护者 2026-01-26 官方公告：因大量低质 AI 漏洞报告导致有效率从 &gt;15% 跌至 &lt;5%，决定于 2026-01-31 关闭赏金计划。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">—</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/tldraw/tldraw/issues/7695" target="_blank" rel="noopener"><strong>tldraw: Stay away from my trash! (Issue #7695)</strong></a></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Standards, Research &amp; Policy</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">policy-standard</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>code-pr · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">tldraw 维护者 2026-01 公告，因外部低质 AI PR 激增而采取自动关闭外部 PR 的防御措施。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">—</td>
+            </tr>
+<tr>
+              <td><a href="https://on.substack.com/p/how-writers-are-reacting-to-substacks" target="_blank" rel="noopener"><strong>Substack: How writers are reacting to AI detection</strong></a></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Standards, Research &amp; Policy</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">policy-standard</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">Substack 官方汇总创作者对平台引入第三方 AI 检测工具的支持与担忧（含误报顾虑）。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">—</td>
+            </tr>
+<tr>
+              <td><a href="https://www.producthunt.com/p/general/product-hunt-s-state-of-tech-discovery-q2-2026" target="_blank" rel="noopener"><strong>Product Hunt State of Tech Discovery (Q2 2026)</strong></a></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Standards, Research &amp; Policy</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">policy-standard</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>ui-design · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">Product Hunt 2026 Q2 行业报告，反映 AI 辅助开发背景下的产品发布供给趋势。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">—</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/blader/humanizer" target="_blank" rel="noopener"><strong>blader/humanizer</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">blader/humanizer</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Prose (EN &amp; Multilingual)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">基于 WP:AISIGNS 的高星英语改写技能，支持导入作者样稿做语感校准。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">71,724★ · 2026-11-19 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/hardikpandya/stop-slop" target="_blank" rel="noopener"><strong>hardikpandya/stop-slop</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">hardikpandya/stop-slop</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Prose (EN &amp; Multilingual)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">偏严格编辑部规范的去套话技能，分拆 phrases、structures、examples 文件并配五维自评。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">19,097★ · 2026-03-17 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/petergyang/no-ai-slop" target="_blank" rel="noopener"><strong>petergyang/no-ai-slop</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">petergyang/no-ai-slop</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Prose (EN &amp; Multilingual)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">覆盖 20+ 英文句式模式，配套文章提出 25/50/25 人机协作改稿分工。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">13,681★ · 2026-09-02 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/Adkid-Zephyr/anti-defensive-writing-Skill" target="_blank" rel="noopener"><strong>Adkid-Zephyr/anti-defensive-writing-Skill</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">Adkid-Zephyr/anti-defensive-writing-Skill</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Prose (EN &amp; Multilingual)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>academic · multilingual</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">中英双语学术技能，针对论文中过度防御性限定与空泛辩护段落。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">6,919★ · 2026-11-15 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/epoko77-ai/im-not-ai" target="_blank" rel="noopener"><strong>epoko77-ai/im-not-ai</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">epoko77-ai/im-not-ai</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Prose (EN &amp; Multilingual)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · ko</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">韩语去 AI 味与反翻译腔润色技能，体现非英语母语语感修复的活跃度。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">6,696★ · 2026-11-17 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/AIScientists-Dev/academic-humanizer" target="_blank" rel="noopener"><strong>AIScientists-Dev/academic-humanizer</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">AIScientists-Dev/academic-humanizer</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Prose (EN &amp; Multilingual)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>academic · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">面向英文论文与 NSF/NIH 基金申报的去套话技能，保留学术语域（仓库 LICENSE 文件注明 MIT）。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">5,761★ · 2026-07-03 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/Nanako0129/sepia" target="_blank" rel="noopener"><strong>Nanako0129/sepia</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">Nanako0129/sepia</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Prose (EN &amp; Multilingual)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">适配多类 Agent 工具的写作技能，结合 StoryScope 做虚构叙事结构修复与分场合文风调整。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">3,913★ · 2026-11-03 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/lynote-ai/humanize-text" target="_blank" rel="noopener"><strong>lynote-ai/humanize-text</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">lynote-ai/humanize-text</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Prose (EN &amp; Multilingual)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">pipeline-app</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">基于 LLM 的开源英文文本拟人化重写工具。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">3,522★ · 2026-10-22 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/hexiecs/talk-normal" target="_blank" rel="noopener"><strong>hexiecs/talk-normal</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">hexiecs/talk-normal</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Prose (EN &amp; Multilingual)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">极简系统提示词，约束模型用平实口语交流。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">1,882★ · 2026-04-22 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/iKora128/stop-ai-slop-jp" target="_blank" rel="noopener"><strong>iKora128/stop-ai-slop-jp</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">iKora128/stop-ai-slop-jp</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Prose (EN &amp; Multilingual)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · ja</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">日语去 AI 味 Claude Skill。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">486★ · 2026-06-11 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/stephenturner/skill-deslop" target="_blank" rel="noopener"><strong>stephenturner/skill-deslop</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">stephenturner/skill-deslop</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Prose (EN &amp; Multilingual)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>academic · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">面向科研文稿的轻量去 AI 味技能。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">444★ · 2026-03-18 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/devswha/patina" target="_blank" rel="noopener"><strong>devswha/patina</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">devswha/patina</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Prose (EN &amp; Multilingual)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · multilingual</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">覆盖韩、英、中、日四种语言的文本去 AI 味项目。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">390★ · 2026-09-29 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/yucezerey/turkish-anti-ai-skill" target="_blank" rel="noopener"><strong>yucezerey/turkish-anti-ai-skill</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">yucezerey/turkish-anti-ai-skill</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Prose (EN &amp; Multilingual)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · tr</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">土耳其语反翻译腔与去 AI 味写作技能。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">330★ · 2026-11-11 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/MohamedAbdallah-14/unslop" target="_blank" rel="noopener"><strong>MohamedAbdallah-14/unslop</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">MohamedAbdallah-14/unslop</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Prose (EN &amp; Multilingual)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">适配 Claude Code、Cursor、Windsurf、Codex 等多宿主的去 AI-isms 插件，显式声明保留代码、URL 与标题。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">195★ · 2026-11-16 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/op7418/Humanizer-zh" target="_blank" rel="noopener"><strong>op7418/Humanizer-zh</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">op7418/Humanizer-zh</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Chinese Writing &amp; Localization</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · zh</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">blader/humanizer 的中文汉化与适配版本，在中文开发者与创作者社区传播最广。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">23,450★ · 2026-09-23 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/zenstory-ai/oh-story-claudecode" target="_blank" rel="noopener"><strong>zenstory-ai/oh-story-claudecode</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">zenstory-ai/oh-story-claudecode</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Chinese Writing &amp; Localization</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · zh</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">中文网文连载 Agent 技能包，把大纲、伏笔追踪与去 AI 味整合到长篇工作流。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">8,800★ · 2026-11-20 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/larashero3-dotcom/lieflat-less-ai-tone" target="_blank" rel="noopener"><strong>larashero3-dotcom/lieflat-less-ai-tone</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">larashero3-dotcom/lieflat-less-ai-tone</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Chinese Writing &amp; Localization</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · multilingual</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">基于 520 万字语料与 629 篇跨模型对照实验构建的去 AI 味技能，内置本地 Python 检测脚本 scripts/detect.py。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">8,454★ · 2026-11-11</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/MrGeDiao/shuorenhua" target="_blank" rel="noopener"><strong>MrGeDiao/shuorenhua</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">MrGeDiao/shuorenhua</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Chinese Writing &amp; Localization</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · zh</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">中文优先改稿技能，主打保事实、分发布场景（周报、群消息、文章），强调不随意改动原意与数字。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">2,726★ · 2026-11-20 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/hylarucoder/ai-flavor-remover" target="_blank" rel="noopener"><strong>hylarucoder/ai-flavor-remover</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">hylarucoder/ai-flavor-remover</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Chinese Writing &amp; Localization</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · zh</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">早期中文去 AI 味提示词项目，面向推理模型压制中文报告腔。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">1,208★ · 2025-04-02 · NONE</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/LifelongLazyLearner/qu-ai-wei" target="_blank" rel="noopener"><strong>LifelongLazyLearner/qu-ai-wei</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">LifelongLazyLearner/qu-ai-wei</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Chinese Writing &amp; Localization</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · zh</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">简体中文去 AI 味技能，侧重消除机械连接词与公文腔。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">770★ · 2026-09-10 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/Hyacehila/humanizer-zh-next" target="_blank" rel="noopener"><strong>Hyacehila/humanizer-zh-next</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">Hyacehila/humanizer-zh-next</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Chinese Writing &amp; Localization</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · zh</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">基于 blader/humanizer 与 op7418/Humanizer-zh 的衍生中文改稿技能。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">257★ · 2026-10-25 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/VincentOld/stop-slop-zh" target="_blank" rel="noopener"><strong>VincentOld/stop-slop-zh</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">VincentOld/stop-slop-zh</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Chinese Writing &amp; Localization</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · zh</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">借鉴 stop-slop 的中文规则：拆三连排比、去名词化、以具体对象替换抽象主语。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">106★ · 2026-05-28 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/jiji262/humanizer-chinese" target="_blank" rel="noopener"><strong>jiji262/humanizer-chinese</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">jiji262/humanizer-chinese</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Chinese Writing &amp; Localization</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · zh</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">总结 36 条中文 AI 写作模式，并显式加入防装人味翻车（伪造口癖或错别字）的约束。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">47★ · 2026-08-02 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/vale-cli/vale" target="_blank" rel="noopener"><strong>vale-cli/vale</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">vale-cli/vale</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Deterministic Linters</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">cli-linter</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · multilingual</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">Go 编写的标记感知散文静态 Linter，支持 YAML 规则包与 CI，面向传统文档风格检查。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">6,413★ · 2026-11-20 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/btford/write-good" target="_blank" rel="noopener"><strong>btford/write-good</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">btford/write-good</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Deterministic Linters</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">cli-linter</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">经典英文被动语态、模糊词与陈词滥调确定性 Linter。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">5,111★ · 2025-03-10 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/get-alex/alex" target="_blank" rel="noopener"><strong>get-alex/alex</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">get-alex/alex</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Deterministic Linters</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">cli-linter</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">英文包容性措辞确定性检查器，展示规则化文本审计的成熟交互形态。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">5,109★ · 2024-11-27 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/textlint/textlint" target="_blank" rel="noopener"><strong>textlint/textlint</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">textlint/textlint</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Deterministic Linters</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">cli-linter</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · multilingual</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">插件化自然语言 AST Linter，在日语与技术文档出版领域生态成熟。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">3,211★ · 2026-11-21 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/seyedehsanhadi/sloptrim" target="_blank" rel="noopener"><strong>seyedehsanhadi/sloptrim</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">seyedehsanhadi/sloptrim</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Deterministic Linters</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">cli-linter</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">Python 标准库零依赖本地散文检测器（62 条确定性探针、支持部分归档格式与保存时钩子），并公布公开配对基准的 ROC-AUC。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">428★ · 2026-11-10 · Apache-2.0</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/sam-paech/slop-forensics" target="_blank" rel="noopener"><strong>sam-paech/slop-forensics</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">sam-paech/slop-forensics</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Deterministic Linters</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">benchmark-dataset</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">面向大模型输出语料的统计取证与高频词、三元组挖掘工具包。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">374★ · 2025-11-01 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/eric-tramel/slop-guard" target="_blank" rel="noopener"><strong>eric-tramel/slop-guard</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">eric-tramel/slop-guard</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Deterministic Linters</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">cli-linter</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">零 LLM 裁判的规则驱动英文散文 0–100 打分器。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">168★ · 2026-07-09 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/FeedHive/ai-slop-detector" target="_blank" rel="noopener"><strong>FeedHive/ai-slop-detector</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">FeedHive/ai-slop-detector</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Deterministic Linters</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">browser-tool</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">9 大类 120 条英文模式清单，提供浏览器在线检查页与配套 Agent Skill。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">113★ · 2026-10-12 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener"><strong>dislop-ai/dislop (本仓库)</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">dislop-ai/dislop</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Deterministic Linters</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">cli-linter</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>multi-modal · multilingual</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">零依赖确定性交付物印前审校与改稿标记多重集复检工具，覆盖中英双语文稿、前端/SVG 及 .docx/.pptx/.pdf 结构检查，配零上传浏览器工作台与 MCP 服务。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">1★ · 2026-11-21 · Apache-2.0</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/anthropics/skills/tree/main/skills/frontend-design" target="_blank" rel="noopener"><strong>anthropics/skills (frontend-design)</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">anthropics/skills</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">UI, Design &amp; Diagrams</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>ui-design · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">Anthropic 官方 Agent Skills 仓内的前端设计基准技能（子目录 LICENSE.txt 为 Apache-2.0），要求先立设计方向再编码。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">198,134★ · 2026-11-16 · Apache-2.0</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/Leonxlnx/taste-skill" target="_blank" rel="noopener"><strong>Leonxlnx/taste-skill</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">Leonxlnx/taste-skill</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">UI, Design &amp; Diagrams</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>ui-design · en</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">结合艺术指导、参考图、浏览器检查以及 scripts/gate.mjs（Stop hook）与 copy-lint.mjs 门禁的前端审美技能。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">119,423★ · 2026-11-08 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/pbakaus/impeccable" target="_blank" rel="noopener"><strong>pbakaus/impeccable</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">pbakaus/impeccable</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">UI, Design &amp; Diagrams</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">cli-linter</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>ui-design · en</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">提供 20+ 设计控制指令、浏览器实时调优，并内置 62 条零 LLM 确定性规则、SARIF 输出（npx impeccable detect --sarif）与编辑钩子。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">114,155★ · 2026-11-21 · Apache-2.0</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/cathrynlavery/diagram-design" target="_blank" rel="noopener"><strong>cathrynlavery/diagram-design</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">cathrynlavery/diagram-design</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">UI, Design &amp; Diagrams</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>diagram-media · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">51 种出版级单文件 HTML+SVG 图解技能，显式规避默认粗糙 Mermaid 风格与冗余投影。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">69,403★ · 2026-11-19 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/Nutlope/hallmark" target="_blank" rel="noopener"><strong>Nutlope/hallmark</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">Nutlope/hallmark</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">UI, Design &amp; Diagrams</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>ui-design · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">面向 Claude Code、Cursor 与 Codex 的反 AI 味前端设计技能。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">58,705★ · 2026-11-11 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/heydamir/unslop" target="_blank" rel="noopener"><strong>heydamir/unslop</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">heydamir/unslop</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">UI, Design &amp; Diagrams</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>ui-design · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">把默认生成感浓重的页面重构为克制界面的 Claude 技能。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">19,356★ · 2026-11-15 · CC-BY-4.0</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/Tejashmakwana/motionmaxxing" target="_blank" rel="noopener"><strong>Tejashmakwana/motionmaxxing</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">Tejashmakwana/motionmaxxing</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">UI, Design &amp; Diagrams</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>diagram-media · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">面向动态图形与视频生成的去模板化 Agent 技能。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">1,726★ · 2026-10-06 · Apache-2.0</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/yetone/kill-ai-slop" target="_blank" rel="noopener"><strong>yetone/kill-ai-slop</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">yetone/kill-ai-slop</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">UI, Design &amp; Diagrams</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>ui-design · multilingual</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">结合视觉与产品文案 AI 味图鉴以及扫描清理技能的双语项目。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">1,466★ · 2026-09-15 · Apache-2.0</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/Tencent-Hunyuan/SRPO" target="_blank" rel="noopener"><strong>Tencent-Hunyuan/SRPO</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">Tencent-Hunyuan/SRPO</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">UI, Design &amp; Diagrams</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">benchmark-dataset</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>diagram-media · multilingual</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">全扩散轨迹细粒度人类偏好对齐研究与代码，社区常用于缓解 Flux 写实生图的过度光滑塑料感（腾讯自定义条款）。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">1,278★ · 2026-05-11 · Tencent-Custom-Academic</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/superdesigndev/superdesign-skill" target="_blank" rel="noopener"><strong>superdesigndev/superdesign-skill</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">superdesigndev/superdesign-skill</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">UI, Design &amp; Diagrams</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>ui-design · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">面向编程 Agent 的反通用 AI 界面设计技能。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">1,038★ · 2026-08-21 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/Yu-369/VibeCurb" target="_blank" rel="noopener"><strong>Yu-369/VibeCurb</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">Yu-369/VibeCurb</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">UI, Design &amp; Diagrams</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>ui-design · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">向 AI 界面工作流注入审美品味约束的工具集。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">1,010★ · 2026-08-05 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/funboy322/avoid-ai-design" target="_blank" rel="noopener"><strong>funboy322/avoid-ai-design</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">funboy322/avoid-ai-design</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">UI, Design &amp; Diagrams</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>ui-design · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">审查并重写紫粉渐变等常见默认前端样式的轻量项目。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">166★ · 2026-11-18 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/cursor/plugins" target="_blank" rel="noopener"><strong>cursor/plugins (deslop)</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">cursor/plugins</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Code &amp; PR Governance</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>code-pr · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">Cursor 官方插件库，含按 PR diff 清理冗余注释、多余 try/catch 与类型绕过的 deslop 插件。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">17,899★ · 2026-11-21 · NONE</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/miqdadbadjuber/anti-slop" target="_blank" rel="noopener"><strong>miqdadbadjuber/anti-slop</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">miqdadbadjuber/anti-slop</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Code &amp; PR Governance</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>multi-modal · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">同时覆盖前端界面、文案与代码的综合 Agent 规则集。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">9,713★ · 2026-11-21 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/dmmulroy/anti-slop" target="_blank" rel="noopener"><strong>dmmulroy/anti-slop</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">dmmulroy/anti-slop</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Code &amp; PR Governance</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">cli-linter</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>code-pr · en</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">基于 Oxlint 的确定性规则集，拒绝低证据与低信号 TypeScript/JavaScript 模式。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">6,241★ · 2026-11-20 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/peteromallet/desloppify" target="_blank" rel="noopener"><strong>peteromallet/desloppify</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">peteromallet/desloppify</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Code &amp; PR Governance</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">cli-linter</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>code-pr · en</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">面向 AI 堆积代码债务的系统化重构 Agent Harness（仓库 LICENSE 为 OSNL 0.2）。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">4,144★ · 2026-10-27 · OSNL-0.2</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/peakoss/anti-slop" target="_blank" rel="noopener"><strong>peakoss/anti-slop</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">peakoss/anti-slop</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Code &amp; PR Governance</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">github-action</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>code-pr · en</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">内置 34 条检查规则的 GitHub Action，覆盖分支、标题、PR 描述、提交信息与改动规模，自动识别并关闭低质 AI PR。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">862★ · 2026-04-15 · AGPL-3.0</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/scanaislop/aislop" target="_blank" rel="noopener"><strong>scanaislop/aislop</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">scanaislop/aislop</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Code &amp; PR Governance</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">cli-linter</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>code-pr · en</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">零 LLM 运行时的确定性代码静态扫描器，检出死代码、不安全类型强转、吞异常与重复块。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">769★ · 2026-11-21 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/MrZoyo/deslop-GPT" target="_blank" rel="noopener"><strong>MrZoyo/deslop-GPT</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">MrZoyo/deslop-GPT</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Code &amp; PR Governance</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>code-pr · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">删除优先的清理技能，专攻测试注水与表演式验证代码。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">141★ · 2026-10-06 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/flamehaven01/AI-SLOP-Detector" target="_blank" rel="noopener"><strong>flamehaven01/AI-SLOP-Detector</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">flamehaven01/AI-SLOP-Detector</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Code &amp; PR Governance</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">cli-linter</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>code-pr · en</div><div style="color:var(--mark-stet);margin-top:2px;">deterministic: yes</div></td>
+              <td lang="zh-CN">检出空函数、虚假文档与注水注释的静态扫描器。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">121★ · 2026-11-19 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/p-e-w/heretic" target="_blank" rel="noopener"><strong>p-e-w/heretic</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">p-e-w/heretic</div></td>
+              <td><span class="sev-error" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Contrast Watch (Evasion / Detectors)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">cli-linter</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>multi-modal · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">免训练修改开源语言模型权重以压制 slop 与迎合输出（模型层路线对照）。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">42,388★ · 2026-11-19 · AGPL-3.0</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/AhmadHassan-BTed/Turnitout-Humanizer" target="_blank" rel="noopener"><strong>AhmadHassan-BTed/Turnitout-Humanizer</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">AhmadHassan-BTed/Turnitout-Humanizer</div></td>
+              <td><span class="sev-error" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Contrast Watch (Evasion / Detectors)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">browser-tool</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>academic · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">【对照观察】主打绕过查重与 AI 检测的规避工具，存在语义失真与学术诚信风险。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">12,486★ · 2026-11-17</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/AhmadHassan-BTed/NaSuno-SongHumanizer" target="_blank" rel="noopener"><strong>AhmadHassan-BTed/NaSuno-SongHumanizer</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">AhmadHassan-BTed/NaSuno-SongHumanizer</div></td>
+              <td><span class="sev-error" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Contrast Watch (Evasion / Detectors)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">cli-linter</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>diagram-media · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">【对照观察】针对 Suno/Udio 的音频去水印工具，反映规避需求已延伸至音频媒介。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">5,951★ · 2026-11-05 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/iniwap/AIWriteX" target="_blank" rel="noopener"><strong>iniwap/AIWriteX</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">iniwap/AIWriteX</div></td>
+              <td><span class="sev-error" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Contrast Watch (Evasion / Detectors)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">pipeline-app</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · zh</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">【对照观察】面向微信公众号/小红书的全自动生成、排版与过朱雀检测流水线，代表中文批量内容生产与规避检测诉求。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">2,301★ · 2026-11-18 · Apache-2.0</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/baoguangsheng/fast-detect-gpt" target="_blank" rel="noopener"><strong>baoguangsheng/fast-detect-gpt</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">baoguangsheng/fast-detect-gpt</div></td>
+              <td><span class="sev-error" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Contrast Watch (Evasion / Detectors)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">benchmark-dataset</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">ICLR 2024 零样本概率型机器文本检测代表作（统计检测路线对照）。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">442★ · 2026-02-07 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/ahans30/Binoculars" target="_blank" rel="noopener"><strong>ahans30/Binoculars</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">ahans30/Binoculars</div></td>
+              <td><span class="sev-error" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Contrast Watch (Evasion / Detectors)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">benchmark-dataset</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">ICML 2024 双模型对比零样本机器文本检测代表作。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">439★ · 2024-05-14 · BSD-3-Clause</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/redbaronyyyyy-eng/humanizer-zh-academic" target="_blank" rel="noopener"><strong>redbaronyyyyy-eng/humanizer-zh-academic</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">redbaronyyyyy-eng/humanizer-zh-academic</div></td>
+              <td><span class="sev-error" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Contrast Watch (Evasion / Detectors)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">agent-skill</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>academic · zh</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">【对照观察】主打降低中文学术写作 AIGC 检测率的技能，统一归入规避类对照区。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">386★ · 2026-02-24 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://matrix.tencent.com/ai-detect/" target="_blank" rel="noopener"><strong>腾讯朱雀大模型检测</strong></a></td>
+              <td><span class="sev-error" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Contrast Watch (Evasion / Detectors)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">browser-tool</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>multi-modal · zh</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">腾讯公开 AIGC 文本与图像检测服务，是中文创作者圈最常对标的统计检测参照系。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">—</td>
+            </tr>
+<tr>
+              <td><a href="https://pangram.com/" target="_blank" rel="noopener"><strong>Pangram AI Detection</strong></a></td>
+              <td><span class="sev-error" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Contrast Watch (Evasion / Detectors)</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">browser-tool</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">英文商业概率型 AI 文本检测服务，是 Substack 等平台误报讨论的焦点参照。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">—</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/sindresorhus/awesome" target="_blank" rel="noopener"><strong>sindresorhus/awesome</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">sindresorhus/awesome</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Awesome Lists &amp; Registries</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">awesome-list</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>multi-modal · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">Awesome 清单总规范（含 awesome.md 宣言与 880★ 的 awesome-lint），要求申请入榜的子清单存活至少 30 天。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">540,121★ · 2026-09-02 · CC0-1.0</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/Shubhamsaboo/awesome-llm-apps" target="_blank" rel="noopener"><strong>Shubhamsaboo/awesome-llm-apps</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">Shubhamsaboo/awesome-llm-apps</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Awesome Lists &amp; Registries</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">awesome-list</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>multi-modal · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">以可运行代码样例驱动增长的 AI 应用目录，并非纯链接搬运。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">145,235★ · 2026-11-18 · Apache-2.0</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/punkpeye/awesome-mcp-servers" target="_blank" rel="noopener"><strong>punkpeye/awesome-mcp-servers</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">punkpeye/awesome-mcp-servers</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Awesome Lists &amp; Registries</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">awesome-list</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>multi-modal · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">围绕新协议（MCP）发布初期建立的平台级索引目录。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">98,334★ · 2026-11-17 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/ComposioHQ/awesome-claude-skills" target="_blank" rel="noopener"><strong>ComposioHQ/awesome-claude-skills</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">ComposioHQ/awesome-claude-skills</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Awesome Lists &amp; Registries</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">awesome-list</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>multi-modal · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">工具商主导维护的 Claude Skills 目录。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">79,965★ · 2026-09-18 · NONE</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/hesreallyhim/awesome-claude-code" target="_blank" rel="noopener"><strong>hesreallyhim/awesome-claude-code</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">hesreallyhim/awesome-claude-code</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Awesome Lists &amp; Registries</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">awesome-list</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>code-pr · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">使用结构化数据与校验脚本辅助维护的高活跃度 Claude Code 资源目录。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">58,476★ · 2026-11-21</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/sickn33/agentic-awesome-skills" target="_blank" rel="noopener"><strong>sickn33/agentic-awesome-skills</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">sickn33/agentic-awesome-skills</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Awesome Lists &amp; Registries</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">awesome-list</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>multi-modal · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">3,000+ 跨 Agent 技能目录（含本地发现 CLI/MCP），已直接收录多个去 AI 味技能。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">50,059★ · 2026-11-20 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/PatrickJS/awesome-cursorrules" target="_blank" rel="noopener"><strong>PatrickJS/awesome-cursorrules</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">PatrickJS/awesome-cursorrules</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Awesome Lists &amp; Registries</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">awesome-list</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>code-pr · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">以可直接复制落地的规则文件为核心的 Cursor 规则资产库。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">41,174★ · 2026-05-30 · CC0-1.0</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/VoltAgent/awesome-agent-skills" target="_blank" rel="noopener"><strong>VoltAgent/awesome-agent-skills</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">VoltAgent/awesome-agent-skills</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Awesome Lists &amp; Registries</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">awesome-list</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>multi-modal · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">收录 1,000+ 官方与社区技能（贡献者直接编辑 README.md），已覆盖多款 humanizer 类条目。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">37,396★ · 2026-11-15 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/Leey21/awesome-ai-research-writing" target="_blank" rel="noopener"><strong>Leey21/awesome-ai-research-writing</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">Leey21/awesome-ai-research-writing</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Awesome Lists &amp; Registries</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">awesome-list</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>academic · multilingual</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">科研写作润色方向的高星垂直目录。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">36,206★ · 2026-08-19 · NONE</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/VoltAgent/awesome-claude-design" target="_blank" rel="noopener"><strong>VoltAgent/awesome-claude-design</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">VoltAgent/awesome-claude-design</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Awesome Lists &amp; Registries</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">awesome-list</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>ui-design · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">68 份可直接使用 DESIGN.md 灵感集，证明可执行设计规范比纯链接更有粘性。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">4,644★ · 2026-06-20 · MIT</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/shannhk/avoid-slop" target="_blank" rel="noopener"><strong>shannhk/avoid-slop</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">shannhk/avoid-slop</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Awesome Lists &amp; Registries</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">awesome-list</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>multi-modal · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">现有专门面向反 AI 味的跨媒介目录（收录文本、代码与设计工具），说明细分列表需求体量远小于平台级目录。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">203★ · 2026-08-24 · NONE</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/zhuyansen/awesome-humanizer-skills" target="_blank" rel="noopener"><strong>zhuyansen/awesome-humanizer-skills</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">zhuyansen/awesome-humanizer-skills</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Awesome Lists &amp; Registries</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">awesome-list</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>multi-modal · multilingual</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">中英双语、覆盖文本/代码/UI 并带安全分级的反 AI 味技能列表样本。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">12★ · 2026-11-20</td>
+            </tr>
+<tr>
+              <td><a href="https://github.com/hwajongpark/awesome-slop" target="_blank" rel="noopener"><strong>hwajongpark/awesome-slop</strong></a><div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">hwajongpark/awesome-slop</div></td>
+              <td><span class="" style="font-family:var(--font-mono);font-size:0.74rem;font-weight:600;">Awesome Lists &amp; Registries</span><div style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);margin-top:2px;">awesome-list</div></td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;"><div>prose · en</div><div style="color:var(--ink-3);margin-top:2px;">deterministic: no</div></td>
+              <td lang="zh-CN">收录工具、研究与词表的早期小体量列表，也是纯链接列表冷启动困难的对照样本。</td>
+              <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;">9★ · 2026-10-14 · NONE</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="contrast-notice" data-i18n="radar.contrastNote">
+        Neutrality &amp; Ethics Boundary: Contrast Watch (contrast-and-detection) isolates both probabilistic AI-text detectors (e.g., Fast-DetectGPT, Pangram) and adversarial evasion or bypass tools strictly for ecosystem contrast. dislop removes AI slop and preserves factual integrity rather than helping evade AI disclosure rules.
+      </div>
+    </section>
+    </main>
+
+    <footer class="colophon">
+      <div>
+        <span data-i18n="footer.snapshot">Snapshot: 2026-11-21 · Zero runtime network calls (CSP: connect-src 'none')</span>
+      </div>
+      <div class="colophon-links">
+        <a href="../" data-i18n="footer.home">Home &amp; Workbench</a>
+        <a href="./index.json" data-i18n="footer.json">Raw JSON</a>
+        <a href="./index.md">Markdown</a>
+        <a href="../llms.txt">llms.txt</a>
+        <a href="https://github.com/dislop-ai/dislop">GitHub (Apache-2.0)</a>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module" src="./radar.js"></script>
+</body>
+</html>
