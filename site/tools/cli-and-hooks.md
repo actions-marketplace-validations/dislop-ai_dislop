@@ -31,9 +31,15 @@ npx --yes github:dislop-ai/dislop resources --json
 - `1`: Findings met or exceeded `--fail-on`.
 - `2`: Invalid flags, missing path, or explicitly specified file was uninspectable (e.g., corrupted archive or non-UTF-8 file).
 
-## Claude Code PostToolUse Hook Template (Using Shipped CLI)
+## Claude Code PostToolUse Hook Template (Fast Local Install Recommended)
 
-Note: `PostToolUse` fires **after** `Write`/`Edit` completes and receives tool context as JSON on stdin (`tool_input.file_path`). Parse and validate that path before invoking `dislop check` so empty values never scan the entire working directory; map CLI exit `1` to exit `2` to return structured post-write feedback to Claude Code.
+Install once locally so hooks run offline with zero network fetch latency:
+
+```bash
+npm install -g github:dislop-ai/dislop
+```
+
+Note: `PostToolUse` fires **after** `Write`/`Edit` completes and receives tool context as JSON on stdin (`tool_input.file_path`). Parse and validate that path before invoking `dislop check`, and map CLI exit `1` to exit `2` to return structured post-write feedback to Claude Code:
 
 ```json
 {
@@ -44,7 +50,7 @@ Note: `PostToolUse` fires **after** `Write`/`Edit` completes and receives tool c
         "hooks": [
           {
             "type": "command",
-            "command": "node -e 'const d=JSON.parse(require("fs").readFileSync(0,"utf8"));const f=d.tool_input?.file_path;if(!f)process.exit(0);const r=require("child_process").spawnSync("npx",["--yes","github:dislop-ai/dislop","check",f,"--fail-on","error"],{stdio:"inherit"});process.exit(r.status===1?2:(r.status??0));'"
+            "command": "node -e 'const fs=require(\"node:fs\"),cp=require(\"node:child_process\");const d=JSON.parse(fs.readFileSync(0,\"utf8\"));const f=d.tool_input&&d.tool_input.file_path;if(!f)process.exit(0);const r=cp.spawnSync(\"dislop\",[\"check\",f,\"--fail-on\",\"error\"],{stdio:\"inherit\"});process.exit(r.status===1?2:(r.status||0));'"
           }
         ]
       }

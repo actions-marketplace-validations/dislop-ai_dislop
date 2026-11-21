@@ -275,22 +275,27 @@ function isAllowedMatch(matchText, allowList = []) {
 
 function probeNegationPivot(proseText, rawText) {
   const hits = [];
-  // Chinese: 这不是 A，而是 B / 不仅仅是 A，更是 B / 与其说 A，不如说 B
-  const zhRegex = /(?:(?:这|那|它)?(?:并)?不(?:是|只是|仅仅?是)|与其说是?)([^，。！？；\n]{1,22})[，,；—]+\s*(?:而是|更是|不如说是?)([^。！？；\n]{1,28})/gu;
+  // Chinese: 这不是/这绝非/并非只是/不仅仅是 A，而是/更是 B / 与其说 A，不如说 B
+  const zhRegex = /(?:(?:这|那|它)?(?:(?:并)?不(?:是|只是|仅仅?是)|绝非|并非(?:只是)?)|与其说是?)([^，。！？；\n]{1,22})[，,；—]+\s*(?:而是|更是|不如说是?)([^。！？；\n]{1,28})/gu;
+  const zhRhetoricalHead = /^(?:(?:这|那|它)|绝非|并非|与其|并?不(?:只是|仅仅?是))/;
+  const zhFactualRootCause = /(?:报错|故障|原因|超时|磁盘|内存|耗尽|端口|进程|导致|因为|[A-Za-z_][A-Za-z0-9_-]{2,})/;
   let m;
   while ((m = zhRegex.exec(proseText)) !== null) {
-    const clauseA = m[1] || "";
-    const clauseB = m[2] || "";
+    const clauseA = (m[1] || "").trim();
+    const clauseB = (m[2] || "").trim();
     const rawSlice = rawText.slice(m.index, m.index + m[0].length);
+    const contextBefore = rawText.slice(Math.max(0, m.index - 12), m.index);
     const bothHaveConcrete =
       (/\d/.test(clauseA) && /\d/.test(clauseB)) ||
       /`/.test(rawSlice) ||
       /\.[a-z]{2,4}\b/i.test(rawSlice) ||
       /(?:第一次|第二次|站台|号楼|排第|星期|周[一二三四五六日天])/.test(rawSlice);
-    if (bothHaveConcrete || clauseB.trim().length > 26) {
+    if (bothHaveConcrete || clauseB.length > 26 || !clauseA || !clauseB) {
       continue;
     }
-    if (clauseA.trim().length === 0 || clauseB.trim().length === 0) continue;
+    if (!zhRhetoricalHead.test(m[0]) && zhFactualRootCause.test(contextBefore + rawSlice)) {
+      continue;
+    }
     hits.push({ index: m.index, length: m[0].length });
   }
 

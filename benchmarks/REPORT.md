@@ -2,16 +2,16 @@
 
 Generated offline by `node scripts/run_benchmark.mjs --write-report`. Zero external APIs or network calls were used.
 
-## 1. Suite A — Detection Benchmark (48 Samples)
+## 1. Suite A — Detection Benchmark (64 Samples)
 
 Measures precision, recall, false-positive rate (including adversarial clean near-misses), 2nd-order AI slogan trap catch rate, and Node.js vs. Python exact parity across 6 writing and design domains.
 
 | Metric | Measured Result |
 |---|---|
-| Precision | **100.0%** (24 TP / 0 FP) |
-| Recall | **100.0%** (24 TP / 0 FN) |
+| Precision | **100.0%** (32 TP / 0 FP) |
+| Recall | **100.0%** (32 TP / 0 FN) |
 | F1 Score | **100.0%** |
-| Clean False-Positive Rate (FPR) | **0.0%** (0 / 24) |
+| Clean False-Positive Rate (FPR) | **0.0%** (0 / 32) |
 | Adversarial Near-Miss FPR | **0.0%** |
 | 2nd-Order Trap Recall | **100.0%** |
 | Expected Rule-ID Recall | **100.0%** |
@@ -21,12 +21,13 @@ Measures precision, recall, false-positive rate (including adversarial clean nea
 
 | Domain | Samples | TP | FP | TN | FN | Precision | Recall | Clean FPR |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| `zh-brief` | 10 | 5 | 0 | 5 | 0 | 100.0% | 100.0% | 0.0% |
-| `zh-essay` | 8 | 4 | 0 | 4 | 0 | 100.0% | 100.0% | 0.0% |
-| `en-brief` | 10 | 5 | 0 | 5 | 0 | 100.0% | 100.0% | 0.0% |
-| `en-essay` | 6 | 3 | 0 | 3 | 0 | 100.0% | 100.0% | 0.0% |
+| `zh-brief` | 16 | 8 | 0 | 8 | 0 | 100.0% | 100.0% | 0.0% |
+| `zh-essay` | 9 | 5 | 0 | 4 | 0 | 100.0% | 100.0% | 0.0% |
+| `en-brief` | 15 | 8 | 0 | 7 | 0 | 100.0% | 100.0% | 0.0% |
+| `en-essay` | 7 | 3 | 0 | 4 | 0 | 100.0% | 100.0% | 0.0% |
 | `web-ui` | 8 | 4 | 0 | 4 | 0 | 100.0% | 100.0% | 0.0% |
 | `pptx-deck` | 6 | 3 | 0 | 3 | 0 | 100.0% | 100.0% | 0.0% |
+| `html-ui` | 3 | 1 | 0 | 2 | 0 | 100.0% | 100.0% | 0.0% |
 
 ## 2. Suite B — End-to-End De-Slop Effectiveness (12 Tasks × 3 Arms)
 
@@ -44,7 +45,7 @@ Evaluates real writing and design outputs across 3 orthogonal dimensions:
 
 ## 3. How to Benchmark Your Own Model, Prompt, or Backend
 
-1. Run your model or backend (`No Skill` vs. `dislop Skill` vs. `server/ LLM API`) on the 12 source inputs in [datasets/revision-v1.json](./datasets/revision-v1.json).
+1. Run your model, Skill, or hosted cloud endpoint (`No Skill` vs. `dislop Skill` vs. `dislop-cloud /api/v1/deslop`) on the 12 source inputs in [datasets/revision-v1.json](./datasets/revision-v1.json).
 2. Save outputs as `schema: "dislop.bench-run/1"` and score them locally:
    ```bash
    node scripts/run_benchmark.mjs --eval path/to/run.json

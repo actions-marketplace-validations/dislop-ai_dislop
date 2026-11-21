@@ -7,6 +7,7 @@ version: 0.4.0
 
 ## 1. Local Offline Stdio MCP (Open Source, Zero LLM, Zero Upload)
 
+Node.js 20+:
 ```json
 {
   "mcpServers": {
@@ -18,15 +19,33 @@ version: 0.4.0
 }
 ```
 
+Python 3.10+ (zero external deps):
+```json
+{
+  "mcpServers": {
+    "dislop": {
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/dislop-ai/dislop", "dislop", "--mcp"]
+    }
+  }
+}
+```
+
 Local deterministic tools:
-- `dislop_check`: Checks `text` or workspace-relative `path`, returning flagged spans, check questions, and examples (0 network calls).
-- `dislop_explain`: Returns rationale and `bad -> trap -> good` examples for a `ruleId`.
-- `dislop_packs`: Lists installed packs (`core`, `business-brief`, `literary-essay`, `deck-and-ui`).
+- `dislop_check`: Arguments `{ "text"?: string, "path"?: string, "filename"?: string, "pack"?: "core"|"business-brief"|"literary-essay"|"deck-and-ui" }`. Returns `{ pack, modality, count, findings }` with 0 network calls.
+- `dislop_explain`: Arguments `{ "ruleId": string, "lang"?: "en"|"zh" }`. Returns rationale and `bad -> trap -> good` examples.
+- `dislop_packs`: Arguments `{}`. Lists installed packs.
 
 ## 2. Hosted Remote HTTP MCP (Cloud LLM, Free 30 Credits/Month)
 
-Claim a free Bearer token (`dslp_...`) at `https://dislop.com/#pricing` (only its SHA-256 hash is stored; paid-tier zero-training model endpoint, no draft logging):
+Claim a free Bearer token (`dslp_...`) at `https://dislop.com/#cloud-token-box` (paid-tier zero-training Google Gemini endpoint, no draft logging; see [`/privacy.md`](../privacy.md)).
 
+### Claude Code
+```bash
+claude mcp add --transport http dislop-cloud https://dislop.com/mcp --header "Authorization: Bearer dslp_YOUR_FREE_TOKEN"
+```
+
+### Cursor / Windsurf (`mcp.json`)
 ```json
 {
   "mcpServers": {
@@ -40,11 +59,25 @@ Claim a free Bearer token (`dslp_...`) at `https://dislop.com/#pricing` (only it
 }
 ```
 
-Remote MCP tools:
-- `dislop_check`, `dislop_explain`, `dislop_packs` (0 credits, no token required).
-- `dislop_review` (1 credit): hybrid deterministic + 3rd-order structural + LLM review.
-- `dislop_deslop` (2 credits): self-healing rewrite with deterministic post-check, numeric fidelity guard, and automatic repair pass.
-- `dislop_voice_extract` (2 credits): extract a reusable `dislop.voice/1` style profile from 1-5 human samples.
+### Codex (`~/.codex/config.toml`)
+```toml
+[mcp_servers.dislop_cloud]
+url = "https://dislop.com/mcp"
+http_headers = { Authorization = "Bearer dslp_YOUR_FREE_TOKEN" }
+```
+
+### Remote MCP Tools & Example Payloads
+
+- `dislop_check`, `dislop_explain`, `dislop_packs` (0 credits, no token required; note remote `dislop_check` accepts `text` only, not local filesystem `path`).
+- `dislop_review` (1 credit, requires Bearer token):
+  - Input: `{ "text": "...", "pack"?: "business-brief", "lang"?: "en"|"zh" }`
+  - Output: `{ mode, model, deterministic, thirdOrderHits, llmReview: { summary, aiFlavorLevel, issues }, billing }`
+- `dislop_deslop` (2 credits, requires Bearer token):
+  - Input: `{ "text": "...", "pack"?: "business-brief", "lang"?: "en"|"zh", "voiceProfile"?: object }`
+  - Output: `{ mode, model, revised, changes, afterCheck, numericDiff, attempts, repaired, billing }`
+- `dislop_voice_extract` (2 credits, requires Bearer token):
+  - Input: `{ "samples": ["Sample 1...", "Sample 2..."], "lang"?: "en"|"zh" }`
+  - Output: `{ schema: "dislop.voice/1", stylometrics, profile }` — pass `output.profile` as `voiceProfile` in `dislop_deslop`.
 
 ## 3. Cloud HTTP API & JS Core Export
 

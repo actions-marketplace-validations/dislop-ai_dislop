@@ -32,7 +32,7 @@
 
 如果删掉了旧套话，却顺手换成了另一种 AI 腔（例如“这不是一次简单的升级，而是一场效率革命”），再跑一遍 `dislop check` 一样会被标出来。改回平实的话，检查直接通过。
 
-大致就做这些。Markdown、纯文本、HTML/CSS/JSX、Word（`.docx`）和 PPT（`.pptx`）都能查。在 [dislop.com](https://dislop.com) 浏览器里、命令行用 `npx` 或 `uvx`、接 MCP、装成 Agent Skill 跑出来的结果一样，都不需要装额外依赖，也不联网。
+大致就做这些。Markdown、纯文本、HTML/CSS/JSX、Word（`.docx`）和 PPT（`.pptx`）都能查。开源的 Node/Python 命令行、本地 stdio MCP 和 [dislop.com](https://dislop.com) 默认离线工作台跑同一套 25 条规则，零外部依赖、零上传（需要一键大模型去味或远程 HTTP MCP 时，再按需使用官方托管云端）。
 
 ## 上手
 
@@ -137,10 +137,22 @@ Node.js 版（`bin/dislop.mjs`）和 Python 版（`src/dislop/`）都零外部�
 <!-- dislop-ignore-next-line zh-bureaucratic-padding -- 原样摘录外部招标文件条款 -->
 ```
 
+### 本地一次安装（真断网 / 快速 Hook 推荐）
+
+```bash
+# Node.js 20+（装一次后完全离网运行）
+npm install -g github:dislop-ai/dislop
+dislop check .
+
+# 或 Python 3.10+（零外部依赖）
+git clone https://github.com/dislop-ai/dislop.git
+PYTHONPATH=dislop/src python3 -m dislop.cli check .
+```
+
 ### 开源本地（`Skill` + `CLI`）vs. 官方托管云端（`dislop.com/mcp`）
 
 - **开源本地（`dislop-ai/dislop`，Apache-2.0）**：`SKILL.md`、Node/Python 命令行（`dislop check`、`dislop explain`、`dislop packs`、`dislop resources`）、本地 stdio MCP（`--mcp`）、25 条确定性规则、`Awesome Anti-Slop` 与 `dislop-bench`。不涉及大模型、不需要 API Key、`check` 全程零联网，私密文档绝不离开本机。
-- **官方托管云端与远程 HTTP MCP（`https://dislop.com/mcp` · [开源与云端方案](https://dislop.com/#pricing)）**：独立闭源云端后台，使用付费级零训练模型端点（不落盘留存草稿）。提供 `dislop_review`（1 额度，三阶结构诊断 + 规则联查）、`dislop_deslop`（2 额度，自愈一键去味 + 数字保真 + 自动二次修复）与 `dislop_voice_extract`（2 额度，提取 `dislop.voice/1` 个人文风）。网页免登录每天 5 次试用额度，邮箱领取免费 Token 即享 **每月 30 次免费额度**，并支持 Pro（`$12/月`）、按量额度包（`$10 / 1,000 额度`）与 Team（`$29/席位/月`）。
+- **官方托管云端与远程 HTTP MCP（`https://dislop.com/mcp` · [开源与云端方案](https://dislop.com/#pricing)）**：独立闭源云端后台，使用付费级零训练 Google Gemini 模型端点（不落盘留存草稿；详见 [隐私说明](https://dislop.com/privacy.md)）。提供 `dislop_review`（1 额度，三阶结构诊断 + 规则联查）、`dislop_deslop`（2 额度，自愈一键去味 + 数字保真 + 自动二次修复）与 `dislop_voice_extract`（2 额度，提取 `dislop.voice/1` 个人文风）。网页免登录每天 5 次试用额度，邮箱领取免费 Token 即享 **每月 30 次免费额度**；Pro（`$12/月` · 1,500 额度）、按量包（`$10 / 800 额度`）与 Team（`$29/席位/月`）已开放早鸟预约。
 
 ## 去 AI 味效果基准测试（`dislop-bench v1`）
 
@@ -152,9 +164,9 @@ node scripts/run_benchmark.mjs --assert
 
 最新离线实测结果（完整报告见 [benchmarks/REPORT.md](./benchmarks/REPORT.md)）：
 
-- **检测基准（48 样本、6 类场景）**：准确率 `100.0%` · 召回率 `100.0%` · 干净原稿误报率 `0.0%` · 易误报近邻样本误报率 `0.0%` · 二阶 AI 口号召回率 `100.0%` · Node/Python 一致率 `100.0%`。
+- **检测基准（64 样本、6 类场景：48 基准 + 16 真实对抗留出集）**：准确率 `100.0%` · 召回率 `100.0%` · 干净原稿误报率 `0.0%` · 易误报近邻样本误报率 `0.0%` · 二阶 AI 口号召回率 `100.0%` · Node/Python 一致率 `100.0%`。
 - **端到端去 AI 味效果（12 题 × 3 组）**：模型原稿 `raw_ai` **61.4 / 100** → 普通改写 `naive_humanizer` **72.1 / 100**（三阶结构味翻倍且漏改/编造数字）→ 按 dislop 规矩改稿 `dislop_clean` **100.0 / 100**（`12/12` 全过）。
-- **5 模型真实在线对比（[benchmarks/MODEL-COMPARISON.md](./benchmarks/MODEL-COMPARISON.md)）**：实测 `Gemini 3.1/3.5 Flash-Lite`、`Gemini 3.5/3.8 Flash` 与 `Qwen 3.8 Flash`，裸 Prompt 仅得 `76.0–84.2 / 100`（`2/10–4/10` 全过），接入 `dislop` 云端自愈流水线后全线提升 **+15.8 至 +22.3 分**（达 `97.0–100.0 / 100`、`8/10–10/10` 全过；其中 `Gemini 3.1 Flash-Lite` 中位延迟仅 `1.2 秒`、每千次调用约 `\$0.09`，得分 `98.5 / 100`）。
+- **5 模型真实在线对比（[benchmarks/MODEL-COMPARISON.md](./benchmarks/MODEL-COMPARISON.md)）**：实测 `Gemini 3.1/3.5 Flash-Lite`、`Gemini 3.5/3.8 Flash` 与 `Qwen 3.8 Flash`，裸 Prompt 仅得 `76.0–84.2 / 100`（`2/10–4/10` 全过），接入 `dislop` 云端自愈流水线后全线提升 **+15.8 至 +22.3 分**（达 `97.0–100.0 / 100`、`8/10–10/10` 全过；其中 `Gemini 3.1 Flash-Lite` 中位延迟仅 `1.2 秒`、每千次调用约 `$0.09`，得分 `98.5 / 100`）。
 
 详见 [benchmarks/README.zh-CN.md](./benchmarks/README.zh-CN.md)，支持评测任意模型/Prompt/Skill/云端端点（`--eval`）以及导出随机盲评表（`--export-blind-sheet`）。
 

@@ -270,11 +270,27 @@
             </div>
             <div class="ai-assist-meta">
               <span id="ai-quota-label" data-i18n="ai.anonHint">免登录每天 5 次试用额度 · 登录后每月 30 次</span>
-              <a href="#pricing" id="ai-token-link" data-i18n="ai.claimLink">领免费 Token →</a>
+              <a href="#cloud-token-box" id="ai-token-link" data-i18n="ai.claimLink">领免费 Token →</a>
             </div>
           </div>
 
           <div class="ai-result-panel" id="ai-result-panel" hidden aria-live="polite"></div>
+
+          <details class="voice-drawer" id="voice-drawer">
+            <summary class="voice-drawer-summary">
+              <span data-i18n="voice.drawerTitle">可选：提取个人文风（2 额度 · 需免费密钥）</span>
+              <span id="voice-active-badge" class="voice-active-badge" hidden></span>
+            </summary>
+            <div class="voice-drawer-body">
+              <p class="voice-drawer-desc" data-i18n="voice.drawerDesc">贴入 1–3 段你自己写过的干净文字（用空行隔开），提取文风后会保存在本机浏览器，后续点击「AI 一键去味」时自动按你的口吻改写。</p>
+              <textarea id="voice-samples-input" class="voice-textarea" rows="3" placeholder="粘贴 1–3 段你自己写过的段落，段与段之间留一个空行…" aria-label="个人写作样稿"></textarea>
+              <div class="quick-actions" style="margin-top:8px;">
+                <button type="button" id="btn-voice-extract" class="ctrl-btn ctrl-btn-sm" data-i18n="voice.extractBtn">提取我的文风（2 额度）</button>
+                <button type="button" id="btn-voice-clear" class="ctrl-btn ctrl-btn-sm" hidden data-i18n="voice.clearBtn">清除已保存文风</button>
+              </div>
+              <div id="voice-output-box" class="cloud-output-box" hidden></div>
+            </div>
+          </details>
 
           <div class="legend-strip">
             <span class="legend-item"><span class="swatch-line swatch-error"></span> <span data-i18n="legend.error">红实线：AI 残留硬伤</span></span>
@@ -378,14 +394,14 @@
               <a class="endpoint-path" href="./llms.txt">/llms.txt</a>
               <div class="endpoint-desc" data-i18n="ep.llms">Agent 入口索引</div>
             </div>
-            <span class="endpoint-meta">2.1 KB · ~534 tok</span>
+            <span class="endpoint-meta">2.4 KB · ~615 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
               <a class="endpoint-path" href="./catalog.json">/catalog.json</a>
               <div class="endpoint-desc" data-i18n="ep.catalog">全部文档的 JSON 目录</div>
             </div>
-            <span class="endpoint-meta">36.8 KB · ~9432 tok</span>
+            <span class="endpoint-meta">37.4 KB · ~9585 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
@@ -420,7 +436,7 @@
               <a class="endpoint-path" href="./tools/skill.md">/tools/skill.md</a>
               <div class="endpoint-desc" data-i18n="ep.skill">跨宿主 Agent Skill</div>
             </div>
-            <span class="endpoint-meta">6.2 KB · ~1578 tok</span>
+            <span class="endpoint-meta">8.1 KB · ~2081 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
@@ -468,11 +484,11 @@
             <h3 data-i18n="price.t1Name">开源本地（Skill + CLI）</h3>
             <span class="pricing-amount" data-i18n="price.t1Price">$0 · 永久免费</span>
           </div>
-          <p class="pricing-sub" data-i18n="price.t1Sub">适合重视数据隐私的个人与开发团队，所有代码和 25 条规则完全透明。</p>
+          <p class="pricing-sub" data-i18n="price.t1Sub">适合重视数据隐私的个人与开发团队，规则与代码全部开源透明。</p>
           <ul class="pricing-list">
-            <li data-i18n="price.t1F1">Agent Skill、Node/Python CLI 与本地 stdio MCP（Apache-2.0）</li>
+            <li data-i18n="price.t1F1">Agent Skill、命令行与本地离线 MCP（Apache-2.0）</li>
             <li data-i18n="price.t1F2">100% 离线确定性检查，支持 Markdown、HTML/CSS、Word、PPT 与 Git Diff</li>
-            <li data-i18n="price.t1F3">免费读取 dislop.com 静态任务卡与 87 条 Awesome 工具清单</li>
+            <li data-i18n="price.t1F3">免费读取官网静态任务卡与工具清单</li>
             <li data-i18n="price.t1F4">零联网、零上传、零大模型 API 成本</li>
           </ul>
           <div class="quick-actions" style="margin-top:auto;padding-top:12px;">
@@ -485,29 +501,29 @@
             <h3 data-i18n="price.t2Name">云端免费版（远程 MCP）</h3>
             <span class="pricing-amount" data-i18n="price.t2Price">$0 · 30 额度 / 月</span>
           </div>
-          <p class="pricing-sub" data-i18n="price.t2Sub">邮箱领取专属 Token，无需绑卡，立即接通远程 MCP 与官网 AI 工作台。</p>
+          <p class="pricing-sub" data-i18n="price.t2Sub">邮箱领取免费密钥，无需绑卡，立即在官网工作台或远程 MCP 使用。</p>
           <ul class="pricing-list">
-            <li data-i18n="price.t2F1">远程 HTTP MCP（https://dislop.com/mcp），免本地装环境</li>
-            <li data-i18n="price.t2F2">AI 深度审校（1 额度）：三阶结构诊断 + 确定性规则联合审查</li>
-            <li data-i18n="price.t2F3">AI 一键去味（2 额度）：改写 + 数字保真校验 + 自动二次修复</li>
-            <li data-i18n="price.t2F4">个人文风提取（2 额度）：1–5 篇旧稿提炼专属文风档案</li>
+            <li data-i18n="price.t2F1">直连 https://dislop.com/mcp，免本地装环境（单次最长 12,000 字）</li>
+            <li data-i18n="price.t2F2">AI 深度审校（1 额度）：查出推销腔、官话与套话，给出具体改法</li>
+            <li data-i18n="price.t2F3">AI 一键去味（2 额度）：自动改写、核对原数字不丢失、二次兜底修复</li>
+            <li data-i18n="price.t2F4">个人文风提取（2 额度）：1–3 篇旧稿提炼专属文风，工作台与远程 MCP 均可用</li>
           </ul>
           <div class="quick-actions" style="margin-top:auto;padding-top:12px;">
-            <a href="#cloud-token-box" class="btn-primary" style="min-height:32px;padding:6px 14px;font-size:0.82rem;" data-i18n="price.t2Cta">下方 10 秒免费领 Token ↓</a>
+            <a href="#cloud-token-box" class="btn-primary" style="min-height:32px;padding:6px 14px;font-size:0.82rem;" data-i18n="price.t2Cta">下方 10 秒免费领密钥 ↓</a>
           </div>
         </div>
 
         <div class="pricing-col">
           <div class="pricing-head">
-            <h3 data-i18n="price.t3Name">Pro · 按量包 · Team</h3>
-            <span class="pricing-amount" data-i18n="price.t3Price">$12/月 · $10/千次</span>
+            <h3 data-i18n="price.t3Name">Pro · 按量包 · Team（早鸟预约）</h3>
+            <span class="pricing-amount" data-i18n="price.t3Price">$12/月 · $10 按量</span>
           </div>
-          <p class="pricing-sub" data-i18n="price.t3Sub">高频写作、长文与团队品牌口吻治理，按月订阅或按量购买均可。</p>
+          <p class="pricing-sub" data-i18n="price.t3Sub">高频写作选 Pro 更划算（比按量省 36%）；低频偶尔用可选永不过期的按量包。</p>
           <ul class="pricing-list">
-            <li data-i18n="price.t3F1">Pro（$12/月）：1,000 额度/月，多份个人文风档案与长文无字数上限</li>
-            <li data-i18n="price.t3F2">按量额度包（$10 / 1,000 额度）：一次购买永不过期，低频重度用户友好</li>
-            <li data-i18n="price.t3F3">Team（$29/席位/月）：5,000 额度 + 团队共享品牌文风卡与 PR 审核</li>
-            <li data-i18n="price.t3F4">统一付费级模型端点，不留存草稿、绝不用于模型训练</li>
+            <li data-i18n="price.t3F1">Pro（$12/月）：1,500 额度/月（约 $0.008/次），长文不限字数 + 10 份个人文风</li>
+            <li data-i18n="price.t3F2">按量额度包（$10 / 800 额度）：一次购买永不过期，低频重度用户友好</li>
+            <li data-i18n="price.t3F3">Team（$29/席位/月）：5,000 额度 + 团队共享品牌文风与 PR 审核</li>
+            <li data-i18n="price.t3F4">统一使用 Google Gemini 付费级端点，不存草稿、绝不用于模型训练</li>
           </ul>
           <div class="quick-actions" style="margin-top:auto;padding-top:12px;">
             <a href="#cloud-waitlist-box" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="price.t3Cta">预约开通通知 ↓</a>
@@ -517,14 +533,14 @@
 
       <div class="cloud-forms-grid">
         <div class="cloud-form-pane" id="cloud-token-box">
-          <h3 class="sub-heading" style="margin:0 0 6px;" data-i18n="cloud.tokenTitle">免费领取 30 额度 + 远程 MCP Token</h3>
+          <h3 class="sub-heading" style="margin:0 0 6px;" data-i18n="cloud.tokenTitle">免费领取 30 额度 + 远程 MCP 密钥</h3>
           <p class="cloud-form-desc" data-i18n="cloud.tokenDesc">
-            输入邮箱立即生成 Bearer Token（服务端仅存 SHA-256 哈希，不存明文），并自动同步到上方工作台。
+            输入邮箱立即生成专属密钥，自动同步到上方工作台，无需绑卡（服务端不存明文与草稿，详见页面底部隐私说明）。
           </p>
           <div id="cloud-account-status" class="cloud-status-bar" hidden></div>
           <form id="free-token-form" class="cloud-inline-form">
             <input type="email" id="token-email-input" class="cloud-input" required placeholder="输入你的常用邮箱，例如 you@company.com" aria-label="邮箱地址">
-            <button type="submit" id="token-submit-btn" class="btn-primary" style="min-height:36px;padding:6px 14px;font-size:0.84rem;" data-i18n="cloud.tokenBtn">领取免费 Token</button>
+            <button type="submit" id="token-submit-btn" class="btn-primary" style="min-height:36px;padding:6px 14px;font-size:0.84rem;" data-i18n="cloud.tokenBtn">领取免费密钥</button>
           </form>
           <div id="token-output-box" class="cloud-output-box" hidden></div>
         </div>
@@ -537,8 +553,8 @@
           <form id="waitlist-form" class="cloud-stack-form">
             <div class="cloud-inline-form">
               <select id="wl-plan-select" class="pack-select" aria-label="选择方案">
-                <option value="pro" data-i18n="cloud.planPro">Pro（$12/月 · 1,000 额度）</option>
-                <option value="credits" data-i18n="cloud.planCredits">按量包（$10 / 1,000 额度）</option>
+                <option value="pro" data-i18n="cloud.planPro">Pro（$12/月 · 1,500 额度）</option>
+                <option value="credits" data-i18n="cloud.planCredits">按量包（$10 / 800 额度 · 永不过期）</option>
                 <option value="team" data-i18n="cloud.planTeam">Team（$29/席位 · 团队文风）</option>
               </select>
               <input type="email" id="wl-email-input" class="cloud-input" required placeholder="联系邮箱" aria-label="预约邮箱">
@@ -613,7 +629,7 @@
         <div>
           <h2 class="section-title" id="share-heading" data-i18n="share.title">觉得顺手？发给同事，或者去 GitHub 留个 Star</h2>
           <p class="section-desc" data-i18n="share.desc">
-            dislop 按 Apache-2.0 完全开源、零依赖、不收数据。如果你身边也有人天天给 AI 稿子改味道，下面三个入口最直接。
+            Skill、CLI 与 25 条确定性规则按 Apache-2.0 永久开源、离线零上传；云端 AI 仅在你主动点击时调用且不存草稿。如果团队里有人天天给 AI 稿子改味道，下面三个入口最直接。
           </p>
         </div>
       </div>
@@ -621,15 +637,15 @@
       <div class="share-grid">
         <div class="share-col">
           <h3 data-i18n="share.c1Title">一键分享给团队或朋友</h3>
-          <p data-i18n="share.c1Desc">复制一段直白不浮夸的介绍（带官网试用链接、案例页和 87 条清单），直接贴到群聊或文档里就行。</p>
+          <p data-i18n="share.c1Desc">复制一段直白不浮夸的介绍（带官网试用链接、案例页和工具清单），直接贴到群聊或文档里就行。</p>
           <div class="quick-actions">
             <button type="button" class="ctrl-btn" id="copy-site-share-btn" data-i18n="share.copySiteBtn">复制项目推荐语</button>
             <button type="button" class="ctrl-btn" id="copy-cases-link-btn" data-i18n="share.copyCasesBtn">复制案例页链接</button>
           </div>
         </div>
         <div class="share-col">
-          <h3 data-i18n="share.c2Title">去 GitHub 点个 Star</h3>
-          <p data-i18n="share.c2Desc">检查引擎、Agent Skill、Plugin、MCP 和 87 条 Awesome Anti-Slop 清单都在同一个仓库。点个 Star 方便以后找。</p>
+          <h3 data-i18n="share.c2Title">去 GitHub 收藏仓库</h3>
+          <p data-i18n="share.c2Desc">检查引擎、Agent Skill、Plugin、本地 MCP 和 Awesome Anti-Slop 清单都在同一个仓库，点个 Star 方便以后找。</p>
           <div class="quick-actions">
             <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener" class="btn-primary" style="min-height:32px;padding:6px 14px;font-size:0.82rem;" data-i18n="share.starCta">GitHub 点 Star ★</a>
           </div>
@@ -693,10 +709,10 @@
               <td data-i18n="status.partial">改动检查可用，AST 未做</td>
             </tr>
             <tr>
-              <td><strong data-i18n="cov.r6Name">节奏单调与个人风格</strong></td>
-              <td><code>v0.3</code></td>
-              <td data-i18n="cov.r6Scope">连环逗号句、句长过于均匀、PPT 连续同版式，以及从自己旧稿里统计句长习惯。原型已跑通，还没合进主程序。</td>
-              <td data-i18n="status.notYet">还没上线（原型阶段）</td>
+              <td><strong data-i18n="cov.r6Name">个人文风与节奏单调</strong></td>
+              <td><code>dislop.voice/1</code></td>
+              <td data-i18n="cov.r6Scope">云端 Remote MCP / API 已支持从 1–5 篇旧稿提取个人文风并带入改写；本地离线节奏单调与 PPT 连同版式探针处于原型阶段。</td>
+              <td data-i18n="status.partialVoice">云端文风可用，本地原型中</td>
             </tr>
           </tbody>
         </table>
@@ -861,7 +877,7 @@
                   <a class="rule-md-link" href="./rules/en-cliche-lexicon.md" aria-label="查看 en-cliche-lexicon 规则卡片">.md</a>
                 </div>
               </td>
-              <td>工作文档<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">轻提示</span></td>
+              <td>工作文档<br><span class="sev-tag sev-info" style="font-size:0.75rem;">轻提示</span></td>
               <td><code>markdown, text, html, docx, pptx</code></td>
               <td><div>高频公关套语，建议替换为具体动作或实测指标。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>如果删掉这个修饰语，读者会少知道哪项机制、指标或取舍？直接写出那项事实。</div></td>
               <td><div class="ex-stack">
@@ -969,7 +985,7 @@
                   <a class="rule-md-link" href="./rules/bold-lead-list-wall.md" aria-label="查看 bold-lead-list-wall 规则卡片">.md</a>
                 </div>
               </td>
-              <td>工作文档<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">轻提示</span></td>
+              <td>工作文档<br><span class="sev-tag sev-info" style="font-size:0.75rem;">轻提示</span></td>
               <td><code>markdown, text</code></td>
               <td><div>连续 4 条及以上 <code>- **小标题**：说明</code> 列表墙，呈现典型大模型平铺罗列感。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>如果是在阐述同一观点，改写为有主次逻辑的自然段；仅在参数说明、术语表或清单核对时保留加粗列表。</div></td>
               <td><div class="ex-stack">
@@ -1043,7 +1059,7 @@
                   <a class="rule-md-link" href="./rules/excessive-em-dash-density.md" aria-label="查看 excessive-em-dash-density 规则卡片">.md</a>
                 </div>
               </td>
-              <td>随笔长文<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">轻提示</span></td>
+              <td>随笔长文<br><span class="sev-tag sev-info" style="font-size:0.75rem;">轻提示</span></td>
               <td><code>markdown, text, html, docx</code></td>
               <td><div>破折号（<code>—</code> / <code>——</code>）密度过高，形成典型生成式插话腔。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>将多数插话破折号改为逗号或句号，只在真正语意陡转处保留一处破折号。</div></td>
               <td><div class="ex-stack">
@@ -1126,7 +1142,7 @@
                   <a class="rule-md-link" href="./rules/slide-weak-topic-title.md" aria-label="查看 slide-weak-topic-title 规则卡片">.md</a>
                 </div>
               </td>
-              <td>PPT 和网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">轻提示</span></td>
+              <td>PPT 和网页<br><span class="sev-tag sev-info" style="font-size:0.75rem;">轻提示</span></td>
               <td><code>pptx</code></td>
               <td><div>正文密集的幻灯片使用“背景/概述/总结”等空泛名词做标题，未直接亮出本页结论。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>把“项目背景/数据概述”替换为听众看完本页应记住的一句具体结论。</div></td>
               <td><div class="ex-stack">
@@ -1220,6 +1236,7 @@
       </div>
       <div class="colophon-links">
         <a href="./awesome/" data-i18n="footer.awesome">工具清单</a>
+        <a href="./privacy.md" data-i18n="footer.privacy">隐私与数据边界</a>
         <a href="https://github.com/dislop-ai/dislop/blob/main/ROADMAP.zh-CN.md" target="_blank" rel="noopener" id="footer-roadmap-link" data-i18n="footer.roadmap">路线图</a>
         <a href="./methodology/brand-and-voice.md" data-i18n="footer.brand">文案基准</a>
         <a href="./methodology/design-system.md" data-i18n="footer.design">视觉规范</a>

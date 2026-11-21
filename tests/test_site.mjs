@@ -256,7 +256,33 @@ assert.equal(casesByLang.zh.length, 3, "Expected 3 ZH showcase cases");
 assert.equal(casesByLang.en.length, 3, "Expected 3 EN showcase cases");
 assert.equal(/[\u4E00-\u9FFF]/.test(JSON.stringify(casesByLang.en)), false, "English showcase cases leaked Chinese chars");
 
+// 8. Verify every fenced ```json block in Agent docs & copyable JSON snippets in site/app.js parses cleanly
+const jsonDocPaths = [
+  ...fs.readdirSync(path.join(SITE_DIR, "tools")).filter((f) => f.endsWith(".md")).map((f) => path.join(SITE_DIR, "tools", f)),
+  ...fs.readdirSync(path.join(SITE_DIR, "tasks")).filter((f) => f.endsWith(".md")).map((f) => path.join(SITE_DIR, "tasks", f)),
+  path.join(ROOT, "skills", "dislop", "SKILL.md"),
+];
+let checkedJsonBlocks = 0;
+for (const docPath of jsonDocPaths) {
+  const txt = fs.readFileSync(docPath, "utf8");
+  for (const m of txt.matchAll(/```json\n([\s\S]*?)```/g)) {
+    checkedJsonBlocks += 1;
+    assert.doesNotThrow(() => JSON.parse(m[1]), `Invalid JSON code block in ${path.relative(ROOT, docPath)}`);
+  }
+}
+const snippetsBlock = appSource.match(/const SNIPPETS_BY_LANG = \{[\s\S]*?\n\};/);
+assert.ok(snippetsBlock, "Could not locate SNIPPETS_BY_LANG in site/app.js");
+const snippetsByLang = new Function(`${snippetsBlock[0]}\nreturn SNIPPETS_BY_LANG;`)();
+for (const lang of ["zh", "en"]) {
+  for (const key of ["mcp", "cloud", "config"]) {
+    checkedJsonBlocks += 1;
+    assert.doesNotThrow(() => JSON.parse(snippetsByLang[lang][key]), `Invalid JSON snippet in site/app.js ${lang}.${key}`);
+  }
+}
+assert.ok(checkedJsonBlocks >= 10, `Expected >= 10 validated JSON snippets, got ${checkedJsonBlocks}`);
+assert.ok(fs.existsSync(path.join(SITE_DIR, "privacy.md")), "Missing site/privacy.md");
+
 console.log(
   `dislop site-test: ok (${totalRules} rules, ${tryRulesChecked} Try demos, ${specimenCount} ZH/EN specimens + 2 hero proofs + 6 cases, ` +
-    `${catalog.resources.length} catalog resources, ${AWESOME_DATA.entries.length} bilingual Awesome entries, plugin manifests & WCAG AA passed)`
+    `${catalog.resources.length} catalog resources, ${checkedJsonBlocks} valid JSON configs, ${AWESOME_DATA.entries.length} bilingual Awesome entries, plugin manifests & WCAG AA passed)`
 );

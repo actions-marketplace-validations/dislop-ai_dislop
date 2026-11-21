@@ -11,8 +11,8 @@
   "entryPoints": {
     "llmsTxt": {
       "path": "/llms.txt",
-      "bytes": 2134,
-      "approxTokens": 534
+      "bytes": 2461,
+      "approxTokens": 615
     },
     "llmsFullTxt": {
       "path": "/llms-full.txt",
@@ -481,14 +481,14 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 6313,
-      "approxTokens": 1578,
+      "bytes": 8323,
+      "approxTokens": 2081,
       "relatedTools": [
         "skill",
         "cli",
         "mcp"
       ],
-      "sha256": "3b59cdad1424f1925ebb3ff2a34088eccbacfb99dd63879c26ee385d1664d8de"
+      "sha256": "3743169c268c1704f791c1d1aef325ce8fa302a771888a3ea2eda3bc0d7b99cc"
     },
     {
       "id": "tools-prompts",
@@ -553,12 +553,12 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 2076,
-      "approxTokens": 519,
+      "bytes": 2191,
+      "approxTokens": 548,
       "relatedTools": [
         "cli"
       ],
-      "sha256": "798be13c7c9f41923ba459f789e4aa00be1131562ad4b2f4278944a430a57d8e"
+      "sha256": "3278bf6fe96654d6ab9adb58bd1c330e0fb545d2f34c3bbe0d2a674c6d958994"
     },
     {
       "id": "tools-mcp-sdk-api",
@@ -590,13 +590,40 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 1917,
-      "approxTokens": 479,
+      "bytes": 3137,
+      "approxTokens": 784,
       "relatedTools": [
         "mcp",
         "cli"
       ],
-      "sha256": "a767e26d257e79e477e30c4b9d3f27055ec9543e766490d5edbe97a9df2ab535"
+      "sha256": "84aa731c01c255b4619f09d4c44e3e90e7e19cb2b6dffeaa104632e85531e2b8"
+    },
+    {
+      "id": "privacy-policy",
+      "pillar": "tools",
+      "kind": "guide",
+      "title": {
+        "en": "Privacy, Data Boundaries & Subprocessors",
+        "zh": "隐私与数据边界说明"
+      },
+      "path": "/privacy.md",
+      "modalities": [
+        "markdown",
+        "text"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [],
+      "bytes": 1830,
+      "approxTokens": 458,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "492945a8f4693d9e5512d2bb4d0742500e30c3478bd4c5f66b6e79905206ba07"
     },
     {
       "id": "pack-core",
