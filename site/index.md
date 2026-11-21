@@ -12,7 +12,7 @@ Complete multi-modal de-slop toolkit for writing, Markdown, HTML/CSS/JSX/SVG, Wo
 - Live browser workbench: https://dislop.com/#workbench (offline in RAM, `CSP: connect-src 'none'`)
 - Agent routing index: https://dislop.com/llms.txt
 - Machine-readable catalog: https://dislop.com/catalog.json
-- Ecosystem radar (87 verified entries): https://dislop.com/radar/
+- Awesome Anti-Slop (87 curated entries): https://dislop.com/awesome/
 
 ## Coverage & Honest Boundaries
 
@@ -37,5 +37,5 @@ Complete multi-modal de-slop toolkit for writing, Markdown, HTML/CSS/JSX/SVG, Wo
 
 - [Methodology](./methodology/index.md): Deletion Test, anti-pattern map, positive divergence, and visual design system.
 - [Cases](./cases/index.md): `bad -> trap -> good` revision contrasts, repository self-dogfooding audit, and non-mainstream design references.
-- [Tools](./tools/index.md): Browser workbench, raw `SKILL.md`, lightweight prompts, CLI, MCP, Hooks, SDK, and planned HTTP API.
-- [Radar](./radar/index.md): 87 verified de-slop tools, standards, benchmarks, and policies (`dislop.radar/2`).
+- [Tools](./tools/index.md): Browser workbench, canonical `SKILL.md`, lightweight prompts, CLI, MCP, Hooks, SDK, and planned HTTP API.
+- [Awesome Anti-Slop](./awesome/index.md): 87 verified de-slop tools, standards, benchmarks, and policies (`dislop.radar/2`).

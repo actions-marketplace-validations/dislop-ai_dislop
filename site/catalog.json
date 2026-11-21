@@ -11,16 +11,16 @@
   "entryPoints": {
     "llmsTxt": {
       "path": "/llms.txt",
-      "bytes": 2385,
-      "approxTokens": 596
+      "bytes": 2390,
+      "approxTokens": 598
     },
     "llmsFullTxt": {
       "path": "/llms-full.txt",
       "bytes": 19344,
       "approxTokens": 4836
     },
-    "radarJson": {
-      "path": "/radar/index.json",
+    "awesomeJson": {
+      "path": "/awesome/index.json",
       "entries": 87,
       "schema": "dislop.radar/2"
     }
@@ -56,15 +56,15 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 2991,
-      "approxTokens": 748,
+      "bytes": 3014,
+      "approxTokens": 754,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp",
         "skill"
       ],
-      "sha256": "d457e101f46f8d9bcd152c7d67bf0261376ca1382f241c4255e051c50f42f583"
+      "sha256": "ec56954c11baea2b044a2ab586f5bea15a4e1496bb276adf84cbfe375fdda564"
     },
     {
       "id": "methodology-index",
@@ -95,14 +95,14 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 842,
-      "approxTokens": 211,
+      "bytes": 1015,
+      "approxTokens": 254,
       "relatedTools": [
         "cli",
         "mcp",
         "skill"
       ],
-      "sha256": "cb21a24ff5e91374d4c8fbac8c5c7a59c62b944b5abbdb86da036507a2041491"
+      "sha256": "3124fcbfe7de4b60937e2daa77d9d8d16b7600006c97bf0ce8c5ed909190b733"
     },
     {
       "id": "methodology-deletion-test",
@@ -210,6 +210,40 @@
       "sha256": "1e0f3706b12dd1a586a981b852985fa002576a21a683c429743a8f45fb6e784e"
     },
     {
+      "id": "methodology-brand-voice",
+      "pillar": "methodology",
+      "kind": "guide",
+      "title": {
+        "en": "Brand Identity, Voice & Design Style Guide",
+        "zh": "品牌风格、表达规范与设计基准"
+      },
+      "path": "/methodology/brand-and-voice.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "svg"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "literary-essay",
+        "deck-and-ui"
+      ],
+      "bytes": 11382,
+      "approxTokens": 2846,
+      "relatedTools": [
+        "browser-workbench",
+        "cli"
+      ],
+      "sha256": "edac57470f264387f8652c4f5a59d473ca330940f58ba876a4896ed726d6bfdb"
+    },
+    {
       "id": "methodology-design-system",
       "pillar": "methodology",
       "kind": "guide",
@@ -232,13 +266,13 @@
         "core",
         "deck-and-ui"
       ],
-      "bytes": 1686,
-      "approxTokens": 422,
+      "bytes": 1832,
+      "approxTokens": 458,
       "relatedTools": [
         "browser-workbench",
         "cli"
       ],
-      "sha256": "2ccac1f5ea128144e4b4707954871a2f1e83a5ebcdb7058d3f31b354f11b4a53"
+      "sha256": "9667ab79873ca6262329e2e727437ae6200768454bb7aca08208dfe8bbf8bd11"
     },
     {
       "id": "cases-index",
@@ -1714,14 +1748,14 @@
       "sha256": "8f55251d2d4a53d21c3af6faa0edf87ab1cfa16a9abaf5411c30245f630532ec"
     },
     {
-      "id": "radar-index-md",
+      "id": "awesome-anti-slop-md",
       "pillar": "cases",
-      "kind": "radar",
+      "kind": "awesome",
       "title": {
-        "en": "Anti-Slop Resource Radar (87 Verified Entries)",
-        "zh": "反 AI 味生态资源雷达（87 条实测核验）"
+        "en": "Awesome Anti-Slop (87 Curated Entries)",
+        "zh": "去 AI 味精选清单 · Awesome Anti-Slop（87 条实测核验）"
       },
-      "path": "/radar/index.md",
+      "path": "/awesome/index.md",
       "modalities": [
         "prose",
         "ui-design",
@@ -1735,12 +1769,12 @@
         "zh"
       ],
       "packs": [],
-      "bytes": 21543,
-      "approxTokens": 5386,
+      "bytes": 21531,
+      "approxTokens": 5383,
       "relatedTools": [
         "browser-workbench"
       ],
-      "sha256": "ad5705f460f9c53a124453d3e512ba2ffb207855833a5d667203143e1a0e37cc"
+      "sha256": "4af8d924d848573e0d34331b83a1f73105cd4447283ac1c3184c34d3e9e83f39"
     }
   ]
 }

@@ -21,11 +21,11 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Verify full dual-native site/ output is in sync with SSOT
+      - name: Verify full dual-native site/ and awesome/ outputs are in sync with SSOT
         run: |
           node scripts/build_site.mjs
-          git diff --exit-code site/
-          test -z "$(git status --porcelain site/)"
+          git diff --exit-code site/ awesome/
+          test -z "$(git status --porcelain site/ awesome/)"
 
       - name: Run website specimen, Try-demo, catalog, URL & WCAG tests
         run: node tests/test_site.mjs
