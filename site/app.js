@@ -1261,7 +1261,7 @@ function renderWorkbench() {
 
   findings.forEach((f, idx) => {
     const isErr = f.severity === "error";
-    const ruleDef = pack.rulesById[f.ruleId];
+    const ruleDef = (pack.rules || []).find((r) => r.id === f.ruleId);
     const meta = RULE_UI_META[f.ruleId];
     const plainTitle = meta?.title?.[currentLang] || f.ruleId;
     const msg = ruleDef?.message?.[currentLang] || f.message || "";

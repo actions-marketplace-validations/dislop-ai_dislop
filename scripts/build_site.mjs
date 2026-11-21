@@ -1871,7 +1871,7 @@ const featuredEndpoints = [
   { path: "./tasks/pre-release-gate.md", label: "/tasks/pre-release-gate.md", i18nKey: "ep.taskGate", desc: "任务卡：发稿前硬伤门禁与改稿核对", resId: "task-pre-release-gate" },
   { path: "./tools/skill.md", label: "/tools/skill.md", i18nKey: "ep.skill", desc: "跨宿主 Agent Skill（检查 -> 改稿 -> 核对）", resId: "tools-skill" },
   { path: "./awesome/index.json", label: "/awesome/index.json", i18nKey: "ep.awesome", desc: `同路清单 ${radarData.entries.length} 条原始 JSON`, bytes: Buffer.byteLength(awesomeJsonStr, "utf8"), tok: approxTokens(awesomeJsonStr) },
-  { path: "./methodology/brand-and-voice.md", label: "/methodology/brand-and-voice.md", i18nKey: "ep.method", desc: "品牌人格、表达基准与自检清单", resId: "methodology-brand" },
+  { path: "./methodology/brand-and-voice.md", label: "/methodology/brand-and-voice.md", i18nKey: "ep.method", desc: "品牌人格、表达基准与自检清单", resId: "methodology-brand-voice" },
   { path: "./llms-full.txt", label: "/llms-full.txt", i18nKey: "ep.full", desc: "单次拉取的全部 29 条规则合集", bytes: Buffer.byteLength(llmsFullTxt, "utf8"), tok: approxTokens(llmsFullTxt) },
 ];
 
@@ -1881,10 +1881,11 @@ const endpointsHtml = featuredEndpoints
     let tok = ep.tok;
     if (ep.resId) {
       const found = catalogResources.find((r) => r.id === ep.resId);
-      if (found) {
-        bytes = found.bytes;
-        tok = found.approxTokens;
+      if (!found) {
+        throw new Error(`Unknown featuredEndpoint resId: ${ep.resId}`);
       }
+      bytes = found.bytes;
+      tok = found.approxTokens;
     }
     const kb = (bytes / 1024).toFixed(1);
     return `          <div class="endpoint-row">
