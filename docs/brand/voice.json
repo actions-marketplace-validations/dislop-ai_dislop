@@ -1,0 +1,102 @@
+{
+  "schema": "dislop.voice/1",
+  "id": "dislop-self-voice",
+  "version": "0.1.0-draft",
+  "status": "proposal",
+  "privacy": {
+    "scope": "public",
+    "containsPersonalCorpus": false,
+    "license": "Apache-2.0",
+    "source": "original"
+  },
+  "targetAudience": "Engineers, editors, and authors who ship model-written drafts, slide decks, and web pages.",
+  "stylometricTargetBands": {
+    "en": {
+      "sentenceWordsMean": [11, 18],
+      "sentenceLengthCV": [0.45, 0.75],
+      "shortSentenceRatioUnder8Words": [0.10, 0.35],
+      "longSentenceRatioOver26Words": [0.00, 0.15],
+      "emDashesPer300WordsMax": 1,
+      "exclamationMarksPer1000WordsMax": 0,
+      "paragraphSentencesMean": [2, 4]
+    },
+    "zh": {
+      "sentenceCharsMean": [18, 34],
+      "sentenceLengthCV": [0.40, 0.70],
+      "shortSentenceRatioUnder12Chars": [0.05, 0.30],
+      "emDashesPer1000CharsMax": 1,
+      "parentheticalQualificationStyle": "concise-factual-bounds-only",
+      "halfwidthPunctuationBetweenHanMax": 0,
+      "paragraphCharsMean": [60, 180]
+    }
+  },
+  "stanceAndPerspective": {
+    "defaultPerson": "Address the author in second person; refer to dislop in third person rather than corporate 'we'.",
+    "uncertaintyPolicy": "Name every inspected part and every skipped part ([SKIP]); never mark unread input as clean.",
+    "evidenceRequirement": "Anchor each claim to a concrete span, location, number, or command; quote author facts as written.",
+    "rhetoricalGuards": [
+      "Red (error) states a direct fact and remedy; blue (warning/info) asks one question the author can answer.",
+      "Describe the text or layout span, never the writer or the model.",
+      "Allow at most one dry, playful beat per surface, only in neutral or resolved states, never inside an error or rejection.",
+      "Delete the wink: the sentence must still carry a concrete fact.",
+      "Write English and Chinese independently from meaning; keep English in Chinese copy only for literal identifiers."
+    ]
+  },
+  "positiveSkeletons": [
+    {
+      "id": "S1-mark-then-ask",
+      "name": "Quote, reason, question",
+      "sequence": [
+        "Quote the marked span",
+        "State what it costs the reader",
+        "Ask one question the author can answer"
+      ],
+      "antiRepetitionMaxConsecutiveDocs": 2
+    },
+    {
+      "id": "S2-release-note",
+      "name": "What changed, how to use it, what is still out of reach",
+      "sequence": [
+        "State what dislop now catches or checks",
+        "Show the minimal command or entry point",
+        "Name what remains out of reach or skipped"
+      ],
+      "antiRepetitionMaxConsecutiveDocs": 2
+    }
+  ],
+  "positiveExemplars": [
+    {
+      "lang": "en",
+      "skeletonId": "S1-mark-then-ask",
+      "source": "original",
+      "text": "This opener makes the reader wait. Cut everything up to \"that\". Does the sentence still say it all?"
+    },
+    {
+      "lang": "zh",
+      "skeletonId": "S2-release-note",
+      "source": "original",
+      "text": "还读不了的：加密 PDF，以及 CID 编码的 PDF 正文。这两种都会如实记为跳过。"
+    }
+  ],
+  "antiSecondOrderConvergence": {
+    "maxConsecutiveShortSentences": 2,
+    "maxBoldLeadBulletRun": 3,
+    "forbidCaricaturePatterns": [
+      "Emoji, exclamation marks, or mascot chatter standing in for warmth",
+      "More than one proofreading pun on a page",
+      "Contempt or snark aimed at AI, models, or the author",
+      "Repeating 'zero' or '零' as an intensifier across the same screen"
+    ]
+  },
+  "verificationBinding": {
+    "extendsNegativePacks": ["core", "business-brief"],
+    "requireFactLockVerify": true,
+    "rejectOnDisplacementFamilies": [
+      "frame/negation-pivot",
+      "frame/staccato",
+      "frame/triad",
+      "frame/ending",
+      "frame/list-wall"
+    ]
+  }
+}

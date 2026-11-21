@@ -2,7 +2,7 @@
 
 [简体中文](./design-system.zh-CN.md)
 
-`dislop` audits interfaces, slides, and prose for template noise. Its own visual identity, documentation banners, and web workbench (`site/`) follow one verifiable system: **an architectural galley proof sheet**. Every rule in this document is enforced on `site/` and `assets/` in CI via `dislop check . --fail-on warning`.
+`dislop` audits interfaces, slides, and prose for template noise. Its own visual identity, documentation banners, and web workbench (`site/`) follow one verifiable system: **an architectural galley proof sheet with hand-drawn proofreader marks** (paired with the voice and personality rules in [brand-and-voice-guide.md](./brand-and-voice-guide.md)). Automated lint and token checks run on `site/` and `assets/` in CI via `dislop check . --fail-on warning` and `tests/test_site.mjs`.
 
 ## 1. Visual Direction & Why Two Defaults Were Rejected
 
@@ -20,7 +20,7 @@ Current AI-generated developer pages cluster around two recognizable defaults:
 
 - **The Mark (`assets/logo.svg`)**: A single continuous proofreader's delete stroke (*dele* / GB/T 14706 删除号) cutting horizontally across a muted manuscript rule and looping cleanly upward and down-right. Tested at `16×16` (favicon), `64×64` (organization avatar), and `512×512` so the inner counter of the loop stays open at tab-icon scale.
 - **Wordmark**: Lowercase `dislop` set in tight geometric sans (`font-weight: 700`, `letter-spacing: -0.025em`) without version pills, sparkles, or nested badge rings.
-- **Repository Banners (`assets/banner-light.svg`, `assets/banner-dark.svg`)**: Paired via HTML `<picture>` (`prefers-color-scheme`) so GitHub renders native light and dark galley proofs rather than a bright white rectangle on dark mode. Right-hand specimens strictly enforce the Two-Pencil rule: Carmin Red strikes only objective `core` errors (`chatbot-artifact`), while Press Green underscores locked `stet` facts.
+- **Repository Banners (`assets/banner-light.svg`, `assets/banner-dark.svg`)**: Paired via HTML `<picture>` (`prefers-color-scheme`) so GitHub renders native light and dark galley proofs rather than a bright white rectangle on dark mode. Both themes keep the master `#F04438` Vermilion loop in the logo tile, reserve Vermilion strictly for `core` `error` defects (`chatbot-artifact`), and use Press Green dots for locked `stet` spans.
 - **Social Preview Card (`assets/og-card.svg`, `assets/og-card.png`, `1200×630`)**: Architectural galley proof Open Graph card synced into `site/assets/` for X, GitHub, Slack, Discord, and messaging previews.
 
 ## 3. Color Tokens & Monotonic Dark Elevation
@@ -29,6 +29,7 @@ All foreground/background text combinations meet or exceed **WCAG 2.2 AA (`4.5:1
 
 | Token | Role | Light Hex | Contrast on Sheet | Dark Hex | Dark `L*` / Contrast |
 |---|---|---|---|---|---|
+| `--pen` | Drawn strokes (`>= 2.5px`) & master logo loop | `#F04438` | `3.8 : 1` (`4.8:1` on tile) | `#F04438` | `L* = 55.0` (`4.7 : 1` on dark sheet) |
 | `--stage` | Outer margin / viewport ground | `#F6F7F5` | — (`L* = 97.1`) | `#0E1012` | `L* = 4.6` |
 | `--sheet` | Primary galley column / card | `#FFFFFF` | — (`L* = 100.0`) | `#15181C` | `L* = 8.1` (`> stage`) |
 | `--raised` | Active control / hover / header | `#ECEEE9` | — (`L* = 93.8`) | `#1D2127` | `L* = 12.6` (`> sheet`) |
@@ -38,17 +39,17 @@ All foreground/background text combinations meet or exceed **WCAG 2.2 AA (`4.5:1
 | `--ink` | Primary copy & headlines | `#14171A` | `18.0 : 1` | `#ECEEF0` | `15.3 : 1` |
 | `--ink-2` | Secondary labels & descriptions | `#474C55` | `8.6 : 1` | `#A6ACB5` | `7.8 : 1` |
 | `--ink-3` | Line numbers & coordinates | `#5E646E` | `6.0 : 1` | `#8C939E` | `5.8 : 1` |
-| `--mark-error` | Invariant error (`dele` pencil) | `#B42318` | `6.6 : 1` | `#FF7A6B` | `7.0 : 1` |
+| `--mark-error` | Invariant error text & thin underline (`dele`) | `#B42318` | `6.6 : 1` | `#FF7A6B` | `7.0 : 1` |
 | `--mark-warn` | Taste query (`query` pencil) | `#1B52B0` | `7.3 : 1` | `#85B4FF` | `8.5 : 1` |
-| `--mark-stet` | Protected fact (`stet` lock) | `#1E6B47` | `6.5 : 1` | `#6CD49B` | `9.8 : 1` |
+| `--mark-stet` | Protected span (`stet` dots) | `#1E6B47` | `6.5 : 1` | `#6CD49B` | `9.8 : 1` |
 
 ## 4. Two-Pencil + Stet Proofreading Semantics
 
 Color is never the sole indicator of meaning. Every inline mark pairs hue with distinct stroke geometry and a monospace label:
 
-1. **Carmin Red (`--mark-error` + `2px solid` underline + `error`)**: Objective `core` defects—leaked workstation paths, unfilled `[insert ...]` placeholders, chatbot wrappers, broken contrast, or off-slide shapes. Nothing decorative on the page uses red.
+1. **Vermilion (`--mark-error` + `2px solid` underline + `error`)**: Objective `core` defects—leaked workstation paths, unfilled `[insert ...]` placeholders, chatbot wrappers, broken contrast, or off-slide shapes. Nothing decorative on the page uses red.
 2. **Cobalt Blue (`--mark-warn` + `1.5px dashed` underline + `warn` / `info`)**: Contextual genre Taste Pack queries—throat-clearing openers, `"Not X, but Y"` negation pivots, staccato slogan runs, or slide word-walls.
-3. **Press Green (`--mark-stet` + `1.5px dotted/dashed` underline + `stet`)**: Numbers, units, qualifiers (`up to 12 minutes`), URLs, code spans, and citations locked by `dislop verify`.
+3. **Press Green (`--mark-stet` + `2px dotted` underline + `stet`)**: Numbers, units, qualifiers (`up to 12 minutes`), URLs, code spans, and citations checked by `dislop verify`. Dotted geometry keeps `stet` distinct from dashed `query` even in monochrome.
 
 ## 5. Typography & Bilingual Typesetting
 
@@ -67,5 +68,5 @@ Zero third-party font CDNs (`fonts.googleapis.com`, `unpkg`, `jsdelivr`) are loa
 
 - **Architectural Rails**: Maximum container width `1200px` bounded by continuous `1px solid var(--rule)` vertical rails. Sections divide via full-bleed `1px` horizontal rules rather than floating drop-shadow cards.
 - **Galley Split (Desktop, `< 1040px` Tablet, `< 820px` Stacked Mobile)**: In the interactive workbench, the manuscript column sits beside a left specimen rail and a right proofreader margin column; margin notes drop below the manuscript below `1040px`, and the specimen rail collapses into a horizontal strip below `820px`.
-- **Corner Radius & Nesting**: Content cells use `0px` radius along shared rails; standalone interactive buttons and inputs use `4px` radius (`--radius-sm: 4px`). Pill radii (`999px`) and 3-level nested bordered boxes (`box-in-box-in-box`) are banned.
-- **Zero Dead Controls**: Every `<button>` and `<a>` performs an immediate action or navigates to a live anchor/URL. Motion is limited to `<= 120ms` color/border transitions and respects `prefers-reduced-motion: reduce`.
+- **Corner Radius & Nesting**: Content cells joined to rails use `0px` radius; pressable controls use `--radius-ctrl: 6px` (`5px` compact) echoing the logo tile's rounded warmth; recessed inputs and code wells use `--radius-input: 4px`. Pill radii (`999px`) and 3-level nested bordered boxes (`box-in-box-in-box`) are banned.
+- **Zero Dead Controls**: Every `<button>` and `<a>` performs an immediate action or navigates to a live anchor/URL. Standard UI transitions stay `<= 120ms` (with one optional `240–300ms` ease-out pen-stroke draw reserved for resolve/verify feedback), and all motion disables under `prefers-reduced-motion: reduce`.
