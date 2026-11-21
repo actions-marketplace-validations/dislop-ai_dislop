@@ -5,7 +5,7 @@ Measured on `2026-11-21` across the **10** text and HTML writing/design tasks in
 Each model was evaluated under two identical setups:
 
 - `bare_prompt`: One-shot generic prompt ("remove AI slop while keeping original meaning").
-- `dislop_pipeline`: Production `server/` self-healing pipeline (deterministic pre-check + 3rd-order probes + locked-number prompt + post-check gate + up to 1 automatic surgical repair pass).
+- `dislop_pipeline`: Production `dislop-cloud` self-healing pipeline (deterministic pre-check + 3rd-order probes + locked-number prompt + post-check gate + up to 1 automatic surgical repair pass).
 
 ## 1. Bare Prompt vs. `dislop` Self-Healing Pipeline
 
@@ -35,7 +35,7 @@ Each model was evaluated under two identical setups:
 ## 3. Practical Model Routing Takeaways
 
 1. **Why the pipeline matters more than swapping models**: A bare prompt on a strong model still slips on 2nd-order slogans, 3rd-order semicolon pitches, dead `href="#"` links, or dropped numbers. Adding `dislop`'s deterministic pre-check, locked-number list, and automatic repair loop raises both score and all-clear rate across every model family.
-2. **Recommended production split for `server/`**:
+2. **Recommended production split for `dislop-cloud`**:
    - Route `dislop_review` (high-frequency 3rd-order critique) to the lowest-latency Flash-Lite tier (`DISLOP_LLM_MODEL_REVIEW`).
    - Route `dislop_deslop` (rewrite + repair) to the highest-scoring Flash tier with the best all-clear / cost ratio (`DISLOP_LLM_MODEL_DESLOP`).
 3. **Reproduce locally**:

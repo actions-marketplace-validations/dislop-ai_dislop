@@ -3,9 +3,9 @@ content-type: reference-data
 version: 0.4.0
 ---
 
-# MCP Server, SDK & Planned HTTP API
+# Local MCP, Hosted Remote MCP & HTTP API
 
-## Stdio MCP Server (Shipped `v0.4.0`)
+## 1. Local Offline Stdio MCP (Open Source, Zero LLM, Zero Upload)
 
 ```json
 {
@@ -18,16 +18,35 @@ version: 0.4.0
 }
 ```
 
-Shipped MCP tools:
-- `dislop_check`: Checks `text` or workspace-relative `path`, returning flagged spans, check questions, and examples.
+Local deterministic tools:
+- `dislop_check`: Checks `text` or workspace-relative `path`, returning flagged spans, check questions, and examples (0 network calls).
 - `dislop_explain`: Returns rationale and `bad -> trap -> good` examples for a `ruleId`.
 - `dislop_packs`: Lists installed packs (`core`, `business-brief`, `literary-essay`, `deck-and-ui`).
 
-## JavaScript Core Export (Shipped `v0.4.0`)
+## 2. Hosted Remote HTTP MCP (Cloud LLM, Free 30 Credits/Month)
 
-`package.json` exports the zero-I/O pure ES module `src/core.mjs` (`auditText`, `auditOoxmlEntries`, `resolveEffectivePack`).
+Claim a free Bearer token (`dslp_...`) at `https://dislop.com/#pricing` (only its SHA-256 hash is stored; paid-tier zero-training model endpoint, no draft logging):
 
-## Roadmap (Not Yet Shipped)
+```json
+{
+  "mcpServers": {
+    "dislop-cloud": {
+      "url": "https://dislop.com/mcp",
+      "headers": {
+        "Authorization": "Bearer dslp_YOUR_FREE_TOKEN"
+      }
+    }
+  }
+}
+```
 
-- `P0`: npm & PyPI package releases, typed JS/Python SDK facades (`checkFile` / `checkBytes`), MCP `dislop_catalog`, Resources, and Prompts.
-- `P1`: Stateless Web-Standard Fetch HTTP API (`/v1/check`, OpenAPI 3.1) sharing `src/core.mjs`.
+Remote MCP tools:
+- `dislop_check`, `dislop_explain`, `dislop_packs` (0 credits, no token required).
+- `dislop_review` (1 credit): hybrid deterministic + 3rd-order structural + LLM review.
+- `dislop_deslop` (2 credits): self-healing rewrite with deterministic post-check, numeric fidelity guard, and automatic repair pass.
+- `dislop_voice_extract` (2 credits): extract a reusable `dislop.voice/1` style profile from 1-5 human samples.
+
+## 3. Cloud HTTP API & JS Core Export
+
+- Same-origin HTTP endpoints: `GET /api/health`, `POST /api/v1/check`, `POST /api/v1/review`, `POST /api/v1/deslop`, `POST /api/v1/voice/extract`, `POST /api/v1/auth/register`, `GET /api/v1/account/me`, and `POST /api/v1/waitlist`.
+- `package.json` exports the zero-I/O pure ES module `src/core.mjs` (`auditText`, `auditOoxmlEntries`, `resolveEffectivePack`).

@@ -847,9 +847,10 @@ Pick the lightest surface that fits your workflow:
 |---|---|---|
 | Zero-Install Prompt & Static Pages | Live | Hand [\`/llms.txt\`](../llms.txt) or [\`/catalog.json\`](../catalog.json) to any web-capable AI, or test drafts offline in the [Browser Workbench](${BASE_URL}/#workbench). |
 | Agent Skill | Live | Install [\`SKILL.md\`](./skill.md) with \`npx skills add dislop-ai/dislop\` in Claude Code, Codex, Cursor, Windsurf, or Antigravity (or see [\`/tools/prompts.md\`](./prompts.md)). |
-| Claude Code Plugin | Live | Install Skill + local stdio MCP in one step using \`.claude-plugin/marketplace.json\` (\`/plugin marketplace add dislop-ai/dislop\` then \`/plugin install dislop@dislop-ai\`). |
-| CLI, Git Diff & Hooks | Live | See [\`/tools/cli-and-hooks.md\`](./cli-and-hooks.md) for Node (\`npx\`), Python (\`uvx\`), SARIF, GitHub Actions, and hook templates. |
-| MCP Server & JS Export | Live | See [\`/tools/mcp-sdk-api.md\`](./mcp-sdk-api.md) for stdio MCP tools and \`src/core.mjs\`. |
+| Hosted Remote HTTP MCP (Cloud) | Live | Connect \`${BASE_URL}/mcp\` with a free 30-credit/month Bearer token from [\`/#pricing\`](${BASE_URL}/#pricing) for \`dislop_review\`, self-healing \`dislop_deslop\`, and \`dislop_voice_extract\`. |
+| Claude Code Plugin | Live | Install Skill + local offline stdio MCP in one step using \`.claude-plugin/marketplace.json\` (\`/plugin marketplace add dislop-ai/dislop\` then \`/plugin install dislop@dislop-ai\`). |
+| CLI, Git Diff & Hooks | Live | See [\`/tools/cli-and-hooks.md\`](./cli-and-hooks.md) for zero-network Node (\`npx\`), Python (\`uvx\`), \`dislop resources\`, SARIF, GitHub Actions, and hook templates. |
+| Local MCP, Remote MCP & JS Export | Live | See [\`/tools/mcp-sdk-api.md\`](./mcp-sdk-api.md) for local stdio MCP, hosted Remote HTTP MCP, HTTP API, and \`src/core.mjs\`. |
 `,
 });
 
@@ -937,6 +938,9 @@ uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review
 
 # Explain a rule's check question and examples
 npx --yes github:dislop-ai/dislop explain negation-pivot-frame
+
+# List bundled offline packs and optional read-only static / cloud URLs (check makes 0 network calls)
+npx --yes github:dislop-ai/dislop resources --json
 \`\`\`
 
 ## Exit Codes
@@ -973,8 +977,8 @@ registerResource({
   id: "tools-mcp-sdk-api",
   pillar: "tools",
   kind: "guide",
-  titleEn: "MCP Server, SDK & Planned HTTP API",
-  titleZh: "MCP 服务、SDK 与规划中的 HTTP API",
+  titleEn: "Local MCP, Hosted Remote MCP & HTTP API",
+  titleZh: "本地 MCP、托管远程 MCP 与 HTTP API",
   relPath: "tools/mcp-sdk-api.md",
   modalities: ["markdown", "text", "html", "css", "jsx", "svg", "docx", "pptx", "pdf"],
   languages: ["en", "zh"],
@@ -985,9 +989,9 @@ content-type: reference-data
 version: ${VERSION}
 ---
 
-# MCP Server, SDK & Planned HTTP API
+# Local MCP, Hosted Remote MCP & HTTP API
 
-## Stdio MCP Server (Shipped \`v${VERSION}\`)
+## 1. Local Offline Stdio MCP (Open Source, Zero LLM, Zero Upload)
 
 \`\`\`json
 {
@@ -1000,19 +1004,38 @@ version: ${VERSION}
 }
 \`\`\`
 
-Shipped MCP tools:
-- \`dislop_check\`: Checks \`text\` or workspace-relative \`path\`, returning flagged spans, check questions, and examples.
+Local deterministic tools:
+- \`dislop_check\`: Checks \`text\` or workspace-relative \`path\`, returning flagged spans, check questions, and examples (0 network calls).
 - \`dislop_explain\`: Returns rationale and \`bad -> trap -> good\` examples for a \`ruleId\`.
 - \`dislop_packs\`: Lists installed packs (\`core\`, \`business-brief\`, \`literary-essay\`, \`deck-and-ui\`).
 
-## JavaScript Core Export (Shipped \`v${VERSION}\`)
+## 2. Hosted Remote HTTP MCP (Cloud LLM, Free 30 Credits/Month)
 
-\`package.json\` exports the zero-I/O pure ES module \`src/core.mjs\` (\`auditText\`, \`auditOoxmlEntries\`, \`resolveEffectivePack\`).
+Claim a free Bearer token (\`dslp_...\`) at \`${BASE_URL}/#pricing\` (only its SHA-256 hash is stored; paid-tier zero-training model endpoint, no draft logging):
 
-## Roadmap (Not Yet Shipped)
+\`\`\`json
+{
+  "mcpServers": {
+    "dislop-cloud": {
+      "url": "${BASE_URL}/mcp",
+      "headers": {
+        "Authorization": "Bearer dslp_YOUR_FREE_TOKEN"
+      }
+    }
+  }
+}
+\`\`\`
 
-- \`P0\`: npm & PyPI package releases, typed JS/Python SDK facades (\`checkFile\` / \`checkBytes\`), MCP \`dislop_catalog\`, Resources, and Prompts.
-- \`P1\`: Stateless Web-Standard Fetch HTTP API (\`/v1/check\`, OpenAPI 3.1) sharing \`src/core.mjs\`.
+Remote MCP tools:
+- \`dislop_check\`, \`dislop_explain\`, \`dislop_packs\` (0 credits, no token required).
+- \`dislop_review\` (1 credit): hybrid deterministic + 3rd-order structural + LLM review.
+- \`dislop_deslop\` (2 credits): self-healing rewrite with deterministic post-check, numeric fidelity guard, and automatic repair pass.
+- \`dislop_voice_extract\` (2 credits): extract a reusable \`dislop.voice/1\` style profile from 1-5 human samples.
+
+## 3. Cloud HTTP API & JS Core Export
+
+- Same-origin HTTP endpoints: \`GET /api/health\`, \`POST /api/v1/check\`, \`POST /api/v1/review\`, \`POST /api/v1/deslop\`, \`POST /api/v1/voice/extract\`, \`POST /api/v1/auth/register\`, \`GET /api/v1/account/me\`, and \`POST /api/v1/waitlist\`.
+- \`package.json\` exports the zero-I/O pure ES module \`src/core.mjs\` (\`auditText\`, \`auditOoxmlEntries\`, \`resolveEffectivePack\`).
 `,
 });
 

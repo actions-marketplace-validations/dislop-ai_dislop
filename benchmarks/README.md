@@ -24,7 +24,7 @@ node scripts/run_benchmark.mjs --write-report
 
 ## Benchmark your own model, Skill, or backend
 
-Run any model or backend (for example `No Skill` vs. `dislop Skill` vs. `server/ LLM API`) on the 12 source items in [datasets/revision-v1.json](./datasets/revision-v1.json) and save a `dislop.bench-run/1` JSON file:
+Run any model, Skill, or hosted endpoint (for example `No Skill` vs. `dislop Skill` vs. `dislop-cloud /api/v1/deslop`) on the 12 source items in [datasets/revision-v1.json](./datasets/revision-v1.json) and save a `dislop.bench-run/1` JSON file:
 
 ```json
 {

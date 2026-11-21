@@ -24,7 +24,7 @@ node scripts/run_benchmark.mjs --write-report
 
 ## 评测你自己的模型、Prompt、Skill 或后台
 
-把任意模型（例如 `无 Skill` vs `装 dislop Skill` vs `server/ 大模型后台`）对 [datasets/revision-v1.json](./datasets/revision-v1.json) 中 12 份 `source` 的输出保存为 `dislop.bench-run/1` JSON：
+把任意模型、Skill 或云端端点（例如 `无 Skill` vs `装 dislop Skill` vs `dislop-cloud /api/v1/deslop`）对 [datasets/revision-v1.json](./datasets/revision-v1.json) 中 12 份 `source` 的输出保存为 `dislop.bench-run/1` JSON：
 
 ```json
 {
