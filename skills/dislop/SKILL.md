@@ -1,34 +1,34 @@
 ---
 name: dislop
-description: De-slop AI outputs across writing, Markdown, HTML/CSS/JSX/SVG, Word (.docx), PowerPoint (.pptx), and PDF deliverables. Runs deterministic checks, applies localized Deletion Tests, and verifies edits kept every number, qualifier, date, URL, code span, and citation intact without second-order slogan drift.
+description: Check AI-written drafts, docs, slide decks, and web pages for slop before they ship, then confirm an edit kept every number, qualifier, date, URL, code span, and citation. Use before delivering, publishing, or committing Markdown or text, HTML/CSS/JSX/SVG, Word (.docx), PowerPoint (.pptx), or PDF files, in English or Chinese.
 ---
 
-# dislop — Multi-Modal De-Slop & Revision Verification
+# dislop
 
-Use `dislop` before delivering, publishing, or committing AI-assisted drafts, docs, slide decks, web interfaces, or Office/PDF deliverables.
+Run `dislop` on anything AI-assisted before you hand it over: a draft, a doc, a slide deck, a web page, or an Office/PDF file. It marks the problems. You make the edits, and it checks them against the original.
 
-## When to Run
+## When to run
 
-- Markdown/text briefs, technical proposals, release notes, READMEs, or longform essays (English or Chinese).
-- HTML, CSS, JSX/TSX, or SVG pages and components where contrast, dark-mode elevation, dead controls, or AI template chrome matter.
-- Word (`.docx`), PowerPoint (`.pptx`), or PDF files before external handoff.
-- Any revision where numbers, qualifiers (`up to`, `at least`, `最多`, `至少`), units, dates, URLs, code spans, or citations must survive verbatim.
+- Markdown or text briefs, technical proposals, release notes, READMEs, or essays (English or Chinese).
+- HTML, CSS, JSX/TSX, or SVG pages where contrast, dark-mode surface order, dead controls, or template chrome matter.
+- Word (`.docx`), PowerPoint (`.pptx`), or PDF files before sharing.
+- Any revision where numbers, qualifiers (`up to`, `at least`, `最多`, `至少`), units, dates, URLs, code spans, or citations must survive intact.
 
-## When NOT to Run
+## When to skip it
 
 - Negative unit-test fixtures that intentionally store anti-pattern examples.
 - Vendored third-party libraries or general non-UI backend application code.
 
-## Pack Selection
+## Pick a pack
 
-- `core` (`severity: error`, always inherited): objective delivery bugs (leaked local paths, unfilled placeholders, chatbot residue, raw Markdown in Office docs, dead `href="#"` controls, WCAG AA contrast `< 4.5:1`, dark-mode Z-elevation inversions, off-slide PPTX frames, PDF URI/title/font hygiene).
-- `business-brief`: technical specs, product briefs, PRDs, memos, executive summaries.
-- `literary-essay`: non-fiction essays, narrative reporting, columns.
+- `core` (`severity: error`, always on): objective delivery defects—leaked local paths, unfilled placeholders, stray chatbot greetings, raw Markdown inside Office docs, dead `href="#"` controls, WCAG AA contrast `< 4.5:1`, dark-mode elevation inversions, off-slide PPTX frames, and PDF URI/title/font hygiene.
+- `business-brief`: technical specs, product briefs, PRDs, memos, and release notes.
+- `literary-essay`: non-fiction essays, narrative reporting, and columns.
 - `deck-and-ui`: HTML/CSS/JSX/SVG interfaces and `.pptx` slide decks.
 
-## Three-Step Execution Loop
+## The loop: check, edit, verify
 
-1. **Inspect (Deterministic Check)**
+1. **Check.**
    - Prefer MCP tool `dislop_check` when `dislop` is attached over stdio.
    - Otherwise run the zero-dependency CLI:
      ```bash
@@ -36,26 +36,26 @@ Use `dislop` before delivering, publishing, or committing AI-assisted drafts, do
      # or Python 3.10+
      uvx --from git+https://github.com/dislop-ai/dislop dislop check <path> --format json --lang <en|zh>
      ```
-   - Fix every `error` (`packs/core`) first. Treat `warning` and `info` findings as localized editorial queries.
+   - Fix every `error` from `packs/core` first. Read each `warning` or `info` as a question about one passage: answer it, or leave the passage as it is.
 
-2. **Targeted Edit (Deletion Test, Not Synonym Swapping)**
-   - Edit only the flagged spans. Apply each finding's `deletionTest` question directly (call `dislop_explain` or read `https://dislop.com/rules/<rule-id>.md` for `bad -> trap -> good` contrasts).
-   - Keep code blocks, inline code, URLs, and quoted primary sources intact.
-   - Preserve every protected fact: numbers with qualifiers (`up to`, `at least`, `最多`, `至少`) and units, dates, links, code spans, and citation markers.
-   - Never trade stock words for second-order slogans (`"It's not X — it's Y"`, three-word staccato chains, 4-char Chinese slogan triads, or moralizing endings).
+2. **Edit only what was marked.**
+   - Answer each finding's `deletionTest` question directly (call `dislop_explain` or read `https://dislop.com/rules/<rule-id>.md` when a suggested cut is unclear). Reaching for a synonym does not answer it.
+   - Keep fenced code, inline code, URLs, and quoted primary sources intact.
+   - Keep every protected detail: numbers with qualifiers (`up to`, `at least`, `最多`, `至少`) and units, dates, links, code spans, and citations.
+   - Do not trade stock phrases for dramatic slogans (`"It's not X — it's Y"`, three-word staccato chains, 4-char Chinese slogan triads, or moralizing endings).
 
-3. **Verify (Stage-3 Fact & Displacement Guard)**
+3. **Verify.**
    - Call MCP `dislop_verify` (`before`, `after`) or run:
      ```bash
      npx --yes github:dislop-ai/dislop verify <before-file> <after-file> --json
      ```
-   - Confirm `"ok": true` in the JSON verdict (exit code `0`) before handoff. If rejected, restore dropped facts or rewrite second-order slogan frames and re-verify.
+   - Hand off only after the JSON verdict says `"ok": true` (exit code `0`). If rejected, put back the dropped facts or revise the flagged slogan, then verify again.
 
-## Zero-Install Fallback (No Shell / No MCP)
+## No shell and no MCP
 
-Fetch the smallest matching Level 0 static resource from `https://dislop.com`:
+Read the smallest matching page from `https://dislop.com` (plain Markdown/JSON, no setup):
 
-- Routing index: `https://dislop.com/llms.txt`
-- Machine catalog (`dislop.catalog/1`): `https://dislop.com/catalog.json`
-- Task bundles (~1,000 tokens each): `/tasks/business-doc.md`, `/tasks/web-and-deck.md`, `/tasks/editorial-writing.md`, `/tasks/pre-release-gate.md`
-- Atomic rule cards: `/rules/<rule-id>.md`
+- Start here: `https://dislop.com/llms.txt`
+- Everything, as JSON (`dislop.catalog/1`): `https://dislop.com/catalog.json`
+- One page per task (~1,000 tokens each): `/tasks/business-doc.md`, `/tasks/web-and-deck.md`, `/tasks/editorial-writing.md`, `/tasks/pre-release-gate.md`
+- One page per rule: `/rules/<rule-id>.md`

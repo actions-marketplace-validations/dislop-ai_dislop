@@ -1,7 +1,7 @@
 # 官方网站即 Agent 服务（Website-as-an-Agent-Service）：人机双读架构与静态协议规范
 
 > 文档状态：架构规划附属规范（v1） · 基线版本：`dislop v0.2.0`（提交 `36fa1f8`） · 日期：2026-11-21
-> 主架构文档：[multi-surface-integration-architecture.zh-CN.md](../multi-surface-integration-architecture.zh-CN.md) · 关联参考：[architecture.zh-CN.md](../../architecture.zh-CN.md)、[design-system.zh-CN.md](../../design-system.zh-CN.md)、[awesome-radar-strategy.zh-CN.md](../awesome-radar-strategy.zh-CN.md)
+> 主架构文档：[multi-surface-integration-architecture.zh-CN.md](../multi-surface-integration-architecture.zh-CN.md) · 关联参考：[architecture.zh-CN.md](../../architecture.zh-CN.md)、[design-system.zh-CN.md](../../design-system.zh-CN.md)、[strategy-and-roadmap.zh-CN.md](../../strategy-and-roadmap.zh-CN.md)
 
 ## 一、定位升级：为什么官网本身就是 Level 0 核心服务入口
 

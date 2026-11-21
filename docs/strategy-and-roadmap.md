@@ -8,24 +8,24 @@
 
 ## 1. Strategic Positioning & Differentiation
 
-### 1.1 Primary Positioning & Brand Voice
+### 1.1 Positioning & Brand Voice
 
-- **English**: **De-slop AI outputs.** Paste a draft, a deck, or a page. dislop strikes what can't ship, asks about what sounds canned, and checks that your edit kept numbers, links, and citations.
-- **Chinese**: **全面去 AI 味。** 把稿子、PPT 或页面贴进来。不能发的硬伤，dislop 直接划掉；听着像套话的地方，它问你一句；改完再替你和原稿对一遍，数字、链接和引用一个不少。
+- **English**: **A red pen for whatever your AI wrote.** Paste a draft, a deck, or a page. dislop strikes what can't ship, asks one question about what sounds canned, and checks your edit against the original so every number, link, and citation stays put.
+- **Chinese**: **给 AI 写的东西配一支红笔。** 把稿子、PPT 或网页贴进来。不能发的硬伤，dislop 直接划掉；听着像套话的地方，它在页边问你一句；改完再和原稿对一遍，数字、链接和引用一个不少。
 - **Brand Baseline**: Anchored in [assets/logo.svg](../assets/logo.svg) — *the sheet is set by machine; the marks are made by hand* (see [brand-and-voice-guide.md](./brand-and-voice-guide.md) and [docs/brand/voice.json](./brand/voice.json)).
 
-### 1.2 Two-Engine Growth Model & Long-Term Moat
+### 1.2 When to Give `Awesome Anti-Slop` Its Own Repository
 
-`dislop` pairs two clearly scoped engines:
+`dislop` maintains two distinct public artifacts under one roof during early growth:
 
-1. **Early Traffic, GitHub Star Magnet & Campaign Landing Page — `Awesome Anti-Slop` ([awesome/README.md](../awesome/README.md) · `https://dislop.com/awesome/`)**:
-   - An independently shareable, bookmarkable, human-previewable, and Agent-readable curated directory of 87 verified de-slop resources, benchmarks, and standards. During early growth—while core engine mindshare is still building—it serves as the primary discovery, bookmarking, and campaign landing wedge.
-   - Maintained inside `dislop-ai/dislop` right now (`awesome/README.md` as the GitHub star-magnet landing page, paired with `https://dislop.com/awesome/` for interactive offline preview and Agent fetches) so stars and workbench conversions concentrate in one repo; structured under `dislop.radar/3` specs for a clean standalone CC0-1.0 spin-out only if sustained external PR volume reaches `>= 5/month`, keeping `https://dislop.com/awesome/` canonical permanently.
-2. **Irreplaceable Core Product — `dislop` Engine & Multi-Surface Toolkit**:
-   - `Awesome Anti-Slop` brings people and Agents in, but it is not the whole product or the final moat. Retention rests on `dislop`'s own capabilities:
-     1. **Cross-Modality Deterministic Parity (Zero Runtime Dependencies)**: `.md`/`.txt`, `.html`/`.css`/`.jsx`/`.tsx`/`.svg`, `.docx`, `.pptx`, and structural `.pdf` metadata with Node.js and Python parity (101 fixtures + 12 conformance tests).
-     2. **Three-Stage Revision Loop (`check -> edit -> verify`)**: Red pencil for objective defects, blue pencil for editorial queries, green `stet` dots for protected spans—comparing edits against the original so numbers, qualifiers, units, dates, URLs, code spans, and citations stay intact without second-order slogan drift.
-     3. **Negative Defense + Positive Voice Pull**: Zero-LLM deterministic checks paired with offline voice (`dislop.voice/1`) and abstract design grammar (`dislop.taste/1`) protocols.
+1. **`Awesome Anti-Slop` ([awesome/README.md](../awesome/README.md) · [中文](../awesome/README.zh-CN.md) · `https://dislop.com/awesome/`)**:
+   - A curated, independently shareable directory of 87 checked tools, guides, design rules, PR policies, and research papers—usable directly by humans on GitHub or `dislop.com/awesome/` and by agents via `/awesome/index.json` and `/awesome/index.md`.
+   - **Split threshold**: Keep the directory inside `dislop-ai/dislop` while the project is still building recognition so bookmarks, community discussion, and workbench visits stay in one place. Spin out a standalone CC0-1.0 `dislop-ai/awesome-anti-slop` repository using the deferred `dislop.radar/3` contract only once sustained external pull requests reach `>= 5/month`, keeping `https://dislop.com/awesome/` canonical permanently.
+2. **Core Product (`dislop` Engine, Workbench, Skill, CLI & MCP)**:
+   - The directory brings readers and agents to the topic; the core tool is what keeps them coming back:
+     1. **Zero-Dependency Parity Across Formats**: `.md`/`.txt`, `.html`/`.css`/`.jsx`/`.tsx`/`.svg`, `.docx`, `.pptx`, and `.pdf` metadata with Node.js and Python parity (101 fixtures + 12 conformance tests).
+     2. **Check, Edit, Verify Loop**: Red solid marks for objective defects, blue dashed queries for clichés, green dotted `stet` marks for protected spans—comparing edits against the original so numbers, qualifiers, units, dates, URLs, code spans, and citations stay intact without slogan drift.
+     3. **Voice & Design Research (`v0.3+`)**: Zero-LLM deterministic checks paired with offline rhythm/voice (`dislop.voice/1`) and abstract design grammar (`dislop.taste/1`) proposals.
 
 ### 1.3 Ethics & Coverage Honesty
 

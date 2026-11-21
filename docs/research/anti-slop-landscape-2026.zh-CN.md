@@ -1,6 +1,6 @@
 # 海内外多平台「去 AI 味（Anti-Slop）」实践全景调研报告
 
-> 快照日期：2026-11-21 · 实证基线：87 条经 GitHub API 或公开网页核验的开源仓库、社区政策、标准文档与研究论文（完整清单见 [anti-slop-resource-radar.md](./anti-slop-resource-radar.md) 与 [anti-slop-radar-index.json](./anti-slop-radar-index.json)）。本文区分「有公开一手链接的实证事实」与「基于社区公开讨论的定性实践归纳」。
+> 快照日期：2026-11-21 · 实证基线：87 条经 GitHub API 或公开网页核验的开源仓库、社区政策、标准文档与研究论文（完整清单见 [awesome/README.zh-CN.md](../../awesome/README.zh-CN.md) 与 [anti-slop-radar-index.json](./anti-slop-radar-index.json)）。本文区分「有公开一手链接的实证事实」与「基于社区公开讨论的定性实践归纳」。
 
 ## 执行摘要
 
@@ -75,7 +75,7 @@
 
 ### 2.3 GitHub 开源生态全景与五类产品形态
 
-结合 87 条核验记录（详见 [anti-slop-resource-radar.md](./anti-slop-resource-radar.md)），当前开源生态可分为五类形态：
+结合 87 条核验记录（详见 [awesome/README.zh-CN.md](../../awesome/README.zh-CN.md)），当前开源生态可分为五类形态：
 
 | 阵营 | 代表项目（2026-11-21 星标） | 核心机制 | 现存短板或边界 |
 |---|---|---|---|
@@ -117,5 +117,5 @@
 
 1. **把叙事收敛为「Agent 交付物的印前检查（Preflight Check）」**：与仓内 [design-system.zh-CN.md](../design-system.zh-CN.md) 的「建筑网格上的印刷校样单」意象完全合一，避开十万星前端与通用写作技能的正面红海。
 2. **优先补齐「可安装」与「可强制」**：完成 v0.2.0 正式发版并上架 npm / PyPI，提供 Claude Code 插件加保存/提交钩子或即用 GitHub Action，解决 MCP 只能靠 Agent 自愿调用的短板。
-3. **建设可复算的「改稿事实丢失与二阶漂移」离线基准**：这是比纯链接目录更高杠杆的生态切入点，详细论证见 [awesome-radar-strategy.zh-CN.md](./awesome-radar-strategy.zh-CN.md)。
+3. **建设可复算的「改稿事实丢失与二阶漂移」离线基准**：这是比纯链接目录更高杠杆的生态切入点，路线安排见 [strategy-and-roadmap.zh-CN.md](../strategy-and-roadmap.zh-CN.md)。
 4. **让 `verify` 从二元拒绝演进为可确认事实账本**：在严格模式（适合无人值守 Agent 润色）之外，提供面向人类作者审阅的结构化变更清单，降低正当编辑误拒率。

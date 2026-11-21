@@ -8,10 +8,15 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ### Added
 
+- **Deep Brand Voice, UI/Visual Polish & Pure Bilingual Experience (`dislop.com` & GitHub)**:
+  - Made `https://dislop.com` and `https://dislop.com/awesome/` default to Simplified Chinese (`zh-CN`) with one-click native English (`en`) switching and zero language mixing across hero samples, all 10 workbench specimens (5 ZH + 5 EN), margin notes, rule catalog, and all 87 Awesome Anti-Slop summaries (`awesome/README.md` in pure English + `awesome/README.zh-CN.md` in pure Chinese).
+  - Replaced the hero terminal stack and numbered spec eyebrows on `dislop.com` with a perform-the-product red-pen headline, an interactive 3-state live Proof Card (powered by `src/core.mjs`), a 3-mark promise strip, collapsible editor-style margin notes, and a feed-legible `1200×630` social card (`assets/og-card.{svg,png}`).
+  - Rewrote `README.md`, `README.zh-CN.md`, `AGENTS.md` (adding an editorial voice section), `skills/dislop/SKILL.md`, CLI help banners, `package.json`, `pyproject.toml`, and `server.json` (trimmed under the 100-char MCP registry cap) to drop internal jargon and show real `check`/`verify` output up front.
+  - Fixed `packs/core/pack.json` `unfilled-placeholder` exemplar so `good` no longer invents an unmeasured latency figure, and removed superseded duplicate research notes (`positioning-and-messaging.zh-CN.md`, `anti-slop-resource-radar.md`, `awesome-radar-strategy.zh-CN.md`).
 - **Brand Identity, Voice Baseline & `Awesome Anti-Slop` (`/awesome/`)**:
   - Added [docs/brand-and-voice-guide.md](./docs/brand-and-voice-guide.md), [docs/brand-and-voice-guide.zh-CN.md](./docs/brand-and-voice-guide.zh-CN.md), and the draft self-voice profile [docs/brand/voice.json](./docs/brand/voice.json) anchored in `assets/logo.svg` ("the sheet is set by machine; the marks are made by hand").
-  - Promoted the 87-entry curated directory to **Awesome Anti-Slop** ([awesome/README.md](./awesome/README.md) & `https://dislop.com/awesome/`, with `/radar/` redirecting via HTTP 301) as an independently shareable traffic and mindshare hub inside the main repo.
-  - Applied Brand Baseline visual/voice updates: unified `#F04438` Vermilion (`--pen`) across light/dark logo tiles, switched `stet` marks to round `2px dotted` underlines (distinct from dashed `query`), added `--radius-ctrl: 6px`, fixed Han heading tracking, and replaced clinical/overclaimed copy with warm, literal desk-editor wording.
+  - Promoted the 87-entry curated directory to **Awesome Anti-Slop** ([awesome/README.md](./awesome/README.md), [awesome/README.zh-CN.md](./awesome/README.zh-CN.md) & `https://dislop.com/awesome/`, with `/radar/` redirecting via HTTP 301).
+  - Applied Brand Baseline visual tokens: unified `#F04438` Vermilion (`--pen`) across light/dark logo tiles, switched `stet` marks to round `2px dotted` underlines (distinct from dashed `query`), added `--radius-ctrl: 6px`, fixed Han heading tracking, and matched `color-scheme` scrollbars.
 - **Human + Agent Dual-Native Website (`https://dislop.com`)**:
   - Upgraded `scripts/build_site.mjs` into a zero-dependency dual-native static compiler generating both the pre-rendered browser workbench (`site/index.html`), an interactive 87-entry ecosystem radar (`site/radar/index.html`), and progressive-disclosure static Agent endpoints (`/llms.txt`, `/llms-full.txt`, `/catalog.json`, `/index.md`, `/methodology/*.md`, `/cases/*.md`, `/tools/*.md`, `/tasks/*.md`, `/packs/*.md`, `/rules/*.md`, `/radar/index.{json,md}`).
   - Added build-time sanitization (stripping HTML comments, invisible/bidi Unicode characters, and negative test fixtures from Agent-facing outputs) plus byte-budget and link-integrity assertions.
@@ -20,8 +25,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
   - Anti-pattern detection & catalog study (`docs/research/anti-pattern-detection-and-catalog.zh-CN.md`) paired with the `v0.3` rule/catalog specification (`docs/specs/anti-pattern-catalog-and-probes-v0.3.md`) and standalone zero-dependency verification prototype (`scripts/prototype_antipattern_lab.mjs`: 29 indexed rules, 5 candidate cadence/UI probes, 20 self-test assertions).
   - Positive divergence & personalization study (`docs/research/positive-divergence-and-personalization.zh-CN.md`), 31 verified non-mainstream design/typography/academic references (`verified-positive-sources.json`), and draft `dislop.voice/1` & `dislop.taste/1` examples.
   - Multi-surface integration architecture (`docs/research/multi-surface-integration-architecture.zh-CN.md`) and Website-as-an-Agent-Service protocol (`docs/research/multi-surface-architecture/website-as-agent-service.zh-CN.md`).
-  - Community radar topology design (`docs/research/awesome-anti-slop-topology-design.zh-CN.md`) with `dislop.radar/3` contract and MVP starter templates.
-  - Homepage positioning & messaging decision note (`docs/research/positioning-and-messaging.zh-CN.md`).
+  - Community topology proposal (`docs/research/awesome-anti-slop-topology-design.zh-CN.md`) with `dislop.radar/3` contract and starter templates (deferred while single-repo-first).
 - **Website Verification & Optimization**:
   - Audited and hardened `site/` and `scripts/build_site.mjs` for pre-rendered vs. hydrated parity, accessibility, i18n completeness, clipboard fallbacks, contrast accuracy, and CI drift detection.
 

@@ -1,6 +1,6 @@
 # `dislop` 反模式识别与查询体系：深度研究、分层架构与演进路线
 
-> 快照日期：2026-11-21 · 关联文档：[生态全景调研](./anti-slop-landscape-2026.zh-CN.md) · [产品战略补充](./awesome-radar-strategy.zh-CN.md) · 精确改造 Spec：[anti-pattern-catalog-and-probes-v0.3.md](../specs/anti-pattern-catalog-and-probes-v0.3.md) · 验证原型：[prototype_antipattern_lab.mjs](../../scripts/prototype_antipattern_lab.mjs)
+> 快照日期：2026-11-21 · 关联文档：[生态全景调研](./anti-slop-landscape-2026.zh-CN.md) · [路线与规划](../strategy-and-roadmap.zh-CN.md) · 精确改造 Spec：[anti-pattern-catalog-and-probes-v0.3.md](../specs/anti-pattern-catalog-and-probes-v0.3.md) · 验证原型：[prototype_antipattern_lab.mjs](../../scripts/prototype_antipattern_lab.mjs)
 >
 > 证据纪律：本文严格区分「经论文或公开基准核验的实证发现」与「基于开源规则集及社区公开实践的经验共识」，不把社区印象写成定量定理。
 
@@ -169,7 +169,7 @@
 
 ### 3.3 分阶段演进路线（P0 / P1 / P2）
 
-与仓内 [awesome-radar-strategy.zh-CN.md](./awesome-radar-strategy.zh-CN.md) 的量化 Gate 保持严格一致，所有演进围绕「Agent 交付物印前检查」主航道展开：
+与仓内 [strategy-and-roadmap.zh-CN.md](../strategy-and-roadmap.zh-CN.md) 的分阶段节奏保持一致，所有演进围绕「Agent 交付物印前检查」主航道展开：
 
 | 阶段 | 定位与周期 | 核心交付项 | 验收与门禁标准 |
 |---|---|---|---|

@@ -1,8 +1,8 @@
 # `awesome-anti-slop` 纳入 `dislop` 产品体系的载体形态与拓扑架构设计
 
-> 文档状态：架构选型与工程设计报告（决策级） · 核验基准日：2026-11-21
+> 文档状态：暂缓拆仓预案（历史架构提案） · 核验基准日：2026-11-21
 >
-> 关联文档：[awesome-radar-strategy.zh-CN.md](./awesome-radar-strategy.zh-CN.md) · [anti-slop-radar-index.json](./anti-slop-radar-index.json) · [anti-pattern-detection-and-catalog.zh-CN.md](./anti-pattern-detection-and-catalog.zh-CN.md) · [multi-surface-integration-architecture.zh-CN.md](./multi-surface-integration-architecture.zh-CN.md)
+> 关联文档：[strategy-and-roadmap.zh-CN.md](../strategy-and-roadmap.zh-CN.md) · [anti-slop-radar-index.json](./anti-slop-radar-index.json) · [anti-pattern-detection-and-catalog.zh-CN.md](./anti-pattern-detection-and-catalog.zh-CN.md) · [multi-surface-integration-architecture.zh-CN.md](./multi-surface-integration-architecture.zh-CN.md)
 >
 > 配套草案：[radar-v3-contract.json](./awesome-anti-slop-topology/radar-v3-contract.json)（`dislop.radar/3` 契约示例） · [mvp-starter-templates.md](./awesome-anti-slop-topology/mvp-starter-templates.md)（目录树、CI 流水线、Issue/PR 模板与同步脚本边界）
 
@@ -17,7 +17,7 @@
 
 在工程实现上，既有单文件 `anti-slop-radar-index.json`（1,456 行）将演进为 `dislop.radar/3` 拆条目目录（`data/entries/<id>.json`）。每条资源独立成文件，从根源消除多人并行 PR 的合并冲突。零依赖构建脚本自动生成 `README.md`、`README.zh-CN.md`、`dist/radar.json` 与 `dist/llms.txt`，并通过固定版本快照同步至 `dislop.com/radar/`，保持官网 `CSP: connect-src 'none'` 与离线可构建。
 
-该设计完整吸收了 [awesome-radar-strategy.zh-CN.md](./awesome-radar-strategy.zh-CN.md) 对「中立性损耗」「精力分散」「死链积压」的判断：通过公开伦理分区、`dislop` 客观平等入列、禁止商业横幅以及「CI 只查结构不审文风」守住公信力；把稳态人工投入锁死在每周 `<= 45` 分钟；以离线可复算的事实保留与二阶漂移基准提供 `skills.sh` 无法替代的选型信号；若 12 周外部有效 PR 低于 5 条，则平滑转入月度自动巡检的低功耗快照模式，零重构保留已积累的 URL、星标与搜索权重。
+该设计完整吸收了早期战略复盘对「中立性损耗」「精力分散」「死链积压」的判断：通过公开伦理分区、`dislop` 客观平等入列、禁止商业横幅以及「CI 只查结构不审文风」守住公信力；把稳态人工投入锁死在每周 `<= 45` 分钟；以离线可复算的事实保留与二阶漂移基准提供 `skills.sh` 无法替代的选型信号；若 12 周外部有效 PR 低于 5 条，则平滑转入月度自动巡检的低功耗快照模式，零重构保留已积累的 URL、星标与搜索权重。
 
 推荐采用零重构的分阶段时序：先完成 `dislop v0.2.0` 的 npm / PyPI 上架，随后立即在独立仓 `dislop-ai/awesome-anti-slop` 发布 `v0.1.0`（导入 87 条基线，尽早启动 `sindresorhus/awesome` 的 30 天存活期并固化规范 URL），2 周内接通 `dislop.com/radar/` 与 `/llms.txt` 自动同步，后续按需叠加离线基准列与反模式语料回流。
 
@@ -189,7 +189,7 @@
 
 ### 4.1 正面化解既有研报指出的四项核心风险
 
-[awesome-radar-strategy.zh-CN.md](./awesome-radar-strategy.zh-CN.md) 提出的审慎判断建立在真实数据之上，本设计并非推翻其诊断，而是将每条风险转化为具体的工程与治理机制：
+早期战略复盘提出的审慎判断建立在真实数据之上，本预案并非推翻其诊断，而是将每条风险转化为具体的工程与治理机制：
 
 | 既有研报指出的真实风险 | 风险根因 | 方案 D 的工程与治理化解措施 |
 |---|---|---|

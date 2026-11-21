@@ -8,24 +8,24 @@
 
 ## 1. 战略定位与护城河
 
-### 1.1 一级定位与核心主张
+### 1.1 定位与品牌语气
 
-- **中文主标**：**全面去 AI 味。** 把稿子、PPT 或页面贴进来。不能发的硬伤，dislop 直接划掉；听着像套话的地方，它问你一句；改完再替你和原稿对一遍，数字、链接和引用一个不少。
-- **英文主标**：**De-slop AI outputs.** Paste a draft, a deck, or a page. dislop strikes what can't ship, asks about what sounds canned, and checks that your edit kept numbers, links, and citations.
+- **中文主标**：**给 AI 写的东西配一支红笔。** 把稿子、PPT 或网页贴进来。不能发的硬伤，dislop 直接划掉；听着像套话的地方，它在页边问你一句；改完再和原稿对一遍，数字、链接和引用一个不少。
+- **英文主标**：**A red pen for whatever your AI wrote.** Paste a draft, a deck, or a page. dislop strikes what can't ship, asks one question about what sounds canned, and checks your edit against the original so every number, link, and citation stays put.
 - **品牌人格与表达基准**：以图标 [assets/logo.svg](../assets/logo.svg) 为参照，确立「**底盘如机印般沉稳，落笔如手批般轻快**」的责任编辑风格（详见 [brand-and-voice-guide.zh-CN.md](./brand-and-voice-guide.zh-CN.md) 与 [docs/brand/voice.json](./brand/voice.json)）。
 
-### 1.2 双引擎增长与长期护城河
+### 1.2 什么时候考虑把 `Awesome Anti-Slop` 拆成独立仓库
 
-`dislop` 采用清晰分工的**双引擎结构**，主次分明、合而不混：
+冷启动阶段，`dislop` 在同一座主仓里维护两件彼此互补的公开物：
 
-1. **早期流量、GitHub 聚星与宣发落地页：`Awesome Anti-Slop`（[awesome/README.md](../awesome/README.md) · `https://dislop.com/awesome/`）**
-   - 这是一个**独立可传播、可收藏、人类可预览、Agent 可直读**的核心子模块（收录 87 条实测核验的去 AI 味工具、标准、论文与对照观察区），在主引擎尚未建立广泛心智的早期阶段承担流量入口、GitHub 吸引 Star 与对外宣发落地页的角色。
-   - 现阶段以 `awesome/README.md` 作为 GitHub 仓库内的精选目录落地页（搭配 `https://dislop.com/awesome/` 离线交互预览与 Agent 直读端点），留在 `dislop-ai/dislop` 主仓内以集中星标动量与工具转化；仅当外部有效 PR 持续 `>= 5 条/月` 时再按 `dislop.radar/3` 契约无损切出独立 CC0 仓，规范地址永久锚定 `https://dislop.com/awesome/`。
-2. **不可替代的长期壁垒：`dislop` 主引擎与多形态工具**
-   - `Awesome Anti-Slop` 是早期增长楔子，但不是全部，更不是终点。访客与 Agent 被清单吸引进来后，真正留住他们的是 `dislop` 自己的三项硬能力：
-     1. **跨媒介确定性双端内核（零外部依赖）**：覆盖 `.md`/`.txt`、`.html`/`.css`/`.jsx`/`.tsx`/`.svg`、`.docx`、`.pptx` 与 `.pdf` 结构元数据，Node.js 与 Python 双端通过 101 项样本断言与 12 项一致性测试。
-     2. **三阶段核对闭环（`check -> edit -> verify`）**：红笔划硬伤、蓝笔问商榷、绿点标出受保护片段；改完与原稿逐项核对数字、限定词（`up to`/`at least`/`最多`/`至少`）、单位、日期、URL、代码与引用，并拦截二阶口号漂移。
-     3. **负向防线 + 正向声纹牵引**：在零 LLM 内核之上，通过离线声纹（`dislop.voice/1`）与抽象设计文法（`dislop.taste/1`）帮作者保住自己的声音。
+1. **同路清单：`Awesome Anti-Slop`（[awesome/README.zh-CN.md](../awesome/README.zh-CN.md) · [English](../awesome/README.md) · `https://dislop.com/awesome/`）**
+   - 收录 87 条逐条核过链接与仓库状态的中英文去 AI 味工具、规范、论文与对照参考，既适合在 GitHub 直接浏览分享，也支持在官网离线筛选和由外部 Agent 读取 JSON/Markdown。
+   - **拆仓条件**：现阶段留在 `dislop-ai/dislop` 主仓，让收藏、讨论与工作台试用不分散；仅当外部有效目录 PR 持续达到 `>= 5 条/月` 时，再按 `dislop.radar/3` 预案无损切出独立 CC0-1.0 仓库，同时永久保持 `https://dislop.com/awesome/` 地址不变。
+2. **主产品：`dislop` 引擎、工作台、Skill、CLI 与 MCP**
+   - 清单把关心这个话题的人和 Agent 带进来，真正留住大家的是 `dislop` 自己的三项能力：
+     1. **跨格式零依赖双端一致**：覆盖 `.md`/`.txt`、`.html`/`.css`/`.jsx`/`.tsx`/`.svg`、`.docx`、`.pptx` 与 `.pdf` 元数据，Node.js 与 Python 双端通过 101 项样本断言与 12 项一致性测试。
+     2. **先查、局部改、再对数**：红实线划硬伤、蓝虚线问商榷、绿点线标出受保护片段；改完和原稿逐条核对数字、限定词、单位、日期、链接、代码与引用，并拦截二阶口号漂移。
+     3. **声纹与设计研究（`v0.3+`）**：保持零 LLM 核心，在主引擎之上逐步沉淀本地节奏/声纹（`dislop.voice/1`）与抽象设计文法（`dislop.taste/1`）提案。
 
 ### 1.3 伦理与覆盖诚实底线
 

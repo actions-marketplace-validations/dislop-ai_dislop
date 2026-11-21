@@ -1,91 +1,113 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./assets/banner-dark.svg">
-    <img src="./assets/banner-light.svg" alt="dislop — 全面去 AI 味，改完和原稿对一遍" width="100%">
+    <img src="./assets/banner-light.svg" alt="dislop — 给 AI 写的东西配一支红笔" width="100%">
   </picture>
 </p>
 
 <p align="center">
   <a href="./README.md">English</a> ·
-  <a href="https://dislop.com">工作台 (dislop.com)</a> ·
-  <a href="./awesome/README.md">Awesome Anti-Slop (87)</a> ·
-  <a href="./docs/brand-and-voice-guide.zh-CN.md">品牌与表达基准</a> ·
-  <a href="./docs/strategy-and-roadmap.zh-CN.md">全景蓝图</a> ·
-  <a href="./docs/architecture.zh-CN.md">架构说明</a> ·
-  <a href="./docs/design-system.zh-CN.md">设计规范</a> ·
-  <a href="./CHANGELOG.md">变更记录</a> ·
+  <a href="https://dislop.com">去 dislop.com 试试</a> ·
+  <a href="./awesome/README.zh-CN.md">Awesome Anti-Slop 同路清单</a> ·
   <a href="./LICENSE">Apache-2.0</a>
 </p>
 
-**全面去 AI 味。** `dislop` 是给模型代笔的东西做体检的工具，支持 Markdown、纯文本、HTML、CSS、JSX/TSX、SVG、Word（`.docx`）、PowerPoint（`.pptx`）与 PDF 结构元数据。不能发的硬伤它直接标红，听着像套话的地方它只在页边问你一句；等你改完，`dislop verify` 再替你和原稿对一遍，数字、限定词（`最多`、`至少`、`up to`、`at least`）、单位、日期、链接、代码片段与引用编号一个不少才算过。
+**给 AI 写的东西配一支红笔。**
 
-它不替你偷偷改稿。笔在你手里，它只管看——无任何外部运行时依赖，断网也能跑，提供浏览器工作台、`/llms.txt`、`SKILL.md`、Node/Python CLI 与 stdio MCP 五类入口。
+先看一段模型交上来的上线说明：
 
-## Awesome Anti-Slop（87 条去 AI 味精选清单）
+```text
+好的，以下是修改后的上线说明。值得注意的是，本次改造以队列分级为重要抓手，全面赋能一线运维团队，故障恢复时间最多 45 秒。这不是一次简单的升级，而是一场效率革命。
+```
 
-如果想先看一份经过逐条核验的去 AI 味生态地图，可以直接打开 GitHub 目录页 **[awesome/README.md](./awesome/README.md)**，或在官网 **[dislop.com/awesome/](https://dislop.com/awesome/)** 离线筛选。清单收录 87 条中英文写作规范、确定性检查器、前端 UI 与图表指南、代码/PR 治理规则与研究标准，同时向 Agent 开放 [JSON](https://dislop.com/awesome/index.json) 与 [Markdown](https://dislop.com/awesome/index.md) 端点。
+`dislop check launch-note.md --lang zh` 在上面批了五处：
 
-欢迎 Star `dislop-ai/dislop` 收藏这份精选清单，也随时试用下方零依赖的 `dislop` 检查引擎与工作台。
+```text
+[ERROR]   launch-note.md:1:1   chatbot-artifact         "好的，以下是修改后"
+[WARNING] launch-note.md:1:16  zh-bureaucratic-padding  "值得注意的是，"
+[WARNING] launch-note.md:1:35  zh-bureaucratic-padding  "抓手"
+[WARNING] launch-note.md:1:38  zh-bureaucratic-padding  "全面赋能"
+[WARNING] launch-note.md:1:63  negation-pivot-frame     "这不是一次简单的升级，而是一场效率革命"
+```
 
-## 红笔和蓝笔
+稿子你来改。改完，`dislop verify` 拿你的版本和原稿对一遍：
 
-市面上主打“去 AI 味 / 拟人化改写”的工具为了绕过概率检测器，经常顺手删改数字或限定条件；而单纯维护一张禁用词黑名单，既会误伤正常专名（如调试器 `Delve`、`抓手机拍照`、`北京大学、清华大学、复旦大学`），又会逼着大模型换用故作深沉的短句口号。
+```text
+dislop verify: ACCEPTED (findings 5 -> 0; all protected facts preserved)
+```
 
-`dislop` 将检查规则拆为职责分明的两层：
+要是顺手把“最多”删了，稿子会被退回来：
 
-1. **基础发布底线（`packs/core/`，固定 `error`，所有包默认继承）**：客观交付事故，默认阻断构建——包括本机路径泄露（`file:///Users/example/spec.pdf`）、未替换模板占位符（`[insert ...]`、`{{var}}`、`【待补充】`）、未删净的 AI 寒暄与内部引用标记（`好的，以下是修改后的…`、`[oaicite:...]`）、粘贴进 Word/PPT 未渲染的裸 Markdown 星号、空链接 `<a href="#">`、低于 WCAG AA（`< 4.5:1`）的前景背景对比度、深色模式 Z 轴亮度倒置，以及越出画布边界的 PPT 文本框。
-2. **文体与界面审美包（`warning` / `info`，默认提示不破构建）**：按文体划分的可插拔 JSON 规则包（`business-brief`、`literary-essay`、`deck-and-ui`）。每条规则均附带**删除测试（Deletion Test）**、**反例 / 二阶陷阱 / 合规改写**三段对照，以及正反自动化测试样本。
+```text
+dislop verify: REJECTED (findings 5 -> 0)
+  - Protected numbers removed or altered: 最多 45 秒
+```
 
-## 支持格式与能力边界（`v0.2.0`）
+它就干这三件事：不能发的硬伤直接划掉；听着像套话的地方问你一句；你改完，它核对数字、限定词、日期、链接、代码片段和引用是不是都还在。它不替你改稿，笔在你手里。
 
-Node.js 版（`bin/dislop.mjs`）与 Python 版（`src/dislop/`）均保持**零第三方运行时依赖**，并通过同一套跨语言一致性测试（`tests/test_conformance.py`）。
+Markdown、纯文本、HTML/CSS/JSX/SVG、Word、PPT 和 PDF 元数据它都读。在 [dislop.com](https://dislop.com) 的浏览器标签页里、用 `npx` 或 `uvx`、接 MCP、装成 Agent Skill，查出来的结果都一样；不用装依赖，也不联网。
 
-| 类别 | 扩展名 | 确定性检出范围 | 明确边界 |
-|---|---|---|---|
-| 文稿与长文 | `.md`, `.mdx`, `.txt` | 基础底线 + 铺垫式开场白、“不是 A，而是 B”对比套句、连续超短句口号、四字排比串、段尾说教升华、无出处权威归因、中文半角标点混排 | 代码块、行内代码、URL、引用块与 `dislop-quote` 示例区对审美规则自动屏蔽 |
-| 前端与矢量图 | `.html`, `.css`, `.jsx`, `.tsx`, `.svg` | 空跳转链接、无说明的静态禁用按钮、单文件可解析对比度、深色模式表面明度阶梯、默认紫粉渐变与渐变裁切标题、胶囊标签泛滥、三层套盒、SVG 文字越界风险 | 仅做单文件静态分析；动态水合后的运行时 DOM 需配合浏览器测试 |
-| Word 文档 | `.docx` | 合并同段落 `<w:t>` 文本运行、检出未接受修订（`<w:ins>`/`<w:del>`）与残留批注、损坏引用域、裸 Markdown 残留、外部 `file:` 链接及正文套话（定位至 `para N`） | 报出段落序号，不计算排版渲染页码 |
-| 演示文稿 | `.pptx` | 按 `p:sldIdLst` 真实放映顺序定位页码、合并段落运行、单页字数墙（英文 > 120 词 / 中文 > 280 字）、项目符号超限（> 6 条）、`<a:normAutofit>` 自动缩排（< 80%）、文本框越界、空泛名词标题 | 隐藏幻灯片（`show="0"`）跳过密度检查并在报告中显式列为 `[SKIP]` |
-| PDF 文档 | `.pdf` | `/URI` 本机文件链接、残留原始文件名 `/Title`（如 `Microsoft Word - ...`）、未嵌入字体描述符、跨页 `/MediaBox` 尺寸不一致 | 加密 PDF 与完整 CID 正文提取在零依赖模式下显式报告 `[SKIP]`，绝不静默伪装为“0 问题” |
-
-## 快速开始
+## 上手
 
 ### Node.js 20+（零外部依赖）
 
 ```bash
-# 检查当前目录（命中 core 错误时退出码为 1，同时打印审美包提示）
+# 检查当前目录（命中硬伤时退出码为 1，同时提示套话商榷）
 npx --yes github:dislop-ai/dislop check .
 
-# 仅检查相对 main 分支新增/修改的行，输出 GitHub PR 行内注解
+# 只查相对 main 新改的行，并输出 GitHub PR 行内批注
 npx --yes github:dislop-ai/dislop check --changed origin/main --format github
 
-# 查看某条规则的删除测试与正反改稿样本
+# 查看某条规则该问自己的问题和改前/改后示例
 npx --yes github:dislop-ai/dislop explain negation-pivot-frame --lang zh
 
-# 核对改稿前后数字、限定词、链接与代码片段是否完整保留
+# 改完和原稿对一遍：核对数字、限定词、链接与代码是否完好
 npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
 ```
 
 ### Python 3.10+（零外部依赖）
 
 ```bash
-# 通过 uvx 直接从 Git 仓库运行
+# 用 uvx 直接跑
 uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review.pptx
 
-# 或克隆仓库本地运行
+# 或克隆到本地运行
 git clone https://github.com/dislop-ai/dislop.git
 cd dislop
 PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning --lang zh
 ```
 
-## Agent Skill 与 Level 0 官网直读
+## 红笔和蓝笔
 
-- **跨宿主 Agent Skill（`skills/dislop/SKILL.md`）**：将 [skills/dislop/SKILL.md](./skills/dislop/SKILL.md) 接入 Claude Code、Codex、Cursor 或 Windsurf（`npx skills add dislop-ai/dislop`），按「先查 -> 局部改稿 -> verify 复检」三步交付。
-- **零安装 Level 0 静态端点**：任意联网 Agent 可直接读取 [https://dislop.com/llms.txt](https://dislop.com/llms.txt)（~2.4 KB）、[https://dislop.com/catalog.json](https://dislop.com/catalog.json)（`dislop.catalog/1`）、场景任务包（`/tasks/*.md`）与 29 张原子规则卡（`/rules/<id>.md`）。
+市面上自动“拟人化改写”的工具为了改得像人，经常顺手删改数字或限定词；而单纯一张黑名单，既会误伤正常词（如「抓手机拍照」「北京大学、清华大学、复旦大学」），又会逼着模型换用故作深沉的短句口号。
 
-## 接入 MCP（`Claude Code`、`Codex`、`Cursor`、`Windsurf`）
+`dislop` 把规则分成两层：
 
-将 `dislop` 注册为本地 stdio MCP 服务，让写作或研发 Agent 在交稿前自动执行“检查 -> 局部修订 -> `verify` 复检”：
+1. **硬伤规则（`packs/core/`，固定 `error`，所有文体包默认开启）**：换谁来看都不能发的疏漏——本机路径泄露（`file:///Users/example/spec.pdf`）、忘了填的占位符（`[insert ...]`、`{{var}}`、`【待补充】`）、留在第一行的 AI 寒暄、贴进 Word/PPT 没渲染的裸 Markdown、点不动的空链接 `<a href="#">`、低于 WCAG AA（`< 4.5:1`）的对比度、深色模式层级倒置，以及越出画布的 PPT 文本框。
+2. **文体包（`warning` / `info`，默认提示不阻断）**：按文体划分的 JSON 规则包（`business-brief`、`literary-essay`、`deck-and-ui`）。每条都附一句问自己的问题、原句 / 改过头 / 改好三段对照，以及正反测试样本。
+
+## 它读得了什么
+
+Node.js 版（`bin/dislop.mjs`）和 Python 版（`src/dislop/`）都零外部依赖，通过同一套跨运行时一致性测试（`tests/test_conformance.py`）。
+
+| 手头的文件 | 扩展名 | 能替你挑出什么 | 明确边界 |
+|---|---|---|---|
+| 文稿与长文 | `.md`, `.mdx`, `.txt` | 硬伤 + 开场白寒暄、公文黑话、“不是 A，而是 B”套句、四字排比、段尾说教、无出处数据、中文里混半角标点 | 代码块、行内代码、URL、引用块与 `dislop-quote` 示例区对文风规则自动屏蔽 |
+| 网页与矢量图 | `.html`, `.css`, `.jsx`, `.tsx`, `.svg` | 空链接、无说明的禁用按钮、单文件对比度、深色模式表面明度顺序、默认紫粉渐变、满屏胶囊标签、三层套盒、SVG 文字裁切 | 只做单文件静态分析；动态渲染后的 DOM 需配合浏览器测试 |
+| Word 文档 | `.docx` | 合并同段落文本运行、未接受的修订与残留批注、损坏引用域、裸 Markdown 残留、外部 `file:` 链接及正文套话（定位至 `para N`） | 报段落序号，不计算排版页码 |
+| 演示文稿 | `.pptx` | 按真实放映顺序定位页码、单页字数墙（中文 > 280 字 / 英文 > 120 词）、要点超过 6 条、自动缩排低于 80%、文本框越界、空泛标题 | 隐藏幻灯片跳过密度检查并显式报 `[SKIP]` |
+| PDF 文档 | `.pdf` | 本机 `/URI` 链接、残留原始文件名 `/Title`、未嵌入字体、跨页尺寸不一致 | 加密 PDF 与完整正文抽字显式报 `[SKIP]`，绝不假装“0 问题” |
+
+## Awesome Anti-Slop 同路清单
+
+想看看还有哪些人在做去 AI 味工具、写作规范、前端设计规则、代码 PR 治理或研究论文？可以直接翻 **[awesome/README.zh-CN.md](./awesome/README.zh-CN.md)**（[English](./awesome/README.md)），或在 **[dislop.com/awesome/](https://dislop.com/awesome/)** 离线筛选全部 87 条已核验资源（也提供 [index.json](https://dislop.com/awesome/index.json) 与 [index.md](https://dislop.com/awesome/index.md) 给 Agent 读取）。
+
+## 让 Agent 来用
+
+- **Agent Skill**：把 [skills/dislop/SKILL.md](./skills/dislop/SKILL.md) 装进 Claude Code、Codex、Cursor 或 Windsurf（`npx skills add dislop-ai/dislop`），按「先查 -> 局部改稿 -> 对照原稿」三步交稿。
+- **不装本地工具也能读**：让联网 Agent 直接读 [dislop.com/llms.txt](https://dislop.com/llms.txt)（约 2.2 KB）、[dislop.com/catalog.json](https://dislop.com/catalog.json)、按场景挑一张任务卡（`/tasks/*.md`）或单条规则页（`/rules/<id>.md`）。
+
+### 接入 MCP（`Claude Code`、`Codex`、`Cursor`、`Windsurf`）
 
 ```json
 {
@@ -98,16 +120,11 @@ PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning --lang zh
 }
 ```
 
-提供的 4 个 MCP 工具：
+提供 4 个工具：`dislop_check`、`dislop_verify`、`dislop_explain`、`dislop_packs`。
 
-- `dislop_check` — 检查内存文本 `text` 或工作区相对路径 `path`，返回命中区间、`protectedFacts` 受保护事实清单、删除测试与改稿示例（不向模型倾倒原始禁用词表，防止触发同义词硬换）。
-- `dislop_verify` — 对照 `before` 与 `after`，一旦丢失数字/限定词、改动链接/代码，或滑向二阶口号句式即返回 `rejected` 与具体原因。
-- `dislop_explain` — 按 `ruleId` 查询规则依据与三段改稿对照。
-- `dislop_packs` — 列出当前安装的规则包（`core`、`business-brief`、`literary-essay`、`deck-and-ui`）。
+## 配置，以及什么时候不听它的
 
-## 项目配置与单行豁免
-
-运行 `dislop init` 生成 `.dislop.json`（本地私有禁止词可放入被 Git 忽略的 `.dislop.local.json`）：
+运行 `dislop init` 生成 `.dislop.json`（个人私有禁词放在 Git 忽略的 `.dislop.local.json`）：
 
 ```json
 {
@@ -118,51 +135,41 @@ PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning --lang zh
     { "files": ["essays/**/*.md"], "pack": "literary-essay" },
     { "files": ["site/**/*.{html,css,svg}"], "pack": "deck-and-ui" }
   ],
-  "allow": ["Delve", "无缝钢管"]
+  "allow": ["无缝钢管"]
 }
 ```
 
-确需在特定行保留原文引用时，须附带豁免理由（`--report-unused` 会检出失效的冗余豁免）：
+确需在某一行保留原文引用，在上一行写明原因即可（`--report-unused` 会清出失效注释）：
 
 ```markdown
 <!-- dislop-ignore-next-line zh-bureaucratic-padding -- 原样摘录外部招标文件条款 -->
 ```
 
-## 自举自审（Dogfooding）
+## 这个仓库自己也过这道门
 
-本仓库在 GitHub Actions CI 中执行 `dislop pack-test`（Node 与 Python 双端各 101 项样本断言）、跨语言一致性测试（`tests/test_conformance.py`），并对仓库自身的 Markdown 文档、SVG 品牌资产与 `site/` 官网执行 `dislop check . --fail-on warning`（`packs/` 与 `tests/` 因存放反例样本默认排除）。
+GitHub Actions CI 在每次提交时跑完双端 `dislop pack-test`（101 项样本断言）、跨运行时一致性测试（`tests/test_conformance.py`）、官网校验测试（`tests/test_site.mjs`），并对仓库自己的文档、SVG、`awesome/` 与 `site/` 执行 `dislop check . --fail-on warning`。
 
-## 官方网站、Awesome Anti-Slop 与 Agent 直读（`dislop.com`）
+## 文档与目录
 
-- **在线工作台与规则目录**：[https://dislop.com](https://dislop.com)（静态 Nginx 托管，零后端进程，响应头与页面级 CSP 双重锁定 `connect-src 'none'`，浏览器内存离线解析 `.docx`/`.pptx`）
-- **Awesome Anti-Slop（87 条去 AI 味精选清单）**：[https://dislop.com/awesome/](https://dislop.com/awesome/) 与仓库直读版 [awesome/README.md](./awesome/README.md)（适合收藏、转发与外部 Agent 直读的跨媒介去 AI 味目录）
-- **Level 0 Agent 端点**：[https://dislop.com/llms.txt](https://dislop.com/llms.txt)（低 Token 路由索引）、[https://dislop.com/catalog.json](https://dislop.com/catalog.json)（`dislop.catalog/1`）、任务组合包（`/tasks/*.md`）与 29 张原子规则卡（`/rules/<id>.md`）
-
-## 仓库目录结构
+- [品牌风格与表达基准](./docs/brand-and-voice-guide.zh-CN.md)（[English](./docs/brand-and-voice-guide.md)）
+- [架构说明](./docs/architecture.zh-CN.md)（[English](./docs/architecture.md)）· [设计规范](./docs/design-system.zh-CN.md)（[English](./docs/design-system.md)）
+- [路线与规划](./docs/strategy-and-roadmap.zh-CN.md)（[English](./docs/strategy-and-roadmap.md)）· [调研索引](./docs/research/README.md) · [变更记录](./CHANGELOG.md)
 
 ```text
 dislop/
-├── awesome/           # Awesome Anti-Slop 独立可分享目录页（README.md，87 条精选资源）
-├── bin/               # Node.js CLI（dislop.mjs）与 stdio MCP 入口（dislop-mcp.mjs）
+├── awesome/           # Awesome Anti-Slop 中英文同路清单（87 条）
+├── bin/               # Node.js CLI（dislop.mjs）与 stdio MCP（dislop-mcp.mjs）
 ├── src/
 │   ├── core.mjs       # 零依赖纯 ES 模块内核，由 Node CLI、MCP 与浏览器工作台共用
-│   ├── binary-node.mjs# Node.js 零依赖 ZIP 与 PDF 流解析层
+│   ├── binary-node.mjs# Node.js 零依赖 ZIP 与 PDF 解析层
 │   └── dislop/        # 零依赖 Python 3.10+ 核心引擎、CLI 与 MCP 服务
 ├── packs/             # 声明式 dislop.pack/2 规则包（core + 3 套文体包，29 条规则）
 ├── skills/dislop/     # 跨宿主标准 Agent Skill（SKILL.md）
 ├── tests/             # 单元测试、Node/Python 跨运行时一致性测试与官网校验测试
-├── scripts/
-│   ├── build_site.mjs # 官网人机双读与 awesome/README.md 静态编译器
-│   └── prototype_antipattern_lab.mjs # v0.3 目录查询与节奏/UI 新探针验证原型
-├── site/              # 编译产物：工作台首页、/awesome/ 精选清单与 /llms.txt 静态端点
-├── assets/            # 品牌删除号标识、浅/深色横幅与 1200x630 Open Graph 预览卡
-├── docs/
-│   ├── brand-and-voice-guide*.md, brand/voice.json # 品牌风格、表达基准与声纹配置
-│   ├── strategy-and-roadmap*.md            # 双引擎战略、视觉 VI、多形态产品与路线蓝图
-│   ├── architecture*.md, design-system*.md # 双语系统架构与视觉排版设计规范
-│   ├── research/      # 2026 生态全景、87 条精选清单事实源、正向差异化与多形态架构研究
-│   └── specs/         # v0.3 反模式目录与新探针规格文档
-└── CHANGELOG.md       # 按时间线整理的开发与优化历程
+├── scripts/           # 官网静态编译器（build_site.mjs）与 v0.3 探针原型
+├── site/              # 编译产物：dislop.com 工作台、/awesome/ 清单与 /llms.txt
+├── assets/            # 校对删除号标识、浅/深色横幅与 1200x630 分享图
+└── docs/              # 品牌基准、架构、视觉规范、路线与调研资料
 ```
 
 ## 开源许可
