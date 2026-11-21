@@ -24,7 +24,6 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://dislop.com"
-Mirror = "https://dislop-ai.github.io"
 Repository = "https://github.com/dislop-ai/dislop"
 Issues = "https://github.com/dislop-ai/dislop/issues"
 

@@ -51,9 +51,8 @@ Uninspected inputs never masquerade as clean:
 
 When inspecting PDFs without external OCR/CID font decoders, `dislop` audits `/URI` links, `/Info` titles, `/FontDescriptor` embedding, and `/MediaBox` consistency, and explicitly records `[SKIP] <file>#prose` in the report.
 
-## 4. Dual-Origin Static Hosting
+## 4. Official Static Hosting (`dislop.com`)
 
 `site/` builds to plain static files with relative asset URLs and zero backend processes:
 
-1. **Primary (`https://dislop.com`)**: Served directly by overseas static Nginx (`server_tokens off`, `Content-Security-Policy` locking `connect-src 'none'`, zero third-party font/analytics requests) so visitors in both mainland China and overseas reach the workbench directly.
-2. **Independent Public Mirror (`https://dislop-ai.github.io`)**: Published from the `dislop-ai.github.io` organization Pages repository without attaching the custom domain, preserving an independent HTTPS fallback with `<link rel="canonical" href="https://dislop.com/">`.
+- **Single Canonical Origin (`https://dislop.com`)**: Served directly by overseas static Nginx over HTTPS (`server_tokens off`, `Strict-Transport-Security`, and `Content-Security-Policy` locking `connect-src 'none'`, with zero third-party font or analytics requests). Visitors in both mainland China and overseas reach one canonical `.com` address without splitting links across a separate `github.io` domain.

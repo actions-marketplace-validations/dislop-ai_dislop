@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="./README.md">English</a> ·
-  <a href="https://dislop-ai.github.io">在线清样工作台</a> ·
+  <a href="https://dislop.com">官网与清样工作台 (dislop.com)</a> ·
   <a href="./docs/architecture.zh-CN.md">架构说明</a> ·
   <a href="./docs/design-system.zh-CN.md">设计规范</a> ·
   <a href="./LICENSE">Apache-2.0</a>
@@ -117,10 +117,9 @@ PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning --lang zh
 
 本仓库在 GitHub Actions CI 中执行 `dislop pack-test`（Node 与 Python 双端各 101 项样本断言）、跨语言一致性测试（`tests/test_conformance.py`），并对仓库自身的 Markdown 文档、SVG 品牌资产与 `site/` 官网执行 `dislop check . --fail-on warning`（`packs/` 与 `tests/` 因存放反例样本默认排除）。
 
-## 官网与公开镜像
+## 官方网站
 
-- 主域名：`https://dislop.com`（海外静态 Nginx 源站，零后端进程，响应头锁定 `connect-src 'none'`）
-- 独立公开镜像：[https://dislop-ai.github.io](https://dislop-ai.github.io)（由 GitHub Actions 自动同步构建 `site/`）
+- 官网与交互式清样工作台：[https://dislop.com](https://dislop.com)（静态 Nginx 托管，零后端进程，响应头与页面级 CSP 双重锁定 `connect-src 'none'`）
 
 ## 开源许可
 
