@@ -1,8 +1,8 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
   "name": "io.github.dislop-ai/dislop",
-  "description": "Cross-modal anti-AI-slop quality gate and pluggable Taste Packs for prose, HTML, PDF, and office docs.",
-  "version": "0.1.0",
+  "description": "Deterministic pre-publication linter and revision verifier for Markdown, HTML/CSS/SVG, DOCX, PPTX, and PDF metadata.",
+  "version": "0.2.0",
   "websiteUrl": "https://dislop.com",
   "repository": {
     "url": "https://github.com/dislop-ai/dislop",
@@ -12,7 +12,7 @@
     {
       "registryType": "npm",
       "identifier": "dislop",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "runtimeHint": "npx",
       "packageArguments": [
         {
@@ -27,7 +27,7 @@
     {
       "registryType": "pypi",
       "identifier": "dislop",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "runtimeHint": "uvx",
       "packageArguments": [
         {

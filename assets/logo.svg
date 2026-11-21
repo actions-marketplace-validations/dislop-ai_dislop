@@ -1,18 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
-  <rect width="512" height="512" rx="108" fill="#141413"/>
-  <rect x="20" y="20" width="472" height="472" rx="90" stroke="#292826" stroke-width="3"/>
-
-  <!-- Top anchored editorial headline bar -->
-  <rect x="112" y="134" width="288" height="38" rx="7" fill="#F7F5F0"/>
-
-  <!-- Middle noisy draft bar (muted ash, split by proofreader strike) -->
-  <rect x="112" y="237" width="288" height="38" rx="7" fill="#6B6661"/>
-
-  <!-- Bottom clean typographic baseline + vermilion period -->
-  <rect x="112" y="340" width="218" height="38" rx="7" fill="#F7F5F0"/>
-  <circle cx="380" cy="359" r="20" fill="#D9381E"/>
-
-  <!-- Knockout halo + Vermilion proofreader red-pen slash -->
-  <line x1="342" y1="110" x2="170" y2="402" stroke="#141413" stroke-width="60" stroke-linecap="round"/>
-  <line x1="342" y1="110" x2="170" y2="402" stroke="#D9381E" stroke-width="34" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="512" height="512" fill="none" role="img" aria-label="dislop proofreader dele mark">
+  <title>dislop — Proofreader's Dele Mark</title>
+  <rect width="64" height="64" rx="12" fill="#14171A"/>
+  <!-- Manuscript line being struck -->
+  <line x1="10" y1="38" x2="54" y2="38" stroke="#F4F5F3" stroke-width="4.5" stroke-linecap="round" stroke-opacity="0.26"/>
+  <!-- GB/T 14706 / Western galley delete mark (dele loop crossing cleanly) -->
+  <path d="M10 38H34C44.5 38 52 30.8 52 21.5C52 14.5 47.2 10 41.2 10C34.8 10 30.5 15 30.5 22.2C30.5 33.8 39.5 45.5 53 51" stroke="#F04438" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>dislop — Deterministic Deliverable Linter &amp; Revision Verifier</title>
+  <meta name="description" content="Audit Markdown, HTML/CSS/SVG, DOCX, PPTX, and PDF deliverables before publication, and verify revisions keep every number, link, and citation intact.">
+  <link rel="canonical" href="https://dislop.com/">
+  <link rel="icon" type="image/svg+xml" href="./assets/logo.svg">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="rail-shell">
+    <!-- Top Architectural Rail Bar -->
+    <header class="topbar band-rule">
+      <a class="brand-lockup" href="#top">
+        <img src="./assets/logo.svg" width="28" height="28" alt="dislop dele mark">
+        <span class="brand-wordmark">dislop</span>
+        <span class="brand-meta">v0.2.0 · Apache-2.0</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary sections">
+        <a href="#workbench" data-i18n="nav.workbench">Workbench</a>
+        <a href="#dogfood" data-i18n="nav.dogfood">Dogfooding</a>
+        <a href="#rules" data-i18n="nav.rules">Rules (29)</a>
+        <a href="#design-system" data-i18n="nav.design">Design System</a>
+        <a href="#cli-mcp" data-i18n="nav.cli">CLI &amp; MCP</a>
+        <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+
+      <div class="top-controls">
+        <button type="button" id="lang-toggle" class="ctrl-btn" aria-label="Switch language">中文</button>
+        <button type="button" id="theme-toggle" class="ctrl-btn" aria-label="Toggle color theme">Dark</button>
+      </div>
+    </header>
+
+    <!-- Lead Band: Two-Ink Claim + Instant CLI Strip -->
+    <section id="top" class="lead-band band-rule">
+      <div class="lead-copy">
+        <p class="section-index" data-i18n="lead.index">00 / PRE-PUBLICATION QUALITY GATE</p>
+        <h1 class="lead-heading">
+          <span data-i18n="lead.titleStrong">Lint deliverables before you publish.</span>
+          <span class="muted-tail" data-i18n="lead.titleMuted">Catch leaked paths, stock filler, and overloaded slides—then verify edits kept numbers, dates, links, and citations intact.</span>
+        </h1>
+        <p class="lead-sub" data-i18n="lead.sub">
+          Deterministic probes for Markdown, HTML/CSS/SVG, Word (.docx), PowerPoint (.pptx), and PDF metadata. Runs offline in Node.js, Python, or this browser sheet with zero text uploaded.
+        </p>
+      </div>
+
+      <div class="lead-install">
+        <div>
+          <p class="section-index" data-i18n="lead.runLabel">RUN IMMEDIATELY (NODE 20+ OR PYTHON 3.10+)</p>
+          <div class="cmd-box">
+            <code id="hero-cmd">npx --yes github:dislop-ai/dislop check .</code>
+            <button type="button" class="ctrl-btn" data-copy-target="hero-cmd" data-i18n="btn.copy">Copy</button>
+          </div>
+        </div>
+        <div class="cmd-box">
+          <code id="hero-py-cmd">uvx --from git+https://github.com/dislop-ai/dislop dislop check .</code>
+          <button type="button" class="ctrl-btn" data-copy-target="hero-py-cmd" data-i18n="btn.copy">Copy</button>
+        </div>
+        <div class="install-meta">
+          <span data-i18n="lead.zeroDeps">0 runtime dependencies · Exit 1 on invariant errors</span>
+          <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener">dislop-ai/dislop →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 01: Interactive Proofreader's Galley Workbench -->
+    <section id="workbench" class="band-rule" aria-labelledby="wb-heading">
+      <div class="workbench-header band-rule">
+        <div>
+          <span class="section-index" id="wb-heading" data-i18n="wb.heading">01 / INTERACTIVE GALLEY PROOF WORKBENCH (SHARED src/core.mjs)</span>
+        </div>
+        <div class="workbench-toolbar">
+          <label for="pack-select" class="section-index" style="margin:0;" data-i18n="wb.packLabel">Taste Pack:</label>
+          <select id="pack-select" class="pack-select" aria-label="Select Taste Pack">
+            <option value="business-brief">business-brief (+ core)</option>
+            <option value="literary-essay">literary-essay (+ core)</option>
+            <option value="deck-and-ui">deck-and-ui (+ core)</option>
+          </select>
+
+          <label class="ctrl-btn file-upload-label">
+            <span data-i18n="wb.openFile">Inspect local file (.md/.html/.docx/.pptx/.pdf)</span>
+            <input type="file" id="file-picker" accept=".md,.txt,.html,.css,.jsx,.tsx,.svg,.docx,.pptx,.pdf">
+          </label>
+        </div>
+      </div>
+
+      <div class="workbench-grid">
+        <!-- Left Specimen Index -->
+        <aside class="specimen-rail" id="specimen-list" aria-label="Sample drafts">
+          <div class="rail-title" data-i18n="wb.specimensTitle">SPECIMENS</div>
+          <!-- Populated by app.js -->
+          <div class="privacy-note" data-i18n="wb.privacyNote">
+            Runs 100% in browser memory via ./engine/core.mjs. Network egress is locked by CSP (connect-src 'none').
+          </div>
+        </aside>
+
+        <!-- Center Galley Sheet -->
+        <div class="galley-sheet">
+          <div class="galley-bar">
+            <div class="mode-tabs" role="group" aria-label="Editor view mode">
+              <button type="button" id="mode-proof-btn" class="ctrl-btn is-active" aria-pressed="true" data-i18n="wb.modeProof">Proof Sheet</button>
+              <button type="button" id="mode-edit-btn" class="ctrl-btn" aria-pressed="false" data-i18n="wb.modeEdit">Edit &amp; Recheck</button>
+            </div>
+            <div class="quick-actions">
+              <button type="button" id="btn-apply-good" class="ctrl-btn" data-i18n="wb.applyClean">Load Clean Revision</button>
+              <button type="button" id="btn-apply-trap" class="ctrl-btn" data-i18n="wb.tryTrap">Try 2nd-Order Trap</button>
+              <button type="button" id="btn-reset" class="ctrl-btn" data-i18n="wb.reset">Reset</button>
+            </div>
+          </div>
+
+          <div class="manuscript-stage">
+            <ol id="proof-view" class="proof-lines" aria-live="polite"></ol>
+            <textarea id="edit-textarea" class="editor-textarea" hidden aria-label="Editable draft manuscript"></textarea>
+          </div>
+
+          <div class="legend-strip">
+            <span class="legend-item"><span class="swatch-line swatch-error"></span> <span data-i18n="legend.error">error: core invariant (solid red)</span></span>
+            <span class="legend-item"><span class="swatch-line swatch-warn"></span> <span data-i18n="legend.warn">warn/info: taste query (dashed blue)</span></span>
+            <span class="legend-item"><span class="swatch-line swatch-stet"></span> <span data-i18n="legend.stet">stet: protected fact locked by verify</span></span>
+          </div>
+        </div>
+
+        <!-- Right Proofreader Margin Column -->
+        <aside class="margin-column" aria-label="Proofreader margin notes">
+          <div class="summary-strip" id="wb-summary">
+            <span>0 errors · 0 queries</span>
+            <span>0.0 ms</span>
+          </div>
+          <div id="verify-box" class="verify-banner" hidden></div>
+          <div id="notes-container" class="notes-list"></div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Section 02: Self-Dogfooding Comparison -->
+    <section id="dogfood" class="section-block band-rule">
+      <div class="section-header">
+        <div>
+          <p class="section-index">02 / REPOSITORY SELF-CHECK</p>
+          <h2 class="section-title" data-i18n="dogfood.title">What an unguarded prompt wrote vs. what shipped</h2>
+          <p class="section-desc" data-i18n="dogfood.desc">
+            Every Markdown file, SVG banner, and HTML/CSS template in this repository runs through `dislop check . --fail-on warning` in CI. Left is a raw model-generated pitch; right is the factual copy after applying the Deletion Test.
+          </p>
+        </div>
+      </div>
+
+      <div class="dogfood-grid">
+        <div class="dogfood-col">
+          <span class="dogfood-tag sev-error" data-i18n="dogfood.badTag">RAW GENERATED DRAFT · FLAGGED BY DISLOP</span>
+          <p class="dogfood-quote" id="dogfood-bad-text"></p>
+          <div class="dogfood-meta" id="dogfood-bad-meta"></div>
+        </div>
+        <div class="dogfood-col">
+          <span class="dogfood-tag" style="color: var(--mark-stet);" data-i18n="dogfood.goodTag">SHIPPED REPOSITORY COPY · 0 FINDINGS</span>
+          <p class="dogfood-quote" id="dogfood-good-text"></p>
+          <div class="dogfood-meta" data-i18n="dogfood.goodMeta">Checked by `business-brief` + `deck-and-ui` · 0 errors, 0 warnings</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 03: Rule & Taste Pack Catalog -->
+    <section id="rules" class="section-block band-rule">
+      <div class="section-header">
+        <div>
+          <p class="section-index">03 / DETERMINISTIC PROBE &amp; TASTE PACK INDEX</p>
+          <h2 class="section-title" data-i18n="rules.title">29 rules across Core Invariants and 3 Genre Packs</h2>
+          <p class="section-desc" data-i18n="rules.desc">
+            Generated directly from `packs/*/pack.json`. Objective publication failures live in `core` (`error`); genre conventions live in modular Taste Packs (`warning` / `info`) paired with a Deletion Test and before/after exemplars.
+          </p>
+        </div>
+      </div>
+
+      <div class="filter-bar" id="rule-filters" role="group" aria-label="Filter rules by pack">
+        <button type="button" class="ctrl-btn is-active" data-pack-filter="all" data-i18n="rules.filterAll">All Packs (29)</button>
+        <button type="button" class="ctrl-btn" data-pack-filter="core">core (7)</button>
+        <button type="button" class="ctrl-btn" data-pack-filter="business-brief">business-brief (8)</button>
+        <button type="button" class="ctrl-btn" data-pack-filter="literary-essay">literary-essay (5)</button>
+        <button type="button" class="ctrl-btn" data-pack-filter="deck-and-ui">deck-and-ui (9)</button>
+      </div>
+
+      <div class="table-scroll">
+        <table class="rules-table">
+          <thead>
+            <tr>
+              <th data-i18n="rules.colId">Rule ID</th>
+              <th data-i18n="rules.colPack">Pack / Tier</th>
+              <th data-i18n="rules.colMod">Modalities</th>
+              <th data-i18n="rules.colWhy">What It Catches &amp; Deletion Test</th>
+              <th data-i18n="rules.colEx">Before → After Exemplar</th>
+            </tr>
+          </thead>
+          <tbody id="rules-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 04: Visual & Graphic Design System Specimen -->
+    <section id="design-system" class="section-block band-rule">
+      <div class="section-header">
+        <div>
+          <p class="section-index">04 / DESIGN SYSTEM SPECIMEN</p>
+          <h2 class="section-title" data-i18n="ds.title">Architectural Galley Tokens &amp; Two-Pencil Semantics</h2>
+          <p class="section-desc" data-i18n="ds.desc">
+            Neutral cotton press stock in light mode and monotonic graphite elevation (`L* 5.2 → 8.6 → 12.8`) in dark mode—avoiding both neon purple gradients and warm-stone cream templates.
+          </p>
+        </div>
+        <a href="https://github.com/dislop-ai/dislop/blob/main/docs/design-system.md" target="_blank" rel="noopener" data-i18n="ds.readSpec">Full Design Spec →</a>
+      </div>
+
+      <div class="ds-grid">
+        <div class="ds-cell">
+          <p class="section-index" data-i18n="ds.tokensHeading">LIVE SURFACE &amp; PENCIL TOKENS (WCAG AA VERIFIED)</p>
+          <div class="token-rows">
+            <div class="token-item"><span class="token-swatch" style="background: var(--stage);"></span><span>--stage<br><small>L* 97.2 / 4.6</small></span></div>
+            <div class="token-item"><span class="token-swatch" style="background: var(--sheet);"></span><span>--sheet<br><small>L* 100 / 8.1</small></span></div>
+            <div class="token-item"><span class="token-swatch" style="background: var(--raised);"></span><span>--raised<br><small>L* 93.8 / 12.6</small></span></div>
+            <div class="token-item"><span class="token-swatch" style="background: var(--ink);"></span><span>--ink<br><small>17.8:1 / 15.6:1</small></span></div>
+            <div class="token-item"><span class="token-swatch" style="background: var(--mark-error);"></span><span>--mark-error<br><small>6.8:1 / 7.0:1 (dele)</small></span></div>
+            <div class="token-item"><span class="token-swatch" style="background: var(--mark-warn);"></span><span>--mark-warn<br><small>7.2:1 / 8.5:1 (query)</small></span></div>
+            <div class="token-item"><span class="token-swatch" style="background: var(--mark-stet);"></span><span>--mark-stet<br><small>6.6:1 / 9.4:1 (stet)</small></span></div>
+            <div class="token-item"><span class="token-swatch" style="background: var(--rule);"></span><span>--rule<br><small>1px structural rail</small></span></div>
+          </div>
+        </div>
+
+        <div class="ds-cell">
+          <p class="section-index" data-i18n="ds.typeHeading">TYPOGRAPHIC ROLES (ZERO EXTERNAL FONT CDN)</p>
+          <div class="type-specimen-row">
+            <div class="type-meta">MANUSCRIPT SERIF · 17px / 1.68 · 65ch EN / 36汉字 ZH</div>
+            <div style="font-family: var(--font-serif); font-size: 1.05rem;">傍晚六点半，修表匠把三枚铜齿轮泡进煤油皿里。</div>
+          </div>
+          <div class="type-specimen-row">
+            <div class="type-meta">CHROME SANS · SYSTEM NATIVE GROTESK</div>
+            <div style="font-family: var(--font-sans); font-weight: 600;">Lint drafts and verify revisions before publication.</div>
+          </div>
+          <div class="type-specimen-row">
+            <div class="type-meta">APPARATUS MONO · TABULAR FIGURES</div>
+            <div style="font-family: var(--font-mono); font-size: 0.84rem;">slide 3 · 215 words &gt; 120 max · verify: ACCEPTED</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 05: CLI, MCP & CI Setup -->
+    <section id="cli-mcp" class="section-block band-rule">
+      <div class="section-header">
+        <div>
+          <p class="section-index">05 / CLI, GIT DIFF, GITHUB ACTIONS &amp; MCP</p>
+          <h2 class="section-title" data-i18n="cli.title">Wire into local agents and pull requests</h2>
+          <p class="section-desc" data-i18n="cli.desc">
+            Use `dislop check --changed` to gate only modified lines on existing repositories, or attach `dislop --mcp` so Claude Code, Codex, and Cursor run `check → edit → verify` automatically.
+          </p>
+        </div>
+      </div>
+
+      <div class="code-panel">
+        <div class="code-panel-head">
+          <div class="mode-tabs" id="snippet-tabs" role="tablist" aria-label="Integration configuration examples">
+            <button type="button" role="tab" aria-selected="true" class="ctrl-btn is-active" data-snippet="cli">CLI &amp; Verify</button>
+            <button type="button" role="tab" aria-selected="false" class="ctrl-btn" data-snippet="mcp">MCP (Claude / Codex / Cursor)</button>
+            <button type="button" role="tab" aria-selected="false" class="ctrl-btn" data-snippet="ci">GitHub Actions</button>
+            <button type="button" role="tab" aria-selected="false" class="ctrl-btn" data-snippet="config">.dislop.json</button>
+          </div>
+          <button type="button" id="copy-snippet-btn" class="ctrl-btn" data-i18n="btn.copy">Copy</button>
+        </div>
+        <pre class="code-pre"><code id="snippet-code"></code></pre>
+      </div>
+    </section>
+
+    <!-- Colophon Footer -->
+    <footer class="colophon">
+      <div>
+        <span data-i18n="footer.audit">Self-audit: `dislop check site/ --pack deck-and-ui --fail-on warning` → 0 findings</span>
+      </div>
+      <div class="colophon-links">
+        <a href="https://dislop.com">dislop.com</a>
+        <a href="https://dislop-ai.github.io">GitHub Pages Mirror</a>
+        <a href="https://github.com/dislop-ai/dislop">Source (Apache-2.0)</a>
+        <a href="https://github.com/dislop-ai/dislop/blob/main/docs/architecture.md">Architecture</a>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

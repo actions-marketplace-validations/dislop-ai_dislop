@@ -4,15 +4,15 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dislop"
-version = "0.1.0"
-description = "Cross-modal anti-AI-slop quality gate and pluggable Taste Packs (CLI & MCP server)"
+version = "0.2.0"
+description = "Deterministic pre-publication deliverable linter and revision verifier across prose, HTML/CSS/SVG, DOCX, PPTX, and PDF (CLI & MCP)"
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.10"
 authors = [
   { name = "dislop contributors" }
 ]
-keywords = ["anti-slop", "ai-slop", "linter", "mcp", "editorial", "quality-gate"]
+keywords = ["anti-slop", "ai-slop", "linter", "proofreading", "mcp", "editorial", "quality-gate"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Console",
@@ -24,6 +24,7 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://dislop.com"
+Mirror = "https://dislop-ai.github.io"
 Repository = "https://github.com/dislop-ai/dislop"
 Issues = "https://github.com/dislop-ai/dislop/issues"
 
