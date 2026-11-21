@@ -9,6 +9,7 @@
   <a href="./README.md">English</a> ·
   <a href="https://dislop.com">去 dislop.com 试试</a> ·
   <a href="./awesome/README.zh-CN.md">Awesome Anti-Slop 同路清单</a> ·
+  <a href="./ROADMAP.zh-CN.md">路线图</a> ·
   <a href="./LICENSE">Apache-2.0</a>
 </p>
 
@@ -153,7 +154,7 @@ GitHub Actions CI 在每次提交时跑完双端 `dislop pack-test`（101 项样
 
 - [品牌风格与表达基准](./docs/brand-and-voice-guide.zh-CN.md)（[English](./docs/brand-and-voice-guide.md)）
 - [架构说明](./docs/architecture.zh-CN.md)（[English](./docs/architecture.md)）· [设计规范](./docs/design-system.zh-CN.md)（[English](./docs/design-system.md)）
-- [路线与规划](./docs/strategy-and-roadmap.zh-CN.md)（[English](./docs/strategy-and-roadmap.md)）· [调研索引](./docs/research/README.md) · [变更记录](./CHANGELOG.md)
+- [路线图与协作计划](./ROADMAP.zh-CN.md)（[English](./ROADMAP.md)）· [贡献指南](./CONTRIBUTING.md) · [调研索引](./docs/research/README.md) · [变更记录](./CHANGELOG.md)
 
 ```text
 dislop/
