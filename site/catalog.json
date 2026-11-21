@@ -11,13 +11,13 @@
   "entryPoints": {
     "llmsTxt": {
       "path": "/llms.txt",
-      "bytes": 2390,
-      "approxTokens": 598
+      "bytes": 2213,
+      "approxTokens": 553
     },
     "llmsFullTxt": {
       "path": "/llms-full.txt",
-      "bytes": 19344,
-      "approxTokens": 4836
+      "bytes": 19355,
+      "approxTokens": 4839
     },
     "awesomeJson": {
       "path": "/awesome/index.json",
@@ -235,13 +235,13 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 11382,
-      "approxTokens": 2846,
+      "bytes": 11961,
+      "approxTokens": 2990,
       "relatedTools": [
         "browser-workbench",
         "cli"
       ],
-      "sha256": "edac57470f264387f8652c4f5a59d473ca330940f58ba876a4896ed726d6bfdb"
+      "sha256": "38bdff03d000937dd165c76822d4a53c24d099ed04326115404e9b41701729e9"
     },
     {
       "id": "methodology-design-system",
@@ -341,14 +341,14 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 8099,
-      "approxTokens": 2025,
+      "bytes": 8110,
+      "approxTokens": 2028,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp"
       ],
-      "sha256": "61e57e626672a5b4ae42c8ab57c4741f2b946a05e5484acee2c00a0c8cdc9528"
+      "sha256": "29a4ec8062ca28a1f335c49806d2a149d9cd4a461056e4ac947ff7bc6d1dbf77"
     },
     {
       "id": "cases-dogfood-audit",
@@ -481,14 +481,14 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 3760,
-      "approxTokens": 940,
+      "bytes": 3740,
+      "approxTokens": 935,
       "relatedTools": [
         "skill",
         "cli",
         "mcp"
       ],
-      "sha256": "5dd44744d359959aded68d5f1b9256524ee0e9890e6adf17d8e6f7bffcf2c867"
+      "sha256": "61d840ac693e26c4db2a4c5074f1a6e4b442b45095c2209816a7855fbc4d26d0"
     },
     {
       "id": "tools-prompts",
@@ -626,14 +626,14 @@
       "packs": [
         "core"
       ],
-      "bytes": 7094,
-      "approxTokens": 1774,
+      "bytes": 7105,
+      "approxTokens": 1776,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp"
       ],
-      "sha256": "0673604b8772f23e75ff501a89984aacc1ee92c543575c61a61670eaf743c110"
+      "sha256": "c7a503a794b0a687ffd782c01cf956f2ab03b96bb6d6ec61f11df1a1d57f7d12"
     },
     {
       "id": "pack-business-brief",
@@ -792,14 +792,14 @@
       "packs": [
         "core"
       ],
-      "bytes": 1087,
-      "approxTokens": 272,
+      "bytes": 1098,
+      "approxTokens": 275,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp"
       ],
-      "sha256": "ebc31fae496feb59c8dc40077116c3f52e25ff09699d23e240e64cf07dd05545"
+      "sha256": "bfb6202bb3a598109949a66345cc0346b9ccd7aa1a7cc34134b1e739f1d0721d"
     },
     {
       "id": "rule-chatbot-artifact",
@@ -1769,12 +1769,12 @@
         "zh"
       ],
       "packs": [],
-      "bytes": 21531,
-      "approxTokens": 5383,
+      "bytes": 21537,
+      "approxTokens": 5384,
       "relatedTools": [
         "browser-workbench"
       ],
-      "sha256": "4af8d924d848573e0d34331b83a1f73105cd4447283ac1c3184c34d3e9e83f39"
+      "sha256": "cb9bfe7e9b5890e869dd1a8a5cb4700962549dc50ad704c09807e05a0e96a888"
     }
   ]
 }

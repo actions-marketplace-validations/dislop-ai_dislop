@@ -443,12 +443,12 @@ export const PACKS_BY_ID = {
           "zh": "发稿前填入核实后的真实数据；若数据尚未就绪，直接删去未完成段落而非保留占位标记。"
         },
         "exemplar": {
-          "bad": "Q3 settlement latency averaged [insert p95 latency] across 14 gateways.",
-          "trap": "Q3 settlement latency improved dramatically across 14 gateways.",
-          "good": "Q3 settlement latency averaged 180 ms (p95) across 14 gateways.",
+          "bad": "Q3 settlement ran across 14 gateways; p95 latency was [insert p95 latency].",
+          "trap": "Q3 settlement improved dramatically across 14 gateways.",
+          "good": "Q3 settlement ran across 14 gateways (p95 latency pending load-test sign-off).",
           "note": {
-            "en": "Replace the bracket with the measured figure rather than hiding the gap behind vague praise.",
-            "zh": "填入实测数值，不要用笼统形容词掩盖缺口。"
+            "en": "State what is still pending—or supply a measured figure from your own logs—rather than leaving a bracket or hiding the gap behind vague praise.",
+            "zh": "尚未测出的数据直说待补，或填入实测数值，不要留括号占位，也不要用空泛夸赞遮掩。"
           },
           "source": "original"
         }
@@ -1134,5 +1134,300 @@ export const PACKS_BY_ID = {
         }
       }
     ]
+  }
+};
+export const RULE_UI_META = {
+  "local-path-leak": {
+    "lang": "both",
+    "title": {
+      "zh": "漏出了本机路径",
+      "en": "Leaked local path"
+    },
+    "zhEx": {
+      "bad": "详见 [架构图](file:///Users/example/docs/arch.png)，共 3 节点。",
+      "trap": "详见 [架构图](file:///Users/example/docs/arch.png)。",
+      "good": "详见 [架构图](./docs/arch.png)，共 3 节点。"
+    },
+    "enEx": {
+      "bad": "See [Architecture Diagram](file:///Users/example/docs/arch-v2.png) for the 3-node layout.",
+      "good": "See [Architecture Diagram](./docs/assets/arch-v2.png) for the 3-node layout."
+    }
+  },
+  "unfilled-placeholder": {
+    "lang": "both",
+    "title": {
+      "zh": "忘了填的占位符",
+      "en": "Unfilled placeholder"
+    },
+    "zhEx": {
+      "bad": "第三季度清分覆盖 14 条通道，p95 延迟见【待补充】。",
+      "trap": "第三季度清分在 14 条通道上表现大幅提升。",
+      "good": "第三季度清分覆盖 14 条通道（p95 延迟待压测签字后补齐）。"
+    }
+  },
+  "chatbot-artifact": {
+    "lang": "both",
+    "title": {
+      "zh": "留在正文里的 AI 寒暄",
+      "en": "Chatbot greeting"
+    },
+    "zhEx": {
+      "bad": "好的，以下是修改后的上线说明：集群 B 已于 02:00 UTC 完成迁移。",
+      "trap": "没问题，集群 B 已于 02:00 UTC 完成迁移。",
+      "good": "集群 B 已于 02:00 UTC 完成迁移。"
+    }
+  },
+  "markdown-leak": {
+    "lang": "both",
+    "title": {
+      "zh": "没渲染的 Markdown 符号",
+      "en": "Raw Markdown in Office doc"
+    },
+    "zhEx": {
+      "bad": "**核心节点**：周五前完成 v0.2 解析器上线。",
+      "good": "核心节点：周五前完成 v0.2 解析器上线（在 Word/PPT 里直接加粗）。"
+    }
+  },
+  "ui-dead-control": {
+    "lang": "both",
+    "title": {
+      "zh": "点不动的按钮或空链接",
+      "en": "Dead link or unexplained disabled button"
+    },
+    "zhEx": {
+      "bad": "<a href=\"#\" class=\"btn\">下载完整报告</a>",
+      "good": "<a href=\"./report.pdf\" class=\"btn\">下载完整报告</a>"
+    }
+  },
+  "ui-contrast-and-dark-inversion": {
+    "lang": "both",
+    "title": {
+      "zh": "字看不清，或深色层级倒置",
+      "en": "Low contrast or dark-mode inversion"
+    },
+    "zhEx": {
+      "bad": ".badge { color: #888888; background: #FFFFFF; font-size: 12px; }",
+      "good": ".badge { color: #474C55; background: #FFFFFF; font-size: 12px; }"
+    }
+  },
+  "office-pdf-hygiene": {
+    "lang": "both",
+    "title": {
+      "zh": "文档带修订痕迹或异常元数据",
+      "en": "Office/PDF hygiene defect"
+    },
+    "zhEx": {
+      "bad": "PDF 标题残留原始文件名（最终版_修改3.docx），且含未嵌入字体。",
+      "good": "导正 PDF 标题为「2026 第三季度产品说明」，导出时勾选嵌入全部字体。"
+    }
+  },
+  "en-throat-clearing-opener": {
+    "lang": "en",
+    "title": {
+      "zh": "英文铺垫开场白",
+      "en": "Throat-clearing opener"
+    }
+  },
+  "en-cliche-lexicon": {
+    "lang": "en",
+    "title": {
+      "zh": "英文高频套词",
+      "en": "Stock AI buzzword"
+    }
+  },
+  "zh-bureaucratic-padding": {
+    "lang": "zh",
+    "title": {
+      "zh": "公文黑话与空泛词",
+      "en": "Chinese bureaucratic padding"
+    }
+  },
+  "negation-pivot-frame": {
+    "lang": "both",
+    "title": {
+      "zh": "“不是 A，而是 B”套句",
+      "en": "\"Not X, but Y\" slogan frame"
+    },
+    "enEx": {
+      "bad": "This isn't just a linter — it's a paradigm shift for your whole team.",
+      "trap": "Not a tool. A standard. A promise.",
+      "good": "The linter catches leaked paths, unfilled brackets, and dropped qualifiers before release."
+    }
+  },
+  "staccato-slogan-run": {
+    "lang": "en",
+    "title": {
+      "zh": "英文短句口号连发",
+      "en": "Staccato slogan chain"
+    }
+  },
+  "zh-four-char-triad": {
+    "lang": "zh",
+    "title": {
+      "zh": "四字排比串",
+      "en": "Chinese four-character triad"
+    }
+  },
+  "unsourced-attribution": {
+    "lang": "both",
+    "title": {
+      "zh": "没写明出处的“研究表明”",
+      "en": "Unsourced claim"
+    },
+    "zhEx": {
+      "bad": "业内普遍认为，超过 70% 的演示文稿存在对比度问题。",
+      "trap": "专家指出，大部分演示文稿都看不清。",
+      "good": "2026 年 3 月抽查的 40 份内部简报里，有 28 份存在对比度不足。"
+    }
+  },
+  "bold-lead-list-wall": {
+    "lang": "both",
+    "title": {
+      "zh": "满屏“加粗词 + 冒号”清单",
+      "en": "Bold-lead bullet wall"
+    },
+    "zhEx": {
+      "bad": "- **速度**：本地运行很快。\n- **隐私**：不上传文件。\n- **准确**：只看确定规则。\n- **易用**：一行命令开跑。",
+      "good": "全部检查都在本地零依赖完成，不上传文件；终端里一行命令即可直接跑完。"
+    }
+  },
+  "zh-essay-moralizing-ending": {
+    "lang": "zh",
+    "title": {
+      "zh": "段尾说教式升华",
+      "en": "Chinese moralizing ending"
+    }
+  },
+  "en-essay-moralizing-ending": {
+    "lang": "en",
+    "title": {
+      "zh": "英文段尾升华",
+      "en": "Moralizing ending"
+    }
+  },
+  "literary-negation-pivot": {
+    "lang": "both",
+    "title": {
+      "zh": "金句腔“不是……而是……”",
+      "en": "Aphorism \"not X, but Y\""
+    },
+    "enEx": {
+      "bad": "His grandfather's plane wasn't a tool — it was a quiet testament to patience.",
+      "trap": "Wood remembers. Hands speak.",
+      "good": "His grandfather's beechwood plane had been sharpened until the iron was half its original length."
+    }
+  },
+  "excessive-em-dash-density": {
+    "lang": "en",
+    "title": {
+      "zh": "破折号太密",
+      "en": "Too many em-dashes"
+    }
+  },
+  "zh-halfwidth-punctuation": {
+    "lang": "zh",
+    "title": {
+      "zh": "中文里混了半角标点",
+      "en": "Half-width punctuation in Chinese"
+    }
+  },
+  "slide-word-wall": {
+    "lang": "both",
+    "title": {
+      "zh": "单页 PPT 字太多",
+      "en": "Slide word wall"
+    },
+    "zhEx": {
+      "bad": "第 3 页塞了 340 字完整长段落解释数据迁移方案与回滚步骤。",
+      "good": "拆成 3 条要点（每条不超过 20 字），把详细回滚步骤移到演讲者备注。"
+    }
+  },
+  "slide-bullet-overload": {
+    "lang": "both",
+    "title": {
+      "zh": "单页要点超过 6 条",
+      "en": "Too many bullets on one slide"
+    },
+    "zhEx": {
+      "bad": "同一页 PPT 竖排堆了 9 条并列要点，同时讲定价、排期和风险。",
+      "good": "拆成「定价」和「排期与风险」两页，每页只留 3–4 条。"
+    }
+  },
+  "slide-autofit-shrink": {
+    "lang": "both",
+    "title": {
+      "zh": "PPT 文字被硬缩太小",
+      "en": "Slide text auto-shrunk too small"
+    },
+    "zhEx": {
+      "bad": "文本框触发自动缩排，字号被压缩到原来的 62.5%。",
+      "good": "删减约 40% 冗余文字，恢复原始正文字号。"
+    }
+  },
+  "slide-weak-topic-title": {
+    "lang": "both",
+    "title": {
+      "zh": "幻灯片标题太泛",
+      "en": "Generic slide title"
+    },
+    "zhEx": {
+      "bad": "标题只写「项目背景」（下方塞了 65 字讲购物车流失 38%）。",
+      "good": "标题直给结论：「结算页第 3 步造成 38% 购物车流失」。"
+    }
+  },
+  "ui-ai-gradient": {
+    "lang": "both",
+    "title": {
+      "zh": "默认紫粉霓虹渐变",
+      "en": "Default purple-pink AI gradient"
+    },
+    "zhEx": {
+      "bad": "<h1 class=\"bg-gradient-to-r from-indigo via-purple to-pink bg-clip-text text-transparent\">智能工作流</h1>",
+      "good": "<h1 class=\"page-title\">本地审校工作台</h1>"
+    }
+  },
+  "ui-pill-soup": {
+    "lang": "both",
+    "title": {
+      "zh": "满屏胶囊小标签",
+      "en": "Pill-badge soup"
+    },
+    "zhEx": {
+      "bad": "一张卡片上连排 8 个圆角胶囊标签：运行中、v2.4、专业版、AI 驱动、已验证、快速、安全、开源。",
+      "good": "只留 1 个状态文字，其余写成一行轻元数据。"
+    }
+  },
+  "ui-box-in-box": {
+    "lang": "both",
+    "title": {
+      "zh": "框套框套框（三层套盒）",
+      "en": "Three-level nested boxes"
+    },
+    "zhEx": {
+      "bad": "<div class=\"border rounded-xl p-6\"><div class=\"border rounded-lg p-4\"><div class=\"border rounded p-3\">指标</div></div></div>",
+      "good": "<section class=\"metric-row\"><h3>延迟</h3><p>18 毫秒</p></section>"
+    }
+  },
+  "ui-prompt-echo-badge": {
+    "lang": "both",
+    "title": {
+      "zh": "把提示词印成了界面徽章",
+      "en": "Prompt-echo marketing badge"
+    },
+    "zhEx": {
+      "bad": "<span class=\"eyebrow\">AI-Powered · Zero Hallucination</span>",
+      "good": "<span class=\"section-meta\">本地离线运行</span>"
+    }
+  },
+  "svg-text-overflow-or-a11y": {
+    "lang": "both",
+    "title": {
+      "zh": "SVG 文字可能被裁切",
+      "en": "SVG text overflow or missing title"
+    },
+    "zhEx": {
+      "bad": "<svg viewBox=\"0 0 200 40\"><text x=\"10\" y=\"28\" font-size=\"24\">跨模态实时审校工作流示意图</text></svg>",
+      "good": "<svg viewBox=\"0 0 420 48\" role=\"img\" aria-label=\"审校流程\"><title>审校流程</title><text x=\"16\" y=\"30\" font-size=\"18\">本地审校流程</text></svg>"
+    }
   }
 };

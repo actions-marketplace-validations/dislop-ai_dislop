@@ -1,519 +1,643 @@
 import {
-  detectModality,
-  resolveEffectivePack,
-  auditText,
   auditOoxmlEntries,
   auditPdfStructure,
-  extractProtectedFacts,
+  auditText,
+  detectModality,
+  resolveEffectivePack,
   verifyRevision,
 } from "./engine/core.mjs";
-import { PACKS_BY_ID } from "./engine/packs-data.mjs";
+import { PACKS_BY_ID, RULE_UI_META } from "./engine/packs-data.mjs";
+
+// ---------- Native Bilingual Copy (Default ZH, Native EN — Zero Translationese) ----------
 
 const I18N = {
-  en: {
-    "page.title": "dislop — Complete Multi-Modal De-Slop Toolkit (Writing, Docs, Decks, UI & Agents)",
-    "nav.skip": "Skip to main content",
-    "nav.workbench": "Workbench",
-    "nav.coverage": "Coverage",
-    "nav.system": "System",
-    "nav.rules": "Rules (29)",
-    "nav.surfaces": "Integrate",
-    "nav.awesome": "Awesome (87)",
-    "lead.index": "00 / multi-modal de-slop toolkit · any model, agent, or dev stack",
-    "lead.titleStrong": "De-slop AI outputs.",
+  zh: {
+    "page.title": "dislop — 给 AI 写的东西配一支红笔",
+    "nav.skip": "跳至正文",
+    "nav.workbench": "试一试",
+    "nav.coverage": "能读什么",
+    "nav.rules": "规则",
+    "nav.surfaces": "安装",
+    "nav.awesome": "同路清单",
+    "theme.dark": "深色",
+    "theme.light": "浅色",
+    "btn.copy": "复制",
+    "btn.copied": "已复制",
+
+    "lead.strike": "好的，以下是为您润色后的版本。",
+    "lead.title": "你的稿子，不带 AI 味。",
     "lead.sub":
-      "Paste a draft, a deck, or a page. dislop strikes what can't ship, asks about what sounds canned, and checks that your edit kept numbers, links, and citations.",
-    "lead.humanLabel": "Human:",
-    "lead.humanAction": "Live Workbench ↓",
-    "lead.coverageAction": "Coverage ↓",
-    "lead.awesomeAction": "Awesome Anti-Slop (87) →",
-    "lead.agentLabel": "Agent (Level 0):",
-    "lead.runLabel": "START IN 10 SECONDS (NODE 20+, PYTHON 3.10+, MCP, OR AGENT FETCH)",
-    "lead.zeroDeps": "No runtime deps · 29 rules · 101 fixture assertions · Awesome (87)",
-    "p1.kicker": "01 / full-chain de-slop",
-    "p1.title": "Two pencils, edit guard & Awesome Anti-Slop",
-    "p1.desc":
-      "29 deterministic rules across 4 packs, Stage-3 revision comparison, draft voice/taste protocols, and 87 curated resources in /awesome/.",
-    "p2.kicker": "02 / multi-modal scope",
-    "p2.title": "Prose, Office docs, slides, Web UI & PR diffs",
-    "p2.desc":
-      "Live today on .md/.txt, .html/.css/.jsx/.svg, .docx, .pptx, .pdf metadata, and git diffs; 5 rhythm/chrome probes verified in the v0.3 prototype.",
-    "p3.kicker": "03 / any model or host",
-    "p3.title": "Model-agnostic across agents, IDEs & CI",
-    "p3.desc":
-      "Works on Claude, GPT, Gemini, DeepSeek, Qwen, and local outputs. Attach via browser, /llms.txt, SKILL.md, CLI, stdio MCP, or GitHub Actions.",
-    "p4.kicker": "04 / honest boundaries",
-    "p4.title": "Deterministic parity, never silent rewrites",
-    "p4.desc":
-      "Node and Python share 101 fixtures and 12 conformance tests with no external deps; verify compares edits against the original and catches overcorrection.",
+      "把稿子、PPT 或网页贴进来。不能发的硬伤，dislop 直接划掉；听着像套话的地方，它在页边问你一句；等你改完，再拿原稿逐条对一遍数字、链接和引用。它不替你改稿，笔一直在你手里。",
+    "lead.cta": "贴一段稿子试试 ↓",
+    "lead.awesomeBtn": "翻翻 87 条同路清单 →",
+    "lead.starBtn": "GitHub 收藏 ★",
+    "lead.reassure": "稿子只留在这个标签页里，不上传，不联网。",
+    "lead.cliLabel": "或者在终端里直接跑：",
+
+    "hp.tabBad": "模型交来的原稿",
+    "hp.tabGood": "你改完之后",
+    "hp.tabTrap": "改过头的一版",
+    "hp.meta": "同引擎实时运行 · 划红线直接删，划蓝线你来定",
+    "hp.openWb": "在下方工作台打开 →",
+
+    "m1.title": "不能发的，直接划掉。",
+    "m1.desc": "漏出来的本机路径、忘了填的占位符、留在开头的 AI 寒暄、点不动的空链接、跑出幻灯片边界的文本框。",
+    "m2.title": "像套话的，问你一句。",
+    "m2.desc": "一处批注只问一个具体问题，不搞一刀切黑名单，也不逼你换同义词。留不留，你说了算。",
+    "m3.title": "改完，和原稿对一遍。",
+    "m3.desc": "数字、限定词（最多、至少、不超过）、单位、日期、链接、代码和引用，漏掉或改歪了当场退回。",
+
+    "wb.heading": "拿一份稿子试试",
+    "wb.packLabel": "当成什么来看：",
+    "pack.brief": "商业简报 / 技术方案",
+    "pack.essay": "随笔 / 长文报道",
+    "pack.ui": "PPT 与网页界面",
+    "wb.openFile": "打开本地文件（.md / .html / .docx / .pptx / .pdf）",
+    "wb.specimensTitle": "样稿",
+    "wb.privacyNote": "你的稿子只留在这个标签页里。页面锁定了 connect-src 'none'，想往外发都发不出去。",
+    "wb.modeProof": "清样批注",
+    "wb.modeEdit": "自己改改看",
+    "wb.applyClean": "看改好的一版",
+    "wb.tryTrap": "看改过头的样子",
+    "wb.reset": "恢复原稿",
+    "wb.voiceTitle": "这份稿子的节奏",
+    "legend.error": "红实线：不能发的硬伤",
+    "legend.warn": "蓝虚线：页边商榷",
+    "legend.stet": "绿点线：改稿时原样保留",
+
+    "cov.title": "它读得了什么，还读不了什么",
+    "cov.desc": "能查的直说能查，还没做的直接标出来。加密或读不了的 PDF 会明确报跳过，绝不假装“0 问题”。",
+    "cov.readMd": "阅读说明（.md）→",
+    "cov.colTarget": "手头的文件",
+    "cov.colFormat": "扩展名",
+    "cov.colScope": "能替你挑出什么",
+    "cov.colStatus": "现状",
+    "cov.r1Name": "文稿、简报与随笔",
+    "cov.r1Scope": "开场白寒暄、公文黑话、“不是 A，而是 B”套句、四字排比、段尾说教、无出处数据、中文里混半角标点，以及改完后核对数字、限定词、日期、链接与引用。",
+    "cov.r2Name": "Word 与 PowerPoint",
+    "cov.r2Scope": "忘接受的修订痕迹和批注、贴进文档没渲染的星号 Markdown、单页字数墙、超限项目符号、文字自动缩太小、文本框跑出画布、空泛标题。",
+    "cov.r3Name": "PDF 元数据与链接",
+    "cov.r3Scope": "指向本机硬盘的链接、标题里残留的原始文件名、未嵌入字体与页面尺寸混排。加密 PDF 与完整正文抽字会显式标明跳过，不静默放行。",
+    "cov.r4Name": "网页界面与矢量图",
+    "cov.r4Scope": "点不动的空链接、无说明的禁用按钮、文字对比度不够、深色模式层级发灰倒置、默认紫粉渐变、满屏胶囊标签、三层套盒，以及 SVG 文字被裁切。",
+    "cov.r5Name": "代码仓与 PR 改动",
+    "cov.r5Scope": "只盯本次修改的行，拦住本机路径、占位符、聊天回复残迹和界面套话，支持输出 GitHub 注解与 SARIF。更深的代码结构规则还在做。",
+    "cov.r6Name": "节奏单调与个人声纹",
+    "cov.r6Scope": "连环逗号句、句长过于均匀、PPT 连续同版式，以及从你自己写过的旧稿里提炼个人节奏参考。原型脚本已跑通，还没并入主程序。",
+    "status.live": "现在能用",
+    "status.pdf": "查元数据，正文跳过",
+    "status.partial": "交稿门禁可用，AST 还在做",
+    "status.notYet": "还不行（原型阶段）",
+
+    "why.title": "为什么只批不改",
+    "why.desc":
+      "市面上自动“拟人化改写”的工具经常为了改得像人，顺手把“最多 45 秒”改成“45 秒”，或者把一句平实的话换成“不是升级，而是革命”。dislop 只做审校台上的红笔和蓝笔：把问题指出来，把决定权留给你，等你改完再和原稿逐条对数。",
+    "why.readBrand": "读我们的文字与设计基准 →",
+    "dogfood.badTag": "模型刚写完的原稿 · 挑出 5 处",
+    "dogfood.goodTag": "改完再对一遍 · 可以付印",
+
+    "surf.title": "装进你已经在用的地方",
+    "surf.desc": "无论模型用的是 Claude、GPT、Gemini、DeepSeek 还是本地开源模型，Node.js 和 Python 双端都零外部依赖，查出来的结果一模一样。",
+    "surf.readTools": "全部接入说明（.md）→",
+    "surf.w1Title": "浏览器里",
+    "surf.w1Desc": "就在上面这个工作台。拖进本地文档，全部在标签页内存里跑完，断网照常工作。",
+    "surf.w2Title": "终端里",
+    "surf.w2Desc": "用 npx 或 uvx 一行开跑，不用配环境。也支持只查本次 Git 改动，直接出 GitHub PR 批注。",
+    "surf.w3Title": "编程 Agent 里",
+    "surf.w3Desc": "接上本地 MCP，或装好 SKILL.md，让 Claude Code、Codex、Cursor、Windsurf 交稿前先自己过一遍红笔。",
+    "surf.w4Title": "写给 Agent 读的页面",
+    "surf.w4Desc": "不想装任何本地工具？让联网 Agent 直接读 /llms.txt 或按场景挑一张千字任务卡。",
+    "snip.cli": "终端命令",
+    "snip.agent": "Agent 直读",
+    "ep.heading": "写给 Agent 读的静态页面（纯文本直读，无测试反例残留）",
+    "ep.llms": "Agent 导航首页（按任务选最小文档）",
+    "ep.catalog": "全部静态资源的 JSON 索引与字数估算",
+    "ep.taskBiz": "任务卡：商业简报与技术方案",
+    "ep.taskWeb": "任务卡：网页界面、SVG 与 PPT",
+    "ep.taskEdit": "任务卡：随笔与长文报道",
+    "ep.taskGate": "任务卡：发稿前硬伤门禁与改稿核对",
+    "ep.skill": "跨宿主 Agent Skill（检查 -> 改稿 -> 核对）",
+    "ep.awesome": "同路清单 87 条原始 JSON",
+    "ep.method": "品牌人格、表达基准与自检清单",
+    "ep.full": "单次拉取的全部 29 条规则合集",
+
+    "rules.title": "每条规则，都有改前和改后",
+    "rules.desc": "中文页只展示中文与跨格式规则及原生中文例句，不夹英文例子；切到英文可看全部英文专项规则。点「试试 ↑」直接装进上方工作台。",
+    "rules.readCases": "全部对照（.md）→",
+    "rules.modAll": "全部格式",
+    "rules.sevAll": "全部级别",
+    "rules.sevError": "红笔硬伤（error）",
+    "rules.sevWarn": "蓝笔商榷（warning）",
+    "rules.sevInfo": "轻提示（info）",
+    "rules.filterAll": "全部",
+    "rules.filterCore": "硬伤规则",
+    "rules.filterBrief": "商业简报",
+    "rules.filterEssay": "随笔长文",
+    "rules.filterUi": "PPT 与网页",
+    "rules.colId": "规则与操作",
+    "rules.colPack": "归属",
+    "rules.colMod": "适用格式",
+    "rules.colWhy": "挑什么毛病 & 问自己一句",
+    "rules.colEx": "原句 → 改过头 → 改好",
+
+    "awesome.title": "同路人：Awesome Anti-Slop",
+    "awesome.desc":
+      "查文稿规范可以看 Vale，查网页模板味可以翻 Impeccable。我们把中英文写作指南、确定性检查器、前端设计规则、代码 PR 治理与论文研究整理成了 87 条清单，所有链接和仓库状态都在 2026-11-21 逐条核过。",
+    "awesome.openFull": "打开同路清单 →",
+    "awesome.ecoTitle": "按手头的活儿找工具",
+    "awesome.ecoDesc": "按写作、网页、代码或研究分栏浏览，也可以只看能离线自动检查的工具。检测器与规避工具单独放在对照区，仅供了解。",
+    "awesome.browseBtn": "在线筛选清单 →",
+    "awesome.ghBtn": "GitHub 中文清单",
+    "awesome.posTitle": "跳出模板的审美参照",
+    "awesome.posDesc": "只删套话还不够，我们另存了 31 处独立印刷、字体厂与出版机构的公开参考源，留给想把页面做出自己味道的人慢慢看。",
+    "awesome.posAll": "看全部 31 处设计参考（.md）→",
+    "stat.entries": "条已核验资源",
+    "stat.sections": "个主题分栏",
+    "stat.det": "款可自动检查",
+    "stat.zh": "条中文 / 多语种",
+
+    "pos.norm-zurich": "苏黎世独立设计事务所，以极克制的模数网格见长。",
+    "pos.stiftung-buchkunst": "世界最美的书评选档案：看页边距、版心比例与长篇阅读怎么拉开呼吸感。",
+    "pos.fonts-in-use": "真实印刷品与网页里的字体搭配库。",
+    "pos.dinamo": "瑞士独立字厂，看可变字重与大号字阶怎么撑起实用界面。",
+    "pos.the-type": "中文排印评论，细聊标点挤压、混排细节与出版规范。",
+    "pos.arena": "研究者自己攒的视觉线索库：旧印刷、路牌与独立小书。",
+
+    "footer.selfAudit": "这一页也过了自己的红笔：dislop check site/ 没挑出毛病。",
+    "footer.awesome": "同路清单",
+    "footer.brand": "品牌与表达",
+    "footer.design": "视觉规范",
+  },
+  en: {
+    "page.title": "dislop — a red pen for AI-written drafts, decks, and pages",
+    "nav.skip": "Skip to main content",
+    "nav.workbench": "Try it",
+    "nav.coverage": "What it reads",
+    "nav.rules": "Rules",
+    "nav.surfaces": "Install",
+    "nav.awesome": "Awesome list",
+    "theme.dark": "Dark",
+    "theme.light": "Light",
     "btn.copy": "Copy",
     "btn.copied": "Copied",
-    "wb.heading": "01 / LIVE DE-SLOP WORKBENCH (ZERO UPLOAD · SHARED src/core.mjs)",
-    "wb.packLabel": "Taste Pack:",
-    "wb.openFile": "Inspect local file (.md/.html/.docx/.pptx/.pdf)",
-    "wb.specimensTitle": "SPECIMENS",
-    "wb.privacyNote":
-      "Your draft stays in this tab. The page's CSP sets connect-src 'none', so it couldn't phone home if it tried.",
-    "wb.modeProof": "Proof Sheet",
-    "wb.modeEdit": "Edit & Recheck",
+
+    "lead.strike": "Certainly! Here is your polished draft.",
+    "lead.title": "Your draft, minus the slop.",
+    "lead.sub":
+      "Paste a draft, a deck, or a page. dislop strikes what can't ship, asks one question about what sounds canned, and checks your edit against the original so every number, link, and citation stays put. It never rewrites a word; the pen stays with you.",
+    "lead.cta": "Paste your draft ↓",
+    "lead.awesomeBtn": "Browse Awesome list (87) →",
+    "lead.starBtn": "Star on GitHub ★",
+    "lead.reassure": "Stays in this tab. Nothing is uploaded.",
+    "lead.cliLabel": "Or run it in a terminal:",
+
+    "hp.tabBad": "Model's draft",
+    "hp.tabGood": "After your edit",
+    "hp.tabTrap": "Went too far",
+    "hp.meta": "Live engine · Red means delete, blue is your call",
+    "hp.openWb": "Open in workbench ↓",
+
+    "m1.title": "Strikes what can't ship.",
+    "m1.desc": "A leaked local path, an unfilled placeholder, a stray chatbot greeting, a dead link, or a text box running off the slide.",
+    "m2.title": "Asks about what sounds canned.",
+    "m2.desc": "One plain question per mark—never a blunt banned-word list that punishes real nouns. You decide what stays.",
+    "m3.title": "Checks your edit against the original.",
+    "m3.desc": "Numbers, qualifiers (up to, at least), units, dates, links, code spans, and citations all have to survive.",
+
+    "wb.heading": "Try it on a real draft",
+    "wb.packLabel": "Read it as:",
+    "pack.brief": "Business brief / tech spec",
+    "pack.essay": "Essay / longform",
+    "pack.ui": "Slide deck / web page",
+    "wb.openFile": "Open a local file (.md / .html / .docx / .pptx / .pdf)",
+    "wb.specimensTitle": "Sample drafts",
+    "wb.privacyNote": "Your draft stays in this tab. The page's CSP sets connect-src 'none', so it couldn't phone home if it tried.",
+    "wb.modeProof": "Proof sheet",
+    "wb.modeEdit": "Edit & recheck",
     "wb.applyClean": "Show a clean edit",
     "wb.tryTrap": "Try an overcorrection",
     "wb.reset": "Reset",
-    "wb.voiceTitle": "LOCAL VOICE METER (RAM ONLY)",
-    "legend.error": "Red, solid: can't ship (error)",
-    "legend.warn": "Blue, dashed: worth a second look (query)",
-    "legend.stet": "Green, dotted: span kept as written (stet)",
-    "cov.index": "02 / UNIVERSAL COVERAGE MATRIX · MODALITIES, MODELS, AGENTS & ENVIRONMENTS",
-    "cov.title": "Multi-modal de-slop coverage across formats, models, and dev stacks — with honest boundaries",
-    "cov.desc":
-      "Every row separates capabilities shipped and runnable today in v0.2.0 from probes and protocols under active prototype validation or v0.3+ specification.",
-    "cov.readMd": "Read Overview (.md) →",
-    "cov.colTarget": "Target Deliverable",
-    "cov.colFormat": "Formats & Scope",
-    "cov.colScope": "What dislop De-Slops",
+    "wb.voiceTitle": "Rhythm of this draft",
+    "legend.error": "Red, solid: can't ship",
+    "legend.warn": "Blue, dashed: worth a second look",
+    "legend.stet": "Green, dotted: kept as written",
+
+    "cov.title": "What it reads, and what it can't yet",
+    "cov.desc": "What works today sits apart from what is still in progress. Encrypted or unreadable PDFs are reported as skipped, never marked clean.",
+    "cov.readMd": "Read overview (.md) →",
+    "cov.colTarget": "What you bring",
+    "cov.colFormat": "Extensions",
+    "cov.colScope": "What dislop catches",
     "cov.colStatus": "Status",
-    "cov.r1Name": "Writing, Copy & Longform",
-    "cov.r1Scope":
-      "Throat-clearing openers, buzzwords, Chinese bureaucratic padding, 2nd-order negation pivots, staccato runs, 4-char triads, moralizing endings, em-dash density, CJK half-width punctuation, and Stage-3 verify fact locks.",
-    "cov.r2Name": "Word, PowerPoint & PDF",
-    "cov.r2Scope":
-      "Unaccepted tracked changes/comments, raw Markdown leaks, slide word-walls (> 120 words / > 280 Han chars), bullet overload (> 6), autofit shrink (< 80%), off-slide frames, weak topic titles, PDF local URIs, raw filename titles, and unembedded fonts.",
-    "cov.r3Name": "Web UI, Visual Layout & SVG",
-    "cov.r3Scope":
-      "Dead href=\"#\" controls, static WCAG AA contrast (< 4.5:1), dark Z-elevation inversions, purple-pink AI gradients, pill-badge soup (> 6), 3-level nested boxes, prompt-echo badges, and SVG text clipping/a11y.",
-    "cov.r4Name": "Code Repos & Agent Handoffs",
-    "cov.r4Scope":
-      "Blocks leaked workstation paths, unfilled placeholders, chatbot residue, and UI/doc slop inside PR diffs; Radar also indexes 8 external code/PR governance tools. Deeper code-slop AST rules remain on the roadmap.",
-    "cov.r4Status": "LIVE (HYGIENE & DIFF) · ROADMAP (AST)",
-    "cov.r5Name": "Cadence, Layout Monotony & Voice",
-    "cov.r5Scope":
-      "5 text/UI probes verified in scripts/prototype_antipattern_lab.mjs (comma chains, sentence-length CV, discourse-marker clusters, glassmorphism, accent-stripe cards), PPTX layout monotony spec, offline voice bands, and decoupled local small-model plugins.",
-    "cov.r5Status": "PROTOTYPE · SPEC v0.3+",
-    "cov.c1Title": "Any AI Model",
-    "cov.c1Desc":
-      "Model-agnostic probes target shared post-training patterns across frontier and local models, plus second-order slogan traps triggered when stock words are banned.",
-    "cov.c2Title": "Any Agent Host",
-    "cov.c2Desc":
-      "Connect via local stdio MCP for structured check/verify loops, drop in the raw SKILL.md workflow, or let any web-capable agent fetch /llms.txt and /tasks/*.md with zero setup.",
-    "cov.c3Title": "Any Dev & Publishing Stack",
-    "cov.c3Desc":
-      "Runs identically in browser memory, Node.js 20+, Python 3.10+, Git diff hooks, and GitHub Actions with zero external runtime dependencies and offline execution.",
-    "sys.title": "De-slop deterministically, verify every fact, then pull drafts away from model averages",
-    "sys.desc":
-      "Post-trained LLMs exhibit intra-model repetition and inter-model homogeneity on open-ended tasks (Jiang et al., NeurIPS 2025 Artificial Hivemind); banning stock words alone often leaves flat prose or second-order templates. dislop keeps its core zero-LLM and pairs shipped v0.2.0 guardrails with Stage-3 fact verification and draft positive-divergence protocols.",
-    "sys.readMd": "Read Methodology (.md) →",
-    "sys.negTitle": "A. Negative Defense (Deterministic De-Slop Guardrails)",
-    "sys.negStatus": "SHIPPED v0.2.0 · v0.3 SPEC",
-    "sys.neg1Title": "Core Invariants (packs/core, error)",
-    "sys.neg1Desc":
-      "Blocks objective delivery bugs across text and binary outputs: leaked workstation paths, unfilled placeholders, AI chat residue, and unaccepted Office revisions or raw Markdown. On UI and decks, flags dead href=\"#\" controls, WCAG AA contrast failures, dark Z-elevation inversions, and off-slide PPTX frames.",
-    "sys.neg2Title": "Genre Taste Packs + Deletion Tests (warning/info)",
-    "sys.neg2Desc":
-      "22 contextual prose, deck, and UI rules across business-brief, literary-essay, and deck-and-ui. Masks code blocks, URLs, and blockquotes so domain nouns (Delve, wool tapestry) stay clean.",
-    "sys.neg3Title": "Stage-3 Revision Guard (dislop verify)",
-    "sys.neg3Desc":
-      "Compares before and after text multisets to confirm numbers, qualifiers (up to / at least), units, dates, URLs, code spans, and citations survived, while rejecting second-order slogan displacement.",
-    "sys.neg4Title": "Rhythm Probes & Optional Local Small Models",
-    "sys.neg4Desc":
-      "5 text/UI probes verified in scripts/prototype_antipattern_lab.mjs (comma-chain cadence, sentence-length CV monotony, discourse-marker clusters, glassmorphism overuse, accent-stripe stacks) plus pptx-layout-monotony in the v0.3 spec. Optional local ONNX/GGUF plugins (mmBERT / Qwen3) remain strictly decoupled from the zero-dep core.",
-    "sys.posTitle": "B. Positive Pull (Controlled Divergence & Voice)",
-    "sys.posStatus": "DRAFT PROTOCOLS · P0/P1",
-    "sys.pos1Title": "Three-Band Entropy Partition",
-    "sys.pos1Desc":
-      "Keep factual spans and WCAG bounds at zero entropy; inject controlled variance only into mid-layer argument skeletons, perspectives, and cadence (Verbalized Sampling + S1–S4 skeletons); prune drift deterministically.",
-    "sys.pos2Title": "Local Voice Profile (dislop.voice/1)",
-    "sys.pos2Desc":
-      "Replaces vague \"write like X\" prompts with offline stylometric bands computed from your own drafts (sentence-length CV, punctuation spectrum, private local bans in .dislop.local/voice.json).",
-    "sys.pos3Title": "Positive Design Cards (dislop.taste/1)",
-    "sys.pos3Desc":
-      "Encodes abstract grid geometry, typography roles, color budgets, and static assertions from independent print, Swiss editorial, and type foundry traditions—never copying third-party DOM or CSS.",
-    "dogfood.badTag": "RAW GENERATED DRAFT · FLAGGED BY DISLOP",
-    "dogfood.goodTag": "SHIPPED REPOSITORY COPY · 0 FINDINGS",
-    "dogfood.goodMeta": "Checked by business-brief + deck-and-ui · 0 errors, 0 warnings, 0 info",
-    "rules.title": "29 deterministic de-slop rules across Core Invariants and 3 Genre Packs",
-    "rules.desc":
-      "Pre-rendered statically from packs/*/pack.json so both browsers and external agents read the same catalog. Every row provides a stable #rule-<id> SARIF anchor, a Deletion Test, and full bad / trap / good contrasts. All 23 text/HTML/CSS/SVG rules include one-click Workbench loading (Try ↑); binary Office and PDF rules run via local file upload or CLI.",
-    "rules.readCases": "All Contrasts (.md) →",
-    "rules.modAll": "All modalities",
-    "rules.sevAll": "All severities",
-    "rules.filterAll": "All Packs (29)",
-    "rules.colId": "Rule ID & Action",
-    "rules.colPack": "Pack / Tier",
-    "rules.colMod": "Modalities",
-    "rules.colWhy": "What It Catches & Deletion Test",
-    "rules.colEx": "Bad → Trap → Good Exemplar",
-    "surf.title": "Plug into any workflow: browser, /llms.txt, CLI, MCP, Skill, Hooks, or CI",
-    "surf.desc":
-      "Start zero-install by opening the workbench or pointing any web-capable agent at dislop.com/llms.txt, or wire the exact same zero-dependency core into Node/Python CLI, MCP, CI pull requests, and upcoming Skill/Hooks/SDK layers.",
-    "surf.readTools": "Tools Guide (.md) →",
-    "surf.colLevel": "Level & Surface",
-    "surf.colStatus": "Status",
-    "surf.colUse": "When to Use",
-    "surf.colEntry": "Entry Point",
-    "status.live": "LIVE",
-    "status.liveV02": "LIVE v0.2.0",
-    "status.draftLive": "DRAFT MD LIVE · PKG P0",
-    "status.tplReady": "TEMPLATES READY · PKG P0",
-    "status.coreOnly": "CORE EXPORTED · API P1",
-    "surf.l0Desc":
-      "Zero-install browser workbench for humans; static progressive-disclosure Markdown and JSON endpoints for external agents.",
-    "surf.l1CliDesc":
-      "Local file/directory/stdin audits, git diff gating (--changed / --staged), SARIF/GitHub annotations, and Stage-3 verify.",
-    "surf.l1SkillDesc":
-      "Cross-host workflow instructing agents to run check, edit only flagged spans, and verify before handoff.",
-    "surf.l2McpDesc":
-      "Attach to Claude Code, Codex, Cursor, or Windsurf for dislop_check, dislop_verify, dislop_explain, and dislop_packs.",
-    "surf.l2CiDesc":
-      "Gate PR diffs or git commits on CLI exit code 1 with SARIF output, or attach a PostToolUse hook after Write/Edit (use a wrapper mapping exit 1 to 2 for hard Claude Code blocking).",
-    "surf.l3Desc":
-      "Zero-I/O src/core.mjs is already exported; typed JS/Python SDK facades and optional Fetch-standard REST service are planned next.",
-    "surf.epTitle": "STATIC AGENT-NATIVE ENDPOINTS (PRE-BUILT, ZERO FIXTURES LEAKED, SANITIZED)",
-    "ep.llms": "L0 routing index (llmstxt.org) for external agents",
-    "ep.catalog": "L0 versioned machine catalog (dislop.catalog/1)",
-    "ep.taskBiz": "L1 bundle: business brief & tech proposal",
-    "ep.taskWeb": "L1 bundle: Web UI, SVG & slide decks",
-    "ep.taskEdit": "L1 bundle: editorial & literary essays",
-    "ep.taskGate": "L1 bundle: core error gate & verify CI",
-    "ep.skill": "L2 canonical SKILL.md workflow (check -> edit -> verify)",
-    "ep.awesome": "L1 raw JSON of 87 Awesome Anti-Slop entries",
-    "ep.method": "L1 methodology pillar (Deletion Test, Brand Voice & Positive Pull)",
-    "ep.full": "L2 single-fetch curated bundle (zero test fixtures)",
-    "theme.dark": "Dark",
-    "theme.light": "Light",
-    "awesome.index": "06 / awesome anti-slop (87) & brand specimen",
-    "awesome.title": "Awesome Anti-Slop: 87 curated resources and 31 non-mainstream design references",
+    "cov.r1Name": "Drafts, briefs & essays",
+    "cov.r1Scope": "Chatbot greetings, throat-clearing openers, buzzwords, 'Not X, but Y' pivots, staccato slogan runs, moralizing endings, unsourced claims, and edit comparison for numbers, qualifiers, dates, links, and citations.",
+    "cov.r2Name": "Word & PowerPoint",
+    "cov.r2Scope": "Unaccepted tracked changes and comments, raw Markdown asterisks left in docs, slide word-walls, bullet overload, shrunk autofit text, off-slide boxes, and vague topic titles.",
+    "cov.r3Name": "PDF metadata & links",
+    "cov.r3Scope": "Local file:/// URIs, raw filename titles, unembedded fonts, and mismatched page sizes. Encrypted PDFs and full body extraction are explicitly skipped.",
+    "cov.r4Name": "Web pages & SVG",
+    "cov.r4Scope": "Dead href='#' controls, unexplained disabled buttons, low WCAG contrast, dark-mode surface inversions, purple-pink AI gradients, pill-badge walls, 3-level nested boxes, and clipped SVG labels.",
+    "cov.r5Name": "Git diffs & PRs",
+    "cov.r5Scope": "Checks only the lines you changed for leaked paths, placeholders, chat wrappers, and UI slop, with GitHub annotations and SARIF output. Deeper AST code rules are not built yet.",
+    "cov.r6Name": "Rhythm monotony & voice",
+    "cov.r6Scope": "Comma-chain sentences, flat sentence lengths, repeated slide layouts, and offline rhythm profiles built from your own writing. Prototype verified, not shipped in the core yet.",
+    "status.live": "Works today",
+    "status.pdf": "Metadata today, body skipped",
+    "status.partial": "Diff hygiene works; AST not yet",
+    "status.notYet": "Not yet (prototype)",
+
+    "why.title": "Why it marks and never rewrites",
+    "why.desc":
+      "Tools that auto-rewrite drafts to 'sound human' quietly turn 'up to 12 minutes' into '12 minutes', or swap plain sentences for dramatic slogans. dislop only marks the page. You edit in your own voice, and verify checks that every number, link, and citation made it through.",
+    "why.readBrand": "Read our brand & voice guide →",
+    "dogfood.badTag": "As the model wrote it · 4 marks",
+    "dogfood.goodTag": "After your edit · Pass for press",
+
+    "surf.title": "Put it where you already work",
+    "surf.desc": "Works on drafts from Claude, GPT, Gemini, DeepSeek, or local models. Zero external runtime dependencies, and identical results in Node.js, Python, and the browser.",
+    "surf.readTools": "All integration docs (.md) →",
+    "surf.w1Title": "In a browser tab",
+    "surf.w1Desc": "Right above on this page. Drop in a local file and inspect it in memory with no network access.",
+    "surf.w2Title": "In a terminal",
+    "surf.w2Desc": "Run once with npx or uvx. Gate only changed lines in a pull request and emit GitHub annotations.",
+    "surf.w3Title": "Inside your coding agent",
+    "surf.w3Desc": "Attach the local stdio MCP server or install SKILL.md so Claude Code, Codex, Cursor, and Windsurf check drafts before handoff.",
+    "surf.w4Title": "Pages written for agents",
+    "surf.w4Desc": "No shell or MCP? Point any web-capable agent at /llms.txt or a single ~1,000-token task guide.",
+    "snip.cli": "Terminal",
+    "snip.agent": "Agent fetch",
+    "ep.heading": "Pages written for agents (plain Markdown & JSON, no raw test fixtures)",
+    "ep.llms": "Start here: compact task router",
+    "ep.catalog": "Everything as versioned JSON with token estimates",
+    "ep.taskBiz": "Guide: review a brief or proposal",
+    "ep.taskWeb": "Guide: check a web page or slide deck",
+    "ep.taskEdit": "Guide: edit an essay",
+    "ep.taskGate": "Guide: check files before release",
+    "ep.skill": "Cross-host Agent Skill (check -> edit -> verify)",
+    "ep.awesome": "Raw JSON for all 87 Awesome Anti-Slop entries",
+    "ep.method": "Brand voice guide & editorial self-check",
+    "ep.full": "Single-fetch compilation of all 29 rules",
+
+    "rules.title": "Every rule, with a before and an after",
+    "rules.desc": "The English view shows English and cross-format rules with native English examples only; switch to 中文 for Chinese-specific rules. Click 'Try ↑' to load any rule into the workbench.",
+    "rules.readCases": "All contrasts (.md) →",
+    "rules.modAll": "All formats",
+    "rules.sevAll": "All levels",
+    "rules.sevError": "Can't ship (error)",
+    "rules.sevWarn": "Query (warning)",
+    "rules.sevInfo": "Note (info)",
+    "rules.filterAll": "All",
+    "rules.filterCore": "Can't-ship",
+    "rules.filterBrief": "Business brief",
+    "rules.filterEssay": "Essay",
+    "rules.filterUi": "Decks & UI",
+    "rules.colId": "Rule & action",
+    "rules.colPack": "Pack",
+    "rules.colMod": "Formats",
+    "rules.colWhy": "What it catches & question to ask",
+    "rules.colEx": "Before → Overcorrected → After",
+
+    "awesome.title": "Other people working on this",
     "awesome.desc":
-      "A standalone, bookmarkable directory for humans and agents—compiled offline from verified JSON snapshots checked on 2026-11-21. Built as a shared hub alongside dislop's own engine.",
-    "awesome.openFull": "Open Awesome Anti-Slop (87) →",
-    "awesome.ecoTitle": "Awesome Anti-Slop (87 Curated Entries)",
-    "awesome.ecoDesc":
-      "Neutral cross-modality directory spanning standards, English and Chinese writing tools, deterministic linters, UI/diagram rules, code/PR governance, and an isolated contrast-watch section for evasion tools.",
-    "awesome.topologyNote":
-      "Maintained inside dislop-ai/dislop (awesome/README.md) and served canonically at dislop.com/awesome/ so bookmarks, sharing, and workbench use stay together; structured for a standalone CC0-1.0 spin-out only if external PR volume justifies it.",
-    "awesome.browseBtn": "Browse & Filter 87 Entries →",
-    "awesome.posTitle": "Non-Mainstream Design & Anti-Convergence Sources",
-    "awesome.posDesc":
-      "Selected from verified-positive-sources.json to study grid proportions, typographic roles, and paper-ink contrast outside SaaS templates (abstract principles only, never copying source code):",
-    "ds.tokensHeading": "LIVE GALLEY TOKENS (WCAG AA VERIFIED · MONOTONIC DARK L* 4.6 → 8.1 → 12.6)",
-    "ds.typeHeading": "TYPOGRAPHIC ROLES (ZERO EXTERNAL FONT CDN)",
-    "footer.audit": "Self-audit: dislop check site/ --fail-on info → 0 findings (Node & Python)",
-  },
-  zh: {
-    "page.title": "dislop — 全场景多模态去 AI 味工具箱（写作、文档、PPT、前端 UI 与 Agent）",
-    "nav.skip": "跳至正文",
-    "nav.workbench": "去味工作台",
-    "nav.coverage": "全场景覆盖",
-    "nav.system": "核心体系",
-    "nav.rules": "规则目录 (29)",
-    "nav.surfaces": "接入方式",
-    "nav.awesome": "Awesome (87)",
-    "lead.index": "00 / 多模态去 AI 味工具箱 · 适配任意模型、Agent 与开发环境",
-    "lead.titleStrong": "全面去 AI 味。",
-    "lead.sub":
-      "把稿子、PPT 或页面贴进来。不能发的硬伤，dislop 直接划掉；听着像套话的地方，它问你一句；改完再替你和原稿对一遍，数字、链接和引用一个不少。",
-    "lead.humanLabel": "人类入口：",
-    "lead.humanAction": "在线去味工作台 ↓",
-    "lead.coverageAction": "全场景覆盖 ↓",
-    "lead.awesomeAction": "Awesome Anti-Slop (87) →",
-    "lead.agentLabel": "Agent 直读（Level 0）：",
-    "lead.runLabel": "10 秒接入（NODE 20+、PYTHON 3.10+、MCP 或 AGENT 直读）",
-    "lead.zeroDeps": "无运行时依赖 · 29 条规则 · 101 项断言 · Awesome (87)",
-    "p1.kicker": "01 / 红蓝两笔 + 精选清单",
-    "p1.title": "确定性批注、改稿核对与 Awesome Anti-Slop",
-    "p1.desc":
-      "4 套规则包 29 条规则、改后逐项核对、正向声纹协议草案，外加可独立收藏与转发的 87 条精选目录（/awesome/）。",
-    "p2.kicker": "02 / 跨媒介交付覆盖",
-    "p2.title": "写作、文档、PPT、PDF、前端 UI 与 PR 增量",
-    "p2.desc":
-      "现已覆盖 .md/.txt、.html/.css/.jsx/.svg、.docx、.pptx、.pdf 元数据与 Git 增量；5 条节奏/界面新探针已完成 v0.3 原型验证。",
-    "p3.kicker": "03 / 不挑模型与宿主",
-    "p3.title": "兼容主流模型、Agent、编辑器与 CI",
-    "p3.desc":
-      "Claude、GPT、Gemini、DeepSeek、Qwen 与本地模型产物通用；支持浏览器、/llms.txt、SKILL.md、CLI、MCP 与 GitHub Actions。",
-    "p4.kicker": "04 / 诚实边界与双端一致",
-    "p4.title": "双端确定性一致，绝不替人偷偷改稿",
-    "p4.desc":
-      "Node 与 Python 无外部依赖双端一致（101 项样本断言 + 12 项契约测试）；verify 对照原稿拦截删改数字与二阶口号过矫。",
-    "btn.copy": "复制",
-    "btn.copied": "已复制",
-    "wb.heading": "01 / 在线去 AI 味工作台（就在这个标签页里跑 · 共用 src/core.mjs）",
-    "wb.packLabel": "审美包：",
-    "wb.openFile": "打开本地文件 (.md/.html/.docx/.pptx/.pdf)",
-    "wb.specimensTitle": "校样标本",
-    "wb.privacyNote":
-      "稿子只留在这个标签页里。页面的 CSP 把 connect-src 设成了 'none'，想往外发也发不出去。",
-    "wb.modeProof": "清样批注视图",
-    "wb.modeEdit": "编辑并复检",
-    "wb.applyClean": "看一版改好的",
-    "wb.tryTrap": "试一版改过头的",
-    "wb.reset": "重置原稿",
-    "wb.voiceTitle": "本地声纹统计（纯内存计算）",
-    "legend.error": "红实线：硬伤，不能发（error）",
-    "legend.warn": "蓝虚线：商榷，你说了算（query）",
-    "legend.stet": "绿点线：受保护片段，原样保留（stet）",
-    "cov.index": "02 / 全覆盖矩阵 · 目标产物、AI 模型、Agent 与开发环境",
-    "cov.title": "覆盖全场景产物、全模型与主流开发环境，并明示已实装与演进边界",
-    "cov.desc": "下表逐项区分 v0.2.0 现已实装可立即运行的能力，以及处于原型验证或 v0.3+ 规格演进中的探针与协议。",
-    "cov.readMd": "阅读能力总览 (.md) →",
-    "cov.colTarget": "目标产物与场景",
-    "cov.colFormat": "支持格式与范围",
-    "cov.colScope": "确定性去 AI 味覆盖项",
-    "cov.colStatus": "当前状态",
-    "cov.r1Name": "写作、文案与深度长文",
-    "cov.r1Scope":
-      "铺垫开场白、英文公关词、中文汇报套话、二阶“不是 A，而是 B”口号、三连超短句、四字排比串、段尾说教升华、破折号过密、中文半角标点混排，以及 verify 事实锁定。",
-    "cov.r2Name": "Word、PowerPoint 与 PDF",
-    "cov.r2Scope":
-      "未接受修订与批注、裸 Markdown 星号残留、单页字数墙（>120 词 / >280 汉字）、项目符号超限（>6）、自动缩排（<80%）、越界文本框、空泛名词标题、PDF 本机链接/原始文件名标题/未嵌入字体。",
-    "cov.r3Name": "前端 UI、视觉版式与 SVG",
-    "cov.r3Scope":
-      "空跳转链接 href=\"#\"、静态 WCAG AA 对比度（<4.5:1）、深色 Z 轴亮度倒置、默认紫粉渐变、胶囊徽章堆砌（>6）、三层套盒、提示词回声标签，以及 SVG 文字越界与无障碍缺失。",
-    "cov.r4Name": "代码仓与 Agent 交付物",
-    "cov.r4Scope":
-      "在 PR 增量（--changed / --staged）与 SARIF 门禁中拦截本机路径泄露、未填占位符、AI 寒暄残迹与 UI/文档瑕疵；生态雷达另收录 8 个代码与 PR 治理工具。深度代码 AST 探针列在后续路线图。",
-    "cov.r4Status": "已上线（卫生与增量门禁）· 规划中（代码 AST）",
-    "cov.r5Name": "节奏趋同、版式雷同与个人声纹",
-    "cov.r5Scope":
-      "原型脚本 prototype_antipattern_lab.mjs 已验证 5 条文本/UI 探针（连续逗号链、句长 CV 节拍器、过渡路标簇、毛玻璃滥用、侧边粗彩条），另有 v0.3 PPTX 版式趋同规格、离线声纹画像与严格解耦的端侧小模型插件。",
-    "cov.r5Status": "原型已验 · v0.3+ 规格",
-    "cov.c1Title": "适配任意 AI 模型",
-    "cov.c1Desc":
-      "不依赖特定模型厂商，针对前沿闭源与开源本地模型共有的后训练套话、模板结构与禁用词后的二阶改写陷阱做确定性检查。",
-    "cov.c2Title": "适配任意 Agent 宿主",
-    "cov.c2Desc":
-      "既可通过本地 stdio MCP 接入自动检查与复检，也可直接加载静态 SKILL.md 剧本，或让任意联网 Agent 零安装按需拉取 /llms.txt 与任务文档。",
-    "cov.c3Title": "适配任意开发与发稿环境",
-    "cov.c3Desc":
-      "在浏览器内存、Node.js 20+、Python 3.10+、Git 钩子与 GitHub Actions 中保持完全一致的零依赖离线行为。",
-    "sys.title": "确定性清掉 AI 味并锁住事实，再把产物拉离模型均值",
-    "sys.desc":
-      "对齐后的大模型在开放任务上会出现单模型重复与跨模型趋同（Jiang 等人，NeurIPS 2025 Artificial Hivemind）；仅删高频套词往往滑向平庸均值或二阶模板。dislop 保持核心零 LLM，将 v0.2.0 确定性门禁、阶段 3 事实复检与正向差异化协议草案配合推进。",
-    "sys.readMd": "阅读方法论 (.md) →",
-    "sys.negTitle": "A. 负向防线（确定性去 AI 味规则与事实守卫）",
-    "sys.negStatus": "已发布 v0.2.0 · v0.3 规格",
-    "sys.neg1Title": "基础发布底线（packs/core，error）",
-    "sys.neg1Desc":
-      "阻断客观交付事故：本机路径泄露、未填占位符、AI 寒暄残迹、Office 修订与裸 Markdown、空链接 href=\"#\"、WCAG AA 对比度不达标、深色 Z 轴亮度倒置及 PPT 文本框越界。",
-    "sys.neg2Title": "文体审美包与删除测试（warning / info）",
-    "sys.neg2Desc":
-      "覆盖 business-brief、literary-essay、deck-and-ui 共 22 条语境规则。自动遮蔽代码块、URL 与引用块，放行 Delve 调试器与正常专名。",
-    "sys.neg3Title": "阶段 3 事实复检（dislop verify）",
-    "sys.neg3Desc":
-      "逐项比对改前与改后的数字、限定词（最多/至少/up to）、单位、日期、链接、代码与引用标记，同时拦截二阶口号漂移。",
-    "sys.neg4Title": "节奏探针与可选端侧小模型",
-    "sys.neg4Desc":
-      "原型 scripts/prototype_antipattern_lab.mjs 已验证 5 条文本/UI 探针（连续逗号链、句长 CV 节拍器、机械过渡路标簇、毛玻璃滥用、侧边粗彩条卡片），外加 v0.3 Spec 中的 pptx-layout-monotony。未来可选本地 ONNX/GGUF 插件（mmBERT / Qwen3）与零依赖核心严格解耦。",
-    "sys.posTitle": "B. 正向牵引（可控差异化与个人声纹）",
-    "sys.posStatus": "协议草案 · P0/P1 规划",
-    "sys.pos1Title": "三带可控熵边界",
-    "sys.pos1Desc":
-      "事实锚点与 WCAG 底线保持零熵锁死；仅在中层骨架、视角与句式节奏注入受控差异（Verbalized Sampling 与 S1–S4 骨架）；最后用确定性规则剪除漂移候选。",
-    "sys.pos2Title": "本地离线声纹画像（dislop.voice/1）",
-    "sys.pos2Desc":
-      "用个人历史原稿的确定性统计区间（句长 CV、标点频谱、.dislop.local/voice.json 本地私有禁忌）替代空泛的“模仿某作家”形容词提示。",
-    "sys.pos3Title": "正向设计参考卡（dislop.taste/1）",
-    "sys.pos3Desc":
-      "从独立印刷、瑞士编排与字厂样本中抽离抽象网格、字阶分工、色域预算与静态断言，绝不复制第三方站点的 DOM 或 CSS 源码。",
-    "dogfood.badTag": "原始生成初稿 · 命中多项规则",
-    "dogfood.goodTag": "仓库实发定稿 · 0 命中",
-    "dogfood.goodMeta": "经 business-brief 与 deck-and-ui 检查 · 0 错误，0 警告，0 提示",
-    "rules.title": "覆盖基础底线与三大文体包的 29 条确定性去 AI 味规则",
-    "rules.desc":
-      "由 packs/*/pack.json 构建期静态预渲染，浏览器与外部 Agent 读到同一份目录。每行带稳定 #rule-<id> SARIF 锚点、删除测试与完整 bad / trap / good 对照；23 条文本、HTML、CSS 与 SVG 规则支持一键载入工作台试跑（试跑 ↑），二进制 Office/PDF 规则通过本地文件上传或 CLI 运行。",
-    "rules.readCases": "查看完整对照 (.md) →",
-    "rules.modAll": "全部模态",
-    "rules.sevAll": "全部级别",
-    "rules.filterAll": "全部规则 (29)",
-    "rules.colId": "规则 ID 与试跑",
-    "rules.colPack": "所属包 / 层级",
-    "rules.colMod": "适用模态",
-    "rules.colWhy": "检出问题与删除测试",
-    "rules.colEx": "三态对照（Bad → Trap → Good）",
-    "surf.title": "按需选择最顺手的接入形态：浏览器、/llms.txt、CLI、MCP、Skill 或 CI",
-    "surf.desc":
-      "零安装起步可直接打开工作台或让联网 Agent 读取 dislop.com/llms.txt；需要自动化门禁时，将同一零依赖内核接入 Node/Python CLI、MCP、CI 与后续 Skill/Hooks/SDK。",
-    "surf.readTools": "工具与接入文档 (.md) →",
-    "surf.colLevel": "层级与形态",
-    "surf.colStatus": "当前状态",
-    "surf.colUse": "适用场景",
-    "surf.colEntry": "直接入口",
-    "status.live": "已上线",
-    "status.liveV02": "已发布 v0.2.0",
-    "status.draftLive": "静态草稿已上线 · 发包 P0",
-    "status.tplReady": "配置模板就绪 · 封装 P0",
-    "status.coreOnly": "内核已导出 · 门面与 API P1",
-    "surf.l0Desc": "人类零上传在线去味工作台；外部 Agent 通过低 Token 渐进式静态 Markdown 与 JSON 端点自助读取。",
-    "surf.l1CliDesc": "本地文件、目录与 stdin 检查，支持 Git 增量行门禁（--changed / --staged）、SARIF/GitHub 注解与 verify 复检。",
-    "surf.l1SkillDesc": "跨宿主 SKILL.md 剧本，编排 Agent 按「先查 -> 局部改稿 -> verify 复检」三步交付。",
-    "surf.l2McpDesc": "接入 Claude Code、Codex、Cursor 或 Windsurf，提供 dislop_check、dislop_verify、dislop_explain 与 dislop_packs。",
-    "surf.l2CiDesc": "在 PR 或 Git 提交中直接以退出码 1 与 SARIF 阻断；Claude Code PostToolUse 钩子在写入后触发，硬阻断需将退出码 1 映射为 2。",
-    "surf.l3Desc": "零 I/O 的 src/core.mjs 已作为包导出；强类型 JS/Python SDK 门面与可选无状态 HTTP API 列入下一阶段。",
-    "surf.epTitle": "静态 Agent 原生端点（构建期预生成，已剔除负例 fixtures 与隐藏字符）",
-    "ep.llms": "L0 路由总索引（llmstxt.org 规范），供外部 Agent 低 Token 发现",
-    "ep.catalog": "L0 版本化机读目录（dislop.catalog/1），含字节数与 SHA-256",
-    "ep.taskBiz": "L1 场景组合包：商业简报与技术方案审校",
-    "ep.taskWeb": "L1 场景组合包：前端 UI、SVG 与演示文稿",
-    "ep.taskEdit": "L1 场景组合包：非虚构散文与深度长文",
-    "ep.taskGate": "L1 场景组合包：发布前客观底线门禁与 CI",
-    "ep.skill": "L2 仓内标准 SKILL.md 工作流（先查 -> 局部改稿 -> verify 复检）",
-    "ep.awesome": "L1 Awesome Anti-Slop 87 条精选清单原始 JSON 数据",
-    "ep.method": "L1 方法论导航（删除测试、品牌声纹基准与正向差异化）",
-    "ep.full": "L2 单次抓取精选合集（剔除负例 fixtures）",
-    "theme.dark": "深色",
-    "theme.light": "浅色",
-    "awesome.index": "06 / awesome anti-slop (87) 与品牌视觉标本",
-    "awesome.title": "Awesome Anti-Slop：87 条去 AI 味精选资源与 31 条非主流设计参考",
-    "awesome.desc":
-      "适合收藏、转发，也支持外部 Agent 直读的跨媒介目录（2026-11-21 实测核验）；作为独立可传播子模块与 dislop 主引擎并行演进。",
-    "awesome.openFull": "进入 Awesome Anti-Slop (87) →",
-    "awesome.ecoTitle": "去 AI 味精选清单 · Awesome Anti-Slop (87)",
-    "awesome.ecoDesc":
-      "中立跨媒介目录，涵盖规范研究、中英文写作工具、确定性 Linter、前端与图表规则、代码 PR 治理，并将规避检测类工具单独隔离在对照观察区。",
-    "awesome.topologyNote":
-      "当前随 dislop-ai/dislop 主仓同源维护（awesome/README.md）并在 dislop.com/awesome/ 规范发布，集中收藏、转发与工作台转化；数据结构已预留 dislop.radar/3 契约，仅在外部投稿进入高频阶段时再无损切出独立 CC0-1.0 仓库。",
-    "awesome.browseBtn": "检索与筛选全部 87 条资源 →",
-    "awesome.posTitle": "非主流高品位设计与印刷参考源",
-    "awesome.posDesc":
-      "精选自 verified-positive-sources.json，用于研习 SaaS 模板之外的网格比例、字体分工与纸墨对比（只抽抽象原则，不抄具体源码）：",
-    "ds.tokensHeading": "实时清样令牌（全部通过 WCAG AA · 深色明度 L* 4.6 → 8.1 → 12.6）",
-    "ds.typeHeading": "三级字体分工（零外部字体 CDN 请求）",
-    "footer.audit": "自检门禁：dislop check site/ --fail-on info → 0 findings（Node 与 Python 双端）",
+      "Vale checks prose against a style guide. Impeccable checks web interfaces. We gathered 87 checked tools, style guides, UI design rules, PR policies, and papers into Awesome Anti-Slop—every link and GitHub snapshot verified on 2026-11-21.",
+    "awesome.openFull": "Open Awesome list →",
+    "awesome.ecoTitle": "Browse by what you're editing",
+    "awesome.ecoDesc": "Filter by writing, web UI, code, or research, or show only tools that run automated checks. Detectors and bypass tools sit separately for reference only.",
+    "awesome.browseBtn": "Filter all 87 entries →",
+    "awesome.ghBtn": "View on GitHub",
+    "awesome.posTitle": "Design references outside the template",
+    "awesome.posDesc": "Cutting clichés is only half the job. We also keep 31 public print, type foundry, and editorial references for when you want a page to feel unmistakably yours.",
+    "awesome.posAll": "See all 31 design references (.md) →",
+    "stat.entries": "checked entries",
+    "stat.sections": "topics",
+    "stat.det": "automated checks",
+    "stat.zh": "zh / multilingual",
+
+    "pos.norm-zurich": "Strict modular graphic systems, micro-typographic rules, and structural restraint.",
+    "pos.stiftung-buchkunst": "Book proportion, margin choreography, and pacing principles transferable to reports, PDFs, and decks.",
+    "pos.fonts-in-use": "Real-world typography pairings across books, posters, and interfaces.",
+    "pos.dinamo": "Independent Swiss foundry demonstrating typographic scale, variable axes, and clean utility UI.",
+    "pos.the-type": "Chinese and multilingual typography critique, CJK punctuation mechanics, and editorial layout standards.",
+    "pos.arena": "Research-oriented visual channels for archival print, editorial systems, and signage.",
+
+    "footer.selfAudit": "This page went under its own red pen: dislop check site/ found nothing to mark.",
+    "footer.awesome": "Awesome list",
+    "footer.brand": "Brand & voice",
+    "footer.design": "Visual guide",
   },
 };
 
-const localPathDemo = ["file:///", "Users/", "alex", "/Desktop/q3-topology.png"].join("");
+// ---------- Hero 3-State Proof Card Data (100% Language-Pure, Live Engine Verified) ----------
 
-const SPECIMENS = [
-  {
-    id: "brief",
-    num: "01",
-    label: { en: "Business Brief", zh: "商业方案简报" },
+const HERO_PROOF_BY_LANG = {
+  zh: {
+    filename: "launch-note.md",
+    modality: "markdown",
     pack: "business-brief",
-    filename: "rollout-brief.md",
-    modality: "markdown",
-    bad: [
-      "Certainly! Here is the Q3 settlement brief.",
-      "",
-      "It is worth noting that CSV exports take up to 12 minutes for workspaces above 500,000 rows.",
-      `See [Topology Diagram](${localPathDemo}) for the 3-node failover layout.`,
-      "本次改造以队列分级为重要抓手，全面赋能一线运维团队，将故障恢复时间压缩至 45 秒内。",
-    ].join("\n"),
-    trap: [
-      "CSV exports take 12 minutes for workspaces above 500,000 rows.",
-      "See [Topology Diagram](./docs/q3-topology.png) for the 3-node failover layout.",
-      "这不是一次简单的队列改造，而是运维团队 45 秒内恢复服务的底气。",
-    ].join("\n"),
-    good: [
-      "Q3 settlement brief.",
-      "",
-      "CSV exports take up to 12 minutes for workspaces above 500,000 rows.",
-      `See [Topology Diagram](${localPathDemo.replace("file:///Users/alex/Desktop/", "./docs/")}) for the 3-node failover layout.`,
-      "本次改造按故障等级拆分告警队列，一线运维恢复时间压缩至 45 秒内。",
-    ].join("\n"),
+    bad: "好的，以下是修改后的上线说明。值得注意的是，本次改造以队列分级为重要抓手，全面赋能一线运维团队，故障恢复时间最多 45 秒。这不是一次简单的升级，而是一场效率革命。",
+    good: "这次改造给队列分了级，一线运维团队的故障恢复时间最多 45 秒。",
+    trap: "这次改造给队列分了级，一线运维团队的故障恢复时间 45 秒。",
+    badNotes: [
+      { kind: "error", label: "红笔硬伤：", text: "AI 寒暄留在第一行，直接删掉。" },
+      { kind: "warn", label: "蓝笔商榷：", text: "去掉“抓手”“全面赋能”和“不是……而是……”，谁对什么做了什么？" },
+      { kind: "stet", label: "绿点保留：", text: "“最多 45 秒”已记下，改完会拿原稿核对。" },
+    ],
+    goodVerdict: "可以付印。5 处批注全部清完，“最多 45 秒”一字没动。",
+    trapVerdict: "退回重对。原稿写的是“最多 45 秒”，改后只剩“45 秒”——这是另一个承诺。",
   },
-  {
-    id: "second-order",
-    num: "02",
-    label: { en: "2nd-Order Slop", zh: "二阶反套话过矫" },
+  en: {
+    filename: "launch-note.md",
+    modality: "markdown",
     pack: "business-brief",
-    filename: "field-sync.md",
-    modality: "markdown",
-    bad: [
-      "Signals drop. Photos vanish. Audits stall.",
-      "This isn't a sync queue. It's field peace of mind for 120 inspection photos.",
-      "这不是一款普通的离线工具，而是地下机房巡检的底气，支持每 30 秒自动重连。",
-    ].join("\n"),
-    trap: [
-      "It is worth noting that our game-changing sync queue buffers 100 inspection photos every 30 seconds.",
-    ].join("\n"),
-    good: [
-      "When cellular coverage drops in basement vaults, the local queue retains 120 inspection photos until connectivity returns.",
-      "地下机房断网期间本地队列保留巡检照片，并每 30 秒自动尝试重连。",
-    ].join("\n"),
+    bad: "Certainly! Here is the launch note. It's worth noting that exports now finish in up to 12 minutes for workspaces above 500,000 rows. This isn't just a speed bump — it's a game-changer.",
+    good: "Exports now finish in up to 12 minutes for workspaces above 500,000 rows.",
+    trap: "Exports now finish in 12 minutes for workspaces above 500,000 rows.",
+    badNotes: [
+      { kind: "error", label: "Red mark:", text: "Chatbot greeting on line one. Delete it." },
+      { kind: "warn", label: "Blue query:", text: "Cut the throat-clearing and slogan frame—what concrete fact is left?" },
+      { kind: "stet", label: "Green stet:", text: 'Kept as written: "up to 12 minutes" and "above 500,000 rows".' },
+    ],
+    goodVerdict: 'Pass for press. 4 marks cleared; "up to 12 minutes" and "above 500,000 rows" survived word for word.',
+    trapVerdict: 'Sent back. The original said "up to 12 minutes"; your edit says "12 minutes", and that is a different promise.',
   },
-  {
-    id: "literary",
-    num: "03",
-    label: { en: "Literary Essay", zh: "非虚构随笔" },
-    pack: "literary-essay",
-    filename: "watchmaker.md",
-    modality: "markdown",
-    bad: [
-      "傍晚六点半,修表匠把拆下的 3 枚铜齿轮泡进煤油皿里;顺手关掉了台灯。",
-      "那把旧镊子不是工具，而是手艺人的尊严。这或许就是慢工出细活在喧嚣时代真正的意义所在。",
-    ].join("\n"),
-    trap: [
-      "傍晚六点半，修表匠把拆下的 3 枚铜齿轮泡进煤油皿里，星期四的橱窗空空荡荡。",
-      "Ultimately, this reminds us that craft endures.",
-    ].join("\n"),
-    good: [
-      "傍晚六点半，修表匠把拆下的 3 枚铜齿轮泡进煤油皿里；顺手关掉了台灯。",
-      "他用鹿皮擦净那把跟了自己二十年的旧镊子，收进抽屉最里格。",
-    ].join("\n"),
-  },
-  {
-    id: "ui-chrome",
-    num: "04",
-    label: { en: "UI & HTML Slop", zh: "前端界面模板味" },
-    pack: "deck-and-ui",
-    filename: "hero-card.html",
-    modality: "html",
-    bad: [
-      '<div class="bg-gradient-to-r from-indigo via-purple to-pink bg-clip-text text-transparent p-6">',
-      '  <span class="badge">AI-Powered · Zero Hallucination</span>',
-      "  <h2>Audit 48 slide decks in 1.2 seconds</h2>",
-      '  <a href="#">Download report</a>',
-      "</div>",
-    ].join("\n"),
-    trap: [
-      '<div class="surface-card p-6">',
-      "  <h2>Audit 48 slide decks in 1.2 seconds</h2>",
-      "  <button disabled>Download report</button>",
-      "</div>",
-    ].join("\n"),
-    good: [
-      '<section class="surface-card p-6">',
-      "  <h2>Audit 48 slide decks in 1.2 seconds</h2>",
-      '  <a href="./reports/deck-audit.json">Download JSON report</a>',
-      "</section>",
-    ].join("\n"),
-  },
-  {
-    id: "clean-nearmiss",
-    num: "05",
-    label: { en: "Clean Near-Miss", zh: "零误报正例核验" },
-    pack: "business-brief",
-    filename: "clean-spec.md",
-    modality: "markdown",
-    bad: [
-      "The museum lent a 16th-century wool tapestry for the 14-week exhibition.",
-      "Run the Delve debugger to inspect goroutine stacks when timeouts occur.",
-      "默认连接超时不是 30 秒，而是 300 秒；测试员单手抓手机拍摄了 24 张夜间条码样本。",
-      "首批离线索引压测覆盖北京大学、清华大学、复旦大学三所高校公开目录。",
-    ].join("\n"),
-    trap: ["这不是普通展览，而是 14 周的文化盛宴。"].join("\n"),
-    good: [
-      "The museum lent a 16th-century wool tapestry for the 14-week exhibition.",
-      "Run the Delve debugger to inspect goroutine stacks when timeouts occur.",
-      "默认连接超时不是 30 秒，而是 300 秒；测试员单手抓手机拍摄了 24 张夜间条码样本。",
-      "首批离线索引压测覆盖北京大学、清华大学、复旦大学三所高校公开目录。",
-    ].join("\n"),
-  },
-];
+};
 
-const SNIPPETS = {
-  cli: `# Audit current directory (blocks on core invariant errors, prints taste warnings)
+// ---------- Language-Pure Workbench Specimens (5 ZH + 5 EN, ZERO Mixing) ----------
+
+const SPECIMENS_BY_LANG = {
+  zh: [
+    {
+      id: "brief",
+      num: "01",
+      label: "汇报与上线说明",
+      pack: "business-brief",
+      filename: "weekly-report.md",
+      modality: "markdown",
+      bad: [
+        "好的，以下是修改后的上线说明。",
+        "",
+        "详见 [架构图](file:///tmp/release-v3/arch.png)，压测延迟数据见【待补充】。",
+        "",
+        "值得注意的是，本次改造以工单分级为重要抓手，全面赋能一线客服团队形成服务闭环，将首响时间压缩至最多 45 秒。",
+        "",
+        "这不是一次简单的升级，而是一场效率革命。",
+      ].join("\n"),
+      trap: [
+        "详见 [架构图](./docs/arch.png)，压测延迟待压测签字后补齐。",
+        "",
+        "本次改造给工单分了级，一线客服首响时间压缩至 45 秒。这不是普通优化，而是行业标杆。",
+      ].join("\n"),
+      good: [
+        "详见 [架构图](./docs/arch.png)，压测延迟待压测签字后补齐。",
+        "",
+        "本次改造给工单分了级，一线客服首响时间压缩至最多 45 秒。",
+      ].join("\n"),
+    },
+    {
+      id: "essay",
+      num: "02",
+      label: "随笔与长文",
+      pack: "literary-essay",
+      filename: "winter-note.md",
+      modality: "markdown",
+      bad: [
+        "冬至那天下了初雪,院子里的腊梅开了 3 朵;香气一直飘到走廊。",
+        "",
+        "老周留下的那把旧刨子不是工具，而是手艺人的尊严。",
+        "",
+        "傍晚 18:30，修表匠把拆下的 3 枚铜齿轮泡进煤油皿里，关掉台灯。这或许就是慢工出细活在喧嚣时代真正的意义所在。",
+      ].join("\n"),
+      trap: [
+        "冬至那天下了初雪，院子里的腊梅开了几朵；香气飘到走廊。",
+        "",
+        "老周的旧刨子不是木头，而是时间本身。",
+        "",
+        "修表匠泡好齿轮，关掉台灯。",
+      ].join("\n"),
+      good: [
+        "冬至那天下了初雪，院子里的腊梅开了 3 朵；香气一直飘到走廊。",
+        "",
+        "老周留下的那把旧刨子刃口磨窄了一半，松木柄被手汗浸得发亮。",
+        "",
+        "傍晚 18:30，修表匠把拆下的 3 枚铜齿轮泡进煤油皿里，关掉台灯。",
+      ].join("\n"),
+    },
+    {
+      id: "ui-chrome",
+      num: "03",
+      label: "网页模板味",
+      pack: "deck-and-ui",
+      filename: "landing-card.html",
+      modality: "html",
+      bad: [
+        '<div class="bg-gradient-to-r from-indigo via-purple to-pink bg-clip-text text-transparent">',
+        "  <h2>1.2 秒查完 48 份演示文稿</h2>",
+        '  <a href="#">下载完整报告</a>',
+        '  <button disabled>立即导出</button>',
+        "</div>",
+      ].join("\n"),
+      trap: [
+        '<div class="surface-card">',
+        "  <h2>快速查完演示文稿</h2>",
+        '  <a href="./report.pdf">下载完整报告</a>',
+        "</div>",
+      ].join("\n"),
+      good: [
+        '<div class="surface-card">',
+        "  <h2>1.2 秒查完 48 份演示文稿</h2>",
+        '  <a href="./report.pdf">下载完整报告</a>',
+        '  <button type="button" disabled title="请先选择要导出的文件">立即导出</button>',
+        "</div>",
+      ].join("\n"),
+    },
+    {
+      id: "verify-demo",
+      num: "04",
+      label: "改稿核对演示",
+      pack: "business-brief",
+      filename: "sla-update.md",
+      modality: "markdown",
+      bad: [
+        "好的，以下是修改后的公告。",
+        "",
+        "新版网关具备精准高效、安全可靠、灵活易用的特性，单节点可支持至少 8000 次每秒请求，迁移窗口最多 300 毫秒，详情见 https://status.example.com/q3。",
+        "",
+        "值得注意的是，本次切换以灰度发布为抓手。",
+      ].join("\n"),
+      trap: [
+        "新版网关单节点支持 8000 次每秒请求，迁移窗口 300 毫秒，详情见 https://status.example.com/q3。",
+        "",
+        "这不是一次普通升级，而是系统架构的质变。",
+      ].join("\n"),
+      good: [
+        "新版网关单节点可支持至少 8000 次每秒请求，迁移窗口最多 300 毫秒，详情见 https://status.example.com/q3。",
+        "",
+        "本次切换采用灰度发布。",
+      ].join("\n"),
+    },
+    {
+      id: "clean-nearmiss",
+      num: "05",
+      label: "看着像套话，其实不是",
+      pack: "business-brief",
+      filename: "clean-chinese.md",
+      modality: "markdown",
+      bad: [
+        "她抓手机拍下黑板上的推导过程，顺手记下 2026-10-15 的压测结果。",
+        "",
+        "北京大学、清华大学、复旦大学三校联合公开了这份语料，单次推理平均延迟降至 18 毫秒。",
+      ].join("\n"),
+      trap: [
+        "她拍下黑板上的推导过程，记下了压测结果。",
+        "",
+        "这不是一份普通的语料，而是学术协作的新起点。",
+      ].join("\n"),
+      good: [
+        "她抓手机拍下黑板上的推导过程，顺手记下 2026-10-15 的压测结果。",
+        "",
+        "北京大学、清华大学、复旦大学三校联合公开了这份语料，单次推理平均延迟降至 18 毫秒。",
+      ].join("\n"),
+    },
+  ],
+  en: [
+    {
+      id: "brief",
+      num: "01",
+      label: "Release brief",
+      pack: "business-brief",
+      filename: "launch-note.md",
+      modality: "markdown",
+      bad: [
+        "Certainly! Here is the Q3 update.",
+        "",
+        "See [Architecture](file:///tmp/release-v3/arch.png); p95 latency is [insert p95 latency].",
+        "",
+        "It is worth noting that CSV exports take up to 12 minutes for accounts above 500,000 rows. This is a game-changer that isn't just faster — it's a paradigm shift.",
+      ].join("\n"),
+      trap: [
+        "See [Architecture](./docs/arch.png); p95 latency is pending load-test sign-off.",
+        "",
+        "CSV exports take 12 minutes for accounts above 500,000 rows. Fast. Clean. Ready.",
+      ].join("\n"),
+      good: [
+        "See [Architecture](./docs/arch.png); p95 latency is pending load-test sign-off.",
+        "",
+        "CSV exports take up to 12 minutes for accounts above 500,000 rows.",
+      ].join("\n"),
+    },
+    {
+      id: "essay",
+      num: "02",
+      label: "Narrative essay",
+      pack: "literary-essay",
+      filename: "ferry-deck.md",
+      modality: "markdown",
+      bad: [
+        "The station clock — brass-rimmed — stopped at 4:10 — right before the rain — leaving the platform quiet — and empty.",
+        "",
+        "At 6:15 a.m., the ferry deck smelled of wet rope and diesel. And perhaps that is what quiet endurance really means in a noisy world.",
+      ].join("\n"),
+      trap: [
+        "The station clock stopped before the rain, leaving the platform quiet.",
+        "",
+        "The ferry deck smelled of wet rope and diesel. It wasn't just a crossing — it was a reckoning.",
+      ].join("\n"),
+      good: [
+        "The brass-rimmed station clock stopped at 4:10 right before the rain, leaving the platform quiet.",
+        "",
+        "At 6:15 a.m., the ferry deck smelled of wet rope and diesel.",
+      ].join("\n"),
+    },
+    {
+      id: "ui-chrome",
+      num: "03",
+      label: "Web page & UI",
+      pack: "deck-and-ui",
+      filename: "hero-card.html",
+      modality: "html",
+      bad: [
+        '<div class="bg-gradient-to-r from-indigo via-purple to-pink bg-clip-text text-transparent">',
+        '  <span class="badge">AI-Powered · Zero Hallucination</span>',
+        "  <h2>Audit 48 slide decks in 1.2 seconds</h2>",
+        '  <a href="#">Download report</a>',
+        "</div>",
+      ].join("\n"),
+      trap: [
+        '<div class="surface-card">',
+        "  <h2>Audit slide decks in seconds</h2>",
+        '  <a href="./report.pdf">Download report</a>',
+        "</div>",
+      ].join("\n"),
+      good: [
+        '<div class="surface-card">',
+        "  <h2>Audit 48 slide decks in 1.2 seconds</h2>",
+        '  <a href="./report.pdf">Download report</a>',
+        "</div>",
+      ].join("\n"),
+    },
+    {
+      id: "verify-demo",
+      num: "04",
+      label: "Edit comparison",
+      pack: "business-brief",
+      filename: "sla-note.md",
+      modality: "markdown",
+      bad: [
+        "Certainly! Here is the revised notice.",
+        "",
+        "Studies show that 70% of decks fail contrast checks. Exports finish in up to 300 ms across 14 gateways; see https://status.example.com/q3.",
+        "",
+        "Signals drop. Audits stall. Launches slip.",
+      ].join("\n"),
+      trap: [
+        "Our audit flagged decks for contrast failures. Exports finish in 300 ms across 14 gateways; see https://status.example.com/q3.",
+      ].join("\n"),
+      good: [
+        "Our internal audit flagged 70% of decks for contrast failures. Exports finish in up to 300 ms across 14 gateways; see https://status.example.com/q3.",
+      ].join("\n"),
+    },
+    {
+      id: "clean-nearmiss",
+      num: "05",
+      label: "Looks like slop, isn't",
+      pack: "business-brief",
+      filename: "clean-english.md",
+      modality: "markdown",
+      bad: [
+        "The Delve debugger inspected a 19th-century wool tapestry archive on 2026-10-15.",
+        "",
+        "Median query latency fell to 18 ms across 14 regions.",
+      ].join("\n"),
+      trap: [
+        "The debugger inspected an archive.",
+        "",
+        "This isn't just speed — it's clarity.",
+      ].join("\n"),
+      good: [
+        "The Delve debugger inspected a 19th-century wool tapestry archive on 2026-10-15.",
+        "",
+        "Median query latency fell to 18 ms across 14 regions.",
+      ].join("\n"),
+    },
+  ],
+};
+
+// ---------- Snippets by Language ----------
+
+const SNIPPETS_BY_LANG = {
+  zh: {
+    cli: `# 检查当前目录（命中硬伤时退出码为 1，同时提示套话商榷）
 npx --yes github:dislop-ai/dislop check .
 
-# Gate only git-modified lines in a pull request and emit SARIF 2.1.0
+# 只查相对 main 新改的行，并输出 SARIF 报告
 npx --yes github:dislop-ai/dislop check --changed origin/main --format sarif > dislop.sarif
 
-# Inspect a PowerPoint deck or Word file with Python 3.10+ (zero external deps)
+# 用 Python 3.10+ 检查 PPT 或 Word（零外部依赖）
 uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review.pptx
 
-# Stage-3 Verification: ensure an edit preserved all numbers, qualifiers, links & code
+# 改完和原稿对一遍：核对数字、限定词、链接与代码是否完好
 npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md`,
-  mcp: `{
+    mcp: `{
   "mcpServers": {
     "dislop": {
       "command": "npx",
@@ -521,24 +645,19 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md`,
     }
   }
 }`,
-  agent: `# Level 0 Website-as-an-Agent-Service (zero installation)
-# 1. Fetch routing index (~500 tokens)
+    agent: `# 1. 先让联网 Agent 读导航首页（约 2.1 KB）
 curl -fsSL https://dislop.com/llms.txt
 
-# 2. Fetch machine-readable catalog (dislop.catalog/1)
-curl -fsSL https://dislop.com/catalog.json
-
-# 3. Fetch only the task bundle needed (~1,000 tokens)
+# 2. 按手头的活儿挑一张千字任务卡
 curl -fsSL https://dislop.com/tasks/business-doc.md
 curl -fsSL https://dislop.com/tasks/web-and-deck.md
 
-# 4. Fetch a single atomic rule card (~250 tokens) or raw skill workflow
-curl -fsSL https://dislop.com/rules/negation-pivot-frame.md
-curl -fsSL https://dislop.com/tools/skill.md`,
-  ci: `name: Deliverable Quality Gate
-on: [push, pull_request]
+# 3. 读取 87 条同路清单的 JSON 数据
+curl -fsSL https://dislop.com/awesome/index.json`,
+    ci: `name: dislop
+on: [pull_request]
 jobs:
-  dislop:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -547,34 +666,89 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - run: npx --yes github:dislop-ai/dislop check . --fail-on error --format github`,
-  config: `{
+      - run: npx --yes github:dislop-ai/dislop check --changed origin/main --format github`,
+    config: `{
   "failOn": "error",
-  "ignore": ["vendor/**", "dist/**", "tests/fixtures/**"],
+  "ignore": ["vendor/**", "dist/**"],
   "overrides": [
     { "files": ["docs/**/*.md"], "pack": "business-brief" },
     { "files": ["essays/**/*.md"], "pack": "literary-essay" },
     { "files": ["site/**/*.{html,css,svg}"], "pack": "deck-and-ui" }
   ],
-  "allow": ["Delve", "Bayeux Tapestry"],
-  "rules": {
-    "bold-lead-list-wall": "info"
+  "allow": ["无缝钢管"]
+}`,
+  },
+  en: {
+    cli: `# Check the current folder (exits 1 on core errors, prints style queries)
+npx --yes github:dislop-ai/dislop check .
+
+# Check only lines changed against main and emit SARIF 2.1.0
+npx --yes github:dislop-ai/dislop check --changed origin/main --format sarif > dislop.sarif
+
+# Inspect a PowerPoint deck or Word file with Python 3.10+ (zero external deps)
+uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review.pptx
+
+# Compare your revision against the original
+npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md`,
+    mcp: `{
+  "mcpServers": {
+    "dislop": {
+      "command": "npx",
+      "args": ["--yes", "github:dislop-ai/dislop", "--mcp"]
+    }
   }
 }`,
+    agent: `# 1. Start with the compact task router (~2.1 KB)
+curl -fsSL https://dislop.com/llms.txt
+
+# 2. Fetch one ~1,000-token guide for your task
+curl -fsSL https://dislop.com/tasks/business-doc.md
+curl -fsSL https://dislop.com/tasks/web-and-deck.md
+
+# 3. Load all 87 Awesome Anti-Slop entries as JSON
+curl -fsSL https://dislop.com/awesome/index.json`,
+    ci: `name: dislop
+on: [pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npx --yes github:dislop-ai/dislop check --changed origin/main --format github`,
+    config: `{
+  "failOn": "error",
+  "ignore": ["vendor/**", "dist/**"],
+  "overrides": [
+    { "files": ["docs/**/*.md"], "pack": "business-brief" },
+    { "files": ["essays/**/*.md"], "pack": "literary-essay" },
+    { "files": ["site/**/*.{html,css,svg}"], "pack": "deck-and-ui" }
+  ],
+  "allow": ["Delve", "Bayeux Tapestry"]
+}`,
+  },
 };
 
-const DOGFOOD_SAMPLES = {
-  en: {
-    bad: "Certainly! In today's fast-paced AI landscape, dislop isn't just a linter — it's a game-changer for quality. Signals drop. Bugs ship. Trust dies. Studies show 80% of teams struggle with slop.",
-    good: "dislop de-slops Markdown, HTML/CSS/JSX/SVG, DOCX, PPTX, and PDF outputs across any model or dev environment. It flags stock phrasing, leaked paths, unfilled placeholders, and overloaded slides deterministically, then verifies edits kept numbers, links, and citations intact.",
-  },
+const PACK_LABELS = {
   zh: {
-    bad: "好的，以下是为您撰写的介绍：值得注意的是，dislop 不仅仅是一款检查工具，更是高质量交付的底气。它以确定性规则为重要抓手，全面赋能内容团队实现精准高效、安全可靠、灵活易用的审校闭环。",
-    good: "dislop 覆盖写作、Markdown、HTML/CSS/JSX/SVG、DOCX、PPTX 与 PDF，适配任意模型与开发环境；确定性标出高频套话、本机路径泄露、未填占位符与超载幻灯片，改后复检确认数字、单位、链接与引用原样保留。",
+    core: "硬伤规则",
+    "business-brief": "商业简报",
+    "literary-essay": "随笔长文",
+    "deck-and-ui": "PPT 与网页",
+  },
+  en: {
+    core: "Can't-ship",
+    "business-brief": "Business brief",
+    "literary-essay": "Essay",
+    "deck-and-ui": "Decks & UI",
   },
 };
 
-// ---------- Safe Storage & State ----------
+// ---------- Safe Storage & Application State ----------
 
 function safeGetStorage(key) {
   try {
@@ -588,13 +762,15 @@ function safeSetStorage(key, value) {
   try {
     window.localStorage.setItem(key, value);
   } catch {
-    // Ignore restricted/private-mode storage errors
+    // Ignore storage quota or restricted-origin errors
   }
 }
 
-let currentLang = safeGetStorage("dislop-lang") === "zh" ? "zh" : "en";
+let currentLang = safeGetStorage("dislop-lang") === "en" ? "en" : "zh";
 let currentTheme = "light";
-let activeSpecimen = SPECIMENS[0];
+let heroProofState = "bad";
+let activeSpecimenIdx = 0;
+let activeSpecimen = SPECIMENS_BY_LANG[currentLang][0];
 let customRuleTitle = null;
 let baselineText = activeSpecimen.bad;
 let currentText = activeSpecimen.bad;
@@ -669,7 +845,7 @@ async function readBrowserZipXmlEntries(arrayBuffer) {
   return entries;
 }
 
-// ---------- Deterministic Local Stylometrics (dislop.voice/1 preview) ----------
+// ---------- Local Rhythm Stats ----------
 
 function computeStylometrics(text, modality) {
   if (!text || modality === "html" || modality === "css" || modality === "svg") {
@@ -686,29 +862,29 @@ function computeStylometrics(text, modality) {
 
   if (rawSents.length === 0) return null;
 
-  const lengths = rawSents.map((s) => {
-    const han = (s.match(/[\u4E00-\u9FFF]/g) || []).length;
-    const latin = (s.match(/[A-Za-z0-9]+/g) || []).length;
-    return han + latin;
-  }).filter((n) => n > 0);
+  const lengths = rawSents
+    .map((s) => {
+      const han = (s.match(/[\u4E00-\u9FFF]/g) || []).length;
+      const latin = (s.match(/[A-Za-z0-9]+/g) || []).length;
+      return han + latin;
+    })
+    .filter((n) => n > 0);
 
   if (lengths.length === 0) return null;
   const mean = lengths.reduce((a, b) => a + b, 0) / lengths.length;
   const variance = lengths.reduce((acc, v) => acc + (v - mean) ** 2, 0) / lengths.length;
   const cv = mean > 0 ? Math.sqrt(variance) / mean : 0;
   const emDashes = (stripped.match(/——|—/g) || []).length;
-  const maxCommas = Math.max(...rawSents.map((s) => (s.replace(/\d,\d/g, "").match(/[,，]/g) || []).length));
 
   return {
     sentences: lengths.length,
     meanLen: mean.toFixed(1),
-    cv: lengths.length >= 2 ? cv.toFixed(2) : "n/a",
+    cv: lengths.length >= 2 ? cv.toFixed(2) : "—",
     emDashes,
-    maxCommas,
   };
 }
 
-// ---------- Rendering Helpers ----------
+// ---------- Helpers ----------
 
 function escapeHtml(str) {
   return String(str)
@@ -731,6 +907,13 @@ function formatRuleProseHtml(str) {
     .replace(/`([^`]+)`/g, "<code>$1</code>");
 }
 
+function getLocalizedExemplar(rule, lang) {
+  const meta = RULE_UI_META[rule.id];
+  if (lang === "zh" && meta?.zhEx) return meta.zhEx;
+  if (lang === "en" && meta?.enEx) return meta.enEx;
+  return rule.exemplar || null;
+}
+
 function setViewMode(mode) {
   viewMode = binaryAuditResult ? "proof" : mode;
   const proofBtn = document.getElementById("mode-proof-btn");
@@ -743,15 +926,15 @@ function setViewMode(mode) {
   editBtn.disabled = Boolean(binaryAuditResult);
   editBtn.title = binaryAuditResult
     ? currentLang === "zh"
-      ? "二进制文档（DOCX/PPTX/PDF）与不可检文件为只读体检模式，请修改原文件后重新上传"
-      : "Binary documents (DOCX/PPTX/PDF) and uninspectable files are read-only; edit the source file and re-upload"
+      ? "Word / PPT / PDF 文件为只读体检，请修改原文件后重新打开"
+      : "Binary files (DOCX/PPTX/PDF) are read-only here; edit the source file and re-open"
     : "";
 }
 
 function collectStetRanges(text, findingSpans) {
   const ranges = [];
   const numRe =
-    /(?<![A-Za-z0-9_/-])(?:(?:\b(?:up to|at least|under|over|above|below)\s+|(?:最多|至少|不超过|低于|高于)\s*))?(?:[$¥€£]\s*)?\d+(?:,\d{3})*(?:\.\d+)?(?:\s*(?:%|(?:ms|s|sec|seconds?|min|minutes?|hours?|weeks?|rows?|nodes?|decks?)(?![A-Za-z])|秒|分钟|小时|周|行|枚|张|所))?/giu;
+    /(?<![A-Za-z0-9_/-])(?:(?:\b(?:up to|at least|under|over|above|below)\s+|(?:最多|至少|不超过|低于|高于)\s*))?(?:[$¥€£]\s*)?\d+(?:,\d{3})*(?:\.\d+)?(?:\s*(?:%|(?:ms|s|sec|seconds?|min|minutes?|hours?|days?|weeks?|rows?|nodes?|decks?|gateways?|regions?)(?![A-Za-z])|毫秒|秒|分钟|小时|天|周|次|页|条|行|枚|张|所|朵|份))?/giu;
   let m;
   while ((m = numRe.exec(text)) !== null) {
     const start = m.index;
@@ -778,7 +961,7 @@ function renderAnnotatedLine(lineText, lineGlobalStart, findings, stetRanges) {
         end: e - lineGlobalStart,
         cls: f.severity === "error" ? "mark-span mark-error" : "mark-span mark-warn",
         findingIdx: idx,
-        title: `${f.ruleId} (${f.severity})`,
+        title: RULE_UI_META[f.ruleId]?.title?.[currentLang] || f.ruleId,
       });
     }
   });
@@ -792,337 +975,380 @@ function renderAnnotatedLine(lineText, lineGlobalStart, findings, stetRanges) {
         tokens.push({
           start: s - lineGlobalStart,
           end: e - lineGlobalStart,
-          cls: "mark-span mark-stet",
+          cls: "mark-stet",
           findingIdx: -1,
-          title: "stet: protected fact locked by dislop verify",
+          title: currentLang === "zh" ? "原样保留的数字与限定词" : "Protected number / qualifier",
         });
       }
     }
   });
 
-  tokens.sort((a, b) => a.start - b.start);
+  tokens.sort((a, b) => a.start - b.start || b.end - a.end);
 
-  let cursor = 0;
   let html = "";
-  for (const tok of tokens) {
-    if (tok.start < cursor) continue;
-    if (tok.start > cursor) {
-      html += escapeHtml(lineText.slice(cursor, tok.start));
+  let cursor = 0;
+  for (const t of tokens) {
+    if (t.start < cursor) continue;
+    if (t.start > cursor) {
+      html += escapeHtml(lineText.slice(cursor, t.start));
     }
-    const focusCls = tok.findingIdx === focusedFindingIdx ? " is-focused" : "";
-    const interactiveAttrs =
-      tok.findingIdx >= 0
-        ? ` data-finding-idx="${tok.findingIdx}" role="button" tabindex="0"`
-        : "";
-    html += `<span class="${tok.cls}${focusCls}" title="${escapeHtml(tok.title)}"${interactiveAttrs}>${escapeHtml(
-      lineText.slice(tok.start, tok.end)
-    )}</span>`;
-    cursor = tok.end;
+    const piece = escapeHtml(lineText.slice(t.start, t.end));
+    if (t.findingIdx >= 0) {
+      const focused = t.findingIdx === focusedFindingIdx ? " is-focused" : "";
+      html += `<span class="${t.cls}${focused}" data-finding-idx="${t.findingIdx}" title="${escapeHtml(t.title)}" tabindex="0">${piece}</span>`;
+    } else {
+      html += `<span class="${t.cls}" title="${escapeHtml(t.title)}">${piece}</span>`;
+    }
+    cursor = t.end;
   }
   if (cursor < lineText.length) {
     html += escapeHtml(lineText.slice(cursor));
   }
-  return html || " ";
+  return html || "&nbsp;";
 }
 
-function syncQuickActionState() {
-  const goodBtn = document.getElementById("btn-apply-good");
-  const trapBtn = document.getElementById("btn-apply-trap");
-  const hasGood = !lastUploadedFile && !binaryAuditResult && typeof activeSpecimen?.good === "string";
-  const hasTrap = !lastUploadedFile && !binaryAuditResult && typeof activeSpecimen?.trap === "string";
-  goodBtn.disabled = !hasGood;
-  trapBtn.disabled = !hasTrap;
-  goodBtn.title = hasGood
-    ? ""
-    : currentLang === "zh"
-      ? "仅内置校样标本支持一键载入合规改写；请直接在编辑视图修改当前文稿"
-      : "Available for built-in specimens with a fact-preserving revision; edit your draft directly in Edit & Recheck";
-  trapBtn.title = hasTrap
-    ? ""
-    : currentLang === "zh"
-      ? "仅提供已验证会被 verify 拒绝的二阶陷阱对照；请直接在编辑视图测试改稿"
-      : "Enabled only when a verified-rejected second-order trap exists; test edits directly in Edit & Recheck";
-}
+// ---------- Hero 3-State Proof Card Renderer ----------
 
-function renderWorkbench() {
-  setViewMode(viewMode);
-  syncQuickActionState();
-  const t0 = performance.now();
-  const pack = resolveEffectivePack(currentPackId, PACKS_BY_ID);
+function renderHeroProof() {
+  const data = HERO_PROOF_BY_LANG[currentLang] || HERO_PROOF_BY_LANG.zh;
+  const stageEl = document.getElementById("hero-proof-stage");
+  const fbEl = document.getElementById("hero-proof-feedback");
+  if (!stageEl || !fbEl) return;
 
-  let findings = [];
-  let verifyState = null;
+  const pack = resolveEffectivePack(data.pack, PACKS_BY_ID);
+  const text = data[heroProofState] || data.bad;
+  const audit = auditText(text, { filename: data.filename, modality: data.modality, pack });
+  const spans = audit.findings.map((f) => f.span).filter(Boolean);
+  const stet = collectStetRanges(text, spans);
+  stageEl.innerHTML = renderAnnotatedLine(text, 0, audit.findings, stet);
 
-  if (binaryAuditResult) {
-    findings = binaryAuditResult.findings;
-  } else {
-    const res = auditText(currentText, {
-      filename: currentFilename,
-      modality: currentModality,
-      pack,
-    });
-    findings = res.findings;
-    if (currentText !== baselineText) {
-      verifyState = verifyRevision(baselineText, currentText, {
-        filename: currentFilename,
-        modality: currentModality,
-        pack,
-      });
-    }
-  }
-  const elapsedMs = (performance.now() - t0).toFixed(1);
-
-  if (focusedFindingIdx >= findings.length) {
-    focusedFindingIdx = Math.max(0, findings.length - 1);
-  }
-
-  // Summary strip (natural plurals + honest numeric-span count before verify runs)
-  const errCount = findings.filter((f) => f.severity === "error").length;
-  const warnCount = findings.length - errCount;
-  const facts = binaryAuditResult ? { numbers: [] } : extractProtectedFacts(currentText);
-  const summaryEl = document.getElementById("wb-summary");
-  const errWord = errCount === 1 ? "error" : "errors";
-  const warnWord = warnCount === 1 ? "query" : "queries";
-  const spanWord = facts.numbers.length === 1 ? "numeric span" : "numeric spans";
-  summaryEl.innerHTML =
-    currentLang === "zh"
-      ? `<span>${errCount} 处硬伤 · ${warnCount} 处商榷 · ${facts.numbers.length} 处数值片段</span><span>${elapsedMs} ms</span>`
-      : `<span>${errCount} ${errWord} · ${warnCount} ${warnWord} · ${facts.numbers.length} ${spanWord}</span><span>${elapsedMs} ms</span>`;
-
-  // Voice meter
-  const vmEl = document.getElementById("voice-meter-values");
-  const stats = binaryAuditResult ? null : computeStylometrics(currentText, currentModality);
-  if (stats) {
-    vmEl.textContent =
-      currentLang === "zh"
-        ? `句数: ${stats.sentences} · 均长: ${stats.meanLen} 单元 · 句长 CV: ${stats.cv} · 破折号: ${stats.emDashes} · 单句最多逗号: ${stats.maxCommas}`
-        : `sentences: ${stats.sentences} · mean len: ${stats.meanLen} units · length CV: ${stats.cv} · em-dashes: ${stats.emDashes} · max commas/sent: ${stats.maxCommas}`;
-  } else {
-    vmEl.textContent =
-      currentLang === "zh"
-        ? `当前模态 (${currentModality}) 仅执行结构与视觉确定性探针`
-        : `modality (${currentModality}): running structural & UI deterministic probes`;
-  }
-
-  // Verify banner
-  const verifyEl = document.getElementById("verify-box");
-  if (verifyState) {
-    verifyEl.hidden = false;
-    verifyEl.className = `verify-banner ${verifyState.ok ? "is-accepted" : "is-rejected"}`;
-    if (verifyState.ok) {
-      verifyEl.innerHTML = `<div class="verify-title">dislop verify: ACCEPTED (${verifyState.beforeCount} → ${verifyState.afterCount})</div><div>${
-        currentLang === "zh"
-          ? "全部数值、限定词、链接与引用均完整保留，且未引入二阶套话。"
-          : "All numbers, qualifiers, links, and code spans survived intact with zero displacement."
-      }</div>`;
-    } else {
-      const items = verifyState.reasons.map((r) => `<li>${escapeHtml(r)}</li>`).join("");
-      verifyEl.innerHTML = `<div class="verify-title">dislop verify: REJECTED (${verifyState.beforeCount} → ${verifyState.afterCount})</div><ul class="verify-reasons">${items}</ul>`;
-    }
-  } else {
-    verifyEl.hidden = true;
-  }
-
-  // Proof sheet vs textarea
-  const proofOl = document.getElementById("proof-view");
-  const editArea = document.getElementById("edit-textarea");
-  if (viewMode === "proof") {
-    proofOl.hidden = false;
-    editArea.hidden = true;
-    const lines = currentText.split("\n");
-    const findingSpans = findings.map((f) => f.span).filter(Boolean);
-    const stetRanges = binaryAuditResult ? [] : collectStetRanges(currentText, findingSpans);
-    let globalOffset = 0;
-    proofOl.innerHTML = lines
-      .map((ln, idx) => {
-        const html = renderAnnotatedLine(ln, globalOffset, findings, stetRanges);
-        globalOffset += ln.length + 1;
-        return `<li class="proof-line"><span class="line-num">${idx + 1}</span><span class="line-content">${html}</span></li>`;
-      })
-      .join("");
-
-    proofOl.querySelectorAll("[data-finding-idx]").forEach((el) => {
-      const activate = () => {
-        focusedFindingIdx = Number(el.getAttribute("data-finding-idx"));
-        renderWorkbench();
-      };
-      el.addEventListener("click", activate);
-      el.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          activate();
-        }
-      });
-    });
-  } else {
-    proofOl.hidden = true;
-    editArea.hidden = false;
-    if (editArea.value !== currentText) {
-      editArea.value = currentText;
-    }
-  }
-
-  // Right-hand margin notes
-  const notesEl = document.getElementById("notes-container");
-  const hardSkips = (binaryAuditResult?.skipped || []).filter((s) => !String(s.file).endsWith("#prose"));
-  if (findings.length === 0 && hardSkips.length > 0) {
-    notesEl.innerHTML = hardSkips
+  if (heroProofState === "bad") {
+    fbEl.innerHTML = `<ul class="hero-proof-notes">${data.badNotes
       .map(
-        (s) =>
-          `<article class="note-card"><div class="note-head"><span class="sev-tag sev-error">uninspectable</span><span>${escapeHtml(
-            s.file
-          )}</span></div><p class="note-why">${escapeHtml(s.reason)}</p></article>`
+        (n) =>
+          `<li><span class="hero-note-dot is-${n.kind}"></span><span><strong>${escapeHtml(n.label)}</strong>${escapeHtml(n.text)}</span></li>`
       )
-      .join("");
-  } else if (findings.length === 0) {
-    const softSkipNote =
-      (binaryAuditResult?.skipped || []).length > 0
-        ? (binaryAuditResult.skipped || [])
-            .map((s) => `<div style="color:var(--ink-2);margin-top:6px;">[SKIP] ${escapeHtml(s.reason)}</div>`)
-            .join("")
-        : "";
-    const isBlankDraft = !binaryAuditResult && currentText.trim().length === 0;
-    const isNearMissSpecimen = !binaryAuditResult && !lastUploadedFile && activeSpecimen?.id === "clean-nearmiss" && currentText === baselineText;
-    const cleanText = isBlankDraft
-      ? currentLang === "zh"
-        ? "校样单还是空的。贴一段稿子进来，或者从左边挑一份标本。"
-        : "Nothing on the sheet yet. Paste a draft, or pick a specimen on the left."
-      : isNearMissSpecimen
-        ? currentLang === "zh"
-          ? "可以付印。这里的 Delve 是调试器、wool tapestry 是真挂毯、数字修正也是真事实，全部原样留着；可点「试一版改过头的」看拦截对比。"
-          : "Pass for press. Delve is the debugger here, wool tapestry is literal, and numeric corrections stay untouched. Click 'Try an overcorrection' to compare."
-        : currentLang === "zh"
-          ? "可以付印。用这组规则查过了，没有批注。"
-          : "Pass for press. No marks from this rule pack.";
-    notesEl.innerHTML = `<div class="clean-sheet-msg">${cleanText}${softSkipNote}</div>`;
+      .join("")}</ul>`;
+  } else if (heroProofState === "good") {
+    const v = verifyRevision(data.bad, data.good, { filename: data.filename, modality: data.modality, pack });
+    fbEl.innerHTML = `<div class="hero-proof-verdict">${escapeHtml(
+      v.ok ? data.goodVerdict : v.reasons.join("; ")
+    )}</div>`;
   } else {
-    const extraSkipCards = (binaryAuditResult?.skipped || [])
-      .map(
-        (s) =>
-          `<article class="note-card"><div class="note-head"><span class="sev-tag sev-warning">coverage-skip</span><span>${escapeHtml(
-            s.file
-          )}</span></div><p class="note-why">${escapeHtml(s.reason)}</p></article>`
-      )
-      .join("");
-    notesEl.innerHTML =
-      findings
-        .map((f, idx) => {
-          const sevCls = `sev-${f.severity}`;
-          const sevLabel = f.severity === "warning" ? "warn" : f.severity;
-          const why = f.message?.[currentLang] || f.message?.en || "";
-          const dt = f.deletionTest?.[currentLang] || f.deletionTest?.en || "";
-          const ex = f.exemplar;
-          const exHtml = ex
-            ? `<div class="note-exemplar">
-                 <div><span class="ex-label">bad:</span> ${escapeHtml(sanitizePublicExemplar(ex.bad))}</div>
-                 ${ex.trap ? `<div><span class="ex-label">trap:</span> ${escapeHtml(sanitizePublicExemplar(ex.trap))}</div>` : ""}
-                 <div><span class="ex-label">good:</span> ${escapeHtml(sanitizePublicExemplar(ex.good))}</div>
-               </div>`
-            : "";
-          return `<article class="note-card${idx === focusedFindingIdx ? " is-focused" : ""}" data-note-idx="${idx}" tabindex="0">
-            <div class="note-head">
-              <span class="sev-tag ${sevCls}">${escapeHtml(sevLabel)} · ${escapeHtml(f.ruleId)}</span>
-              <span>${escapeHtml(f.location)}</span>
-            </div>
-            <p class="note-why">${escapeHtml(why)}</p>
-            ${dt ? `<p class="note-test"><strong>${currentLang === "zh" ? "删除测试：" : "Deletion test:"}</strong> ${escapeHtml(dt)}</p>` : ""}
-            ${exHtml}
-          </article>`;
-        })
-        .join("") + extraSkipCards;
-
-    notesEl.querySelectorAll("[data-note-idx]").forEach((card) => {
-      const activate = () => {
-        focusedFindingIdx = Number(card.getAttribute("data-note-idx"));
-        renderWorkbench();
-      };
-      card.addEventListener("click", activate);
-      card.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          activate();
-        }
-      });
-    });
+    const v = verifyRevision(data.bad, data.trap, { filename: data.filename, modality: data.modality, pack });
+    fbEl.innerHTML = `<div class="hero-proof-verdict is-rejected">${escapeHtml(
+      !v.ok ? data.trapVerdict : ""
+    )}</div>`;
   }
+
+  document.querySelectorAll("[data-hero-state]").forEach((btn) => {
+    const active = btn.getAttribute("data-hero-state") === heroProofState;
+    btn.classList.toggle("is-active", active);
+    btn.setAttribute("aria-selected", String(active));
+  });
 }
+
+// ---------- Workbench Renderers ----------
 
 function updateSpecimenRailSelection() {
-  document.querySelectorAll(".specimen-btn").forEach((btn) => {
-    const isSelected = !binaryAuditResult && !lastUploadedFile && !customRuleTitle && activeSpecimen.id === btn.dataset.specimenId;
-    btn.classList.toggle("is-active", isSelected);
-    btn.setAttribute("aria-pressed", String(isSelected));
+  const rail = document.getElementById("specimen-list");
+  if (!rail) return;
+  rail.querySelectorAll(".specimen-btn").forEach((b) => {
+    const active = !lastUploadedFile && !customRuleTitle && b.getAttribute("data-specimen-id") === activeSpecimen?.id;
+    b.classList.toggle("is-active", active);
   });
 }
 
 function renderSpecimenRail() {
   const rail = document.getElementById("specimen-list");
-  const existing = rail.querySelectorAll(".specimen-btn");
-  if (existing.length === SPECIMENS.length) {
-    existing.forEach((btn, i) => {
-      const sp = SPECIMENS[i];
-      const labelEl = btn.querySelector(".spec-label");
-      if (labelEl) labelEl.textContent = sp.label[currentLang] || sp.label.en;
-    });
-    updateSpecimenRailSelection();
-    return;
-  }
+  const titleEl = rail.querySelector(".rail-title");
+  const privacyEl = rail.querySelector(".privacy-note");
+  rail.querySelectorAll(".specimen-btn").forEach((el) => el.remove());
 
-  existing.forEach((b) => b.remove());
-  const privacyNote = rail.querySelector(".privacy-note");
-
-  SPECIMENS.forEach((sp) => {
+  const list = SPECIMENS_BY_LANG[currentLang] || SPECIMENS_BY_LANG.zh;
+  list.forEach((sp, idx) => {
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.dataset.specimenId = sp.id;
-    btn.className = "specimen-btn";
-    btn.innerHTML = `
-      <span class="spec-num">${sp.num} / ${sp.filename}</span>
-      <span class="spec-label">${escapeHtml(sp.label[currentLang] || sp.label.en)}</span>
-      <span class="spec-pack">${sp.pack}</span>
-    `;
+    btn.className = "specimen-btn" + (!lastUploadedFile && !customRuleTitle && sp.id === activeSpecimen.id ? " is-active" : "");
+    btn.setAttribute("data-specimen-id", sp.id);
+    const packName = PACK_LABELS[currentLang]?.[sp.pack] || sp.pack;
+    btn.innerHTML = `<span class="spec-num">${sp.num}</span><span class="spec-label">${escapeHtml(sp.label)}</span><span class="spec-pack">${escapeHtml(packName)}</span>`;
     btn.addEventListener("click", () => {
       uploadSeq += 1;
-      binaryAuditResult = null;
+      activeSpecimenIdx = idx;
+      activeSpecimen = sp;
       lastUploadedFile = null;
       uploadedOriginalText = null;
+      binaryAuditResult = null;
       customRuleTitle = null;
-      activeSpecimen = sp;
-      baselineText = sp.bad;
-      currentText = sp.bad;
+      currentPackId = sp.pack;
       currentFilename = sp.filename;
       currentModality = sp.modality;
-      currentPackId = sp.pack;
+      baselineText = sp.bad;
+      currentText = sp.bad;
       focusedFindingIdx = 0;
-      document.getElementById("pack-select").value = currentPackId;
+      document.getElementById("pack-select").value = sp.pack;
+      setViewMode("proof");
       updateSpecimenRailSelection();
       renderWorkbench();
     });
-    rail.insertBefore(btn, privacyNote);
+    rail.insertBefore(btn, privacyEl);
   });
-  updateSpecimenRailSelection();
+  titleEl.textContent = I18N[currentLang]["wb.specimensTitle"];
 }
+
+function renderVoiceMeter(text, modality, isBinary) {
+  const valuesEl = document.getElementById("voice-meter-values");
+  if (!valuesEl) return;
+  if (isBinary) {
+    valuesEl.textContent =
+      currentLang === "zh"
+        ? "二进制文档不统计句长节奏，仅做结构与内容体检。"
+        : "Rhythm stats are skipped for binary Office/PDF files.";
+    return;
+  }
+  const st = computeStylometrics(text, modality);
+  if (!st) {
+    valuesEl.textContent =
+      currentLang === "zh" ? "代码或空白稿件不统计句长节奏。" : "Rhythm stats apply to prose drafts.";
+    return;
+  }
+  if (currentLang === "zh") {
+    valuesEl.textContent = `句数：${st.sentences} · 平均句长：${st.meanLen} 字 · 句长变化：${st.cv} · 破折号：${st.emDashes}`;
+  } else {
+    valuesEl.textContent = `sentences: ${st.sentences} · mean length: ${st.meanLen} · variation (CV): ${st.cv} · em-dashes: ${st.emDashes}`;
+  }
+}
+
+function renderWorkbench() {
+  const pack = resolveEffectivePack(currentPackId, PACKS_BY_ID);
+  const t0 = performance.now();
+  const auditRes = binaryAuditResult
+    ? binaryAuditResult
+    : auditText(currentText, {
+        filename: currentFilename,
+        modality: currentModality,
+        pack,
+      });
+  const elapsedMs = (performance.now() - t0).toFixed(1);
+  const findings = auditRes.findings || [];
+  const skipped = auditRes.skipped || [];
+
+  const proofView = document.getElementById("proof-view");
+  const editArea = document.getElementById("edit-textarea");
+  const summaryEl = document.getElementById("wb-summary");
+  const verifyBox = document.getElementById("verify-box");
+  const notesEl = document.getElementById("notes-container");
+
+  setViewMode(viewMode);
+  const goodBtn = document.getElementById("btn-apply-good");
+  const trapBtn = document.getElementById("btn-apply-trap");
+  if (goodBtn) {
+    goodBtn.disabled = Boolean(lastUploadedFile || binaryAuditResult || typeof activeSpecimen?.good !== "string");
+  }
+  if (trapBtn) {
+    trapBtn.disabled = Boolean(lastUploadedFile || binaryAuditResult || typeof activeSpecimen?.trap !== "string");
+  }
+
+  const errorsCount = findings.filter((f) => f.severity === "error").length;
+  const queriesCount = findings.length - errorsCount;
+
+  const isEmptySheet = !binaryAuditResult && currentText.trim().length === 0;
+  if (isEmptySheet) {
+    summaryEl.innerHTML =
+      currentLang === "zh"
+        ? `<span>空稿纸 · 等你贴字进来</span><span>${elapsedMs} ms</span>`
+        : `<span>Blank sheet · paste a draft</span><span>${elapsedMs} ms</span>`;
+  } else {
+    summaryEl.innerHTML =
+      currentLang === "zh"
+        ? `<span>${errorsCount} 处硬伤 · ${queriesCount} 条商榷</span><span>${elapsedMs} ms</span>`
+        : `<span>${errorsCount} ${errorsCount === 1 ? "error" : "errors"} · ${queriesCount} ${queriesCount === 1 ? "query" : "queries"}</span><span>${elapsedMs} ms</span>`;
+  }
+
+  renderVoiceMeter(currentText, currentModality, Boolean(binaryAuditResult));
+
+  // Render Proof Sheet or Edit Mode
+  if (viewMode === "edit" && !binaryAuditResult) {
+    proofView.hidden = true;
+    editArea.hidden = false;
+    if (editArea.value !== currentText) {
+      editArea.value = currentText;
+    }
+  } else {
+    proofView.hidden = false;
+    editArea.hidden = true;
+
+    const lines = currentText.split("\n");
+    const findingSpans = findings.map((f) => f.span).filter(Boolean);
+    const stetRanges = binaryAuditResult ? [] : collectStetRanges(currentText, findingSpans);
+    let offset = 0;
+    const htmlLines = lines.map((line, i) => {
+      const annotated = binaryAuditResult
+        ? escapeHtml(line)
+        : renderAnnotatedLine(line, offset, findings, stetRanges);
+      offset += line.length + 1;
+      return `<li class="proof-line"><span class="line-num">${i + 1}</span><span class="line-content">${annotated}</span></li>`;
+    });
+    proofView.innerHTML = htmlLines.join("");
+
+    proofView.querySelectorAll("[data-finding-idx]").forEach((el) => {
+      const focusHandler = () => {
+        focusedFindingIdx = Number(el.getAttribute("data-finding-idx"));
+        renderWorkbench();
+        const noteCard = notesEl.querySelector(`[data-note-idx="${focusedFindingIdx}"]`);
+        if (noteCard) noteCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      };
+      el.addEventListener("click", focusHandler);
+      el.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter" || ev.key === " ") {
+          ev.preventDefault();
+          focusHandler();
+        }
+      });
+    });
+  }
+
+  // Edit comparison verdict
+  if (!binaryAuditResult && currentText !== baselineText) {
+    const v = verifyRevision(baselineText, currentText, {
+      filename: currentFilename,
+      modality: currentModality,
+      pack,
+    });
+    verifyBox.hidden = false;
+    verifyBox.className = "verify-banner " + (v.ok ? "is-accepted" : "is-rejected");
+    const title = v.ok
+      ? currentLang === "zh"
+        ? `可以付印（批注 ${v.beforeFindings} → ${v.afterFindings}，数字与链接原样保留）`
+        : `Pass for press (marks ${v.beforeFindings} → ${v.afterFindings}; numbers, links & code intact)`
+      : currentLang === "zh"
+        ? `退回重对（批注 ${v.beforeFindings} → ${v.afterFindings}）`
+        : `Sent back (marks ${v.beforeFindings} → ${v.afterFindings})`;
+    const reasonsHtml = v.reasons.length
+      ? `<ul>${v.reasons.map((r) => `<li>${escapeHtml(r)}</li>`).join("")}</ul>`
+      : "";
+    verifyBox.innerHTML = `<strong>${escapeHtml(title)}</strong>${reasonsHtml}`;
+  } else {
+    verifyBox.hidden = true;
+    verifyBox.innerHTML = "";
+  }
+
+  // Render Editor-Style Margin Notes
+  const cards = [];
+
+  for (const s of skipped) {
+    cards.push(`<div class="note-card">
+      <div class="note-head"><span class="sev-tag sev-warning">${currentLang === "zh" ? "跳过未查" : "Skipped"}</span><span class="note-loc">${escapeHtml(s.file)}</span></div>
+      <div class="note-why">${escapeHtml(s.reason)}</div>
+    </div>`);
+  }
+
+  if (findings.length === 0 && skipped.length === 0) {
+    const cleanMsg = isEmptySheet
+      ? currentLang === "zh"
+        ? "空稿纸。切到「自己改改看」贴一段文字，或从左侧选一份样稿。"
+        : "Blank sheet. Switch to 'Edit & recheck' to paste a draft, or pick a sample on the left."
+      : !lastUploadedFile && !customRuleTitle && activeSpecimen?.id === "clean-nearmiss" && currentText === baselineText
+        ? currentLang === "zh"
+          ? "可以付印。“抓手机”是动作，“北京大学、清华大学、复旦大学”是真实校名，数字原样保留——点击「看改过头的样子」试试会怎样。"
+          : "Pass for press. 'Delve' is the debugger here, 'wool tapestry' is literal, and numbers stay untouched. Click 'Try an overcorrection' to compare."
+        : currentLang === "zh"
+          ? "可以付印。这一版没挑出硬伤或套话。"
+          : "Pass for press. No marks from this rule pack.";
+    cards.push(`<div class="clean-sheet-msg">${escapeHtml(cleanMsg)}</div>`);
+  }
+
+  findings.forEach((f, idx) => {
+    const isErr = f.severity === "error";
+    const ruleDef = pack.rulesById[f.ruleId];
+    const meta = RULE_UI_META[f.ruleId];
+    const plainTitle = meta?.title?.[currentLang] || f.ruleId;
+    const msg = ruleDef?.message?.[currentLang] || f.message || "";
+    const dt = ruleDef?.deletionTest?.[currentLang] || f.deletionTest || "";
+    const ex = ruleDef ? getLocalizedExemplar(ruleDef, currentLang) : f.exemplar;
+    const loc = f.location?.label ? f.location.label : `${f.line}:${f.column}`;
+    const focusedCls = idx === focusedFindingIdx ? " is-focused" : "";
+    const dotCls = isErr ? "is-error" : "is-warn";
+
+    const exHtml = ex
+      ? `<div class="note-exemplar">
+          <div><span class="ex-label">${currentLang === "zh" ? "原句：" : "Before:"}</span> ${escapeHtml(sanitizePublicExemplar(ex.bad))}</div>
+          ${ex.trap ? `<div><span class="ex-label">${currentLang === "zh" ? "改过头：" : "Overcorrected:"}</span> ${escapeHtml(sanitizePublicExemplar(ex.trap))}</div>` : ""}
+          <div><span class="ex-label">${currentLang === "zh" ? "改好：" : "After:"}</span> ${escapeHtml(sanitizePublicExemplar(ex.good))}</div>
+        </div>`
+      : "";
+
+    cards.push(`<article class="note-card${focusedCls}" data-note-idx="${idx}">
+      <div class="note-head">
+        <span style="display:inline-flex;align-items:center;gap:8px;font-weight:650;color:var(--ink);font-size:0.86rem;">
+          <span class="hero-note-dot ${dotCls}"></span>${escapeHtml(plainTitle)}
+        </span>
+        <span class="note-loc">${escapeHtml(loc)}</span>
+      </div>
+      <div class="note-snippet">“${escapeHtml(sanitizePublicExemplar(f.snippet))}”</div>
+      ${dt ? `<div class="note-test"><strong>${currentLang === "zh" ? "问自己一句：" : "Ask yourself:"}</strong> ${formatRuleProseHtml(dt)}</div>` : ""}
+      <details class="note-details">
+        <summary>${currentLang === "zh" ? "看规则和改法" : "Show rule & fix"}</summary>
+        <div class="note-why" style="margin-top:6px;">${formatRuleProseHtml(msg)}</div>
+        ${exHtml}
+        <div style="margin-top:6px;font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);">
+          <a href="#rule-${escapeHtml(f.ruleId)}">${escapeHtml(f.ruleId)}</a> · <a href="./rules/${escapeHtml(f.ruleId)}.md">.md</a>
+        </div>
+      </details>
+    </article>`);
+  });
+
+  notesEl.innerHTML = cards.join("");
+  notesEl.querySelectorAll("[data-note-idx]").forEach((card) => {
+    card.addEventListener("click", (ev) => {
+      if (ev.target.closest("summary, a")) return;
+      focusedFindingIdx = Number(card.getAttribute("data-note-idx"));
+      renderWorkbench();
+    });
+  });
+}
+
+// ---------- Verified Language-Pure Dogfood Contrast ----------
 
 function renderDogfood() {
-  const sample = DOGFOOD_SAMPLES[currentLang] || DOGFOOD_SAMPLES.en;
-  const pack = resolveEffectivePack("business-brief", PACKS_BY_ID);
-  const badRes = auditText(sample.bad, { filename: "pitch.md", modality: "markdown", pack });
-  document.getElementById("dogfood-bad-text").textContent = sample.bad;
-  document.getElementById("dogfood-good-text").textContent = sample.good;
-  const ruleNames = badRes.findings.map((f) => f.ruleId).join(", ");
-  document.getElementById("dogfood-bad-meta").textContent =
-    currentLang === "zh"
-      ? `引擎实测命中 ${badRes.findings.length} 处：${ruleNames}`
-      : `Live engine caught ${badRes.findings.length} findings: ${ruleNames}`;
+  const data = HERO_PROOF_BY_LANG[currentLang] || HERO_PROOF_BY_LANG.zh;
+  const pack = resolveEffectivePack(data.pack, PACKS_BY_ID);
+  const badRes = auditText(data.bad, { filename: data.filename, modality: data.modality, pack });
+  const goodRes = auditText(data.good, { filename: data.filename, modality: data.modality, pack });
+  const ver = verifyRevision(data.bad, data.good, { filename: data.filename, modality: data.modality, pack });
+
+  const badTextEl = document.getElementById("dogfood-bad-text");
+  const badMetaEl = document.getElementById("dogfood-bad-meta");
+  const goodTextEl = document.getElementById("dogfood-good-text");
+  const goodMetaEl = document.getElementById("dogfood-good-meta");
+  if (!badTextEl || !goodTextEl) return;
+
+  badTextEl.textContent = data.bad;
+  goodTextEl.textContent = data.good;
+
+  const errs = badRes.findings.filter((f) => f.severity === "error").length;
+  const warns = badRes.findings.length - errs;
+  if (badMetaEl) {
+    badMetaEl.textContent =
+      currentLang === "zh"
+        ? `实时检出：硬伤 ${errs} 处 · 商榷 ${warns} 处`
+        : `Live check: ${errs} error · ${warns} queries`;
+  }
+  if (goodMetaEl) {
+    goodMetaEl.textContent =
+      currentLang === "zh"
+        ? `实时检出：${goodRes.findings.length} 处批注 · verify ${ver.ok ? "通过（“最多 45 秒”原样保留）" : "退回"}`
+        : `Live check: ${goodRes.findings.length} marks · verify ${ver.ok ? 'accepted ("up to 12 minutes" intact)' : "rejected"}`;
+  }
 }
 
+// ---------- Rule Catalog (Strict Language Purity: ZH shows ZH+both; EN shows EN+both) ----------
+
 function findRuleById(ruleId) {
-  const order = ["core", "business-brief", "literary-essay", "deck-and-ui"];
-  for (const pid of order) {
-    const pack = PACKS_BY_ID[pid];
-    if (!pack) continue;
-    const hit = (pack.rules || []).find((r) => r.id === ruleId);
-    if (hit) return { rule: hit, packId: pid };
+  for (const [packId, pack] of Object.entries(PACKS_BY_ID)) {
+    const found = (pack.rules || []).find((r) => r.id === ruleId);
+    if (found) return { packId, rule: found };
   }
   return null;
 }
@@ -1130,7 +1356,7 @@ function findRuleById(ruleId) {
 function loadRuleInWorkbench(ruleId) {
   const found = findRuleById(ruleId);
   if (!found || !found.rule.exemplar) return;
-  const { rule, packId } = found;
+  const { packId, rule } = found;
   const mods = rule.modalities || [];
   let modality = "markdown";
   let ext = "md";
@@ -1144,7 +1370,6 @@ function loadRuleInWorkbench(ruleId) {
     modality = "html";
     ext = "html";
   }
-
   const targetPack =
     packId === "core"
       ? modality === "html" || modality === "css" || modality === "svg"
@@ -1154,31 +1379,32 @@ function loadRuleInWorkbench(ruleId) {
   const effPack = resolveEffectivePack(targetPack, PACKS_BY_ID);
   const sampleFilename = `${rule.id}.${ext}`;
 
-  // Ensure the loaded bad sample triggers this rule live; fall back to rule.demo
-  // for rules whose exemplar.bad is prose rather than raw markup.
-  let badSample = rule.exemplar.bad;
-  let goodSample = rule.exemplar.good;
-  let trapSample = rule.exemplar.trap || null;
-  const probeEx = auditText(badSample, { filename: sampleFilename, modality, pack: effPack });
-  if (!probeEx.findings.some((f) => f.ruleId === rule.id) && rule.demo?.bad) {
-    badSample = rule.demo.bad;
-    goodSample = rule.demo.good || null;
-    trapSample = null;
-  }
+  const localizedEx = getLocalizedExemplar(rule, currentLang) || rule.exemplar;
+  let badSample = localizedEx.bad;
+  let goodSample = localizedEx.good;
+  let trapSample = localizedEx.trap || null;
 
-  // Only offer one-click "Load Clean Revision" when goodSample passes Stage-3 verifyRevision
-  if (goodSample) {
-    const v = verifyRevision(badSample, goodSample, { filename: sampleFilename, modality, pack: effPack });
-    if (!v.ok) {
-      goodSample = null;
-    }
-  }
-  // Only offer "Try 2nd-Order Trap" when trapSample is verified rejected by Stage-3 verifyRevision
-  if (trapSample) {
-    const vt = verifyRevision(badSample, trapSample, { filename: sampleFilename, modality, pack: effPack });
-    if (vt.ok) {
+  const probeEx = auditText(badSample, { filename: sampleFilename, modality, pack: effPack });
+  if (!probeEx.findings.some((f) => f.ruleId === rule.id)) {
+    const rawProbe = auditText(rule.exemplar.bad, { filename: sampleFilename, modality, pack: effPack });
+    if (rawProbe.findings.some((f) => f.ruleId === rule.id)) {
+      badSample = rule.exemplar.bad;
+      goodSample = rule.exemplar.good;
+      trapSample = rule.exemplar.trap || null;
+    } else if (rule.demo?.bad) {
+      badSample = rule.demo.bad;
+      goodSample = rule.demo.good || null;
       trapSample = null;
     }
+  }
+
+  if (goodSample) {
+    const v = verifyRevision(badSample, goodSample, { filename: sampleFilename, modality, pack: effPack });
+    if (!v.ok) goodSample = null;
+  }
+  if (trapSample) {
+    const vt = verifyRevision(badSample, trapSample, { filename: sampleFilename, modality, pack: effPack });
+    if (vt.ok) trapSample = null;
   }
 
   uploadSeq += 1;
@@ -1228,7 +1454,7 @@ function renderRulesTable() {
   const tbody = document.getElementById("rules-tbody");
   const countEl = document.getElementById("rules-count");
   const rows = [];
-  let totalCount = 0;
+  let visibleInLangCount = 0;
   let matchedCount = 0;
   const q = activeRuleSearch.trim().toLowerCase();
   const order = ["core", "business-brief", "literary-essay", "deck-and-ui"];
@@ -1238,25 +1464,26 @@ function renderRulesTable() {
     const pack = PACKS_BY_ID[pid];
     if (!pack) continue;
     for (const r of pack.rules || []) {
-      totalCount += 1;
+      const meta = RULE_UI_META[r.id] || { lang: "both", title: { zh: r.id, en: r.id } };
+      // Strict language purity: hide EN-only rules in ZH view and ZH-only rules in EN view
+      // (unless specifically targeted via #rule-<id> hash link)
+      const hiddenByLang =
+        highlightedRuleId !== r.id &&
+        ((currentLang === "zh" && meta.lang === "en") || (currentLang === "en" && meta.lang === "zh"));
+      if (hiddenByLang) continue;
+
+      visibleInLangCount += 1;
       if (activeRuleFilter !== "all" && activeRuleFilter !== pid) continue;
       if (activeModalityFilter !== "all" && !(r.modalities || []).includes(activeModalityFilter)) continue;
       if (activeSeverityFilter !== "all" && r.severity !== activeSeverityFilter) continue;
 
+      const ex = getLocalizedExemplar(r, currentLang);
+      const title = meta.title?.[currentLang] || r.id;
+      const why = r.message?.[currentLang] || r.message?.en || "";
+      const dt = r.deletionTest?.[currentLang] || r.deletionTest?.en || "";
+
       if (q) {
-        const hay = [
-          r.id,
-          pid,
-          r.family,
-          r.message?.en,
-          r.message?.zh,
-          r.deletionTest?.en,
-          r.deletionTest?.zh,
-          r.exemplar?.bad,
-          r.exemplar?.trap,
-          r.exemplar?.good,
-          ...(r.modalities || []),
-        ]
+        const hay = [r.id, title, pid, why, dt, ex?.bad, ex?.trap, ex?.good, ...(r.modalities || [])]
           .filter(Boolean)
           .join(" ")
           .toLowerCase();
@@ -1265,37 +1492,52 @@ function renderRulesTable() {
 
       matchedCount += 1;
       const sevCls = r.severity === "error" ? "sev-error" : "sev-warning";
-      const why = r.message?.[currentLang] || r.message?.en || "";
-      const dt = r.deletionTest?.[currentLang] || r.deletionTest?.en || "";
-      const ex = r.exemplar;
+      const sevLabel =
+        currentLang === "zh"
+          ? r.severity === "error"
+            ? "红笔硬伤"
+            : r.severity === "warning"
+              ? "蓝笔商榷"
+              : "轻提示"
+          : r.severity === "error"
+            ? "can't ship"
+            : r.severity === "warning"
+              ? "query"
+              : "note";
       const canTry = ex && (r.modalities || []).some((m) => textMods.has(m));
       const hashCls = highlightedRuleId === r.id ? " is-hash-target" : "";
-      const tryAria = currentLang === "zh" ? `在工作台试跑 ${r.id}` : `Try ${r.id} in Workbench`;
-      const mdAria = currentLang === "zh" ? `打开 ${r.id} Markdown 规则卡` : `Open ${r.id} Markdown rule card`;
+      const packLabel = PACK_LABELS[currentLang]?.[pid] || pid;
 
-      rows.push(`<tr id="rule-${escapeHtml(r.id)}" class="rule-row${hashCls}">
+      const badLabel = currentLang === "zh" ? "原句：" : "Before:";
+      const trapLabel = currentLang === "zh" ? "改过头：" : "Overcorrected:";
+      const goodLabel = currentLang === "zh" ? "改好：" : "After:";
+
+      rows.push(`<tr id="rule-${escapeHtml(r.id)}" class="rule-row${hashCls}" data-rule-lang="${escapeHtml(meta.lang)}">
         <td class="rule-id-cell">
-          <code>${escapeHtml(r.id)}</code>
+          <strong>${escapeHtml(title)}</strong>
+          <div style="margin-top:2px;"><code>${escapeHtml(r.id)}</code></div>
           <div class="rule-id-actions">
             ${
               canTry
-                ? `<button type="button" class="ctrl-btn ctrl-btn-sm" data-try-rule="${escapeHtml(r.id)}" aria-label="${escapeHtml(tryAria)}">${
-                    currentLang === "zh" ? "试跑 ↑" : "Try ↑"
+                ? `<button type="button" class="ctrl-btn ctrl-btn-sm" data-try-rule="${escapeHtml(r.id)}">${
+                    currentLang === "zh" ? "试试 ↑" : "Try ↑"
                   }</button>`
                 : ""
             }
-            <a class="rule-md-link" href="./rules/${escapeHtml(r.id)}.md" aria-label="${escapeHtml(mdAria)}">.md</a>
+            <a class="rule-md-link" href="./rules/${escapeHtml(r.id)}.md">.md</a>
           </div>
         </td>
-        <td><code>${escapeHtml(pid)}</code><br><span class="sev-tag ${sevCls}" style="font-family:var(--font-mono);font-size:0.73rem;">${escapeHtml(r.tier)} · ${escapeHtml(r.severity)}</span></td>
+        <td>${escapeHtml(packLabel)}<br><span class="sev-tag ${sevCls}" style="font-size:0.75rem;">${escapeHtml(sevLabel)}</span></td>
         <td><code>${escapeHtml((r.modalities || []).join(", "))}</code></td>
-        <td><div>${formatRuleProseHtml(why)}</div><div style="color:var(--ink-2);font-size:0.8rem;margin-top:4px;"><strong>${currentLang === "zh" ? "删除测试：" : "Test:"}</strong> ${formatRuleProseHtml(dt)}</div></td>
+        <td><div>${formatRuleProseHtml(why)}</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>${
+        currentLang === "zh" ? "问自己一句：" : "Ask yourself:"
+      }</strong> ${formatRuleProseHtml(dt)}</div></td>
         <td>${
           ex
             ? `<div class="ex-stack">
-                 <div class="ex-row-bad"><strong>bad:</strong> <code>${escapeHtml(sanitizePublicExemplar(ex.bad))}</code></div>
-                 ${ex.trap ? `<div class="ex-row-trap"><strong>trap:</strong> <code>${escapeHtml(sanitizePublicExemplar(ex.trap))}</code></div>` : ""}
-                 <div class="ex-row-good"><strong>good:</strong> <code>${escapeHtml(sanitizePublicExemplar(ex.good))}</code></div>
+                 <div class="ex-row-bad"><strong>${badLabel}</strong> <code>${escapeHtml(sanitizePublicExemplar(ex.bad))}</code></div>
+                 ${ex.trap ? `<div class="ex-row-trap"><strong>${trapLabel}</strong> <code>${escapeHtml(sanitizePublicExemplar(ex.trap))}</code></div>` : ""}
+                 <div class="ex-row-good"><strong>${goodLabel}</strong> <code>${escapeHtml(sanitizePublicExemplar(ex.good))}</code></div>
                </div>`
             : "—"
         }</td>
@@ -1304,8 +1546,8 @@ function renderRulesTable() {
   }
 
   if (rows.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" style="color:var(--ink-2);font-family:var(--font-mono);padding:18px;">${
-      currentLang === "zh" ? "无匹配规则。" : "No rules matched."
+    tbody.innerHTML = `<tr><td colspan="5" style="color:var(--ink-2);padding:18px;">${
+      currentLang === "zh" ? "没有匹配的规则。" : "No rules matched."
     } <button type="button" class="ctrl-btn ctrl-btn-sm" id="rules-clear-empty-btn" style="margin-left:8px;">${
       currentLang === "zh" ? "清空筛选" : "Clear filters"
     }</button></td></tr>`;
@@ -1316,7 +1558,7 @@ function renderRulesTable() {
   }
 
   countEl.textContent =
-    currentLang === "zh" ? `${matchedCount} / ${totalCount} 条规则` : `${matchedCount} / ${totalCount} rules`;
+    currentLang === "zh" ? `${matchedCount} / ${visibleInLangCount} 条规则` : `${matchedCount} / ${visibleInLangCount} rules`;
 
   tbody.querySelectorAll("[data-try-rule]").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -1377,7 +1619,8 @@ function selectSnippetTab(tabBtn, moveFocus = false) {
 }
 
 function renderSnippet() {
-  document.getElementById("snippet-code").textContent = SNIPPETS[activeSnippet] || SNIPPETS.cli;
+  const map = SNIPPETS_BY_LANG[currentLang] || SNIPPETS_BY_LANG.zh;
+  document.getElementById("snippet-code").textContent = map[activeSnippet] || map.cli;
 }
 
 async function copyTextWithFeedback(btn, text) {
@@ -1421,35 +1664,76 @@ async function copyTextWithFeedback(btn, text) {
 
 function updateThemeToggleLabel() {
   const btn = document.getElementById("theme-toggle");
-  const dict = I18N[currentLang] || I18N.en;
+  const dict = I18N[currentLang] || I18N.zh;
   btn.textContent = currentTheme === "dark" ? dict["theme.light"] : dict["theme.dark"];
   btn.setAttribute("aria-label", currentLang === "zh" ? "切换浅色/深色主题" : "Toggle color theme");
 }
 
-function applyI18n() {
+function applyI18n(isUserSwitch = false) {
   document.documentElement.lang = currentLang === "zh" ? "zh-CN" : "en";
   safeSetStorage("dislop-lang", currentLang);
-  const dict = I18N[currentLang] || I18N.en;
+  const dict = I18N[currentLang] || I18N.zh;
   if (dict["page.title"]) document.title = dict["page.title"];
   document.querySelectorAll("[data-i18n]").forEach((el) => {
     const key = el.getAttribute("data-i18n");
-    if (dict[key]) el.textContent = dict[key];
+    if (dict[key] !== undefined) el.textContent = dict[key];
   });
+
+  // Update struck opener text safely without touching the sibling SVG path
+  const strikeEl = document.getElementById("hero-strike-text");
+  if (strikeEl) strikeEl.textContent = dict["lead.strike"];
+
+  // Footer agent hint with link
+  const agentHintEl = document.querySelector("[data-i18n='footer.agentHint']");
+  if (agentHintEl) {
+    agentHintEl.innerHTML =
+      currentLang === "zh"
+        ? '让 Agent 来读？从 <a href="./llms.txt">/llms.txt</a> 开始。'
+        : 'Sending an agent? Start it at <a href="./llms.txt">/llms.txt</a>.';
+  }
+
+  // Update GitHub Awesome link to match language
+  const ghLink = document.getElementById("awesome-gh-link");
+  if (ghLink) {
+    ghLink.href =
+      currentLang === "zh"
+        ? "https://github.com/dislop-ai/dislop/blob/main/awesome/README.zh-CN.md"
+        : "https://github.com/dislop-ai/dislop/tree/main/awesome";
+  }
+
   const searchEl = document.getElementById("rule-search");
   if (searchEl) {
-    searchEl.placeholder =
-      currentLang === "zh"
-        ? "搜索规则 ID、症状或关键词（中 / EN）..."
-        : "Search rule ID, symptom, or keyword (EN / 中文)...";
+    searchEl.placeholder = currentLang === "zh" ? "搜规则名、毛病或关键词…" : "Search rules or symptoms...";
     searchEl.setAttribute("aria-label", currentLang === "zh" ? "搜索规则" : "Search rules");
   }
+
   const langBtn = document.getElementById("lang-toggle");
-  langBtn.textContent = currentLang === "en" ? "中文" : "EN";
-  langBtn.setAttribute("aria-label", currentLang === "en" ? "切换到中文" : "Switch to English");
+  langBtn.textContent = currentLang === "zh" ? "EN" : "中文";
+  langBtn.setAttribute("aria-label", currentLang === "zh" ? "Switch to English" : "切换为中文");
+
+  // Swap built-in specimen to native language if user has not uploaded or edited their own draft
+  if (isUserSwitch && !lastUploadedFile && !customRuleTitle) {
+    const untouched = currentText === baselineText || currentText === activeSpecimen.good || currentText === activeSpecimen.trap;
+    if (untouched) {
+      const nextList = SPECIMENS_BY_LANG[currentLang] || SPECIMENS_BY_LANG.zh;
+      const nextSp = nextList[activeSpecimenIdx] || nextList[0];
+      activeSpecimen = nextSp;
+      currentPackId = nextSp.pack;
+      currentFilename = nextSp.filename;
+      currentModality = nextSp.modality;
+      baselineText = nextSp.bad;
+      currentText = nextSp.bad;
+      focusedFindingIdx = 0;
+      document.getElementById("pack-select").value = nextSp.pack;
+    }
+  }
+
   updateThemeToggleLabel();
+  renderHeroProof();
   renderSpecimenRail();
   renderWorkbench();
   renderDogfood();
+  renderSnippet();
   renderRulesTable();
 }
 
@@ -1473,8 +1757,44 @@ function init() {
   });
 
   document.getElementById("lang-toggle").addEventListener("click", () => {
-    currentLang = currentLang === "en" ? "zh" : "en";
-    applyI18n();
+    currentLang = currentLang === "zh" ? "en" : "zh";
+    applyI18n(true);
+  });
+
+  // Hero 3-state Proof Card tabs
+  document.querySelectorAll("[data-hero-state]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      heroProofState = btn.getAttribute("data-hero-state") || "bad";
+      renderHeroProof();
+    });
+  });
+
+  document.getElementById("hero-open-wb")?.addEventListener("click", () => {
+    const data = HERO_PROOF_BY_LANG[currentLang] || HERO_PROOF_BY_LANG.zh;
+    uploadSeq += 1;
+    lastUploadedFile = null;
+    uploadedOriginalText = null;
+    binaryAuditResult = null;
+    customRuleTitle = "hero-proof";
+    activeSpecimen = {
+      id: "hero-proof",
+      pack: data.pack,
+      filename: data.filename,
+      modality: data.modality,
+      bad: data.bad,
+      good: data.good,
+      trap: data.trap,
+    };
+    currentPackId = data.pack;
+    currentFilename = data.filename;
+    currentModality = data.modality;
+    baselineText = data.bad;
+    currentText = data[heroProofState] || data.bad;
+    focusedFindingIdx = 0;
+    document.getElementById("pack-select").value = data.pack;
+    setViewMode("proof");
+    updateSpecimenRailSelection();
+    renderWorkbench();
   });
 
   document.getElementById("pack-select").addEventListener("change", async (e) => {
@@ -1576,7 +1896,10 @@ function init() {
         }
         const res = auditOoxmlEntries(entries, { filename: file.name, modality: mod, pack });
         nextBinaryResult = res;
-        nextCurrentText = `[Local ${mod.toUpperCase()} inspected in browser RAM: ${file.name}]\nFindings: ${res.findings.length}`;
+        nextCurrentText =
+          currentLang === "zh"
+            ? `[已在标签页内存检查本地 ${mod.toUpperCase()}：${file.name}]\n检出：${res.findings.length} 处`
+            : `[Inspected local ${mod.toUpperCase()} in browser memory: ${file.name}]\nFindings: ${res.findings.length}`;
       } else if (mod === "pdf") {
         const buf = await file.arrayBuffer();
         const latin1 = new TextDecoder("latin1").decode(new Uint8Array(buf));
@@ -1589,11 +1912,16 @@ function init() {
           {
             file: `${file.name}#compressed-streams`,
             reason:
-              "Browser mode checks uncompressed PDF metadata and /URI objects only; compressed FlateDecode streams require the Node.js or Python CLI.",
+              currentLang === "zh"
+                ? "浏览器模式只检查未压缩 PDF 元数据与链接；压缩流请用本机 Node.js 或 Python CLI。"
+                : "Browser mode checks uncompressed PDF metadata and /URI objects only; compressed streams require the Node.js or Python CLI.",
           },
         ];
         nextBinaryResult = res;
-        nextCurrentText = `[Local PDF uncompressed metadata/URI structure inspected in browser RAM: ${file.name}]\nFindings: ${res.findings.length}`;
+        nextCurrentText =
+          currentLang === "zh"
+            ? `[已在标签页内存检查本地 PDF 元数据与链接：${file.name}]\n检出：${res.findings.length} 处`
+            : `[Inspected local PDF metadata & /URI links in browser memory: ${file.name}]\nFindings: ${res.findings.length}`;
       } else {
         const buf = await file.arrayBuffer();
         let text;
@@ -1614,7 +1942,6 @@ function init() {
       nextCurrentText = `Could not inspect ${file.name}: ${err.message}`;
     }
 
-    // Discard superseded async reads
     if (token !== uploadSeq) return;
 
     lastUploadedFile = file;
@@ -1643,7 +1970,6 @@ function init() {
     await handleUploadedFile(file, true);
   });
 
-  // Rule table filters & search
   document.querySelectorAll("[data-pack-filter]").forEach((btn) => {
     btn.setAttribute("aria-pressed", String(btn.classList.contains("is-active")));
     btn.addEventListener("click", () => {
@@ -1672,7 +1998,6 @@ function init() {
     renderRulesTable();
   });
 
-  // Snippet tabs (W3C APG keyboard navigation + roving tabindex)
   const snippetTabs = Array.from(document.querySelectorAll("[data-snippet]"));
   snippetTabs.forEach((btn, idx) => {
     btn.addEventListener("click", () => selectSnippetTab(btn, false));
@@ -1689,7 +2014,6 @@ function init() {
     });
   });
 
-  // Copy buttons (shared per-button timer + clipboard fallback)
   document.querySelectorAll("[data-copy-target]").forEach((btn) => {
     btn.addEventListener("click", async () => {
       const targetId = btn.getAttribute("data-copy-target");
@@ -1706,8 +2030,7 @@ function init() {
 
   window.addEventListener("hashchange", handleRuleHash);
 
-  renderSnippet();
-  applyI18n();
+  applyI18n(false);
   handleRuleHash();
 }
 

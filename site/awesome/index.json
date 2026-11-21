@@ -60,7 +60,8 @@
       ],
       "format": "policy-standard",
       "hasDeterministicCheck": false,
-      "summary": "英语维基百科 WikiProject AI Cleanup 维护的活规范，归类夸大意义、高频词、三段式、否定平行、残留寒暄与标记瑕疵，是多个开源写作技能的共同语料源头。"
+      "summary": "英语维基百科 WikiProject AI Cleanup 维护的活规范，归类夸大意义、高频词、三段式、否定平行、残留寒暄与标记瑕疵，是多个开源写作技能的共同语料源头。",
+      "summaryEn": "Living guide maintained by English Wikipedia's WikiProject AI Cleanup cataloging inflated significance, stock words, rule-of-three lists, negative parallelisms, chatbot greetings, and markup defects."
     },
     {
       "id": "simonwillison-slop",
@@ -74,7 +75,9 @@
       ],
       "format": "policy-standard",
       "hasDeterministicCheck": false,
-      "summary": "2024-05-08 发布，提出将未经请求且未经审阅的 AI 生成内容称为 slop（类比垃圾邮件 spam），奠定行业讨论口径。"
+      "summary": "2024-05-08 发布，提出将未经请求且未经审阅的 AI 生成内容称为 slop（类比垃圾邮件 spam），奠定行业讨论口径。",
+      "nameEn": "Simon Willison: Slop (origin essay)",
+      "summaryEn": "Published 2024-05-08; coined 'slop' for unsolicited, unreviewed AI-generated content (by analogy to spam), setting the shared vocabulary."
     },
     {
       "id": "kobak-excess-vocabulary",
@@ -88,7 +91,8 @@
       ],
       "format": "benchmark-dataset",
       "hasDeterministicCheck": false,
-      "summary": "分析 1,500 万篇 PubMed 摘要的超额词汇，推算 2024 年至少 13.5% 的生物医学摘要经 LLM 处理或辅助（下界估计，2025-07 刊于 Science Advances）。"
+      "summary": "分析 1,500 万篇 PubMed 摘要的超额词汇，推算 2024 年至少 13.5% 的生物医学摘要经 LLM 处理或辅助（下界估计，2025-07 刊于 Science Advances）。",
+      "summaryEn": "Analyzes excess word frequencies across 15M PubMed abstracts, estimating at least 13.5% of 2024 biomedical abstracts involved LLM assistance (Science Advances, Jul 2025)."
     },
     {
       "id": "eqbench-slop-score",
@@ -103,7 +107,8 @@
       ],
       "format": "benchmark-dataset",
       "hasDeterministicCheck": true,
-      "summary": "公开可解释的复合指标（60% 高频词 + 25% 对比句式 + 15% 高频三元组），用于跨模型横向对照文本模板化程度。"
+      "summary": "公开可解释的复合指标（60% 高频词 + 25% 对比句式 + 15% 高频三元组），用于跨模型横向对照文本模板化程度。",
+      "summaryEn": "Open, interpretable composite metric (60% overused words + 25% contrast frames + 15% frequent trigrams) comparing model template habits."
     },
     {
       "id": "sam-paech-slop-score",
@@ -123,7 +128,8 @@
       ],
       "format": "cli-linter",
       "hasDeterministicCheck": true,
-      "summary": "EQ-Bench Slop Score 的公开评分实现代码。"
+      "summary": "EQ-Bench Slop Score 的公开评分实现代码。",
+      "summaryEn": "Public scoring implementation behind the EQ-Bench Slop Score."
     },
     {
       "id": "storyscope-paper",
@@ -137,7 +143,8 @@
       ],
       "format": "benchmark-dataset",
       "hasDeterministicCheck": false,
-      "summary": "面向虚构叙事结构修复的研究框架，被多语种技能 Nanako0129/sepia 用作叙事层理论依据。"
+      "summary": "面向虚构叙事结构修复的研究框架，被多语种技能 Nanako0129/sepia 用作叙事层理论依据。",
+      "summaryEn": "Research framework for repairing narrative structure in fiction, cited by Nanako0129/sepia."
     },
     {
       "id": "agentskills-spec",
@@ -151,7 +158,8 @@
       ],
       "format": "policy-standard",
       "hasDeterministicCheck": false,
-      "summary": "跨 Agent 工具通用的 SKILL.md 目录与清单格式规范，独立于各家分发注册中心。"
+      "summary": "跨 Agent 工具通用的 SKILL.md 目录与清单格式规范，独立于各家分发注册中心。",
+      "summaryEn": "Cross-host directory and manifest specification for SKILL.md packages, independent of any single registry."
     },
     {
       "id": "skills-sh-docs",
@@ -165,7 +173,8 @@
       ],
       "format": "policy-standard",
       "hasDeterministicCheck": false,
-      "summary": "面向 Agent Skills 的公共注册中心与安装量榜单文档，已承接大量写作与前端去 AI 味技能的发现层流量。"
+      "summary": "面向 Agent Skills 的公共注册中心与安装量榜单文档，已承接大量写作与前端去 AI 味技能的发现层流量。",
+      "summaryEn": "Public registry and install leaderboard for Agent Skills, now a major discovery channel for writing and UI anti-slop skills."
     },
     {
       "id": "ghostty-ai-policy",
@@ -184,7 +193,8 @@
       ],
       "format": "policy-standard",
       "hasDeterministicCheck": false,
-      "summary": "Mitchell Hashimoto 确立的开源 AI 贡献政策：仅限预批准 Issue、强制工具披露，且贡献者必须独立理解全部代码。"
+      "summary": "Mitchell Hashimoto 确立的开源 AI 贡献政策：仅限预批准 Issue、强制工具披露，且贡献者必须独立理解全部代码。",
+      "summaryEn": "Mitchell Hashimoto's open-source AI contribution policy: pre-approved issues only, mandatory tool disclosure, and full contributor understanding of every line."
     },
     {
       "id": "curl-bug-bounty-end",
@@ -198,7 +208,8 @@
       ],
       "format": "policy-standard",
       "hasDeterministicCheck": false,
-      "summary": "curl 维护者 2026-01-26 官方公告：因大量低质 AI 漏洞报告导致有效率从 >15% 跌至 <5%，决定于 2026-01-31 关闭赏金计划。"
+      "summary": "curl 维护者 2026-01-26 官方公告：因大量低质 AI 漏洞报告导致有效率从 >15% 跌至 <5%，决定于 2026-01-31 关闭赏金计划。",
+      "summaryEn": "Daniel Stenberg's 2026-01-26 post announcing the end of curl's bug bounty (2026-01-31) after low-grade AI submissions pushed valid report rates from >15% down to <5%."
     },
     {
       "id": "tldraw-external-prs",
@@ -212,7 +223,8 @@
       ],
       "format": "policy-standard",
       "hasDeterministicCheck": false,
-      "summary": "tldraw 维护者 2026-01 公告，因外部低质 AI PR 激增而采取自动关闭外部 PR 的防御措施。"
+      "summary": "tldraw 维护者 2026-01 公告，因外部低质 AI PR 激增而采取自动关闭外部 PR 的防御措施。",
+      "summaryEn": "tldraw maintainer notice (Jan 2026) auto-closing external pull requests in response to a surge of unreviewed AI-generated PRs."
     },
     {
       "id": "substack-writer-reactions",
@@ -226,7 +238,8 @@
       ],
       "format": "policy-standard",
       "hasDeterministicCheck": false,
-      "summary": "Substack 官方汇总创作者对平台引入第三方 AI 检测工具的支持与担忧（含误报顾虑）。"
+      "summary": "Substack 官方汇总创作者对平台引入第三方 AI 检测工具的支持与担忧（含误报顾虑）。",
+      "summaryEn": "Substack roundup of how writers respond to third-party AI detection tools, including false-positive concerns."
     },
     {
       "id": "product-hunt-q2-2026",
@@ -240,7 +253,8 @@
       ],
       "format": "policy-standard",
       "hasDeterministicCheck": false,
-      "summary": "Product Hunt 2026 Q2 行业报告，反映 AI 辅助开发背景下的产品发布供给趋势。"
+      "summary": "Product Hunt 2026 Q2 行业报告，反映 AI 辅助开发背景下的产品发布供给趋势。",
+      "summaryEn": "Product Hunt Q2 2026 report tracking launch supply trends in the era of AI-assisted software."
     },
     {
       "id": "blader-humanizer",
@@ -260,7 +274,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "基于 WP:AISIGNS 的高星英语改写技能，支持导入作者样稿做语感校准。"
+      "summary": "基于 WP:AISIGNS 的高星英语改写技能，支持导入作者样稿做语感校准。",
+      "summaryEn": "Popular English rewriting skill built on WP:AISIGNS, with support for loading author writing samples for voice calibration."
     },
     {
       "id": "hardikpandya-stop-slop",
@@ -280,7 +295,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "偏严格编辑部规范的去套话技能，分拆 phrases、structures、examples 文件并配五维自评。"
+      "summary": "偏严格编辑部规范的去套话技能，分拆 phrases、structures、examples 文件并配五维自评。",
+      "summaryEn": "Strict editorial anti-cliché skill splitting phrases, structures, and examples into separate files with a five-dimension self-check."
     },
     {
       "id": "petergyang-no-ai-slop",
@@ -301,7 +317,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "覆盖 20+ 英文句式模式，配套文章提出 25/50/25 人机协作改稿分工。"
+      "summary": "覆盖 20+ 英文句式模式，配套文章提出 25/50/25 人机协作改稿分工。",
+      "summaryEn": "Covers 20+ English AI writing patterns alongside an essay outlining a 25/50/25 human-AI drafting split."
     },
     {
       "id": "adkid-anti-defensive-writing",
@@ -321,7 +338,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "中英双语学术技能，针对论文中过度防御性限定与空泛辩护段落。"
+      "summary": "中英双语学术技能，针对论文中过度防御性限定与空泛辩护段落。",
+      "summaryEn": "Bilingual academic writing skill targeting overly defensive hedging and filler disclaimers in papers."
     },
     {
       "id": "epoko77-im-not-ai",
@@ -340,7 +358,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "韩语去 AI 味与反翻译腔润色技能，体现非英语母语语感修复的活跃度。"
+      "summary": "韩语去 AI 味与反翻译腔润色技能，体现非英语母语语感修复的活跃度。",
+      "summaryEn": "Korean writing skill removing AI phrasing and translationese."
     },
     {
       "id": "academic-humanizer",
@@ -359,7 +378,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "面向英文论文与 NSF/NIH 基金申报的去套话技能，保留学术语域（仓库 LICENSE 文件注明 MIT）。"
+      "summary": "面向英文论文与 NSF/NIH 基金申报的去套话技能，保留学术语域（仓库 LICENSE 文件注明 MIT）。",
+      "summaryEn": "Anti-cliché skill tuned for English papers and NSF/NIH grant proposals while keeping academic register intact (MIT license in repo)."
     },
     {
       "id": "nanako-sepia",
@@ -378,7 +398,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "适配多类 Agent 工具的写作技能，结合 StoryScope 做虚构叙事结构修复与分场合文风调整。"
+      "summary": "适配多类 Agent 工具的写作技能，结合 StoryScope 做虚构叙事结构修复与分场合文风调整。",
+      "summaryEn": "Multi-host writing skill combining StoryScope narrative structure repair with register controls."
     },
     {
       "id": "lynote-humanize-text",
@@ -397,7 +418,8 @@
       ],
       "format": "pipeline-app",
       "hasDeterministicCheck": false,
-      "summary": "基于 LLM 的开源英文文本拟人化重写工具。"
+      "summary": "基于 LLM 的开源英文文本拟人化重写工具。",
+      "summaryEn": "Open-source LLM-based English text rewriting tool."
     },
     {
       "id": "hexiecs-talk-normal",
@@ -416,7 +438,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "极简系统提示词，约束模型用平实口语交流。"
+      "summary": "极简系统提示词，约束模型用平实口语交流。",
+      "summaryEn": "Short system prompt steering models toward plain, conversational speech."
     },
     {
       "id": "ikora-stop-ai-slop-jp",
@@ -435,7 +458,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "日语去 AI 味 Claude Skill。"
+      "summary": "日语去 AI 味 Claude Skill。",
+      "summaryEn": "Japanese anti-slop skill for Claude."
     },
     {
       "id": "stephenturner-skill-deslop",
@@ -454,7 +478,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "面向科研文稿的轻量去 AI 味技能。"
+      "summary": "面向科研文稿的轻量去 AI 味技能。",
+      "summaryEn": "Lightweight anti-slop skill for scientific manuscripts."
     },
     {
       "id": "devswha-patina",
@@ -473,7 +498,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "覆盖韩、英、中、日四种语言的文本去 AI 味项目。"
+      "summary": "覆盖韩、英、中、日四种语言的文本去 AI 味项目。",
+      "summaryEn": "Text anti-slop project covering Korean, English, Chinese, and Japanese."
     },
     {
       "id": "yucezerey-turkish-anti-ai",
@@ -492,7 +518,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "土耳其语反翻译腔与去 AI 味写作技能。"
+      "summary": "土耳其语反翻译腔与去 AI 味写作技能。",
+      "summaryEn": "Turkish writing skill targeting AI phrasing and translationese."
     },
     {
       "id": "mohamedabdallah-unslop",
@@ -512,7 +539,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "适配 Claude Code、Cursor、Windsurf、Codex 等多宿主的去 AI-isms 插件，显式声明保留代码、URL 与标题。"
+      "summary": "适配 Claude Code、Cursor、Windsurf、Codex 等多宿主的去 AI-isms 插件，显式声明保留代码、URL 与标题。",
+      "summaryEn": "Multi-host plugin (Claude Code, Cursor, Windsurf, Codex) for stripping AI-isms while explicitly preserving code, URLs, and headings."
     },
     {
       "id": "op7418-humanizer-zh",
@@ -531,7 +559,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "blader/humanizer 的中文汉化与适配版本，在中文开发者与创作者社区传播最广。"
+      "summary": "blader/humanizer 的中文汉化与适配版本，在中文开发者与创作者社区传播最广。",
+      "summaryEn": "Widely shared Chinese adaptation of blader/humanizer for Chinese writers and developers."
     },
     {
       "id": "zenstory-oh-story",
@@ -551,7 +580,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "中文网文连载 Agent 技能包，把大纲、伏笔追踪与去 AI 味整合到长篇工作流。"
+      "summary": "中文网文连载 Agent 技能包，把大纲、伏笔追踪与去 AI 味整合到长篇工作流。",
+      "summaryEn": "Chinese serial-fiction agent skill bundling outline tracking, foreshadowing notes, and anti-slop rules."
     },
     {
       "id": "lieflat-less-ai-tone",
@@ -572,7 +602,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": true,
-      "summary": "基于 520 万字语料与 629 篇跨模型对照实验构建的去 AI 味技能，内置本地 Python 检测脚本 scripts/detect.py。"
+      "summary": "基于 520 万字语料与 629 篇跨模型对照实验构建的去 AI 味技能，内置本地 Python 检测脚本 scripts/detect.py。",
+      "summaryEn": "Chinese anti-slop skill built from a 5.2M-character corpus and 629 cross-model comparisons, with a local Python detector (scripts/detect.py)."
     },
     {
       "id": "mrgediao-shuorenhua",
@@ -591,7 +622,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "中文优先改稿技能，主打保事实、分发布场景（周报、群消息、文章），强调不随意改动原意与数字。"
+      "summary": "中文优先改稿技能，主打保事实、分发布场景（周报、群消息、文章），强调不随意改动原意与数字。",
+      "summaryEn": "Chinese-first revision skill organized by venue (weekly reports, chat, articles) with explicit rules against altering numbers or meaning."
     },
     {
       "id": "hylarucoder-ai-flavor-remover",
@@ -610,7 +642,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "早期中文去 AI 味提示词项目，面向推理模型压制中文报告腔。"
+      "summary": "早期中文去 AI 味提示词项目，面向推理模型压制中文报告腔。",
+      "summaryEn": "Early Chinese prompt collection cutting bureaucratic report phrasing from reasoning models."
     },
     {
       "id": "lifelonglazylearner-qu-ai-wei",
@@ -629,7 +662,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "简体中文去 AI 味技能，侧重消除机械连接词与公文腔。"
+      "summary": "简体中文去 AI 味技能，侧重消除机械连接词与公文腔。",
+      "summaryEn": "Simplified Chinese skill targeting mechanical transitions and officialese."
     },
     {
       "id": "hyacehila-humanizer-zh-next",
@@ -648,7 +682,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "基于 blader/humanizer 与 op7418/Humanizer-zh 的衍生中文改稿技能。"
+      "summary": "基于 blader/humanizer 与 op7418/Humanizer-zh 的衍生中文改稿技能。",
+      "summaryEn": "Chinese revision skill derived from blader/humanizer and op7418/Humanizer-zh."
     },
     {
       "id": "vincentold-stop-slop-zh",
@@ -668,7 +703,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "借鉴 stop-slop 的中文规则：拆三连排比、去名词化、以具体对象替换抽象主语。"
+      "summary": "借鉴 stop-slop 的中文规则：拆三连排比、去名词化、以具体对象替换抽象主语。",
+      "summaryEn": "Chinese rules adapted from stop-slop: break three-part lists, cut nominalizations, and replace abstract subjects with concrete nouns."
     },
     {
       "id": "jiji262-humanizer-chinese",
@@ -687,7 +723,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "总结 36 条中文 AI 写作模式，并显式加入防装人味翻车（伪造口癖或错别字）的约束。"
+      "summary": "总结 36 条中文 AI 写作模式，并显式加入防装人味翻车（伪造口癖或错别字）的约束。",
+      "summaryEn": "Catalogs 36 Chinese AI writing habits and adds guards against fake-human overcorrections like forced slang or typos."
     },
     {
       "id": "vale-cli",
@@ -706,7 +743,8 @@
       ],
       "format": "cli-linter",
       "hasDeterministicCheck": true,
-      "summary": "Go 编写的标记感知散文静态 Linter，支持 YAML 规则包与 CI，面向传统文档风格检查。"
+      "summary": "Go 编写的标记感知散文静态 Linter，支持 YAML 规则包与 CI，面向传统文档风格检查。",
+      "summaryEn": "Markup-aware prose linter written in Go with YAML style packs and CI integration."
     },
     {
       "id": "write-good",
@@ -725,7 +763,8 @@
       ],
       "format": "cli-linter",
       "hasDeterministicCheck": true,
-      "summary": "经典英文被动语态、模糊词与陈词滥调确定性 Linter。"
+      "summary": "经典英文被动语态、模糊词与陈词滥调确定性 Linter。",
+      "summaryEn": "Classic deterministic English prose linter for passive voice, weasel words, and clichés."
     },
     {
       "id": "get-alex",
@@ -744,7 +783,8 @@
       ],
       "format": "cli-linter",
       "hasDeterministicCheck": true,
-      "summary": "英文包容性措辞确定性检查器，展示规则化文本审计的成熟交互形态。"
+      "summary": "英文包容性措辞确定性检查器，展示规则化文本审计的成熟交互形态。",
+      "summaryEn": "Deterministic checker for insensitive or inconsiderate English phrasing, showing mature prose-lint UX."
     },
     {
       "id": "textlint",
@@ -763,7 +803,8 @@
       ],
       "format": "cli-linter",
       "hasDeterministicCheck": true,
-      "summary": "插件化自然语言 AST Linter，在日语与技术文档出版领域生态成熟。"
+      "summary": "插件化自然语言 AST Linter，在日语与技术文档出版领域生态成熟。",
+      "summaryEn": "Pluggable natural-language AST linter widely used in Japanese and technical publishing."
     },
     {
       "id": "sloptrim",
@@ -782,7 +823,8 @@
       ],
       "format": "cli-linter",
       "hasDeterministicCheck": true,
-      "summary": "Python 标准库零依赖本地散文检测器（62 条确定性探针、支持部分归档格式与保存时钩子），并公布公开配对基准的 ROC-AUC。"
+      "summary": "Python 标准库零依赖本地散文检测器（62 条确定性探针、支持部分归档格式与保存时钩子），并公布公开配对基准的 ROC-AUC。",
+      "summaryEn": "Zero-dependency Python prose detector (62 deterministic probes, partial archive support, save hooks) with published paired-benchmark ROC-AUC."
     },
     {
       "id": "sam-paech-slop-forensics",
@@ -802,7 +844,8 @@
       ],
       "format": "benchmark-dataset",
       "hasDeterministicCheck": true,
-      "summary": "面向大模型输出语料的统计取证与高频词、三元组挖掘工具包。"
+      "summary": "面向大模型输出语料的统计取证与高频词、三元组挖掘工具包。",
+      "summaryEn": "Statistical forensics toolkit for mining overrepresented words and trigrams in LLM corpora."
     },
     {
       "id": "slop-guard",
@@ -822,7 +865,8 @@
       ],
       "format": "cli-linter",
       "hasDeterministicCheck": true,
-      "summary": "零 LLM 裁判的规则驱动英文散文 0–100 打分器。"
+      "summary": "零 LLM 裁判的规则驱动英文散文 0–100 打分器。",
+      "summaryEn": "Rule-driven 0-100 English prose scorer with no LLM judge."
     },
     {
       "id": "feedhive-ai-slop-detector",
@@ -843,7 +887,8 @@
       ],
       "format": "browser-tool",
       "hasDeterministicCheck": true,
-      "summary": "9 大类 120 条英文模式清单，提供浏览器在线检查页与配套 Agent Skill。"
+      "summary": "9 大类 120 条英文模式清单，提供浏览器在线检查页与配套 Agent Skill。",
+      "summaryEn": "120 English patterns across 9 categories, paired with a browser checker and an Agent Skill."
     },
     {
       "id": "dislop-self",
@@ -863,7 +908,9 @@
       ],
       "format": "cli-linter",
       "hasDeterministicCheck": true,
-      "summary": "零依赖确定性交付物印前审校与改稿标记多重集复检工具，覆盖中英双语文稿、前端/SVG 及 .docx/.pptx/.pdf 结构检查，配零上传浏览器工作台与 MCP 服务。"
+      "summary": "给 AI 写的东西配一支红笔：零依赖检查中英文稿、网页/SVG、Word、PPT 和 PDF 元数据，改完拿原稿对一遍数字、链接和引用，附不上传的浏览器工作台与 MCP。",
+      "nameEn": "dislop-ai/dislop (this repo)",
+      "summaryEn": "A red pen for AI-written drafts, decks, and pages: zero-dependency checks for EN/ZH prose, HTML/CSS/SVG, DOCX, PPTX, and PDF metadata, plus edit comparison, offline browser workbench, and MCP."
     },
     {
       "id": "anthropics-skills-frontend-design",
@@ -882,7 +929,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "Anthropic 官方 Agent Skills 仓内的前端设计基准技能（子目录 LICENSE.txt 为 Apache-2.0），要求先立设计方向再编码。"
+      "summary": "Anthropic 官方 Agent Skills 仓内的前端设计基准技能（子目录 LICENSE.txt 为 Apache-2.0），要求先立设计方向再编码。",
+      "summaryEn": "Official Anthropic frontend design skill (Apache-2.0 in subdirectory LICENSE.txt) requiring a concrete design direction before coding."
     },
     {
       "id": "leonxlnx-taste-skill",
@@ -903,7 +951,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": true,
-      "summary": "结合艺术指导、参考图、浏览器检查以及 scripts/gate.mjs（Stop hook）与 copy-lint.mjs 门禁的前端审美技能。"
+      "summary": "结合艺术指导、参考图、浏览器检查以及 scripts/gate.mjs（Stop hook）与 copy-lint.mjs 门禁的前端审美技能。",
+      "summaryEn": "Frontend aesthetic skill pairing art direction, references, and browser review with scripts/gate.mjs (Stop hook) and copy-lint.mjs."
     },
     {
       "id": "pbakaus-impeccable",
@@ -925,7 +974,8 @@
       ],
       "format": "cli-linter",
       "hasDeterministicCheck": true,
-      "summary": "提供 20+ 设计控制指令、浏览器实时调优，并内置 62 条零 LLM 确定性规则、SARIF 输出（npx impeccable detect --sarif）与编辑钩子。"
+      "summary": "提供 20+ 设计控制指令、浏览器实时调优，并内置 62 条零 LLM 确定性规则、SARIF 输出（npx impeccable detect --sarif）与编辑钩子。",
+      "summaryEn": "Frontend design toolkit with 20+ design commands, 62 zero-LLM deterministic checks, SARIF output (npx impeccable detect --sarif), and edit hooks."
     },
     {
       "id": "cathrynlavery-diagram-design",
@@ -945,7 +995,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "51 种出版级单文件 HTML+SVG 图解技能，显式规避默认粗糙 Mermaid 风格与冗余投影。"
+      "summary": "51 种出版级单文件 HTML+SVG 图解技能，显式规避默认粗糙 Mermaid 风格与冗余投影。",
+      "summaryEn": "51 publication-grade single-file HTML+SVG diagram recipes avoiding default Mermaid styling and heavy drop shadows."
     },
     {
       "id": "nutlope-hallmark",
@@ -965,7 +1016,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "面向 Claude Code、Cursor 与 Codex 的反 AI 味前端设计技能。"
+      "summary": "面向 Claude Code、Cursor 与 Codex 的反 AI 味前端设计技能。",
+      "summaryEn": "Anti-slop frontend design skill for Claude Code, Cursor, and Codex."
     },
     {
       "id": "heydamir-unslop",
@@ -984,7 +1036,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "把默认生成感浓重的页面重构为克制界面的 Claude 技能。"
+      "summary": "把默认生成感浓重的页面重构为克制界面的 Claude 技能。",
+      "summaryEn": "Claude skill for stripping heavy AI-generated chrome down to restrained interfaces."
     },
     {
       "id": "tejash-motionmaxxing",
@@ -1004,7 +1057,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "面向动态图形与视频生成的去模板化 Agent 技能。"
+      "summary": "面向动态图形与视频生成的去模板化 Agent 技能。",
+      "summaryEn": "Agent skill targeting template-heavy motion graphics and generated video."
     },
     {
       "id": "yetone-kill-ai-slop",
@@ -1024,7 +1078,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "结合视觉与产品文案 AI 味图鉴以及扫描清理技能的双语项目。"
+      "summary": "结合视觉与产品文案 AI 味图鉴以及扫描清理技能的双语项目。",
+      "summaryEn": "Bilingual visual and product-copy anti-slop field guide paired with a scanning and cleanup skill."
     },
     {
       "id": "tencent-hunyuan-srpo",
@@ -1043,7 +1098,8 @@
       ],
       "format": "benchmark-dataset",
       "hasDeterministicCheck": false,
-      "summary": "全扩散轨迹细粒度人类偏好对齐研究与代码，社区常用于缓解 Flux 写实生图的过度光滑塑料感（腾讯自定义条款）。"
+      "summary": "全扩散轨迹细粒度人类偏好对齐研究与代码，社区常用于缓解 Flux 写实生图的过度光滑塑料感（腾讯自定义条款）。",
+      "summaryEn": "Diffusion trajectory preference-alignment code often used to reduce the plastic smoothness of Flux photorealistic renders (custom Tencent terms)."
     },
     {
       "id": "superdesigndev-superdesign-skill",
@@ -1062,7 +1118,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "面向编程 Agent 的反通用 AI 界面设计技能。"
+      "summary": "面向编程 Agent 的反通用 AI 界面设计技能。",
+      "summaryEn": "Anti-generic UI design skill for coding agents."
     },
     {
       "id": "yu369-vibecurb",
@@ -1081,7 +1138,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "向 AI 界面工作流注入审美品味约束的工具集。"
+      "summary": "向 AI 界面工作流注入审美品味约束的工具集。",
+      "summaryEn": "Toolkit injecting aesthetic guardrails into AI UI workflows."
     },
     {
       "id": "funboy322-avoid-ai-design",
@@ -1100,7 +1158,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "审查并重写紫粉渐变等常见默认前端样式的轻量项目。"
+      "summary": "审查并重写紫粉渐变等常见默认前端样式的轻量项目。",
+      "summaryEn": "Lightweight guide and checker replacing default purple-pink gradients and boilerplate UI styles."
     },
     {
       "id": "cursor-plugins-deslop",
@@ -1119,7 +1178,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "Cursor 官方插件库，含按 PR diff 清理冗余注释、多余 try/catch 与类型绕过的 deslop 插件。"
+      "summary": "Cursor 官方插件库，含按 PR diff 清理冗余注释、多余 try/catch 与类型绕过的 deslop 插件。",
+      "summaryEn": "Official Cursor plugin repo including a deslop plugin that trims redundant comments, unnecessary try/catch blocks, and type casts on PR diffs."
     },
     {
       "id": "miqdadbadjuber-anti-slop",
@@ -1139,7 +1199,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "同时覆盖前端界面、文案与代码的综合 Agent 规则集。"
+      "summary": "同时覆盖前端界面、文案与代码的综合 Agent 规则集。",
+      "summaryEn": "Combined agent ruleset spanning frontend UI, copy, and application code."
     },
     {
       "id": "dmmulroy-anti-slop",
@@ -1158,7 +1219,8 @@
       ],
       "format": "cli-linter",
       "hasDeterministicCheck": true,
-      "summary": "基于 Oxlint 的确定性规则集，拒绝低证据与低信号 TypeScript/JavaScript 模式。"
+      "summary": "基于 Oxlint 的确定性规则集，拒绝低证据与低信号 TypeScript/JavaScript 模式。",
+      "summaryEn": "Deterministic Oxlint ruleset rejecting low-signal TypeScript and JavaScript patterns."
     },
     {
       "id": "peteromallet-desloppify",
@@ -1178,7 +1240,8 @@
       ],
       "format": "cli-linter",
       "hasDeterministicCheck": true,
-      "summary": "面向 AI 堆积代码债务的系统化重构 Agent Harness（仓库 LICENSE 为 OSNL 0.2）。"
+      "summary": "面向 AI 堆积代码债务的系统化重构 Agent Harness（仓库 LICENSE 为 OSNL 0.2）。",
+      "summaryEn": "Agent harness for systematically refactoring accumulated AI code debt (OSNL 0.2 license)."
     },
     {
       "id": "peakoss-anti-slop",
@@ -1197,7 +1260,8 @@
       ],
       "format": "github-action",
       "hasDeterministicCheck": true,
-      "summary": "内置 34 条检查规则的 GitHub Action，覆盖分支、标题、PR 描述、提交信息与改动规模，自动识别并关闭低质 AI PR。"
+      "summary": "内置 34 条检查规则的 GitHub Action，覆盖分支、标题、PR 描述、提交信息与改动规模，自动识别并关闭低质 AI PR。",
+      "summaryEn": "GitHub Action with 34 rules checking branch names, PR titles/bodies, commit messages, and diff size to auto-close low-effort AI PRs."
     },
     {
       "id": "scanaislop-aislop",
@@ -1217,7 +1281,8 @@
       ],
       "format": "cli-linter",
       "hasDeterministicCheck": true,
-      "summary": "零 LLM 运行时的确定性代码静态扫描器，检出死代码、不安全类型强转、吞异常与重复块。"
+      "summary": "零 LLM 运行时的确定性代码静态扫描器，检出死代码、不安全类型强转、吞异常与重复块。",
+      "summaryEn": "Zero-LLM static code scanner flagging dead code, unsafe casts, swallowed exceptions, and duplicate blocks."
     },
     {
       "id": "mrzoyo-deslop-gpt",
@@ -1236,7 +1301,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "删除优先的清理技能，专攻测试注水与表演式验证代码。"
+      "summary": "删除优先的清理技能，专攻测试注水与表演式验证代码。",
+      "summaryEn": "Deletion-first cleanup skill targeting padded tests and performative validation code."
     },
     {
       "id": "flamehaven-ai-slop-detector",
@@ -1255,7 +1321,8 @@
       ],
       "format": "cli-linter",
       "hasDeterministicCheck": true,
-      "summary": "检出空函数、虚假文档与注水注释的静态扫描器。"
+      "summary": "检出空函数、虚假文档与注水注释的静态扫描器。",
+      "summaryEn": "Static scanner flagging stub functions, fabricated docs, and filler comments."
     },
     {
       "id": "pew-heretic",
@@ -1275,7 +1342,8 @@
       ],
       "format": "cli-linter",
       "hasDeterministicCheck": false,
-      "summary": "免训练修改开源语言模型权重以压制 slop 与迎合输出（模型层路线对照）。"
+      "summary": "免训练修改开源语言模型权重以压制 slop 与迎合输出（模型层路线对照）。",
+      "summaryEn": "Training-free weight editing for open-weight LLMs to suppress slop and sycophancy (model-level reference)."
     },
     {
       "id": "turnitout-humanizer",
@@ -1294,7 +1362,8 @@
       ],
       "format": "browser-tool",
       "hasDeterministicCheck": false,
-      "summary": "【对照观察】主打绕过查重与 AI 检测的规避工具，存在语义失真与学术诚信风险。"
+      "summary": "【对照观察】主打绕过查重与 AI 检测的规避工具，存在语义失真与学术诚信风险。",
+      "summaryEn": "Reference only: bypass tool marketed to evade plagiarism and AI detectors; carries meaning-drift and academic-integrity risks."
     },
     {
       "id": "nasuno-song-humanizer",
@@ -1313,7 +1382,8 @@
       ],
       "format": "cli-linter",
       "hasDeterministicCheck": false,
-      "summary": "【对照观察】针对 Suno/Udio 的音频去水印工具，反映规避需求已延伸至音频媒介。"
+      "summary": "【对照观察】针对 Suno/Udio 的音频去水印工具，反映规避需求已延伸至音频媒介。",
+      "summaryEn": "Reference only: audio watermark-removal tool targeting Suno and Udio outputs."
     },
     {
       "id": "iniwap-aiwritex",
@@ -1332,7 +1402,8 @@
       ],
       "format": "pipeline-app",
       "hasDeterministicCheck": false,
-      "summary": "【对照观察】面向微信公众号/小红书的全自动生成、排版与过朱雀检测流水线，代表中文批量内容生产与规避检测诉求。"
+      "summary": "【对照观察】面向微信公众号/小红书的全自动生成、排版与过朱雀检测流水线，代表中文批量内容生产与规避检测诉求。",
+      "summaryEn": "Reference only: automated WeChat/Xiaohongshu generation, formatting, and Zhuque-detector bypass pipeline."
     },
     {
       "id": "baoguangsheng-fast-detect-gpt",
@@ -1351,7 +1422,8 @@
       ],
       "format": "benchmark-dataset",
       "hasDeterministicCheck": false,
-      "summary": "ICLR 2024 零样本概率型机器文本检测代表作（统计检测路线对照）。"
+      "summary": "ICLR 2024 零样本概率型机器文本检测代表作（统计检测路线对照）。",
+      "summaryEn": "ICLR 2024 zero-shot probabilistic machine-text detector (statistical detection reference)."
     },
     {
       "id": "ahans30-binoculars",
@@ -1370,7 +1442,8 @@
       ],
       "format": "benchmark-dataset",
       "hasDeterministicCheck": false,
-      "summary": "ICML 2024 双模型对比零样本机器文本检测代表作。"
+      "summary": "ICML 2024 双模型对比零样本机器文本检测代表作。",
+      "summaryEn": "ICML 2024 dual-model zero-shot machine-text detector (statistical detection reference)."
     },
     {
       "id": "redbarony-humanizer-zh-academic",
@@ -1389,7 +1462,8 @@
       ],
       "format": "agent-skill",
       "hasDeterministicCheck": false,
-      "summary": "【对照观察】主打降低中文学术写作 AIGC 检测率的技能，统一归入规避类对照区。"
+      "summary": "【对照观察】主打降低中文学术写作 AIGC 检测率的技能，统一归入规避类对照区。",
+      "summaryEn": "Reference only: Chinese academic rewriting skill marketed to lower AIGC detection scores."
     },
     {
       "id": "tencent-zhuque-detect",
@@ -1404,7 +1478,9 @@
       ],
       "format": "browser-tool",
       "hasDeterministicCheck": false,
-      "summary": "腾讯公开 AIGC 文本与图像检测服务，是中文创作者圈最常对标的统计检测参照系。"
+      "summary": "腾讯公开 AIGC 文本与图像检测服务，是中文创作者圈最常对标的统计检测参照系。",
+      "nameEn": "Tencent Zhuque AI Detector",
+      "summaryEn": "Public Tencent AIGC text and image detector widely referenced by Chinese content creators."
     },
     {
       "id": "pangram-ai-detection",
@@ -1418,7 +1494,8 @@
       ],
       "format": "browser-tool",
       "hasDeterministicCheck": false,
-      "summary": "英文商业概率型 AI 文本检测服务，是 Substack 等平台误报讨论的焦点参照。"
+      "summary": "英文商业概率型 AI 文本检测服务，是 Substack 等平台误报讨论的焦点参照。",
+      "summaryEn": "Commercial English probabilistic AI-text detector often cited in Substack and publishing false-positive debates."
     },
     {
       "id": "sindresorhus-awesome",
@@ -1437,7 +1514,8 @@
       ],
       "format": "awesome-list",
       "hasDeterministicCheck": false,
-      "summary": "Awesome 清单总规范（含 awesome.md 宣言与 880★ 的 awesome-lint），要求申请入榜的子清单存活至少 30 天。"
+      "summary": "Awesome 清单总规范（含 awesome.md 宣言与 880★ 的 awesome-lint），要求申请入榜的子清单存活至少 30 天。",
+      "summaryEn": "Canonical Awesome list hub (awesome.md manifesto + awesome-lint) requiring submitted lists to exist for at least 30 days."
     },
     {
       "id": "awesome-llm-apps",
@@ -1456,7 +1534,8 @@
       ],
       "format": "awesome-list",
       "hasDeterministicCheck": false,
-      "summary": "以可运行代码样例驱动增长的 AI 应用目录，并非纯链接搬运。"
+      "summary": "以可运行代码样例驱动增长的 AI 应用目录，并非纯链接搬运。",
+      "summaryEn": "AI application catalog anchored by runnable source examples rather than links alone."
     },
     {
       "id": "awesome-mcp-servers",
@@ -1475,7 +1554,8 @@
       ],
       "format": "awesome-list",
       "hasDeterministicCheck": false,
-      "summary": "围绕新协议（MCP）发布初期建立的平台级索引目录。"
+      "summary": "围绕新协议（MCP）发布初期建立的平台级索引目录。",
+      "summaryEn": "Protocol-era directory built around the early Model Context Protocol ecosystem."
     },
     {
       "id": "awesome-claude-skills",
@@ -1494,7 +1574,8 @@
       ],
       "format": "awesome-list",
       "hasDeterministicCheck": false,
-      "summary": "工具商主导维护的 Claude Skills 目录。"
+      "summary": "工具商主导维护的 Claude Skills 目录。",
+      "summaryEn": "Vendor-maintained catalog of Claude Skills."
     },
     {
       "id": "awesome-claude-code",
@@ -1513,7 +1594,8 @@
       ],
       "format": "awesome-list",
       "hasDeterministicCheck": false,
-      "summary": "使用结构化数据与校验脚本辅助维护的高活跃度 Claude Code 资源目录。"
+      "summary": "使用结构化数据与校验脚本辅助维护的高活跃度 Claude Code 资源目录。",
+      "summaryEn": "High-activity Claude Code directory backed by structured data files and validation scripts."
     },
     {
       "id": "sickn33-agentic-awesome-skills",
@@ -1533,7 +1615,8 @@
       ],
       "format": "awesome-list",
       "hasDeterministicCheck": false,
-      "summary": "3,000+ 跨 Agent 技能目录（含本地发现 CLI/MCP），已直接收录多个去 AI 味技能。"
+      "summary": "3,000+ 跨 Agent 技能目录（含本地发现 CLI/MCP），已直接收录多个去 AI 味技能。",
+      "summaryEn": "3,000+ cross-agent skills directory with local discovery CLI/MCP, already indexing multiple anti-slop skills."
     },
     {
       "id": "awesome-cursorrules",
@@ -1552,7 +1635,8 @@
       ],
       "format": "awesome-list",
       "hasDeterministicCheck": false,
-      "summary": "以可直接复制落地的规则文件为核心的 Cursor 规则资产库。"
+      "summary": "以可直接复制落地的规则文件为核心的 Cursor 规则资产库。",
+      "summaryEn": "Collection of copy-ready Cursor rule files."
     },
     {
       "id": "voltagent-awesome-agent-skills",
@@ -1571,7 +1655,8 @@
       ],
       "format": "awesome-list",
       "hasDeterministicCheck": false,
-      "summary": "收录 1,000+ 官方与社区技能（贡献者直接编辑 README.md），已覆盖多款 humanizer 类条目。"
+      "summary": "收录 1,000+ 官方与社区技能（贡献者直接编辑 README.md），已覆盖多款 humanizer 类条目。",
+      "summaryEn": "1,000+ official and community skills maintained directly in README.md, including major humanizer skills."
     },
     {
       "id": "awesome-ai-research-writing",
@@ -1590,7 +1675,8 @@
       ],
       "format": "awesome-list",
       "hasDeterministicCheck": false,
-      "summary": "科研写作润色方向的高星垂直目录。"
+      "summary": "科研写作润色方向的高星垂直目录。",
+      "summaryEn": "Popular vertical directory for scientific writing and revision tools."
     },
     {
       "id": "voltagent-awesome-claude-design",
@@ -1609,7 +1695,8 @@
       ],
       "format": "awesome-list",
       "hasDeterministicCheck": false,
-      "summary": "68 份可直接使用 DESIGN.md 灵感集，证明可执行设计规范比纯链接更有粘性。"
+      "summary": "68 份可直接使用 DESIGN.md 灵感集，证明可执行设计规范比纯链接更有粘性。",
+      "summaryEn": "68 ready-to-use DESIGN.md blueprints showing how executable design specs outlast bare link lists."
     },
     {
       "id": "shannhk-avoid-slop",
@@ -1628,7 +1715,8 @@
       ],
       "format": "awesome-list",
       "hasDeterministicCheck": false,
-      "summary": "现有专门面向反 AI 味的跨媒介目录（收录文本、代码与设计工具），说明细分列表需求体量远小于平台级目录。"
+      "summary": "现有专门面向反 AI 味的跨媒介目录（收录文本、代码与设计工具），说明细分列表需求体量远小于平台级目录。",
+      "summaryEn": "Cross-modality anti-slop directory covering prose, code, and design."
     },
     {
       "id": "zhuyansen-awesome-humanizer-skills",
@@ -1648,7 +1736,8 @@
       ],
       "format": "awesome-list",
       "hasDeterministicCheck": false,
-      "summary": "中英双语、覆盖文本/代码/UI 并带安全分级的反 AI 味技能列表样本。"
+      "summary": "中英双语、覆盖文本/代码/UI 并带安全分级的反 AI 味技能列表样本。",
+      "summaryEn": "Bilingual anti-slop skills list spanning text, code, and UI with safety tiers."
     },
     {
       "id": "hwajongpark-awesome-slop",
@@ -1667,7 +1756,8 @@
       ],
       "format": "awesome-list",
       "hasDeterministicCheck": false,
-      "summary": "收录工具、研究与词表的早期小体量列表，也是纯链接列表冷启动困难的对照样本。"
+      "summary": "收录工具、研究与词表的早期小体量列表，也是纯链接列表冷启动困难的对照样本。",
+      "summaryEn": "Small early list of anti-slop tools, papers, and wordlists."
     }
   ]
 }
