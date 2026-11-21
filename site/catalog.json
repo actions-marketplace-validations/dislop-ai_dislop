@@ -1,0 +1,1746 @@
+{
+  "schema": "dislop.catalog/1",
+  "version": "0.2.0",
+  "snapshotDate": "2026-11-21",
+  "baseUrl": "https://dislop.com",
+  "pillars": [
+    "methodology",
+    "cases",
+    "tools"
+  ],
+  "entryPoints": {
+    "llmsTxt": {
+      "path": "/llms.txt",
+      "bytes": 2385,
+      "approxTokens": 596
+    },
+    "llmsFullTxt": {
+      "path": "/llms-full.txt",
+      "bytes": 19344,
+      "approxTokens": 4836
+    },
+    "radarJson": {
+      "path": "/radar/index.json",
+      "entries": 87,
+      "schema": "dislop.radar/2"
+    }
+  },
+  "resources": [
+    {
+      "id": "site-index",
+      "pillar": "methodology",
+      "kind": "site-mirror",
+      "title": {
+        "en": "dislop — Complete Multi-Modal De-Slop Toolkit",
+        "zh": "dislop — 全场景多模态去 AI 味工具箱"
+      },
+      "path": "/index.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "jsx",
+        "svg",
+        "docx",
+        "pptx",
+        "pdf"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "literary-essay",
+        "deck-and-ui"
+      ],
+      "bytes": 2991,
+      "approxTokens": 748,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp",
+        "skill"
+      ],
+      "sha256": "d457e101f46f8d9bcd152c7d67bf0261376ca1382f241c4255e051c50f42f583"
+    },
+    {
+      "id": "methodology-index",
+      "pillar": "methodology",
+      "kind": "pillar-index",
+      "title": {
+        "en": "Methodology Index",
+        "zh": "方法论导航"
+      },
+      "path": "/methodology/index.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "svg",
+        "docx",
+        "pptx",
+        "pdf"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "literary-essay",
+        "deck-and-ui"
+      ],
+      "bytes": 842,
+      "approxTokens": 211,
+      "relatedTools": [
+        "cli",
+        "mcp",
+        "skill"
+      ],
+      "sha256": "cb21a24ff5e91374d4c8fbac8c5c7a59c62b944b5abbdb86da036507a2041491"
+    },
+    {
+      "id": "methodology-deletion-test",
+      "pillar": "methodology",
+      "kind": "guide",
+      "title": {
+        "en": "Deletion Test & Fact-Preserving Rewrites",
+        "zh": "删除测试与事实守恒改写原则"
+      },
+      "path": "/methodology/deletion-test.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "literary-essay"
+      ],
+      "bytes": 1716,
+      "approxTokens": 429,
+      "relatedTools": [
+        "cli",
+        "mcp",
+        "browser-workbench"
+      ],
+      "sha256": "285e05795ac106e8c21d5ea2c0402a4f17f99621df5c5d32589b20373f74abee"
+    },
+    {
+      "id": "methodology-anti-pattern-map",
+      "pillar": "methodology",
+      "kind": "guide",
+      "title": {
+        "en": "Cross-Modality Anti-Pattern Map",
+        "zh": "跨媒介反模式图谱"
+      },
+      "path": "/methodology/anti-pattern-map.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "jsx",
+        "svg",
+        "docx",
+        "pptx",
+        "pdf"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "literary-essay",
+        "deck-and-ui"
+      ],
+      "bytes": 1907,
+      "approxTokens": 477,
+      "relatedTools": [
+        "cli",
+        "mcp"
+      ],
+      "sha256": "f0c0808ca2389fc3ebdd328e6a693374dbc06bee158687589d2880c6933d29d9"
+    },
+    {
+      "id": "methodology-positive-divergence",
+      "pillar": "methodology",
+      "kind": "guide",
+      "title": {
+        "en": "Positive Divergence & Personalization (Draft Protocols)",
+        "zh": "正向差异化与个性化协议（草案）"
+      },
+      "path": "/methodology/positive-divergence.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "literary-essay",
+        "deck-and-ui"
+      ],
+      "bytes": 2086,
+      "approxTokens": 522,
+      "relatedTools": [
+        "browser-workbench",
+        "skill"
+      ],
+      "sha256": "1e0f3706b12dd1a586a981b852985fa002576a21a683c429743a8f45fb6e784e"
+    },
+    {
+      "id": "methodology-design-system",
+      "pillar": "methodology",
+      "kind": "guide",
+      "title": {
+        "en": "Visual & Typographic Design System (Galley Proof)",
+        "zh": "视觉与排版设计规范（印刷校样体系）"
+      },
+      "path": "/methodology/design-system.md",
+      "modalities": [
+        "html",
+        "css",
+        "jsx",
+        "svg"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "deck-and-ui"
+      ],
+      "bytes": 1686,
+      "approxTokens": 422,
+      "relatedTools": [
+        "browser-workbench",
+        "cli"
+      ],
+      "sha256": "2ccac1f5ea128144e4b4707954871a2f1e83a5ebcdb7058d3f31b354f11b4a53"
+    },
+    {
+      "id": "cases-index",
+      "pillar": "cases",
+      "kind": "pillar-index",
+      "title": {
+        "en": "Cases & Specimens Index",
+        "zh": "正反案例与标本导航"
+      },
+      "path": "/cases/index.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "svg",
+        "docx",
+        "pptx",
+        "pdf"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "literary-essay",
+        "deck-and-ui"
+      ],
+      "bytes": 586,
+      "approxTokens": 147,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "1e10770b1896983d5193d47014c6a53b429eabd5959b5b5795dc11eb1b2ba539"
+    },
+    {
+      "id": "cases-copy-contrasts",
+      "pillar": "cases",
+      "kind": "cases",
+      "title": {
+        "en": "Revision Contrasts (bad -> trap -> good) & Positive Specimens",
+        "zh": "正反改稿对照（bad -> trap -> good）与正向范本"
+      },
+      "path": "/cases/copy-contrasts.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "svg",
+        "docx",
+        "pptx",
+        "pdf"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "literary-essay",
+        "deck-and-ui"
+      ],
+      "bytes": 8099,
+      "approxTokens": 2025,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "61e57e626672a5b4ae42c8ab57c4741f2b946a05e5484acee2c00a0c8cdc9528"
+    },
+    {
+      "id": "cases-dogfood-audit",
+      "pillar": "cases",
+      "kind": "cases",
+      "title": {
+        "en": "Repository Self-Dogfooding Audit",
+        "zh": "仓库自审对照实录"
+      },
+      "path": "/cases/dogfood-audit.md",
+      "modalities": [
+        "markdown",
+        "html",
+        "css",
+        "svg"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "deck-and-ui"
+      ],
+      "bytes": 1404,
+      "approxTokens": 351,
+      "relatedTools": [
+        "cli",
+        "browser-workbench"
+      ],
+      "sha256": "b4804e1d85a942a39ff20ad20dbac045d9f4ad8b47c6cfe2a35f0489cf373211"
+    },
+    {
+      "id": "cases-ui-specimens",
+      "pillar": "cases",
+      "kind": "cases",
+      "title": {
+        "en": "Non-Mainstream Design & Print References (31 Verified)",
+        "zh": "非主流设计与印刷参考源（31 条实测核验）"
+      },
+      "path": "/cases/ui-specimens.md",
+      "modalities": [
+        "html",
+        "css",
+        "svg",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "deck-and-ui"
+      ],
+      "bytes": 7000,
+      "approxTokens": 1750,
+      "relatedTools": [
+        "browser-workbench"
+      ],
+      "sha256": "6dcda0659a7e1f7340c971429e7202728c211eb19b7c4f5056cca80b4e08c455"
+    },
+    {
+      "id": "tools-index",
+      "pillar": "tools",
+      "kind": "pillar-index",
+      "title": {
+        "en": "Tools & Multi-Surface Integration Guide",
+        "zh": "工具与多形态渐进接入导航"
+      },
+      "path": "/tools/index.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "jsx",
+        "svg",
+        "docx",
+        "pptx",
+        "pdf"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "literary-essay",
+        "deck-and-ui"
+      ],
+      "bytes": 842,
+      "approxTokens": 211,
+      "relatedTools": [
+        "browser-workbench",
+        "skill",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "091025cb16ad40b770333377292fa4e9a99ebc0789839af3987c6ef1ee311921"
+    },
+    {
+      "id": "tools-skill",
+      "pillar": "tools",
+      "kind": "skill",
+      "title": {
+        "en": "dislop Agent Skill Workflow (SKILL.md)",
+        "zh": "dislop Agent 技能剧本（SKILL.md）"
+      },
+      "path": "/tools/skill.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "jsx",
+        "svg",
+        "docx",
+        "pptx",
+        "pdf"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "literary-essay",
+        "deck-and-ui"
+      ],
+      "bytes": 3760,
+      "approxTokens": 940,
+      "relatedTools": [
+        "skill",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "5dd44744d359959aded68d5f1b9256524ee0e9890e6adf17d8e6f7bffcf2c867"
+    },
+    {
+      "id": "tools-prompts",
+      "pillar": "tools",
+      "kind": "prompts",
+      "title": {
+        "en": "Zero-Install Prompt Snippets for External Agents",
+        "zh": "零安装轻量审校提示片段"
+      },
+      "path": "/tools/prompts.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "literary-essay",
+        "deck-and-ui"
+      ],
+      "bytes": 1170,
+      "approxTokens": 293,
+      "relatedTools": [
+        "browser-workbench",
+        "skill"
+      ],
+      "sha256": "0013c126572d5cbd9240095b924ca8de5a69332bc47acbcf7e9e3d9eeb24c0d1"
+    },
+    {
+      "id": "tools-cli-hooks",
+      "pillar": "tools",
+      "kind": "guide",
+      "title": {
+        "en": "CLI, Git Diff, Hooks & GitHub Actions",
+        "zh": "CLI、Git 增量、Hooks 与 CI 接入"
+      },
+      "path": "/tools/cli-and-hooks.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "jsx",
+        "svg",
+        "docx",
+        "pptx",
+        "pdf"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "literary-essay",
+        "deck-and-ui"
+      ],
+      "bytes": 1940,
+      "approxTokens": 485,
+      "relatedTools": [
+        "cli"
+      ],
+      "sha256": "cd06b61b50bdc0e0f9e49f79b3c27a588e3680ce3fc0ebeaf944dc61f4abbd2b"
+    },
+    {
+      "id": "tools-mcp-sdk-api",
+      "pillar": "tools",
+      "kind": "guide",
+      "title": {
+        "en": "MCP Server, SDK & Planned HTTP API",
+        "zh": "MCP 服务、SDK 与规划中的 HTTP API"
+      },
+      "path": "/tools/mcp-sdk-api.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "jsx",
+        "svg",
+        "docx",
+        "pptx",
+        "pdf"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "literary-essay",
+        "deck-and-ui"
+      ],
+      "bytes": 1258,
+      "approxTokens": 315,
+      "relatedTools": [
+        "mcp",
+        "cli"
+      ],
+      "sha256": "ec64a3d8246a4ff93d610db3314c854942dca43814dea0616b500705857f950e"
+    },
+    {
+      "id": "pack-core",
+      "pillar": "methodology",
+      "kind": "pack",
+      "title": {
+        "en": "Pack: Core Publication Invariants (7 rules)",
+        "zh": "规则包：基础发布底线（7 条）"
+      },
+      "path": "/packs/core.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "jsx",
+        "svg",
+        "docx",
+        "pptx",
+        "pdf"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core"
+      ],
+      "bytes": 7094,
+      "approxTokens": 1774,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "0673604b8772f23e75ff501a89984aacc1ee92c543575c61a61670eaf743c110"
+    },
+    {
+      "id": "pack-business-brief",
+      "pillar": "methodology",
+      "kind": "pack",
+      "title": {
+        "en": "Pack: Business Brief & Technical Proposal (8 rules)",
+        "zh": "规则包：商业方案与技术简报（8 条）"
+      },
+      "path": "/packs/business-brief.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "business-brief"
+      ],
+      "bytes": 8275,
+      "approxTokens": 2069,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "2b2be94739077c1a6c07e01f62395d3ec96b201d5f64fd7d6184a4aa42bf4445"
+    },
+    {
+      "id": "pack-literary-essay",
+      "pillar": "methodology",
+      "kind": "pack",
+      "title": {
+        "en": "Pack: Literary Essay & Longform Narrative (5 rules)",
+        "zh": "规则包：散文随笔与深度非虚构（5 条）"
+      },
+      "path": "/packs/literary-essay.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "literary-essay"
+      ],
+      "bytes": 5131,
+      "approxTokens": 1283,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "38a194d80bf411f941617bd801aaf6e16ddf2d46ad416d5ca9acfe2ef299823c"
+    },
+    {
+      "id": "pack-deck-and-ui",
+      "pillar": "methodology",
+      "kind": "pack",
+      "title": {
+        "en": "Pack: Slide Deck, Web UI & Graphic Layout (9 rules)",
+        "zh": "规则包：演示文稿、Web 界面与平面视觉（9 条）"
+      },
+      "path": "/packs/deck-and-ui.md",
+      "modalities": [
+        "html",
+        "css",
+        "jsx",
+        "svg",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "deck-and-ui"
+      ],
+      "bytes": 9392,
+      "approxTokens": 2348,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "65408bf7cd11b105424478aea79a82577cfd0fba00d8189723ebb22c4648f00a"
+    },
+    {
+      "id": "rule-local-path-leak",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: local-path-leak",
+        "zh": "规则：local-path-leak"
+      },
+      "path": "/rules/local-path-leak.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "jsx",
+        "svg",
+        "docx",
+        "pptx",
+        "pdf"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core"
+      ],
+      "bytes": 1068,
+      "approxTokens": 267,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "4ab7429ac96c5034b472e91c868161616344b937d4481b62bf4411374a4f4c09"
+    },
+    {
+      "id": "rule-unfilled-placeholder",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: unfilled-placeholder",
+        "zh": "规则：unfilled-placeholder"
+      },
+      "path": "/rules/unfilled-placeholder.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "jsx",
+        "svg",
+        "docx",
+        "pptx",
+        "pdf"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core"
+      ],
+      "bytes": 1087,
+      "approxTokens": 272,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "ebc31fae496feb59c8dc40077116c3f52e25ff09699d23e240e64cf07dd05545"
+    },
+    {
+      "id": "rule-chatbot-artifact",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: chatbot-artifact",
+        "zh": "规则：chatbot-artifact"
+      },
+      "path": "/rules/chatbot-artifact.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "jsx",
+        "docx",
+        "pptx",
+        "pdf"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core"
+      ],
+      "bytes": 1050,
+      "approxTokens": 263,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "a189105c3c4e3527467dab69930cec1580a0063946997ba812eff3b08c9f9a3e"
+    },
+    {
+      "id": "rule-markdown-leak",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: markdown-leak",
+        "zh": "规则：markdown-leak"
+      },
+      "path": "/rules/markdown-leak.md",
+      "modalities": [
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core"
+      ],
+      "bytes": 969,
+      "approxTokens": 242,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "a7624cee1b82b526cf5de920ebeddf85318ad84b48d04c8748669dc4faec9634"
+    },
+    {
+      "id": "rule-ui-dead-control",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: ui-dead-control",
+        "zh": "规则：ui-dead-control"
+      },
+      "path": "/rules/ui-dead-control.md",
+      "modalities": [
+        "html",
+        "jsx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core"
+      ],
+      "bytes": 1136,
+      "approxTokens": 284,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "6fc4f3a28eed5e926218b718000c9be53c1e5899bf9fc4d28aa2178b42cef1ef"
+    },
+    {
+      "id": "rule-ui-contrast-and-dark-inversion",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: ui-contrast-and-dark-inversion",
+        "zh": "规则：ui-contrast-and-dark-inversion"
+      },
+      "path": "/rules/ui-contrast-and-dark-inversion.md",
+      "modalities": [
+        "html",
+        "css"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core"
+      ],
+      "bytes": 1234,
+      "approxTokens": 309,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "83c8969656577e997a359de855849fafc870e89d4661054a7d2890430e5560c9"
+    },
+    {
+      "id": "rule-office-pdf-hygiene",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: office-pdf-hygiene",
+        "zh": "规则：office-pdf-hygiene"
+      },
+      "path": "/rules/office-pdf-hygiene.md",
+      "modalities": [
+        "docx",
+        "pptx",
+        "pdf"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core"
+      ],
+      "bytes": 1221,
+      "approxTokens": 305,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "0f916ff40f15210830f76c2e15e1838e24d924fcd7b24f206c90c52899443a07"
+    },
+    {
+      "id": "rule-en-throat-clearing-opener",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: en-throat-clearing-opener",
+        "zh": "规则：en-throat-clearing-opener"
+      },
+      "path": "/rules/en-throat-clearing-opener.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en"
+      ],
+      "packs": [
+        "business-brief"
+      ],
+      "bytes": 1076,
+      "approxTokens": 269,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "fad6ada2e283801f05d2f2543651b55de571bf74728555c3015e3aa9482739d5"
+    },
+    {
+      "id": "rule-en-cliche-lexicon",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: en-cliche-lexicon",
+        "zh": "规则：en-cliche-lexicon"
+      },
+      "path": "/rules/en-cliche-lexicon.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en"
+      ],
+      "packs": [
+        "business-brief"
+      ],
+      "bytes": 1108,
+      "approxTokens": 277,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "f7ccac6c35a2077ec48ebd78daa89446ec02608cdc43a76a4ef59c7dc723bd02"
+    },
+    {
+      "id": "rule-zh-bureaucratic-padding",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: zh-bureaucratic-padding",
+        "zh": "规则：zh-bureaucratic-padding"
+      },
+      "path": "/rules/zh-bureaucratic-padding.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "zh"
+      ],
+      "packs": [
+        "business-brief"
+      ],
+      "bytes": 1184,
+      "approxTokens": 296,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "02a07b0ad2a9c4e586cc9f7fad90ed7c56e58af0f6f434efa720a96abdb0815d"
+    },
+    {
+      "id": "rule-negation-pivot-frame",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: negation-pivot-frame",
+        "zh": "规则：negation-pivot-frame"
+      },
+      "path": "/rules/negation-pivot-frame.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "business-brief"
+      ],
+      "bytes": 1239,
+      "approxTokens": 310,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "a464632daf0060e9db6a6c03fc39482cfe238cc226548be149a416668d56cec6"
+    },
+    {
+      "id": "rule-staccato-slogan-run",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: staccato-slogan-run",
+        "zh": "规则：staccato-slogan-run"
+      },
+      "path": "/rules/staccato-slogan-run.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "business-brief"
+      ],
+      "bytes": 1178,
+      "approxTokens": 295,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "1532c0bfa59cd097b0ecd1c3fa4155c539ae13c958aa9d9f5bbdbc93a1e44cc4"
+    },
+    {
+      "id": "rule-zh-four-char-triad",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: zh-four-char-triad",
+        "zh": "规则：zh-four-char-triad"
+      },
+      "path": "/rules/zh-four-char-triad.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "zh"
+      ],
+      "packs": [
+        "business-brief"
+      ],
+      "bytes": 1147,
+      "approxTokens": 287,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "6dd358525ad518a78409c91b8e354ea1d7dc12f6dacd1ac48176fcc565ce8ab8"
+    },
+    {
+      "id": "rule-unsourced-attribution",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: unsourced-attribution",
+        "zh": "规则：unsourced-attribution"
+      },
+      "path": "/rules/unsourced-attribution.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "business-brief"
+      ],
+      "bytes": 1204,
+      "approxTokens": 301,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "9877e0cb9b570115e91058d49608dbfd12ce3739c8b752fe9ca0ca793d3735d1"
+    },
+    {
+      "id": "rule-bold-lead-list-wall",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: bold-lead-list-wall",
+        "zh": "规则：bold-lead-list-wall"
+      },
+      "path": "/rules/bold-lead-list-wall.md",
+      "modalities": [
+        "markdown",
+        "text"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "business-brief"
+      ],
+      "bytes": 1254,
+      "approxTokens": 314,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "36d5957e83132e575fd7a6bec7f4625f67886abe9e12e213711fc67fb5eb7d85"
+    },
+    {
+      "id": "rule-zh-essay-moralizing-ending",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: zh-essay-moralizing-ending",
+        "zh": "规则：zh-essay-moralizing-ending"
+      },
+      "path": "/rules/zh-essay-moralizing-ending.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx"
+      ],
+      "languages": [
+        "zh"
+      ],
+      "packs": [
+        "literary-essay"
+      ],
+      "bytes": 1206,
+      "approxTokens": 302,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "9462ab15ec409e3cf965f277ad5d701740185d0cb560282ba7a35d409dfe21d4"
+    },
+    {
+      "id": "rule-en-essay-moralizing-ending",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: en-essay-moralizing-ending",
+        "zh": "规则：en-essay-moralizing-ending"
+      },
+      "path": "/rules/en-essay-moralizing-ending.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx"
+      ],
+      "languages": [
+        "en"
+      ],
+      "packs": [
+        "literary-essay"
+      ],
+      "bytes": 1102,
+      "approxTokens": 276,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "23c7907bf690ed22afe607ea856dfcf5c323aa44f48e3fdd7915cf3539b63de1"
+    },
+    {
+      "id": "rule-literary-negation-pivot",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: literary-negation-pivot",
+        "zh": "规则：literary-negation-pivot"
+      },
+      "path": "/rules/literary-negation-pivot.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "literary-essay"
+      ],
+      "bytes": 1032,
+      "approxTokens": 258,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "2e987d77b27613385aae7da1dd6bcdefdc6d8e399501614f7e37c6714a8fdbbf"
+    },
+    {
+      "id": "rule-excessive-em-dash-density",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: excessive-em-dash-density",
+        "zh": "规则：excessive-em-dash-density"
+      },
+      "path": "/rules/excessive-em-dash-density.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "literary-essay"
+      ],
+      "bytes": 1214,
+      "approxTokens": 304,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "720b74030d39f9fc654bddffdf62d99d9e6946026b59480361c93f9ba62ac051"
+    },
+    {
+      "id": "rule-zh-halfwidth-punctuation",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: zh-halfwidth-punctuation",
+        "zh": "规则：zh-halfwidth-punctuation"
+      },
+      "path": "/rules/zh-halfwidth-punctuation.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx"
+      ],
+      "languages": [
+        "zh"
+      ],
+      "packs": [
+        "literary-essay"
+      ],
+      "bytes": 1115,
+      "approxTokens": 279,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "5f94365c25922e0d6579ab69b955db83c023eecb4cc10bdbd3fb709b77650634"
+    },
+    {
+      "id": "rule-slide-word-wall",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: slide-word-wall",
+        "zh": "规则：slide-word-wall"
+      },
+      "path": "/rules/slide-word-wall.md",
+      "modalities": [
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "deck-and-ui"
+      ],
+      "bytes": 1246,
+      "approxTokens": 312,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "763f6df07f014d27e68c45bf349d994c1c264b33d79eeb74aa04dc9ff98cf575"
+    },
+    {
+      "id": "rule-slide-bullet-overload",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: slide-bullet-overload",
+        "zh": "规则：slide-bullet-overload"
+      },
+      "path": "/rules/slide-bullet-overload.md",
+      "modalities": [
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "deck-and-ui"
+      ],
+      "bytes": 1053,
+      "approxTokens": 263,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "19998c0e20c0ff4b84c86cdd4bbbdcdaeb8edeb50b8b329a5507958e4e8ddf1a"
+    },
+    {
+      "id": "rule-slide-autofit-shrink",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: slide-autofit-shrink",
+        "zh": "规则：slide-autofit-shrink"
+      },
+      "path": "/rules/slide-autofit-shrink.md",
+      "modalities": [
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "deck-and-ui"
+      ],
+      "bytes": 1068,
+      "approxTokens": 267,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "c11963774ea7c781f438e03b6cee194e271e4e5602caded6ca7cf27a12e2fce7"
+    },
+    {
+      "id": "rule-slide-weak-topic-title",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: slide-weak-topic-title",
+        "zh": "规则：slide-weak-topic-title"
+      },
+      "path": "/rules/slide-weak-topic-title.md",
+      "modalities": [
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "deck-and-ui"
+      ],
+      "bytes": 1090,
+      "approxTokens": 273,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "8cb1bb2cf1e9c89e75d4831dfccae5fa465e8b8df53898bb903c2cafae2b91de"
+    },
+    {
+      "id": "rule-ui-ai-gradient",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: ui-ai-gradient",
+        "zh": "规则：ui-ai-gradient"
+      },
+      "path": "/rules/ui-ai-gradient.md",
+      "modalities": [
+        "html",
+        "css",
+        "jsx",
+        "svg"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "deck-and-ui"
+      ],
+      "bytes": 1146,
+      "approxTokens": 287,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "11a40a7030125deb035f86c480e7bcdd905cc123ee446c639fdb6525e7fd7bac"
+    },
+    {
+      "id": "rule-ui-pill-soup",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: ui-pill-soup",
+        "zh": "规则：ui-pill-soup"
+      },
+      "path": "/rules/ui-pill-soup.md",
+      "modalities": [
+        "html",
+        "jsx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "deck-and-ui"
+      ],
+      "bytes": 1202,
+      "approxTokens": 301,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "528293e02c6267cf83191425240eeb067aa77e7273c74989f452dfce5acaabbb"
+    },
+    {
+      "id": "rule-ui-box-in-box",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: ui-box-in-box",
+        "zh": "规则：ui-box-in-box"
+      },
+      "path": "/rules/ui-box-in-box.md",
+      "modalities": [
+        "html",
+        "jsx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "deck-and-ui"
+      ],
+      "bytes": 1205,
+      "approxTokens": 301,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "6bfe67f7aa466a0e0877be5fc07f4de79cbbc5f32b43cea43a5b713542c468a0"
+    },
+    {
+      "id": "rule-ui-prompt-echo-badge",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: ui-prompt-echo-badge",
+        "zh": "规则：ui-prompt-echo-badge"
+      },
+      "path": "/rules/ui-prompt-echo-badge.md",
+      "modalities": [
+        "html",
+        "jsx",
+        "svg"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "deck-and-ui"
+      ],
+      "bytes": 1180,
+      "approxTokens": 295,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "d8eebdb90ec6d25f63a282b1d9772111dfa81fb1429758e597d6cac440a55eb6"
+    },
+    {
+      "id": "rule-svg-text-overflow-or-a11y",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: svg-text-overflow-or-a11y",
+        "zh": "规则：svg-text-overflow-or-a11y"
+      },
+      "path": "/rules/svg-text-overflow-or-a11y.md",
+      "modalities": [
+        "svg"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "deck-and-ui"
+      ],
+      "bytes": 1357,
+      "approxTokens": 339,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "719de6c606ebf037ab0ee86855d3db93a4490e54e1f739358f08116d7f7358d4"
+    },
+    {
+      "id": "task-business-doc",
+      "pillar": "methodology",
+      "kind": "task-bundle",
+      "title": {
+        "en": "Task Bundle: Business Brief & Technical Proposal",
+        "zh": "任务组合：商业简报与技术方案审校"
+      },
+      "path": "/tasks/business-doc.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief"
+      ],
+      "bytes": 3911,
+      "approxTokens": 978,
+      "relatedTools": [
+        "browser-workbench",
+        "skill",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "43ac3e9879f999319c7a7c403030d730e610430e496cbbbc1ace602c9ada241a"
+    },
+    {
+      "id": "task-web-and-deck",
+      "pillar": "methodology",
+      "kind": "task-bundle",
+      "title": {
+        "en": "Task Bundle: Web UI, SVG & Slide Decks",
+        "zh": "任务组合：前端 UI、SVG 与演示文稿审校"
+      },
+      "path": "/tasks/web-and-deck.md",
+      "modalities": [
+        "html",
+        "css",
+        "jsx",
+        "svg",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "deck-and-ui"
+      ],
+      "bytes": 4208,
+      "approxTokens": 1052,
+      "relatedTools": [
+        "browser-workbench",
+        "skill",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "a7fc858139dbfb5140e611b164bebc09d4649be6e6caeff6f2e6685c206b0419"
+    },
+    {
+      "id": "task-editorial-writing",
+      "pillar": "methodology",
+      "kind": "task-bundle",
+      "title": {
+        "en": "Task Bundle: Editorial & Literary Writing",
+        "zh": "任务组合：散文随笔与非虚构长文审校"
+      },
+      "path": "/tasks/editorial-writing.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "literary-essay"
+      ],
+      "bytes": 3500,
+      "approxTokens": 875,
+      "relatedTools": [
+        "browser-workbench",
+        "skill",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "91b99b36001725cc71519b1cf901646142ddc87f5ffbfcaf7d140dc8909e1ce4"
+    },
+    {
+      "id": "task-pre-release-gate",
+      "pillar": "tools",
+      "kind": "task-bundle",
+      "title": {
+        "en": "Task Bundle: Pre-Release Objective Gate & CI",
+        "zh": "任务组合：发布前客观质量门禁与 CI"
+      },
+      "path": "/tasks/pre-release-gate.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "jsx",
+        "svg",
+        "docx",
+        "pptx",
+        "pdf"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core"
+      ],
+      "bytes": 2057,
+      "approxTokens": 514,
+      "relatedTools": [
+        "cli",
+        "mcp"
+      ],
+      "sha256": "8f55251d2d4a53d21c3af6faa0edf87ab1cfa16a9abaf5411c30245f630532ec"
+    },
+    {
+      "id": "radar-index-md",
+      "pillar": "cases",
+      "kind": "radar",
+      "title": {
+        "en": "Anti-Slop Resource Radar (87 Verified Entries)",
+        "zh": "反 AI 味生态资源雷达（87 条实测核验）"
+      },
+      "path": "/radar/index.md",
+      "modalities": [
+        "prose",
+        "ui-design",
+        "diagram-media",
+        "code-pr",
+        "academic",
+        "multi-modal"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [],
+      "bytes": 21543,
+      "approxTokens": 5386,
+      "relatedTools": [
+        "browser-workbench"
+      ],
+      "sha256": "ad5705f460f9c53a124453d3e512ba2ffb207855833a5d667203143e1a0e37cc"
+    }
+  ]
+}

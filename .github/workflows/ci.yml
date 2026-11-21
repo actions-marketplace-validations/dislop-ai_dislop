@@ -21,10 +21,17 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Verify site bundle is in sync with src/core.mjs & packs/
+      - name: Verify full dual-native site/ output is in sync with SSOT
         run: |
           node scripts/build_site.mjs
-          git diff --exit-code site/engine/ site/assets/
+          git diff --exit-code site/
+          test -z "$(git status --porcelain site/)"
+
+      - name: Run website specimen, Try-demo, catalog, URL & WCAG tests
+        run: node tests/test_site.mjs
+
+      - name: Run v0.3 anti-pattern prototype self-test
+        run: node scripts/prototype_antipattern_lab.mjs self-test
 
       - name: Validate Pack Schema v2 & all 101+ rule fixtures (Node & Python)
         run: |
@@ -34,8 +41,10 @@ jobs:
       - name: Run unit & cross-runtime conformance tests (DOCX, PPTX, PDF, MCP, verify)
         run: PYTHONPATH=src python3 -m unittest discover -s tests -v
 
-      - name: Strict self-dogfood across docs, SVG assets & site/ (Node & Python)
+      - name: Strict self-dogfood across docs, skills, SVG assets & site/ (Node & Python)
         run: |
           node ./bin/dislop.mjs check . --fail-on warning
           PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning
+          node ./bin/dislop.mjs check site/ docs/research/ skills/ assets/ --fail-on info
+          PYTHONPATH=src python3 -m dislop.cli check site/ docs/research/ skills/ assets/ --fail-on info
           PYTHONPATH=src python3 -m dislop.cli check README.zh-CN.md --pack literary-essay --fail-on warning

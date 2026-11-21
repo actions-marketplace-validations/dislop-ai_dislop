@@ -1,0 +1,55 @@
+---
+content-type: reference-data
+task: web-and-deck
+version: 0.2.0
+---
+
+# Task Bundle: Web UI, SVG & Slide Decks
+
+Use this bundle when building or auditing HTML/CSS/JSX pages, SVG diagrams, or PowerPoint (`.pptx`) presentations.
+
+## 1. Hard Invariants & Layout Guards
+
+1. Zero dead controls (`<a href="#">`, unlabeled buttons, unexplained `<button disabled>`).
+2. Meet WCAG 2.2 AA contrast (`>= 4.5:1` normal text) and strictly monotonic dark-mode elevation (`stage < sheet < raised`).
+3. Reject both Generator Default #1 (purple-pink neon gradients, pill soup > 6, 3-level nested boxes) and Generator Default #2 (warm cream + terracotta fallback).
+4. Keep PowerPoint slides readable: `<= 120` Latin words (`<= 280` Han chars), `<= 6` bullets, zero off-slide text shapes, and `normAutofit >= 80%`.
+
+## 2. Active Rules
+
+### Pack `core`
+- [`local-path-leak`](../rules/local-path-leak.md) (`error`): Leaked local filesystem path or file:/// link.
+- [`unfilled-placeholder`](../rules/unfilled-placeholder.md) (`error`): Unfilled template placeholder, broken Word reference field, or dummy copy.
+- [`chatbot-artifact`](../rules/chatbot-artifact.md) (`error`): Unstripped chatbot wrapper sentence or AI search citation token.
+- [`markdown-leak`](../rules/markdown-leak.md) (`error`): Raw Markdown syntax (`**bold**` or `## heading`) left unrendered inside an Office document.
+- [`ui-dead-control`](../rules/ui-dead-control.md) (`error`): Anchor with dead `href="#"` / empty target, unlabeled button, or unexplained static `<button disabled>`.
+- [`ui-contrast-and-dark-inversion`](../rules/ui-contrast-and-dark-inversion.md) (`error`): Resolvable foreground/background contrast fails WCAG AA (< 4.5:1), or dark-theme canvas is brighter than raised surface tokens.
+- [`office-pdf-hygiene`](../rules/office-pdf-hygiene.md) (`error`): Off-slide text box in PPTX, unaccepted tracked changes/comments in Office docs, or PDF metadata/font/URI defect.
+
+### Pack `deck-and-ui`
+- [`slide-word-wall`](../rules/slide-word-wall.md) (`warning`): Slide exceeds readable copy budget (> 120 Latin words or > 280 Chinese characters).
+- [`slide-bullet-overload`](../rules/slide-bullet-overload.md) (`warning`): Slide contains more than 6 bullet items (`maxSlideBullets`), fragmenting visual hierarchy.
+- [`slide-autofit-shrink`](../rules/slide-autofit-shrink.md) (`warning`): PowerPoint `normAutofit` shrank text below 80% (`fontScale < 80000`) because copy overflowed its box.
+- [`slide-weak-topic-title`](../rules/slide-weak-topic-title.md) (`info`): Content-heavy slide uses a generic topic label (`Overview`, `Background`, `背景`) instead of stating its takeaway.
+- [`ui-ai-gradient`](../rules/ui-ai-gradient.md) (`warning`): Default purple/indigo-to-pink generator gradient or gradient-clipped display headline.
+- [`ui-pill-soup`](../rules/ui-pill-soup.md) (`warning`): Excessive `rounded-full` / `999px` text pills (> 6 per view) turn interface metadata into badge soup.
+- [`ui-box-in-box`](../rules/ui-box-in-box.md) (`warning`): Three or more nested bordered/rounded containers wrap the same content (`box-in-box-in-box`).
+- [`ui-prompt-echo-badge`](../rules/ui-prompt-echo-badge.md) (`warning`): Interface chrome echoes prompt-engineering hype (`AI-Powered`, `Zero Hallucination`) instead of naming the function.
+- [`svg-text-overflow-or-a11y`](../rules/svg-text-overflow-or-a11y.md) (`warning`): Standalone SVG contains `<text>` likely to clip outside `viewBox` on fallback fonts, or omits `<title>`/`aria-label`.
+
+## 3. Reference Contrast
+
+```text
+bad:  <h1 class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Release Notes v2.4</h1>
+trap: <h1 class="bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent">Release Notes v2.4</h1>
+good: <h1 class="page-title">Release Notes v2.4</h1>
+```
+
+## 4. Deterministic Verification Command
+
+```bash
+npx --yes github:dislop-ai/dislop check site/ --pack deck-and-ui --fail-on warning
+uvx --from git+https://github.com/dislop-ai/dislop dislop check deck.pptx
+```
+
+Deep dives: [Pack `deck-and-ui`](../packs/deck-and-ui.md) · [Design System](../methodology/design-system.md) · [UI References](../cases/ui-specimens.md)

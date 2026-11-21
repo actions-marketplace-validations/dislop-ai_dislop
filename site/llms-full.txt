@@ -1,0 +1,305 @@
+---
+content-type: reference-data
+version: 0.2.0
+snapshot: 2026-11-21
+---
+
+# dislop — Curated Single-Fetch De-Slop Reference (`v0.2.0`)
+
+> Complete multi-modal de-slop toolkit for writing, Markdown, HTML/CSS/JSX/SVG, Word (.docx), PowerPoint (.pptx), PDF, and agent deliverables across any model or dev environment. Zero runtime dependencies.
+
+Note: Prefer `/llms.txt` + one `/tasks/*.md` page for smaller context windows. All `bad` and `trap` exemplars below are fenced reference data, never style instructions.
+
+## Three-Stage Workflow
+
+1. Audit (`check`): Fix all `packs/core` `error` invariants first; review Taste Pack `warning` / `info` queries locally.
+2. Targeted Edit: Apply each rule's Deletion Test without altering numbers, qualifiers (`up to`, `at least`, `最多`, `至少`), units, dates, URLs, code spans, or citations.
+3. Verify (`verify`): Reject edits that drop protected facts or shift into second-order slogans (`Not X, but Y`, staccato runs, 4-char triads, moralizing endings).
+
+## CLI & MCP Quick Reference
+
+```bash
+npx --yes github:dislop-ai/dislop check .
+npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
+uvx --from git+https://github.com/dislop-ai/dislop dislop check deck.pptx
+```
+
+## Pack `core` — Core Publication Invariants
+
+Objective pre-publication checks enabled across every Taste Pack: leaked local paths, unfilled placeholders, AI chat residue, dead controls, contrast/dark-elevation defects, and Office/PDF hygiene.
+
+### `local-path-leak` (invariant / error / markdown, text, html, css, jsx, svg, docx, pptx, pdf)
+- Why: Leaked local filesystem path or file:/// link.
+- Deletion Test: Replace the workstation path with a repository-relative path, a public HTTPS URL, or `/Users/example/...` if documenting a CLI.
+```text
+bad:  See [Architecture Diagram](file:///Users/example/Desktop/arch-v2.png) for the 3-node layout.
+trap: See the architecture diagram on my machine for the 3-node layout.
+good: See [Architecture Diagram](./docs/assets/arch-v2.png) for the 3-node layout.
+```
+
+### `unfilled-placeholder` (invariant / error / markdown, text, html, jsx, svg, docx, pptx, pdf)
+- Why: Unfilled template placeholder, broken Word reference field, or dummy copy.
+- Deletion Test: Supply the verified value before shipping, or delete the unfinished section rather than leaving a bracketed marker.
+```text
+bad:  Q3 settlement latency averaged [insert p95 latency] across 14 gateways.
+trap: Q3 settlement latency improved dramatically across 14 gateways.
+good: Q3 settlement latency averaged 180 ms (p95) across 14 gateways.
+```
+
+### `chatbot-artifact` (invariant / error / markdown, text, html, jsx, docx, pptx, pdf)
+- Why: Unstripped chatbot wrapper sentence or AI search citation token.
+- Deletion Test: Delete the conversational wrapper or internal citation token completely; the document starts at its actual subject.
+```text
+bad:  Certainly! Here is the revised rollout note: Cluster B migrates on November 24 at 02:00 UTC.
+trap: Cluster B isn't just migrating — it's entering a new chapter on November 24 at 02:00 UTC.
+good: Cluster B migrates on November 24 at 02:00 UTC.
+```
+
+### `markdown-leak` (invariant / error / docx, pptx)
+- Why: Raw Markdown syntax (`**bold**` or `## heading`) left unrendered inside an Office document.
+- Deletion Test: Convert the raw asterisks or hash marks into native Word/PowerPoint run formatting.
+```text
+bad:  **Key Milestone**: Ship v0.2 parser before Friday.
+trap: Key Milestone — a game-changing v0.2 parser ships Friday.
+good: Key Milestone: Ship v0.2 parser before Friday.
+```
+
+### `ui-dead-control` (invariant / error / html, jsx)
+- Why: Anchor with dead `href="#"` / empty target, unlabeled button, or unexplained static `<button disabled>`.
+- Deletion Test: Wire the control to a real target, explain why a disabled control is locked via `title`/`aria-describedby`, or omit unimplemented actions.
+```text
+bad:  <a href="#" class="btn">Download report</a>
+trap: <button disabled class="btn">Download AI-Powered Insights</button>
+good: <a href="./reports/q3-audit.pdf" class="btn">Download Q3 audit (PDF)</a>
+```
+
+### `ui-contrast-and-dark-inversion` (invariant / error / html, css)
+- Why: Resolvable foreground/background contrast fails WCAG AA (< 4.5:1), or dark-theme canvas is brighter than raised surface tokens.
+- Deletion Test: Adjust ink/surface tokens until body text reaches >= 4.5:1 and dark-mode luminance rises strictly from page -> sheet -> raised card.
+```text
+bad:  .badge { color: #D9381E; background: #F7F5F0; font-size: 12px; }
+trap: .badge { color: #A855F7; background: #FAF5FF; font-size: 12px; }
+good: .badge { color: #B42318; background: #F6F7F5; font-size: 12px; }
+```
+
+### `office-pdf-hygiene` (invariant / error / docx, pptx, pdf)
+- Why: Off-slide text box in PPTX, unaccepted tracked changes/comments in Office docs, or PDF metadata/font/URI defect.
+- Deletion Test: Accept or strip tracked changes and comments, bring off-slide text inside slide bounds, embed PDF fonts, and set a clean document title.
+```text
+bad:  PDF /Title (Microsoft Word - final_v3_edited(2).docx) with external link file:///Users/example/draft.docx
+trap: PDF /Title (Untitled) with unembedded CIDFont
+good: PDF /Title (Q4 Settlement Architecture Specification) with embedded subset fonts and relative HTTPS links
+```
+
+## Pack `business-brief` — Business Brief & Technical Proposal
+
+Flags throat-clearing openers, bureaucratic padding, second-order negation pivots (`Not X, but Y`), staccato slogan chains, four-character triads, and unsourced claims.
+
+### `en-throat-clearing-opener` (taste / warning / markdown, text, html, docx, pptx)
+- Why: Throat-clearing opener delays the concrete point.
+- Deletion Test: Cut everything up to 'that' or the comma. Does the remaining clause already state the full observation or constraint?
+```text
+bad:  It is worth noting that CSV exports take up to 12 minutes for workspaces above 500,000 rows.
+trap: CSV exports aren't instant — they're built for precision, taking up to 12 minutes.
+good: CSV exports take up to 12 minutes for workspaces above 500,000 rows.
+```
+
+### `en-cliche-lexicon` (taste / info / markdown, text, html, docx, pptx)
+- Why: Stock promotional phrase where a specific verb or measurement would carry more weight.
+- Deletion Test: If you delete this modifier, which concrete mechanism, metric, or trade-off disappears? State that fact directly.
+```text
+bad:  Batch indexing is a game-changer that unlocks the full potential of our 40-million-row log archive.
+trap: This isn't indexing. It's instant recall across 40 million rows.
+good: Batch indexing cuts 40-million-row log queries from 19 seconds to 1.4 seconds.
+```
+
+### `zh-bureaucratic-padding` (taste / warning / markdown, text, html, docx, pptx)
+- Why: Chinese bureaucratic buzzword or throat-clearing filler.
+- Deletion Test: Ask 'who changed what, by how much, under what constraint?' and delete the abstract wrapper.
+```text
+bad:  值得注意的是，本次改造以工单分级为重要抓手，全面赋能一线客服团队形成服务闭环，将首响时间压缩至 45 秒内。
+trap: 这不是一次工单改造，而是客服体验的底气：首响压缩至 45 秒内。
+good: 本次改造按问题紧急度拆分工单队列，一线客服首次响应时间压缩至 45 秒内。
+```
+
+### `negation-pivot-frame` (taste / warning / markdown, text, html, docx, pptx)
+- Why: Second-order `Not X, but Y` / `不是 A，而是 B` rhetorical pivot elevates an abstract slogan instead of stating a concrete fact.
+- Deletion Test: Delete the negated first half ('Not X,'). If the remaining clause ('Y') holds no measurement, mechanism, or real correction, rewrite or cut the whole sentence.
+```text
+bad:  这不是一款简单的文档检查工具，而是交付质量的底气。
+trap: 工具已至。底气自生。交付无忧。
+good: `dislop` 在发稿前标出本机路径泄露、未填占位符和超载幻灯片。
+```
+
+### `staccato-slogan-run` (taste / warning / markdown, text, html, docx, pptx)
+- Why: Three or more consecutive ultra-short slogan fragments mimic dramatic copywriting cadence.
+- Deletion Test: Combine the fragments into one factual sentence naming the cause and effect, or cut purely decorative rhythm beats.
+```text
+bad:  Signals drop. Photos vanish. Audits stall. Offline sync keeps all 120 inspection photos queued locally.
+trap: Offline sync isn't a fallback — it's field resilience for 120 photos.
+good: When cellular coverage drops in basement vaults, offline sync queues up to 120 inspection photos locally until reconnection.
+```
+
+### `zh-four-char-triad` (taste / warning / markdown, text, html, docx, pptx)
+- Why: Chained four-character Chinese slogan triad pads prose without measurable detail.
+- Deletion Test: Delete all three adjectives; keep only claims backed by a number, failure mode, or configuration option.
+```text
+bad:  新版网关具备精准高效、安全可靠、灵活易用的特性，单节点支持 8,000 QPS。
+trap: 新版网关不是简单升级，而是 8,000 QPS 的性能飞跃。
+good: 新版网关单节点支持 8,000 QPS，并在上游超时 2 秒后自动熔断。
+```
+
+### `unsourced-attribution` (taste / warning / markdown, text, html, docx, pptx)
+- Why: Vague authority claim (`studies show`, `业内人士指出`) without a named source, link, or citation.
+- Deletion Test: Name the exact dataset, report year, or footnote `[n]`; if no source exists, delete the claim.
+```text
+bad:  Industry research shows that 70% of enterprise decks fail basic accessibility checks.
+trap: Everyone knows most enterprise decks fail basic accessibility checks.
+good: In our audit of 48 internal Q3 review decks, 31 contained at least one low-contrast caption (< 4.5:1).
+```
+
+### `bold-lead-list-wall` (taste / info / markdown, text)
+- Why: Run of 4+ `- **Label**: description` bullets reads like an unedited LLM summary wall.
+- Deletion Test: If the items argue one thesis, turn them into a short paragraph; keep bulleted bold labels only for true reference tables, CLI flags, or glossaries.
+```text
+bad:  - **Speed**: Runs fast locally.
+- **Privacy**: Keeps files offline.
+- **Modularity**: Uses JSON packs.
+- **Clarity**: Prints line numbers.
+trap: Speed. Privacy. Modularity. Clarity.
+good: `dislop` runs locally with no network calls, loads rules from plain JSON packs, and prints exact file and line coordinates.
+```
+
+## Pack `literary-essay` — Literary Essay & Longform Narrative
+
+Protects concrete observation and voice against moralizing paragraph endings, second-order negation pivots, em-dash saturation, and half-width Chinese punctuation.
+
+### `zh-essay-moralizing-ending` (taste / warning / markdown, text, html, docx)
+- Why: Moralizing summary formula flattens concrete scene observation at the end of a passage.
+- Deletion Test: Cut the final moralizing sentence completely and stop on the concrete physical detail right before it.
+```text
+bad:  傍晚六点半，修表匠把拆下的三枚铜齿轮泡进煤油皿里，关掉台灯。这或许就是慢工出细活在喧嚣时代真正的意义所在。
+trap: 傍晚六点半，三枚铜齿轮泡进煤油皿。这不是修表，而是与时间的对话。
+good: 傍晚六点半，修表匠把拆下的三枚铜齿轮泡进煤油皿里，关掉台灯。
+```
+
+### `en-essay-moralizing-ending` (taste / warning / markdown, text, html, docx)
+- Why: Formulaic wistful conclusion tells the reader what to feel instead of ending on the scene.
+- Deletion Test: Delete the concluding reflection; let the preceding image or quote carry the ending.
+```text
+bad:  At 6:15 a.m., the ferry deck smelled of wet rope and diesel. Ultimately, this reminds us that departures are always quieter than arrivals.
+trap: Wet rope. Cold diesel. Quiet departures at 6:15 a.m.
+good: At 6:15 a.m., the ferry deck smelled of wet rope and diesel.
+```
+
+### `literary-negation-pivot` (taste / warning / markdown, text, html, docx)
+- Why: Formulaic `Not X, but Y` / `不是 A，而是 B` aphorism interrupts narrative texture.
+- Deletion Test: Replace the abstract contrast with what the person actually did, said, or noticed.
+```text
+bad:  老周留下的那把旧刨子不是工具，而是手艺人的尊严。
+trap: 一把旧刨子。半生木工活。满手老茧。
+good: 老周退休那天把用了二十年的旧刨子擦净木屑，收进樟木箱底。
+```
+
+### `excessive-em-dash-density` (taste / info / markdown, text, html, docx)
+- Why: High em-dash (`—` / `——`) frequency creates breathless LLM parenthetical rhythm.
+- Deletion Test: Convert most parenthetical dashes into commas or periods; save a single dash for a genuine turn.
+```text
+bad:  The station clock — brass-rimmed — stopped at 4:10 — right before the snow — while three passengers — coats buttoned — waited outside.
+trap: Brass clock. 4:10 sharp. Snow falling. Three passengers waiting.
+good: The brass-rimmed station clock stopped at 4:10, right before the snow, while three passengers waited outside in buttoned coats.
+```
+
+### `zh-halfwidth-punctuation` (taste / warning / markdown, text, html, docx)
+- Why: Half-width ASCII punctuation (`,;:!?`) wedged directly between Chinese characters.
+- Deletion Test: Replace half-width ASCII punctuation between Han characters with full-width Chinese punctuation (`，；：！？`).
+```text
+bad:  冬至那天下了初雪,院子里的腊梅开了三朵;香气一直飘到走廊。
+trap: 冬至初雪。腊梅三朵。暗香盈袖。
+good: 冬至那天下了初雪，院子里的腊梅开了三朵；香气一直飘到走廊。
+```
+
+## Pack `deck-and-ui` — Slide Deck, Web UI & Graphic Layout
+
+Audits PowerPoint slide word-walls, bullet caps, autofit text shrink, weak topic titles, default purple-pink AI gradients, pill-badge soup, triple nested cards, prompt-echo chrome, and SVG clipping.
+
+### `slide-word-wall` (taste / warning / pptx)
+- Why: Slide exceeds readable copy budget (> 120 Latin words or > 280 Chinese characters).
+- Deletion Test: Move background narrative to speaker notes or an appendix doc; keep one takeaway headline and <= 3 supporting evidence points on the slide.
+```text
+bad:  Slide 3 packs 215 words of full-sentence prose explaining migration history, rollback scripts, staffing, and Q4 SLA targets.
+trap: Slide 3 shrinks body font to 9pt so all 215 words fit inside one rounded box.
+good: Slide 3 headline: 'Zero-downtime migration cut p99 latency from 420 ms to 95 ms' + 3 short metric rows (54 words total); full runbook linked in notes.
+```
+
+### `slide-bullet-overload` (taste / warning / pptx)
+- Why: Slide contains more than 6 bullet items (`maxSlideBullets`), fragmenting visual hierarchy.
+- Deletion Test: Group related bullets into 2–3 structured columns or split across two slides.
+```text
+bad:  Slide lists 9 separate top-level bullets covering pricing, onboarding, compliance, SLA, and billing.
+trap: Slide wraps 9 bullets into 9 tiny pill badges.
+good: Slide groups commercial terms into 3 columns: Pricing ($49/seat), Onboarding (2 days), SLA (99.95%).
+```
+
+### `slide-autofit-shrink` (taste / warning / pptx)
+- Why: PowerPoint `normAutofit` shrank text below 80% (`fontScale < 80000`) because copy overflowed its box.
+- Deletion Test: Trim the overflowing copy or enlarge the text frame so body type renders at 100% scale.
+```text
+bad:  <a:normAutofit fontScale="62500" lnSpcReduction="20000"/> on body placeholder
+trap: Manually hardcode 10pt font so `normAutofit` disappears while text stays illegible.
+good: <a:noAutofit/> with 42 words set at 18pt and full line spacing
+```
+
+### `slide-weak-topic-title` (taste / info / pptx)
+- Why: Content-heavy slide uses a generic topic label (`Overview`, `Background`, `背景`) instead of stating its takeaway.
+- Deletion Test: Replace `Overview` with the one-sentence finding the audience should remember from this slide.
+```text
+bad:  Title: 'Background' (above 65 words detailing 38% cart abandonment on mobile Safari)
+trap: Title: 'Reimagining Checkout Excellence'
+good: Title: 'Mobile Safari accounts for 38% of cart abandonment due to 4-step address entry'
+```
+
+### `ui-ai-gradient` (taste / warning / html, css, jsx, svg)
+- Why: Default purple/indigo-to-pink generator gradient or gradient-clipped display headline.
+- Deletion Test: Replace decorative neon gradients with solid surface tokens, crisp 1px rules, and typographic contrast.
+```text
+bad:  <h1 class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Release Notes v2.4</h1>
+trap: <h1 class="bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent">Release Notes v2.4</h1>
+good: <h1 class="page-title">Release Notes v2.4</h1>
+```
+
+### `ui-pill-soup` (taste / warning / html, jsx)
+- Why: Excessive `rounded-full` / `999px` text pills (> 6 per view) turn interface metadata into badge soup.
+- Deletion Test: Render metadata as plain tabular text separated by middots (`·`) or hairlines; save one high-contrast label for actionable status.
+```text
+bad:  8 adjacent `rounded-full` badges on one card: `Active`, `v2.4`, `US-West`, `SOC2`, `Fast`, `AI`, `Pro`, `Verified`.
+trap: 8 square pastel badges with 8 emoji icons on one card.
+good: Plain mono metadata line: `v2.4 · us-west-2 · SOC2` + single status word `degraded` when unhealthy.
+```
+
+### `ui-box-in-box` (taste / warning / html, jsx)
+- Why: Three or more nested bordered/rounded containers wrap the same content (`box-in-box-in-box`).
+- Deletion Test: Remove outer wrapper borders and separate sections with alignment, whitespace, or a single 1px rule.
+```text
+bad:  <div class="border rounded-xl p-6"><div class="border rounded-lg p-4"><div class="border rounded-md p-3">99.98% uptime</div></div></div>
+trap: <div class="shadow-xl rounded-2xl p-6"><div class="shadow-md rounded-xl p-4"><div class="bg-slate-900 rounded-lg p-3">99.98% uptime</div></div></div>
+good: <section class="metric-row"><span>Uptime (90d)</span><strong>99.98%</strong></section>
+```
+
+### `ui-prompt-echo-badge` (taste / warning / html, jsx, svg)
+- Why: Interface chrome echoes prompt-engineering hype (`AI-Powered`, `Zero Hallucination`) instead of naming the function.
+- Deletion Test: Delete the `AI-Powered` badge; label the control by the exact task it performs ('Extract invoice totals', 'Check slide word count').
+```text
+bad:  <span class="eyebrow">AI-Powered · Zero Hallucination</span><h2>Document Checker</h2>
+trap: <span class="eyebrow">Built for Craft · Pure Signal</span><h2>Document Checker</h2>
+good: <h2>Document Linter for Markdown, HTML, DOCX & PPTX</h2>
+```
+
+### `svg-text-overflow-or-a11y` (taste / warning / svg)
+- Why: Standalone SVG contains `<text>` likely to clip outside `viewBox` on fallback fonts, or omits `<title>`/`aria-label`.
+- Deletion Test: Leave >= 12% horizontal safety margin for `<text>` inside `viewBox` (or convert wordmarks to `<path>` outlines) and include `<title>`.
+```text
+bad:  <svg viewBox="0 0 200 40"><text x="10" y="28" font-size="24">Long fallback string that clips past 200px</text></svg>
+trap: <svg viewBox="0 0 200 40"><text x="10" y="28" font-size="5">Tiny 5px unreadable text</text></svg>
+good: <svg viewBox="0 0 420 40" role="img" aria-label="Release timeline"><title>Release timeline</title><text x="16" y="26" font-size="16">Q1–Q4 rollout</text></svg>
+```
