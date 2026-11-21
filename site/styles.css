@@ -1260,6 +1260,12 @@ html[lang^="zh"] .proof-lines {
   font-size: 0.85rem;
 }
 
+.cloud-status-bar[hidden],
+.ai-result-panel[hidden],
+.cloud-output-box[hidden] {
+  display: none;
+}
+
 .cloud-status-bar {
   margin-bottom: 10px;
   padding: 8px 10px;
