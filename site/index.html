@@ -4,19 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
-  <title>dislop — 给 AI 写的东西配一支红笔</title>
-  <meta name="description" content="给 AI 写的东西配一支红笔：发稿前检查文稿、PPT、Word、PDF 与网页里的硬伤和套话，改完再拿原稿对一遍数字、链接和引用。不联网，不上传，笔一直在你手里。">
+  <title>dislop — 发之前，把稿子里的 AI 味挑出来</title>
+  <meta name="description" content="检查 AI 写的文档、PPT、Word、PDF 和网页里的客套话、套话和假链接，不替你重写；改完拿原稿核对一遍数字和链接。零依赖，不上传。">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="dislop">
   <meta property="og:url" content="https://dislop.com/">
-  <meta property="og:title" content="dislop — 你的稿子，不带 AI 味">
-  <meta property="og:description" content="给 AI 写的东西配一支红笔：划掉不能发的硬伤，页边问一句套话，改完和原稿对一遍数字与链接。零依赖、不上传，另附 87 条同路人精选清单。">
+  <meta property="og:title" content="dislop — 把稿子里的 AI 味挑出来">
+  <meta property="og:description" content="只标问题，不替你重写。查文档、PPT 和网页里的客套话、套话和假链接，改完核对数字和链接有没有漏。">
   <meta property="og:image" content="https://dislop.com/assets/og-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="dislop — Your draft, minus the slop.">
-  <meta name="twitter:description" content="A red pen for whatever your AI wrote. Strikes what can't ship, asks about what sounds canned, and checks your edit kept every number, link, and citation.">
+  <meta name="twitter:title" content="dislop — Catch AI slop before you send it">
+  <meta name="twitter:description" content="Marks stray chat replies, filler phrasing, and broken links in AI-written docs, decks, and pages. Checks your edit kept numbers and links.">
   <meta name="twitter:image" content="https://dislop.com/assets/og-card.png">
   <link rel="canonical" href="https://dislop.com/">
   <link rel="alternate" type="text/plain" href="./llms.txt" title="LLMs Resource Index">
@@ -31,16 +31,16 @@
     <!-- Top Bar -->
     <header class="topbar band-rule">
       <a class="brand-lockup" href="#top">
-        <img src="./assets/logo.svg" width="28" height="28" alt="dislop 校对删除号标识">
+        <img src="./assets/logo.svg" width="28" height="28" alt="dislop 图标">
         <span class="brand-wordmark">dislop</span>
       </a>
 
       <nav class="nav-links" aria-label="主导航">
         <a href="#workbench" data-i18n="nav.workbench">试一试</a>
-        <a href="#coverage" data-i18n="nav.coverage">能读什么</a>
+        <a href="#coverage" data-i18n="nav.coverage">支持格式</a>
         <a href="#rules" data-i18n="nav.rules">规则</a>
         <a href="#surfaces" data-i18n="nav.surfaces">安装</a>
-        <a href="./awesome/" data-i18n="nav.awesome">同路清单</a>
+        <a href="./awesome/" data-i18n="nav.awesome">工具清单</a>
         <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener">GitHub</a>
       </nav>
 
@@ -51,7 +51,7 @@
     </header>
 
     <main id="main-content">
-    <!-- Hero: Perform-the-product headline + Live 3-State Proof Card -->
+    <!-- Hero -->
     <section id="top" class="band-rule">
       <div class="lead-band band-rule">
         <div class="lead-copy">
@@ -64,23 +64,23 @@
               </svg>
             </div>
             <!-- dislop-quote-end -->
-            <h1 class="lead-heading" data-i18n="lead.title">你的稿子，不带 AI 味。</h1>
+            <h1 class="lead-heading" data-i18n="lead.title">把稿子里的 AI 味挑出来</h1>
             <p class="lead-sub" data-i18n="lead.sub">
-              把稿子、PPT 或网页贴进来。不能发的硬伤，dislop 直接划掉；听着像套话的地方，它在页边问你一句；等你改完，再拿原稿逐条对一遍数字、链接和引用。它不替你改稿，笔一直在你手里。
+              AI 写完的文档、PPT 或网页，经常夹着客套话、空话、假链接，或者一改稿就把数字改丢了。dislop 只负责把这些问题标出来，不替你重写。改完拿原稿对一下，没漏数字和链接就行。
             </p>
           </div>
 
           <div style="display:flex;flex-direction:column;gap:10px;">
             <div class="hero-cta-row">
-              <a href="#workbench" class="btn-primary" data-i18n="lead.cta">贴一段稿子试试 ↓</a>
-              <a href="./awesome/" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="lead.awesomeBtn">翻翻 87 条同路清单 →</a>
-              <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="lead.starBtn">GitHub 收藏 ★</a>
+              <a href="#workbench" class="btn-primary" data-i18n="lead.cta">贴一段试试 ↓</a>
+              <a href="./awesome/" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="lead.awesomeBtn">87 条相关工具清单 →</a>
+              <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="lead.starBtn">GitHub</a>
             </div>
-            <p class="hero-reassure" data-i18n="lead.reassure">稿子只留在这个标签页里，不上传，不联网。</p>
+            <p class="hero-reassure" data-i18n="lead.reassure">只在当前浏览器标签页里跑，不上传文件。</p>
           </div>
 
           <div class="hero-cli-inline">
-            <span class="hero-cli-label" data-i18n="lead.cliLabel">或者在终端里直接跑：</span>
+            <span class="hero-cli-label" data-i18n="lead.cliLabel">或者直接命令行跑：</span>
             <div class="cmd-box">
               <code id="hero-cmd">npx --yes github:dislop-ai/dislop check .</code>
               <button type="button" class="ctrl-btn" data-copy-target="hero-cmd" data-i18n="btn.copy">复制</button>
@@ -88,13 +88,13 @@
           </div>
         </div>
 
-        <!-- Right column: Live 3-State Proof Card (powered by real src/core.mjs) -->
-        <div class="hero-proof" aria-label="首屏红笔校样演示">
+        <!-- Right column: Live 3-State Proof Card -->
+        <div class="hero-proof" aria-label="首屏检查示例">
           <div class="hero-proof-head">
-            <div class="mode-tabs" id="hero-proof-tabs" role="tablist" aria-label="切换校样状态">
-              <button type="button" id="hp-tab-bad" role="tab" aria-selected="true" class="ctrl-btn is-active" data-hero-state="bad" data-i18n="hp.tabBad">模型交来的原稿</button>
-              <button type="button" id="hp-tab-good" role="tab" aria-selected="false" class="ctrl-btn" data-hero-state="good" data-i18n="hp.tabGood">你改完之后</button>
-              <button type="button" id="hp-tab-trap" role="tab" aria-selected="false" class="ctrl-btn" data-hero-state="trap" data-i18n="hp.tabTrap">改过头的一版</button>
+            <div class="mode-tabs" id="hero-proof-tabs" role="tablist" aria-label="切换示例版本">
+              <button type="button" id="hp-tab-bad" role="tab" aria-selected="true" class="ctrl-btn is-active" data-hero-state="bad" data-i18n="hp.tabBad">原稿</button>
+              <button type="button" id="hp-tab-good" role="tab" aria-selected="false" class="ctrl-btn" data-hero-state="good" data-i18n="hp.tabGood">改完</button>
+              <button type="button" id="hp-tab-trap" role="tab" aria-selected="false" class="ctrl-btn" data-hero-state="trap" data-i18n="hp.tabTrap">改漏了</button>
             </div>
           </div>
 
@@ -107,57 +107,57 @@
 
           <div id="hero-proof-feedback">
             <ul class="hero-proof-notes">
-              <li><span class="hero-note-dot is-error"></span><span><strong>红笔硬伤：</strong>AI 寒暄留在第一行，直接删掉。</span></li>
-              <li><span class="hero-note-dot is-warn"></span><span><strong>蓝笔商榷：</strong>去掉“抓手”“全面赋能”和“不是……而是……”，谁对什么做了什么？</span></li>
-              <li><span class="hero-note-dot is-stet"></span><span><strong>绿点保留：</strong>“最多 45 秒”已记下，改完会拿原稿核对。</span></li>
+              <li><span class="hero-note-dot is-error"></span><span><strong>红线：</strong>开头留着 AI 寒暄，删掉就行。</span></li>
+              <li><span class="hero-note-dot is-warn"></span><span><strong>蓝线：</strong>“抓手”“全面赋能”“不是……而是……”都是空话，可以直接说做了什么。</span></li>
+              <li><span class="hero-note-dot is-stet"></span><span><strong>绿点：</strong>“最多 45 秒”先记下来，改完会核对。</span></li>
             </ul>
           </div>
 
           <div class="hero-proof-foot">
-            <span id="hero-proof-meta" data-i18n="hp.meta">同引擎实时运行 · 划红线直接删，划蓝线你来定</span>
-            <a href="#workbench" id="hero-open-wb" data-i18n="hp.openWb">在下方工作台打开 →</a>
+            <span id="hero-proof-meta" data-i18n="hp.meta">用同一个检查引擎实时跑的</span>
+            <a href="#workbench" id="hero-open-wb" data-i18n="hp.openWb">在下面工作台打开 →</a>
           </div>
         </div>
       </div>
 
-      <!-- Three Marks = The Entire Promise -->
-      <div class="marks-strip" aria-label="三种校对标记的含义">
+      <!-- Three Marks -->
+      <div class="marks-strip" aria-label="三种标记说明">
         <div class="mark-pillar">
           <div class="mark-pillar-head">
             <span class="swatch-line swatch-error"></span>
-            <h2 class="mark-pillar-title" data-i18n="m1.title">不能发的，直接划掉。</h2>
+            <h2 class="mark-pillar-title" data-i18n="m1.title">红线：硬伤</h2>
           </div>
-          <p class="mark-pillar-desc" data-i18n="m1.desc">漏出来的本机路径、忘了填的占位符、留在开头的 AI 寒暄、点不动的空链接、跑出幻灯片边界的文本框。</p>
+          <p class="mark-pillar-desc" data-i18n="m1.desc">本机路径、没填的占位符、开头寒暄、空链接、跑出页面的 PPT 文本框。</p>
         </div>
         <div class="mark-pillar">
           <div class="mark-pillar-head">
             <span class="swatch-line swatch-warn"></span>
-            <h2 class="mark-pillar-title" data-i18n="m2.title">像套话的，问你一句。</h2>
+            <h2 class="mark-pillar-title" data-i18n="m2.title">蓝线：套话</h2>
           </div>
-          <p class="mark-pillar-desc" data-i18n="m2.desc">一处批注只问一个具体问题，不搞一刀切黑名单，也不逼你换同义词。留不留，你说了算。</p>
+          <p class="mark-pillar-desc" data-i18n="m2.desc">只标出来给你看，不搞一刀切黑名单，留不留你自己定。</p>
         </div>
         <div class="mark-pillar">
           <div class="mark-pillar-head">
             <span class="swatch-line swatch-stet"></span>
-            <h2 class="mark-pillar-title" data-i18n="m3.title">改完，和原稿对一遍。</h2>
+            <h2 class="mark-pillar-title" data-i18n="m3.title">绿点：数字和链接</h2>
           </div>
-          <p class="mark-pillar-desc" data-i18n="m3.desc">数字、限定词（最多、至少、不超过）、单位、日期、链接、代码和引用，漏掉或改歪了当场退回。</p>
+          <p class="mark-pillar-desc" data-i18n="m3.desc">改完拿原稿对一遍，“最多”“至少”、单位、日期和链接不能漏。</p>
         </div>
       </div>
     </section>
 
-    <!-- Workbench: Try it on a real draft -->
+    <!-- Workbench -->
     <section id="workbench" class="band-rule" aria-labelledby="wb-heading">
       <div class="workbench-header band-rule">
         <div>
-          <h2 class="sub-heading" id="wb-heading" style="margin:0;" data-i18n="wb.heading">拿一份稿子试试</h2>
+          <h2 class="sub-heading" id="wb-heading" style="margin:0;" data-i18n="wb.heading">下面直接试试</h2>
         </div>
         <div class="workbench-toolbar">
-          <label for="pack-select" style="font-size:0.82rem;color:var(--ink-2);" data-i18n="wb.packLabel">当成什么来看：</label>
+          <label for="pack-select" style="font-size:0.82rem;color:var(--ink-2);" data-i18n="wb.packLabel">按哪种稿子查：</label>
           <select id="pack-select" class="pack-select" aria-label="选择文体包">
-            <option value="business-brief" data-i18n="pack.brief">商业简报 / 技术方案</option>
-            <option value="literary-essay" data-i18n="pack.essay">随笔 / 长文报道</option>
-            <option value="deck-and-ui" data-i18n="pack.ui">PPT 与网页界面</option>
+            <option value="business-brief" data-i18n="pack.brief">工作文档 / 方案</option>
+            <option value="literary-essay" data-i18n="pack.essay">随笔 / 长文</option>
+            <option value="deck-and-ui" data-i18n="pack.ui">PPT 和网页</option>
           </select>
 
           <label class="ctrl-btn file-upload-label">
@@ -170,10 +170,10 @@
       <div class="workbench-grid">
         <!-- Left Specimen Index -->
         <aside class="specimen-rail" id="specimen-list" aria-label="样稿列表">
-          <div class="rail-title" data-i18n="wb.specimensTitle">样稿</div>
+          <div class="rail-title" data-i18n="wb.specimensTitle">示例</div>
           <!-- Populated by app.js -->
           <div class="privacy-note" data-i18n="wb.privacyNote">
-            你的稿子只留在这个标签页里。页面锁定了 connect-src 'none'，想往外发都发不出去。
+            内容只留在这个标签页里，页面禁止联网（connect-src 'none'）。
           </div>
         </aside>
 
@@ -181,13 +181,13 @@
         <div class="galley-sheet">
           <div class="galley-bar">
             <div class="mode-tabs" role="group" aria-label="视图切换">
-              <button type="button" id="mode-proof-btn" class="ctrl-btn is-active" aria-pressed="true" data-i18n="wb.modeProof">清样批注</button>
-              <button type="button" id="mode-edit-btn" class="ctrl-btn" aria-pressed="false" data-i18n="wb.modeEdit">自己改改看</button>
+              <button type="button" id="mode-proof-btn" class="ctrl-btn is-active" aria-pressed="true" data-i18n="wb.modeProof">标出问题</button>
+              <button type="button" id="mode-edit-btn" class="ctrl-btn" aria-pressed="false" data-i18n="wb.modeEdit">编辑原文</button>
             </div>
             <div class="quick-actions">
-              <button type="button" id="btn-apply-good" class="ctrl-btn" data-i18n="wb.applyClean">看改好的一版</button>
-              <button type="button" id="btn-apply-trap" class="ctrl-btn" data-i18n="wb.tryTrap">看改过头的样子</button>
-              <button type="button" id="btn-reset" class="ctrl-btn" data-i18n="wb.reset">恢复原稿</button>
+              <button type="button" id="btn-apply-good" class="ctrl-btn" data-i18n="wb.applyClean">看改好的</button>
+              <button type="button" id="btn-apply-trap" class="ctrl-btn" data-i18n="wb.tryTrap">看改漏的</button>
+              <button type="button" id="btn-reset" class="ctrl-btn" data-i18n="wb.reset">还原</button>
             </div>
           </div>
 
@@ -197,21 +197,21 @@
           </div>
 
           <div class="voice-meter" id="voice-meter" aria-label="文稿节奏统计">
-            <span class="voice-meter-title" data-i18n="wb.voiceTitle">这份稿子的节奏</span>
+            <span class="voice-meter-title" data-i18n="wb.voiceTitle">句长统计</span>
             <span class="voice-meter-metrics" id="voice-meter-values">句数：— · 均长：— · 句长变化：— · 破折号：—</span>
           </div>
 
           <div class="legend-strip">
-            <span class="legend-item"><span class="swatch-line swatch-error"></span> <span data-i18n="legend.error">红实线：不能发的硬伤</span></span>
-            <span class="legend-item"><span class="swatch-line swatch-warn"></span> <span data-i18n="legend.warn">蓝虚线：页边商榷</span></span>
-            <span class="legend-item"><span class="swatch-line swatch-stet"></span> <span data-i18n="legend.stet">绿点线：改稿时原样保留</span></span>
+            <span class="legend-item"><span class="swatch-line swatch-error"></span> <span data-i18n="legend.error">红实线：硬伤</span></span>
+            <span class="legend-item"><span class="swatch-line swatch-warn"></span> <span data-i18n="legend.warn">蓝虚线：套话提醒</span></span>
+            <span class="legend-item"><span class="swatch-line swatch-stet"></span> <span data-i18n="legend.stet">绿点线：受保护的数字</span></span>
           </div>
         </div>
 
-        <!-- Right Proofreader Margin Column -->
-        <aside class="margin-column" aria-label="页边批注">
+        <!-- Right Margin Column -->
+        <aside class="margin-column" aria-label="检查结果">
           <div class="summary-strip" id="wb-summary">
-            <span>0 处硬伤 · 0 条商榷</span>
+            <span>0 处硬伤 · 0 条提醒</span>
             <span>0.0 ms</span>
           </div>
           <div id="verify-box" class="verify-banner" hidden></div>
@@ -220,135 +220,135 @@
       </div>
     </section>
 
-    <!-- What it reads, and what it can't yet -->
+    <!-- What it checks -->
     <section id="coverage" class="section-block band-rule">
       <div class="section-header">
         <div>
-          <h2 class="section-title" data-i18n="cov.title">它读得了什么，还读不了什么</h2>
+          <h2 class="section-title" data-i18n="cov.title">支持哪些文件，哪些还查不了</h2>
           <p class="section-desc" data-i18n="cov.desc">
-            能查的直说能查，还没做的直接标出来。加密或读不了的 PDF 会明确报跳过，绝不假装“0 问题”。
+            能查的和还没做的都写明白。加密或读不出来的 PDF 会报跳过，不会显示成 0 问题。
           </p>
         </div>
-        <a href="./index.md" data-i18n="cov.readMd">阅读说明（.md）→</a>
+        <a href="./index.md" data-i18n="cov.readMd">看纯文本说明（.md）→</a>
       </div>
 
       <div class="table-scroll" tabindex="0" role="region" aria-label="支持格式一览">
         <table class="matrix-table">
           <thead>
             <tr>
-              <th data-i18n="cov.colTarget">手头的文件</th>
+              <th data-i18n="cov.colTarget">文件类型</th>
               <th data-i18n="cov.colFormat">扩展名</th>
-              <th data-i18n="cov.colScope">能替你挑出什么</th>
+              <th data-i18n="cov.colScope">查什么</th>
               <th data-i18n="cov.colStatus">现状</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong data-i18n="cov.r1Name">文稿、简报与随笔</strong></td>
+              <td><strong data-i18n="cov.r1Name">文稿与笔记</strong></td>
               <td><code>.md</code>, <code>.mdx</code>, <code>.txt</code></td>
-              <td data-i18n="cov.r1Scope">开场白寒暄、公文黑话、“不是 A，而是 B”套句、四字排比、段尾说教、无出处数据、中文里混半角标点，以及改完后核对数字、限定词、日期、链接与引用。</td>
-              <td data-i18n="status.live">现在能用</td>
+              <td data-i18n="cov.r1Scope">开头寒暄、公文黑话、“不是 A，而是 B”套句、四字排比、段尾说教、没出处的统计、中文里混半角标点，以及改完后核对数字、限定词、日期、链接和引用。</td>
+              <td data-i18n="status.live">可用</td>
             </tr>
             <tr>
-              <td><strong data-i18n="cov.r2Name">Word 与 PowerPoint</strong></td>
+              <td><strong data-i18n="cov.r2Name">Word 和 PPT</strong></td>
               <td><code>.docx</code>, <code>.pptx</code></td>
-              <td data-i18n="cov.r2Scope">忘接受的修订痕迹和批注、贴进文档没渲染的星号 Markdown、单页字数墙、超限项目符号、文字自动缩太小、文本框跑出画布、空泛标题。</td>
-              <td data-i18n="status.live">现在能用</td>
+              <td data-i18n="cov.r2Scope">忘处理的修订痕迹和批注、贴进文档没渲染的 Markdown 星号、单页字太多、要点超 6 条、文字自动缩太小、文本框跑出页面、空泛标题。</td>
+              <td data-i18n="status.live">可用</td>
             </tr>
             <tr>
               <td><strong data-i18n="cov.r3Name">PDF 元数据与链接</strong></td>
               <td><code>.pdf</code></td>
-              <td data-i18n="cov.r3Scope">指向本机硬盘的链接、标题里残留的原始文件名、未嵌入字体与页面尺寸混排。加密 PDF 与完整正文抽字会显式标明跳过，不静默放行。</td>
+              <td data-i18n="cov.r3Scope">指向本机硬盘的链接、标题里残留的原始文件名、未嵌入字体、跨页尺寸不一致。加密 PDF 和完整正文抽字会明确报跳过。</td>
               <td data-i18n="status.pdf">查元数据，正文跳过</td>
             </tr>
             <tr>
-              <td><strong data-i18n="cov.r4Name">网页界面与矢量图</strong></td>
+              <td><strong data-i18n="cov.r4Name">网页与 SVG</strong></td>
               <td><code>.html</code>, <code>.css</code>, <code>.jsx</code>, <code>.tsx</code>, <code>.svg</code></td>
-              <td data-i18n="cov.r4Scope">点不动的空链接、无说明的禁用按钮、文字对比度不够、深色模式层级发灰倒置、默认紫粉渐变、满屏胶囊标签、三层套盒，以及 SVG 文字被裁切。</td>
-              <td data-i18n="status.live">现在能用</td>
+              <td data-i18n="cov.r4Scope">空链接、无说明的禁用按钮、文字对比度不够、深色模式层级倒置、默认紫粉渐变、满屏胶囊标签、三层套盒、SVG 文字裁切。</td>
+              <td data-i18n="status.live">可用</td>
             </tr>
             <tr>
-              <td><strong data-i18n="cov.r5Name">代码仓与 PR 改动</strong></td>
+              <td><strong data-i18n="cov.r5Name">Git 改动与 PR</strong></td>
               <td><code>--changed</code>, <code>--staged</code></td>
-              <td data-i18n="cov.r5Scope">只盯本次修改的行，拦住本机路径、占位符、聊天回复残迹和界面套话，支持输出 GitHub 注解与 SARIF。更深的代码结构规则还在做。</td>
-              <td data-i18n="status.partial">交稿门禁可用，AST 还在做</td>
+              <td data-i18n="cov.r5Scope">只查本次改过的行，拦住本机路径、占位符、聊天残迹和页面套话，支持 GitHub PR 批注和 SARIF。代码语法树检查还没做。</td>
+              <td data-i18n="status.partial">改动检查可用，AST 未做</td>
             </tr>
             <tr>
-              <td><strong data-i18n="cov.r6Name">节奏单调与个人声纹</strong></td>
+              <td><strong data-i18n="cov.r6Name">节奏单调与个人风格</strong></td>
               <td><code>v0.3</code></td>
-              <td data-i18n="cov.r6Scope">连环逗号句、句长过于均匀、PPT 连续同版式，以及从你自己写过的旧稿里提炼个人节奏参考。原型脚本已跑通，还没并入主程序。</td>
-              <td data-i18n="status.notYet">还不行（原型阶段）</td>
+              <td data-i18n="cov.r6Scope">连环逗号句、句长过于均匀、PPT 连续同版式，以及从自己旧稿里统计句长习惯。原型已跑通，还没合进主程序。</td>
+              <td data-i18n="status.notYet">还没上线（原型阶段）</td>
             </tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <!-- Why it marks and never rewrites + Verified Before/After -->
+    <!-- Why mark instead of rewrite -->
     <section id="why" class="section-block band-rule">
       <div class="section-header">
         <div>
-          <h2 class="section-title" data-i18n="why.title">为什么只批不改</h2>
+          <h2 class="section-title" data-i18n="why.title">为什么只标不改</h2>
           <p class="section-desc" data-i18n="why.desc">
-            市面上自动“拟人化改写”的工具经常为了改得像人，顺手把“最多 45 秒”改成“45 秒”，或者把一句平实的话换成“不是升级，而是革命”。dislop 只做审校台上的红笔和蓝笔：把问题指出来，把决定权留给你，等你改完再和原稿逐条对数。
+            很多自动“去 AI 味”改写工具会把“最多 45 秒”改成“45 秒”，或者把平实的话改写成另一种套话。dislop 只标出问题在哪，改动交给你自己，改完再帮你核对数字和链接没丢。
           </p>
         </div>
-        <a href="./methodology/brand-and-voice.md" data-i18n="why.readBrand">读我们的文字与设计基准 →</a>
+        <a href="./methodology/brand-and-voice.md" data-i18n="why.readBrand">看文字与设计说明 →</a>
       </div>
 
       <div id="dogfood" class="dogfood-grid">
         <div class="dogfood-col">
-          <span class="dogfood-tag sev-error" data-i18n="dogfood.badTag">模型刚写完的原稿 · 挑出 5 处</span>
+          <span class="dogfood-tag sev-error" data-i18n="dogfood.badTag">原稿 · 标出 5 处</span>
           <!-- dislop-quote-start -->
           <!-- dislop-ignore-next-line chatbot-artifact -- intentional before-edit contrast specimen -->
           <p class="dogfood-quote" id="dogfood-bad-text">好的，以下是修改后的上线说明。值得注意的是，本次改造以队列分级为重要抓手，全面赋能一线运维团队，故障恢复时间最多 45 秒。这不是一次简单的升级，而是一场效率革命。</p>
           <!-- dislop-quote-end -->
-          <div class="dogfood-meta" id="dogfood-bad-meta">硬伤 1 处（AI 寒暄）· 商榷 4 处（黑话与对比套句）</div>
+          <div class="dogfood-meta" id="dogfood-bad-meta">硬伤 1 处 · 提醒 4 处</div>
         </div>
         <div class="dogfood-col">
-          <span class="dogfood-tag sev-stet" data-i18n="dogfood.goodTag">改完再对一遍 · 可以付印</span>
+          <span class="dogfood-tag sev-stet" data-i18n="dogfood.goodTag">改完核对 · 通过</span>
           <p class="dogfood-quote" id="dogfood-good-text">这次改造给队列分了级，一线运维团队的故障恢复时间最多 45 秒。</p>
-          <div class="dogfood-meta" id="dogfood-good-meta">0 处硬伤 · 0 条商榷 · verify 通过（“最多 45 秒”完整保留）</div>
+          <div class="dogfood-meta" id="dogfood-good-meta">0 处问题 · verify 通过（“最多 45 秒”没动）</div>
         </div>
       </div>
     </section>
 
-    <!-- Put it where you already work -->
+    <!-- Where to run it -->
     <section id="surfaces" class="section-block band-rule">
       <div class="section-header">
         <div>
-          <h2 class="section-title" data-i18n="surf.title">装进你已经在用的地方</h2>
+          <h2 class="section-title" data-i18n="surf.title">在哪里都能用</h2>
           <p class="section-desc" data-i18n="surf.desc">
-            无论模型用的是 Claude、GPT、Gemini、DeepSeek 还是本地开源模型，Node.js 和 Python 双端都零外部依赖，查出来的结果一模一样。
+            不管稿子是哪个模型写的，Node.js、Python 和浏览器跑出来的结果一样，都不需要装额外依赖。
           </p>
         </div>
-        <a href="./tools/index.md" data-i18n="surf.readTools">全部接入说明（.md）→</a>
+        <a href="./tools/index.md" data-i18n="surf.readTools">全部用法（.md）→</a>
       </div>
 
       <div class="where-grid">
         <div class="where-item">
-          <h3 data-i18n="surf.w1Title">浏览器里</h3>
-          <p data-i18n="surf.w1Desc">就在上面这个工作台。拖进本地文档，全部在标签页内存里跑完，断网照常工作。</p>
+          <h3 data-i18n="surf.w1Title">浏览器</h3>
+          <p data-i18n="surf.w1Desc">就在上面这个页面。直接拖进本地文件，断网也能查。</p>
         </div>
         <div class="where-item">
-          <h3 data-i18n="surf.w2Title">终端里</h3>
-          <p data-i18n="surf.w2Desc">用 npx 或 uvx 一行开跑，不用配环境。也支持只查本次 Git 改动，直接出 GitHub PR 批注。</p>
+          <h3 data-i18n="surf.w2Title">命令行</h3>
+          <p data-i18n="surf.w2Desc">用 npx 或 uvx 一行开跑，也可以只查这次 Git 改动。</p>
         </div>
         <div class="where-item">
-          <h3 data-i18n="surf.w3Title">编程 Agent 里</h3>
-          <p data-i18n="surf.w3Desc">接上本地 MCP，或装好 SKILL.md，让 Claude Code、Codex、Cursor、Windsurf 交稿前先自己过一遍红笔。</p>
+          <h3 data-i18n="surf.w3Title">编程 Agent</h3>
+          <p data-i18n="surf.w3Desc">接本地 MCP，或者装上 SKILL.md，让 Claude Code、Codex、Cursor 交稿前自己查一遍。</p>
         </div>
         <div class="where-item">
-          <h3 data-i18n="surf.w4Title">写给 Agent 读的页面</h3>
-          <p data-i18n="surf.w4Desc">不想装任何本地工具？让联网 Agent 直接读 /llms.txt 或按场景挑一张千字任务卡。</p>
+          <h3 data-i18n="surf.w4Title">直接给 Agent 读</h3>
+          <p data-i18n="surf.w4Desc">不想装工具的话，让能上网的 Agent 直接读 /llms.txt 就行。</p>
         </div>
       </div>
 
       <!-- Copyable Snippets -->
       <div class="code-panel" id="cli-mcp">
         <div class="code-panel-head">
-          <div class="mode-tabs" id="snippet-tabs" role="tablist" aria-label="接入命令与配置示例">
-            <button type="button" id="tab-cli" role="tab" aria-selected="true" aria-controls="snippet-panel" tabindex="0" class="ctrl-btn is-active" data-snippet="cli" data-i18n="snip.cli">终端命令</button>
+          <div class="mode-tabs" id="snippet-tabs" role="tablist" aria-label="命令与配置示例">
+            <button type="button" id="tab-cli" role="tab" aria-selected="true" aria-controls="snippet-panel" tabindex="0" class="ctrl-btn is-active" data-snippet="cli" data-i18n="snip.cli">命令行</button>
             <button type="button" id="tab-mcp" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="mcp">MCP</button>
             <button type="button" id="tab-agent" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="agent" data-i18n="snip.agent">Agent 直读</button>
             <button type="button" id="tab-ci" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="ci">GitHub Actions</button>
@@ -357,7 +357,7 @@
           <button type="button" id="copy-snippet-btn" class="ctrl-btn" data-i18n="btn.copy">复制</button>
         </div>
         <pre class="code-pre" id="snippet-panel" role="tabpanel" aria-labelledby="tab-cli" tabindex="0"><code id="snippet-code"><!-- BUILD:DEFAULT_SNIPPET -->
-# 检查当前目录（命中硬伤时退出码为 1，同时提示套话商榷）
+# 检查当前目录（命中硬伤时退出码为 1，同时标出套话提醒）
 npx --yes github:dislop-ai/dislop check .
 
 # 只查相对 main 新改的行，并输出 SARIF 报告
@@ -374,7 +374,7 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
       <!-- Compact Agent Endpoints Ledger -->
       <div class="endpoints-box" style="margin-top:20px;">
         <div class="endpoints-head">
-          <span data-i18n="ep.heading">写给 Agent 读的静态页面（纯文本直读，无测试反例残留）</span>
+          <span data-i18n="ep.heading">给 Agent 读的静态文档（纯 Markdown / JSON）</span>
           <a href="./catalog.json" style="font-size:0.78rem;">catalog.json</a>
         </div>
         <div class="endpoints-list">
@@ -382,70 +382,70 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
           <div class="endpoint-row">
             <div class="endpoint-main">
               <a class="endpoint-path" href="./llms.txt">/llms.txt</a>
-              <div class="endpoint-desc" data-i18n="ep.llms">Agent 导航首页（按任务选最小文档）</div>
+              <div class="endpoint-desc" data-i18n="ep.llms">Agent 入口索引</div>
             </div>
-            <span class="endpoint-meta">2.3 KB · ~584 tok</span>
+            <span class="endpoint-meta">2.3 KB · ~579 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
               <a class="endpoint-path" href="./catalog.json">/catalog.json</a>
-              <div class="endpoint-desc" data-i18n="ep.catalog">全部静态资源的 JSON 索引与字数估算</div>
+              <div class="endpoint-desc" data-i18n="ep.catalog">全部文档的 JSON 目录</div>
             </div>
             <span class="endpoint-meta">39.5 KB · ~10124 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
               <a class="endpoint-path" href="./tasks/business-doc.md">/tasks/business-doc.md</a>
-              <div class="endpoint-desc" data-i18n="ep.taskBiz">任务卡：商业简报与技术方案</div>
+              <div class="endpoint-desc" data-i18n="ep.taskBiz">任务卡：工作文档与技术方案</div>
             </div>
             <span class="endpoint-meta">3.8 KB · ~978 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
               <a class="endpoint-path" href="./tasks/web-and-deck.md">/tasks/web-and-deck.md</a>
-              <div class="endpoint-desc" data-i18n="ep.taskWeb">任务卡：网页界面、SVG 与 PPT</div>
+              <div class="endpoint-desc" data-i18n="ep.taskWeb">任务卡：网页、SVG 与 PPT</div>
             </div>
             <span class="endpoint-meta">4.1 KB · ~1052 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
               <a class="endpoint-path" href="./tasks/editorial-writing.md">/tasks/editorial-writing.md</a>
-              <div class="endpoint-desc" data-i18n="ep.taskEdit">任务卡：随笔与长文报道</div>
+              <div class="endpoint-desc" data-i18n="ep.taskEdit">任务卡：随笔与长文</div>
             </div>
             <span class="endpoint-meta">3.4 KB · ~875 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
               <a class="endpoint-path" href="./tasks/pre-release-gate.md">/tasks/pre-release-gate.md</a>
-              <div class="endpoint-desc" data-i18n="ep.taskGate">任务卡：发稿前硬伤门禁与改稿核对</div>
+              <div class="endpoint-desc" data-i18n="ep.taskGate">任务卡：发稿前硬伤检查与核对</div>
             </div>
             <span class="endpoint-meta">2.0 KB · ~514 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
               <a class="endpoint-path" href="./tools/skill.md">/tools/skill.md</a>
-              <div class="endpoint-desc" data-i18n="ep.skill">跨宿主 Agent Skill（检查 -&gt; 改稿 -&gt; 核对）</div>
+              <div class="endpoint-desc" data-i18n="ep.skill">跨宿主 Agent Skill</div>
             </div>
             <span class="endpoint-meta">3.7 KB · ~935 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
               <a class="endpoint-path" href="./awesome/index.json">/awesome/index.json</a>
-              <div class="endpoint-desc" data-i18n="ep.awesome">同路清单 87 条原始 JSON</div>
+              <div class="endpoint-desc" data-i18n="ep.awesome">87 条工具清单 JSON</div>
             </div>
             <span class="endpoint-meta">65.6 KB · ~16782 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
               <a class="endpoint-path" href="./methodology/brand-and-voice.md">/methodology/brand-and-voice.md</a>
-              <div class="endpoint-desc" data-i18n="ep.method">品牌人格、表达基准与自检清单</div>
+              <div class="endpoint-desc" data-i18n="ep.method">文案与设计基准</div>
             </div>
-            <span class="endpoint-meta">11.7 KB · ~2990 tok</span>
+            <span class="endpoint-meta">8.0 KB · ~2045 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
               <a class="endpoint-path" href="./llms-full.txt">/llms-full.txt</a>
-              <div class="endpoint-desc" data-i18n="ep.full">单次拉取的全部 29 条规则合集</div>
+              <div class="endpoint-desc" data-i18n="ep.full">单次拉取的全部 29 条规则</div>
             </div>
             <span class="endpoint-meta">18.9 KB · ~4839 tok</span>
           </div>
@@ -454,20 +454,20 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
       </div>
     </section>
 
-    <!-- Rule Catalog: Language-Pure View -->
+    <!-- Rule Catalog -->
     <section id="rules" class="section-block band-rule">
       <div class="section-header">
         <div>
-          <h2 class="section-title" data-i18n="rules.title">每条规则，都有改前和改后</h2>
+          <h2 class="section-title" data-i18n="rules.title">规则列表</h2>
           <p class="section-desc" data-i18n="rules.desc">
-            中文页只展示中文与跨格式规则及原生中文例句，不夹英文例子；切到英文可看全部英文专项规则。点「试试 ↑」直接装进上方工作台。
+            中文页只列中文和通用规则，例子都是中文；切英文可以看到全部英文规则。点「试试 ↑」会直接装进上面的工作台。
           </p>
         </div>
-        <a href="./cases/copy-contrasts.md" data-i18n="rules.readCases">全部对照（.md）→</a>
+        <a href="./cases/copy-contrasts.md" data-i18n="rules.readCases">看全部例子（.md）→</a>
       </div>
 
       <div class="catalog-controls">
-        <input type="search" id="rule-search" class="search-input" placeholder="搜规则名、毛病或关键词…" aria-label="搜索规则">
+        <input type="search" id="rule-search" class="search-input" placeholder="搜规则或关键词…" aria-label="搜索规则">
         <select id="rule-modality-filter" class="filter-select" aria-label="按文件格式筛选">
           <option value="all" data-i18n="rules.modAll">全部格式</option>
           <option value="markdown">markdown</option>
@@ -480,8 +480,8 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
         </select>
         <select id="rule-severity-filter" class="filter-select" aria-label="按级别筛选">
           <option value="all" data-i18n="rules.sevAll">全部级别</option>
-          <option value="error" data-i18n="rules.sevError">红笔硬伤（error）</option>
-          <option value="warning" data-i18n="rules.sevWarn">蓝笔商榷（warning）</option>
+          <option value="error" data-i18n="rules.sevError">硬伤（error）</option>
+          <option value="warning" data-i18n="rules.sevWarn">提醒（warning）</option>
           <option value="info" data-i18n="rules.sevInfo">轻提示（info）</option>
         </select>
       </div>
@@ -489,10 +489,10 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
       <div class="filter-bar">
         <div class="filter-group" id="rule-filters" role="group" aria-label="按规则包筛选">
           <button type="button" class="ctrl-btn is-active" data-pack-filter="all" data-i18n="rules.filterAll">全部</button>
-          <button type="button" class="ctrl-btn" data-pack-filter="core" data-i18n="rules.filterCore">硬伤规则</button>
-          <button type="button" class="ctrl-btn" data-pack-filter="business-brief" data-i18n="rules.filterBrief">商业简报</button>
+          <button type="button" class="ctrl-btn" data-pack-filter="core" data-i18n="rules.filterCore">硬伤</button>
+          <button type="button" class="ctrl-btn" data-pack-filter="business-brief" data-i18n="rules.filterBrief">工作文档</button>
           <button type="button" class="ctrl-btn" data-pack-filter="literary-essay" data-i18n="rules.filterEssay">随笔长文</button>
-          <button type="button" class="ctrl-btn" data-pack-filter="deck-and-ui" data-i18n="rules.filterUi">PPT 与网页</button>
+          <button type="button" class="ctrl-btn" data-pack-filter="deck-and-ui" data-i18n="rules.filterUi">PPT 和网页</button>
         </div>
         <span class="catalog-count" id="rules-count" aria-live="polite">24 条规则</span>
       </div>
@@ -501,11 +501,11 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
         <table class="rules-table">
           <thead>
             <tr>
-              <th data-i18n="rules.colId">规则与操作</th>
-              <th data-i18n="rules.colPack">归属</th>
-              <th data-i18n="rules.colMod">适用格式</th>
-              <th data-i18n="rules.colWhy">挑什么毛病 &amp; 问自己一句</th>
-              <th data-i18n="rules.colEx">原句 → 改过头 → 改好</th>
+              <th data-i18n="rules.colId">规则</th>
+              <th data-i18n="rules.colPack">分类</th>
+              <th data-i18n="rules.colMod">格式</th>
+              <th data-i18n="rules.colWhy">查什么 / 怎么判断</th>
+              <th data-i18n="rules.colEx">原句 → 改坏 → 改好</th>
             </tr>
           </thead>
           <tbody id="rules-tbody">
@@ -520,9 +520,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/local-path-leak.md" aria-label="查看 local-path-leak 规则卡片">.md</a>
                 </div>
               </td>
-              <td>硬伤规则<br><span class="sev-tag sev-error" style="font-size:0.75rem;">红笔硬伤</span></td>
+              <td>硬伤<br><span class="sev-tag sev-error" style="font-size:0.75rem;">硬伤</span></td>
               <td><code>markdown, text, html, css, jsx, svg, docx, pptx, pdf</code></td>
-              <td><div>残留本机文件系统路径或 file:/// 链接。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>将个人工作站路径改为仓库相对路径、公开 HTTPS 链接，或在命令示例中改用 <code>/Users/example/...</code>。</div></td>
+              <td><div>残留本机文件系统路径或 file:/// 链接。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>将个人工作站路径改为仓库相对路径、公开 HTTPS 链接，或在命令示例中改用 <code>/Users/example/...</code>。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>详见 [架构图](file:///Users/example/docs/arch.png)，共 3 节点。</code></div>
                  <div class="ex-row-trap"><strong>改过头：</strong> <code>详见 [架构图](file:///Users/example/docs/arch.png)。</code></div>
@@ -538,9 +538,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/unfilled-placeholder.md" aria-label="查看 unfilled-placeholder 规则卡片">.md</a>
                 </div>
               </td>
-              <td>硬伤规则<br><span class="sev-tag sev-error" style="font-size:0.75rem;">红笔硬伤</span></td>
+              <td>硬伤<br><span class="sev-tag sev-error" style="font-size:0.75rem;">硬伤</span></td>
               <td><code>markdown, text, html, jsx, svg, docx, pptx, pdf</code></td>
-              <td><div>存在未替换的模板占位符、损坏的交叉引用域或测试假文。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>发稿前填入核实后的真实数据；若数据尚未就绪，直接删去未完成段落而非保留占位标记。</div></td>
+              <td><div>存在未替换的模板占位符、损坏的交叉引用域或测试假文。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>发稿前填入核实后的真实数据；若数据尚未就绪，直接删去未完成段落而非保留占位标记。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>第三季度清分覆盖 14 条通道，p95 延迟见【待补充】。</code></div>
                  <div class="ex-row-trap"><strong>改过头：</strong> <code>第三季度清分在 14 条通道上表现大幅提升。</code></div>
@@ -556,9 +556,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/chatbot-artifact.md" aria-label="查看 chatbot-artifact 规则卡片">.md</a>
                 </div>
               </td>
-              <td>硬伤规则<br><span class="sev-tag sev-error" style="font-size:0.75rem;">红笔硬伤</span></td>
+              <td>硬伤<br><span class="sev-tag sev-error" style="font-size:0.75rem;">硬伤</span></td>
               <td><code>markdown, text, html, jsx, docx, pptx, pdf</code></td>
-              <td><div>残留未清理的 AI 对话寒暄壳或检索引用内部标记。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>直接删掉对话寒暄句或内部引用残迹，正文从事实内容直接开始。</div></td>
+              <td><div>残留未清理的 AI 对话寒暄壳或检索引用内部标记。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>直接删掉对话寒暄句或内部引用残迹，正文从事实内容直接开始。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>好的，以下是修改后的上线说明：集群 B 已于 02:00 UTC 完成迁移。</code></div>
                  <div class="ex-row-trap"><strong>改过头：</strong> <code>没问题，集群 B 已于 02:00 UTC 完成迁移。</code></div>
@@ -573,9 +573,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/markdown-leak.md" aria-label="查看 markdown-leak 规则卡片">.md</a>
                 </div>
               </td>
-              <td>硬伤规则<br><span class="sev-tag sev-error" style="font-size:0.75rem;">红笔硬伤</span></td>
+              <td>硬伤<br><span class="sev-tag sev-error" style="font-size:0.75rem;">硬伤</span></td>
               <td><code>docx, pptx</code></td>
-              <td><div>Word 或 PowerPoint 文本中残留未渲染的原始 Markdown 标记（如 <code>**加粗**</code> 或 <code>## 标题</code>）。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>去掉原始星号或井号，改用 Word/PowerPoint 原生样式或加粗格式。</div></td>
+              <td><div>Word 或 PowerPoint 文本中残留未渲染的原始 Markdown 标记（如 <code>**加粗**</code> 或 <code>## 标题</code>）。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>去掉原始星号或井号，改用 Word/PowerPoint 原生样式或加粗格式。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>**核心节点**：周五前完成 v0.2 解析器上线。</code></div>
                  <div class="ex-row-good"><strong>改好：</strong> <code>核心节点：周五前完成 v0.2 解析器上线（在 Word/PPT 里直接加粗）。</code></div>
@@ -590,9 +590,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/ui-dead-control.md" aria-label="查看 ui-dead-control 规则卡片">.md</a>
                 </div>
               </td>
-              <td>硬伤规则<br><span class="sev-tag sev-error" style="font-size:0.75rem;">红笔硬伤</span></td>
+              <td>硬伤<br><span class="sev-tag sev-error" style="font-size:0.75rem;">硬伤</span></td>
               <td><code>html, jsx</code></td>
-              <td><div>存在空跳转链接（<code>href=&quot;#&quot;</code>）、无障碍名称缺失的按钮，或未说明原因的静态禁用按钮。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>绑定真实跳转或交互处理函数；若确需禁用须通过 <code>title</code> 或 <code>aria-describedby</code> 说明原因，未实现的功能直接移除按钮。</div></td>
+              <td><div>存在空跳转链接（<code>href=&quot;#&quot;</code>）、无障碍名称缺失的按钮，或未说明原因的静态禁用按钮。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>绑定真实跳转或交互处理函数；若确需禁用须通过 <code>title</code> 或 <code>aria-describedby</code> 说明原因，未实现的功能直接移除按钮。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>&lt;a href=&quot;#&quot; class=&quot;btn&quot;&gt;下载完整报告&lt;/a&gt;</code></div>
                  <div class="ex-row-good"><strong>改好：</strong> <code>&lt;a href=&quot;./report.pdf&quot; class=&quot;btn&quot;&gt;下载完整报告&lt;/a&gt;</code></div>
@@ -607,9 +607,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/ui-contrast-and-dark-inversion.md" aria-label="查看 ui-contrast-and-dark-inversion 规则卡片">.md</a>
                 </div>
               </td>
-              <td>硬伤规则<br><span class="sev-tag sev-error" style="font-size:0.75rem;">红笔硬伤</span></td>
+              <td>硬伤<br><span class="sev-tag sev-error" style="font-size:0.75rem;">硬伤</span></td>
               <td><code>html, css</code></td>
-              <td><div>可静态解析的前景/背景对比度低于 WCAG AA（&lt; 4.5:1），或深色模式下底层画布比上层卡片更亮（Z 轴亮度倒置）。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>调整前景色与表面色令牌，确保正文对比度 &gt;= 4.5:1，且深色模式亮度按“底层画布 &lt; 内容面 &lt; 浮层卡片”严格递增。</div></td>
+              <td><div>可静态解析的前景/背景对比度低于 WCAG AA（&lt; 4.5:1），或深色模式下底层画布比上层卡片更亮（Z 轴亮度倒置）。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>调整前景色与表面色令牌，确保正文对比度 &gt;= 4.5:1，且深色模式亮度按“底层画布 &lt; 内容面 &lt; 浮层卡片”严格递增。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>.badge { color: #888888; background: #FFFFFF; font-size: 12px; }</code></div>
                  <div class="ex-row-good"><strong>改好：</strong> <code>.badge { color: #474C55; background: #FFFFFF; font-size: 12px; }</code></div>
@@ -623,9 +623,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/office-pdf-hygiene.md" aria-label="查看 office-pdf-hygiene 规则卡片">.md</a>
                 </div>
               </td>
-              <td>硬伤规则<br><span class="sev-tag sev-error" style="font-size:0.75rem;">红笔硬伤</span></td>
+              <td>硬伤<br><span class="sev-tag sev-error" style="font-size:0.75rem;">硬伤</span></td>
               <td><code>docx, pptx, pdf</code></td>
-              <td><div>PPTX 文本框越出画布边界、Office 文档残留修订痕迹/批注，或 PDF 存在本机链接、未嵌入字体、原始文件名标题。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>定稿前接受修订并清理批注，收回越界文本框，嵌入 PDF 字体并设置正式文档标题。</div></td>
+              <td><div>PPTX 文本框越出画布边界、Office 文档残留修订痕迹/批注，或 PDF 存在本机链接、未嵌入字体、原始文件名标题。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>定稿前接受修订并清理批注，收回越界文本框，嵌入 PDF 字体并设置正式文档标题。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>PDF 标题残留原始文件名（最终版_修改3.docx），且含未嵌入字体。</code></div>
                  <div class="ex-row-good"><strong>改好：</strong> <code>导正 PDF 标题为「2026 第三季度产品说明」，导出时勾选嵌入全部字体。</code></div>
@@ -640,9 +640,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/en-throat-clearing-opener.md" aria-label="查看 en-throat-clearing-opener 规则卡片">.md</a>
                 </div>
               </td>
-              <td>商业简报<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>工作文档<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>markdown, text, html, docx, pptx</code></td>
-              <td><div>英文铺垫式开场白拖延了核心事实。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>删掉前半句铺垫壳，看剩下的主干是否已经完整表达了事实或限制条件。</div></td>
+              <td><div>英文铺垫式开场白拖延了核心事实。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>删掉前半句铺垫壳，看剩下的主干是否已经完整表达了事实或限制条件。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>It is worth noting that CSV exports take up to 12 minutes for workspaces above 500,000 rows.</code></div>
                  <div class="ex-row-trap"><strong>改过头：</strong> <code>CSV exports aren't instant — they're built for precision, taking up to 12 minutes.</code></div>
@@ -658,9 +658,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/en-cliche-lexicon.md" aria-label="查看 en-cliche-lexicon 规则卡片">.md</a>
                 </div>
               </td>
-              <td>商业简报<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">轻提示</span></td>
+              <td>工作文档<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">轻提示</span></td>
               <td><code>markdown, text, html, docx, pptx</code></td>
-              <td><div>高频公关套语，建议替换为具体动作或实测指标。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>如果删掉这个修饰语，读者会少知道哪项机制、指标或取舍？直接写出那项事实。</div></td>
+              <td><div>高频公关套语，建议替换为具体动作或实测指标。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>如果删掉这个修饰语，读者会少知道哪项机制、指标或取舍？直接写出那项事实。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>Batch indexing is a game-changer that unlocks the full potential of our 40-million-row log archive.</code></div>
                  <div class="ex-row-trap"><strong>改过头：</strong> <code>This isn't indexing. It's instant recall across 40 million rows.</code></div>
@@ -676,9 +676,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/zh-bureaucratic-padding.md" aria-label="查看 zh-bureaucratic-padding 规则卡片">.md</a>
                 </div>
               </td>
-              <td>商业简报<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>工作文档<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>markdown, text, html, docx, pptx</code></td>
-              <td><div>存在空泛汇报套词或铺垫口头禅，掩盖了具体动作、主体与结果。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>追问“谁对什么做了哪项改动、指标变了多少”，删掉抽象包装词。</div></td>
+              <td><div>存在空泛汇报套词或铺垫口头禅，掩盖了具体动作、主体与结果。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>追问“谁对什么做了哪项改动、指标变了多少”，删掉抽象包装词。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>值得注意的是，本次改造以工单分级为重要抓手，全面赋能一线客服团队形成服务闭环，将首响时间压缩至 45 秒内。</code></div>
                  <div class="ex-row-trap"><strong>改过头：</strong> <code>这不是一次工单改造，而是客服体验的底气：首响压缩至 45 秒内。</code></div>
@@ -694,9 +694,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/negation-pivot-frame.md" aria-label="查看 negation-pivot-frame 规则卡片">.md</a>
                 </div>
               </td>
-              <td>商业简报<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>工作文档<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>markdown, text, html, docx, pptx</code></td>
-              <td><div>二阶“不是 A，而是 B”对比修辞：先否定稻草人再拔高抽象概念，缺乏具体事实增量。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>删掉前半句否定铺垫，只看“而是 B”。如果 B 没有数值、机制或真实纠偏信息，整句删改。</div></td>
+              <td><div>二阶“不是 A，而是 B”对比修辞：先否定稻草人再拔高抽象概念，缺乏具体事实增量。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>删掉前半句否定铺垫，只看“而是 B”。如果 B 没有数值、机制或真实纠偏信息，整句删改。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>这不是一款简单的文档检查工具，而是交付质量的底气。</code></div>
                  <div class="ex-row-trap"><strong>改过头：</strong> <code>工具已至。底气自生。交付无忧。</code></div>
@@ -712,9 +712,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/staccato-slogan-run.md" aria-label="查看 staccato-slogan-run 规则卡片">.md</a>
                 </div>
               </td>
-              <td>商业简报<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>工作文档<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>markdown, text, html, docx, pptx</code></td>
-              <td><div>连续三个及以上超短断句口号（第二代 AI 戏剧化腔调）。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>把零碎口号合并为一句交代因果与边界的完整陈述，删去纯节奏铺陈。</div></td>
+              <td><div>连续三个及以上超短断句口号（第二代 AI 戏剧化腔调）。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>把零碎口号合并为一句交代因果与边界的完整陈述，删去纯节奏铺陈。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>Signals drop. Photos vanish. Audits stall. Offline sync keeps all 120 inspection photos queued locally.</code></div>
                  <div class="ex-row-trap"><strong>改过头：</strong> <code>Offline sync isn't a fallback — it's field resilience for 120 photos.</code></div>
@@ -730,9 +730,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/zh-four-char-triad.md" aria-label="查看 zh-four-char-triad 规则卡片">.md</a>
                 </div>
               </td>
-              <td>商业简报<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>工作文档<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>markdown, text, html, docx, pptx</code></td>
-              <td><div>连续三个及以上四字套语并列（如“精准高效、安全可靠、灵活易用”），信息密度低。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>删掉整组四字形容词，只保留有数字、故障边界或配置项支撑的具体事实。</div></td>
+              <td><div>连续三个及以上四字套语并列（如“精准高效、安全可靠、灵活易用”），信息密度低。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>删掉整组四字形容词，只保留有数字、故障边界或配置项支撑的具体事实。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>新版网关具备精准高效、安全可靠、灵活易用的特性，单节点支持 8,000 QPS。</code></div>
                  <div class="ex-row-trap"><strong>改过头：</strong> <code>新版网关不是简单升级，而是 8,000 QPS 的性能飞跃。</code></div>
@@ -748,9 +748,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/unsourced-attribution.md" aria-label="查看 unsourced-attribution 规则卡片">.md</a>
                 </div>
               </td>
-              <td>商业简报<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>工作文档<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>markdown, text, html, docx, pptx</code></td>
-              <td><div>出现“研究表明/数据显示/业内人士指出”等模糊权威背书，但句内无具体机构、年份、链接或引用标记。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>补齐具体报告名称、年份或引用编号 <code>[n]</code>；若查无实据则直接删去该判断。</div></td>
+              <td><div>出现“研究表明/数据显示/业内人士指出”等模糊权威背书，但句内无具体机构、年份、链接或引用标记。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>补齐具体报告名称、年份或引用编号 <code>[n]</code>；若查无实据则直接删去该判断。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>业内普遍认为，超过 70% 的演示文稿存在对比度问题。</code></div>
                  <div class="ex-row-trap"><strong>改过头：</strong> <code>专家指出，大部分演示文稿都看不清。</code></div>
@@ -766,9 +766,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/bold-lead-list-wall.md" aria-label="查看 bold-lead-list-wall 规则卡片">.md</a>
                 </div>
               </td>
-              <td>商业简报<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">轻提示</span></td>
+              <td>工作文档<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">轻提示</span></td>
               <td><code>markdown, text</code></td>
-              <td><div>连续 4 条及以上 <code>- **小标题**：说明</code> 列表墙，呈现典型大模型平铺罗列感。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>如果是在阐述同一观点，改写为有主次逻辑的自然段；仅在参数说明、术语表或清单核对时保留加粗列表。</div></td>
+              <td><div>连续 4 条及以上 <code>- **小标题**：说明</code> 列表墙，呈现典型大模型平铺罗列感。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>如果是在阐述同一观点，改写为有主次逻辑的自然段；仅在参数说明、术语表或清单核对时保留加粗列表。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>- **速度**：本地运行很快。
 - **隐私**：不上传文件。
@@ -786,9 +786,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/zh-essay-moralizing-ending.md" aria-label="查看 zh-essay-moralizing-ending 规则卡片">.md</a>
                 </div>
               </td>
-              <td>随笔长文<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>随笔长文<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>markdown, text, html, docx</code></td>
-              <td><div>段尾出现说教升华套句，冲淡了前文的具体细节。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>直接删去最后一句升华总结，在它前面的具体动作或画面处收尾。</div></td>
+              <td><div>段尾出现说教升华套句，冲淡了前文的具体细节。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>直接删去最后一句升华总结，在它前面的具体动作或画面处收尾。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>傍晚六点半，修表匠把拆下的三枚铜齿轮泡进煤油皿里，关掉台灯。这或许就是慢工出细活在喧嚣时代真正的意义所在。</code></div>
                  <div class="ex-row-trap"><strong>改过头：</strong> <code>傍晚六点半，三枚铜齿轮泡进煤油皿。这不是修表，而是与时间的对话。</code></div>
@@ -804,9 +804,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/en-essay-moralizing-ending.md" aria-label="查看 en-essay-moralizing-ending 规则卡片">.md</a>
                 </div>
               </td>
-              <td>随笔长文<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>随笔长文<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>markdown, text, html, docx</code></td>
-              <td><div>英文感伤升华结语直接替读者总结情绪，削弱了叙事余味。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>删掉结尾抒情总结句，让前一句的具体意象或对话自然收束。</div></td>
+              <td><div>英文感伤升华结语直接替读者总结情绪，削弱了叙事余味。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>删掉结尾抒情总结句，让前一句的具体意象或对话自然收束。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>At 6:15 a.m., the ferry deck smelled of wet rope and diesel. Ultimately, this reminds us that departures are always quieter than arrivals.</code></div>
                  <div class="ex-row-trap"><strong>改过头：</strong> <code>Wet rope. Cold diesel. Quiet departures at 6:15 a.m.</code></div>
@@ -822,9 +822,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/literary-negation-pivot.md" aria-label="查看 literary-negation-pivot 规则卡片">.md</a>
                 </div>
               </td>
-              <td>随笔长文<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>随笔长文<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>markdown, text, html, docx</code></td>
-              <td><div>套路化“不是 A，而是 B”金句打断叙事质感。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>删掉抽象对比金句，改写人物实际做出的动作或看到的细节。</div></td>
+              <td><div>套路化“不是 A，而是 B”金句打断叙事质感。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>删掉抽象对比金句，改写人物实际做出的动作或看到的细节。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>老周留下的那把旧刨子不是工具，而是手艺人的尊严。</code></div>
                  <div class="ex-row-trap"><strong>改过头：</strong> <code>一把旧刨子。半生木工活。满手老茧。</code></div>
@@ -842,7 +842,7 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
               </td>
               <td>随笔长文<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">轻提示</span></td>
               <td><code>markdown, text, html, docx</code></td>
-              <td><div>破折号（<code>—</code> / <code>——</code>）密度过高，形成典型生成式插话腔。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>将多数插话破折号改为逗号或句号，只在真正语意陡转处保留一处破折号。</div></td>
+              <td><div>破折号（<code>—</code> / <code>——</code>）密度过高，形成典型生成式插话腔。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>将多数插话破折号改为逗号或句号，只在真正语意陡转处保留一处破折号。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>The station clock — brass-rimmed — stopped at 4:10 — right before the snow — while three passengers — coats buttoned — waited outside.</code></div>
                  <div class="ex-row-trap"><strong>改过头：</strong> <code>Brass clock. 4:10 sharp. Snow falling. Three passengers waiting.</code></div>
@@ -858,9 +858,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/zh-halfwidth-punctuation.md" aria-label="查看 zh-halfwidth-punctuation 规则卡片">.md</a>
                 </div>
               </td>
-              <td>随笔长文<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>随笔长文<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>markdown, text, html, docx</code></td>
-              <td><div>汉字之间混入半角西文标点（<code>,;:!?</code>），违反中文排版规范（W3C CLREQ）。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>将汉字之间的半角标点替换为全角中文标点（<code>，；：！？</code>）。</div></td>
+              <td><div>汉字之间混入半角西文标点（<code>,;:!?</code>），违反中文排版规范（W3C CLREQ）。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>将汉字之间的半角标点替换为全角中文标点（<code>，；：！？</code>）。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>冬至那天下了初雪,院子里的腊梅开了三朵;香气一直飘到走廊。</code></div>
                  <div class="ex-row-trap"><strong>改过头：</strong> <code>冬至初雪。腊梅三朵。暗香盈袖。</code></div>
@@ -875,9 +875,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/slide-word-wall.md" aria-label="查看 slide-word-wall 规则卡片">.md</a>
                 </div>
               </td>
-              <td>PPT 与网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>PPT 和网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>pptx</code></td>
-              <td><div>单页幻灯片可见文字超载（英文 &gt; 120 词或中文 &gt; 280 字），变成文档搬家。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>将长篇背景移入演讲者备注或配套文档，画面仅保留 1 句结论标题与不超过 3 条核心论据。</div></td>
+              <td><div>单页幻灯片可见文字超载（英文 &gt; 120 词或中文 &gt; 280 字），变成文档搬家。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>将长篇背景移入演讲者备注或配套文档，画面仅保留 1 句结论标题与不超过 3 条核心论据。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>第 3 页塞了 340 字完整长段落解释数据迁移方案与回滚步骤。</code></div>
                  <div class="ex-row-good"><strong>改好：</strong> <code>拆成 3 条要点（每条不超过 20 字），把详细回滚步骤移到演讲者备注。</code></div>
@@ -891,9 +891,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/slide-bullet-overload.md" aria-label="查看 slide-bullet-overload 规则卡片">.md</a>
                 </div>
               </td>
-              <td>PPT 与网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>PPT 和网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>pptx</code></td>
-              <td><div>单页幻灯片项目符号超过 6 条（<code>maxSlideBullets</code>），视觉层级碎裂。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>将零散条目归并为 2–3 组结构化分栏，或拆分为两页演示。</div></td>
+              <td><div>单页幻灯片项目符号超过 6 条（<code>maxSlideBullets</code>），视觉层级碎裂。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>将零散条目归并为 2–3 组结构化分栏，或拆分为两页演示。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>同一页 PPT 竖排堆了 9 条并列要点，同时讲定价、排期和风险。</code></div>
                  <div class="ex-row-good"><strong>改好：</strong> <code>拆成「定价」和「排期与风险」两页，每页只留 3–4 条。</code></div>
@@ -907,9 +907,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/slide-autofit-shrink.md" aria-label="查看 slide-autofit-shrink 规则卡片">.md</a>
                 </div>
               </td>
-              <td>PPT 与网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>PPT 和网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>pptx</code></td>
-              <td><div>文本框触发 PowerPoint 自动缩排（<code>fontScale &lt; 80%</code>），表明文案超出容器容量。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>精简溢出文案或调大文本框尺寸，使正文按 100% 原始字号清晰排布。</div></td>
+              <td><div>文本框触发 PowerPoint 自动缩排（<code>fontScale &lt; 80%</code>），表明文案超出容器容量。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>精简溢出文案或调大文本框尺寸，使正文按 100% 原始字号清晰排布。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>文本框触发自动缩排，字号被压缩到原来的 62.5%。</code></div>
                  <div class="ex-row-good"><strong>改好：</strong> <code>删减约 40% 冗余文字，恢复原始正文字号。</code></div>
@@ -923,9 +923,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/slide-weak-topic-title.md" aria-label="查看 slide-weak-topic-title 规则卡片">.md</a>
                 </div>
               </td>
-              <td>PPT 与网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">轻提示</span></td>
+              <td>PPT 和网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">轻提示</span></td>
               <td><code>pptx</code></td>
-              <td><div>正文密集的幻灯片使用“背景/概述/总结”等空泛名词做标题，未直接亮出本页结论。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>把“项目背景/数据概述”替换为听众看完本页应记住的一句具体结论。</div></td>
+              <td><div>正文密集的幻灯片使用“背景/概述/总结”等空泛名词做标题，未直接亮出本页结论。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>把“项目背景/数据概述”替换为听众看完本页应记住的一句具体结论。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>标题只写「项目背景」（下方塞了 65 字讲购物车流失 38%）。</code></div>
                  <div class="ex-row-good"><strong>改好：</strong> <code>标题直给结论：「结算页第 3 步造成 38% 购物车流失」。</code></div>
@@ -940,9 +940,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/ui-ai-gradient.md" aria-label="查看 ui-ai-gradient 规则卡片">.md</a>
                 </div>
               </td>
-              <td>PPT 与网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>PPT 和网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>html, css, jsx, svg</code></td>
-              <td><div>使用默认紫粉/蓝紫高饱和渐变或渐变裁切艺术字标题（典型生成式模板特征）。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>去掉装饰性霓虹渐变，改用克制的纯色纸面令牌、1px 结构分界线与字重对比。</div></td>
+              <td><div>使用默认紫粉/蓝紫高饱和渐变或渐变裁切艺术字标题（典型生成式模板特征）。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>去掉装饰性霓虹渐变，改用克制的纯色纸面令牌、1px 结构分界线与字重对比。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>&lt;h1 class=&quot;bg-gradient-to-r from-indigo via-purple to-pink bg-clip-text text-transparent&quot;&gt;智能工作流&lt;/h1&gt;</code></div>
                  <div class="ex-row-good"><strong>改好：</strong> <code>&lt;h1 class=&quot;page-title&quot;&gt;本地审校工作台&lt;/h1&gt;</code></div>
@@ -957,9 +957,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/ui-pill-soup.md" aria-label="查看 ui-pill-soup 规则卡片">.md</a>
                 </div>
               </td>
-              <td>PPT 与网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>PPT 和网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>html, jsx</code></td>
-              <td><div>单视图堆砌超过 6 个胶囊圆角文字标签（<code>rounded-full</code> / <code>999px</code>），导致视觉噪音泛滥。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>将常规元数据改为用间隔号（<code>·</code>）或细线分隔的纯文本，仅对需要干预的异常状态保留单枚强调标记。</div></td>
+              <td><div>单视图堆砌超过 6 个胶囊圆角文字标签（<code>rounded-full</code> / <code>999px</code>），导致视觉噪音泛滥。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>将常规元数据改为用间隔号（<code>·</code>）或细线分隔的纯文本，仅对需要干预的异常状态保留单枚强调标记。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>一张卡片上连排 8 个圆角胶囊标签：运行中、v2.4、专业版、AI 驱动、已验证、快速、安全、开源。</code></div>
                  <div class="ex-row-good"><strong>改好：</strong> <code>只留 1 个状态文字，其余写成一行轻元数据。</code></div>
@@ -974,9 +974,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/ui-box-in-box.md" aria-label="查看 ui-box-in-box 规则卡片">.md</a>
                 </div>
               </td>
-              <td>PPT 与网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>PPT 和网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>html, jsx</code></td>
-              <td><div>连续三层及以上带边框与圆角的容器层层套盒，挤压有效内容空间。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>去掉多余的外层描边套盒，改用对齐、留白或单根 1px 分界线组织层级。</div></td>
+              <td><div>连续三层及以上带边框与圆角的容器层层套盒，挤压有效内容空间。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>去掉多余的外层描边套盒，改用对齐、留白或单根 1px 分界线组织层级。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>&lt;div class=&quot;border rounded-xl p-6&quot;&gt;&lt;div class=&quot;border rounded-lg p-4&quot;&gt;&lt;div class=&quot;border rounded p-3&quot;&gt;指标&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</code></div>
                  <div class="ex-row-good"><strong>改好：</strong> <code>&lt;section class=&quot;metric-row&quot;&gt;&lt;h3&gt;延迟&lt;/h3&gt;&lt;p&gt;18 毫秒&lt;/p&gt;&lt;/section&gt;</code></div>
@@ -991,9 +991,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/ui-prompt-echo-badge.md" aria-label="查看 ui-prompt-echo-badge 规则卡片">.md</a>
                 </div>
               </td>
-              <td>PPT 与网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>PPT 和网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>html, jsx, svg</code></td>
-              <td><div>界面标签直接回显提示词营销口号（如<code>AI 强力驱动</code><code>零幻觉保证</code>），未说明具体功能。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>删去“AI 驱动”装饰标牌，直接用控件完成的实际动作命名（如“核对幻灯片字数”）。</div></td>
+              <td><div>界面标签直接回显提示词营销口号（如<code>AI 强力驱动</code><code>零幻觉保证</code>），未说明具体功能。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>删去“AI 驱动”装饰标牌，直接用控件完成的实际动作命名（如“核对幻灯片字数”）。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>&lt;span class=&quot;eyebrow&quot;&gt;AI-Powered · Zero Hallucination&lt;/span&gt;</code></div>
                  <div class="ex-row-good"><strong>改好：</strong> <code>&lt;span class=&quot;section-meta&quot;&gt;本地离线运行&lt;/span&gt;</code></div>
@@ -1008,9 +1008,9 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
                   <a class="rule-md-link" href="./rules/svg-text-overflow-or-a11y.md" aria-label="查看 svg-text-overflow-or-a11y 规则卡片">.md</a>
                 </div>
               </td>
-              <td>PPT 与网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">蓝笔商榷</span></td>
+              <td>PPT 和网页<br><span class="sev-tag sev-warning" style="font-size:0.75rem;">提醒</span></td>
               <td><code>svg</code></td>
-              <td><div>独立 SVG 中的 <code>&lt;text&gt;</code> 在回退字体下存在超出 <code>viewBox</code> 裁切风险，或缺少 <code>&lt;title&gt;</code>/<code>aria-label</code> 无障碍说明。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>为 SVG <code>&lt;text&gt;</code> 预留充足宽度余量（或将品牌字标转为 <code>&lt;path&gt;</code> 轮廓），并补充 <code>&lt;title&gt;</code>。</div></td>
+              <td><div>独立 SVG 中的 <code>&lt;text&gt;</code> 在回退字体下存在超出 <code>viewBox</code> 裁切风险，或缺少 <code>&lt;title&gt;</code>/<code>aria-label</code> 无障碍说明。</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>为 SVG <code>&lt;text&gt;</code> 预留充足宽度余量（或将品牌字标转为 <code>&lt;path&gt;</code> 轮廓），并补充 <code>&lt;title&gt;</code>。</div></td>
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>&lt;svg viewBox=&quot;0 0 200 40&quot;&gt;&lt;text x=&quot;10&quot; y=&quot;28&quot; font-size=&quot;24&quot;&gt;跨模态实时审校工作流示意图&lt;/text&gt;&lt;/svg&gt;</code></div>
                  <div class="ex-row-good"><strong>改好：</strong> <code>&lt;svg viewBox=&quot;0 0 420 48&quot; role=&quot;img&quot; aria-label=&quot;审校流程&quot;&gt;&lt;title&gt;审校流程&lt;/title&gt;&lt;text x=&quot;16&quot; y=&quot;30&quot; font-size=&quot;18&quot;&gt;本地审校流程&lt;/text&gt;&lt;/svg&gt;</code></div>
@@ -1023,43 +1023,43 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
       </div>
     </section>
 
-    <!-- Other people working on this: Awesome Anti-Slop -->
+    <!-- Awesome Anti-Slop -->
     <section id="awesome" class="section-block band-rule">
       <div class="section-header">
         <div>
-          <h2 class="section-title" data-i18n="awesome.title">同路人：Awesome Anti-Slop</h2>
+          <h2 class="section-title" data-i18n="awesome.title">其他去 AI 味工具（Awesome Anti-Slop）</h2>
           <p class="section-desc" data-i18n="awesome.desc">
-            查文稿规范可以看 Vale，查网页模板味可以翻 Impeccable。我们把中英文写作指南、确定性检查器、前端设计规则、代码 PR 治理与论文研究整理成了 87 条清单，所有链接和仓库状态都在 2026-11-21 逐条核过。
+            我们也顺手整理了一份 87 条工具和资料清单，包括 Vale、Impeccable 这类成熟项目，以及中英文写作规范、PR 治理规则和论文。链接和仓库信息在 2026-11-21 核过一遍。
           </p>
         </div>
-        <a href="./awesome/" data-i18n="awesome.openFull">打开同路清单 →</a>
+        <a href="./awesome/" data-i18n="awesome.openFull">打开清单 →</a>
       </div>
 
       <div class="radar-split">
         <div class="radar-split-col">
-          <h3 class="sub-heading" data-i18n="awesome.ecoTitle">按手头的活儿找工具</h3>
+          <h3 class="sub-heading" data-i18n="awesome.ecoTitle">按用途筛选</h3>
           <p style="margin:0;font-size:0.88rem;color:var(--ink-2);" data-i18n="awesome.ecoDesc">
-            按写作、网页、代码或研究分栏浏览，也可以只看能离线自动检查的工具。检测器与规避工具单独放在对照区，仅供了解。
+            可以按写作、网页、代码、研究分类找，也可以只看能本地自动检查的工具。检测器和规避工具单独放在最下面做对照。
           </p>
 <!-- BUILD:RADAR_STATS -->
           <div class="stat-strip">
-            <div class="stat-cell"><span class="stat-num">87</span><span class="stat-label" data-i18n="stat.entries">条已核验资源</span></div>
-            <div class="stat-cell"><span class="stat-num">8</span><span class="stat-label" data-i18n="stat.sections">个主题分栏</span></div>
-            <div class="stat-cell"><span class="stat-num">19</span><span class="stat-label" data-i18n="stat.det">款可自动检查</span></div>
+            <div class="stat-cell"><span class="stat-num">87</span><span class="stat-label" data-i18n="stat.entries">条资料</span></div>
+            <div class="stat-cell"><span class="stat-num">8</span><span class="stat-label" data-i18n="stat.sections">个分类</span></div>
+            <div class="stat-cell"><span class="stat-num">19</span><span class="stat-label" data-i18n="stat.det">个可自动检查</span></div>
             <div class="stat-cell"><span class="stat-num">21</span><span class="stat-label" data-i18n="stat.zh">条中文 / 多语种</span></div>
           </div>
 <!-- /BUILD:RADAR_STATS -->
           <div class="quick-actions" style="margin-top:14px;">
-            <a href="./awesome/" class="ctrl-btn" style="text-decoration:none;" data-i18n="awesome.browseBtn">在线筛选清单 →</a>
-            <a href="https://github.com/dislop-ai/dislop/blob/main/awesome/README.zh-CN.md" target="_blank" rel="noopener" class="ctrl-btn" style="text-decoration:none;" id="awesome-gh-link" data-i18n="awesome.ghBtn">GitHub 中文清单</a>
+            <a href="./awesome/" class="ctrl-btn" style="text-decoration:none;" data-i18n="awesome.browseBtn">在线筛选 →</a>
+            <a href="https://github.com/dislop-ai/dislop/blob/main/awesome/README.zh-CN.md" target="_blank" rel="noopener" class="ctrl-btn" style="text-decoration:none;" id="awesome-gh-link" data-i18n="awesome.ghBtn">GitHub 中文版</a>
             <a href="./awesome/index.json" class="ctrl-btn" style="text-decoration:none;">index.json</a>
           </div>
         </div>
 
         <div class="radar-split-col">
-          <h3 class="sub-heading" data-i18n="awesome.posTitle">跳出模板的审美参照</h3>
+          <h3 class="sub-heading" data-i18n="awesome.posTitle">顺便存的设计参考</h3>
           <p style="margin:0;font-size:0.86rem;color:var(--ink-2);" data-i18n="awesome.posDesc">
-            只删套话还不够，我们另存了 31 处独立印刷、字体厂与出版机构的公开参考源，留给想把页面做出自己味道的人慢慢看。
+            除了去套话，还存了 31 个印刷、字体厂和独立出版站点，做页面不想长成默认模板时可以翻翻。
           </p>
 <!-- BUILD:POSITIVE_REFS -->
           <ul class="ref-list">
@@ -1071,7 +1071,7 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
             <li><a href="https://www.are.na" target="_blank" rel="noopener">Are.na</a><span class="ref-note" data-i18n="pos.arena">研究者自己攒的视觉线索库：旧印刷、路牌与独立小书。</span></li>
           </ul>
 <!-- /BUILD:POSITIVE_REFS -->
-          <p style="margin:12px 0 0;font-size:0.8rem;"><a href="./cases/positive-references.md" data-i18n="awesome.posAll">看全部 31 处设计参考（.md）→</a></p>
+          <p style="margin:12px 0 0;font-size:0.8rem;"><a href="./cases/positive-references.md" data-i18n="awesome.posAll">全部 31 个参考（.md）→</a></p>
         </div>
       </div>
     </section>
@@ -1080,13 +1080,13 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
     <!-- Colophon Footer -->
     <footer class="colophon">
       <div>
-        <span data-i18n="footer.selfAudit">这一页也过了自己的红笔：dislop check site/ 没挑出毛病。</span>
-        <span style="margin-left:10px;" data-i18n="footer.agentHint">让 Agent 来读？从 <a href="./llms.txt">/llms.txt</a> 开始。</span>
+        <span data-i18n="footer.selfAudit">这个页面自己也跑过 dislop check site/，0 处问题。</span>
+        <span style="margin-left:10px;" data-i18n="footer.agentHint">给 Agent 读的话，从 <a href="./llms.txt">/llms.txt</a> 开始。</span>
       </div>
       <div class="colophon-links">
-        <a href="./awesome/" data-i18n="footer.awesome">同路清单</a>
+        <a href="./awesome/" data-i18n="footer.awesome">工具清单</a>
         <a href="https://github.com/dislop-ai/dislop/blob/main/ROADMAP.zh-CN.md" target="_blank" rel="noopener" id="footer-roadmap-link" data-i18n="footer.roadmap">路线图</a>
-        <a href="./methodology/brand-and-voice.md" data-i18n="footer.brand">品牌与表达</a>
+        <a href="./methodology/brand-and-voice.md" data-i18n="footer.brand">文案基准</a>
         <a href="./methodology/design-system.md" data-i18n="footer.design">视觉规范</a>
         <a href="./llms.txt">llms.txt</a>
         <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener">GitHub (Apache-2.0)</a>

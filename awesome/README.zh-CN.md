@@ -1,25 +1,25 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="../assets/banner-dark.svg">
-    <img src="../assets/banner-light.svg" alt="Awesome Anti-Slop — dislop 同路清单" width="100%">
+    <img src="../assets/banner-light.svg" alt="Awesome Anti-Slop — 去 AI 味工具清单" width="100%">
   </picture>
 </p>
 
 <p align="center">
   <a href="./README.md">English</a> ·
-  <a href="https://dislop.com/awesome/">去官网在线筛选</a> ·
-  <a href="https://dislop.com/#workbench">查一份稿子</a> ·
+  <a href="https://dislop.com/awesome/">在线筛选</a> ·
+  <a href="https://dislop.com/#workbench">试查一段稿子</a> ·
   <a href="https://dislop.com/awesome/index.json">JSON 数据</a> ·
   <a href="../README.zh-CN.md">返回 dislop 主仓</a>
 </p>
 
-# Awesome Anti-Slop（去 AI 味同路清单）
+# Awesome Anti-Slop（去 AI 味工具清单）
 
-查文稿有没有违反写作规范，可以先看 Vale。想找网页里的模板痕迹，可以翻 Impeccable。这份清单按手头的活儿整理了 87 条中英文工具、检查器、写作规范、前端设计规则、代码 PR 治理政策与论文研究。
+一共整理了 87 个中英文工具、检查器、写作规范、网页设计指南、代码 PR 治理规则和论文，包括 Vale、Impeccable 这类常用项目。
 
-所有链接、GitHub 星标数与最近推送日期均于 `2026-11-21` 通过 API 与 HTTP 状态逐条核验；其中 19 条具备无需大模型的自动检查能力。AI 文本检测器与规避工具单独放在文末[检测与规避研究](#检测与规避研究仅供对照)，仅供对照了解。
+所有链接、GitHub 星标和最近更新时间都在 `2026-11-21` 核过一遍。其中 19 个可以在本地跑自动检查，不依赖大模型。AI 文本检测器和规避工具单独放在最下面的[检测与规避研究](#检测与规避研究仅供对照)，只作对照参考。
 
-想离线搜索筛选，直接打开 [dislop.com/awesome](https://dislop.com/awesome/)；要交给 Agent 读取，提供 [index.json](https://dislop.com/awesome/index.json) 或 [index.md](https://dislop.com/awesome/index.md)。补充新条目请看文末[提交新条目](#提交新条目)。
+想离线搜索筛选，可以打开 [dislop.com/awesome](https://dislop.com/awesome/)。想给 Agent 读，直接用 [index.json](https://dislop.com/awesome/index.json) 或 [index.md](https://dislop.com/awesome/index.md)。补充新条目请看[提交新条目](#提交新条目)。
 
 ## 目录
 
@@ -179,6 +179,6 @@
 
 ## 提交新条目
 
-欢迎提 PR 更新 [docs/research/anti-slop-radar-index.json](../docs/research/anti-slop-radar-index.json)，并运行 `node scripts/build_site.mjs` 重新生成目录页（每条需提供可访问的 HTTPS 链接、类别、语种与一句客观用途说明）。
+提 PR 更新 [docs/research/anti-slop-radar-index.json](../docs/research/anti-slop-radar-index.json)，然后跑一遍 `node scripts/build_site.mjs` 就行。每条需要可访问的 HTTPS 链接、类别、语种，以及一句说明它是做什么的。
 
-想直接给自己手头的稿子过一遍红笔？回 [dislop 中文首页](../README.zh-CN.md)，或在终端里运行 `npx --yes github:dislop-ai/dislop check .`。
+想用 dislop 直接查自己手头的稿子，可以看[中文 README](../README.zh-CN.md)，或者命令行运行 `npx --yes github:dislop-ai/dislop check .`。
