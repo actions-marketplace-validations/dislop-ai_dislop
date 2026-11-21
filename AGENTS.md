@@ -1,21 +1,22 @@
 # AGENTS.md
 
-本文件定义 `dislop` 仓库的开发约定、架构边界与质量门禁，适用于所有人类维护者与 AI 编程助手。
+本文件定义 `dislop` 仓库的开发约定、架构边界与质量门禁，适用于人类维护者与 AI 编程助手。
 
 ## 1. 核心工程原则
 
-- **确定性优先于模型重写**：能用词法/句法规则、AST、DOM 包围盒、PDF 页面几何、Office XML 结构确定性检出的问题，一律写进确定性探针（`engine/`），不把基础体检推给高波动的 LLM 主观打分。
-- **零退化护栏（Zero-Degradation）**：任何自动改写功能必须验证事实、数值、单位、代码标识符、链接和引用未发生漂移；改动后若复检未净减缺陷或破坏版式边界，必须回退并仅输出诊断与改稿对照。
-- **引擎与审美分离**：通用解析器、几何探针与协议层放 `engine/` 和 `interfaces/`；带鲜明文体取向或视觉偏好的规则、禁用词表与正反样本一律封装进 `packs/<pack-name>/`，不在核心引擎硬编码单一风格教条。
-- **吃自己的狗粮**：本仓库自身的文档、CLI 输出、报错提示与示例材料必须先通过去 AI 味标准——直陈事实与取舍，禁用空洞排比、拔高套话、三段式水词与伪造数据。
+能用词法与句法结构、HTML/CSS/SVG 标记、PDF 对象与链接字典、Office Open XML 结构确定性检出的问题，统一实现为确定性探针（JS 核心 `src/core.mjs` 与 Python 实现 `src/dislop/engine.py`），不把基础体检交给高波动的大模型主观打分。
+
+客观交付事故（路径泄露、未填占位符、AI 对话残迹、死点击控件、对比度与深色层级倒置、幻灯片越界）放入 `packs/core/`，固定为 `error` 并在所有文体包中默认启用；文体与版式审美信号放入各文体 `packs/<pack-id>/`，默认 `warning` 或 `info`，附删除测试与正反改稿对照。
+
+修改文稿后须通过 `dislop verify`（或 MCP `dislop_verify`）核对数值、单位、日期、链接、代码片段与引用标记未丢失或篡改，且未把一阶套话替换成二阶口号句式（如 `不是 A，而是 B` 或三连短句）。浏览器工作台（`site/`）与 Node CLI/MCP（`bin/`）直接共用零依赖 ES 模块 `src/core.mjs`；Python CLI/MCP（`src/dislop/`）须通过 `tests/test_conformance.py` 与 Node 运行时跑同一组公开样本与 `dislop pack-test`。本仓库自身的文档、网站（`site/`）、SVG 资产与 CLI 输出均受 `dislop check . --fail-on warning` 门禁约束。
 
 ## 2. 安全与隐私红线
 
-- **零凭据入库**：严禁在代码、测试样本、配置或提交记录中写入任何 API Key、Token、Cookie、内部地址或真实客户私密材料。本地调试统一通过环境变量注入，`.env*` 与 `.private/` 永久忽略。
-- **样本脱敏与版权合规**：纳入 `packs/` 或 `tests/fixtures/` 的正反例样本须为原创构造、自有已脱敏材料或明确允许再分发的开源/公有领域样本，保留来源与许可元数据，不整篇入库受版权保护的第三方专有内容。
-- **外部调用熔断**：单元测试默认离线确定性运行，严禁在单测中直接发起未 Mock 的付费大模型 API 或外部网络写请求。
+- **零凭据与私密信息入库**：严禁在代码、测试样本、配置或提交记录中写入 API Key、Token、Cookie、本机真实用户目录、内网主机地址或非公开项目材料。本地私有禁止词可写入被 Git 忽略的 `.dislop.local.json`。
+- **样本脱敏与版权合规**：纳入 `packs/` 或 `tests/` 的正反例样本须为原创构造或明确允许再分发的公开材料，每条 `exemplar` 记录 `source` 字段，且 `good` 改写稿不得凭空编造原句没有的事实或数值。
+- **离线确定性测试**：单测默认离线运行，严禁发起外部网络请求或调用付费模型接口；网站与在线工作台严禁加载第三方字体/统计外链，保持零上传（`connect-src 'none'`）。
 
-## 3. 协作工作流
+## 3. 协作与验收工作流
 
-- 新增检查规则时，同步提供至少 1 组命中反例（slop fixture）与 1 组不误伤的高质量正例（clean fixture），防止高误报毁掉可用性。
-- 修改公共接口（CLI 参数、MCP Tool Schema、Taste Pack 清单结构）时同步更新 `docs/architecture.md` 与对应测试。
+- 新增或修改规则时，必须在对应 `pack.json` 中提供至少 1 条命中样本（`fixtures.hit`）与 1 条不误报样本（`fixtures.clean`），并运行 `node bin/dislop.mjs pack-test` 与 `PYTHONPATH=src python3 -m unittest discover -s tests` 全部通过。
+- 修改 CLI 参数、MCP 工具协议或审美包结构时，同步更新 `README.md`、`README.zh-CN.md`、`docs/architecture.md` 与 `docs/architecture.zh-CN.md`。

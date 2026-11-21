@@ -1,0 +1,299 @@
+{
+  "schema": "dislop.pack/2",
+  "id": "core",
+  "version": "0.2.0",
+  "tier": "invariant",
+  "extends": [],
+  "name": {
+    "en": "Core Publication Invariants",
+    "zh": "基础发布底线"
+  },
+  "summary": {
+    "en": "Objective pre-publication checks enabled across every Taste Pack: leaked local paths, unfilled placeholders, AI chat residue, dead controls, contrast/dark-elevation defects, and Office/PDF hygiene.",
+    "zh": "所有审美包默认启用的客观交付检查：本机路径泄露、未填占位符、AI 对话残迹、死点击控件、对比度与深色层级倒置、Office 与 PDF 结构卫生。"
+  },
+  "modalities": [
+    "markdown",
+    "text",
+    "html",
+    "css",
+    "jsx",
+    "svg",
+    "docx",
+    "pptx",
+    "pdf"
+  ],
+  "thresholds": {
+    "minNormalContrast": 4.5,
+    "minLargeContrast": 3.0
+  },
+  "rules": [
+    {
+      "id": "local-path-leak",
+      "tier": "invariant",
+      "severity": "error",
+      "family": "hygiene/path",
+      "probe": "regex",
+      "zones": ["raw"],
+      "modalities": ["markdown", "text", "html", "css", "jsx", "svg", "docx", "pptx", "pdf"],
+      "patterns": [
+        "file:///(?!(?:Users|home)/(?:example|demo|user|username|you|\\.{3})(?:/|\\b|$))[A-Za-z0-9_./:\\\\-]+",
+        "(?<![A-Za-z0-9_])/Users/(?!(?:example|demo|user|username|you|yourname|\\.{3})(?:/|\\b|$))[A-Za-z0-9._-]+/[A-Za-z0-9._/-]+",
+        "(?<![A-Za-z0-9_])/home/(?!(?:example|demo|user|username|you|runner|ubuntu|\\.{3})(?:/|\\b|$))[A-Za-z0-9._-]+/[A-Za-z0-9._/-]+",
+        "\\b[A-Za-z]:\\\\Users\\\\(?!(?:example|demo|user|Public)\\\\)[A-Za-z0-9._-]+\\\\",
+        "/private/var/folders/[A-Za-z0-9_./-]+"
+      ],
+      "message": {
+        "en": "Leaked local filesystem path or file:/// link.",
+        "zh": "残留本机文件系统路径或 file:/// 链接。"
+      },
+      "deletionTest": {
+        "en": "Replace the workstation path with a repository-relative path, a public HTTPS URL, or `/Users/example/...` if documenting a CLI.",
+        "zh": "将个人工作站路径改为仓库相对路径、公开 HTTPS 链接，或在命令示例中改用 `/Users/example/...`。"
+      },
+      "exemplar": {
+        "bad": "See [Architecture Diagram](file:///Users/alex/Desktop/arch-v2.png) for the 3-node layout.",
+        "trap": "See the architecture diagram on my machine for the 3-node layout.",
+        "good": "See [Architecture Diagram](./docs/assets/arch-v2.png) for the 3-node layout.",
+        "note": {
+          "en": "Keep the link target inside the repository and preserve the 3-node detail.",
+          "zh": "改为仓库内相对路径，保留“3 节点”事实信息。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": [
+          "Diagram: file:///Users/alice/Documents/spec.pdf",
+          "Loaded config from /Users/jordan/projects/secret/app.json"
+        ],
+        "clean": [
+          "Diagram: ./docs/spec.pdf",
+          "Example path: /Users/example/project/dislop.json"
+        ]
+      }
+    },
+    {
+      "id": "unfilled-placeholder",
+      "tier": "invariant",
+      "severity": "error",
+      "family": "hygiene/placeholder",
+      "probe": "regex",
+      "zones": ["prose", "ui-text"],
+      "modalities": ["markdown", "text", "html", "jsx", "svg", "docx", "pptx", "pdf"],
+      "patterns": [
+        "(?<![A-Za-z])(?:lorem ipsum|dolor sit amet)(?![A-Za-z])",
+        "\\[(?:insert|add|your|placeholder|tbd|todo)(?:\\s+[^\\]\\n]{1,50})?\\]",
+        "\\{\\{\\s*[A-Za-z_][A-Za-z0-9_.-]{0,40}\\s*\\}\\}",
+        "【[^】\\n]{0,20}(?:待补充|待填写|此处插入|占位符)[^】\\n]{0,20}】",
+        "(?:Click to add (?:title|subtitle|text)|单击此处添加(?:标题|副标题|文本))",
+        "(?:Error! Reference source not found|Error! Bookmark not defined|错误!未找到引用源|错误!未定义书签)"
+      ],
+      "message": {
+        "en": "Unfilled template placeholder, broken Word reference field, or dummy copy.",
+        "zh": "存在未替换的模板占位符、损坏的交叉引用域或测试假文。"
+      },
+      "deletionTest": {
+        "en": "Supply the verified value before shipping, or delete the unfinished section rather than leaving a bracketed marker.",
+        "zh": "发稿前填入核实后的真实数据；若数据尚未就绪，直接删去未完成段落而非保留占位标记。"
+      },
+      "exemplar": {
+        "bad": "Q3 settlement latency averaged [insert p95 latency] across 14 gateways.",
+        "trap": "Q3 settlement latency improved dramatically across 14 gateways.",
+        "good": "Q3 settlement latency averaged 180 ms (p95) across 14 gateways.",
+        "note": {
+          "en": "Replace the bracket with the measured figure rather than hiding the gap behind vague praise.",
+          "zh": "填入实测数值，不要用笼统形容词掩盖缺口。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": [
+          "Contact [insert account owner] before Friday.",
+          "Summary: {{project_summary}}",
+          "附录见【此处插入测试数据】。"
+        ],
+        "clean": [
+          "Contact the on-call engineer before Friday.",
+          "Array indexing uses items[0] in JavaScript.",
+          "已完成第 3 节压测记录。"
+        ]
+      }
+    },
+    {
+      "id": "chatbot-artifact",
+      "tier": "invariant",
+      "severity": "error",
+      "family": "hygiene/chat-residue",
+      "probe": "regex",
+      "zones": ["prose", "ui-text"],
+      "modalities": ["markdown", "text", "html", "jsx", "docx", "pptx", "pdf"],
+      "patterns": [
+        "(?:^|\\n)\\s*(?:Certainly|Sure|Absolutely)[!,.]?\\s+[Hh]ere(?:'s| is| are)\\b",
+        "\\bAs an AI(?: language model| assistant)?\\b",
+        "\\bI hope this helps[!.]?",
+        "(?:^|\\n)\\s*(?:好的|当然可以|没问题)[，,！!]?\\s*(?:以下|下面)是(?:为您|修改后|润色后|整理后)",
+        "\\b作为一个?\\s*AI(?:\\s*语言模型|\\s*助手)?",
+        "\\[oaicite:\\d+\\]",
+        "contentReference\\[oaicite:\\d+\\]",
+        "【\\d+†[^】\\n]{1,40}】",
+        "[?&]utm_source=(?:chatgpt\\.com|openai)"
+      ],
+      "message": {
+        "en": "Unstripped chatbot wrapper sentence or AI search citation token.",
+        "zh": "残留未清理的 AI 对话寒暄壳或检索引用内部标记。"
+      },
+      "deletionTest": {
+        "en": "Delete the conversational wrapper or internal citation token completely; the document starts at its actual subject.",
+        "zh": "直接删掉对话寒暄句或内部引用残迹，正文从事实内容直接开始。"
+      },
+      "exemplar": {
+        "bad": "Certainly! Here is the revised rollout note: Cluster B migrates on November 24 at 02:00 UTC.",
+        "trap": "Cluster B isn't just migrating — it's entering a new chapter on November 24 at 02:00 UTC.",
+        "good": "Cluster B migrates on November 24 at 02:00 UTC.",
+        "note": {
+          "en": "Strip the chat preamble and leave the rollout timestamp untouched.",
+          "zh": "删去对话开场白，原样保留迁移时间。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": [
+          "Certainly! Here is the summary of Q2 churn.",
+          "Latency dropped 18%【4†source】.",
+          "好的，以下是修改后的会议纪要：周三上线。"
+        ],
+        "clean": [
+          "Sure enough, the cache warmed within 40 seconds.",
+          "Q2 churn dropped from 4.1% to 3.4%.",
+          "会议纪要：周三上线。"
+        ]
+      }
+    },
+    {
+      "id": "markdown-leak",
+      "tier": "invariant",
+      "severity": "error",
+      "family": "hygiene/markdown-leak",
+      "probe": "office-markdown-leak",
+      "modalities": ["docx", "pptx"],
+      "message": {
+        "en": "Raw Markdown syntax (`**bold**` or `## heading`) left unrendered inside an Office document.",
+        "zh": "Word 或 PowerPoint 文本中残留未渲染的原始 Markdown 标记（如 `**加粗**` 或 `## 标题`）。"
+      },
+      "deletionTest": {
+        "en": "Convert the raw asterisks or hash marks into native Word/PowerPoint run formatting.",
+        "zh": "去掉原始星号或井号，改用 Word/PowerPoint 原生样式或加粗格式。"
+      },
+      "exemplar": {
+        "bad": "**Key Milestone**: Ship v0.2 parser before Friday.",
+        "trap": "Key Milestone — a game-changing v0.2 parser ships Friday.",
+        "good": "Key Milestone: Ship v0.2 parser before Friday.",
+        "note": {
+          "en": "Apply native run bolding in DOCX/PPTX rather than pasting raw Markdown asterisks.",
+          "zh": "在 Office 文档中使用原生字体加粗，不保留裸露的星号。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": ["DOCX_RAW_MARKDOWN:**Key Milestone**: Ship v0.2"],
+        "clean": ["DOCX_PLAIN_RUN:Key Milestone: Ship v0.2"]
+      }
+    },
+    {
+      "id": "ui-dead-control",
+      "tier": "invariant",
+      "severity": "error",
+      "family": "ui/dead-control",
+      "probe": "ui-dead-control",
+      "modalities": ["html", "jsx"],
+      "message": {
+        "en": "Anchor with dead `href=\"#\"` / empty target, unlabeled button, or unexplained static `<button disabled>`.",
+        "zh": "存在空跳转链接（`href=\"#\"`）、无障碍名称缺失的按钮，或未说明原因的静态禁用按钮。"
+      },
+      "deletionTest": {
+        "en": "Wire the control to a real target, explain why a disabled control is locked via `title`/`aria-describedby`, or omit unimplemented actions.",
+        "zh": "绑定真实跳转或交互处理函数；若确需禁用须通过 `title` 或 `aria-describedby` 说明原因，未实现的功能直接移除按钮。"
+      },
+      "exemplar": {
+        "bad": "<a href=\"#\" class=\"btn\">Download report</a>",
+        "trap": "<button disabled class=\"btn\">Download AI-Powered Insights</button>",
+        "good": "<a href=\"./reports/q3-audit.pdf\" class=\"btn\">Download Q3 audit (PDF)</a>",
+        "note": {
+          "en": "Point links to real resources and omit controls that do nothing when clicked.",
+          "zh": "链接指向真实资源，不要摆放点按无反应的假控件。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": ["<a href=\"#\">Read specification</a>"],
+        "clean": ["<a href=\"/docs/spec.html\">Read specification</a>"]
+      }
+    },
+    {
+      "id": "ui-contrast-and-dark-inversion",
+      "tier": "invariant",
+      "severity": "error",
+      "family": "ui/contrast",
+      "probe": "ui-contrast-and-dark-inversion",
+      "modalities": ["html", "css"],
+      "message": {
+        "en": "Resolvable foreground/background contrast fails WCAG AA (< 4.5:1), or dark-theme canvas is brighter than raised surface tokens.",
+        "zh": "可静态解析的前景/背景对比度低于 WCAG AA（< 4.5:1），或深色模式下底层画布比上层卡片更亮（Z 轴亮度倒置）。"
+      },
+      "deletionTest": {
+        "en": "Adjust ink/surface tokens until body text reaches >= 4.5:1 and dark-mode luminance rises strictly from page -> sheet -> raised card.",
+        "zh": "调整前景色与表面色令牌，确保正文对比度 >= 4.5:1，且深色模式亮度按“底层画布 < 内容面 < 浮层卡片”严格递增。"
+      },
+      "exemplar": {
+        "bad": ".badge { color: #D9381E; background: #F7F5F0; font-size: 12px; }",
+        "trap": ".badge { color: #A855F7; background: #FAF5FF; font-size: 12px; }",
+        "good": ".badge { color: #B42318; background: #F6F7F5; font-size: 12px; }",
+        "note": {
+          "en": "#D9381E on #F7F5F0 is 4.25:1 (fails AA for 12px text); #B42318 on #F6F7F5 is 6.32:1.",
+          "zh": "12px 文字下 #D9381E 配 #F7F5F0 仅 4.25:1 未达标；#B42318 配 #F6F7F5 达 6.32:1。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": [
+          ".eyebrow { color: #999999; background-color: #ffffff; }",
+          "[data-theme=\"dark\"] { --bg: #262626; --card: #121212; }"
+        ],
+        "clean": [
+          ".eyebrow { color: #474C55; background-color: #ffffff; }",
+          "[data-theme=\"dark\"] { --bg: #0E1012; --card: #16191E; --inset: #090A0C; }"
+        ]
+      }
+    },
+    {
+      "id": "office-pdf-hygiene",
+      "tier": "invariant",
+      "severity": "error",
+      "family": "office/geometry",
+      "probe": "office-pdf-hygiene",
+      "modalities": ["docx", "pptx", "pdf"],
+      "message": {
+        "en": "Off-slide text box in PPTX, unaccepted tracked changes/comments in Office docs, or PDF metadata/font/URI defect.",
+        "zh": "PPTX 文本框越出画布边界、Office 文档残留修订痕迹/批注，或 PDF 存在本机链接、未嵌入字体、原始文件名标题。"
+      },
+      "deletionTest": {
+        "en": "Accept or strip tracked changes and comments, bring off-slide text inside slide bounds, embed PDF fonts, and set a clean document title.",
+        "zh": "定稿前接受修订并清理批注，收回越界文本框，嵌入 PDF 字体并设置正式文档标题。"
+      },
+      "exemplar": {
+        "bad": "PDF /Title (Microsoft Word - final_v3_edited(2).docx) with external link file:///Users/lee/draft.docx",
+        "trap": "PDF /Title (Untitled) with unembedded CIDFont",
+        "good": "PDF /Title (Q4 Settlement Architecture Specification) with embedded subset fonts and relative HTTPS links",
+        "note": {
+          "en": "Export PDFs with embedded fonts, an explicit document title, and no local file annotations.",
+          "zh": "导出 PDF 时嵌入字体子集、填写正式文档标题，并清除本机文件链接。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": ["PPTX_OFF_SLIDE:1", "DOCX_TRACKED_CHANGE:1"],
+        "clean": ["PPTX_IN_BOUNDS:1"]
+      }
+    }
+  ]
+}

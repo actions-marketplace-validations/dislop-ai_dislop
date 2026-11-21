@@ -1,41 +1,59 @@
-# 架构设计说明
+# 系统架构说明（`v0.2.0`）
 
-[English](./architecture.md) · **简体中文**
+[English](./architecture.md)
 
-## 1. 核心前提：先确定性体检，再有护栏地动笔
+`dislop` 由三段确定性审校闭环与统一的规则清单协议（`schema: "dislop.pack/2"`）构成。
 
-`dislop` 用三段可观测、可单独调用的流水线替代黑盒式的“一键改写”：
+## 1. 三阶段审校与复检闭环
 
 ```text
-输入文件 (Markdown / HTML / SVG / DOCX / PPTX)
-  │
-  ▼
-[第一层：确定性跨模态体检]  ──► 输出精确行号 / 幻灯片页码、规则 ID 与严重级别
-  │
-  ▼
-[第二层：同体裁样本对照]    ──► 按审美包拉取 bad -> good 人工改稿先例与编辑理由
-  │
-  ▼
-[第三层：护栏式局部修订]    ──► 锁定数字/专名/链接不变量，只改问题片段并复检
+待发交付物 (.md, .html, .css, .svg, .docx, .pptx, .pdf)
+   │
+   ▼
+阶段 1：确定性体检 (`auditText` / `auditOoxmlEntries` / `auditPdfStructure`)
+   ├── 基础发布底线 (`packs/core/`，固定 `error`)
+   └── 文体与界面审美包 (`business-brief` | `literary-essay` | `deck-and-ui`，`warning`/`info`)
+   │
+   ▼
+阶段 2：改稿上下文 (`deletionTest` 删除测试 + `bad -> trap -> good` 对照 + `protectedFacts`)
+   │   人类作者或本地 Agent 仅针对命中区间做局部修改
+   ▼
+阶段 3：局部修订复检 (`dislop verify` / MCP `dislop_verify`)
+   ├── 核对数字（含限定词与单位）、URL、行内与围栏代码、引用标记的多重集完全一致
+   ├── 确认未引入任何 `core` 错误且命中总数净下降
+   └── 拦截向二阶口号句式（`negation-pivot`、`staccato`、`triad`、`ending`）的过矫漂移
 ```
 
-1. **第一层（`dislop check`）** 纯本地毫秒级运行，零大模型 API 消耗、零网络外发。检查 Markdown 时自动屏蔽代码块与行内代码，避免技术文档引用反例时产生误报。
-2. **第二层（`dislop explain` / `dislop_exemplars`）** 从当前激活的审美包中取出资深作者或设计师编写的正反对照样本，直接展示“为什么原句显得假、怎样改才干净”。
-3. **第三层（护栏修订）** 锁死金额、日期、代码标识符、URL 与引用出处，改后自动重跑第一层复检，确保缺陷净减少且不引入事实漂移。
+### 为什么把“检查”与“复检”拆开
 
-## 2. 跨模态探针矩阵
+- **阶段 1（`check`）** 只读不改稿。引擎通过等长空格掩码构造 `raw`、`prose` 与 `ui-text` 三层视图：代码块、行内代码、URL、HTML 标签/注释与引用样本不会触发正文误报，同时所有命中的行号与 Unicode 码点列号均与源文件严格对齐。
+- **阶段 2（`explain` 与行内附带样本）** 向作者或 MCP Agent 提供具体的**删除测试问题**及“反例 / 二阶陷阱 / 合规改写”对照，而不是直接下发禁用词黑名单——直接喂禁用词表正是诱发大模型同义词硬换与短句口号化的根源。
+- **阶段 3（`verify`）** 用确定性规则兜住事实底线。例如把 `最多 12 分钟` 改成 `12 分钟`，或把 `重要抓手` 改写成 `这不是一次改造，而是底气`，都会被 `verify` 直接判为 `rejected` 并列出原因。
 
-| 模态 | 已内置确定性探针（零外部依赖） | 后续深度探针规划 |
-| :--- | :--- | :--- |
-| **文本与长文（`.md`, `.txt`）** | 中英文套话连接词、空洞大词、段末升华点题、破折号密度（每千字 `>10` 个）、未完成占位符、本机路径泄漏 | 句长方差过低检测、无出处凑整数字预警 |
-| **网页与卡片（`.html`, `.svg`, `.css`）** | 默认蓝紫粉渐变配色指纹、SaaS 落地页空洞口号、装饰性表情包堆砌 | 浏览器 DOM 包围盒重叠/截断检测、字号对比度检查 |
-| **Word 文档（`.docx`）** | 标准库直读 OOXML 段落与表格文字、统计 `word/media/*` 内嵌图片数、执行全文修辞与卫生检查 | 样式表层级一致性检查 |
-| **演示文稿（`.pptx`）** | 标准库逐页解析幻灯片 XML、单页字墙预警（单页 `>120` 英文词或 `>280` 汉字）、按页码定位套话 | 结论型标题（Action Title）与文本框越界检查 |
+## 2. 双运行时与浏览器同源架构
 
-## 3. 审美包结构（`packs/<id>/pack.json`）
+| 模块 | 路径 | 职责 |
+|---|---|---|
+| JS 共享核心 | `src/core.mjs` | 纯标准 ES 模块（零 `node:*` 与 DOM 依赖），由 Node CLI、MCP 与浏览器工作台直接共用 |
+| Node 二进制解析层 | `src/binary-node.mjs` | 基于标准库 `zlib.inflateRawSync` 解析 `.docx`/`.pptx` ZIP 中央目录及 `.pdf` 压缩流 |
+| Node CLI 与 MCP | `bin/dislop.mjs`, `bin/dislop-mcp.mjs` | 命令行（`check`、`verify`、`explain`、`packs`、`pack-test`、`init`）与 stdio MCP 服务 |
+| Python 核心与接口 | `src/dislop/{engine,cli,mcp_server}.py` | 纯 Python 3.10+ 标准库实现，通过 `tests/test_conformance.py` 与 Node 保持行为一致 |
+| 规则包清单 | `packs/{core,business-brief,literary-essay,deck-and-ui}/pack.json` | 声明式 `dislop.pack/2` 规则、阈值、删除测试、三段样本与正反用例 |
+| 官网清样工作台 | `site/`（由 `scripts/build_site.mjs` 同步） | 纯静态 HTML/CSS/JS，利用浏览器原生 `DecompressionStream('deflate-raw')` 在本地内存解析 `.docx`/`.pptx` |
 
-每个审美包都是独立目录，用清晰的 JSON 字段描述特定文体或视觉场景的判断标准：
-- 基础元数据：`id`、`name`、`version`、`languages`、`modalities`、`description`
-- 结构阈值 `structural`：如 `maxSlideWords`、`maxSlideCjkChars`
-- 规则集 `rules[]`：`id`、`severity`（`error` | `warning` | `info`）、`category`、`description`、`patterns[]`
-- 改稿样本 `exemplars[]`：`ruleId`、`bad`、`good`、`rationale`
+## 3. 覆盖率诚实原则与退出码
+
+未经检查的内容绝不伪装成“检查通过”：
+
+- `0` — 已完成检查，且高于或等于 `--fail-on`（默认 `error`）的命中数为 0。
+- `1` — 存在达到 `--fail-on` 阈值的命中项（或启用 `--report-unused` 时存在失效豁免注释）。
+- `2` — 参数错误、目标路径不存在，或显式指定的单个文件无法检查（如加密 PDF 或非 UTF-8 编码文本）。
+
+在零外部依赖模式下检查 PDF 时，`dislop` 会核验 `/URI` 本机路径泄露、`/Info` 原始文件名标题、`/FontDescriptor` 字体嵌入与跨页 `/MediaBox` 尺寸一致性，并将完整 CID 正文提取显式标记为 `[SKIP] <file>#prose`。
+
+## 4. 官网与双源静态部署
+
+`site/` 产物为纯静态文件（全部采用相对路径，零后端进程）：
+
+1. **主域名（`https://dislop.com`）**：由海外静态 Nginx 源站直接托管（关闭版本号暴露，配置 `Content-Security-Policy` 锁死 `connect-src 'none'`，全站零第三方字体与统计外链），兼顾中国大陆与海外访问速度。
+2. **独立公开镜像（`https://dislop-ai.github.io`）**：由 `dislop-ai.github.io` 组织级 GitHub Pages 仓库独立提供 HTTPS 访问（不绑定自定义域名以避免被重定向合并），页面内声明 `<link rel="canonical" href="https://dislop.com/">`。

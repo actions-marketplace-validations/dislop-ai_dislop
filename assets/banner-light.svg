@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300" fill="none" role="img" aria-label="dislop — Deterministic deliverable linter and revision verifier">
+  <title>dislop — Deterministic deliverable linter and revision verifier</title>
+  <rect width="1200" height="300" fill="#F6F7F5"/>
+  <!-- Architectural 1px galley rails -->
+  <line x1="48" y1="0" x2="48" y2="300" stroke="#D5D7D2" stroke-width="1"/>
+  <line x1="620" y1="0" x2="620" y2="300" stroke="#D5D7D2" stroke-width="1"/>
+  <line x1="1152" y1="0" x2="1152" y2="300" stroke="#D5D7D2" stroke-width="1"/>
+  <line x1="0" y1="36" x2="1200" y2="36" stroke="#D5D7D2" stroke-width="1"/>
+  <line x1="0" y1="264" x2="1200" y2="264" stroke="#D5D7D2" stroke-width="1"/>
+
+  <!-- Left column: Mark + Wordmark + Factual scope -->
+  <g transform="translate(84, 76)">
+    <rect width="56" height="56" rx="10" fill="#14171A"/>
+    <line x1="9" y1="33" x2="47" y2="33" stroke="#F4F5F3" stroke-width="4" stroke-linecap="round" stroke-opacity="0.26"/>
+    <path d="M9 33H30C39 33 45.5 26.8 45.5 18.8C45.5 12.6 41.3 8.8 36 8.8C30.5 8.8 26.7 13.1 26.7 19.4C26.7 29.5 34.6 39.8 46.4 44.6" stroke="#F04438" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="76" y="43" fill="#14171A" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="46" font-weight="700" letter-spacing="-1.2">dislop</text>
+  </g>
+
+  <text x="84" y="176" fill="#14171A" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="20" font-weight="500">Lint drafts and verify revisions before you publish.</text>
+  <text x="84" y="210" fill="#474C55" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14">Markdown · HTML/CSS/SVG · DOCX · PPTX · PDF  |  CLI &amp; MCP</text>
+
+  <!-- Right column: Real Galley Proof Specimen -->
+  <rect x="621" y="37" width="530" height="226" fill="#FFFFFF"/>
+  <text x="652" y="76" fill="#474C55" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12">SPECIMEN 01  ·  en-throat-clearing-opener  ·  verify: ACCEPTED</text>
+
+  <!-- Struck phrase -->
+  <text x="652" y="128" fill="#676D78" font-family="Georgia, 'Times New Roman', serif" font-size="21">It is worth noting that</text>
+  <line x1="648" y1="121" x2="852" y2="121" stroke="#B42318" stroke-width="2.4"/>
+  <text x="862" y="128" fill="#14171A" font-family="Georgia, 'Times New Roman', serif" font-size="21">CSV exports take</text>
+
+  <!-- Protected fact line -->
+  <text x="652" y="166" fill="#14171A" font-family="Georgia, 'Times New Roman', serif" font-size="21">up to 12 minutes above 500,000 rows.</text>
+  <line x1="652" y1="174" x2="808" y2="174" stroke="#1E6B47" stroke-width="2" stroke-dasharray="4 3"/>
+  <line x1="874" y1="174" x2="1002" y2="174" stroke="#1E6B47" stroke-width="2" stroke-dasharray="4 3"/>
+
+  <!-- Margin proof legend -->
+  <text x="652" y="216" fill="#B42318" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="600">dele: cut 5 filler words</text>
+  <text x="864" y="216" fill="#1E6B47" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="600">stet: 2 facts locked</text>
+</svg>

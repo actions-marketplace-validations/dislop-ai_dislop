@@ -1,69 +1,324 @@
 {
+  "schema": "dislop.pack/2",
   "id": "deck-and-ui",
-  "name": "Slide Decks, Web UI & Cards / 演示稿与界面卡片",
-  "version": "0.1.0",
-  "languages": ["en", "zh"],
-  "modalities": ["pptx", "html", "svg", "css", "markdown"],
-  "description": "Catch AI UI palette clichés, hero buzzwords, emoji clusters, and slide word-walls in decks and web pages.",
-  "structural": {
+  "version": "0.2.0",
+  "tier": "taste",
+  "extends": ["core"],
+  "name": {
+    "en": "Slide Deck, Web UI & Graphic Layout",
+    "zh": "演示文稿、Web 界面与平面视觉"
+  },
+  "summary": {
+    "en": "Audits PowerPoint slide word-walls, bullet caps, autofit text shrink, weak topic titles, default purple-pink AI gradients, pill-badge soup, triple nested cards, prompt-echo chrome, and SVG clipping.",
+    "zh": "检查幻灯片文字墙、项目符号超限、字号自动缩排、弱结论标题，以及界面紫粉渐变、胶囊徽章堆砌、三层套盒、提示词回声标签与 SVG 裁切风险。"
+  },
+  "modalities": ["html", "css", "jsx", "svg", "pptx"],
+  "thresholds": {
     "maxSlideWords": 120,
-    "maxSlideCjkChars": 280,
-    "maxSlideBullets": 6
+    "maxSlideCharsZh": 280,
+    "maxSlideBullets": 6,
+    "minAutofitScale": 80000,
+    "maxPillsPerFile": 6
   },
   "rules": [
     {
-      "id": "ui-purple-gradient-cliche",
+      "id": "slide-word-wall",
+      "tier": "taste",
       "severity": "warning",
-      "category": "visual-cliche",
-      "description": "Default AI-generated purple/indigo/pink Tailwind or CSS gradient palette",
-      "patterns": [
-        "from-(?:indigo|purple|violet)-[0-9]{3}\\s+(?:via-[a-z]+-[0-9]{3}\\s+)?to-(?:purple|pink|fuchsia|indigo)-[0-9]{3}",
-        "linear-gradient\\([^)]*#(?:6366f1|8b5cf6|a855f7|ec4899)[^)]*#(?:8b5cf6|a855f7|ec4899|6366f1)"
-      ]
+      "family": "deck/density",
+      "probe": "slide-word-wall",
+      "modalities": ["pptx"],
+      "message": {
+        "en": "Slide exceeds readable copy budget (> 120 Latin words or > 280 Chinese characters).",
+        "zh": "单页幻灯片可见文字超载（英文 > 120 词或中文 > 280 字），变成文档搬家。"
+      },
+      "deletionTest": {
+        "en": "Move background narrative to speaker notes or an appendix doc; keep one takeaway headline and <= 3 supporting evidence points on the slide.",
+        "zh": "将长篇背景移入演讲者备注或配套文档，画面仅保留 1 句结论标题与不超过 3 条核心论据。"
+      },
+      "exemplar": {
+        "bad": "Slide 3 packs 215 words of full-sentence prose explaining migration history, rollback scripts, staffing, and Q4 SLA targets.",
+        "trap": "Slide 3 shrinks body font to 9pt so all 215 words fit inside one rounded box.",
+        "good": "Slide 3 headline: 'Zero-downtime migration cut p99 latency from 420 ms to 95 ms' + 3 short metric rows (54 words total); full runbook linked in notes.",
+        "note": {
+          "en": "State the conclusion in the slide title and move prose paragraphs into speaker notes.",
+          "zh": "用结论句做标题，长段落移入备注栏而非缩小字号硬塞。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": ["PPTX_WORD_WALL:145"],
+        "clean": ["PPTX_CONCISE:48"]
+      }
     },
     {
-      "id": "ui-hero-buzzword",
+      "id": "slide-bullet-overload",
+      "tier": "taste",
       "severity": "warning",
-      "category": "copywriting",
-      "description": "Generic SaaS landing-page AI hero slogan",
-      "patterns": [
-        "supercharge your workflow",
-        "unleash the power of",
-        "revolutionize the way you",
-        "next-generation ai-powered",
-        "开启.*新纪元",
-        "重塑.*新范式",
-        "一站式智能赋能"
-      ]
+      "family": "deck/density",
+      "probe": "slide-bullet-overload",
+      "modalities": ["pptx"],
+      "message": {
+        "en": "Slide contains more than 6 bullet items (`maxSlideBullets`), fragmenting visual hierarchy.",
+        "zh": "单页幻灯片项目符号超过 6 条（`maxSlideBullets`），视觉层级碎裂。"
+      },
+      "deletionTest": {
+        "en": "Group related bullets into 2–3 structured columns or split across two slides.",
+        "zh": "将零散条目归并为 2–3 组结构化分栏，或拆分为两页演示。"
+      },
+      "exemplar": {
+        "bad": "Slide lists 9 separate top-level bullets covering pricing, onboarding, compliance, SLA, and billing.",
+        "trap": "Slide wraps 9 bullets into 9 tiny pill badges.",
+        "good": "Slide groups commercial terms into 3 columns: Pricing ($49/seat), Onboarding (2 days), SLA (99.95%).",
+        "note": {
+          "en": "Keep all 3 commercial numbers while capping list items per slide at <= 6.",
+          "zh": "保留全部商业数字，将单页列表控制在 6 条以内。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": ["PPTX_BULLETS:8"],
+        "clean": ["PPTX_BULLETS:4"]
+      }
     },
     {
-      "id": "emoji-confetti",
+      "id": "slide-autofit-shrink",
+      "tier": "taste",
       "severity": "warning",
-      "category": "visual-cliche",
-      "description": "Decorative AI emoji cluster (sparkles, rockets, fire)",
-      "patterns": [
-        "[✨🚀🔥💡🎯🌟]{2,}"
-      ]
+      "family": "deck/density",
+      "probe": "slide-autofit-shrink",
+      "modalities": ["pptx"],
+      "message": {
+        "en": "PowerPoint `normAutofit` shrank text below 80% (`fontScale < 80000`) because copy overflowed its box.",
+        "zh": "文本框触发 PowerPoint 自动缩排（`fontScale < 80%`），表明文案超出容器容量。"
+      },
+      "deletionTest": {
+        "en": "Trim the overflowing copy or enlarge the text frame so body type renders at 100% scale.",
+        "zh": "精简溢出文案或调大文本框尺寸，使正文按 100% 原始字号清晰排布。"
+      },
+      "exemplar": {
+        "bad": "<a:normAutofit fontScale=\"62500\" lnSpcReduction=\"20000\"/> on body placeholder",
+        "trap": "Manually hardcode 10pt font so `normAutofit` disappears while text stays illegible.",
+        "good": "<a:noAutofit/> with 42 words set at 18pt and full line spacing",
+        "note": {
+          "en": "Autofit below 80% is deterministic proof that text did not fit its layout frame.",
+          "zh": "低于 80% 的自动缩排是文案撑破版面的确定性证据。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": ["PPTX_AUTOFIT:65000"],
+        "clean": ["PPTX_AUTOFIT:100000"]
+      }
     },
     {
-      "id": "placeholder-remnant",
-      "severity": "error",
-      "category": "artifact-hygiene",
-      "description": "Unfinished placeholder copy left in deliverable",
-      "patterns": [
-        "lorem ipsum",
-        "\\[insert\\s+[^\\]]+\\]",
-        "your company name here",
-        "待补充数据"
-      ]
-    }
-  ],
-  "exemplars": [
+      "id": "slide-weak-topic-title",
+      "tier": "taste",
+      "severity": "info",
+      "family": "deck/density",
+      "probe": "slide-weak-topic-title",
+      "modalities": ["pptx"],
+      "message": {
+        "en": "Content-heavy slide uses a generic topic label ('Overview', 'Background', '背景') instead of stating its takeaway.",
+        "zh": "正文密集的幻灯片使用“背景/概述/总结”等空泛名词做标题，未直接亮出本页结论。"
+      },
+      "deletionTest": {
+        "en": "Replace 'Overview' with the one-sentence finding the audience should remember from this slide.",
+        "zh": "把“项目背景/数据概述”替换为听众看完本页应记住的一句具体结论。"
+      },
+      "exemplar": {
+        "bad": "Title: 'Background' (above 65 words detailing 38% cart abandonment on mobile Safari)",
+        "trap": "Title: 'Reimagining Checkout Excellence'",
+        "good": "Title: 'Mobile Safari accounts for 38% of cart abandonment due to 4-step address entry'",
+        "note": {
+          "en": "Section dividers with <= 12 words are exempt; dense content slides benefit from assertion titles.",
+          "zh": "少于 12 词的章节过渡页豁免；高信息量内容页建议采用结论式标题。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": ["PPTX_WEAK_TITLE:Overview"],
+        "clean": ["PPTX_STRONG_TITLE:Cache hit ratio reached 94% after key sharding"]
+      }
+    },
     {
-      "ruleId": "ui-hero-buzzword",
-      "bad": "✨ Supercharge Your Content Workflow with Our Next-Generation AI-Powered Platform 🚀",
-      "good": "Check prose, layout bounds, and slide density before you ship a document.",
-      "rationale": "Name the concrete input and check performed instead of promising vague transformation."
+      "id": "ui-ai-gradient",
+      "tier": "taste",
+      "severity": "warning",
+      "family": "ui/slop-chrome",
+      "probe": "ui-ai-gradient",
+      "modalities": ["html", "css", "jsx", "svg"],
+      "message": {
+        "en": "Default purple/indigo-to-pink generator gradient or gradient-clipped display headline.",
+        "zh": "使用默认紫粉/蓝紫高饱和渐变或渐变裁切艺术字标题（典型生成式模板特征）。"
+      },
+      "deletionTest": {
+        "en": "Replace decorative neon gradients with solid surface tokens, crisp 1px rules, and typographic contrast.",
+        "zh": "去掉装饰性霓虹渐变，改用克制的纯色纸面令牌、1px 结构分界线与字重对比。"
+      },
+      "exemplar": {
+        "bad": "<h1 class=\"bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent\">Release Notes v2.4</h1>",
+        "trap": "<h1 class=\"bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent\">Release Notes v2.4</h1>",
+        "good": "<h1 class=\"page-title\">Release Notes v2.4</h1>",
+        "note": {
+          "en": "Swapping purple-pink for teal-cyan gradient text repeats the same template habit; set headlines in solid high-contrast ink.",
+          "zh": "把紫粉渐变换成青蓝渐变字仍是同一模板套路；正文标题应使用高对比度纯色墨迹。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": [
+          "<div class=\"bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500\">Hero</div>",
+          ".hero-title { background: linear-gradient(90deg, #6366f1, #ec4899); -webkit-background-clip: text; color: transparent; }"
+        ],
+        "clean": [
+          "<div class=\"surface-panel\">Hero</div>",
+          ".hero-title { color: #15171A; border-bottom: 1px solid #D5D7D2; }"
+        ]
+      }
+    },
+    {
+      "id": "ui-pill-soup",
+      "tier": "taste",
+      "severity": "warning",
+      "family": "ui/slop-chrome",
+      "probe": "ui-pill-soup",
+      "modalities": ["html", "jsx"],
+      "message": {
+        "en": "Excessive `rounded-full` / `999px` text pills (> 6 per view) turn interface metadata into badge soup.",
+        "zh": "单视图堆砌超过 6 个胶囊圆角文字标签（`rounded-full` / `999px`），导致视觉噪音泛滥。"
+      },
+      "deletionTest": {
+        "en": "Render metadata as plain tabular text separated by middots (`·`) or hairlines; save one high-contrast label for actionable status.",
+        "zh": "将常规元数据改为用间隔号（`·`）或细线分隔的纯文本，仅对需要干预的异常状态保留单枚强调标记。"
+      },
+      "exemplar": {
+        "bad": "8 adjacent `rounded-full` badges on one card: `Active`, `v2.4`, `US-West`, `SOC2`, `Fast`, `AI`, `Pro`, `Verified`.",
+        "trap": "8 square pastel badges with 8 emoji icons on one card.",
+        "good": "Plain mono metadata line: `v2.4 · us-west-2 · SOC2` + single status word `degraded` when unhealthy.",
+        "note": {
+          "en": "Circular avatars and icon-only buttons are exempt; text-bearing pills are counted.",
+          "zh": "圆形头像与纯图标按钮豁免，仅统计带文字的胶囊标签。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": [
+          "<div><span class=\"rounded-full px-3\">Tag 1</span><span class=\"rounded-full px-3\">Tag 2</span><span class=\"rounded-full px-3\">Tag 3</span><span class=\"rounded-full px-3\">Tag 4</span><span class=\"rounded-full px-3\">Tag 5</span><span class=\"rounded-full px-3\">Tag 6</span><span class=\"rounded-full px-3\">Tag 7</span></div>"
+        ],
+        "clean": [
+          "<div class=\"meta\"><span>v0.2.0</span> · <span>Apache-2.0</span> · <span class=\"rounded-full px-2\">error</span></div>"
+        ]
+      }
+    },
+    {
+      "id": "ui-box-in-box",
+      "tier": "taste",
+      "severity": "warning",
+      "family": "ui/slop-chrome",
+      "probe": "ui-box-in-box",
+      "modalities": ["html", "jsx"],
+      "message": {
+        "en": "Three or more nested bordered/rounded containers wrap the same content (`box-in-box-in-box`).",
+        "zh": "连续三层及以上带边框与圆角的容器层层套盒，挤压有效内容空间。"
+      },
+      "deletionTest": {
+        "en": "Remove outer wrapper borders and separate sections with alignment, whitespace, or a single 1px rule.",
+        "zh": "去掉多余的外层描边套盒，改用对齐、留白或单根 1px 分界线组织层级。"
+      },
+      "exemplar": {
+        "bad": "<div class=\"border rounded-xl p-6\"><div class=\"border rounded-lg p-4\"><div class=\"border rounded-md p-3\">99.98% uptime</div></div></div>",
+        "trap": "<div class=\"shadow-xl rounded-2xl p-6\"><div class=\"shadow-md rounded-xl p-4\"><div class=\"bg-slate-900 rounded-lg p-3\">99.98% uptime</div></div></div>",
+        "good": "<section class=\"metric-row\"><span>Uptime (90d)</span><strong>99.98%</strong></section>",
+        "note": {
+          "en": "One container boundary or hairline rule is enough to group a metric.",
+          "zh": "一层边界或一根分隔细线足以建立视觉分组。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": [
+          "<div class=\"border rounded-xl p-4\"><div class=\"border rounded-lg p-4\"><div class=\"border rounded-md p-4\">Nested</div></div></div>"
+        ],
+        "clean": [
+          "<section class=\"border-t py-4\"><div class=\"card border rounded-sm p-4\">Clean single card</div></section>"
+        ]
+      }
+    },
+    {
+      "id": "ui-prompt-echo-badge",
+      "tier": "taste",
+      "severity": "warning",
+      "family": "ui/slop-chrome",
+      "probe": "regex",
+      "zones": ["ui-text"],
+      "modalities": ["html", "jsx", "svg"],
+      "patterns": [
+        "\\b(?:AI-Powered|Powered by AI|Next-Gen AI|Zero Hallucinations?|100% Hallucination-Free|Supercharge Your Workflow|Unleash the Power of AI)\\b",
+        "(?:AI\\s*强力驱动|零幻觉保证|开启智能新时代|颠覆式智能体验)"
+      ],
+      "message": {
+        "en": "Interface chrome echoes prompt-engineering hype ('AI-Powered', 'Zero Hallucination') instead of naming the function.",
+        "zh": "界面标签直接回显提示词营销口号（如“AI 强力驱动”“零幻觉保证”），未说明具体功能。"
+      },
+      "deletionTest": {
+        "en": "Delete the 'AI-Powered' badge; label the control by the exact task it performs ('Extract invoice totals', 'Check slide word count').",
+        "zh": "删去“AI 驱动”装饰标牌，直接用控件完成的实际动作命名（如“核对幻灯片字数”）。"
+      },
+      "exemplar": {
+        "bad": "<span class=\"eyebrow\">AI-Powered · Zero Hallucination</span><h2>Document Checker</h2>",
+        "trap": "<span class=\"eyebrow\">Built for Craft · Pure Signal</span><h2>Document Checker</h2>",
+        "good": "<h2>Document Linter for Markdown, HTML, DOCX & PPTX</h2>",
+        "note": {
+          "en": "Name the supported file formats instead of boasting about intelligence.",
+          "zh": "直接列出支持的文件格式，不贴自我标榜的口号签。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": [
+          "<span class=\"badge\">AI-Powered</span>",
+          "<p>Supercharge Your Workflow today</p>"
+        ],
+        "clean": [
+          "<span>Checks Markdown, HTML, SVG, DOCX, PPTX, and PDF metadata</span>",
+          "<button type=\"submit\">Verify revision</button>"
+        ]
+      }
+    },
+    {
+      "id": "svg-text-overflow-or-a11y",
+      "tier": "taste",
+      "severity": "warning",
+      "family": "ui/slop-chrome",
+      "probe": "svg-text-overflow",
+      "modalities": ["svg"],
+      "message": {
+        "en": "Standalone SVG contains `<text>` likely to clip outside `viewBox` on fallback fonts, or omits `<title>`/`aria-label`.",
+        "zh": "独立 SVG 中的 `<text>` 在回退字体下存在超出 `viewBox` 裁切风险，或缺少 `<title>`/`aria-label` 无障碍说明。"
+      },
+      "deletionTest": {
+        "en": "Leave >= 12% horizontal safety margin for `<text>` inside `viewBox` (or convert wordmarks to `<path>` outlines) and include `<title>`.",
+        "zh": "为 SVG `<text>` 预留充足宽度余量（或将品牌字标转为 `<path>` 轮廓），并补充 `<title>`。"
+      },
+      "exemplar": {
+        "bad": "<svg viewBox=\"0 0 200 40\"><text x=\"10\" y=\"28\" font-size=\"24\">Long fallback string that clips past 200px</text></svg>",
+        "trap": "<svg viewBox=\"0 0 200 40\"><text x=\"10\" y=\"28\" font-size=\"5\">Tiny 5px unreadable text</text></svg>",
+        "good": "<svg viewBox=\"0 0 420 40\" role=\"img\" aria-label=\"Release timeline\"><title>Release timeline</title><text x=\"16\" y=\"26\" font-size=\"16\">Q1–Q4 rollout</text></svg>",
+        "note": {
+          "en": "Caught our own v0.1.0 banner overflow on Verdana fallback.",
+          "zh": "本规则曾检出本仓库 v0.1.0 横幅在 Linux 回退字体下的右侧裁切问题。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": [
+          "<svg viewBox=\"0 0 180 40\"><text x=\"20\" y=\"25\" font-size=\"20\">Overflowing fallback headline text</text></svg>"
+        ],
+        "clean": [
+          "<svg viewBox=\"0 0 320 48\" role=\"img\" aria-label=\"dislop mark\"><title>dislop mark</title><text x=\"16\" y=\"30\" font-size=\"16\">dislop</text></svg>"
+        ]
+      }
     }
   ]
 }

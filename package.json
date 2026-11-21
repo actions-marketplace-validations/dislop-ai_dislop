@@ -1,7 +1,7 @@
 {
   "name": "dislop",
-  "version": "0.1.0",
-  "description": "Cross-modal anti-AI-slop quality gate and pluggable Taste Packs (CLI & MCP server)",
+  "version": "0.2.0",
+  "description": "Deterministic pre-publication deliverable linter and revision verifier across prose, HTML/CSS/SVG, DOCX, PPTX, and PDF (CLI & MCP)",
   "license": "Apache-2.0",
   "homepage": "https://dislop.com",
   "repository": {
@@ -15,14 +15,27 @@
   "engines": {
     "node": ">=20.0.0"
   },
+  "exports": {
+    ".": "./src/core.mjs",
+    "./core": "./src/core.mjs"
+  },
   "bin": {
     "dislop": "./bin/dislop.mjs",
     "dislop-mcp": "./bin/dislop-mcp.mjs"
   },
+  "scripts": {
+    "test": "node bin/dislop.mjs pack-test"
+  },
   "files": [
     "bin/",
+    "src/core.mjs",
+    "src/binary-node.mjs",
     "packs/",
-    "assets/logo.svg",
+    "assets/",
+    "docs/architecture.md",
+    "docs/architecture.zh-CN.md",
+    "docs/design-system.md",
+    "docs/design-system.zh-CN.md",
     "README.md",
     "README.zh-CN.md",
     "LICENSE"
@@ -31,6 +44,7 @@
     "anti-slop",
     "ai-slop",
     "linter",
+    "proofreading",
     "mcp",
     "model-context-protocol",
     "editorial",

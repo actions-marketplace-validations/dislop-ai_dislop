@@ -4,6 +4,7 @@
 .codex/
 .agents/
 CLAUDE.local.md
+.dislop.local.json
 .env
 .env.*
 !.env.example

@@ -1,77 +1,127 @@
 <p align="center">
-  <img src="./assets/banner.svg" alt="dislop — 跨模态去 AI 味终审门禁与可插拔审美包" width="100%" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/banner-dark.svg">
+    <img src="./assets/banner-light.svg" alt="dislop — 确定性交付物审校与改稿复检工具" width="100%">
+  </picture>
 </p>
 
 <p align="center">
-  <a href="./README.md">English</a> · <strong>简体中文</strong> · <a href="./docs/architecture.zh-CN.md">架构设计</a> · <a href="./CONTRIBUTING.md">参与贡献</a> · <a href="https://dislop.com">dislop.com</a>
+  <a href="./README.md">English</a> ·
+  <a href="https://dislop-ai.github.io">在线清样工作台</a> ·
+  <a href="./docs/architecture.zh-CN.md">架构说明</a> ·
+  <a href="./docs/design-system.zh-CN.md">设计规范</a> ·
+  <a href="./LICENSE">Apache-2.0</a>
 </p>
 
----
+`dislop` 是发稿前使用的交付物检查与改稿复检工具。它读取 Markdown、纯文本、HTML、CSS、JSX/TSX、SVG、Word（`.docx`）、PowerPoint（`.pptx`）与 PDF 结构元数据，标出命中规则的文件、行号、段落序号或幻灯片页码。
 
-**`dislop`** 是一个开源的跨模态交付质检门禁，用于在文章、网页、图文卡片与办公文档（`DOCX` / `PPTX` / `Markdown` / `HTML`）正式发出前，定位套话修辞、版式越界与常见生成痕迹。
+`dislop` 不会在后台偷偷改写你的正文。作者或本地 Agent 修改命中片段后，运行 `dislop verify` 可逐项比对改前与改后文本，确认数字、限定词（如 `最多`、`至少`、`up to`）、单位、链接、代码片段与引用编号全部原样保留，并拦截把一阶公关词换成二阶口号句（如 `不是 A，而是 B` 或三连短句）的过矫改写。
 
-与市面上直接让大模型通篇改写的“去 AI 味（Humanizer）”工具不同，`dislop` 坚持**确定性探针先行、正反改稿样本对照、引擎与审美包解耦**——先精准指出哪一行、哪一页出了什么问题，再给出同体裁的人工改稿先例，绝不为了绕过统计检测器而篡改事实数字或把专业文本改得口水化。
+## 为什么要做两层分治
 
-## 解决什么真问题
+市面上主打“去 AI 味 / 拟人化改写”的工具为了绕过概率检测器，经常顺手删改数字或限定条件；而单纯维护一张禁用词黑名单，既会误伤正常专名（如调试器 `Delve`、`抓手机拍照`、`北京大学、清华大学、复旦大学`），又会逼着大模型换用故作深沉的短句口号。
 
-1. **盲目通篇重写会污染事实**：黑盒改写工具极易把金额、百分比、专有名词与引用出处改错，专业交付场景根本不敢直接用。
-2. **纯文本检查看不见版式灾难**：第 4 页塞满 300 字的 PPT 字墙、千篇一律的蓝紫粉渐变落地页、残留本机绝对路径的文档，读者扫一眼就会失去信任。
-3. **好品味因文体而异**：商业研究简报追求结论前置与数字有据，长篇非虚构随笔看重叙事留白与个人语感。把不同领域的编辑经验封装成可插拔的 **Taste Packs（审美包）**，才能让真正懂文字、懂设计的人把经验沉淀下来复用。
+`dislop` 将检查规则拆为职责分明的两层：
 
-## 快速上手
+1. **基础发布底线（`packs/core/`，固定 `error`，所有包默认继承）**：客观交付事故，默认阻断构建——包括本机路径泄露（`file:///Users/example/spec.pdf`）、未替换模板占位符（`[insert ...]`、`{{var}}`、`【待补充】`）、未删净的 AI 寒暄与内部引用标记（`好的，以下是修改后的…`、`[oaicite:...]`）、粘贴进 Word/PPT 未渲染的裸 Markdown 星号、空链接 `<a href="#">`、低于 WCAG AA（`< 4.5:1`）的前景背景对比度、深色模式 Z 轴亮度倒置，以及越出画布边界的 PPT 文本框。
+2. **文体与界面审美包（`warning` / `info`，默认提示不破构建）**：按文体划分的可插拔 JSON 规则包（`business-brief`、`literary-essay`、`deck-and-ui`）。每条规则均附带**删除测试（Deletion Test）**、**反例 / 二阶陷阱 / 合规改写**三段对照，以及正反自动化测试样本。
 
-### Node.js 命令行（零第三方运行时依赖）
+## 支持格式与能力边界（`v0.2.0`）
+
+Node.js 版（`bin/dislop.mjs`）与 Python 版（`src/dislop/`）均保持**零第三方运行时依赖**，并通过同一套跨语言一致性测试（`tests/test_conformance.py`）。
+
+| 类别 | 扩展名 | 确定性检出范围 | 明确边界 |
+|---|---|---|---|
+| 文稿与长文 | `.md`, `.mdx`, `.txt` | 基础底线 + 铺垫式开场白、“不是 A，而是 B”对比套句、连续超短句口号、四字排比串、段尾说教升华、无出处权威归因、中文半角标点混排 | 代码块、行内代码、URL、引用块与 `dislop-quote` 示例区对审美规则自动屏蔽 |
+| 前端与矢量图 | `.html`, `.css`, `.jsx`, `.tsx`, `.svg` | 空跳转链接、无说明的静态禁用按钮、单文件可解析对比度、深色模式表面明度阶梯、默认紫粉渐变与渐变裁切标题、胶囊标签泛滥、三层套盒、SVG 文字越界风险 | 仅做单文件静态分析；动态水合后的运行时 DOM 需配合浏览器测试 |
+| Word 文档 | `.docx` | 合并同段落 `<w:t>` 文本运行、检出未接受修订（`<w:ins>`/`<w:del>`）与残留批注、损坏引用域、裸 Markdown 残留、外部 `file:` 链接及正文套话（定位至 `para N`） | 报出段落序号，不计算排版渲染页码 |
+| 演示文稿 | `.pptx` | 按 `p:sldIdLst` 真实放映顺序定位页码、合并段落运行、单页字数墙（英文 > 120 词 / 中文 > 280 字）、项目符号超限（> 6 条）、`<a:normAutofit>` 自动缩排（< 80%）、文本框越界、空泛名词标题 | 隐藏幻灯片（`show="0"`）跳过密度检查并在报告中显式列为 `[SKIP]` |
+| PDF 文档 | `.pdf` | `/URI` 本机文件链接、残留原始文件名 `/Title`（如 `Microsoft Word - ...`）、未嵌入字体描述符、跨页 `/MediaBox` 尺寸不一致 | 加密 PDF 与完整 CID 正文提取在零依赖模式下显式报告 `[SKIP]`，绝不静默伪装为“0 问题” |
+
+## 快速开始
+
+### Node.js 20+（零外部依赖）
 
 ```bash
-# 检查单篇文档或整个目录
-node ./bin/dislop.mjs check README.zh-CN.md
-node ./bin/dislop.mjs check ./docs --pack business-brief
+# 检查当前目录（命中 core 错误时退出码为 1，同时打印审美包提示）
+npx --yes github:dislop-ai/dislop check .
 
-# 查看内置审美包与单条规则的改稿理由
-node ./bin/dislop.mjs packs
-node ./bin/dislop.mjs explain zh-cliche-connector
+# 仅检查相对 main 分支新增/修改的行，输出 GitHub PR 行内注解
+npx --yes github:dislop-ai/dislop check --changed origin/main --format github
+
+# 查看某条规则的删除测试与正反改稿样本
+npx --yes github:dislop-ai/dislop explain negation-pivot-frame --lang zh
+
+# 核对改稿前后数字、限定词、链接与代码片段是否完整保留
+npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md
 ```
 
-### Python 命令行（原生支持零依赖 `.docx` 与 `.pptx` 逐页密度检查）
+### Python 3.10+（零外部依赖）
 
 ```bash
-# 直接从源码运行，无需安装第三方解析库即可检查 Word 与 PPTX
-PYTHONPATH=src python3 -m dislop.cli check ./README.zh-CN.md
-PYTHONPATH=src python3 -m dislop.cli check ./deck.pptx --pack deck-and-ui
+# 通过 uvx 直接从 Git 仓库运行
+uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review.pptx
+
+# 或克隆仓库本地运行
+git clone https://github.com/dislop-ai/dislop.git
+cd dislop
+PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning --lang zh
 ```
 
-### 接入本地 Agent（MCP Server）
+## 接入 MCP（`Claude Code`、`Codex`、`Cursor`、`Windsurf`）
 
-在 Claude Code、Codex、Cursor 或 Antigravity 的 MCP 配置中加入 `dislop`，让 Agent 在向你交付文稿或前端页面前先跑一轮确定性自检：
+将 `dislop` 注册为本地 stdio MCP 服务，让写作或研发 Agent 在交稿前自动执行“检查 -> 局部修订 -> `verify` 复检”：
 
 ```json
 {
   "mcpServers": {
     "dislop": {
-      "command": "node",
-      "args": ["/path/to/dislop/bin/dislop-mcp.mjs"]
+      "command": "npx",
+      "args": ["--yes", "github:dislop-ai/dislop", "--mcp"]
     }
   }
 }
 ```
 
-提供的 MCP 工具：
-- `dislop_check`：按指定审美包检查文本、单个文件（`.md` / `.html` / `.svg` / `.docx` / `.pptx`）或整个目录，返回精确行号与页码。
-- `dislop_packs`：列出当前可用的审美包、适用模态与规则数。
-- `dislop_exemplars`：拉取对应审美包的 `bad -> good` 改稿对照与编辑理由，供主控 Agent 只针对问题句段做最小修订。
+提供的 4 个 MCP 工具：
 
-## 内置审美包（Taste Packs）
+- `dislop_check` — 检查内存文本 `text` 或工作区相对路径 `path`，返回命中区间、`protectedFacts` 受保护事实清单、删除测试与改稿示例（不向模型倾倒原始禁用词表，防止触发同义词硬换）。
+- `dislop_verify` — 对照 `before` 与 `after`，一旦丢失数字/限定词、改动链接/代码，或滑向二阶口号句式即返回 `rejected` 与具体原因。
+- `dislop_explain` — 按 `ruleId` 查询规则依据与三段改稿对照。
+- `dislop_packs` — 列出当前安装的规则包（`core`、`business-brief`、`literary-essay`、`deck-and-ui`）。
 
-| 审美包 ID | 适用媒介 | 重点拦截问题 |
-| :--- | :--- | :--- |
-| `business-brief` | 商业策划书、研究简报、对客方案（`.md`, `.docx`） | 中英文空洞连接词、拔高大词、本机路径残留、破折号堆砌 |
-| `literary-essay` | 长篇公众号、非虚构特稿、随笔（`.md`, `.html`） | 段末强行升华点题、对称排比陈词、生硬翻译腔被动句 |
-| `deck-and-ui` | 演示文稿、网页与信息卡片（`.pptx`, `.html`, `.svg`, `.css`） | 单页 PPT 字墙（`>120` 英文词或 `>280` 汉字）、默认紫粉渐变套路、表情包堆砌、未替换占位符 |
+## 项目配置与单行豁免
 
-## 吃自己的狗粮（Self-Dogfooding）
+运行 `dislop init` 生成 `.dislop.json`（本地私有禁止词可放入被 Git 忽略的 `.dislop.local.json`）：
 
-本仓库自身的中英文文档、架构说明与 SVG 视觉资产在每次 Git 提交和 GitHub Actions CI（`.github/workflows/ci.yml`）中都会经过 `dislop check` 自检，命中任何一条套话或卫生规则即阻断构建。
+```json
+{
+  "failOn": "error",
+  "ignore": ["vendor/**", "dist/**"],
+  "overrides": [
+    { "files": ["docs/**/*.md"], "pack": "business-brief" },
+    { "files": ["essays/**/*.md"], "pack": "literary-essay" },
+    { "files": ["site/**/*.{html,css,svg}"], "pack": "deck-and-ui" }
+  ],
+  "allow": ["Delve", "无缝钢管"]
+}
+```
+
+确需在特定行保留原文引用时，须附带豁免理由（`--report-unused` 会检出失效的冗余豁免）：
+
+```markdown
+<!-- dislop-ignore-next-line zh-bureaucratic-padding -- 原样摘录外部招标文件条款 -->
+```
+
+## 自举自审（Dogfooding）
+
+本仓库在 GitHub Actions CI 中执行 `dislop pack-test`（Node 与 Python 双端各 101 项样本断言）、跨语言一致性测试（`tests/test_conformance.py`），并对仓库自身的 Markdown 文档、SVG 品牌资产与 `site/` 官网执行 `dislop check . --fail-on warning`（`packs/` 与 `tests/` 因存放反例样本默认排除）。
+
+## 官网与公开镜像
+
+- 主域名：`https://dislop.com`（海外静态 Nginx 源站，零后端进程，响应头锁定 `connect-src 'none'`）
+- 独立公开镜像：[https://dislop-ai.github.io](https://dislop-ai.github.io)（由 GitHub Actions 自动同步构建 `site/`）
 
 ## 开源许可
 
-基于 [Apache License 2.0](./LICENSE) 许可开源。
+[Apache License 2.0](./LICENSE)

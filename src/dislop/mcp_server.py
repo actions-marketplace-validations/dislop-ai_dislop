@@ -1,108 +1,263 @@
+"""Zero-dependency MCP stdio JSON-RPC server matching `bin/dislop.mjs --mcp`."""
+
 from __future__ import annotations
 
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
-from . import __version__
-from .engine import audit_path, audit_text, load_packs
+from .engine import (
+    ENGINE_VERSION,
+    audit_text,
+    detect_modality,
+    extract_protected_facts,
+    inspect_file,
+    load_all_packs,
+    load_config,
+    pick_pack_for_file,
+    resolve_effective_pack,
+    verify_revision,
+)
 
 
-def _emit(payload: dict) -> None:
-    sys.stdout.write(json.dumps(payload, ensure_ascii=False) + "\n")
+def _send(msg: dict[str, Any]) -> None:
+    sys.stdout.write(json.dumps(msg, ensure_ascii=False) + "\n")
     sys.stdout.flush()
 
 
-def run_stdio() -> None:
-    packs = load_packs()
-    for raw in sys.stdin:
-        raw = raw.strip()
-        if not raw:
+def _tool_result(req_id: Any, payload: dict[str, Any], is_error: bool = False) -> None:
+    _send(
+        {
+            "jsonrpc": "2.0",
+            "id": req_id,
+            "result": {
+                "isError": is_error,
+                "content": [{"type": "text", "text": json.dumps(payload, ensure_ascii=False, indent=2)}],
+            },
+        }
+    )
+
+
+TOOLS = [
+    {
+        "name": "dislop_check",
+        "description": (
+            "Audit a draft (`text` or workspace-relative `path`) for publication invariants and genre Taste Pack signals. "
+            "Workflow: check -> edit ONLY flagged spans while keeping `protectedFacts` untouched -> run `dislop_verify` before delivering."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "text": {"type": "string", "description": "Draft text to inspect in memory"},
+                "path": {"type": "string", "description": "Workspace-relative file path (.md, .html, .css, .svg, .docx, .pptx, .pdf)"},
+                "pack": {"type": "string", "description": "Taste Pack ID (business-brief, literary-essay, deck-and-ui)"},
+                "filename": {"type": "string", "description": "Virtual filename hint when inspecting `text`"},
+            },
+        },
+    },
+    {
+        "name": "dislop_verify",
+        "description": (
+            "Deterministic Stage-3 revision verifier. Compares `before` and `after` text to confirm all numbers, units, qualifiers, "
+            "URLs, code spans, and citations survived intact, findings decreased, and no 2nd-order slop frame was introduced."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "before": {"type": "string"},
+                "after": {"type": "string"},
+                "pack": {"type": "string"},
+                "filename": {"type": "string"},
+            },
+            "required": ["before", "after"],
+        },
+    },
+    {
+        "name": "dislop_explain",
+        "description": "Retrieve the rationale, Deletion Test, and before/trap/after editorial exemplar for a specific `ruleId`.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "ruleId": {"type": "string"},
+                "lang": {"type": "string"},
+            },
+            "required": ["ruleId"],
+        },
+    },
+    {
+        "name": "dislop_packs",
+        "description": "List installed Taste Packs, supported modalities, and rule counts.",
+        "inputSchema": {"type": "object", "properties": {}},
+    },
+]
+
+
+def run_mcp_stdio() -> None:
+    packs = load_all_packs()
+    cwd = Path.cwd().resolve()
+    config = load_config(cwd)
+
+    for raw_line in sys.stdin:
+        line = raw_line.strip()
+        if not line:
             continue
         try:
-            req = json.loads(raw)
+            req = json.loads(line)
         except json.JSONDecodeError:
             continue
+
         req_id = req.get("id")
+        if req_id is None:
+            continue
         method = req.get("method")
         params = req.get("params") or {}
+
         if method == "initialize":
-            _emit(
+            client_ver = params.get("protocolVersion", "2024-11-05")
+            _send(
                 {
                     "jsonrpc": "2.0",
                     "id": req_id,
                     "result": {
-                        "protocolVersion": "2024-11-05",
+                        "protocolVersion": client_ver,
                         "capabilities": {"tools": {}},
-                        "serverInfo": {"name": "dislop", "version": __version__},
+                        "serverInfo": {"name": "dislop", "version": ENGINE_VERSION},
                     },
                 }
             )
-        elif method == "tools/list":
-            _emit(
-                {
-                    "jsonrpc": "2.0",
-                    "id": req_id,
-                    "result": {
-                        "tools": [
-                            {
-                                "name": "dislop_check",
-                                "description": "Audit prose text or a local file/directory (MD, HTML, DOCX, PPTX) against a Taste Pack before delivery.",
-                                "inputSchema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "text": {"type": "string", "description": "Raw text/Markdown to audit"},
-                                        "path": {"type": "string", "description": "Optional path to MD, HTML, DOCX, PPTX, or directory"},
-                                        "pack": {"type": "string", "default": "business-brief"},
-                                    },
-                                },
-                            },
-                            {
-                                "name": "dislop_packs",
-                                "description": "List installed Taste Packs and their supported modalities.",
-                                "inputSchema": {"type": "object", "properties": {}},
-                            },
-                            {
-                                "name": "dislop_exemplars",
-                                "description": "Fetch before/after editorial exemplars and rationales from a Taste Pack.",
-                                "inputSchema": {
-                                    "type": "object",
-                                    "properties": {"pack": {"type": "string", "default": "business-brief"}},
-                                },
-                            },
-                        ]
-                    },
-                }
-            )
-        elif method == "tools/call":
+            continue
+
+        if method == "ping":
+            _send({"jsonrpc": "2.0", "id": req_id, "result": {}})
+            continue
+
+        if method == "tools/list":
+            _send({"jsonrpc": "2.0", "id": req_id, "result": {"tools": TOOLS}})
+            continue
+
+        if method == "tools/call":
             name = params.get("name")
-            arguments = params.get("arguments") or {}
+            args = params.get("arguments") or {}
             try:
-                if name == "dislop_check":
-                    if arguments.get("path"):
-                        report = audit_path(Path(str(arguments["path"])), arguments.get("pack"))
-                    else:
-                        report = audit_text(str(arguments.get("text", "")), str(arguments.get("pack") or "business-brief"))
-                    _emit({"jsonrpc": "2.0", "id": req_id, "result": {"content": [{"type": "text", "text": json.dumps(report, ensure_ascii=False, indent=2)}]}})
-                elif name == "dislop_packs":
-                    summary = [
-                        {"id": p["id"], "name": p["name"], "modalities": p.get("modalities", []), "rules": len(p.get("rules", []))}
+                if name == "dislop_packs":
+                    items = [
+                        {
+                            "id": p["id"],
+                            "tier": p.get("tier"),
+                            "name": p["name"],
+                            "modalities": p["modalities"],
+                            "ruleCount": len(p.get("rules", [])),
+                            "summary": p["summary"],
+                        }
                         for p in packs.values()
                     ]
-                    _emit({"jsonrpc": "2.0", "id": req_id, "result": {"content": [{"type": "text", "text": json.dumps(summary, ensure_ascii=False, indent=2)}]}})
-                elif name == "dislop_exemplars":
-                    pack = packs.get(str(arguments.get("pack", "business-brief"))) or {}
-                    _emit({"jsonrpc": "2.0", "id": req_id, "result": {"content": [{"type": "text", "text": json.dumps(pack.get("exemplars", []), ensure_ascii=False, indent=2)}]}})
-                else:
-                    _emit({"jsonrpc": "2.0", "id": req_id, "error": {"code": -32601, "message": f"Unknown tool: {name}"}})
+                    _tool_result(req_id, {"packs": items})
+                    continue
+
+                if name == "dislop_explain":
+                    rid = args.get("ruleId")
+                    if not rid:
+                        _tool_result(req_id, {"error": "Missing required argument `ruleId`"}, True)
+                        continue
+                    found = None
+                    for p in packs.values():
+                        for r in p.get("rules", []):
+                            if r["id"] == rid:
+                                found = {"packId": p["id"], **r}
+                                break
+                    if found:
+                        _tool_result(req_id, found)
+                    else:
+                        _tool_result(req_id, {"error": f"Unknown ruleId '{rid}'"}, True)
+                    continue
+
+                if name == "dislop_verify":
+                    before = args.get("before")
+                    after = args.get("after")
+                    if not isinstance(before, str) or not isinstance(after, str):
+                        _tool_result(req_id, {"error": "`dislop_verify` requires both `before` and `after` strings."}, True)
+                        continue
+                    fn = args.get("filename") or "draft.md"
+                    mod = detect_modality(fn) or "markdown"
+                    pack_id = pick_pack_for_file(fn, mod, args.get("pack"), config)
+                    pack = resolve_effective_pack(pack_id, packs, config)
+                    res = verify_revision(before, after, filename=fn, modality=mod, pack=pack, config=config)
+                    _tool_result(req_id, res)
+                    continue
+
+                if name == "dislop_check":
+                    has_text = isinstance(args.get("text"), str)
+                    has_path = isinstance(args.get("path"), str) and bool(args["path"].strip())
+                    if has_text == has_path:
+                        _tool_result(
+                            req_id,
+                            {"error": "Provide exactly one of `text` (in-memory string) or `path` (workspace file path)."},
+                            True,
+                        )
+                        continue
+
+                    if has_text:
+                        fn = args.get("filename") or "draft.md"
+                        mod = detect_modality(fn) or "markdown"
+                        pack_id = pick_pack_for_file(fn, mod, args.get("pack"), config)
+                        pack = resolve_effective_pack(pack_id, packs, config)
+                        res = audit_text(args["text"], filename=fn, modality=mod, pack=pack, config=config)
+                        _tool_result(
+                            req_id,
+                            {
+                                "pack": pack_id,
+                                "modality": mod,
+                                "checked": True,
+                                "skipped": [],
+                                "count": len(res["findings"]),
+                                "protectedFacts": extract_protected_facts(args["text"]),
+                                "findings": res["findings"],
+                            },
+                        )
+                        continue
+
+                    resolved = (cwd / args["path"]).resolve()
+                    try:
+                        rel = resolved.relative_to(cwd).as_posix()
+                    except ValueError:
+                        _tool_result(req_id, {"error": "Path must stay within the current workspace directory."}, True)
+                        continue
+                    if not resolved.is_file():
+                        _tool_result(req_id, {"error": f"File not found: {args['path']}"}, True)
+                        continue
+                    mod = detect_modality(resolved.name)
+                    if not mod:
+                        _tool_result(req_id, {"error": f"Unsupported file extension for '{args['path']}'"}, True)
+                        continue
+                    res = inspect_file(resolved, rel, packs, args.get("pack"), config)
+                    protected_facts = None
+                    if mod not in {"docx", "pptx", "pdf"} and res["checked"]:
+                        protected_facts = extract_protected_facts(resolved.read_text(encoding="utf-8"))
+                    _tool_result(
+                        req_id,
+                        {
+                            "pack": pick_pack_for_file(rel, mod, args.get("pack"), config),
+                            "modality": mod,
+                            "checked": res["checked"],
+                            "skipped": res["skipped"],
+                            "count": len(res["findings"]),
+                            "protectedFacts": protected_facts,
+                            "findings": res["findings"],
+                        },
+                    )
+                    continue
+
+                _tool_result(req_id, {"error": f"Unknown tool '{name}'"}, True)
             except Exception as exc:
-                _emit({"jsonrpc": "2.0", "id": req_id, "error": {"code": -32000, "message": str(exc)}})
-        elif req_id is not None:
-            _emit({"jsonrpc": "2.0", "id": req_id, "result": {}})
+                _tool_result(req_id, {"error": str(exc)}, True)
+            continue
+
+        _send({"jsonrpc": "2.0", "id": req_id, "error": {"code": -32601, "message": f"Method not found: {method}"}})
 
 
 def main() -> None:
-    run_stdio()
+    run_mcp_stdio()
 
 
 if __name__ == "__main__":

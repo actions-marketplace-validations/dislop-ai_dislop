@@ -21,16 +21,21 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Run Python test suite (prose, OOXML .docx/.pptx, MCP)
-        run: python3 tests/test_engine.py
-
-      - name: Dogfood Python CLI across repository docs & SVGs
+      - name: Verify site bundle is in sync with src/core.mjs & packs/
         run: |
-          PYTHONPATH=src python3 -m dislop.cli check .
-          PYTHONPATH=src python3 -m dislop.cli check README.zh-CN.md --pack literary-essay
+          node scripts/build_site.mjs
+          git diff --exit-code site/engine/ site/assets/
 
-      - name: Dogfood Node.js CLI & MCP server
+      - name: Validate Pack Schema v2 & all 101+ rule fixtures (Node & Python)
         run: |
-          node ./bin/dislop.mjs check .
-          node ./bin/dislop.mjs packs
-          printf '{"jsonrpc":"2.0","id":1,"method":"initialize"}\n{"jsonrpc":"2.0","id":2,"method":"tools/list"}\n' | node ./bin/dislop-mcp.mjs
+          node ./bin/dislop.mjs pack-test
+          PYTHONPATH=src python3 -m dislop.cli pack-test
+
+      - name: Run unit & cross-runtime conformance tests (DOCX, PPTX, PDF, MCP, verify)
+        run: PYTHONPATH=src python3 -m unittest discover -s tests -v
+
+      - name: Strict self-dogfood across docs, SVG assets & site/ (Node & Python)
+        run: |
+          node ./bin/dislop.mjs check . --fail-on warning
+          PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning
+          PYTHONPATH=src python3 -m dislop.cli check README.zh-CN.md --pack literary-essay --fail-on warning

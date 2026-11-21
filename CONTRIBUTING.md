@@ -1,23 +1,45 @@
-# Contributing to `dislop` / 参与贡献
+# Contributing to `dislop`
 
-## Adding or Refining a Taste Pack / 新增与打磨审美包
+Thank you for helping keep `dislop` accurate, low-noise, and zero-dependency.
 
-1. **Keep rules concrete and falsifiable / 规则必须具体可证伪**: Every rule added to `packs/<pack-id>/pack.json` must target a verifiable lexical, structural, or visual pattern.
-2. **Pair rules with positive & negative fixtures / 正反测试样本成对提供**: Add at least one slop sample that triggers the rule and one high-craft human sample that passes with zero false positives in `tests/test_engine.py`.
-3. **Include an editorial exemplar / 附带改稿对照**: Provide a `bad -> good` rewrite pair and a concise `rationale` explaining *why* the revision reads better.
+## 1. Rule Design Checklist
 
-## Privacy & Clean-Room Rules / 隐私与样本合规红线
+Every new or updated rule in `packs/<pack-id>/pack.json` must include:
 
-- **No private or proprietary text**: All test fixtures and exemplars must be original synthetic examples or permissively licensed public materials. Never paste private client documents, internal URLs, credentials, or personal file paths.
-- **Zero external runtime bloat**: Core CLI and OOXML/Markdown probes must run cleanly on Python 3.10+ standard library and Node.js 20+ built-in modules unless an optional extra is explicitly isolated.
+1. **Clear Tier Placement**:
+   - Put objective publication bugs (leaked local paths, unfilled placeholders, broken contrast, off-slide boxes, unaccepted tracked changes) in `packs/core/pack.json` (`tier: "invariant"`, `severity: "error"`).
+   - Put genre-specific prose or layout taste signals in a genre pack (`tier: "taste"`, `severity: "warning"` or `"info"`).
+2. **Portable, Bounded Patterns**:
+   - Regex patterns must run identically in JavaScript (`new RegExp(pat, "gimu")`) and Python (`re.compile(pat, re.I | re.M)`).
+   - Never use unbounded `.*` across sentences; bound gaps explicitly (e.g., `[^，。！？\n]{1,24}`).
+3. **Bilingual Deletion Test & Fact-Preserving Exemplar**:
+   - Provide `deletionTest.en` and `deletionTest.zh`.
+   - Provide `exemplar.bad`, `exemplar.trap` (the second-order cliché to avoid), `exemplar.good`, and `exemplar.source`.
+   - `exemplar.good` must preserve every number, qualifier, and concrete entity from `exemplar.bad` without inventing new facts.
+4. **Automated Positive & Negative Fixtures**:
+   - Add at least one triggering string in `fixtures.hit` and at least one realistic near-miss in `fixtures.clean`.
 
-## Local Verification / 本地验收命令
+## 2. Privacy & Sample Licensing
+
+- Never include real workstation usernames, internal hostnames, private repository references, or proprietary customer material in code, fixtures, or commit messages.
+- All fixtures and exemplars must be original constructions or explicitly licensed open/public-domain text.
+
+## 3. Local Verification Before Opening a PR
+
+Run all checks from the repository root:
 
 ```bash
-# 1. Run Python unit & OOXML tests
-python3 tests/test_engine.py
+# 1. Sync browser workbench bundle
+node scripts/build_site.mjs
 
-# 2. Dogfood check on repository docs (both Python & Node CLIs)
-PYTHONPATH=src python3 -m dislop.cli check .
-node ./bin/dislop.mjs check .
+# 2. Validate Pack Schema v2 and all 101+ rule fixtures in both runtimes
+node bin/dislop.mjs pack-test
+PYTHONPATH=src python3 -m dislop.cli pack-test
+
+# 3. Run unit & cross-runtime conformance tests (including DOCX, PPTX, PDF, MCP, verify)
+PYTHONPATH=src python3 -m unittest discover -s tests -v
+
+# 4. Self-dogfood docs, SVG assets, and site/ at warning threshold
+node bin/dislop.mjs check . --fail-on warning
+PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning
 ```
