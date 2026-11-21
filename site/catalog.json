@@ -11,8 +11,8 @@
   "entryPoints": {
     "llmsTxt": {
       "path": "/llms.txt",
-      "bytes": 2213,
-      "approxTokens": 553
+      "bytes": 2335,
+      "approxTokens": 584
     },
     "llmsFullTxt": {
       "path": "/llms-full.txt",
@@ -1775,6 +1775,45 @@
         "browser-workbench"
       ],
       "sha256": "cb9bfe7e9b5890e869dd1a8a5cb4700962549dc50ad704c09807e05a0e96a888"
+    },
+    {
+      "id": "roadmap-en",
+      "pillar": "methodology",
+      "kind": "guide",
+      "title": {
+        "en": "dislop Roadmap & Collaboration Tracks",
+        "zh": "dislop 路线图（英文）"
+      },
+      "path": "/roadmap.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "jsx",
+        "svg",
+        "docx",
+        "pptx",
+        "pdf"
+      ],
+      "languages": [
+        "en"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "literary-essay",
+        "deck-and-ui"
+      ],
+      "bytes": 9438,
+      "approxTokens": 2360,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp",
+        "skill"
+      ],
+      "sha256": "841c3479814dfa13ba5b3ec90e8e23e40fd7d66d807f93baa0d9b83c2d3895d2"
     }
   ]
 }

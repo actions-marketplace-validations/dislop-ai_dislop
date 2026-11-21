@@ -165,6 +165,7 @@ const I18N = {
 
     "footer.selfAudit": "这一页也过了自己的红笔：dislop check site/ 没挑出毛病。",
     "footer.awesome": "同路清单",
+    "footer.roadmap": "路线图",
     "footer.brand": "品牌与表达",
     "footer.design": "视觉规范",
   },
@@ -322,6 +323,7 @@ const I18N = {
 
     "footer.selfAudit": "This page went under its own red pen: dislop check site/ found nothing to mark.",
     "footer.awesome": "Awesome list",
+    "footer.roadmap": "Roadmap",
     "footer.brand": "Brand & voice",
     "footer.design": "Visual guide",
   },
@@ -1703,13 +1705,20 @@ function applyI18n(isUserSwitch = false) {
         : 'Sending an agent? Start it at <a href="./llms.txt">/llms.txt</a>.';
   }
 
-  // Update GitHub Awesome link to match language
+  // Update GitHub Awesome & Roadmap links to match language
   const ghLink = document.getElementById("awesome-gh-link");
   if (ghLink) {
     ghLink.href =
       currentLang === "zh"
         ? "https://github.com/dislop-ai/dislop/blob/main/awesome/README.zh-CN.md"
         : "https://github.com/dislop-ai/dislop/tree/main/awesome";
+  }
+  const roadmapLink = document.getElementById("footer-roadmap-link");
+  if (roadmapLink) {
+    roadmapLink.href =
+      currentLang === "zh"
+        ? "https://github.com/dislop-ai/dislop/blob/main/ROADMAP.zh-CN.md"
+        : "https://github.com/dislop-ai/dislop/blob/main/ROADMAP.md";
   }
 
   const searchEl = document.getElementById("rule-search");
