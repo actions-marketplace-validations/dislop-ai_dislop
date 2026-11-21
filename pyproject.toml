@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "dislop"
 version = "0.2.0"
-description = "Multi-modal de-slop toolkit and fact-preserving revision verifier for writing, Markdown, HTML/CSS/JSX/SVG, DOCX, PPTX, and PDF (CLI & MCP)"
+description = "A red pen for AI-written drafts, decks, and pages: a zero-dependency linter that also checks your edit kept every number, link, and citation."
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.10"

@@ -1,7 +1,7 @@
 {
   "name": "dislop",
   "version": "0.2.0",
-  "description": "Multi-modal de-slop toolkit and fact-preserving revision verifier for writing, Markdown, HTML/CSS/JSX/SVG, DOCX, PPTX, and PDF (Web, Skill, CLI & MCP)",
+  "description": "A red pen for AI-written drafts, decks, and pages: a zero-dependency linter that also checks your edit kept every number, link, and citation.",
   "license": "Apache-2.0",
   "homepage": "https://dislop.com",
   "repository": {
@@ -43,9 +43,8 @@
     "docs/brand-and-voice-guide.md",
     "docs/brand-and-voice-guide.zh-CN.md",
     "docs/brand/voice.json",
-    "docs/strategy-and-roadmap.md",
-    "docs/strategy-and-roadmap.zh-CN.md",
     "awesome/README.md",
+    "awesome/README.zh-CN.md",
     "CHANGELOG.md",
     "README.md",
     "README.zh-CN.md",

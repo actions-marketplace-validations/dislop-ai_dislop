@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
   "name": "io.github.dislop-ai/dislop",
-  "description": "Multi-modal de-slop toolkit and fact-preserving revision verifier for writing, Markdown, HTML/CSS/JSX/SVG, DOCX, PPTX, and PDF metadata.",
+  "description": "Check AI-written drafts, decks, and pages for slop, then verify an edit kept every number and link.",
   "version": "0.2.0",
   "websiteUrl": "https://dislop.com",
   "repository": {
