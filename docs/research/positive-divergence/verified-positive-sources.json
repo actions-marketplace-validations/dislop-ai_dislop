@@ -1,0 +1,262 @@
+{
+  "schema": "dislop.positive-radar/1",
+  "snapshotDate": "2026-11-21",
+  "verificationMethod": "Live HTTP HEAD/GET and GitHub REST API check executed on 2026-11-21; anti-bot rate limits or certificate issues are recorded honestly rather than hidden.",
+  "compliancePolicy": "Indexes public homepage URLs, academic identifiers, and abstract design/writing extraction notes only. No scraping, mirroring, or copying of protected layouts or prose.",
+  "entries": [
+    {
+      "id": "verbalized-sampling-2025",
+      "category": "academic-anti-convergence",
+      "name": "Verbalized Sampling: How to Mitigate Mode Collapse and Unlock LLM Diversity",
+      "url": "https://arxiv.org/abs/2510.01171",
+      "companionRepo": "https://github.com/CHATS-lab/verbalized-sampling",
+      "repoStarsSnapshot": 828,
+      "httpStatus": 200,
+      "extractablePrinciple": "Prompt models to verbalize a distribution of candidate outputs and probabilities to bypass RLHF typicality bias without retraining."
+    },
+    {
+      "id": "artificial-hivemind-2025",
+      "category": "academic-anti-convergence",
+      "name": "Artificial Hivemind: The Open-Ended Homogeneity of Language Models (and Beyond) (NeurIPS 2025 Best Paper)",
+      "url": "https://arxiv.org/abs/2510.22954",
+      "httpStatus": 200,
+      "extractablePrinciple": "Documents both intra-model repetition and inter-model homogeneity across INFINITY-CHAT; proves model-swapping alone does not ensure diversity."
+    },
+    {
+      "id": "padmakumar-he-iclr-2024",
+      "category": "academic-anti-convergence",
+      "name": "Does Writing with Language Models Reduce Content Diversity? (ICLR 2024)",
+      "url": "https://arxiv.org/abs/2309.05196",
+      "httpStatus": 200,
+      "extractablePrinciple": "Shows feedback-tuned InstructGPT significantly reduces collective lexical and content diversity compared with unaided or base-model co-writing."
+    },
+    {
+      "id": "doshi-hauser-sciadv-2024",
+      "category": "academic-anti-convergence",
+      "name": "Generative AI enhances individual creativity but reduces the collective diversity of novel content (Science Advances 2024)",
+      "url": "https://doi.org/10.1126/sciadv.adn5290",
+      "httpStatus": 403,
+      "statusNote": "Returned HTTP 403 anti-bot response on 2026-11-21; DOI resolves in standard browser.",
+      "extractablePrinciple": "Empirical proof of the individual-polish versus collective-homogenization trade-off in AI-assisted ideation."
+    },
+    {
+      "id": "min-p-sampling-iclr-2025",
+      "category": "academic-anti-convergence",
+      "name": "Turning Up the Heat: Min-p Sampling for Creative and Coherent LLM Outputs (ICLR 2025 Oral)",
+      "url": "https://arxiv.org/abs/2407.01082",
+      "httpStatus": 200,
+      "extractablePrinciple": "Dynamic probability truncation relative to top-token confidence; useful at token layer though insufficient alone for structural divergence."
+    },
+    {
+      "id": "locally-typical-sampling-2023",
+      "category": "academic-anti-convergence",
+      "name": "Locally Typical Sampling (Meister et al., TACL 2023)",
+      "url": "https://aclanthology.org/2023.tacl-1.7/",
+      "httpStatus": 200,
+      "extractablePrinciple": "Selects tokens whose surprisal stays close to conditional entropy, balancing predictability against incoherent long-tail noise."
+    },
+    {
+      "id": "rainbow-teaming-neurips-2024",
+      "category": "academic-anti-convergence",
+      "name": "Rainbow Teaming: Open-Ended Generation of Diverse Adversarial Prompts (NeurIPS 2024)",
+      "url": "https://arxiv.org/abs/2402.16822",
+      "httpStatus": 200,
+      "extractablePrinciple": "Applies MAP-Elites quality-diversity grids to text generation, offering an architectural blueprint for orthogonal Generate-and-Select."
+    },
+    {
+      "id": "voltagent-awesome-design-md",
+      "category": "ai-design-context",
+      "name": "VoltAgent/awesome-design-md",
+      "url": "https://github.com/VoltAgent/awesome-design-md",
+      "repoStarsSnapshot": 128462,
+      "httpStatus": 200,
+      "extractablePrinciple": "Popularized plain-text DESIGN.md tokens for coding agents; also serves as a cautionary baseline against copying a narrow set of tech brands."
+    },
+    {
+      "id": "anthropics-skills",
+      "category": "ai-design-context",
+      "name": "anthropics/skills (including frontend-design)",
+      "url": "https://github.com/anthropics/skills",
+      "repoStarsSnapshot": 198165,
+      "httpStatus": 200,
+      "extractablePrinciple": "Demonstrates opinionated SKILL.md framing that pushes coding agents toward deliberate aesthetic direction rather than neutral SaaS defaults."
+    },
+    {
+      "id": "arena",
+      "category": "non-mainstream-design-index",
+      "name": "Are.na",
+      "url": "https://www.are.na",
+      "httpStatus": 200,
+      "extractablePrinciple": "Research-oriented visual channels for archival print, editorial systems, signage, and independent graphic culture."
+    },
+    {
+      "id": "godly",
+      "category": "non-mainstream-design-index",
+      "name": "Godly",
+      "url": "https://godly.website",
+      "httpStatus": 200,
+      "extractablePrinciple": "Curated high-craft web engineering, kinetic typography, and non-standard navigation structures."
+    },
+    {
+      "id": "siteinspire",
+      "category": "non-mainstream-design-index",
+      "name": "SiteInspire",
+      "url": "https://www.siteinspire.com",
+      "httpStatus": 429,
+      "statusNote": "Returned HTTP 429 rate-limit to automated check on 2026-11-21; live site reachable via standard browser.",
+      "extractablePrinciple": "Long-running archive of editorial, institutional, and studio websites with disciplined grid hierarchies."
+    },
+    {
+      "id": "hoverstates",
+      "category": "non-mainstream-design-index",
+      "name": "Hoverstat.es",
+      "url": "https://www.hoverstat.es",
+      "httpStatus": 200,
+      "extractablePrinciple": "Interaction craft, state-change timing, and unconventional browser layouts outside standard SaaS patterns."
+    },
+    {
+      "id": "minimal-gallery",
+      "category": "non-mainstream-design-index",
+      "name": "Minimal Gallery",
+      "url": "https://minimal.gallery",
+      "httpStatus": 200,
+      "extractablePrinciple": "Restrained typography, disciplined whitespace ratios, and low-ornament information architecture."
+    },
+    {
+      "id": "httpster",
+      "category": "non-mainstream-design-index",
+      "name": "Httpster",
+      "url": "https://httpster.net",
+      "httpStatus": 200,
+      "extractablePrinciple": "Independent portfolio and studio sites showcasing diverse layout topologies beyond template hero sections."
+    },
+    {
+      "id": "dark-design",
+      "category": "non-mainstream-design-index",
+      "name": "Dark.design",
+      "url": "https://www.dark.design",
+      "httpStatus": 200,
+      "extractablePrinciple": "Dark-mode surface elevation, contrast discipline, and controlled accent budgets."
+    },
+    {
+      "id": "brutalist-websites",
+      "category": "non-mainstream-design-index",
+      "name": "Brutalist Websites",
+      "url": "https://brutalistwebsites.com",
+      "httpStatus": 200,
+      "extractablePrinciple": "Raw structural honesty and anti-ornament grids; always filter through WCAG contrast and usability gates."
+    },
+    {
+      "id": "fonts-in-use",
+      "category": "typography-and-foundries",
+      "name": "Fonts In Use",
+      "url": "https://fontsinuse.com",
+      "httpStatus": 200,
+      "extractablePrinciple": "Historical and contemporary real-world typography pairings across books, posters, interfaces, and ephemera."
+    },
+    {
+      "id": "typewolf",
+      "category": "typography-and-foundries",
+      "name": "Typewolf",
+      "url": "https://www.typewolf.com",
+      "httpStatus": 200,
+      "extractablePrinciple": "Practical web typography role pairings and open-source fallback comparisons."
+    },
+    {
+      "id": "dinamo",
+      "category": "typography-and-foundries",
+      "name": "Dinamo",
+      "url": "https://abcdinamo.com",
+      "httpStatus": 200,
+      "extractablePrinciple": "Swiss-German independent foundry demonstrating typographic scale, variable axes, and expressive utility UI."
+    },
+    {
+      "id": "klim-type-foundry",
+      "category": "typography-and-foundries",
+      "name": "Klim Type Foundry",
+      "url": "https://klim.co.nz",
+      "httpStatus": 200,
+      "extractablePrinciple": "Editorial type engineering notes and restrained specimen presentation grounded in print history."
+    },
+    {
+      "id": "grilli-type",
+      "category": "typography-and-foundries",
+      "name": "Grilli Type",
+      "url": "https://www.grillitype.com",
+      "httpStatus": 200,
+      "extractablePrinciple": "Sharp Swiss digital publishing layouts and interactive specimen microsites."
+    },
+    {
+      "id": "commercial-type",
+      "category": "typography-and-foundries",
+      "name": "Commercial Type",
+      "url": "https://commercialtype.com",
+      "httpStatus": 200,
+      "extractablePrinciple": "Newspaper and magazine typographic systems demonstrating high-density text legibility."
+    },
+    {
+      "id": "colophon-foundry",
+      "category": "typography-and-foundries",
+      "name": "Colophon Foundry",
+      "url": "https://www.colophon-foundry.org",
+      "httpStatus": 200,
+      "extractablePrinciple": "Clean tabular specimen catalogs and restrained typographic contrast."
+    },
+    {
+      "id": "the-type",
+      "category": "cjk-typography-and-editorial",
+      "name": "The Type",
+      "url": "https://www.thetype.com",
+      "httpStatus": 200,
+      "extractablePrinciple": "Chinese and multilingual typography critique, CJK punctuation mechanics, and editorial layout standards."
+    },
+    {
+      "id": "justfont",
+      "category": "cjk-typography-and-editorial",
+      "name": "Justfont",
+      "url": "https://justfont.com",
+      "httpStatus": 200,
+      "extractablePrinciple": "Traditional/CJK webfont density, stroke weight calibration, and bilingual readability principles."
+    },
+    {
+      "id": "stiftung-buchkunst",
+      "category": "book-design-and-studios",
+      "name": "Stiftung Buchkunst (Best Book Design from all over the World)",
+      "url": "https://www.stiftung-buchkunst.de",
+      "httpStatus": 200,
+      "extractablePrinciple": "Book proportion, margin choreography, and pacing principles transferable to longform reports, PDFs, and decks."
+    },
+    {
+      "id": "swiss-culture-awards-books",
+      "category": "book-design-and-studios",
+      "name": "Most Beautiful Swiss Books (Swiss Federal Office of Culture)",
+      "url": "https://www.schweizerkulturpreise.ch",
+      "httpStatus": 200,
+      "extractablePrinciple": "Contemporary Swiss editorial systems, grid discipline, and paper-ink contrast ratios."
+    },
+    {
+      "id": "experimental-jetset",
+      "category": "book-design-and-studios",
+      "name": "Experimental Jetset",
+      "url": "https://www.experimentaljetset.nl",
+      "httpStatus": 200,
+      "extractablePrinciple": "Radical typographic clarity and systematic archival indexing without ornamental chrome."
+    },
+    {
+      "id": "norm-zurich",
+      "category": "book-design-and-studios",
+      "name": "Norm (Zurich)",
+      "url": "https://www.norm.to",
+      "httpStatus": 200,
+      "extractablePrinciple": "Strict modular graphic systems, micro-typographic rules, and structural restraint."
+    },
+    {
+      "id": "area17",
+      "category": "book-design-and-studios",
+      "name": "Area 17",
+      "url": "https://www.area17.com",
+      "httpStatus": 200,
+      "extractablePrinciple": "Digital editorial architecture for cultural institutions and high-readability publications."
+    }
+  ]
+}

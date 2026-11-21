@@ -1,29 +1,39 @@
-# Anti-Slop Research & Resource Snapshot (`2026-11`)
+# Anti-Slop Research & Architecture Index (`2026-11`)
 
-本目录收录围绕 `dislop` 开展的海内外「去 AI 味（anti-slop / de-slop）」生态调研、87 条经实测核验的结构化资源快照，以及关于「信息索引、公开基准与核心产品如何配合」的战略分析。
+本目录汇总围绕 `dislop` 开展的五组专题研究、结构化数据原型与规格文档，覆盖生态全景、反模式识别与查询、正向差异化与个性化、多形态集成（含官网即 Agent 服务）以及 `awesome-anti-slop` 载体拓扑设计。
+
+> [!TIP]
+> 如需直接查阅整合后的最新战略、功能边界、视觉 VI 与多形态产品蓝图，请先读 [strategy-and-roadmap.zh-CN.md](../strategy-and-roadmap.zh-CN.md)（[English](../strategy-and-roadmap.md)）；本目录保留各专题的一手调研数据、出处与推导过程。
 
 > [!NOTE]
-> 所有 GitHub 仓库星标、最近推送日期与外部链接均在 **2026-11-21** 通过 GitHub REST API 与 HTTP 请求实测核验（星标与活跃度随时间动态变化）。本目录 4 份 Markdown 文档全部通过 Node 与 Python 双端 `dislop check docs/research --fail-on info` 零命中自审；JSON 索引单独通过 Schema 与双向一致性校验。
+> 所有 GitHub 仓库星标、最近推送日期与外部链接均在 **2026-11-21** 通过 GitHub REST API 与 HTTP 请求实测核验（星标与活跃度随时间动态变化）。本目录全部 Markdown 文档均通过 Node 与 Python 双端 `dislop check docs/research --fail-on info` 零命中自审；JSON 索引与原型文件单独通过结构校验。
 
-## 1. 文档导航
+## 1. 研究与设计文档总索引
 
-| 文档 | 定位 | 核心内容 |
+| 文档 | 专题方向 | 核心内容与配套资产 |
 |---|---|---|
-| [anti-slop-landscape-2026.zh-CN.md](./anti-slop-landscape-2026.zh-CN.md) | 深度调研报告 | 梳理海内外开源仓库、平台规范与社区实践，拆解文本、前端 UI、办公文档、代码与多模态五类媒介的演进与监管背景，以及 `dislop` 的真实差异化边界 |
-| [anti-slop-resource-radar.md](./anti-slop-resource-radar.md) | 资源雷达快照（87 条） | 由 [anti-slop-radar-index.json](./anti-slop-radar-index.json) 1:1 渲染生成，按八大分栏与四维标签组织 87 条经核验资源，明确区分常规项目、对照观察区与索引目录 |
-| [anti-slop-radar-index.json](./anti-slop-radar-index.json) | 单一事实源 (`dislop.radar/2`) | 中立结构化 JSON 索引，包含媒介、语种、多值介入阶段、是否含确定性检查、归档状态与上游真实许可证字段 |
-| [awesome-radar-strategy.zh-CN.md](./awesome-radar-strategy.zh-CN.md) | 产品战略补充 | 审视头部 `awesome-*` 与 `skills.sh` 的分发机制，论证为何纯链接目录在 2026 年易沦为冷启动墓地，提出「基准优先（Benchmark-backed Radar）+ 量化 Gate + 8 周熔断」的务实路线 |
+| [anti-slop-landscape-2026.zh-CN.md](./anti-slop-landscape-2026.zh-CN.md) | 生态全景调研 | 盘点海内外开源仓库、监管标识法规与社区实践，拆解文本、前端 UI、办公文档、代码与多模态五类媒介的演进脉络，界定 `dislop` 在「Agent 交付物印前检查」上的差异化边界 |
+| [anti-slop-resource-radar.md](./anti-slop-resource-radar.md) | 生态资源雷达（87 条） | 由 [anti-slop-radar-index.json](./anti-slop-radar-index.json) 1:1 渲染生成，按八大分栏与四维标签组织 87 条经核验资源，明确区分常规项目、对照观察区与综合目录 |
+| [anti-slop-radar-index.json](./anti-slop-radar-index.json) | 资源雷达单一事实源 (`dislop.radar/2`) | 中立结构化 JSON 索引，记录媒介、语种、多值介入阶段、是否含确定性检查、归档状态与上游许可证字段；直接驱动官网 `/radar/` 静态目录 |
+| [awesome-radar-strategy.zh-CN.md](./awesome-radar-strategy.zh-CN.md) | 资源策略与门控基准 | 复盘头部 `awesome-*` 与 `skills.sh` 的分发机制，指出纯链接目录冷启动阻力，提出「基准优先（Benchmark-backed Radar）+ 量化 Gate + 熔断阈值」路线 |
+| [anti-pattern-detection-and-catalog.zh-CN.md](./anti-pattern-detection-and-catalog.zh-CN.md) | 反模式识别与查询体系 | 梳理语言/节奏与 UI/平面设计反模式、跨模型倾向证据边界、确定性脚本到开源轻量小模型的四级漏斗，以及反模式目录查询与 P0–P2 路线（配套 [v0.3 Spec](../specs/anti-pattern-catalog-and-probes-v0.3.md) 与 [验证原型](../../scripts/prototype_antipattern_lab.mjs)） |
+| [positive-divergence-and-personalization.zh-CN.md](./positive-divergence-and-personalization.zh-CN.md) | 正向差异化与个性化 | 围绕模式坍缩实证研究提出「三带可控熵边界」、六类非主流高品位设计谱系、五维可量化声纹画像与防二阶趋同机制（配套 [positive-design-card.example.json](./positive-divergence/positive-design-card.example.json)、[voice-profile.example.json](./positive-divergence/voice-profile.example.json)、[verified-positive-sources.json](./positive-divergence/verified-positive-sources.json)） |
+| [multi-surface-integration-architecture.zh-CN.md](./multi-surface-integration-architecture.zh-CN.md) | 多形态开发者集成架构 | 确立「单一内核 + 薄适配层」与统一返回契约（`dislop.result/1`），系统规划 Level 0–3 共 11 类使用形态（官网、CLI、Agent Skill、MCP、Hooks、SDK、GitHub Action、HTTP API 与工作流节点）的差异化分工与分阶段路线 |
+| [multi-surface-architecture/website-as-agent-service.zh-CN.md](./multi-surface-architecture/website-as-agent-service.zh-CN.md) | 官方网站即 Agent 服务 | 定义 `dislop.com` 的人机双读（Human + Agent Dual-Native）协议：三类资源自助导航（方法论/案例/工具）、3 层低 Token 渐进披露（`/llms.txt`、`/catalog.json`、纯 `.md` 镜像）、预渲染消除 SPA 空壳与防间接提示词注入清洗边界 |
+| [awesome-anti-slop-topology-design.zh-CN.md](./awesome-anti-slop-topology-design.zh-CN.md) | `awesome-anti-slop` 载体拓扑 | 复盘 8 组开源先例并对比 4 种载体拓扑，确定「独立 `dislop-ai/awesome-anti-slop` 仓库（CC0-1.0）+ `dislop.com/radar/` 人机双读目录 + 主仓静态快照同步」方案与中立治理宪章（配套 [radar-v3-contract.json](./awesome-anti-slop-topology/radar-v3-contract.json) 与 [mvp-starter-templates.md](./awesome-anti-slop-topology/mvp-starter-templates.md)） |
+| [positioning-and-messaging.zh-CN.md](./positioning-and-messaging.zh-CN.md) | 官网定位与信息层级 | 诊断首版人机双读官网的首屏口径偏差，确立「全面去 AI 味（De-slop AI outputs）」一级直给主标、四维二级证据体系、全场景多模态/全宿主覆盖矩阵与诚实边界清单 |
 
-## 2. 核心发现速览
+## 2. 跨专题综合结论
 
-单点去 AI 味工具已积累十万星级关注度，但头部项目本身也在快速工程化。前端侧 `Leonxlnx/taste-skill`（119,423★）已自带 Stop hook 门禁与文案检查，`pbakaus/impeccable`（114,155★）已内置 62 条零 LLM 确定性规则、SARIF 代码扫描输出与编辑钩子；文本侧 `seyedehsanhadi/sloptrim`（428★）已实现 Python 标准库本地检测并公布公开基准 ROC-AUC，`larashero3-dotcom/lieflat-less-ai-tone`（8,454★）结合 520 万字对照语料与本地脚本检测。因此，简单的「上游软提示、下游确定性」二分已经过时。
+在**负向防线（确定性印前门禁 + 反模式查询）**上，头部上游技能已开始内置确定性脚本与编辑钩子（如 `pbakaus/impeccable` 62 条规则与 SARIF 输出、`Leonxlnx/taste-skill` Stop hook）。`dislop` 站得住脚的主航道在于「跨媒介交付物印前检查」：零依赖双端一致覆盖 `.md`/`.html`/`.css`/`.svg`/`.docx`/`.pptx`/`.pdf`，提供受保护事实多重集复检与二阶口号漂移拦截（`dislop verify`），并在此之上将 `packs/` 升级为可检索的反模式目录与四级识别漏斗（零依赖确定性探针先行，可选轻量小模型严格解耦）。
 
-在发现层上，反 AI 味细分目录体量偏小（如跨媒介目录 `shannhk/avoid-slop` 为 203★，多款 `awesome-slop` 类仓库不足 30★），原因更接近「已有注册中心与综合目录承接了分发」（`skills.sh` 按安装量排行、`VoltAgent/awesome-agent-skills` 37.4K★ 与 `sickn33/agentic-awesome-skills` 50.1K★ 已收录头部写作与前端技能），而不是无人发现的红利空白。单靠搬运链接无法撑起第二增长引擎。
+在**正向牵引（反趋同与个性化协议）**上，仅靠删除套话无法避免均值回归或二阶模板化（NeurIPS 2025 *Artificial Hivemind* 证实跨模型同样趋同）。可行路线是保持零 LLM 核心，用确定性工具实现三带可控熵边界——零熵锁死事实与 WCAG 底线，中层通过 `dislop.voice/1`（本地离线声纹统计）与 `dislop.taste/1`（抽离自独立印刷与字厂传统的抽象设计文法）引导宿主 Agent 差异化生成，再由确定性比选与跨文档趋同检测收口。
 
-`dislop` 站得住脚的差异化位于「Agent 交付物的印前检查（Preflight Check）」：同时覆盖 `.docx`、`.pptx`、`.pdf` 客观结构交付事故（未接受修订、残留批注、PPT 文本框越界与字数墙、PDF 字体嵌入与本机路径），提供改稿前后受保护标记多重集比对与二阶句式漂移拦截（`dislop verify`），并具备原生中英双语规则与零上传浏览器清样工作台。
+在**多形态集成与官网即服务**上，以单一零依赖核心（`src/core.mjs` + `src/dislop/`）驱动全部形态，差异化只留在触发时机与交互壳。官网 `dislop.com` 升级为 Level 0 人机双读入口：人类获得零上传浏览器清样工作台（`CSP: connect-src 'none'`）与可检索规则/资源目录，外部 Agent 通过 `/llms.txt`、`/catalog.json` 与纯 `.md` 端点按需低 Token 读取方法论、案例与工具。
 
-将信息整理转化为产品杠杆的正确姿势，是优先建设可复算的「改稿事实丢失率与二阶漂移率」离线基准，把资源清单定位为带日期的生态快照，并在达到外部采用 Gate 后再决定是否投入独立目录维护。
+在**生态资源雷达的双仓联动拓扑**上，待主引擎完成正式发包后，以独立 `dislop-ai/awesome-anti-slop` 仓库（单条目 JSON + CC0-1.0 + 自动巡检）承接 GitHub 搜索与中立社区 PR，再经由离线快照同步至 `dislop.com/radar/`，并以离线可复算的事实保真与二阶漂移基准建立差异化参考系。
 
-## 3. 维护与校验
+## 3. 维护与自审门禁
 
-如需增删条目，应先编辑单一事实源 [anti-slop-radar-index.json](./anti-slop-radar-index.json)，再同步重新生成 [anti-slop-resource-radar.md](./anti-slop-resource-radar.md) 并执行 `dislop check docs/research --fail-on info`。准入门槛、分阶段 Gate 与熔断条件见 [awesome-radar-strategy.zh-CN.md](./awesome-radar-strategy.zh-CN.md#4-资源雷达准入与治理草案)。
+- 增删生态雷达条目时，先编辑单一事实源 [anti-slop-radar-index.json](./anti-slop-radar-index.json)，再重新运行 `node scripts/build_site.mjs` 同步官网 `/radar/` 静态目录与 `/llms.txt`。
+- 变更本目录任意 Markdown 文档后，须同时执行 `node ./bin/dislop.mjs check docs/research --fail-on info` 与 `PYTHONPATH=src python3 -m dislop.cli check docs/research --fail-on info` 确认零命中。

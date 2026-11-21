@@ -1,0 +1,113 @@
+{
+  "schema": "dislop.voice/1",
+  "id": "engineering-editorial-bilingual",
+  "version": "0.1.0-draft",
+  "status": "proposal",
+  "privacy": {
+    "scope": "public-example",
+    "localOnlyRecommendedPath": ".dislop.local/voice.json",
+    "containsPersonalCorpus": false,
+    "license": "Apache-2.0",
+    "source": "original"
+  },
+  "targetAudience": "Engineers, technical founders, and editors evaluating architecture or research trade-offs",
+  "stylometricTargetBands": {
+    "en": {
+      "sentenceWordsMean": [13, 21],
+      "sentenceLengthCV": [0.38, 0.72],
+      "shortSentenceRatioUnder8Words": [0.08, 0.25],
+      "longSentenceRatioOver26Words": [0.10, 0.28],
+      "emDashesPer300WordsMax": 2,
+      "exclamationMarksPer1000WordsMax": 0,
+      "paragraphSentencesMean": [2.2, 4.5]
+    },
+    "zh": {
+      "sentenceCharsMean": [22, 42],
+      "sentenceLengthCV": [0.35, 0.68],
+      "shortSentenceRatioUnder12Chars": [0.05, 0.20],
+      "emDashesPer1000CharsMax": 3,
+      "parentheticalQualificationStyle": "concise-factual-bounds-only",
+      "halfwidthPunctuationBetweenHanMax": 0,
+      "paragraphCharsMean": [90, 220]
+    }
+  },
+  "stanceAndPerspective": {
+    "defaultPerson": "direct-editorial-first-or-neutral",
+    "uncertaintyPolicy": "State exact sample size, test boundary, or missing verification explicitly instead of using vague hedging.",
+    "evidenceRequirement": "Every comparative claim must pair with a measurable metric, named source + year, or reproducible boundary condition.",
+    "rhetoricalGuards": [
+      "Start with the conclusion, failure mode, or concrete measurement rather than macro-era framing.",
+      "Prefer concrete nouns and active verbs over abstract nominalizations.",
+      "Do not invent dramatic contrast pivots ('Not X, but Y') when a direct factual statement suffices.",
+      "End on the concrete trade-off or next verification step rather than a moralizing summary."
+    ]
+  },
+  "positiveSkeletons": [
+    {
+      "id": "S1-decision-ledger",
+      "name": "Conclusion + Evidence Ledger",
+      "sequence": [
+        "1-sentence decision or finding",
+        "Measured numbers, sample size, or failure mode",
+        "Explicit limitation or counter-example",
+        "Concrete next action with exit gate"
+      ],
+      "antiRepetitionMaxConsecutiveDocs": 2
+    },
+    {
+      "id": "S2-mechanism-teardown",
+      "name": "Observation -> Flawed Intuition -> Mechanism",
+      "sequence": [
+        "Specific observed anomaly",
+        "Why the intuitive fix fails in practice",
+        "Verified underlying mechanism",
+        "Bounded engineering solution"
+      ],
+      "antiRepetitionMaxConsecutiveDocs": 2
+    }
+  ],
+  "positiveExemplars": [
+    {
+      "lang": "zh",
+      "skeletonId": "S1-decision-ledger",
+      "text": "本次压测覆盖 14 个支付网关，p95 结算耗时为 180 ms，高于 150 ms 目标值。瓶颈集中在跨区证书校验（占单次耗时 41%），仅扩容下游数据库连接池无法缓解；下周先在华东节点启用本地 OCSP 缓存，再复测 72 小时。",
+      "structuralNotes": [
+        "首句直接给样本口径、实测值与目标差距",
+        "第二句指出根因占比并否定无效方案，不含空洞修饰",
+        "尾句落到具体动作与复测窗口，无升华口号"
+      ],
+      "source": "original"
+    },
+    {
+      "lang": "en",
+      "skeletonId": "S2-mechanism-teardown",
+      "text": "Banning twenty overused adjectives rarely fixes flat prose. When a model loses its top lexical shortcuts, it shifts to structural shortcuts—three-word slogan chains and binary contrast pivots—because post-training still rewards familiar cadence. Breaking the loop requires locking factual spans first, then sampling across distinct paragraph skeletons.",
+      "structuralNotes": [
+        "Alternates a crisp 9-word opening claim with a 30-word causal explanation and a 19-word operational takeaway (high burstiness)",
+        "Names the concrete displacement mechanism instead of using hype adjectives"
+      ],
+      "source": "original"
+    }
+  ],
+  "antiSecondOrderConvergence": {
+    "maxConsecutiveShortSentences": 2,
+    "maxBoldLeadBulletRun": 3,
+    "forbidCaricaturePatterns": [
+      "Forced slang or intentional typos to fake human warmth",
+      "Chained one-line aphorisms pretending to be punchy",
+      "Repeating the same opening rhetorical frame across consecutive documents"
+    ],
+    "localPrivateForbidFile": ".dislop.local.json"
+  },
+  "verificationBinding": {
+    "extendsNegativePacks": ["core", "business-brief"],
+    "requireFactLockVerify": true,
+    "rejectOnDisplacementFamilies": [
+      "frame/negation-pivot",
+      "frame/staccato",
+      "frame/triad",
+      "frame/ending",
+      "frame/list-wall"
+    ]
+  }
+}

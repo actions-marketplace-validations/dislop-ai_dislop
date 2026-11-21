@@ -1,0 +1,133 @@
+{
+  "schema": "dislop.taste/1",
+  "id": "swiss-galley-proof",
+  "version": "0.1.0-draft",
+  "status": "proposal",
+  "name": {
+    "en": "Architectural Galley Proof (Swiss Editorial Grid)",
+    "zh": "建筑网格印刷校样单"
+  },
+  "lineage": {
+    "school": "International Typographic Style / Editorial Galley Proof / Technical Spec Sheet",
+    "referenceUrls": [
+      "https://www.norm.to",
+      "https://www.stiftung-buchkunst.de",
+      "https://fontsinuse.com"
+    ],
+    "attributionNote": "Encodes abstract grid proportions, typographic hierarchy, and contrast invariants only; contains no third-party code, images, or proprietary font files.",
+    "license": "Apache-2.0",
+    "source": "original"
+  },
+  "fit": {
+    "recommendedModalities": ["html", "css", "jsx", "svg", "pptx"],
+    "recommendedUseCases": [
+      "Developer tools and inspection workbenches",
+      "Technical documentation and audit reports",
+      "Data-dense engineering release notes"
+    ],
+    "antiUseCases": [
+      "Playful consumer entertainment campaigns",
+      "Full-bleed photography lookbooks"
+    ],
+    "adoptionRisk": "low-medium"
+  },
+  "layout": {
+    "maxContainerWidthPx": 1200,
+    "gridGrammar": "Asymmetric multi-column editorial grid divided by continuous 1px hairlines rather than floating nested cards.",
+    "proseMeasure": {
+      "enMaxChars": 68,
+      "zhMaxChars": 38
+    },
+    "borderRadiusPx": {
+      "min": 0,
+      "max": 4
+    },
+    "shadowPolicy": "none-or-flat-hairline",
+    "antiDefaultConstraints": [
+      "No centered marketing hero with decorative abstract gradient blobs",
+      "No equal-width three-card feature grid with generic icon badges",
+      "No box-in-box-in-box bordered nesting",
+      "Lead with the functional workbench or concrete artifact above the fold"
+    ]
+  },
+  "typography": {
+    "externalFontCdnAllowed": false,
+    "roles": {
+      "editorialProse": {
+        "stack": "Georgia, \"Source Serif 4\", \"Noto Serif CJK SC\", \"Songti SC\", \"Microsoft YaHei\", serif",
+        "lineHeightEn": 1.6,
+        "lineHeightZh": 1.8
+      },
+      "uiControlsAndHeadings": {
+        "stack": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif",
+        "letterSpacingHeading": "-0.02em"
+      },
+      "coordinatesAndMetrics": {
+        "stack": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+        "fontVariantNumeric": "tabular-nums"
+      }
+    }
+  },
+  "colorBudget": {
+    "maxDecorativeAccentHues": 0,
+    "semanticAccentRoles": ["error", "warning", "verified-stet"],
+    "wcagMinimumContrast": {
+      "normalText": 4.5,
+      "largeText": 3.0
+    },
+    "darkModeElevation": "strictly-monotonic-luminance-increase",
+    "surfaceTokens": {
+      "light": {
+        "stage": "#F6F7F5",
+        "sheet": "#FFFFFF",
+        "raised": "#ECEEE9",
+        "inset": "#F1F3F0",
+        "rule": "#D5D7D2",
+        "ink": "#14171A"
+      },
+      "dark": {
+        "stage": "#0E1012",
+        "sheet": "#15181C",
+        "raised": "#1D2127",
+        "inset": "#0A0C0E",
+        "rule": "#2A2F37",
+        "ink": "#ECEEF0"
+      }
+    },
+    "antiDefaultColorGuards": [
+      "Forbid indigo/purple/pink decorative gradients",
+      "Forbid warm-beige (#F7F5F0) + vermilion second-order AI template fallback",
+      "Reserve red strictly for objective errors, never for decorative eyebrows"
+    ]
+  },
+  "densityAndMotion": {
+    "maxTextPillsPerView": 4,
+    "maxTransitionMs": 120,
+    "respectPrefersReducedMotion": true
+  },
+  "enforceableChecks": {
+    "extendsNegativePacks": ["core", "deck-and-ui"],
+    "deterministicAssertions": [
+      {
+        "id": "taste-max-border-radius",
+        "target": "css",
+        "assertion": "border-radius <= 4px (excluding circular avatars/icon buttons)"
+      },
+      {
+        "id": "taste-zero-external-font-cdn",
+        "target": "html,css",
+        "assertion": "No fonts.googleapis.com or external webfont CDN imports"
+      },
+      {
+        "id": "taste-strict-dark-elevation",
+        "target": "css",
+        "assertion": "L*(dark.stage) < L*(dark.sheet) < L*(dark.raised)"
+      },
+      {
+        "id": "taste-no-decorative-gradient",
+        "target": "html,css,jsx,svg",
+        "assertion": "No linear-gradient or radial-gradient on primary headings or cards"
+      }
+    ]
+  }
+}

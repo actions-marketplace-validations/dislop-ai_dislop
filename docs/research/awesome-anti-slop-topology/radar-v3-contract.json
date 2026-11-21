@@ -1,0 +1,92 @@
+{
+  "schema": "dislop.radar/3",
+  "description": "Single-entry JSON contract for dislop-ai/awesome-anti-slop (data/entries/<id>.json). Backward-compatible evolution of dislop.radar/2.",
+  "entryExample": {
+    "id": "blader-humanizer",
+    "section": "prose-en-multilingual",
+    "kind": "skill-doc",
+    "status": "active",
+    "name": "blader/humanizer",
+    "url": "https://github.com/blader/humanizer",
+    "homepage": "https://skills.sh/blader/humanizer",
+    "repo": "blader/humanizer",
+    "modality": "prose",
+    "locale": "en",
+    "stages": ["midstream-rewrite"],
+    "format": "agent-skill",
+    "hasDeterministicCheck": false,
+    "summaryEn": "English prose revision skill grounded in Wikipedia Signs of AI Writing, supporting author style samples for voice calibration.",
+    "summaryZh": "基于 WP:AISIGNS 的英语改写技能，支持导入作者样稿做语感校准。",
+    "tags": ["wp-aisigns", "style-calibration"],
+    "addedAt": "2026-11-21",
+    "verifiedAt": "2026-11-21",
+    "metrics": {
+      "stars": 71724,
+      "pushedAt": "2026-11-19",
+      "archived": false,
+      "license": "MIT"
+    },
+    "benchmarkRef": null
+  },
+  "selfListingExample": {
+    "id": "dislop-self",
+    "section": "deterministic-prose-linters",
+    "kind": "software",
+    "status": "active",
+    "name": "dislop-ai/dislop",
+    "url": "https://github.com/dislop-ai/dislop",
+    "homepage": "https://dislop.com",
+    "repo": "dislop-ai/dislop",
+    "modality": "multi-modal",
+    "locale": "multilingual",
+    "stages": ["downstream-lint"],
+    "format": "cli-linter",
+    "hasDeterministicCheck": true,
+    "hostOrgMaintained": true,
+    "summaryEn": "Zero-dependency deterministic deliverable linter and revision fact-verifier for Markdown, HTML/CSS/SVG, DOCX, PPTX, and PDF.",
+    "summaryZh": "零依赖确定性交付物印前审校与改稿标记复检工具，覆盖中英双语文稿、前端/SVG 与 Office/PDF 结构检查。",
+    "tags": ["bilingual", "office-pdf", "mcp", "fact-verify"],
+    "addedAt": "2026-11-21",
+    "verifiedAt": "2026-11-21",
+    "metrics": {
+      "stars": 1,
+      "pushedAt": "2026-11-21",
+      "archived": false,
+      "license": "Apache-2.0"
+    },
+    "benchmarkRef": null
+  },
+  "enums": {
+    "kind": ["software", "skill-doc", "research-policy", "directory"],
+    "status": ["active", "historical-baseline", "stale", "archived", "contrast-watch"],
+    "sections": [
+      "standards-research-policy",
+      "prose-en-multilingual",
+      "prose-zh",
+      "deterministic-prose-linters",
+      "ui-design-and-media",
+      "code-and-pr-governance",
+      "contrast-and-detection",
+      "awesome-and-registries"
+    ],
+    "modalities": ["prose", "ui-design", "diagram-media", "code-pr", "academic", "multi-modal"],
+    "locales": ["en", "zh", "multilingual", "ko", "ja", "tr"],
+    "stages": ["upstream-prompt", "midstream-rewrite", "downstream-lint", "benchmark-policy", "model-level"],
+    "formats": [
+      "agent-skill",
+      "cli-linter",
+      "browser-tool",
+      "policy-standard",
+      "benchmark-dataset",
+      "awesome-list",
+      "github-action",
+      "pipeline-app"
+    ]
+  },
+  "neutralityConstraints": [
+    "No subjective comparison field against dislop or any specific vendor.",
+    "summaryEn <= 160 chars; summaryZh <= 90 CJK chars; factual mechanism description only.",
+    "Tools focused on detector evasion or watermark removal must set section='contrast-and-detection' and status='contrast-watch'.",
+    "Only entries with kind='software' transition to status='stale' after 18 months without default-branch commits; skill-doc and research-policy use 'historical-baseline'."
+  ]
+}
