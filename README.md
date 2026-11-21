@@ -141,6 +141,26 @@ For a narrow one-off exception, add a reason above the line (`--report-unused` f
 <!-- dislop-ignore-next-line en-cliche-lexicon -- quoting vendor press release verbatim -->
 ```
 
+### Local MCP vs. Open-Source LLM Backend (`server/`)
+
+- **CLI, Skill, and local stdio MCP (`--mcp`)**: Zero-LLM, zero-key, 100% offline.
+- **Open-source LLM backend & Remote HTTP MCP ([server/](./server/README.md))**: Self-host with your own API key (OpenAI, DeepSeek, Gemini compat, OpenRouter, Ollama) or deploy as an official backend. Exposes `/v1/check`, `/v1/review` (3rd-order prose & design review), `/v1/deslop` (plain-voice rewrite + automatic deterministic re-check), and Remote HTTP `/mcp` (`dislop_check`, `dislop_review`, `dislop_deslop`, `dislop_explain`, `dislop_packs`). API keys live strictly in server environment variables (`DISLOP_LLM_API_KEY`) and are never logged or sent to the browser.
+
+## Anti-slop benchmark (`dislop-bench v1`)
+
+Run the full offline benchmark (`48` cross-modality detection samples across Node & Python + `12` end-to-end writing/design tasks comparing raw AI, naive humanizers, and `dislop`-guided revisions):
+
+```bash
+node scripts/run_benchmark.mjs --assert
+```
+
+Latest measured baseline ([benchmarks/REPORT.md](./benchmarks/REPORT.md)):
+
+- **Detection (48 samples, 6 domains)**: Precision `100.0%` · Recall `100.0%` · Clean FPR `0.0%` · Adversarial Near-Miss FPR `0.0%` · 2nd-Order Trap Recall `100.0%` · Node/Python Parity `100.0%`.
+- **End-to-end de-slop (12 tasks × 3 arms)**: `raw_ai` **61.4 / 100** → `naive_humanizer` **72.1 / 100** (doubles 3rd-order slop and drops/invents numbers) → `dislop_clean` **100.0 / 100** (`12/12` all-clear).
+
+See [benchmarks/README.md](./benchmarks/README.md) to score your own model, Skill, or `server/` deployment (`--eval`) or export randomized blind human A/B review sheets (`--export-blind-sheet`).
+
 ## dislop checks dislop
 
 GitHub Actions CI runs `dislop pack-test` (88 fixture assertions in both Node and Python), cross-runtime conformance tests (`tests/test_conformance.py`), and site checks (`tests/test_site.mjs`). It also runs `dislop check . --fail-on warning` across this repository's docs, `awesome/`, and `site/`.
@@ -156,7 +176,9 @@ dislop/
 ├── .claude-plugin/    # Claude Code plugin & marketplace manifests (bundles Skill + MCP)
 ├── .mcp.json          # Standard stdio MCP server manifest
 ├── awesome/           # Awesome Anti-Slop (README.md & README.zh-CN.md, 87 entries)
+├── benchmarks/        # Offline anti-slop benchmark datasets (CC0-1.0) & reproducible report
 ├── bin/               # Node.js CLI (dislop.mjs) & stdio MCP launcher (dislop-mcp.mjs)
+├── server/            # Open-source BYOK LLM backend + Remote Streamable HTTP MCP (/mcp)
 ├── src/
 │   ├── core.mjs       # Zero-dep ES module shared by Node CLI, MCP, and browser workbench
 │   ├── binary-node.mjs# Zero-dep ZIP reader for Node.js (.docx / .pptx)

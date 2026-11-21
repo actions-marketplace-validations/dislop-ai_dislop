@@ -34,6 +34,8 @@ Re-check (`dislop check` / MCP `dislop_check`)
 | Node CLI & MCP | `bin/dislop.mjs`, `bin/dislop-mcp.mjs` | CLI (`check`, `explain`, `packs`, `pack-test`, `init`) and stdio MCP server (`dislop_check`, `dislop_explain`, `dislop_packs`) |
 | Python Core, CLI & MCP | `src/dislop/{engine,cli,mcp_server}.py` | Pure Python 3.10+ stdlib implementation kept in lockstep via `tests/test_conformance.py` |
 | Rule Manifests | `packs/{core,business-brief,literary-essay,deck-and-ui}/pack.json` | Declarative `dislop.pack/2` rules (25 total), thresholds, check questions, examples, and `hit`/`clean` fixtures |
+| Open-Source LLM Backend & Remote MCP | `server/{index,llm-client}.mjs`, `server/Dockerfile` | Optional zero-dep HTTP API (`/v1/check`, `/v1/review`, `/v1/deslop`) and Remote Streamable HTTP `/mcp` with server-only env keys (`DISLOP_LLM_API_KEY`), secret redaction, rate limits, and BYOK self-hosting |
+| Anti-Slop Benchmark | `benchmarks/`, `scripts/run_benchmark.mjs` | 48 original `CC0-1.0` detection samples (Node/Python parity) + 12 end-to-end writing/design revision tasks with 3rd-order probes, numeric retention scoring, `--eval`, and blind A/B sheet export |
 | Static Site Compiler | `scripts/build_site.mjs` | Zero-dependency compiler turning `src/core.mjs`, `packs/`, `skills/`, `docs/brand*`, `ROADMAP*.md`, and verified research JSON into `site/` and `awesome/README*.md` |
 | Research, Specs & Prototype | `docs/research/`, `docs/specs/`, `scripts/prototype_antipattern_lab.mjs` | Verified 87-entry Awesome Anti-Slop dataset (`dislop.radar/2`), 31 design/academic references, multi-surface & positive-divergence studies, `v0.3` probe spec, and standalone self-tested prototype |
 

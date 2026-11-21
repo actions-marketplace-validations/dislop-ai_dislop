@@ -310,8 +310,8 @@
           <p data-i18n="surf.w2Desc">一行命令装进 Claude Code、Codex、Cursor、Windsurf 或 Antigravity。写之前防 AI 味，写完自动复检。</p>
         </div>
         <div class="where-item">
-          <h3 data-i18n="surf.w3Title">3. Plugin 插件 / MCP 服务</h3>
-          <p data-i18n="surf.w3Desc">Claude Code 一键装 Plugin，自动配好 Skill + 本地 MCP；其他 Agent 也可以直接接 stdio MCP 调本地引擎。</p>
+          <h3 data-i18n="surf.w3Title">3. Plugin 与 MCP（本地 / 在线）</h3>
+          <p data-i18n="surf.w3Desc">本地 stdio MCP 与 Plugin 零依赖免 Key；需要大模型深度改写或三阶审校时，可接入官方/自托管开源后台的远程 HTTP MCP。</p>
         </div>
         <div class="where-item">
           <h3 data-i18n="surf.w4Title">4. 命令行与 PR 卡点</h3>
@@ -327,6 +327,7 @@
             <button type="button" id="tab-skill" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="skill">Skill</button>
             <button type="button" id="tab-plugin" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="plugin">Plugin</button>
             <button type="button" id="tab-mcp" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="mcp">MCP</button>
+            <button type="button" id="tab-server" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="server" data-i18n="snip.server">自托管后台</button>
             <button type="button" id="tab-cli" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="cli" data-i18n="snip.cli">命令行</button>
             <button type="button" id="tab-ci" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="ci">GitHub Actions</button>
             <button type="button" id="tab-config" role="tab" aria-selected="false" aria-controls="snippet-panel" tabindex="-1" class="ctrl-btn" data-snippet="config">.dislop.json</button>

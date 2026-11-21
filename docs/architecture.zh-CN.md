@@ -34,6 +34,8 @@
 | Node CLI 与 MCP | `bin/dislop.mjs`, `bin/dislop-mcp.mjs` | 命令行（`check`、`explain`、`packs`、`pack-test`、`init`）与 stdio MCP 服务（`dislop_check`、`dislop_explain`、`dislop_packs`） |
 | Python 核心与接口 | `src/dislop/{engine,cli,mcp_server}.py` | 纯 Python 3.10+ 标准库实现，通过 `tests/test_conformance.py` 与 Node 保持行为一致 |
 | 规则包清单 | `packs/{core,business-brief,literary-essay,deck-and-ui}/pack.json` | 声明式 `dislop.pack/2` 规则（共 25 条）、阈值、判断方法、三段样本与正反用例 |
+| 开源大模型后台与远程 MCP | `server/{index,llm-client}.mjs`、`server/Dockerfile` | 可选零依赖 HTTP API（`/v1/check`、`/v1/review`、`/v1/deslop`）与远程 HTTP `/mcp`；Key 仅存服务端环境变量（`DISLOP_LLM_API_KEY`），支持官方部署与 BYOK 自托管 |
+| 离线效果基准评测 | `benchmarks/`、`scripts/run_benchmark.mjs` | 48 份 `CC0-1.0` 跨媒介检测样本（含 Node/Python 一致性）+ 12 组端到端文案/设计改稿任务、三阶探针、数字保真评分、`--eval` 与盲评表导出 |
 | 官网静态编译器 | `scripts/build_site.mjs` | 零依赖编译器，将 `src/core.mjs`、`packs/`、`skills/`、`docs/brand*`、`ROADMAP*.md` 与已核验研究 JSON 同源编译为 `site/` 与 `awesome/README*.md` |
 | 专题研究、规格与原型 | `docs/research/`, `docs/specs/`, `scripts/prototype_antipattern_lab.mjs` | 87 条实测核验 Awesome Anti-Slop 数据源（`dislop.radar/2`）、31 条设计/学术参考、多形态与正向差异化研究、`v0.3` 探针规格及可独立自测的验证原型 |
 

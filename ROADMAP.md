@@ -46,15 +46,16 @@ Goal: promote our verified cadence and UI template probes into both production r
 
 **Done when**: Node and Python pass identical `pack-test` and `test_conformance.py` assertions on all 31 rules, and the repository passes `dislop check . --fail-on warning`.
 
-### Track C — Offline Anti-Slop Benchmark (Next, Parallel)
+### Track C — Offline Anti-Slop Benchmark (`v1` Shipped, Expanding)
 
-Goal: measure false-positive rate and AI-slop recall with reproducible offline numbers rather than opinions.
+Goal: measure false-positive rate, recall, and end-to-end de-slop quality with reproducible offline numbers rather than opinions.
 
-- [ ] Curate 30–50 original or open-licensed (`CC0` / `CC-BY`) drafts across Chinese business briefs, Chinese essays, English technical specs, HTML cards, and `.pptx` decks.
-- [ ] Measure two concrete numbers offline: false-positive rate on clean human writing and recall on 1st- and 2nd-order AI slop.
-- [ ] Publish the benchmark runner under `scripts/` and report results in docs.
+- [x] Curate 48 original `CC0-1.0` detection samples across Chinese briefs, Chinese essays, English specs, English essays, HTML/CSS components, and `.pptx` decks plus 12 end-to-end revision tasks ([benchmarks/](./benchmarks/README.md)).
+- [x] Measure precision (`100%`), recall (`100%`), clean FPR (`0%`), adversarial near-miss FPR (`0%`), 2nd-order trap recall (`100%`), Node/Python parity (`100%`), and `raw_ai` vs. `naive_humanizer` vs. `dislop_clean` scores offline.
+- [x] Ship one-command offline evaluation, CI regression gates (`node scripts/run_benchmark.mjs --assert`), external model/Skill evaluation (`--eval`), randomized blind human A/B review sheets (`--export-blind-sheet`), and generated [benchmarks/REPORT.md](./benchmarks/REPORT.md).
+- [ ] Expand with longer real-world drafts, multi-slide decks, and cross-model A/B runs via `server/`.
 
-**Done when**: anyone can run one offline command and reproduce the exact score table.
+**Done when**: gated in CI; anyone can run `node scripts/run_benchmark.mjs --assert` offline to reproduce the exact score tables.
 
 ### Track D — `Awesome Anti-Slop` Maintenance & Split Threshold (Ongoing, Parallel)
 

@@ -85,11 +85,12 @@ const I18N = {
     "surf.w1Desc": "适合 ChatGPT、Claude、Kimi 等任意联网对话。复制一句话丢给它，它会自己读 dislop.com/llms.txt 按规矩审稿。",
     "surf.w2Title": "2. Agent Skill（跨工具通用）",
     "surf.w2Desc": "一行命令装进 Claude Code、Codex、Cursor、Windsurf 或 Antigravity。写之前防 AI 味，写完自动复检。",
-    "surf.w3Title": "3. Plugin 插件 / MCP 服务",
-    "surf.w3Desc": "Claude Code 一键装 Plugin，自动配好 Skill + 本地 MCP；其他 Agent 也可以直接接 stdio MCP 调本地引擎。",
+    "surf.w3Title": "3. Plugin 与 MCP（本地 / 在线）",
+    "surf.w3Desc": "本地 stdio MCP 与 Plugin 零依赖免 Key；需要大模型深度改写或三阶审校时，可接入官方/自托管开源后台的远程 HTTP MCP。",
     "surf.w4Title": "4. 命令行与 PR 卡点",
     "surf.w4Desc": "终端用 npx 或 uvx 查整个目录、Word、PPT 或本次 Git 改动，也能放进 GitHub Actions 卡住 AI 残留硬伤。",
     "snip.prompt": "发给 AI",
+    "snip.server": "自托管后台",
     "snip.cli": "命令行",
     "ep.foldTitle": "给 Agent / 开发者看：静态 Markdown 与 JSON 接口",
     "ep.foldSub": "/llms.txt · /catalog.json · 任务卡 · 规则卡（纯静态，展开查看）",
@@ -266,11 +267,12 @@ const I18N = {
     "surf.w1Desc": "Works in ChatGPT, Claude, or any web-capable agent. Paste one sentence and it reads dislop.com/llms.txt directly.",
     "surf.w2Title": "2. Agent Skill (cross-host)",
     "surf.w2Desc": "One command for Claude Code, Codex, Cursor, Windsurf, or Antigravity. Covers plain writing habits plus local re-checking.",
-    "surf.w3Title": "3. Plugin bundle / MCP server",
-    "surf.w3Desc": "Install the Claude Code plugin to get Skill + local stdio MCP in one step, or attach MCP directly in any compatible host.",
+    "surf.w3Title": "3. Plugin & MCP (local / hosted)",
+    "surf.w3Desc": "Local stdio MCP and Plugin run zero-dep with no key; attach our open-source server/ for LLM-backed remote HTTP MCP review & rewriting.",
     "surf.w4Title": "4. CLI & PR gate",
     "surf.w4Desc": "Run npx or uvx on folders, Word/PPT files, or git diffs, or block AI artifact bugs automatically in GitHub Actions.",
     "snip.prompt": "Send to AI",
+    "snip.server": "Self-host server",
     "snip.cli": "CLI",
     "ep.foldTitle": "For Agents & Developers: Static Markdown & JSON Endpoints",
     "ep.foldSub": "/llms.txt · /catalog.json · task guides · rule cards (click to expand)",
@@ -873,6 +875,15 @@ npx skills add dislop-ai/dislop
     }
   }
 }`,
+    server: `# 开源后台（自托管 BYOK，支持 OpenAI / DeepSeek / Gemini 兼容端点 / Ollama）
+# Key 只放服务端环境变量，绝不进仓库或前端；同时提供 /v1/review、/v1/deslop 与远程 /mcp
+cp server/.env.example server/.env
+set -a && source server/.env && set +a
+node server/index.mjs
+
+# 或 Docker 一键部署（零 npm 依赖）：
+docker build -f server/Dockerfile -t dislop-server .
+docker run --rm -p 8787:8787 -e DISLOP_LLM_API_KEY="YOUR_KEY" dislop-server`,
     cli: `# 检查当前目录（命中硬伤时退出码为 1，同时标出套话提醒）
 npx --yes github:dislop-ai/dislop check .
 
@@ -935,6 +946,15 @@ npx skills add dislop-ai/dislop
     }
   }
 }`,
+    server: `# Open-source BYOK server (OpenAI, DeepSeek, Gemini compat, OpenRouter, Ollama)
+# Keys live only in server env vars; exposes /v1/check, /v1/review, /v1/deslop & Remote HTTP /mcp
+cp server/.env.example server/.env
+set -a && source server/.env && set +a
+node server/index.mjs
+
+# Or run via Docker (zero npm install):
+docker build -f server/Dockerfile -t dislop-server .
+docker run --rm -p 8787:8787 -e DISLOP_LLM_API_KEY="YOUR_KEY" dislop-server`,
     cli: `# Check the current folder (exits 1 on core errors, prints style warnings)
 npx --yes github:dislop-ai/dislop check .
 

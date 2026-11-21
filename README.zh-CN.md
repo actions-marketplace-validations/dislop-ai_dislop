@@ -137,6 +137,26 @@ Node.js 版（`bin/dislop.mjs`）和 Python 版（`src/dislop/`）都零外部�
 <!-- dislop-ignore-next-line zh-bureaucratic-padding -- 原样摘录外部招标文件条款 -->
 ```
 
+### 本地零大模型 vs. 开源大模型后台（`server/`）
+
+- **CLI、Skill 与本地 stdio MCP（`--mcp`）**：纯确定性规则，不涉及大模型、不需要 API Key、完全离线。
+- **开源大模型后台与远程 HTTP MCP（[server/](./server/README.zh-CN.md)）**：支持用自己的 Key 自托管（OpenAI、DeepSeek、Gemini 兼容端点、OpenRouter、Ollama），也支持官方部署。提供 `/v1/check`、`/v1/review`（三阶结构味与设计味审校）、`/v1/deslop`（去 AI 味改写 + 自动确定性复检）与远程 HTTP `/mcp`（5 个工具）。API Key 只放服务端环境变量（`DISLOP_LLM_API_KEY`），绝不进前端、仓库或错误日志。
+
+## 去 AI 味效果基准测试（`dislop-bench v1`）
+
+一键离线复现 `48` 份跨媒介检测样本（Node/Python 双端一致性核验）与 `12` 组端到端文案/设计改稿任务：
+
+```bash
+node scripts/run_benchmark.mjs --assert
+```
+
+最新离线实测结果（完整报告见 [benchmarks/REPORT.md](./benchmarks/REPORT.md)）：
+
+- **检测基准（48 样本、6 类场景）**：准确率 `100.0%` · 召回率 `100.0%` · 干净原稿误报率 `0.0%` · 易误报近邻样本误报率 `0.0%` · 二阶 AI 口号召回率 `100.0%` · Node/Python 一致率 `100.0%`。
+- **端到端去 AI 味效果（12 题 × 3 组）**：模型原稿 `raw_ai` **61.4 / 100** → 普通改写 `naive_humanizer` **72.1 / 100**（三阶结构味翻倍且漏改/编造数字）→ 按 dislop 规矩改稿 `dislop_clean` **100.0 / 100**（`12/12` 全过）。
+
+详见 [benchmarks/README.zh-CN.md](./benchmarks/README.zh-CN.md)，支持评测任意模型/Prompt/Skill/后台（`--eval`）以及导出随机盲评表（`--export-blind-sheet`）。
+
 ## 这个仓库自己也过这道门
 
 GitHub Actions CI 在每次提交时跑完双端 `dislop pack-test`（88 项样本断言）、跨运行时一致性测试（`tests/test_conformance.py`）、官网校验测试（`tests/test_site.mjs`），并对仓库自己的文档、`awesome/` 与 `site/` 执行 `dislop check . --fail-on warning`。
@@ -152,7 +172,9 @@ dislop/
 ├── .claude-plugin/    # Claude Code 插件与市场清单（打包 Skill + 本地 MCP）
 ├── .mcp.json          # 标准 stdio MCP 配置清单
 ├── awesome/           # Awesome Anti-Slop 中英文工具清单（87 条）
+├── benchmarks/        # 去 AI 味效果基准测试数据集（CC0-1.0）与离线实测报告
 ├── bin/               # Node.js CLI（dislop.mjs）与 stdio MCP（dislop-mcp.mjs）
+├── server/            # 开源大模型后台与远程 HTTP MCP（BYOK 自托管 / 官方可部署）
 ├── src/
 │   ├── core.mjs       # 零依赖纯 ES 模块内核，由 Node CLI、MCP 与浏览器工作台共用
 │   ├── binary-node.mjs# Node.js 零依赖 ZIP 解析层（.docx / .pptx）
