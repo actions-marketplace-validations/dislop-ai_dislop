@@ -222,6 +222,8 @@ assert.equal(/^[ \t]+$/m.test(indexHtml), false, "index.html contains whitespace
 assert.equal(indexHtml.includes("NaN KB"), false, "index.html contains NaN KB in endpoints ledger");
 assert.equal(indexHtml.includes("undefined tok"), false, "index.html contains undefined tok in endpoints ledger");
 assert.equal(appSource.includes("rulesById"), false, "site/app.js must look up rules via pack.rules, not pack.rulesById");
+assert.equal(appSource.includes("f.column"), false, "site/app.js must use f.col, not f.column");
+assert.equal(appSource.includes("f.snippet"), false, "site/app.js must use f.match, not f.snippet");
 
 console.log(
   `dislop site-test: ok (${totalRules} rules, ${tryRulesChecked} Try demos, ${specimenCount} ZH/EN specimens + 2 hero proofs, ` +

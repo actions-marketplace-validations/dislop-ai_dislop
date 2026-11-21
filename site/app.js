@@ -901,8 +901,18 @@ function sanitizePublicExemplar(str) {
     .replace(/(?<![A-Za-z0-9_])\/Users\/(?!example\/)[A-Za-z0-9._-]+\//g, "/Users/example/");
 }
 
+function cleanRuleCopyForLang(str, lang) {
+  if (!str) return "";
+  if (lang === "en") {
+    return String(str)
+      .replace(/\s*\/\s*['"`“「][^'"`”」]*[\u4E00-\u9FFF][^'"`”」]*['"`”」]/g, "")
+      .replace(/\s*\([^)]*[\u4E00-\u9FFF][^)]*\)/g, "");
+  }
+  return String(str);
+}
+
 function formatRuleProseHtml(str) {
-  return escapeHtml(str || "")
+  return escapeHtml(cleanRuleCopyForLang(str, currentLang))
     .replace(/'(AI-Powered|Zero Hallucination|Overview|Background|studies show)'/g, "<code>$1</code>")
     .replace(/`([^`]+)`/g, "<code>$1</code>");
 }
@@ -1267,7 +1277,8 @@ function renderWorkbench() {
     const msg = ruleDef?.message?.[currentLang] || f.message || "";
     const dt = ruleDef?.deletionTest?.[currentLang] || f.deletionTest || "";
     const ex = ruleDef ? getLocalizedExemplar(ruleDef, currentLang) : f.exemplar;
-    const loc = f.location?.label ? f.location.label : `${f.line}:${f.column}`;
+    const loc = typeof f.location === "string" && f.location ? f.location : `${f.line || 1}:${f.col || 1}`;
+    const excerpt = f.match || "";
     const focusedCls = idx === focusedFindingIdx ? " is-focused" : "";
     const dotCls = isErr ? "is-error" : "is-warn";
 
@@ -1286,7 +1297,7 @@ function renderWorkbench() {
         </span>
         <span class="note-loc">${escapeHtml(loc)}</span>
       </div>
-      <div class="note-snippet">“${escapeHtml(sanitizePublicExemplar(f.snippet))}”</div>
+      ${excerpt ? `<div class="note-snippet">“${escapeHtml(sanitizePublicExemplar(excerpt))}”</div>` : ""}
       ${dt ? `<div class="note-test"><strong>${currentLang === "zh" ? "问自己一句：" : "Ask yourself:"}</strong> ${formatRuleProseHtml(dt)}</div>` : ""}
       <details class="note-details">
         <summary>${currentLang === "zh" ? "看规则和改法" : "Show rule & fix"}</summary>
