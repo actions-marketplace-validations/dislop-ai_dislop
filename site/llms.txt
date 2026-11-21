@@ -1,8 +1,8 @@
 # dislop
 
-> A red pen for AI-written drafts, decks, and web pages. Strikes what can't ship, asks about what sounds canned, and checks edits against the original so numbers, qualifiers, dates, links, code spans, and citations stay put. Zero runtime dependencies; works offline in Node.js 20+, Python 3.10+, MCP, or a browser tab.
+> Offline linter for AI-written docs, slides, and web pages. Flags hard bugs and stock phrasing without rewriting your text, then verifies your edit kept every number, qualifier, date, link, code span, and citation. Zero runtime dependencies across Node.js 20+, Python 3.10+, MCP, and the browser.
 
-Choose the page that matches the file you are reviewing. Each guide names the checks to run and shows an example edit. Use the local CLI or MCP server to check a file or compare a revision.
+Choose the page that matches the file you are reviewing. Each guide lists the checks to run and includes an example edit. Use the local CLI or MCP server to check a file or verify a revision.
 
 ## Start by task (~800-1,500 tokens each)
 - [Review a brief or proposal](https://dislop.com/tasks/business-doc.md): Core errors, `business-brief` rules, and edit comparison.

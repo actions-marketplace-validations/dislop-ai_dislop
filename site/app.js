@@ -12,148 +12,148 @@ import { PACKS_BY_ID, RULE_UI_META } from "./engine/packs-data.mjs";
 
 const I18N = {
   zh: {
-    "page.title": "dislop — 给 AI 写的东西配一支红笔",
+    "page.title": "dislop — 发之前，把稿子里的 AI 味挑出来",
     "nav.skip": "跳至正文",
     "nav.workbench": "试一试",
-    "nav.coverage": "能读什么",
+    "nav.coverage": "支持格式",
     "nav.rules": "规则",
     "nav.surfaces": "安装",
-    "nav.awesome": "同路清单",
+    "nav.awesome": "工具清单",
     "theme.dark": "深色",
     "theme.light": "浅色",
     "btn.copy": "复制",
     "btn.copied": "已复制",
 
     "lead.strike": "好的，以下是为您润色后的版本。",
-    "lead.title": "你的稿子，不带 AI 味。",
+    "lead.title": "把稿子里的 AI 味挑出来",
     "lead.sub":
-      "把稿子、PPT 或网页贴进来。不能发的硬伤，dislop 直接划掉；听着像套话的地方，它在页边问你一句；等你改完，再拿原稿逐条对一遍数字、链接和引用。它不替你改稿，笔一直在你手里。",
-    "lead.cta": "贴一段稿子试试 ↓",
-    "lead.awesomeBtn": "翻翻 87 条同路清单 →",
-    "lead.starBtn": "GitHub 收藏 ★",
-    "lead.reassure": "稿子只留在这个标签页里，不上传，不联网。",
-    "lead.cliLabel": "或者在终端里直接跑：",
+      "AI 写完的文档、PPT 或网页，经常夹着客套话、空话、假链接，或者一改稿就把数字改丢了。dislop 只负责把这些问题标出来，不替你重写。改完拿原稿对一下，没漏数字和链接就行。",
+    "lead.cta": "贴一段试试 ↓",
+    "lead.awesomeBtn": "87 条相关工具清单 →",
+    "lead.starBtn": "GitHub",
+    "lead.reassure": "只在当前浏览器标签页里跑，不上传文件。",
+    "lead.cliLabel": "或者直接命令行跑：",
 
-    "hp.tabBad": "模型交来的原稿",
-    "hp.tabGood": "你改完之后",
-    "hp.tabTrap": "改过头的一版",
-    "hp.meta": "同引擎实时运行 · 划红线直接删，划蓝线你来定",
-    "hp.openWb": "在下方工作台打开 →",
+    "hp.tabBad": "原稿",
+    "hp.tabGood": "改完",
+    "hp.tabTrap": "改漏了",
+    "hp.meta": "用同一个检查引擎实时跑的",
+    "hp.openWb": "在下面工作台打开 →",
 
-    "m1.title": "不能发的，直接划掉。",
-    "m1.desc": "漏出来的本机路径、忘了填的占位符、留在开头的 AI 寒暄、点不动的空链接、跑出幻灯片边界的文本框。",
-    "m2.title": "像套话的，问你一句。",
-    "m2.desc": "一处批注只问一个具体问题，不搞一刀切黑名单，也不逼你换同义词。留不留，你说了算。",
-    "m3.title": "改完，和原稿对一遍。",
-    "m3.desc": "数字、限定词（最多、至少、不超过）、单位、日期、链接、代码和引用，漏掉或改歪了当场退回。",
+    "m1.title": "红线：硬伤",
+    "m1.desc": "本机路径、没填的占位符、开头寒暄、空链接、跑出页面的 PPT 文本框。",
+    "m2.title": "蓝线：套话",
+    "m2.desc": "只标出来给你看，不搞一刀切黑名单，留不留你自己定。",
+    "m3.title": "绿点：数字和链接",
+    "m3.desc": "改完拿原稿对一遍，“最多”“至少”、单位、日期和链接不能漏。",
 
-    "wb.heading": "拿一份稿子试试",
-    "wb.packLabel": "当成什么来看：",
-    "pack.brief": "商业简报 / 技术方案",
-    "pack.essay": "随笔 / 长文报道",
-    "pack.ui": "PPT 与网页界面",
+    "wb.heading": "下面直接试试",
+    "wb.packLabel": "按哪种稿子查：",
+    "pack.brief": "工作文档 / 方案",
+    "pack.essay": "随笔 / 长文",
+    "pack.ui": "PPT 和网页",
     "wb.openFile": "打开本地文件（.md / .html / .docx / .pptx / .pdf）",
-    "wb.specimensTitle": "样稿",
-    "wb.privacyNote": "你的稿子只留在这个标签页里。页面锁定了 connect-src 'none'，想往外发都发不出去。",
-    "wb.modeProof": "清样批注",
-    "wb.modeEdit": "自己改改看",
-    "wb.applyClean": "看改好的一版",
-    "wb.tryTrap": "看改过头的样子",
-    "wb.reset": "恢复原稿",
-    "wb.voiceTitle": "这份稿子的节奏",
-    "legend.error": "红实线：不能发的硬伤",
-    "legend.warn": "蓝虚线：页边商榷",
-    "legend.stet": "绿点线：改稿时原样保留",
+    "wb.specimensTitle": "示例",
+    "wb.privacyNote": "内容只留在这个标签页里，页面禁止联网（connect-src 'none'）。",
+    "wb.modeProof": "标出问题",
+    "wb.modeEdit": "编辑原文",
+    "wb.applyClean": "看改好的",
+    "wb.tryTrap": "看改漏的",
+    "wb.reset": "还原",
+    "wb.voiceTitle": "句长统计",
+    "legend.error": "红实线：硬伤",
+    "legend.warn": "蓝虚线：套话提醒",
+    "legend.stet": "绿点线：受保护的数字",
 
-    "cov.title": "它读得了什么，还读不了什么",
-    "cov.desc": "能查的直说能查，还没做的直接标出来。加密或读不了的 PDF 会明确报跳过，绝不假装“0 问题”。",
-    "cov.readMd": "阅读说明（.md）→",
-    "cov.colTarget": "手头的文件",
+    "cov.title": "支持哪些文件，哪些还查不了",
+    "cov.desc": "能查的和还没做的都写明白。加密或读不出来的 PDF 会报跳过，不会显示成 0 问题。",
+    "cov.readMd": "看纯文本说明（.md）→",
+    "cov.colTarget": "文件类型",
     "cov.colFormat": "扩展名",
-    "cov.colScope": "能替你挑出什么",
+    "cov.colScope": "查什么",
     "cov.colStatus": "现状",
-    "cov.r1Name": "文稿、简报与随笔",
-    "cov.r1Scope": "开场白寒暄、公文黑话、“不是 A，而是 B”套句、四字排比、段尾说教、无出处数据、中文里混半角标点，以及改完后核对数字、限定词、日期、链接与引用。",
-    "cov.r2Name": "Word 与 PowerPoint",
-    "cov.r2Scope": "忘接受的修订痕迹和批注、贴进文档没渲染的星号 Markdown、单页字数墙、超限项目符号、文字自动缩太小、文本框跑出画布、空泛标题。",
+    "cov.r1Name": "文稿与笔记",
+    "cov.r1Scope": "开头寒暄、公文黑话、“不是 A，而是 B”套句、四字排比、段尾说教、没出处的统计、中文里混半角标点，以及改完后核对数字、限定词、日期、链接和引用。",
+    "cov.r2Name": "Word 和 PPT",
+    "cov.r2Scope": "忘处理的修订痕迹和批注、贴进文档没渲染的 Markdown 星号、单页字太多、要点超 6 条、文字自动缩太小、文本框跑出页面、空泛标题。",
     "cov.r3Name": "PDF 元数据与链接",
-    "cov.r3Scope": "指向本机硬盘的链接、标题里残留的原始文件名、未嵌入字体与页面尺寸混排。加密 PDF 与完整正文抽字会显式标明跳过，不静默放行。",
-    "cov.r4Name": "网页界面与矢量图",
-    "cov.r4Scope": "点不动的空链接、无说明的禁用按钮、文字对比度不够、深色模式层级发灰倒置、默认紫粉渐变、满屏胶囊标签、三层套盒，以及 SVG 文字被裁切。",
-    "cov.r5Name": "代码仓与 PR 改动",
-    "cov.r5Scope": "只盯本次修改的行，拦住本机路径、占位符、聊天回复残迹和界面套话，支持输出 GitHub 注解与 SARIF。更深的代码结构规则还在做。",
-    "cov.r6Name": "节奏单调与个人声纹",
-    "cov.r6Scope": "连环逗号句、句长过于均匀、PPT 连续同版式，以及从你自己写过的旧稿里提炼个人节奏参考。原型脚本已跑通，还没并入主程序。",
-    "status.live": "现在能用",
+    "cov.r3Scope": "指向本机硬盘的链接、标题里残留的原始文件名、未嵌入字体、跨页尺寸不一致。加密 PDF 和完整正文抽字会明确报跳过。",
+    "cov.r4Name": "网页与 SVG",
+    "cov.r4Scope": "空链接、无说明的禁用按钮、文字对比度不够、深色模式层级倒置、默认紫粉渐变、满屏胶囊标签、三层套盒、SVG 文字裁切。",
+    "cov.r5Name": "Git 改动与 PR",
+    "cov.r5Scope": "只查本次改过的行，拦住本机路径、占位符、聊天残迹和页面套话，支持 GitHub PR 批注和 SARIF。代码语法树检查还没做。",
+    "cov.r6Name": "节奏单调与个人风格",
+    "cov.r6Scope": "连环逗号句、句长过于均匀、PPT 连续同版式，以及从自己旧稿里统计句长习惯。原型已跑通，还没合进主程序。",
+    "status.live": "可用",
     "status.pdf": "查元数据，正文跳过",
-    "status.partial": "交稿门禁可用，AST 还在做",
-    "status.notYet": "还不行（原型阶段）",
+    "status.partial": "改动检查可用，AST 未做",
+    "status.notYet": "还没上线（原型阶段）",
 
-    "why.title": "为什么只批不改",
+    "why.title": "为什么只标不改",
     "why.desc":
-      "市面上自动“拟人化改写”的工具经常为了改得像人，顺手把“最多 45 秒”改成“45 秒”，或者把一句平实的话换成“不是升级，而是革命”。dislop 只做审校台上的红笔和蓝笔：把问题指出来，把决定权留给你，等你改完再和原稿逐条对数。",
-    "why.readBrand": "读我们的文字与设计基准 →",
-    "dogfood.badTag": "模型刚写完的原稿 · 挑出 5 处",
-    "dogfood.goodTag": "改完再对一遍 · 可以付印",
+      "很多自动“去 AI 味”改写工具会把“最多 45 秒”改成“45 秒”，或者把平实的话改写成另一种套话。dislop 只标出问题在哪，改动交给你自己，改完再帮你核对数字和链接没丢。",
+    "why.readBrand": "看文字与设计说明 →",
+    "dogfood.badTag": "原稿 · 标出 5 处",
+    "dogfood.goodTag": "改完核对 · 通过",
 
-    "surf.title": "装进你已经在用的地方",
-    "surf.desc": "无论模型用的是 Claude、GPT、Gemini、DeepSeek 还是本地开源模型，Node.js 和 Python 双端都零外部依赖，查出来的结果一模一样。",
-    "surf.readTools": "全部接入说明（.md）→",
-    "surf.w1Title": "浏览器里",
-    "surf.w1Desc": "就在上面这个工作台。拖进本地文档，全部在标签页内存里跑完，断网照常工作。",
-    "surf.w2Title": "终端里",
-    "surf.w2Desc": "用 npx 或 uvx 一行开跑，不用配环境。也支持只查本次 Git 改动，直接出 GitHub PR 批注。",
-    "surf.w3Title": "编程 Agent 里",
-    "surf.w3Desc": "接上本地 MCP，或装好 SKILL.md，让 Claude Code、Codex、Cursor、Windsurf 交稿前先自己过一遍红笔。",
-    "surf.w4Title": "写给 Agent 读的页面",
-    "surf.w4Desc": "不想装任何本地工具？让联网 Agent 直接读 /llms.txt 或按场景挑一张千字任务卡。",
-    "snip.cli": "终端命令",
+    "surf.title": "在哪里都能用",
+    "surf.desc": "不管稿子是哪个模型写的，Node.js、Python 和浏览器跑出来的结果一样，都不需要装额外依赖。",
+    "surf.readTools": "全部用法（.md）→",
+    "surf.w1Title": "浏览器",
+    "surf.w1Desc": "就在上面这个页面。直接拖进本地文件，断网也能查。",
+    "surf.w2Title": "命令行",
+    "surf.w2Desc": "用 npx 或 uvx 一行开跑，也可以只查这次 Git 改动。",
+    "surf.w3Title": "编程 Agent",
+    "surf.w3Desc": "接本地 MCP，或者装上 SKILL.md，让 Claude Code、Codex、Cursor 交稿前自己查一遍。",
+    "surf.w4Title": "直接给 Agent 读",
+    "surf.w4Desc": "不想装工具的话，让能上网的 Agent 直接读 /llms.txt 就行。",
+    "snip.cli": "命令行",
     "snip.agent": "Agent 直读",
-    "ep.heading": "写给 Agent 读的静态页面（纯文本直读，无测试反例残留）",
-    "ep.llms": "Agent 导航首页（按任务选最小文档）",
-    "ep.catalog": "全部静态资源的 JSON 索引与字数估算",
-    "ep.taskBiz": "任务卡：商业简报与技术方案",
-    "ep.taskWeb": "任务卡：网页界面、SVG 与 PPT",
-    "ep.taskEdit": "任务卡：随笔与长文报道",
-    "ep.taskGate": "任务卡：发稿前硬伤门禁与改稿核对",
-    "ep.skill": "跨宿主 Agent Skill（检查 -> 改稿 -> 核对）",
-    "ep.awesome": "同路清单 87 条原始 JSON",
-    "ep.method": "品牌人格、表达基准与自检清单",
-    "ep.full": "单次拉取的全部 29 条规则合集",
+    "ep.heading": "给 Agent 读的静态文档（纯 Markdown / JSON）",
+    "ep.llms": "Agent 入口索引",
+    "ep.catalog": "全部文档的 JSON 目录",
+    "ep.taskBiz": "任务卡：工作文档与技术方案",
+    "ep.taskWeb": "任务卡：网页、SVG 与 PPT",
+    "ep.taskEdit": "任务卡：随笔与长文",
+    "ep.taskGate": "任务卡：发稿前硬伤检查与核对",
+    "ep.skill": "跨宿主 Agent Skill",
+    "ep.awesome": "87 条工具清单 JSON",
+    "ep.method": "文案与设计基准",
+    "ep.full": "单次拉取的全部 29 条规则",
 
-    "rules.title": "每条规则，都有改前和改后",
-    "rules.desc": "中文页只展示中文与跨格式规则及原生中文例句，不夹英文例子；切到英文可看全部英文专项规则。点「试试 ↑」直接装进上方工作台。",
-    "rules.readCases": "全部对照（.md）→",
+    "rules.title": "规则列表",
+    "rules.desc": "中文页只列中文和通用规则，例子都是中文；切英文可以看到全部英文规则。点「试试 ↑」会直接装进上面的工作台。",
+    "rules.readCases": "看全部例子（.md）→",
     "rules.modAll": "全部格式",
     "rules.sevAll": "全部级别",
-    "rules.sevError": "红笔硬伤（error）",
-    "rules.sevWarn": "蓝笔商榷（warning）",
+    "rules.sevError": "硬伤（error）",
+    "rules.sevWarn": "提醒（warning）",
     "rules.sevInfo": "轻提示（info）",
     "rules.filterAll": "全部",
-    "rules.filterCore": "硬伤规则",
-    "rules.filterBrief": "商业简报",
+    "rules.filterCore": "硬伤",
+    "rules.filterBrief": "工作文档",
     "rules.filterEssay": "随笔长文",
-    "rules.filterUi": "PPT 与网页",
-    "rules.colId": "规则与操作",
-    "rules.colPack": "归属",
-    "rules.colMod": "适用格式",
-    "rules.colWhy": "挑什么毛病 & 问自己一句",
-    "rules.colEx": "原句 → 改过头 → 改好",
+    "rules.filterUi": "PPT 和网页",
+    "rules.colId": "规则",
+    "rules.colPack": "分类",
+    "rules.colMod": "格式",
+    "rules.colWhy": "查什么 / 怎么判断",
+    "rules.colEx": "原句 → 改坏 → 改好",
 
-    "awesome.title": "同路人：Awesome Anti-Slop",
+    "awesome.title": "其他去 AI 味工具（Awesome Anti-Slop）",
     "awesome.desc":
-      "查文稿规范可以看 Vale，查网页模板味可以翻 Impeccable。我们把中英文写作指南、确定性检查器、前端设计规则、代码 PR 治理与论文研究整理成了 87 条清单，所有链接和仓库状态都在 2026-11-21 逐条核过。",
-    "awesome.openFull": "打开同路清单 →",
-    "awesome.ecoTitle": "按手头的活儿找工具",
-    "awesome.ecoDesc": "按写作、网页、代码或研究分栏浏览，也可以只看能离线自动检查的工具。检测器与规避工具单独放在对照区，仅供了解。",
-    "awesome.browseBtn": "在线筛选清单 →",
-    "awesome.ghBtn": "GitHub 中文清单",
-    "awesome.posTitle": "跳出模板的审美参照",
-    "awesome.posDesc": "只删套话还不够，我们另存了 31 处独立印刷、字体厂与出版机构的公开参考源，留给想把页面做出自己味道的人慢慢看。",
-    "awesome.posAll": "看全部 31 处设计参考（.md）→",
-    "stat.entries": "条已核验资源",
-    "stat.sections": "个主题分栏",
-    "stat.det": "款可自动检查",
+      "我们也顺手整理了一份 87 条工具和资料清单，包括 Vale、Impeccable 这类成熟项目，以及中英文写作规范、PR 治理规则和论文。链接和仓库信息在 2026-11-21 核过一遍。",
+    "awesome.openFull": "打开清单 →",
+    "awesome.ecoTitle": "按用途筛选",
+    "awesome.ecoDesc": "可以按写作、网页、代码、研究分类找，也可以只看能本地自动检查的工具。检测器和规避工具单独放在最下面做对照。",
+    "awesome.browseBtn": "在线筛选 →",
+    "awesome.ghBtn": "GitHub 中文版",
+    "awesome.posTitle": "顺便存的设计参考",
+    "awesome.posDesc": "除了去套话，还存了 31 个印刷、字体厂和独立出版站点，做页面不想长成默认模板时可以翻翻。",
+    "awesome.posAll": "全部 31 个参考（.md）→",
+    "stat.entries": "条资料",
+    "stat.sections": "个分类",
+    "stat.det": "个可自动检查",
     "stat.zh": "条中文 / 多语种",
 
     "pos.norm-zurich": "苏黎世独立设计事务所，以极克制的模数网格见长。",
@@ -163,17 +163,17 @@ const I18N = {
     "pos.the-type": "中文排印评论，细聊标点挤压、混排细节与出版规范。",
     "pos.arena": "研究者自己攒的视觉线索库：旧印刷、路牌与独立小书。",
 
-    "footer.selfAudit": "这一页也过了自己的红笔：dislop check site/ 没挑出毛病。",
-    "footer.awesome": "同路清单",
+    "footer.selfAudit": "这个页面自己也跑过 dislop check site/，0 处问题。",
+    "footer.awesome": "工具清单",
     "footer.roadmap": "路线图",
-    "footer.brand": "品牌与表达",
+    "footer.brand": "文案基准",
     "footer.design": "视觉规范",
   },
   en: {
-    "page.title": "dislop — a red pen for AI-written drafts, decks, and pages",
+    "page.title": "dislop — Catch AI slop before you send it",
     "nav.skip": "Skip to main content",
     "nav.workbench": "Try it",
-    "nav.coverage": "What it reads",
+    "nav.coverage": "Formats",
     "nav.rules": "Rules",
     "nav.surfaces": "Install",
     "nav.awesome": "Awesome list",
@@ -183,135 +183,135 @@ const I18N = {
     "btn.copied": "Copied",
 
     "lead.strike": "Certainly! Here is your polished draft.",
-    "lead.title": "Your draft, minus the slop.",
+    "lead.title": "Catch the AI slop before you send it",
     "lead.sub":
-      "Paste a draft, a deck, or a page. dislop strikes what can't ship, asks one question about what sounds canned, and checks your edit against the original so every number, link, and citation stays put. It never rewrites a word; the pen stays with you.",
-    "lead.cta": "Paste your draft ↓",
-    "lead.awesomeBtn": "Browse Awesome list (87) →",
-    "lead.starBtn": "Star on GitHub ★",
-    "lead.reassure": "Stays in this tab. Nothing is uploaded.",
-    "lead.cliLabel": "Or run it in a terminal:",
+      "AI-written docs, slides, and web pages often leave behind chat replies, filler phrasing, and broken links. Auto-rewriters often quietly drop numbers when they clean things up. dislop just marks what looks off so you can edit it yourself, then checks that your numbers and links are still there.",
+    "lead.cta": "Try a draft ↓",
+    "lead.awesomeBtn": "87 anti-slop tools →",
+    "lead.starBtn": "GitHub",
+    "lead.reassure": "Runs only in this browser tab. Nothing gets uploaded.",
+    "lead.cliLabel": "Or run it from a terminal:",
 
-    "hp.tabBad": "Model's draft",
-    "hp.tabGood": "After your edit",
-    "hp.tabTrap": "Went too far",
-    "hp.meta": "Live engine · Red means delete, blue is your call",
+    "hp.tabBad": "Original",
+    "hp.tabGood": "Edited",
+    "hp.tabTrap": "Dropped a word",
+    "hp.meta": "Running live on the same linter engine",
     "hp.openWb": "Open in workbench ↓",
 
-    "m1.title": "Strikes what can't ship.",
-    "m1.desc": "A leaked local path, an unfilled placeholder, a stray chatbot greeting, a dead link, or a text box running off the slide.",
-    "m2.title": "Asks about what sounds canned.",
-    "m2.desc": "One plain question per mark—never a blunt banned-word list that punishes real nouns. You decide what stays.",
-    "m3.title": "Checks your edit against the original.",
-    "m3.desc": "Numbers, qualifiers (up to, at least), units, dates, links, code spans, and citations all have to survive.",
+    "m1.title": "Red: hard bugs",
+    "m1.desc": "Local file paths, unfilled brackets, stray chat replies, dead links, or off-slide PPTX text boxes.",
+    "m2.title": "Blue: stock phrasing",
+    "m2.desc": "Marked for review, not auto-replaced. No blunt banned-word list; you decide what stays.",
+    "m3.title": "Green: numbers & links",
+    "m3.desc": "Checked against the original after you edit so qualifiers (up to, at least), dates, and links survive.",
 
-    "wb.heading": "Try it on a real draft",
-    "wb.packLabel": "Read it as:",
-    "pack.brief": "Business brief / tech spec",
+    "wb.heading": "Try it here",
+    "wb.packLabel": "Check as:",
+    "pack.brief": "Work doc / spec",
     "pack.essay": "Essay / longform",
-    "pack.ui": "Slide deck / web page",
+    "pack.ui": "Slides & UI",
     "wb.openFile": "Open a local file (.md / .html / .docx / .pptx / .pdf)",
-    "wb.specimensTitle": "Sample drafts",
-    "wb.privacyNote": "Your draft stays in this tab. The page's CSP sets connect-src 'none', so it couldn't phone home if it tried.",
-    "wb.modeProof": "Proof sheet",
-    "wb.modeEdit": "Edit & recheck",
-    "wb.applyClean": "Show a clean edit",
-    "wb.tryTrap": "Try an overcorrection",
+    "wb.specimensTitle": "Examples",
+    "wb.privacyNote": "Everything stays in this tab. The page blocks outbound requests (connect-src 'none').",
+    "wb.modeProof": "Highlights",
+    "wb.modeEdit": "Edit text",
+    "wb.applyClean": "Clean version",
+    "wb.tryTrap": "Bad edit",
     "wb.reset": "Reset",
-    "wb.voiceTitle": "Rhythm of this draft",
-    "legend.error": "Red, solid: can't ship",
-    "legend.warn": "Blue, dashed: worth a second look",
-    "legend.stet": "Green, dotted: kept as written",
+    "wb.voiceTitle": "Sentence stats",
+    "legend.error": "Red solid: hard bug",
+    "legend.warn": "Blue dashed: cliché warning",
+    "legend.stet": "Green dotted: protected number",
 
-    "cov.title": "What it reads, and what it can't yet",
-    "cov.desc": "What works today sits apart from what is still in progress. Encrypted or unreadable PDFs are reported as skipped, never marked clean.",
-    "cov.readMd": "Read overview (.md) →",
-    "cov.colTarget": "What you bring",
+    "cov.title": "What it checks, and what it skips",
+    "cov.desc": "Plain status for each file type. Encrypted or unreadable PDFs are marked as skipped instead of 0 issues.",
+    "cov.readMd": "Plain text overview (.md) →",
+    "cov.colTarget": "File type",
     "cov.colFormat": "Extensions",
-    "cov.colScope": "What dislop catches",
+    "cov.colScope": "What gets checked",
     "cov.colStatus": "Status",
-    "cov.r1Name": "Drafts, briefs & essays",
-    "cov.r1Scope": "Chatbot greetings, throat-clearing openers, buzzwords, 'Not X, but Y' pivots, staccato slogan runs, moralizing endings, unsourced claims, and edit comparison for numbers, qualifiers, dates, links, and citations.",
+    "cov.r1Name": "Docs & notes",
+    "cov.r1Scope": "Chat replies, throat-clearing openers, buzzwords, 'Not X, but Y' frames, staccato slogan runs, moralizing endings, unsourced claims, plus edit checks for numbers, qualifiers, dates, links, and citations.",
     "cov.r2Name": "Word & PowerPoint",
-    "cov.r2Scope": "Unaccepted tracked changes and comments, raw Markdown asterisks left in docs, slide word-walls, bullet overload, shrunk autofit text, off-slide boxes, and vague topic titles.",
+    "cov.r2Scope": "Unaccepted tracked changes and comments, raw Markdown asterisks, crowded slides, more than 6 bullets, shrunk autofit text, off-slide boxes, and vague slide titles.",
     "cov.r3Name": "PDF metadata & links",
-    "cov.r3Scope": "Local file:/// URIs, raw filename titles, unembedded fonts, and mismatched page sizes. Encrypted PDFs and full body extraction are explicitly skipped.",
+    "cov.r3Scope": "Local file:/// links, raw filename titles, unembedded fonts, and mixed page sizes. Encrypted PDFs and full text extraction are reported as skipped.",
     "cov.r4Name": "Web pages & SVG",
-    "cov.r4Scope": "Dead href='#' controls, unexplained disabled buttons, low WCAG contrast, dark-mode surface inversions, purple-pink AI gradients, pill-badge walls, 3-level nested boxes, and clipped SVG labels.",
+    "cov.r4Scope": "Dead href='#' links, unexplained disabled buttons, low contrast, inverted dark-mode surfaces, purple-pink AI gradients, pill walls, 3-level nested boxes, and clipped SVG text.",
     "cov.r5Name": "Git diffs & PRs",
-    "cov.r5Scope": "Checks only the lines you changed for leaked paths, placeholders, chat wrappers, and UI slop, with GitHub annotations and SARIF output. Deeper AST code rules are not built yet.",
-    "cov.r6Name": "Rhythm monotony & voice",
-    "cov.r6Scope": "Comma-chain sentences, flat sentence lengths, repeated slide layouts, and offline rhythm profiles built from your own writing. Prototype verified, not shipped in the core yet.",
-    "status.live": "Works today",
-    "status.pdf": "Metadata today, body skipped",
-    "status.partial": "Diff hygiene works; AST not yet",
-    "status.notYet": "Not yet (prototype)",
+    "cov.r5Scope": "Checks only modified lines for local paths, placeholders, chat wrappers, and UI clichés, with GitHub annotations and SARIF output. Code AST linting is not built.",
+    "cov.r6Name": "Rhythm & voice stats",
+    "cov.r6Scope": "Comma chains, uniform sentence length, repeated slide layouts, and local sentence stats from your own drafts. Prototype works, not merged into the core yet.",
+    "status.live": "Works now",
+    "status.pdf": "Metadata only; body skipped",
+    "status.partial": "Diff checks work; no AST",
+    "status.notYet": "Not shipped (prototype)",
 
-    "why.title": "Why it marks and never rewrites",
+    "why.title": "Why it marks instead of rewriting",
     "why.desc":
-      "Tools that auto-rewrite drafts to 'sound human' quietly turn 'up to 12 minutes' into '12 minutes', or swap plain sentences for dramatic slogans. dislop only marks the page. You edit in your own voice, and verify checks that every number, link, and citation made it through.",
-    "why.readBrand": "Read our brand & voice guide →",
-    "dogfood.badTag": "As the model wrote it · 4 marks",
-    "dogfood.goodTag": "After your edit · Pass for press",
+      "Auto-humanizers often turn 'up to 12 minutes' into '12 minutes', or swap one cliché for another. dislop only marks the lines that look off. You make the edits, and verify checks that your numbers and links made it through.",
+    "why.readBrand": "Read voice & style notes →",
+    "dogfood.badTag": "Original · 4 marks",
+    "dogfood.goodTag": "After edit · Passed",
 
-    "surf.title": "Put it where you already work",
-    "surf.desc": "Works on drafts from Claude, GPT, Gemini, DeepSeek, or local models. Zero external runtime dependencies, and identical results in Node.js, Python, and the browser.",
-    "surf.readTools": "All integration docs (.md) →",
-    "surf.w1Title": "In a browser tab",
-    "surf.w1Desc": "Right above on this page. Drop in a local file and inspect it in memory with no network access.",
-    "surf.w2Title": "In a terminal",
-    "surf.w2Desc": "Run once with npx or uvx. Gate only changed lines in a pull request and emit GitHub annotations.",
-    "surf.w3Title": "Inside your coding agent",
-    "surf.w3Desc": "Attach the local stdio MCP server or install SKILL.md so Claude Code, Codex, Cursor, and Windsurf check drafts before handoff.",
-    "surf.w4Title": "Pages written for agents",
-    "surf.w4Desc": "No shell or MCP? Point any web-capable agent at /llms.txt or a single ~1,000-token task guide.",
+    "surf.title": "Where to run it",
+    "surf.desc": "Works regardless of which model wrote the draft. Node.js, Python, and the browser run the same checks with zero external dependencies.",
+    "surf.readTools": "All install options (.md) →",
+    "surf.w1Title": "Browser",
+    "surf.w1Desc": "Right here on this page. Drop in a local file; works offline.",
+    "surf.w2Title": "Terminal",
+    "surf.w2Desc": "Run once with npx or uvx, or check only changed lines in Git.",
+    "surf.w3Title": "Coding agents",
+    "surf.w3Desc": "Attach the local MCP server or install SKILL.md in Claude Code, Codex, or Cursor.",
+    "surf.w4Title": "Plain pages for agents",
+    "surf.w4Desc": "No local install needed: point any web-capable agent at /llms.txt.",
     "snip.cli": "Terminal",
     "snip.agent": "Agent fetch",
-    "ep.heading": "Pages written for agents (plain Markdown & JSON, no raw test fixtures)",
-    "ep.llms": "Start here: compact task router",
-    "ep.catalog": "Everything as versioned JSON with token estimates",
-    "ep.taskBiz": "Guide: review a brief or proposal",
-    "ep.taskWeb": "Guide: check a web page or slide deck",
-    "ep.taskEdit": "Guide: edit an essay",
-    "ep.taskGate": "Guide: check files before release",
-    "ep.skill": "Cross-host Agent Skill (check -> edit -> verify)",
-    "ep.awesome": "Raw JSON for all 87 Awesome Anti-Slop entries",
-    "ep.method": "Brand voice guide & editorial self-check",
-    "ep.full": "Single-fetch compilation of all 29 rules",
+    "ep.heading": "Plain Markdown & JSON pages for agents",
+    "ep.llms": "Entry index for agents",
+    "ep.catalog": "JSON index of all pages",
+    "ep.taskBiz": "Guide: work docs & specs",
+    "ep.taskWeb": "Guide: web pages, SVG & slides",
+    "ep.taskEdit": "Guide: essays & longform",
+    "ep.taskGate": "Guide: pre-release checks & verify",
+    "ep.skill": "Cross-host Agent Skill",
+    "ep.awesome": "Raw JSON for 87 anti-slop tools",
+    "ep.method": "Voice & design guide",
+    "ep.full": "All 29 rules in one file",
 
-    "rules.title": "Every rule, with a before and an after",
-    "rules.desc": "The English view shows English and cross-format rules with native English examples only; switch to 中文 for Chinese-specific rules. Click 'Try ↑' to load any rule into the workbench.",
-    "rules.readCases": "All contrasts (.md) →",
+    "rules.title": "Rules",
+    "rules.desc": "The English page lists English and shared rules with English examples only. Switch to 中文 for Chinese-specific rules. Click 'Try ↑' to load any example into the workbench.",
+    "rules.readCases": "All examples (.md) →",
     "rules.modAll": "All formats",
     "rules.sevAll": "All levels",
-    "rules.sevError": "Can't ship (error)",
-    "rules.sevWarn": "Query (warning)",
-    "rules.sevInfo": "Note (info)",
+    "rules.sevError": "Hard bug (error)",
+    "rules.sevWarn": "Warning",
+    "rules.sevInfo": "Info",
     "rules.filterAll": "All",
-    "rules.filterCore": "Can't-ship",
-    "rules.filterBrief": "Business brief",
-    "rules.filterEssay": "Essay",
-    "rules.filterUi": "Decks & UI",
-    "rules.colId": "Rule & action",
-    "rules.colPack": "Pack",
+    "rules.filterCore": "Hard bugs",
+    "rules.filterBrief": "Work docs",
+    "rules.filterEssay": "Essays",
+    "rules.filterUi": "Slides & UI",
+    "rules.colId": "Rule",
+    "rules.colPack": "Group",
     "rules.colMod": "Formats",
-    "rules.colWhy": "What it catches & question to ask",
-    "rules.colEx": "Before → Overcorrected → After",
+    "rules.colWhy": "What it checks / how to judge",
+    "rules.colEx": "Before → Bad edit → After",
 
-    "awesome.title": "Other people working on this",
+    "awesome.title": "Other anti-slop tools (Awesome Anti-Slop)",
     "awesome.desc":
-      "Vale checks prose against a style guide. Impeccable checks web interfaces. We gathered 87 checked tools, style guides, UI design rules, PR policies, and papers into Awesome Anti-Slop—every link and GitHub snapshot verified on 2026-11-21.",
-    "awesome.openFull": "Open Awesome list →",
-    "awesome.ecoTitle": "Browse by what you're editing",
-    "awesome.ecoDesc": "Filter by writing, web UI, code, or research, or show only tools that run automated checks. Detectors and bypass tools sit separately for reference only.",
-    "awesome.browseBtn": "Filter all 87 entries →",
+      "We also keep a list of 87 tools, guides, PR policies, and papers, including established linters like Vale and Impeccable. Every link and GitHub snapshot was checked on 2026-11-21.",
+    "awesome.openFull": "Open full list →",
+    "awesome.ecoTitle": "Filter by use case",
+    "awesome.ecoDesc": "Filter by writing, web UI, code, or research, or show only tools with automated checks. Detectors and bypass tools are kept separate at the bottom.",
+    "awesome.browseBtn": "Filter online →",
     "awesome.ghBtn": "View on GitHub",
-    "awesome.posTitle": "Design references outside the template",
-    "awesome.posDesc": "Cutting clichés is only half the job. We also keep 31 public print, type foundry, and editorial references for when you want a page to feel unmistakably yours.",
-    "awesome.posAll": "See all 31 design references (.md) →",
-    "stat.entries": "checked entries",
+    "awesome.posTitle": "Design references we saved",
+    "awesome.posDesc": "31 public print, type foundry, and independent publishing sites worth browsing when you do not want a page to look like a default template.",
+    "awesome.posAll": "All 31 references (.md) →",
+    "stat.entries": "entries",
     "stat.sections": "topics",
-    "stat.det": "automated checks",
+    "stat.det": "automated tools",
     "stat.zh": "zh / multilingual",
 
     "pos.norm-zurich": "Strict modular graphic systems, micro-typographic rules, and structural restraint.",
@@ -321,11 +321,11 @@ const I18N = {
     "pos.the-type": "Chinese and multilingual typography critique, CJK punctuation mechanics, and editorial layout standards.",
     "pos.arena": "Research-oriented visual channels for archival print, editorial systems, and signage.",
 
-    "footer.selfAudit": "This page went under its own red pen: dislop check site/ found nothing to mark.",
+    "footer.selfAudit": "This site passes dislop check site/ with 0 issues.",
     "footer.awesome": "Awesome list",
     "footer.roadmap": "Roadmap",
-    "footer.brand": "Brand & voice",
-    "footer.design": "Visual guide",
+    "footer.brand": "Voice guide",
+    "footer.design": "Design tokens",
   },
 };
 
@@ -340,12 +340,12 @@ const HERO_PROOF_BY_LANG = {
     good: "这次改造给队列分了级，一线运维团队的故障恢复时间最多 45 秒。",
     trap: "这次改造给队列分了级，一线运维团队的故障恢复时间 45 秒。",
     badNotes: [
-      { kind: "error", label: "红笔硬伤：", text: "AI 寒暄留在第一行，直接删掉。" },
-      { kind: "warn", label: "蓝笔商榷：", text: "去掉“抓手”“全面赋能”和“不是……而是……”，谁对什么做了什么？" },
-      { kind: "stet", label: "绿点保留：", text: "“最多 45 秒”已记下，改完会拿原稿核对。" },
+      { kind: "error", label: "红线：", text: "开头留着 AI 寒暄，删掉就行。" },
+      { kind: "warn", label: "蓝线：", text: "“抓手”“全面赋能”“不是……而是……”都是空话，可以直接说做了什么。" },
+      { kind: "stet", label: "绿点：", text: "“最多 45 秒”先记下来，改完会核对。" },
     ],
-    goodVerdict: "可以付印。5 处批注全部清完，“最多 45 秒”一字没动。",
-    trapVerdict: "退回重对。原稿写的是“最多 45 秒”，改后只剩“45 秒”——这是另一个承诺。",
+    goodVerdict: "通过。5 处问题都清掉了，“最多 45 秒”没动。",
+    trapVerdict: "没通过。原稿写的是“最多 45 秒”，改完变成“45 秒”，意思变了。",
   },
   en: {
     filename: "launch-note.md",
@@ -355,12 +355,12 @@ const HERO_PROOF_BY_LANG = {
     good: "Exports now finish in up to 12 minutes for workspaces above 500,000 rows.",
     trap: "Exports now finish in 12 minutes for workspaces above 500,000 rows.",
     badNotes: [
-      { kind: "error", label: "Red mark:", text: "Chatbot greeting on line one. Delete it." },
-      { kind: "warn", label: "Blue query:", text: "Cut the throat-clearing and slogan frame—what concrete fact is left?" },
-      { kind: "stet", label: "Green stet:", text: 'Kept as written: "up to 12 minutes" and "above 500,000 rows".' },
+      { kind: "error", label: "Red:", text: "Stray chat reply on line one. Delete it." },
+      { kind: "warn", label: "Blue:", text: "Filler opener and slogan frame. Say the plain fact instead." },
+      { kind: "stet", label: "Green:", text: 'Tracked for verification: "up to 12 minutes", "above 500,000 rows".' },
     ],
-    goodVerdict: 'Pass for press. 4 marks cleared; "up to 12 minutes" and "above 500,000 rows" survived word for word.',
-    trapVerdict: 'Sent back. The original said "up to 12 minutes"; your edit says "12 minutes", and that is a different promise.',
+    goodVerdict: 'Passed. 4 marks cleared, and "up to 12 minutes" and "above 500,000 rows" are still intact.',
+    trapVerdict: 'Rejected. The original said "up to 12 minutes", not "12 minutes".',
   },
 };
 
@@ -628,7 +628,7 @@ const SPECIMENS_BY_LANG = {
 
 const SNIPPETS_BY_LANG = {
   zh: {
-    cli: `# 检查当前目录（命中硬伤时退出码为 1，同时提示套话商榷）
+    cli: `# 检查当前目录（命中硬伤时退出码为 1，同时标出套话提醒）
 npx --yes github:dislop-ai/dislop check .
 
 # 只查相对 main 新改的行，并输出 SARIF 报告
@@ -647,14 +647,14 @@ npx --yes github:dislop-ai/dislop verify draft.before.md draft.after.md`,
     }
   }
 }`,
-    agent: `# 1. 先让联网 Agent 读导航首页（约 2.1 KB）
+    agent: `# 1. 先让联网 Agent 读入口索引（约 2.1 KB）
 curl -fsSL https://dislop.com/llms.txt
 
-# 2. 按手头的活儿挑一张千字任务卡
+# 2. 按手头的活儿挑一张任务卡
 curl -fsSL https://dislop.com/tasks/business-doc.md
 curl -fsSL https://dislop.com/tasks/web-and-deck.md
 
-# 3. 读取 87 条同路清单的 JSON 数据
+# 3. 读取 87 条工具清单的 JSON 数据
 curl -fsSL https://dislop.com/awesome/index.json`,
     ci: `name: dislop
 on: [pull_request]
@@ -737,16 +737,16 @@ jobs:
 
 const PACK_LABELS = {
   zh: {
-    core: "硬伤规则",
-    "business-brief": "商业简报",
+    core: "硬伤",
+    "business-brief": "工作文档",
     "literary-essay": "随笔长文",
-    "deck-and-ui": "PPT 与网页",
+    "deck-and-ui": "PPT 和网页",
   },
   en: {
-    core: "Can't-ship",
-    "business-brief": "Business brief",
-    "literary-essay": "Essay",
-    "deck-and-ui": "Decks & UI",
+    core: "Hard bugs",
+    "business-brief": "Work docs",
+    "literary-essay": "Essays",
+    "deck-and-ui": "Slides & UI",
   },
 };
 
@@ -1174,8 +1174,8 @@ function renderWorkbench() {
   } else {
     summaryEl.innerHTML =
       currentLang === "zh"
-        ? `<span>${errorsCount} 处硬伤 · ${queriesCount} 条商榷</span><span>${elapsedMs} ms</span>`
-        : `<span>${errorsCount} ${errorsCount === 1 ? "error" : "errors"} · ${queriesCount} ${queriesCount === 1 ? "query" : "queries"}</span><span>${elapsedMs} ms</span>`;
+        ? `<span>${errorsCount} 处硬伤 · ${queriesCount} 条提醒</span><span>${elapsedMs} ms</span>`
+        : `<span>${errorsCount} ${errorsCount === 1 ? "error" : "errors"} · ${queriesCount} ${queriesCount === 1 ? "warning" : "warnings"}</span><span>${elapsedMs} ms</span>`;
   }
 
   renderVoiceMeter(currentText, currentModality, Boolean(binaryAuditResult));
@@ -1232,11 +1232,11 @@ function renderWorkbench() {
     verifyBox.className = "verify-banner " + (v.ok ? "is-accepted" : "is-rejected");
     const title = v.ok
       ? currentLang === "zh"
-        ? `可以付印（批注 ${v.beforeFindings} → ${v.afterFindings}，数字与链接原样保留）`
-        : `Pass for press (marks ${v.beforeFindings} → ${v.afterFindings}; numbers, links & code intact)`
+        ? `通过（问题 ${v.beforeFindings} → ${v.afterFindings}，数字和链接没漏）`
+        : `Passed (marks ${v.beforeFindings} → ${v.afterFindings}; numbers, links & code intact)`
       : currentLang === "zh"
-        ? `退回重对（批注 ${v.beforeFindings} → ${v.afterFindings}）`
-        : `Sent back (marks ${v.beforeFindings} → ${v.afterFindings})`;
+        ? `没通过（问题 ${v.beforeFindings} → ${v.afterFindings}）`
+        : `Rejected (marks ${v.beforeFindings} → ${v.afterFindings})`;
     const reasonsHtml = v.reasons.length
       ? `<ul>${v.reasons.map((r) => `<li>${escapeHtml(r)}</li>`).join("")}</ul>`
       : "";
@@ -1259,15 +1259,15 @@ function renderWorkbench() {
   if (findings.length === 0 && skipped.length === 0) {
     const cleanMsg = isEmptySheet
       ? currentLang === "zh"
-        ? "空稿纸。切到「自己改改看」贴一段文字，或从左侧选一份样稿。"
-        : "Blank sheet. Switch to 'Edit & recheck' to paste a draft, or pick a sample on the left."
+        ? "这里还是空的。点「编辑原文」贴一段字，或者从左边选个例子。"
+        : "Nothing here yet. Click 'Edit text' to paste a draft, or pick an example on the left."
       : !lastUploadedFile && !customRuleTitle && activeSpecimen?.id === "clean-nearmiss" && currentText === baselineText
         ? currentLang === "zh"
-          ? "可以付印。“抓手机”是动作，“北京大学、清华大学、复旦大学”是真实校名，数字原样保留——点击「看改过头的样子」试试会怎样。"
-          : "Pass for press. 'Delve' is the debugger here, 'wool tapestry' is literal, and numbers stay untouched. Click 'Try an overcorrection' to compare."
+          ? "0 处问题。“抓手机”是动作，“北京大学、清华大学、复旦大学”是真实校名，不会被误伤。可以点「看改漏的」对比一下。"
+          : "0 issues. 'Delve' is a debugger and 'wool tapestry' is literal, so nothing gets flagged. Click 'Bad edit' to see what gets rejected."
         : currentLang === "zh"
-          ? "可以付印。这一版没挑出硬伤或套话。"
-          : "Pass for press. No marks from this rule pack.";
+          ? "没查出问题。"
+          : "No issues found.";
     cards.push(`<div class="clean-sheet-msg">${escapeHtml(cleanMsg)}</div>`);
   }
 
@@ -1300,9 +1300,9 @@ function renderWorkbench() {
         <span class="note-loc">${escapeHtml(loc)}</span>
       </div>
       ${excerpt ? `<div class="note-snippet">“${escapeHtml(sanitizePublicExemplar(excerpt))}”</div>` : ""}
-      ${dt ? `<div class="note-test"><strong>${currentLang === "zh" ? "问自己一句：" : "Ask yourself:"}</strong> ${formatRuleProseHtml(dt)}</div>` : ""}
+      ${dt ? `<div class="note-test"><strong>${currentLang === "zh" ? "判断方法：" : "Check:"}</strong> ${formatRuleProseHtml(dt)}</div>` : ""}
       <details class="note-details">
-        <summary>${currentLang === "zh" ? "看规则和改法" : "Show rule & fix"}</summary>
+        <summary>${currentLang === "zh" ? "规则和示例" : "Rule & examples"}</summary>
         <div class="note-why" style="margin-top:6px;">${formatRuleProseHtml(msg)}</div>
         ${exHtml}
         <div style="margin-top:6px;font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-3);">
@@ -1345,14 +1345,14 @@ function renderDogfood() {
   if (badMetaEl) {
     badMetaEl.textContent =
       currentLang === "zh"
-        ? `实时检出：硬伤 ${errs} 处 · 商榷 ${warns} 处`
-        : `Live check: ${errs} error · ${warns} queries`;
+        ? `实时检查：硬伤 ${errs} 处 · 提醒 ${warns} 处`
+        : `Live check: ${errs} error · ${warns} warnings`;
   }
   if (goodMetaEl) {
     goodMetaEl.textContent =
       currentLang === "zh"
-        ? `实时检出：${goodRes.findings.length} 处批注 · verify ${ver.ok ? "通过（“最多 45 秒”原样保留）" : "退回"}`
-        : `Live check: ${goodRes.findings.length} marks · verify ${ver.ok ? 'accepted ("up to 12 minutes" intact)' : "rejected"}`;
+        ? `实时检查：${goodRes.findings.length} 处问题 · verify ${ver.ok ? "通过（“最多 45 秒”没动）" : "没通过"}`
+        : `Live check: ${goodRes.findings.length} issues · verify ${ver.ok ? 'passed ("up to 12 minutes" intact)' : "rejected"}`;
   }
 }
 
@@ -1508,15 +1508,15 @@ function renderRulesTable() {
       const sevLabel =
         currentLang === "zh"
           ? r.severity === "error"
-            ? "红笔硬伤"
+            ? "硬伤"
             : r.severity === "warning"
-              ? "蓝笔商榷"
+              ? "提醒"
               : "轻提示"
           : r.severity === "error"
-            ? "can't ship"
+            ? "hard bug"
             : r.severity === "warning"
-              ? "query"
-              : "note";
+              ? "warning"
+              : "info";
       const canTry = ex && (r.modalities || []).some((m) => textMods.has(m));
       const hashCls = highlightedRuleId === r.id ? " is-hash-target" : "";
       const packLabel = PACK_LABELS[currentLang]?.[pid] || pid;
@@ -1543,7 +1543,7 @@ function renderRulesTable() {
         <td>${escapeHtml(packLabel)}<br><span class="sev-tag ${sevCls}" style="font-size:0.75rem;">${escapeHtml(sevLabel)}</span></td>
         <td><code>${escapeHtml((r.modalities || []).join(", "))}</code></td>
         <td><div>${formatRuleProseHtml(why)}</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>${
-        currentLang === "zh" ? "问自己一句：" : "Ask yourself:"
+        currentLang === "zh" ? "判断方法：" : "Check:"
       }</strong> ${formatRuleProseHtml(dt)}</div></td>
         <td>${
           ex
@@ -1701,8 +1701,8 @@ function applyI18n(isUserSwitch = false) {
   if (agentHintEl) {
     agentHintEl.innerHTML =
       currentLang === "zh"
-        ? '让 Agent 来读？从 <a href="./llms.txt">/llms.txt</a> 开始。'
-        : 'Sending an agent? Start it at <a href="./llms.txt">/llms.txt</a>.';
+        ? '给 Agent 读的话，从 <a href="./llms.txt">/llms.txt</a> 开始。'
+        : 'For agents, start at <a href="./llms.txt">/llms.txt</a>.';
   }
 
   // Update GitHub Awesome & Roadmap links to match language

@@ -550,7 +550,7 @@ Read only the focused document matching your current task:
 - [Deletion Test & Fact-Preserving Rewrites](./deletion-test.md): Why banning flat word lists causes second-order slogans, and how the three-stage \`check -> edit -> verify\` loop works.
 - [Cross-Modality Anti-Pattern Map](./anti-pattern-map.md): Four-tier problem model (L0 objective bugs through L3 factual density) across prose, UI, Office, and PDF.
 - [Positive Divergence & Personalization (Draft)](./positive-divergence.md): Three-band entropy partition, \`dislop.voice/1\` offline stylometrics, and \`dislop.taste/1\` positive design cards.
-- [Brand Identity & Voice Guide](./brand-and-voice.md): Copy-editor persona anchored in \`assets/logo.svg\`, EN/ZH native voice parity, and 8-question contributor self-check.
+- [Brand & Voice Guide](./brand-and-voice.md): Plain maker voice grounded in Karpathy's 80% ASD-STE100 and our own copy before/after edits.
 - [Visual & Typographic Design System](./design-system.md): Architectural Galley Proof Sheet tokens, WCAG AA contrast table, and monotonic dark-mode luminance rules.
 `,
 });
@@ -1480,11 +1480,11 @@ const repoAwesomeReadmeEn = `<p align="center">
 
 # Awesome Anti-Slop
 
-Tools, linters, style guides, design rules, contribution policies, and papers for making AI-written work stop sounding AI-written. There are ${radarData.entries.length} entries, in English and Chinese.
+${radarData.entries.length} tools, linters, style guides, UI rules, PR policies, and papers in English and Chinese, including established projects like Vale and Impeccable.
 
-Vale checks prose against a style guide. Impeccable checks web interfaces. Every link, star count, and last-push date below was checked via GitHub API and HTTP status on \`${SNAPSHOT_DATE}\`. ${awesomeDetTotal} entries run automated checks without an LLM, and the tables note which. AI-text detectors and bypass tools sit apart in [Contrast Watch](#contrast-watch) at the bottom, listed for reference only.
+Every link, star count, and last-push date below was checked via GitHub API and HTTP status on \`${SNAPSHOT_DATE}\`. ${awesomeDetTotal} entries run automated checks without an LLM, and the tables note which. AI-text detectors and bypass tools sit apart in [Contrast Watch](#contrast-watch) at the bottom for reference only.
 
-To filter the list offline, open [dislop.com/awesome](${BASE_URL}/awesome/). To hand it to an agent, point it at [index.json](${BASE_URL}/awesome/index.json) or [index.md](${BASE_URL}/awesome/index.md). To add an entry, see [Suggest a resource](#suggest-a-resource).
+To filter the list offline, open [dislop.com/awesome](${BASE_URL}/awesome/). To give it to an agent, point it at [index.json](${BASE_URL}/awesome/index.json) or [index.md](${BASE_URL}/awesome/index.md). To add an entry, see [Suggest a resource](#suggest-a-resource).
 
 ## Contents
 
@@ -1494,9 +1494,9 @@ ${githubTablesEn}
 
 ## Suggest a resource
 
-Open a pull request updating [docs/research/anti-slop-radar-index.json](../docs/research/anti-slop-radar-index.json) and run \`node scripts/build_site.mjs\`. Every entry needs a live HTTPS link, a topic, a locale, and a one-sentence description of what it does.
+Open a pull request updating [docs/research/anti-slop-radar-index.json](../docs/research/anti-slop-radar-index.json) and run \`node scripts/build_site.mjs\`. Every entry needs a live HTTPS link, a topic, a locale, and one plain sentence saying what it does.
 
-Looking for the red pen that maintains this list? See [dislop](../README.md) or run \`npx --yes github:dislop-ai/dislop check .\`.
+To check a local draft with dislop itself, see [the main README](../README.md) or run \`npx --yes github:dislop-ai/dislop check .\`.
 `;
 fs.writeFileSync(path.join(REPO_AWESOME_OUT, "README.md"), sanitizeAgentText(repoAwesomeReadmeEn), "utf8");
 
@@ -1529,25 +1529,25 @@ const githubTablesZh = GITHUB_SECTION_META.map((sec) => {
 const repoAwesomeReadmeZh = `<p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="../assets/banner-dark.svg">
-    <img src="../assets/banner-light.svg" alt="Awesome Anti-Slop — dislop 同路清单" width="100%">
+    <img src="../assets/banner-light.svg" alt="Awesome Anti-Slop — 去 AI 味工具清单" width="100%">
   </picture>
 </p>
 
 <p align="center">
   <a href="./README.md">English</a> ·
-  <a href="${BASE_URL}/awesome/">去官网在线筛选</a> ·
-  <a href="${BASE_URL}/#workbench">查一份稿子</a> ·
+  <a href="${BASE_URL}/awesome/">在线筛选</a> ·
+  <a href="${BASE_URL}/#workbench">试查一段稿子</a> ·
   <a href="${BASE_URL}/awesome/index.json">JSON 数据</a> ·
   <a href="../README.zh-CN.md">返回 dislop 主仓</a>
 </p>
 
-# Awesome Anti-Slop（去 AI 味同路清单）
+# Awesome Anti-Slop（去 AI 味工具清单）
 
-查文稿有没有违反写作规范，可以先看 Vale。想找网页里的模板痕迹，可以翻 Impeccable。这份清单按手头的活儿整理了 ${radarData.entries.length} 条中英文工具、检查器、写作规范、前端设计规则、代码 PR 治理政策与论文研究。
+一共整理了 ${radarData.entries.length} 个中英文工具、检查器、写作规范、网页设计指南、代码 PR 治理规则和论文，包括 Vale、Impeccable 这类常用项目。
 
-所有链接、GitHub 星标数与最近推送日期均于 \`${SNAPSHOT_DATE}\` 通过 API 与 HTTP 状态逐条核验；其中 ${awesomeDetTotal} 条具备无需大模型的自动检查能力。AI 文本检测器与规避工具单独放在文末[检测与规避研究](#检测与规避研究仅供对照)，仅供对照了解。
+所有链接、GitHub 星标和最近更新时间都在 \`${SNAPSHOT_DATE}\` 核过一遍。其中 ${awesomeDetTotal} 个可以在本地跑自动检查，不依赖大模型。AI 文本检测器和规避工具单独放在最下面的[检测与规避研究](#检测与规避研究仅供对照)，只作对照参考。
 
-想离线搜索筛选，直接打开 [dislop.com/awesome](${BASE_URL}/awesome/)；要交给 Agent 读取，提供 [index.json](${BASE_URL}/awesome/index.json) 或 [index.md](${BASE_URL}/awesome/index.md)。补充新条目请看文末[提交新条目](#提交新条目)。
+想离线搜索筛选，可以打开 [dislop.com/awesome](${BASE_URL}/awesome/)。想给 Agent 读，直接用 [index.json](${BASE_URL}/awesome/index.json) 或 [index.md](${BASE_URL}/awesome/index.md)。补充新条目请看[提交新条目](#提交新条目)。
 
 ## 目录
 
@@ -1557,9 +1557,9 @@ ${githubTablesZh}
 
 ## 提交新条目
 
-欢迎提 PR 更新 [docs/research/anti-slop-radar-index.json](../docs/research/anti-slop-radar-index.json)，并运行 \`node scripts/build_site.mjs\` 重新生成目录页（每条需提供可访问的 HTTPS 链接、类别、语种与一句客观用途说明）。
+提 PR 更新 [docs/research/anti-slop-radar-index.json](../docs/research/anti-slop-radar-index.json)，然后跑一遍 \`node scripts/build_site.mjs\` 就行。每条需要可访问的 HTTPS 链接、类别、语种，以及一句说明它是做什么的。
 
-想直接给自己手头的稿子过一遍红笔？回 [dislop 中文首页](../README.zh-CN.md)，或在终端里运行 \`npx --yes github:dislop-ai/dislop check .\`。
+想用 dislop 直接查自己手头的稿子，可以看[中文 README](../README.zh-CN.md)，或者命令行运行 \`npx --yes github:dislop-ai/dislop check .\`。
 `;
 fs.writeFileSync(path.join(REPO_AWESOME_OUT, "README.zh-CN.md"), sanitizeAgentText(repoAwesomeReadmeZh), "utf8");
 
@@ -1598,13 +1598,13 @@ const awesomeHtml = `<!DOCTYPE html>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
-  <title>同路清单 · Awesome Anti-Slop（${radarData.entries.length} 条）— dislop</title>
-  <meta name="description" content="整理了 ${radarData.entries.length} 条中英文去 AI 味工具、确定性检查器、写作规范、前端设计指南与论文研究，链接与仓库信息均已核验，可离线筛选。">
+  <title>去 AI 味工具清单 · Awesome Anti-Slop（${radarData.entries.length} 条）— dislop</title>
+  <meta name="description" content="整理了 ${radarData.entries.length} 个中英文去 AI 味工具、检查器、写作规范、网页设计指南和论文，链接和仓库信息已核验，可离线筛选。">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="dislop">
   <meta property="og:url" content="https://dislop.com/awesome/">
-  <meta property="og:title" content="Awesome Anti-Slop — ${radarData.entries.length} 条去 AI 味同路清单">
-  <meta property="og:description" content="中英文去 AI 味工具、检查器、写作与设计规范、代码 PR 治理与研究清单，不联网离线筛选。">
+  <meta property="og:title" content="Awesome Anti-Slop — ${radarData.entries.length} 个去 AI 味工具与资料">
+  <meta property="og:description" content="中英文去 AI 味工具、检查器、写作与设计规范、代码 PR 治理和论文清单，标签页离线筛选。">
   <meta property="og:image" content="https://dislop.com/assets/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://dislop.com/assets/og-card.png">
@@ -1620,13 +1620,13 @@ const awesomeHtml = `<!DOCTYPE html>
   <div class="rail-shell">
     <header class="topbar band-rule">
       <a class="brand-lockup" href="../">
-        <img src="../assets/logo.svg" width="28" height="28" alt="dislop 校对删除号标识">
+        <img src="../assets/logo.svg" width="28" height="28" alt="dislop 标识">
         <span class="brand-wordmark">dislop</span>
       </a>
 
-      <nav class="nav-links" aria-label="同路清单导航">
+      <nav class="nav-links" aria-label="工具清单导航">
         <a href="../" data-i18n="nav.workbench">返回首页</a>
-        <a href="./" aria-current="page" data-i18n="nav.awesome">同路清单</a>
+        <a href="./" aria-current="page" data-i18n="nav.awesome">工具清单</a>
         <a href="./index.json" class="nav-agent-link">index.json</a>
         <a href="./index.md" class="nav-agent-link">index.md</a>
         <a href="https://github.com/dislop-ai/dislop/blob/main/awesome/README.zh-CN.md" target="_blank" rel="noopener" id="awesome-gh-nav">GitHub</a>
@@ -1640,13 +1640,13 @@ const awesomeHtml = `<!DOCTYPE html>
 
     <main id="main-content">
     <section class="section-block band-rule">
-      <h1 class="lead-heading" style="max-width:24ch;" data-i18n="awesome.heading">同路清单</h1>
+      <h1 class="lead-heading" style="max-width:24ch;" data-i18n="awesome.heading">去 AI 味工具清单</h1>
       <p class="section-desc" data-i18n="awesome.sub">
-        查文稿有没有违反写作规范，可以先看 Vale；想找网页里的模板痕迹，可以翻 Impeccable。按手头的活儿选一类，也可以只看能自动检查的工具。全部 ${radarData.entries.length} 条链接与 GitHub 状态核验于 ${SNAPSHOT_DATE}。
+        一共整理了 ${radarData.entries.length} 个中英文工具、检查器、写作规范、网页设计指南和论文，包括 Vale、Impeccable 这类常用项目。可以按类别找，也可以只看能自动检查的工具。链接和 GitHub 状态核验于 ${SNAPSHOT_DATE}。
       </p>
 
       <div class="catalog-controls" style="margin-top:24px;">
-        <input type="search" id="awesome-search" class="search-input" placeholder="搜项目名、仓库或用途…" aria-label="搜索同路清单">
+        <input type="search" id="awesome-search" class="search-input" placeholder="搜项目名、仓库或用途…" aria-label="搜索工具清单">
         <select id="awesome-section" class="filter-select" aria-label="按类别筛选">
           ${awesomeSectionOptionsHtml}
         </select>
@@ -1663,12 +1663,12 @@ const awesomeHtml = `<!DOCTYPE html>
         <span style="font-size:0.78rem;color:var(--ink-3);" data-i18n="awesome.snapNote">核验日期 ${SNAPSHOT_DATE} · 标签页离线筛选</span>
       </div>
 
-      <div class="table-scroll" tabindex="0" role="region" aria-label="同路清单表格">
+      <div class="table-scroll" tabindex="0" role="region" aria-label="工具清单表格">
         <table class="radar-table">
           <thead>
             <tr>
-              <th data-i18n="awesome.colName">资源与类别</th>
-              <th data-i18n="awesome.colSummary">用途</th>
+              <th data-i18n="awesome.colName">项目与类别</th>
+              <th data-i18n="awesome.colSummary">做什么的</th>
               <th style="text-align:right;" data-i18n="awesome.colMeta">星标 · 最近更新</th>
             </tr>
           </thead>
@@ -1679,7 +1679,7 @@ ${awesomePreRenderedRows}
       </div>
 
       <div class="contrast-notice" data-i18n="awesome.contrastNote">
-        中立边界：「检测与规避研究（仅供对照）」单独收录概率型 AI 文本检测器与规避工具，仅作行业参考。dislop 专注去套话与改稿核对，不用于规避披露规范。
+        说明：「检测与规避研究（仅供对照）」收录概率型 AI 文本检测器和规避工具，只作对照参考。dislop 只做去套话和改稿核对，不用于规避披露规则。
       </div>
     </section>
     </main>
@@ -1743,9 +1743,9 @@ const llmsTxt = writeCleanFile(
   "llms.txt",
   `# dislop
 
-> A red pen for AI-written drafts, decks, and web pages. Strikes what can't ship, asks about what sounds canned, and checks edits against the original so numbers, qualifiers, dates, links, code spans, and citations stay put. Zero runtime dependencies; works offline in Node.js 20+, Python 3.10+, MCP, or a browser tab.
+> Offline linter for AI-written docs, slides, and web pages. Flags hard bugs and stock phrasing without rewriting your text, then verifies your edit kept every number, qualifier, date, link, code span, and citation. Zero runtime dependencies across Node.js 20+, Python 3.10+, MCP, and the browser.
 
-Choose the page that matches the file you are reviewing. Each guide names the checks to run and shows an example edit. Use the local CLI or MCP server to check a file or compare a revision.
+Choose the page that matches the file you are reviewing. Each guide lists the checks to run and includes an example edit. Use the local CLI or MCP server to check a file or verify a revision.
 
 ## Start by task (~800-1,500 tokens each)
 - [Review a brief or proposal](${BASE_URL}/tasks/business-doc.md): Core errors, \`business-brief\` rules, and edit comparison.
@@ -1847,17 +1847,17 @@ let indexHtml = fs.readFileSync(path.join(SITE_DIR, "index.html"), "utf8");
 // 3a. Pre-rendered Rules Table in default Chinese (en-only rules hidden on initial ZH load, preserving #rule-<id> anchors)
 const textMods = new Set(["markdown", "text", "html", "css", "jsx", "svg"]);
 const PACK_LABELS_ZH = {
-  core: "硬伤规则",
-  "business-brief": "商业简报",
+  core: "硬伤",
+  "business-brief": "工作文档",
   "literary-essay": "随笔长文",
-  "deck-and-ui": "PPT 与网页",
+  "deck-and-ui": "PPT 和网页",
 };
 const preRenderedRules = allRules
   .map(({ packId, rule: r }) => {
     const meta = RULE_UI_META[r.id] || { lang: "both", title: { zh: r.id, en: r.id } };
     const isEnOnly = meta.lang === "en";
     const sevCls = r.severity === "error" ? "sev-error" : "sev-warning";
-    const sevTextZh = r.severity === "error" ? "红笔硬伤" : r.severity === "warning" ? "蓝笔商榷" : "轻提示";
+    const sevTextZh = r.severity === "error" ? "硬伤" : r.severity === "warning" ? "提醒" : "轻提示";
     const canTry = r.exemplar && (r.modalities || []).some((m) => textMods.has(m));
     const ex = isEnOnly ? r.exemplar : meta.zhEx || r.exemplar;
     const exLines = ex
@@ -1890,7 +1890,7 @@ ${actionLines.join("\n")}
               </td>
               <td>${escapeHtml(PACK_LABELS_ZH[packId] || packId)}<br><span class="sev-tag ${sevCls}" style="font-size:0.75rem;">${sevTextZh}</span></td>
               <td><code>${escapeHtml((r.modalities || []).join(", "))}</code></td>
-              <td><div>${formatRuleProseHtml(r.message.zh || r.message.en)}</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>问自己一句：</strong>${formatRuleProseHtml(r.deletionTest.zh || r.deletionTest.en)}</div></td>
+              <td><div>${formatRuleProseHtml(r.message.zh || r.message.en)}</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>${formatRuleProseHtml(r.deletionTest.zh || r.deletionTest.en)}</div></td>
               <td>${exLines}</td>
             </tr>`;
   })
@@ -1900,16 +1900,16 @@ indexHtml = replaceBuildBlock(indexHtml, "RULES_TABLE", preRenderedRules);
 
 // 3b. Pre-rendered Agent Endpoints Ledger (Chinese default)
 const featuredEndpoints = [
-  { path: "./llms.txt", label: "/llms.txt", i18nKey: "ep.llms", desc: "Agent 导航首页（按任务选最小文档）", bytes: Buffer.byteLength(llmsTxt, "utf8"), tok: approxTokens(llmsTxt) },
-  { path: "./catalog.json", label: "/catalog.json", i18nKey: "ep.catalog", desc: "全部静态资源的 JSON 索引与字数估算", bytes: Buffer.byteLength(catalogJsonStr, "utf8"), tok: approxTokens(catalogJsonStr) },
-  { path: "./tasks/business-doc.md", label: "/tasks/business-doc.md", i18nKey: "ep.taskBiz", desc: "任务卡：商业简报与技术方案", resId: "task-business-doc" },
-  { path: "./tasks/web-and-deck.md", label: "/tasks/web-and-deck.md", i18nKey: "ep.taskWeb", desc: "任务卡：网页界面、SVG 与 PPT", resId: "task-web-and-deck" },
-  { path: "./tasks/editorial-writing.md", label: "/tasks/editorial-writing.md", i18nKey: "ep.taskEdit", desc: "任务卡：随笔与长文报道", resId: "task-editorial-writing" },
-  { path: "./tasks/pre-release-gate.md", label: "/tasks/pre-release-gate.md", i18nKey: "ep.taskGate", desc: "任务卡：发稿前硬伤门禁与改稿核对", resId: "task-pre-release-gate" },
-  { path: "./tools/skill.md", label: "/tools/skill.md", i18nKey: "ep.skill", desc: "跨宿主 Agent Skill（检查 -> 改稿 -> 核对）", resId: "tools-skill" },
-  { path: "./awesome/index.json", label: "/awesome/index.json", i18nKey: "ep.awesome", desc: `同路清单 ${radarData.entries.length} 条原始 JSON`, bytes: Buffer.byteLength(awesomeJsonStr, "utf8"), tok: approxTokens(awesomeJsonStr) },
-  { path: "./methodology/brand-and-voice.md", label: "/methodology/brand-and-voice.md", i18nKey: "ep.method", desc: "品牌人格、表达基准与自检清单", resId: "methodology-brand-voice" },
-  { path: "./llms-full.txt", label: "/llms-full.txt", i18nKey: "ep.full", desc: "单次拉取的全部 29 条规则合集", bytes: Buffer.byteLength(llmsFullTxt, "utf8"), tok: approxTokens(llmsFullTxt) },
+  { path: "./llms.txt", label: "/llms.txt", i18nKey: "ep.llms", desc: "Agent 入口索引", bytes: Buffer.byteLength(llmsTxt, "utf8"), tok: approxTokens(llmsTxt) },
+  { path: "./catalog.json", label: "/catalog.json", i18nKey: "ep.catalog", desc: "全部文档的 JSON 目录", bytes: Buffer.byteLength(catalogJsonStr, "utf8"), tok: approxTokens(catalogJsonStr) },
+  { path: "./tasks/business-doc.md", label: "/tasks/business-doc.md", i18nKey: "ep.taskBiz", desc: "任务卡：工作文档与技术方案", resId: "task-business-doc" },
+  { path: "./tasks/web-and-deck.md", label: "/tasks/web-and-deck.md", i18nKey: "ep.taskWeb", desc: "任务卡：网页、SVG 与 PPT", resId: "task-web-and-deck" },
+  { path: "./tasks/editorial-writing.md", label: "/tasks/editorial-writing.md", i18nKey: "ep.taskEdit", desc: "任务卡：随笔与长文", resId: "task-editorial-writing" },
+  { path: "./tasks/pre-release-gate.md", label: "/tasks/pre-release-gate.md", i18nKey: "ep.taskGate", desc: "任务卡：发稿前硬伤检查与核对", resId: "task-pre-release-gate" },
+  { path: "./tools/skill.md", label: "/tools/skill.md", i18nKey: "ep.skill", desc: "跨宿主 Agent Skill", resId: "tools-skill" },
+  { path: "./awesome/index.json", label: "/awesome/index.json", i18nKey: "ep.awesome", desc: `${radarData.entries.length} 条工具清单 JSON`, bytes: Buffer.byteLength(awesomeJsonStr, "utf8"), tok: approxTokens(awesomeJsonStr) },
+  { path: "./methodology/brand-and-voice.md", label: "/methodology/brand-and-voice.md", i18nKey: "ep.method", desc: "文案与设计基准", resId: "methodology-brand-voice" },
+  { path: "./llms-full.txt", label: "/llms-full.txt", i18nKey: "ep.full", desc: "单次拉取的全部 29 条规则", bytes: Buffer.byteLength(llmsFullTxt, "utf8"), tok: approxTokens(llmsFullTxt) },
 ];
 
 const endpointsHtml = featuredEndpoints
@@ -1938,7 +1938,7 @@ const endpointsHtml = featuredEndpoints
 indexHtml = replaceBuildBlock(indexHtml, "ENDPOINTS", endpointsHtml);
 
 // 3c. Default CLI snippet pre-rendered in Chinese
-const defaultSnippet = `# 检查当前目录（命中硬伤时退出码为 1，同时提示套话商榷）
+const defaultSnippet = `# 检查当前目录（命中硬伤时退出码为 1，同时标出套话提醒）
 npx --yes github:dislop-ai/dislop check .
 
 # 只查相对 main 新改的行，并输出 SARIF 报告
@@ -1956,9 +1956,9 @@ indexHtml = replaceBuildBlock(indexHtml, "DEFAULT_SNIPPET", escapeHtml(defaultSn
 const detCount = radarData.entries.filter((e) => e.hasDeterministicCheck).length;
 const zhCount = radarData.entries.filter((e) => e.locale === "zh" || e.locale === "multilingual").length;
 const radarStatsHtml = `          <div class="stat-strip">
-            <div class="stat-cell"><span class="stat-num">${radarData.entries.length}</span><span class="stat-label" data-i18n="stat.entries">条已核验资源</span></div>
-            <div class="stat-cell"><span class="stat-num">${radarData.taxonomy.sections.length}</span><span class="stat-label" data-i18n="stat.sections">个主题分栏</span></div>
-            <div class="stat-cell"><span class="stat-num">${detCount}</span><span class="stat-label" data-i18n="stat.det">款可自动检查</span></div>
+            <div class="stat-cell"><span class="stat-num">${radarData.entries.length}</span><span class="stat-label" data-i18n="stat.entries">条资料</span></div>
+            <div class="stat-cell"><span class="stat-num">${radarData.taxonomy.sections.length}</span><span class="stat-label" data-i18n="stat.sections">个分类</span></div>
+            <div class="stat-cell"><span class="stat-num">${detCount}</span><span class="stat-label" data-i18n="stat.det">个可自动检查</span></div>
             <div class="stat-cell"><span class="stat-num">${zhCount}</span><span class="stat-label" data-i18n="stat.zh">条中文 / 多语种</span></div>
           </div>`;
 

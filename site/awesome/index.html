@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
-  <title>同路清单 · Awesome Anti-Slop（87 条）— dislop</title>
-  <meta name="description" content="整理了 87 条中英文去 AI 味工具、确定性检查器、写作规范、前端设计指南与论文研究，链接与仓库信息均已核验，可离线筛选。">
+  <title>去 AI 味工具清单 · Awesome Anti-Slop（87 条）— dislop</title>
+  <meta name="description" content="整理了 87 个中英文去 AI 味工具、检查器、写作规范、网页设计指南和论文，链接和仓库信息已核验，可离线筛选。">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="dislop">
   <meta property="og:url" content="https://dislop.com/awesome/">
-  <meta property="og:title" content="Awesome Anti-Slop — 87 条去 AI 味同路清单">
-  <meta property="og:description" content="中英文去 AI 味工具、检查器、写作与设计规范、代码 PR 治理与研究清单，不联网离线筛选。">
+  <meta property="og:title" content="Awesome Anti-Slop — 87 个去 AI 味工具与资料">
+  <meta property="og:description" content="中英文去 AI 味工具、检查器、写作与设计规范、代码 PR 治理和论文清单，标签页离线筛选。">
   <meta property="og:image" content="https://dislop.com/assets/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://dislop.com/assets/og-card.png">
@@ -26,13 +26,13 @@
   <div class="rail-shell">
     <header class="topbar band-rule">
       <a class="brand-lockup" href="../">
-        <img src="../assets/logo.svg" width="28" height="28" alt="dislop 校对删除号标识">
+        <img src="../assets/logo.svg" width="28" height="28" alt="dislop 标识">
         <span class="brand-wordmark">dislop</span>
       </a>
 
-      <nav class="nav-links" aria-label="同路清单导航">
+      <nav class="nav-links" aria-label="工具清单导航">
         <a href="../" data-i18n="nav.workbench">返回首页</a>
-        <a href="./" aria-current="page" data-i18n="nav.awesome">同路清单</a>
+        <a href="./" aria-current="page" data-i18n="nav.awesome">工具清单</a>
         <a href="./index.json" class="nav-agent-link">index.json</a>
         <a href="./index.md" class="nav-agent-link">index.md</a>
         <a href="https://github.com/dislop-ai/dislop/blob/main/awesome/README.zh-CN.md" target="_blank" rel="noopener" id="awesome-gh-nav">GitHub</a>
@@ -46,13 +46,13 @@
 
     <main id="main-content">
     <section class="section-block band-rule">
-      <h1 class="lead-heading" style="max-width:24ch;" data-i18n="awesome.heading">同路清单</h1>
+      <h1 class="lead-heading" style="max-width:24ch;" data-i18n="awesome.heading">去 AI 味工具清单</h1>
       <p class="section-desc" data-i18n="awesome.sub">
-        查文稿有没有违反写作规范，可以先看 Vale；想找网页里的模板痕迹，可以翻 Impeccable。按手头的活儿选一类，也可以只看能自动检查的工具。全部 87 条链接与 GitHub 状态核验于 2026-11-21。
+        一共整理了 87 个中英文工具、检查器、写作规范、网页设计指南和论文，包括 Vale、Impeccable 这类常用项目。可以按类别找，也可以只看能自动检查的工具。链接和 GitHub 状态核验于 2026-11-21。
       </p>
 
       <div class="catalog-controls" style="margin-top:24px;">
-        <input type="search" id="awesome-search" class="search-input" placeholder="搜项目名、仓库或用途…" aria-label="搜索同路清单">
+        <input type="search" id="awesome-search" class="search-input" placeholder="搜项目名、仓库或用途…" aria-label="搜索工具清单">
         <select id="awesome-section" class="filter-select" aria-label="按类别筛选">
           <option value="all">全部类别（87）</option>
           <option value="standards-research-policy">标准、研究与平台政策（13）</option>
@@ -77,12 +77,12 @@
         <span style="font-size:0.78rem;color:var(--ink-3);" data-i18n="awesome.snapNote">核验日期 2026-11-21 · 标签页离线筛选</span>
       </div>
 
-      <div class="table-scroll" tabindex="0" role="region" aria-label="同路清单表格">
+      <div class="table-scroll" tabindex="0" role="region" aria-label="工具清单表格">
         <table class="radar-table">
           <thead>
             <tr>
-              <th data-i18n="awesome.colName">资源与类别</th>
-              <th data-i18n="awesome.colSummary">用途</th>
+              <th data-i18n="awesome.colName">项目与类别</th>
+              <th data-i18n="awesome.colSummary">做什么的</th>
               <th style="text-align:right;" data-i18n="awesome.colMeta">星标 · 最近更新</th>
             </tr>
           </thead>
@@ -527,7 +527,7 @@
       </div>
 
       <div class="contrast-notice" data-i18n="awesome.contrastNote">
-        中立边界：「检测与规避研究（仅供对照）」单独收录概率型 AI 文本检测器与规避工具，仅作行业参考。dislop 专注去套话与改稿核对，不用于规避披露规范。
+        说明：「检测与规避研究（仅供对照）」收录概率型 AI 文本检测器和规避工具，只作对照参考。dislop 只做去套话和改稿核对，不用于规避披露规则。
       </div>
     </section>
     </main>

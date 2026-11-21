@@ -15,11 +15,11 @@
 
 # Awesome Anti-Slop
 
-Tools, linters, style guides, design rules, contribution policies, and papers for making AI-written work stop sounding AI-written. There are 87 entries, in English and Chinese.
+87 tools, linters, style guides, UI rules, PR policies, and papers in English and Chinese, including established projects like Vale and Impeccable.
 
-Vale checks prose against a style guide. Impeccable checks web interfaces. Every link, star count, and last-push date below was checked via GitHub API and HTTP status on `2026-11-21`. 19 entries run automated checks without an LLM, and the tables note which. AI-text detectors and bypass tools sit apart in [Contrast Watch](#contrast-watch) at the bottom, listed for reference only.
+Every link, star count, and last-push date below was checked via GitHub API and HTTP status on `2026-11-21`. 19 entries run automated checks without an LLM, and the tables note which. AI-text detectors and bypass tools sit apart in [Contrast Watch](#contrast-watch) at the bottom for reference only.
 
-To filter the list offline, open [dislop.com/awesome](https://dislop.com/awesome/). To hand it to an agent, point it at [index.json](https://dislop.com/awesome/index.json) or [index.md](https://dislop.com/awesome/index.md). To add an entry, see [Suggest a resource](#suggest-a-resource).
+To filter the list offline, open [dislop.com/awesome](https://dislop.com/awesome/). To give it to an agent, point it at [index.json](https://dislop.com/awesome/index.json) or [index.md](https://dislop.com/awesome/index.md). To add an entry, see [Suggest a resource](#suggest-a-resource).
 
 ## Contents
 
@@ -179,6 +179,6 @@ To filter the list offline, open [dislop.com/awesome](https://dislop.com/awesome
 
 ## Suggest a resource
 
-Open a pull request updating [docs/research/anti-slop-radar-index.json](../docs/research/anti-slop-radar-index.json) and run `node scripts/build_site.mjs`. Every entry needs a live HTTPS link, a topic, a locale, and a one-sentence description of what it does.
+Open a pull request updating [docs/research/anti-slop-radar-index.json](../docs/research/anti-slop-radar-index.json) and run `node scripts/build_site.mjs`. Every entry needs a live HTTPS link, a topic, a locale, and one plain sentence saying what it does.
 
-Looking for the red pen that maintains this list? See [dislop](../README.md) or run `npx --yes github:dislop-ai/dislop check .`.
+To check a local draft with dislop itself, see [the main README](../README.md) or run `npx --yes github:dislop-ai/dislop check .`.

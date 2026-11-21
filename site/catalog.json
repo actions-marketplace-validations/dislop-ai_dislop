@@ -11,8 +11,8 @@
   "entryPoints": {
     "llmsTxt": {
       "path": "/llms.txt",
-      "bytes": 2335,
-      "approxTokens": 584
+      "bytes": 2316,
+      "approxTokens": 579
     },
     "llmsFullTxt": {
       "path": "/llms-full.txt",
@@ -95,14 +95,14 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 1015,
-      "approxTokens": 254,
+      "bytes": 982,
+      "approxTokens": 246,
       "relatedTools": [
         "cli",
         "mcp",
         "skill"
       ],
-      "sha256": "3124fcbfe7de4b60937e2daa77d9d8d16b7600006c97bf0ce8c5ed909190b733"
+      "sha256": "5af8e730397f280767d94ab00b3dfc791007ef6a2b33de0e3412a88c67518d3d"
     },
     {
       "id": "methodology-deletion-test",
@@ -235,13 +235,13 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 11961,
-      "approxTokens": 2990,
+      "bytes": 8180,
+      "approxTokens": 2045,
       "relatedTools": [
         "browser-workbench",
         "cli"
       ],
-      "sha256": "38bdff03d000937dd165c76822d4a53c24d099ed04326115404e9b41701729e9"
+      "sha256": "55a3f2be89f135646759322bc49feab17c33598fac737f0326b0e6e900fea399"
     },
     {
       "id": "methodology-design-system",
