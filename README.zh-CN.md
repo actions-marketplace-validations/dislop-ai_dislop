@@ -1,14 +1,15 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./assets/banner-dark.svg">
-    <img src="./assets/banner-light.svg" alt="dislop — 全面去 AI 味并锁住每个事实" width="100%">
+    <img src="./assets/banner-light.svg" alt="dislop — 全面去 AI 味，改完和原稿对一遍" width="100%">
   </picture>
 </p>
 
 <p align="center">
   <a href="./README.md">English</a> ·
   <a href="https://dislop.com">工作台 (dislop.com)</a> ·
-  <a href="https://dislop.com/radar/">生态雷达 (87)</a> ·
+  <a href="./awesome/README.md">Awesome Anti-Slop (87)</a> ·
+  <a href="./docs/brand-and-voice-guide.zh-CN.md">品牌与表达基准</a> ·
   <a href="./docs/strategy-and-roadmap.zh-CN.md">全景蓝图</a> ·
   <a href="./docs/architecture.zh-CN.md">架构说明</a> ·
   <a href="./docs/design-system.zh-CN.md">设计规范</a> ·
@@ -16,11 +17,17 @@
   <a href="./LICENSE">Apache-2.0</a>
 </p>
 
-**全面去 AI 味，覆盖写作、文档、PPT、PDF、前端 UI 与 Agent 交付。** `dislop` 基于零外部运行时依赖的双端内核读取 Markdown、纯文本、HTML、CSS、JSX/TSX、SVG、Word（`.docx`）、PowerPoint（`.pptx`）与 PDF 结构元数据，精确报出文件、行号、段落序号或幻灯片页码；适配任意 AI 模型、Agent 与开发环境，提供浏览器工作台、`/llms.txt`、`SKILL.md`、Node/Python CLI 与 stdio MCP 五类入口。
+**全面去 AI 味。** `dislop` 是给模型代笔的东西做体检的工具，支持 Markdown、纯文本、HTML、CSS、JSX/TSX、SVG、Word（`.docx`）、PowerPoint（`.pptx`）与 PDF 结构元数据。不能发的硬伤它直接标红，听着像套话的地方它只在页边问你一句；等你改完，`dislop verify` 再替你和原稿对一遍，数字、限定词（`最多`、`至少`、`up to`、`at least`）、单位、日期、链接、代码片段与引用编号一个不少才算过。
 
-`dislop` 不会在后台偷偷改写正文。作者或本地 Agent 修改命中片段后，运行 `dislop verify` 逐项比对改前与改后文本，确认数字、限定词（`最多`、`至少`、`up to`、`at least`）、单位、日期、链接、代码片段与引用编号全部原样保留，并拦截把一阶公关词换成二阶口号句（如 `不是 A，而是 B` 或三连短句）的过矫改写。
+它不替你偷偷改稿。笔在你手里，它只管看——无任何外部运行时依赖，断网也能跑，提供浏览器工作台、`/llms.txt`、`SKILL.md`、Node/Python CLI 与 stdio MCP 五类入口。
 
-## 为什么要做两层分治
+## Awesome Anti-Slop（87 条去 AI 味精选清单）
+
+如果想先看一份经过逐条核验的去 AI 味生态地图，可以直接打开 GitHub 目录页 **[awesome/README.md](./awesome/README.md)**，或在官网 **[dislop.com/awesome/](https://dislop.com/awesome/)** 离线筛选。清单收录 87 条中英文写作规范、确定性检查器、前端 UI 与图表指南、代码/PR 治理规则与研究标准，同时向 Agent 开放 [JSON](https://dislop.com/awesome/index.json) 与 [Markdown](https://dislop.com/awesome/index.md) 端点。
+
+欢迎 Star `dislop-ai/dislop` 收藏这份精选清单，也随时试用下方零依赖的 `dislop` 检查引擎与工作台。
+
+## 红笔和蓝笔
 
 市面上主打“去 AI 味 / 拟人化改写”的工具为了绕过概率检测器，经常顺手删改数字或限定条件；而单纯维护一张禁用词黑名单，既会误伤正常专名（如调试器 `Delve`、`抓手机拍照`、`北京大学、清华大学、复旦大学`），又会逼着大模型换用故作深沉的短句口号。
 
@@ -125,16 +132,17 @@ PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning --lang zh
 
 本仓库在 GitHub Actions CI 中执行 `dislop pack-test`（Node 与 Python 双端各 101 项样本断言）、跨语言一致性测试（`tests/test_conformance.py`），并对仓库自身的 Markdown 文档、SVG 品牌资产与 `site/` 官网执行 `dislop check . --fail-on warning`（`packs/` 与 `tests/` 因存放反例样本默认排除）。
 
-## 官方网站与 Agent 直读服务（`dislop.com`）
+## 官方网站、Awesome Anti-Slop 与 Agent 直读（`dislop.com`）
 
 - **在线工作台与规则目录**：[https://dislop.com](https://dislop.com)（静态 Nginx 托管，零后端进程，响应头与页面级 CSP 双重锁定 `connect-src 'none'`，浏览器内存离线解析 `.docx`/`.pptx`）
-- **87 条实测生态雷达**：[https://dislop.com/radar/](https://dislop.com/radar/)（由 `docs/research/anti-slop-radar-index.json` 离线编译的跨媒介可筛选目录）
+- **Awesome Anti-Slop（87 条去 AI 味精选清单）**：[https://dislop.com/awesome/](https://dislop.com/awesome/) 与仓库直读版 [awesome/README.md](./awesome/README.md)（适合收藏、转发与外部 Agent 直读的跨媒介去 AI 味目录）
 - **Level 0 Agent 端点**：[https://dislop.com/llms.txt](https://dislop.com/llms.txt)（低 Token 路由索引）、[https://dislop.com/catalog.json](https://dislop.com/catalog.json)（`dislop.catalog/1`）、任务组合包（`/tasks/*.md`）与 29 张原子规则卡（`/rules/<id>.md`）
 
 ## 仓库目录结构
 
 ```text
 dislop/
+├── awesome/           # Awesome Anti-Slop 独立可分享目录页（README.md，87 条精选资源）
 ├── bin/               # Node.js CLI（dislop.mjs）与 stdio MCP 入口（dislop-mcp.mjs）
 ├── src/
 │   ├── core.mjs       # 零依赖纯 ES 模块内核，由 Node CLI、MCP 与浏览器工作台共用
@@ -144,14 +152,15 @@ dislop/
 ├── skills/dislop/     # 跨宿主标准 Agent Skill（SKILL.md）
 ├── tests/             # 单元测试、Node/Python 跨运行时一致性测试与官网校验测试
 ├── scripts/
-│   ├── build_site.mjs # 官网人机双读静态编译器
+│   ├── build_site.mjs # 官网人机双读与 awesome/README.md 静态编译器
 │   └── prototype_antipattern_lab.mjs # v0.3 目录查询与节奏/UI 新探针验证原型
-├── site/              # 编译产物：工作台首页、87 条生态雷达与 /llms.txt 静态端点
+├── site/              # 编译产物：工作台首页、/awesome/ 精选清单与 /llms.txt 静态端点
 ├── assets/            # 品牌删除号标识、浅/深色横幅与 1200x630 Open Graph 预览卡
 ├── docs/
-│   ├── strategy-and-roadmap*.md            # 战略、视觉 VI、多形态产品与路线全景蓝图
+│   ├── brand-and-voice-guide*.md, brand/voice.json # 品牌风格、表达基准与声纹配置
+│   ├── strategy-and-roadmap*.md            # 双引擎战略、视觉 VI、多形态产品与路线蓝图
 │   ├── architecture*.md, design-system*.md # 双语系统架构与视觉排版设计规范
-│   ├── research/      # 2026 生态全景、87 条雷达事实源、正向差异化与多形态架构研究
+│   ├── research/      # 2026 生态全景、87 条精选清单事实源、正向差异化与多形态架构研究
 │   └── specs/         # v0.3 反模式目录与新探针规格文档
 └── CHANGELOG.md       # 按时间线整理的开发与优化历程
 ```
