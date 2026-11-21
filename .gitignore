@@ -1,0 +1,30 @@
+# Private & local workspace state
+.private/
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Node / TypeScript
+node_modules/
+npm-debug.log*
+pnpm-debug.log*
+.tsbuildinfo
+
+# OS & Editor
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
