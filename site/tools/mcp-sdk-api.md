@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.6.1
+version: 0.6.2
 ---
 
 # Local MCP, Hosted Remote MCP & HTTP API

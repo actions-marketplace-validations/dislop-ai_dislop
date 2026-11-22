@@ -3,7 +3,7 @@
   "name": "io.github.dislop-ai/dislop",
   "title": "dislop",
   "description": "Zero-dependency anti-slop linter & Cloud MCP for AI-written docs, slides, and web UI.",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "websiteUrl": "https://dislop.com",
   "repository": {
     "url": "https://github.com/dislop-ai/dislop",
@@ -13,7 +13,7 @@
     {
       "registryType": "npm",
       "identifier": "dislop",
-      "version": "0.6.1",
+      "version": "0.6.2",
       "runtimeHint": "npx",
       "packageArguments": [
         {
@@ -28,7 +28,7 @@
     {
       "registryType": "pypi",
       "identifier": "dislop",
-      "version": "0.6.1",
+      "version": "0.6.2",
       "runtimeHint": "uvx",
       "packageArguments": [
         {
