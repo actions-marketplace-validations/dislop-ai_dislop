@@ -134,8 +134,8 @@ jobs:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Pin npm >= 11.5.1 for OIDC support
-        run: npm install -g npm@11.5.1
+      - name: Upgrade npm CLI for OIDC Trusted Publishing
+        run: npm install -g npm@latest
 
       - name: Ensure MCP manifests use published registry package coordinate
         run: node scripts/sync_manifests.mjs --channel registry

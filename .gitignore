@@ -39,3 +39,5 @@ pnpm-debug.log*
 .idea/
 .vscode/*
 !.vscode/extensions.json
+integrations/vscode/LICENSE
+integrations/vscode/*.vsix
