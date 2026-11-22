@@ -12,7 +12,7 @@
 
 核对本仓现有清单与公网接口返回状态，当前多平台分发的真实起点如下：
 
-- **包名尚未正式抢注上架**：`https://registry.npmjs.org/dislop` 与 `https://pypi.org/pypi/dislop/json` 当前均返回 `HTTP 404`。这意味着包名仍可直接注册，但也处于随时可能被外部抢注的窗口期；同时，未发布的 npm/PyPI 包会直接卡住官方 MCP Registry（`registry.modelcontextprotocol.io`）的包归属校验，并迫使 `.mcp.json` 退回高延迟的 `npx --yes github:dislop-ai/dislop` Git 拉取方式。
+- **三大核心注册表已正式上架贯通**：`https://registry.npmjs.org/dislop`（`npx dislop`）、`https://pypi.org/pypi/dislop/json`（`uvx dislop`）与官方 MCP Registry `https://registry.modelcontextprotocol.io`（`io.github.dislop-ai/dislop`，同时登记本地 `stdio` 与远程 `https://dislop.com/mcp`）均已完成首发验证并返回 `HTTP 200`，`.mcp.json` 等全套清单已切换至毫秒级公共注册表坐标。
 - **多份清单已完成 `v0.6.0` 同源收敛**：此前各清单曾散落在 `0.2.0`–`0.5.0` 不同版本，现已通过 `scripts/sync_manifests.mjs` 全部对齐至 `v0.6.0` 基线，并在 `server.json` 中同时写入本地 `npm`/`pypi` 包与 `https://dislop.com/mcp` 远程 `streamable-http` 入口。
 - **部分主流商店仍处于完全空白期**：实测检索 Antigravity 官方插件市场（`writing`、`lint`、`markdown`、`slop`、`proofread`、`copywriting` 六组词），当前针对文稿、PPT 与网页去 AI 味的插件数量为 `0`。VS Code 市场里虽已有数款带 `slop` 词根的扩展（如 `AI Slop Detector`、`AI Code Detector`），但几乎全部聚焦代码坏味道与函数复杂度，针对中英文文档、`.docx`/`.pptx` 和前端模板味的确定性检查仍是空位。
 

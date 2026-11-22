@@ -43,7 +43,7 @@ good: <h1 class="page-title">Release Notes v2.4</h1>
 ## 4. Deterministic Verification Command
 
 ```bash
-npx --yes github:dislop-ai/dislop check site/ --pack deck-and-ui --fail-on warning
+npx --yes dislop check site/ --pack deck-and-ui --fail-on warning
 uvx dislop check deck.pptx
 ```
 

@@ -181,4 +181,4 @@
 
 提 PR 更新 [docs/research/anti-slop-radar-index.json](../docs/research/anti-slop-radar-index.json)，然后跑一遍 `node scripts/build_site.mjs` 就行。每条需要可访问的 HTTPS 链接、类别、语种，以及一句说明它是做什么的。
 
-想用 dislop 直接查自己手头的稿子，可以看[中文 README](../README.zh-CN.md)，或者命令行运行 `npx --yes github:dislop-ai/dislop check .`。
+想用 dislop 直接查自己手头的稿子，可以看[中文 README](../README.zh-CN.md)，或者命令行运行 `npx --yes dislop check .`。

@@ -13,7 +13,7 @@ Node.js 20+:
   "mcpServers": {
     "dislop": {
       "command": "npx",
-      "args": ["--yes", "github:dislop-ai/dislop", "--mcp"]
+      "args": ["--yes", "dislop", "--mcp"]
     }
   }
 }

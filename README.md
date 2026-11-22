@@ -8,6 +8,7 @@
 <p align="center">
   <a href="./README.zh-CN.md">简体中文</a> ·
   <a href="https://dislop.com/?lang=en">Try it at dislop.com</a> ·
+  <a href="https://www.npmjs.com/package/dislop">npm</a> ·
   <a href="https://pypi.org/project/dislop/">PyPI</a> ·
   <a href="./awesome/README.md">Awesome Anti-Slop</a> ·
   <a href="./ROADMAP.md">Roadmap</a> ·
@@ -37,24 +38,24 @@ That's it. It reads Markdown, plain text, HTML/CSS/JSX, Word (`.docx`), and Powe
 
 ## Quick start
 
-### Node.js 20+ (zero dependencies, all 7 packs bundled offline)
+### Node.js 20+ (published on npm, zero dependencies, all 7 packs bundled offline)
 
 ```bash
 # Check the current folder (exits 1 on core AI artifact errors; prints cliché warnings)
-npx --yes github:dislop-ai/dislop check .
+npx --yes dislop check .
 
 # Auto-route domain pack and enable 5-axis telemetry, 14.6 KB Pocket ML, and extended pattern probes
-npx --yes github:dislop-ai/dislop check draft.md --pack auto --profile --ml --patterns
+npx --yes dislop check draft.md --pack auto --profile --ml --patterns
 
 # Extract a deterministic personal voice profile offline or inspect hardware for optional local models
-npx --yes github:dislop-ai/dislop voice my-notes.md
-npx --yes github:dislop-ai/dislop model
+npx --yes dislop voice my-notes.md
+npx --yes dislop model
 
 # Check only lines changed against main and emit GitHub PR annotations
-npx --yes github:dislop-ai/dislop check --changed origin/main --format github
+npx --yes dislop check --changed origin/main --format github
 
 # Explain a rule's check question and before / overcorrected / after examples
-npx --yes github:dislop-ai/dislop explain negation-pivot-frame
+npx --yes dislop explain negation-pivot-frame
 ```
 
 ### Python 3.10+ (published on PyPI, zero dependencies)
@@ -98,7 +99,8 @@ Looking for other tools, style guides, design rules, PR policies, and papers in 
 | **Claude Code Plugin** | `/plugin marketplace add dislop-ai/dislop` then `/plugin install dislop@dislop-ai` | Bundles Skill + local stdio MCP (`~130` always-on tokens) |
 | **OpenAI Codex Plugin** | `codex plugin marketplace add dislop-ai/dislop` then `codex plugin add dislop@dislop-ai` | Ships native UI card metadata ([openai.yaml](./skills/dislop/agents/openai.yaml)) and `$dislop` trigger |
 | **Gemini CLI Extension** | `gemini extensions install https://github.com/dislop-ai/dislop` | Mounts local `bin/dislop-mcp.mjs` directly via [gemini-extension.json](./gemini-extension.json) |
-| **VS Code / Cursor 1-Click MCP** | [Install in VS Code (Local Offline)](https://vscode.dev/redirect/mcp/install?name=dislop&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22--yes%22%2C%22github%3Adislop-ai%2Fdislop%22%2C%22--mcp%22%5D%7D) · [Install in VS Code (Cloud)](https://vscode.dev/redirect/mcp/install?name=dislop-cloud&config=%7B%22url%22%3A%22https%3A%2F%2Fdislop.com%2Fmcp%22%7D) · [Install in Cursor (Local)](cursor://anysphere.cursor-deeplink/mcp/install?name=dislop&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyItLXllcyIsImdpdGh1YjpkaXNsb3AtYWkvZGlzbG9wIiwiLS1tY3AiXX0=) | Opens the editor's native confirmation dialog without manual JSON edits |
+| **Official MCP Registry** | Search `io.github.dislop-ai/dislop` on `registry.modelcontextprotocol.io` | Lists local `npx` / `uvx` `stdio` packages and remote `https://dislop.com/mcp` |
+| **VS Code / Cursor 1-Click MCP** | [Install in VS Code (Local Offline)](https://vscode.dev/redirect/mcp/install?name=dislop&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22--yes%22%2C%22dislop%22%2C%22--mcp%22%5D%7D) · [Install in VS Code (Cloud)](https://vscode.dev/redirect/mcp/install?name=dislop-cloud&config=%7B%22url%22%3A%22https%3A%2F%2Fdislop.com%2Fmcp%22%7D) · [Install in Cursor (Local)](cursor://anysphere.cursor-deeplink/mcp/install?name=dislop&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyItLXllcyIsImRpc2xvcCIsIi0tbWNwIl19) | Opens the editor's native confirmation dialog without manual JSON edits |
 | **GitHub Action / `pre-commit`** | Reference `uses: dislop-ai/dislop@main` ([action.yml](./action.yml) and [.pre-commit-hooks.yaml](./.pre-commit-hooks.yaml)) | Gates modified lines in PRs with inline annotations or SARIF 2.1.0 |
 
 ### Manual MCP config (`Claude Code`, `Codex`, `Cursor`, `Windsurf`)
@@ -108,7 +110,7 @@ Looking for other tools, style guides, design rules, PR policies, and papers in 
   "mcpServers": {
     "dislop": {
       "command": "npx",
-      "args": ["--yes", "github:dislop-ai/dislop", "--mcp"]
+      "args": ["--yes", "dislop", "--mcp"]
     }
   }
 }
@@ -145,8 +147,8 @@ For a narrow one-off exception, add a reason above the line (`--report-unused` f
 ### Install once locally (true air-gapped / fast hooks)
 
 ```bash
-# Node.js 20+ (global binary, < 250 KB tarball, zero network after install)
-npm install -g github:dislop-ai/dislop
+# Node.js 20+ (published on npm, < 250 KB tarball, zero network after install)
+npm install -g dislop
 dislop check .
 
 # Or Python 3.10+ (published on PyPI, zero external dependencies)

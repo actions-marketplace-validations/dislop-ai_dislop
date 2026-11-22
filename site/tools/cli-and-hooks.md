@@ -9,32 +9,32 @@ version: 0.6.0
 
 ```bash
 # Check a folder (exits 1 on core AI artifact errors)
-npx --yes github:dislop-ai/dislop check .
+npx --yes dislop check .
 
 # Check only modified git lines and output GitHub PR annotations or SARIF 2.1.0
-npx --yes github:dislop-ai/dislop check --changed origin/main --format github
-npx --yes github:dislop-ai/dislop check --changed origin/main --format sarif > dislop.sarif
+npx --yes dislop check --changed origin/main --format github
+npx --yes dislop check --changed origin/main --format sarif > dislop.sarif
 
 # Inspect DOCX/PPTX with Python (published on PyPI)
 uvx dislop check quarterly-review.pptx
 
 # Explain a rule's check question and examples
-npx --yes github:dislop-ai/dislop explain negation-pivot-frame
+npx --yes dislop explain negation-pivot-frame
 
 # Check with 5-axis rhythm stats and bundled 14.6 KB Pocket ML
-npx --yes github:dislop-ai/dislop check draft.md --profile --ml
+npx --yes dislop check draft.md --profile --ml
 
 # Run extended 53-pattern catalog probes offline
-npx --yes github:dislop-ai/dislop patterns draft.md
+npx --yes dislop patterns draft.md
 
 # Extract an offline deterministic personal voice profile (0 network calls)
-npx --yes github:dislop-ai/dislop voice sample1.md sample2.md -o .dislop.local/voice.json
+npx --yes dislop voice sample1.md sample2.md -o .dislop.local/voice.json
 
 # Inspect hardware RAM/chip and optional local small-model tiers (never bloats install)
-npx --yes github:dislop-ai/dislop model status
+npx --yes dislop model status
 
 # List bundled offline packs and optional read-only static / cloud URLs (check makes 0 network calls)
-npx --yes github:dislop-ai/dislop resources --json
+npx --yes dislop resources --json
 ```
 
 ## Exit Codes
@@ -48,7 +48,7 @@ npx --yes github:dislop-ai/dislop resources --json
 Install once locally so hooks run offline with zero network fetch latency:
 
 ```bash
-npm install -g github:dislop-ai/dislop
+npm install -g dislop
 # or Python 3.10+: pip install dislop
 ```
 

@@ -44,7 +44,7 @@ good: 傍晚六点半，修表匠把拆下的三枚铜齿轮泡进煤油皿里�
 ## 4. Deterministic Verification Command
 
 ```bash
-npx --yes github:dislop-ai/dislop check essay.md --pack literary-essay --lang zh
+npx --yes dislop check essay.md --pack literary-essay --lang zh
 ```
 
 Deep dives: [Pack `literary-essay`](../packs/literary-essay.md) · [Positive Divergence](../methodology/positive-divergence.md)

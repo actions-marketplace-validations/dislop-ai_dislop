@@ -4,6 +4,19 @@ All notable changes to `dislop` are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.1] - 2026-11-22
+
+### Added
+
+- **Public Registry Onboarding & Official MCP Registry Listing**:
+  - Published `dislop` live on **npm** (`https://www.npmjs.com/package/dislop`), **PyPI** (`https://pypi.org/project/dislop/`), and the **Official MCP Registry** (`io.github.dislop-ai/dislop` on `registry.modelcontextprotocol.io`, exposing both local `npx`/`uvx` `stdio` packages and hosted `https://dislop.com/mcp` `streamable-http`).
+  - Switched default install snippets, VS Code / Cursor 1-click MCP deeplinks, `SKILL.md`, and `.mcp.json` / `mcp.json` manifests to fast public registry coordinates (`npx --yes dislop`, `uvx dislop`, `npm install -g dislop`, `pip install dislop`).
+- **Editor & Multi-Agent Fleet Integrations (`integrations/` & `.cursor-plugin/`)**:
+  - Added the Web-compatible **VS Code & Open VSX** extension (`integrations/vscode/`, bundling all 7 offline packs for squiggle diagnostics, hover before/trap/after cards, `Cmd+.` quick-ignore comments, and automatic `dislop.mcp` + `dislop_check_document` registration, attaching `dislop-<ver>.vsix` to GitHub Releases).
+  - Added the validated **Antigravity** plugin bundle (`integrations/antigravity/`, passing `agy plugin validate --strict` with zero warnings), **Cursor** plugin manifest (`.cursor-plugin/plugin.json`), **Orca** / **Herdr** worktree templates (`integrations/orca/orca.yaml`, `integrations/herdr/herdr-plugin.toml`), and 2-strike Agent Hook gate (`integrations/hooks/dislop-gate.sh`).
+- **Site Crawlability & GitHub Workflow Upgrades**:
+  - Added `/robots.txt` and `/sitemap.xml` generation and tests in `scripts/build_site.mjs` and `tests/test_site.mjs`, upgraded GitHub Actions to Node 24 (`actions/checkout@v7`, `actions/setup-node@v7`, `actions/setup-python@v7`, `astral-sh/setup-uv@v7`), and added GitHub Issue/PR templates, `CODEOWNERS`, and weekly Awesome link health checks (`scripts/check_awesome_links.mjs`).
+
 ## [0.6.0] - 2026-11-22
 
 ### Added

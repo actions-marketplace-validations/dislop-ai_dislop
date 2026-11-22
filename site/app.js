@@ -1093,7 +1093,7 @@ npx skills add dislop-ai/dislop
   "mcpServers": {
     "dislop": {
       "command": "npx",
-      "args": ["--yes", "github:dislop-ai/dislop", "--mcp"]
+      "args": ["--yes", "dislop", "--mcp"]
     }
   }
 }`,
@@ -1108,17 +1108,17 @@ npx skills add dislop-ai/dislop
   }
 }`,
     cli: `# 离线检查当前目录（Node 或 Python PyPI 包，内置全部 7 套场景包，0 联网）
-npx --yes github:dislop-ai/dislop check .
+npx --yes dislop check .
 uvx dislop check .
 
 # 开启 5 轴节奏统计与内置 14.6 KB 轻量模型复检
-npx --yes github:dislop-ai/dislop check draft.md --profile --ml
+npx --yes dislop check draft.md --profile --ml
 
 # 离线提取你自己的句长与标点声纹（0 上传）
-npx --yes github:dislop-ai/dislop voice my-notes.md
+npx --yes dislop voice my-notes.md
 
 # 按本机内存与芯片查看选装本地小模型建议（不撑大安装包）
-npx --yes github:dislop-ai/dislop model --lang zh`,
+npx --yes dislop model --lang zh`,
     ci: `name: dislop
 on: [pull_request]
 jobs:
@@ -1131,7 +1131,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - run: npx --yes github:dislop-ai/dislop check --changed origin/main --format github`,
+      - run: npx --yes dislop check --changed origin/main --format github`,
     config: `{
   "failOn": "error",
   "ignore": ["vendor/**", "dist/**"],
@@ -1167,7 +1167,7 @@ npx skills add dislop-ai/dislop
   "mcpServers": {
     "dislop": {
       "command": "npx",
-      "args": ["--yes", "github:dislop-ai/dislop", "--mcp"]
+      "args": ["--yes", "dislop", "--mcp"]
     }
   }
 }`,
@@ -1182,17 +1182,17 @@ npx skills add dislop-ai/dislop
   }
 }`,
     cli: `# Check the current folder offline (Node or PyPI, ships all 7 built-in packs, 0 network calls)
-npx --yes github:dislop-ai/dislop check .
+npx --yes dislop check .
 uvx dislop check .
 
 # Run with 5-axis rhythm telemetry and bundled 14.6 KB Pocket ML
-npx --yes github:dislop-ai/dislop check draft.md --profile --ml
+npx --yes dislop check draft.md --profile --ml
 
 # Extract a deterministic personal voice profile offline (0 uploads)
-npx --yes github:dislop-ai/dislop voice my-notes.md
+npx --yes dislop voice my-notes.md
 
 # Inspect hardware-matched optional local small-model tiers (never bloats install)
-npx --yes github:dislop-ai/dislop model`,
+npx --yes dislop model`,
     ci: `name: dislop
 on: [pull_request]
 jobs:
@@ -1205,7 +1205,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - run: npx --yes github:dislop-ai/dislop check --changed origin/main --format github`,
+      - run: npx --yes dislop check --changed origin/main --format github`,
     config: `{
   "failOn": "error",
   "ignore": ["vendor/**", "dist/**"],

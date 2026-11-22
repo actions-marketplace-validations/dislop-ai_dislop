@@ -23,7 +23,7 @@ This roadmap tracks what `dislop` ships today, how we are rolling out universal 
 | Formats | `.md`, `.mdx`, `.txt`, `.html`, `.css`, `.jsx`, `.tsx`, `.svg`, `.docx`, `.pptx` | `src/binary-node.mjs`, `src/dislop/engine.py` |
 | Website & Workbench | Default-Chinese `dislop.com` with native English toggle, 2 proof marks (red solid `error` + blue dashed `warning`/`info`), 5-cell rhythm gauges, offline + cloud voice profile drawer, and `/llms.txt` endpoints | `scripts/build_site.mjs`, `site/` |
 | Awesome Anti-Slop | 87 checked bilingual entries (`dislop.radar/2`), pure English `awesome/README.md`, pure Chinese `awesome/README.zh-CN.md`, and offline filter at `dislop.com/awesome/` | `docs/research/anti-slop-radar-index.json`, `awesome/` |
-| Multi-surface manifests & CI gates | 10 CI-locked manifests generated from one source: Agent Skill (`skills/dislop/` with 4 local reference cards + `agents/openai.yaml`), Claude Code plugin (`.claude-plugin/`, ~130 always-on tokens), Codex plugin (`.codex-plugin/` + `.agents/plugins/marketplace.json`), Agent Plugins 1.0 (`plugin.json` + `mcp.json`), Gemini CLI extension (`gemini-extension.json`), dual-mode MCP Registry (`server.json` declaring both local `stdio` and remote `https://dislop.com/mcp`), GitHub Action (`action.yml`), and `.pre-commit-hooks.yaml` | `scripts/sync_manifests.mjs`, `plugin.json`, `server.json`, `action.yml` |
+| Multi-surface manifests & editor bundles | CI-locked manifests and bundles across npm (`dislop`), PyPI (`dislop`), Official MCP Registry (`io.github.dislop-ai/dislop` declaring local `stdio` + remote `https://dislop.com/mcp`), Agent Skill (`skills/dislop/` with 4 local reference cards + `agents/openai.yaml`), Claude Code (`.claude-plugin/`, ~130 always-on tokens), Codex (`.codex-plugin/` + `.agents/plugins/marketplace.json`), Cursor (`.cursor-plugin/`), Antigravity (`integrations/antigravity/`), VS Code / Open VSX Web extension (`integrations/vscode/`), GitHub Action (`action.yml`), and `.pre-commit-hooks.yaml` | `scripts/sync_manifests.mjs`, `integrations/`, `server.json`, `action.yml` |
 
 ---
 
@@ -37,8 +37,8 @@ Goal: finish account-side publishing so every install command resolves from publ
 
 - [x] Ship single-source manifest generator (`scripts/sync_manifests.mjs`), automated Trusted Publishing release workflow (`.github/workflows/release.yml`), reusable GitHub Action (`action.yml`), and `pre-commit` hooks (`.pre-commit-hooks.yaml`).
 - [x] Default local MCP `dislop_check` to `verbosity: "compact"`, expose the focused 7-tool stdio surface, strip negative test fixtures from `dislop_explain`, pass `claude plugin validate` and `codex plugin` install checks, and set GitHub repository crawler topics (`gemini-cli-extension`, `claude-code-plugin`, `agent-plugins`).
-- [ ] Run initial `npm publish` (`dislop`) and PyPI Trusted Publishing (`dislop`), flip `.mcp.json` / `mcp.json` via `node scripts/sync_manifests.mjs --channel registry`, and push `server.json` to `registry.modelcontextprotocol.io` (claiming Smithery and Glama listings).
-- [ ] Submit both the GitHub plugin bundle and the remote `https://dislop.com/mcp` connector on Anthropic's directory portal (`claude.ai/directory/manage`), submit to OpenAI's universal plugin directory, and verify automatic indexing on `skills.sh` and `geminicli.com/extensions`.
+- [x] Publish `dislop` on npm and PyPI, flip default package coordinates via `node scripts/sync_manifests.mjs --channel registry`, and publish `server.json` live to `registry.modelcontextprotocol.io` (`io.github.dislop-ai/dislop`).
+- [ ] Verify automatic indexing on `skills.sh` and `geminicli.com/extensions`, claim Smithery and Glama listings, and complete deferred manual store reviews for Anthropic (`claude.ai/directory/manage`) and OpenAI.
 
 **Done when**: `npx dislop check .`, `uvx dislop check .`, and `gemini extensions install` work straight from public registries, and the Official MCP Registry lists both local `stdio` and remote `streamable-http` transports.
 
@@ -46,9 +46,9 @@ Goal: finish account-side publishing so every install command resolves from publ
 
 Goal: ship one zero-dependency Web extension across both major VS Code registries and solve Git worktree handoff checks for parallel agent runners like Orca, Herdr, and Conductor.
 
-- [ ] Build a lightweight Web-compatible extension `integrations/vscode/` (`< 150 KB`) directly around `src/core.mjs`: on-save/idle squiggles, hover before/trap/after cards, `Cmd+.` quick-ignore comments + optional cloud rewrite, and automatic agent registration via `mcpServerDefinitions` / `languageModelTools`; publish simultaneously to **VS Code Marketplace** and **Open VSX** (covering VS Code, Cursor, Windsurf, Antigravity, VSCodium, and `vscode.dev`).
-- [ ] Package `integrations/antigravity/` (square high-contrast logo + 3 starter prompts), pass `agy plugin validate --strict` with zero warnings for Antigravity Partner Intake, and submit `.cursor-plugin/` + Cline MCP Marketplace PRs.
-- [ ] Ship parallel-fleet templates: `integrations/orca/orca.yaml` and Conductor `post-setup.d` hooks (symlinking gitignored `.dislop.local.json` into isolated child Git worktrees and gating previews on `core` errors), `integrations/herdr/herdr-plugin.toml` for one-key pane checks, and Agent Hook scripts with a 2-strike circuit breaker.
+- [x] Ship the Web-compatible extension `integrations/vscode/` around `src/core.mjs` (on-save/idle squiggles, hover before/trap/after cards, `Cmd+.` quick-ignore comments, automatic `mcpServerDefinitions` / `languageModelTools` registration, and `.vsix` attached to GitHub Releases).
+- [x] Ship `integrations/antigravity/` (passing `agy plugin validate --strict` with zero warnings), `.cursor-plugin/plugin.json`, and parallel-fleet templates (`integrations/orca/orca.yaml`, `integrations/herdr/herdr-plugin.toml`, and 2-strike `integrations/hooks/dislop-gate.sh`).
+- [ ] Configure publisher tokens for **VS Code Marketplace** and **Open VSX**, and submit Antigravity Partner Intake plus Cursor / Cline Marketplace PRs.
 
 **Done when**: installing `.vsix` activates both human diagnostics and editor agent tools with zero manual JSON edits, and child Git worktrees inherit `.dislop.local.json` cleanly.
 

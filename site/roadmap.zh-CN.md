@@ -23,7 +23,7 @@ snapshot: 2026-11-21
 | 支持格式 | `.md`、`.mdx`、`.txt`、`.html`、`.css`、`.jsx`、`.tsx`、`.svg`、`.docx`、`.pptx` | `src/binary-node.mjs`、`src/dislop/engine.py` |
 | 官网与在线工作台 | 默认简体中文的 `dislop.com`（一键切原生英文、严格零混排），采用两种标线（红实线硬伤 / 蓝虚线套话提醒）、5 格白话节奏条、离线与云端双模式声纹抽屉及 `/llms.txt` 端点 | `scripts/build_site.mjs`、`site/` |
 | Awesome Anti-Slop | 87 条双语核验清单（`dislop.radar/2`），同源生成纯英文 `awesome/README.md`、纯中文 `awesome/README.zh-CN.md` 与 `dislop.com/awesome/` 离线筛选页 | `docs/research/anti-slop-radar-index.json`、`awesome/` |
-| 多平台清单与 CI 门禁 | 同源生成并受 CI 校验的 10 份分发清单：Agent Skill（`skills/dislop/` 含 4 张本地参考卡与 `agents/openai.yaml`）、Claude Code 插件（`.claude-plugin/`，常驻仅约 130 tokens）、Codex 插件（`.codex-plugin/` 与 `.agents/plugins/marketplace.json`）、Agent Plugins 1.0（`plugin.json` + `mcp.json`）、Gemini CLI 扩展（`gemini-extension.json`）、双通道 MCP Registry（`server.json` 含本地 `stdio` 与远程 `https://dislop.com/mcp`）、可复用 GitHub Action（`action.yml`）与 `.pre-commit-hooks.yaml` | `scripts/sync_manifests.mjs`、`plugin.json`、`server.json`、`action.yml` |
+| 多平台清单与编辑器集成 | 同源生成并受 CI 校验的分发清单与集成包：npm（`dislop`）、PyPI（`dislop`）、官方 MCP Registry（`io.github.dislop-ai/dislop` 含本地 `stdio` 与远程 `https://dislop.com/mcp`）、Agent Skill（`skills/dislop/` 含 4 张本地参考卡与 `agents/openai.yaml`）、Claude Code 插件（`.claude-plugin/`，常驻仅约 130 tokens）、Codex 插件（`.codex-plugin/` 与 `.agents/plugins/marketplace.json`）、Cursor 插件（`.cursor-plugin/`）、Antigravity 插件包（`integrations/antigravity/`）、VS Code / Open VSX 轻量 Web 扩展（`integrations/vscode/`）、可复用 GitHub Action（`action.yml`）与 `.pre-commit-hooks.yaml` | `scripts/sync_manifests.mjs`、`integrations/`、`server.json`、`action.yml` |
 
 ---
 
@@ -37,8 +37,8 @@ snapshot: 2026-11-21
 
 - [x] 建立同源清单同步与校验脚本（`scripts/sync_manifests.mjs`）、自动发包工作流（`.github/workflows/release.yml`）、GitHub Action（`action.yml`）与 `pre-commit` 钩子配置（`.pre-commit-hooks.yaml`）。
 - [x] 默认开启本地 MCP 紧凑输出（`verbosity: "compact"`），收口为 7 个核心离线工具并剥离 `dislop_explain` 测试负例，通过 `claude plugin validate` 与 `codex plugin` 实装校验，配置 GitHub 仓库 `gemini-cli-extension` 等爬虫检索标签。
-- [ ] 完成 npm（`dislop`）与 PyPI（`dislop`）首次登录发布，运行 `node scripts/sync_manifests.mjs --channel registry` 切换正式包名，并推送 `server.json` 至官方 MCP Registry（同步认领 Smithery 与 Glama）。
-- [ ] 在 Anthropic 官方目录（`claude.ai/directory/manage`）提交 GitHub 插件包与远程 `https://dislop.com/mcp` 双通道审核，向 OpenAI 通用插件目录提审，并核验 `skills.sh` 与 `geminicli.com/extensions` 自动收录状态。
+- [x] 完成 npm（`dislop`）与 PyPI（`dislop`）正式发布，运行 `node scripts/sync_manifests.mjs --channel registry` 将全仓默认坐标切换至正式公共包，并已将 `server.json` 推送上线至官方 MCP Registry（`io.github.dislop-ai/dislop`）。
+- [ ] 核验 `skills.sh` 与 `geminicli.com/extensions` 自动收录状态，认领 Smithery 与 Glama 页面；Anthropic 官方目录与 OpenAI 通用插件目录待人工资质与提审窗口推进。
 
 **验收标准**：公网直接执行 `npx dislop check .`、`uvx dislop check .` 与 `gemini extensions install` 可用，官方 MCP Registry 返回 `io.github.dislop-ai/dislop` 本地与远程双条目。
 
@@ -46,9 +46,9 @@ snapshot: 2026-11-21
 
 目标：用同一份零依赖 `src/core.mjs` 吃下最大编辑器搜索流量，并解决 Orca、Herdr、Conductor 等多 Agent 并行工具的 Git Worktree 收口痛点。
 
-- [ ] 开发支持桌面与浏览器端（`vscode.dev`）的轻量 Web 扩展 `integrations/vscode/`（`< 150 KB`）：提供保存/空闲波浪线、悬停三段示例、`Cmd+.` 快速插入豁免注释或可选云端改写，并通过 `mcpServerDefinitions` / `languageModelTools` 自动把工具挂载进编辑器 Agent 模式；同步发布至 **VS Code Marketplace** 与 **Open VSX**（一次覆盖 VS Code、Cursor、Windsurf、Antigravity、VSCodium）。
-- [ ] 构建独立目录 `integrations/antigravity/`（含方形高对比图标与 3 条启动提示词），跑通 `agy plugin validate --strict` 零警告后提交 Antigravity 伙伴审核；补齐 `.cursor-plugin/` 提交 Cursor 官方市场与 Cline MCP 市场 PR。
-- [ ] 交付多 Agent 编排器专属配置：提供 `integrations/orca/orca.yaml` 与 Conductor `post-setup.d` 模板（新建子 Git Worktree 时自动软链被忽略的 `.dislop.local.json`，并在进预览前拦截硬伤），以及 `integrations/herdr/herdr-plugin.toml` 终端面板一键增量检查插件与带 2 次熔断的通用 Agent Hook 脚本。
+- [x] 落地支持桌面与浏览器端（`vscode.dev`）的轻量 Web 扩展 `integrations/vscode/`（内置 7 包规则、波浪线诊断、悬停三段示例、`Cmd+.` 快速插入豁免注释与 Agent 工具双挂载，随 GitHub Release 附带 `.vsix` 安装包）。
+- [x] 落地 `integrations/antigravity/`（通过 `agy plugin validate --strict` 零警告校验）、`.cursor-plugin/plugin.json` 以及多 Agent 编排器配置（`integrations/orca/orca.yaml`、`integrations/herdr/herdr-plugin.toml` 与带 2 次熔断的 `integrations/hooks/dislop-gate.sh`）。
+- [ ] 配置发布者凭据同步上架 **VS Code Marketplace** 与 **Open VSX**，提交 Antigravity 伙伴审核及 Cursor / Cline 市场 PR。
 
 **验收标准**：本地实装 `.vsix` 验证波浪线与 Agent 工具双挂载生效；模拟多 Worktree 并行场景验证私有禁词继承与 `--fail-on error` 拦截退出码准确。
 
