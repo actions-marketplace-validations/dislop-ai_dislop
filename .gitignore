@@ -2,7 +2,9 @@
 .private/
 .claude/
 .codex/
-.agents/
+.agents/*
+!.agents/plugins/
+!.agents/plugins/marketplace.json
 CLAUDE.local.md
 .dislop.local.json
 .env

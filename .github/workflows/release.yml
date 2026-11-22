@@ -1,0 +1,205 @@
+name: Release All Platforms
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      publish_registries:
+        description: "Force attempt npm, PyPI & Official MCP Registry publish"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  verify-and-github-release:
+    runs-on: ubuntu-latest
+    outputs:
+      npm_ready: ${{ steps.probe.outputs.npm_ready }}
+      pypi_ready: ${{ steps.probe.outputs.pypi_ready }}
+      vscode_ready: ${{ steps.probe.outputs.vscode_ready }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run full release preflight gates
+        run: node scripts/release.mjs --check --strict-clean
+
+      - name: Build release archives for GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          mkdir -p dist-assets
+          npm pack --pack-destination dist-assets
+          python3 -m pip install --upgrade build
+          python3 -m build --outdir dist-assets
+          node scripts/release.mjs --extract-notes "${GITHUB_REF_NAME}" > release-notes.md
+
+      - name: Create or update GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            gh release upload "${GITHUB_REF_NAME}" dist-assets/* --clobber
+          else
+            gh release create "${GITHUB_REF_NAME}" dist-assets/* \
+              --title "dislop ${GITHUB_REF_NAME}" \
+              --notes-file release-notes.md
+          fi
+
+      - name: Probe registry OIDC readiness
+        id: probe
+        env:
+          HAS_NPM_SECRET: ${{ secrets.NPM_TOKEN != '' }}
+          NPM_OIDC_FLAG: ${{ vars.NPM_OIDC_ENABLED }}
+          PYPI_OIDC_FLAG: ${{ vars.PYPI_OIDC_ENABLED }}
+          FORCE_REGISTRIES: ${{ inputs.publish_registries }}
+        run: |
+          if [ "${HAS_NPM_SECRET}" = "true" ] || [ "${NPM_OIDC_FLAG}" = "true" ] || [ "${FORCE_REGISTRIES}" = "true" ] || curl -sf https://registry.npmjs.org/dislop >/dev/null 2>&1; then
+            echo "npm_ready=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "npm_ready=false" >> "${GITHUB_OUTPUT}"
+            echo "Note: npm package 'dislop' not yet bootstrapped on npmjs.org; skipping OIDC publish until initial 'npm publish --access=public' + Trusted Publisher binding."
+          fi
+          if [ "${PYPI_OIDC_FLAG}" = "true" ] || [ "${FORCE_REGISTRIES}" = "true" ] || curl -sf https://pypi.org/pypi/dislop/json >/dev/null 2>&1; then
+            echo "pypi_ready=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "pypi_ready=false" >> "${GITHUB_OUTPUT}"
+            echo "Note: PyPI package 'dislop' not yet bootstrapped or PYPI_OIDC_ENABLED not set; skipping PyPI OIDC publish."
+          fi
+          if [ -f "integrations/vscode/package.json" ]; then
+            echo "vscode_ready=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "vscode_ready=false" >> "${GITHUB_OUTPUT}"
+          fi
+
+  publish-npm:
+    needs: verify-and-github-release
+    if: needs.verify-and-github-release.outputs.npm_ready == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 22 with npm >= 11.5.1 for OIDC Trusted Publishing
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Upgrade npm CLI for OIDC support
+        run: npm install -g npm@latest
+
+      - name: Ensure MCP manifests use published registry package coordinate
+        run: node scripts/sync_manifests.mjs --channel registry
+
+      - name: Publish to npm (idempotent if version already bootstrapped)
+        env:
+          BOOTSTRAP_NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          PKG_VER="$(node -p "require('./package.json').version")"
+          if curl -sf "https://registry.npmjs.org/dislop/${PKG_VER}" >/dev/null 2>&1; then
+            echo "dislop@${PKG_VER} is already published on npm; skipping duplicate publish."
+            exit 0
+          fi
+          if [ -n "${BOOTSTRAP_NPM_TOKEN}" ]; then
+            NODE_AUTH_TOKEN="${BOOTSTRAP_NPM_TOKEN}" npm publish --access=public --provenance
+          else
+            rm -f "${NPM_CONFIG_USERCONFIG:-/nonexistent}" ~/.npmrc
+            npm publish --access=public --provenance
+          fi
+
+  publish-pypi:
+    needs: verify-and-github-release
+    if: needs.verify-and-github-release.outputs.pypi_ready == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/dislop
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build Python wheel and sdist
+        run: |
+          python3 -m pip install --upgrade build
+          python3 -m build
+
+      - name: Publish to PyPI via OIDC Trusted Publishing
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true
+
+  publish-mcp-registry:
+    needs: [verify-and-github-release, publish-npm, publish-pypi]
+    if: >-
+      needs.verify-and-github-release.outputs.npm_ready == 'true' &&
+      needs.verify-and-github-release.outputs.pypi_ready == 'true' &&
+      needs.publish-npm.result == 'success' &&
+      needs.publish-pypi.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install mcp-publisher and publish server.json via GitHub OIDC
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error https://registry.npmjs.org/dislop >/dev/null
+          curl --fail --silent --show-error https://pypi.org/pypi/dislop/json >/dev/null
+          curl --fail --location --silent --show-error \
+            "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" \
+            | tar -xz mcp-publisher
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish
+
+  publish-editor-extensions:
+    needs: verify-and-github-release
+    if: needs.verify-and-github-release.outputs.vscode_ready == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Package and publish VSIX to VS Code Marketplace & Open VSX
+        working-directory: integrations/vscode
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        run: |
+          npx --yes @vscode/vsce package --out dislop.vsix
+          if [ -n "${VSCE_PAT}" ]; then
+            npx --yes @vscode/vsce publish --packagePath dislop.vsix -p "${VSCE_PAT}"
+          fi
+          if [ -n "${OVSX_PAT}" ]; then
+            npx --yes ovsx publish dislop.vsix -p "${OVSX_PAT}"
+          fi

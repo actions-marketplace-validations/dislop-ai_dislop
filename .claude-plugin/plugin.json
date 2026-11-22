@@ -1,7 +1,7 @@
 {
   "name": "dislop",
-  "version": "0.3.0",
-  "description": "Anti-slop kit for AI-written docs, Word/PowerPoint decks, and web pages: bundles the dislop Agent Skill (plain writing and UI rules) with the local zero-dependency dislop MCP linter.",
+  "version": "0.6.0",
+  "description": "Zero-dependency anti-slop Skill, CLI, and MCP linter for AI-written docs, Word/PowerPoint decks, and web pages (7 built-in packs, 42 rules, 53 patterns, and bundled 15 KB Pocket ML).",
   "author": {
     "name": "dislop-ai",
     "url": "https://dislop.com"
