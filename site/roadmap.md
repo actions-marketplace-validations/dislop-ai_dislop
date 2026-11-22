@@ -66,7 +66,8 @@ Goal: reach writers, researchers, and PMs outside code editors while expanding r
 
 Goal: keep the 87-entry directory accurate, neutral, and easy to filter in both English and Chinese without splitting focus.
 
-- [ ] Add a GitHub Issue form template for resource submissions (URL, topic, locale, one-sentence EN & ZH summary) and an optional monthly link/star refresh script.
+- [x] Add GitHub Issue form templates for Awesome Anti-Slop submissions (`.github/ISSUE_TEMPLATE/awesome_submission.yml` with URL, category, locale, and one-sentence EN/ZH summaries).
+- [ ] Add an optional monthly link and GitHub star refresh script for the 87 entries.
 - [ ] Keep `awesome/README.md`, `awesome/README.zh-CN.md`, and `https://dislop.com/awesome/` inside `dislop-ai/dislop` during early growth.
 - [ ] **Split threshold**: spin out a standalone CC0-1.0 `dislop-ai/awesome-anti-slop` repository (`dislop.radar/3`) only once sustained external directory PRs reach `>= 5/month`, keeping `https://dislop.com/awesome/` canonical permanently.
 
@@ -96,7 +97,10 @@ These five design choices are open for co-maintainers and contributors to weigh 
 
 ## 4. How We Collaborate
 
-- **Discuss first on direction**: Use [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) for open design questions and rule proposals; open an [Issue](https://github.com/dislop-ai/dislop/issues) when claiming a track or reporting a false positive.
+Open design questions live in [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions). Concrete tasks, false positives, and Awesome submissions live in [Issues](https://github.com/dislop-ai/dislop/issues) grouped by `track:*`, `area:*`, and `priority:*` labels across milestones (`v0.6.1`, `v0.7.0`, `v0.8.0`).
+
+Non-trivial changes go on short topic branches (`feat/...`, `fix/...`, `docs/...`) with `Closes #<number>` in the PR description. `.github/CODEOWNERS` routes PR review requests to maintainers (`@zhangxin840` and `@rayw000`), merged branches delete automatically, and `main` blocks force-pushes and branch deletion while keeping fast-forward release automation working. Commercial billing and hosted cloud backend work stay separated in the private cloud repository.
+
 - **Parallel-friendly file boundaries**:
   - Core probes & parity: `packs/`, `patterns/`, `src/core.mjs`, `src/dislop/`, `tests/test_conformance.py`
   - Marketplaces & editor integrations: `scripts/sync_manifests.mjs`, `plugin.json`, `integrations/`, `action.yml`

@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Open Design Questions & Ideas
+    url: https://github.com/dislop-ai/dislop/discussions
+    about: Propose rule ideas, discuss thresholds, or weigh in on roadmap questions.
+  - name: Online Workbench & Docs
+    url: https://dislop.com
+    about: Test text, Office docs, and HTML/UI copy offline in your browser.

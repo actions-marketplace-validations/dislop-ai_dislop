@@ -1,0 +1,40 @@
+name: Bug or False Positive
+description: Report a broken command, engine mismatch, or clean text flagged by a rule.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options:
+        - CLI (Node or Python)
+        - Local stdio MCP
+        - Web workbench (dislop.com)
+        - Editor or Agent plugin
+        - Rule pack or pattern probe
+    validations:
+      required: true
+  - type: input
+    id: rule_id
+    attributes:
+      label: Rule or Pattern ID (if applicable)
+      placeholder: "e.g. core/chat-wrapper, business-brief/hedge-stack"
+  - type: textarea
+    id: sample
+    attributes:
+      label: Input sample or reproduction steps
+      description: Paste a short clean or failing snippet. Remove any private or proprietary text first.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual output
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Version and OS
+      placeholder: "e.g. dislop v0.6.0, Node 22, macOS"

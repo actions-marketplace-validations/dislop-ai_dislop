@@ -1,0 +1,32 @@
+name: Feature or Roadmap Task
+description: Claim a roadmap track, propose a new rule, or request an integration.
+title: "[Task] "
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: track
+    attributes:
+      label: Roadmap Track
+      options:
+        - Track A - Public registries & marketplaces
+        - Track B - Editor extensions & orchestrators
+        - Track C - Writer stores & benchmarks
+        - Track D - Awesome Anti-Slop
+        - Core rules, pattern catalog & engine
+        - Website & voice copy
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: State what should change and why.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Scope & acceptance criteria
+      description: List the concrete files or checks that show this task is done.
+    validations:
+      required: true

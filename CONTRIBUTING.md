@@ -24,7 +24,13 @@ Every new or updated rule in `packs/<pack-id>/pack.json` must include:
 - Never include real workstation usernames, internal hostnames, private repository references, or proprietary customer material in code, fixtures, or commit messages.
 - All fixtures and exemplars must be original constructions or explicitly licensed open/public-domain text.
 
-## 3. Local Verification & Releases
+## 3. GitHub Workflow & Collaboration
+
+- **Issues vs. Discussions**: Open a [GitHub Discussion](https://github.com/dislop-ai/dislop/discussions) for open design questions or new rule debates. Open an [Issue](https://github.com/dislop-ai/dislop/issues) using the matching form when claiming a roadmap task, reporting a false positive, or submitting an Awesome Anti-Slop entry.
+- **Labels**: Issues use `track:*` (roadmap tracks A–D), `area:*` (`rules`, `voice-copy`, `site`, `mcp-cli`), and `priority: high` / `priority: medium` so tasks filter cleanly on the project board.
+- **Branches & Pull Requests**: Use short branch names such as `feat/<topic>`, `fix/<topic>`, or `docs/<topic>`, reference the tracked issue with `Closes #<number>` in the PR body, and rely on `.github/CODEOWNERS` for maintainer review routing. Merged PR branches are deleted automatically, and `main` blocks force-pushes and branch deletion.
+
+## 4. Local Verification & Releases
 
 Run the full preflight check from the repository root before opening a PR (takes ~15s):
 
