@@ -10,6 +10,7 @@
   <a href="https://dislop.com/?lang=en">Try it at dislop.com</a> ·
   <a href="./awesome/README.md">Awesome Anti-Slop</a> ·
   <a href="./ROADMAP.md">Roadmap</a> ·
+  <a href="https://x.com/dislop_ai">X (@dislop_ai)</a> ·
   <a href="./LICENSE">Apache-2.0</a>
 </p>
 

@@ -25,3 +25,8 @@ Data is sent to `dislop.com` **only** when you explicitly click an AI button in 
   - For anonymous web demos (5 credits/day), we keep an in-memory/ephemeral daily counter keyed by `YYYY-MM-DD:<client-ip>` that is pruned after the day ends.
   - Re-registering with the same email rotates and invalidates the previous token immediately.
 - **Confidential Drafts**: Never send confidential, regulated, or unreleased source documents to any hosted cloud endpoint; use the local offline CLI or local stdio MCP instead.
+
+## 3. Contact & Security Disclosures
+
+- **Support, account deletion & privacy inquiries**: `hello@dislop.com`
+- **Vulnerability & security reports**: `security@dislop.com`
