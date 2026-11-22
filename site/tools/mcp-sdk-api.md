@@ -19,13 +19,13 @@ Node.js 20+:
 }
 ```
 
-Python 3.10+ (zero external deps):
+Python 3.10+ (PyPI, zero external deps):
 ```json
 {
   "mcpServers": {
     "dislop": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/dislop-ai/dislop", "dislop", "--mcp"]
+      "args": ["dislop", "--mcp"]
     }
   }
 }

@@ -15,8 +15,8 @@ npx --yes github:dislop-ai/dislop check .
 npx --yes github:dislop-ai/dislop check --changed origin/main --format github
 npx --yes github:dislop-ai/dislop check --changed origin/main --format sarif > dislop.sarif
 
-# Inspect DOCX/PPTX with Python
-uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review.pptx
+# Inspect DOCX/PPTX with Python (published on PyPI)
+uvx dislop check quarterly-review.pptx
 
 # Explain a rule's check question and examples
 npx --yes github:dislop-ai/dislop explain negation-pivot-frame
@@ -49,6 +49,7 @@ Install once locally so hooks run offline with zero network fetch latency:
 
 ```bash
 npm install -g github:dislop-ai/dislop
+# or Python 3.10+: pip install dislop
 ```
 
 Note: `PostToolUse` fires **after** `Write`/`Edit` completes and receives tool context as JSON on stdin (`tool_input.file_path`). Parse and validate that path before invoking `dislop check`, and map CLI exit `1` to exit `2` to return structured post-write feedback to Claude Code:

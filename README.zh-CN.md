@@ -8,6 +8,7 @@
 <p align="center">
   <a href="./README.md">English</a> ·
   <a href="https://dislop.com">去 dislop.com 试试</a> ·
+  <a href="https://pypi.org/project/dislop/">PyPI</a> ·
   <a href="./awesome/README.zh-CN.md">Awesome Anti-Slop 工具清单</a> ·
   <a href="./ROADMAP.zh-CN.md">路线图</a> ·
   <a href="https://x.com/dislop_ai">X (@dislop_ai)</a> ·
@@ -57,16 +58,12 @@ npx --yes github:dislop-ai/dislop check --changed origin/main --format github
 npx --yes github:dislop-ai/dislop explain negation-pivot-frame --lang zh
 ```
 
-### Python 3.10+（零外部依赖）
+### Python 3.10+（已上架 PyPI，零外部依赖）
 
 ```bash
-# 用 uvx 直接跑
-uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review.pptx
-
-# 或克隆到本地运行
-git clone https://github.com/dislop-ai/dislop.git
-cd dislop
-PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning --lang zh
+# 用 uvx 免安装直接跑，或用 pip 安装
+uvx dislop check quarterly-review.pptx
+pip install dislop && dislop check . --lang zh
 ```
 
 ## AI 残留硬伤和套话提醒分开查
@@ -150,9 +147,9 @@ Node.js 版（`bin/dislop.mjs`）和 Python 版（`src/dislop/`）都零外部�
 npm install -g github:dislop-ai/dislop
 dislop check .
 
-# 或 Python 3.10+（零外部依赖）
-git clone https://github.com/dislop-ai/dislop.git
-PYTHONPATH=dislop/src python3 -m dislop.cli check .
+# 或 Python 3.10+（已上架 PyPI，零外部依赖）
+pip install dislop
+dislop check .
 ```
 
 ### 开源本地（`Skill` + `CLI`）vs. 官方托管云端（`dislop.com/mcp`）

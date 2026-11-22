@@ -8,6 +8,7 @@
 <p align="center">
   <a href="./README.zh-CN.md">简体中文</a> ·
   <a href="https://dislop.com/?lang=en">Try it at dislop.com</a> ·
+  <a href="https://pypi.org/project/dislop/">PyPI</a> ·
   <a href="./awesome/README.md">Awesome Anti-Slop</a> ·
   <a href="./ROADMAP.md">Roadmap</a> ·
   <a href="https://x.com/dislop_ai">X (@dislop_ai)</a> ·
@@ -56,16 +57,12 @@ npx --yes github:dislop-ai/dislop check --changed origin/main --format github
 npx --yes github:dislop-ai/dislop explain negation-pivot-frame
 ```
 
-### Python 3.10+ (zero dependencies)
+### Python 3.10+ (published on PyPI, zero dependencies)
 
 ```bash
-# Run directly via uvx
-uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review.pptx
-
-# Or from a local checkout
-git clone https://github.com/dislop-ai/dislop.git
-cd dislop
-PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning
+# Run directly via uvx (zero install) or install via pip
+uvx dislop check quarterly-review.pptx
+pip install dislop && dislop check .
 ```
 
 ## AI artifacts vs. style warnings
@@ -152,9 +149,9 @@ For a narrow one-off exception, add a reason above the line (`--report-unused` f
 npm install -g github:dislop-ai/dislop
 dislop check .
 
-# Or Python 3.10+ (zero external dependencies)
-git clone https://github.com/dislop-ai/dislop.git
-PYTHONPATH=dislop/src python3 -m dislop.cli check .
+# Or Python 3.10+ (published on PyPI, zero external dependencies)
+pip install dislop
+dislop check .
 ```
 
 ### Open-Source Local (`Skill` + `CLI`) vs. Hosted Cloud (`dislop.com/mcp`)
