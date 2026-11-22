@@ -1083,7 +1083,7 @@ version: ${VERSION}
 1. Remove unfilled placeholders and chatbot wrappers.
 2. Cut throat-clearing openers, stock promotional adjectives, and moralizing endings.
 3. Do not replace cut filler with binary negation slogans ("Not X, but Y") or three-word staccato fragments.
-4. Re-check the revised draft locally with: npx --yes github:dislop-ai/dislop check draft.md
+4. Re-check the revised draft locally with: npx --yes dislop check draft.md
 \`\`\`
 
 ## Web UI & Slide Deck Checklist
@@ -1118,32 +1118,32 @@ version: ${VERSION}
 
 \`\`\`bash
 # Check a folder (exits 1 on core AI artifact errors)
-npx --yes github:dislop-ai/dislop check .
+npx --yes dislop check .
 
 # Check only modified git lines and output GitHub PR annotations or SARIF 2.1.0
-npx --yes github:dislop-ai/dislop check --changed origin/main --format github
-npx --yes github:dislop-ai/dislop check --changed origin/main --format sarif > dislop.sarif
+npx --yes dislop check --changed origin/main --format github
+npx --yes dislop check --changed origin/main --format sarif > dislop.sarif
 
 # Inspect DOCX/PPTX with Python (published on PyPI)
 uvx dislop check quarterly-review.pptx
 
 # Explain a rule's check question and examples
-npx --yes github:dislop-ai/dislop explain negation-pivot-frame
+npx --yes dislop explain negation-pivot-frame
 
 # Check with 5-axis rhythm stats and bundled 14.6 KB Pocket ML
-npx --yes github:dislop-ai/dislop check draft.md --profile --ml
+npx --yes dislop check draft.md --profile --ml
 
 # Run extended 53-pattern catalog probes offline
-npx --yes github:dislop-ai/dislop patterns draft.md
+npx --yes dislop patterns draft.md
 
 # Extract an offline deterministic personal voice profile (0 network calls)
-npx --yes github:dislop-ai/dislop voice sample1.md sample2.md -o .dislop.local/voice.json
+npx --yes dislop voice sample1.md sample2.md -o .dislop.local/voice.json
 
 # Inspect hardware RAM/chip and optional local small-model tiers (never bloats install)
-npx --yes github:dislop-ai/dislop model status
+npx --yes dislop model status
 
 # List bundled offline packs and optional read-only static / cloud URLs (check makes 0 network calls)
-npx --yes github:dislop-ai/dislop resources --json
+npx --yes dislop resources --json
 \`\`\`
 
 ## Exit Codes
@@ -1157,7 +1157,7 @@ npx --yes github:dislop-ai/dislop resources --json
 Install once locally so hooks run offline with zero network fetch latency:
 
 \`\`\`bash
-npm install -g github:dislop-ai/dislop
+npm install -g dislop
 # or Python 3.10+: pip install dislop
 \`\`\`
 
@@ -1209,7 +1209,7 @@ Node.js 20+:
   "mcpServers": {
     "dislop": {
       "command": "npx",
-      "args": ["--yes", "github:dislop-ai/dislop", "--mcp"]
+      "args": ["--yes", "dislop", "--mcp"]
     }
   }
 }
@@ -1482,7 +1482,7 @@ ${fencedExemplar(packsById["business-brief"].rules[2].exemplar)}
 ## 4. Deterministic Verification Command
 
 \`\`\`bash
-npx --yes github:dislop-ai/dislop check brief.md --pack business-brief
+npx --yes dislop check brief.md --pack business-brief
 \`\`\`
 
 Deep dives: [Pack \`business-brief\`](../packs/business-brief.md) · [Deletion Test](../methodology/deletion-test.md) · [Skill](../tools/skill.md)
@@ -1527,7 +1527,7 @@ ${fencedExemplar(packsById["deck-and-ui"].rules[4].exemplar)}
 ## 4. Deterministic Verification Command
 
 \`\`\`bash
-npx --yes github:dislop-ai/dislop check site/ --pack deck-and-ui --fail-on warning
+npx --yes dislop check site/ --pack deck-and-ui --fail-on warning
 uvx dislop check deck.pptx
 \`\`\`
 
@@ -1574,7 +1574,7 @@ ${fencedExemplar(packsById["literary-essay"].rules[0].exemplar)}
 ## 4. Deterministic Verification Command
 
 \`\`\`bash
-npx --yes github:dislop-ai/dislop check essay.md --pack literary-essay --lang zh
+npx --yes dislop check essay.md --pack literary-essay --lang zh
 \`\`\`
 
 Deep dives: [Pack \`literary-essay\`](../packs/literary-essay.md) · [Positive Divergence](../methodology/positive-divergence.md)
@@ -1610,10 +1610,10 @@ ${renderTaskRuleSummary(["core"])}
 
 \`\`\`bash
 # Gate only git-changed lines against main (exit 1 on core error)
-npx --yes github:dislop-ai/dislop check --changed origin/main --fail-on error --format github
+npx --yes dislop check --changed origin/main --fail-on error --format github
 
 # Emit SARIF 2.1.0 for GitHub Code Scanning
-npx --yes github:dislop-ai/dislop check . --fail-on error --format sarif > dislop.sarif
+npx --yes dislop check . --fail-on error --format sarif > dislop.sarif
 \`\`\`
 
 Deep dives: [Pack \`core\`](../packs/core.md) · [CLI & Hooks](../tools/cli-and-hooks.md) · [MCP & SDK](../tools/mcp-sdk-api.md)
@@ -1762,7 +1762,7 @@ ${githubTablesEn}
 
 Open a pull request updating [docs/research/anti-slop-radar-index.json](../docs/research/anti-slop-radar-index.json) and run \`node scripts/build_site.mjs\`. Every entry needs a live HTTPS link, a topic, a locale, and one plain sentence saying what it does.
 
-To check a local draft with dislop itself, see [the main README](../README.md) or run \`npx --yes github:dislop-ai/dislop check .\`.
+To check a local draft with dislop itself, see [the main README](../README.md) or run \`npx --yes dislop check .\`.
 `;
 fs.writeFileSync(path.join(REPO_AWESOME_OUT, "README.md"), sanitizeAgentText(repoAwesomeReadmeEn), "utf8");
 
@@ -1825,7 +1825,7 @@ ${githubTablesZh}
 
 提 PR 更新 [docs/research/anti-slop-radar-index.json](../docs/research/anti-slop-radar-index.json)，然后跑一遍 \`node scripts/build_site.mjs\` 就行。每条需要可访问的 HTTPS 链接、类别、语种，以及一句说明它是做什么的。
 
-想用 dislop 直接查自己手头的稿子，可以看[中文 README](../README.zh-CN.md)，或者命令行运行 \`npx --yes github:dislop-ai/dislop check .\`。
+想用 dislop 直接查自己手头的稿子，可以看[中文 README](../README.zh-CN.md)，或者命令行运行 \`npx --yes dislop check .\`。
 `;
 fs.writeFileSync(path.join(REPO_AWESOME_OUT, "README.zh-CN.md"), sanitizeAgentText(repoAwesomeReadmeZh), "utf8");
 
@@ -2079,8 +2079,8 @@ Note: Prefer \`/llms.txt\` + one \`/tasks/*.md\` page for smaller context window
 ## CLI Quick Reference
 
 \`\`\`bash
-npx --yes github:dislop-ai/dislop check .
-npx --yes github:dislop-ai/dislop explain negation-pivot-frame
+npx --yes dislop check .
+npx --yes dislop explain negation-pivot-frame
 uvx dislop check deck.pptx
 \`\`\`
 
@@ -2109,6 +2109,54 @@ const catalogObj = {
 };
 const catalogJsonStr = JSON.stringify(catalogObj, null, 2) + "\n";
 fs.writeFileSync(path.join(SITE_DIR, "catalog.json"), catalogJsonStr, "utf8");
+
+// 2l. Search & Crawlability files (/robots.txt & /sitemap.xml)
+const robotsTxt = `User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /mcp
+
+Sitemap: ${BASE_URL}/sitemap.xml
+`;
+fs.writeFileSync(path.join(SITE_DIR, "robots.txt"), robotsTxt, "utf8");
+
+function escapeXml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
+const sitemapMap = new Map([
+  [`${BASE_URL}/`, "1.0"],
+  [`${BASE_URL}/awesome/`, "0.9"],
+  [`${BASE_URL}/llms.txt`, "0.8"],
+  [`${BASE_URL}/llms-full.txt`, "0.7"],
+  [`${BASE_URL}/roadmap.md`, "0.6"],
+  [`${BASE_URL}/roadmap.zh-CN.md`, "0.6"],
+  [`${BASE_URL}/privacy.md`, "0.5"],
+]);
+for (const res of catalogResources) {
+  const fullUrl = `${BASE_URL}${res.path.startsWith("/") ? res.path : `/${res.path}`}`;
+  if (!sitemapMap.has(fullUrl)) {
+    const prio = res.kind === "guide" || res.kind === "task" ? "0.7" : "0.6";
+    sitemapMap.set(fullUrl, prio);
+  }
+}
+const sitemapUrls = [...sitemapMap.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${sitemapUrls
+  .map(
+    ([loc, priority]) =>
+      `  <url>\n    <loc>${escapeXml(loc)}</loc>\n    <lastmod>${escapeXml(SNAPSHOT_DATE)}</lastmod>\n    <priority>${priority}</priority>\n  </url>`
+  )
+  .join("\n")}
+</urlset>
+`;
+fs.writeFileSync(path.join(SITE_DIR, "sitemap.xml"), sitemapXml, "utf8");
 
 // ---------- 3. Pre-Render Static Content into site/index.html ----------
 
