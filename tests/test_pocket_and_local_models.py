@@ -369,7 +369,8 @@ class PocketAndLocalModelsTests(unittest.TestCase):
     def test_check_ml_non_json_formatters_and_cli_help_parity(self) -> None:
         import dislop
 
-        self.assertEqual(dislop.__version__, "0.6.0")
+        pkg_ver = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))["version"]
+        self.assertEqual(dislop.__version__, pkg_ver)
         stealth = (
             "Teams adopting modern deployment workflows often notice clearer coordination across product and platform groups. "
             "Building shared visibility into rollout stages supports steady operational progress."
