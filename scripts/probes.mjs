@@ -46,9 +46,23 @@ export function runThirdOrderProbes(payload, { modality = "markdown", lang = "zh
     hits.push({ probeId: "struct-pull-quote-closer", detail: "Pull-quote / slogan closing punchline" });
   }
 
-  // 3. Comma-chain cadence (5+ commas inside a single sentence)
+  // 3. Comma-chain cadence (5+ clause commas inside a single sentence, stripping numeric thousands separators like 1,200)
   const sentences = raw.split(/[。！？.!?\n]+/).filter((s) => s.trim().length > 0);
-  if (sentences.some((s) => (s.match(/[，,]/g) || []).length >= 5)) {
+  if (
+    sentences.some((s) => {
+      const cleaned = s.replace(/(\d),(\d{3})(?!\d)/g, "$1$2").replace(/\([^)\n]{1,60}\)/g, " ");
+      const parts = cleaned.split(/[，,]/).map((p) => p.trim()).filter(Boolean);
+      if (parts.length < 6) return false;
+      let clauseParts = 0;
+      for (const p of parts) {
+        const cjk = (p.match(/[\u4e00-\u9fff]/gu) || []).length;
+        const enWords = (p.match(/[A-Za-z]+/g) || []).length;
+        const hasGerund = /\b[a-z]{3,}ing\b/i.test(p);
+        if (cjk >= 6 || enWords >= 4 || (enWords >= 3 && hasGerund)) clauseParts += 1;
+      }
+      return clauseParts >= 5;
+    })
+  ) {
     hits.push({ probeId: "struct-comma-chain", detail: "Sentence with 5+ comma-chained clauses" });
   }
 

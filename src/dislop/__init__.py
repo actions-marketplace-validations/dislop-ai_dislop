@@ -1,3 +1,5 @@
-"""dislop — Deterministic deliverable linter and revision verifier."""
+"""dislop — Zero-dependency anti-slop linter for docs, slides, and web UI."""
 
-__version__ = "0.2.0"
+from .engine import ENGINE_VERSION as __version__
+
+__all__ = ["__version__"]
