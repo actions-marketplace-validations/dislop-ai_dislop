@@ -21,33 +21,7 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Verify full dual-native site/ and awesome/ outputs are in sync with SSOT
+      - name: Run full preflight, benchmarks, parity, privacy & packaging gates
         run: |
-          node scripts/build_site.mjs
-          git diff --exit-code site/ awesome/
+          node scripts/release.mjs --check --strict-clean
           test -z "$(git status --porcelain site/ awesome/)"
-
-      - name: Run website specimen, Try-demo, catalog, URL & WCAG tests
-        run: node tests/test_site.mjs
-
-      - name: Run anti-slop benchmark regression gates (48 detection + 12 revision tasks, Node & Python parity)
-        run: node scripts/run_benchmark.mjs --assert
-
-      - name: Run v0.3 anti-pattern prototype self-test
-        run: node scripts/prototype_antipattern_lab.mjs self-test
-
-      - name: Validate Pack Schema v2 & all 101+ rule fixtures (Node & Python)
-        run: |
-          node ./bin/dislop.mjs pack-test
-          PYTHONPATH=src python3 -m dislop.cli pack-test
-
-      - name: Run unit & cross-runtime conformance tests (DOCX, PPTX, PDF, MCP, verify)
-        run: PYTHONPATH=src python3 -m unittest discover -s tests -v
-
-      - name: Strict self-dogfood across docs, skills, SVG assets & site/ (Node & Python)
-        run: |
-          node ./bin/dislop.mjs check . --fail-on warning
-          PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning
-          node ./bin/dislop.mjs check site/ docs/research/ skills/ assets/ --fail-on info
-          PYTHONPATH=src python3 -m dislop.cli check site/ docs/research/ skills/ assets/ --fail-on info
-          PYTHONPATH=src python3 -m dislop.cli check README.zh-CN.md --pack literary-essay --fail-on warning

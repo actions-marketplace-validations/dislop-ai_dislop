@@ -1,8 +1,9 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.dislop-ai/dislop",
-  "description": "Local zero-dependency anti-slop linter for AI-written docs, slides, and web pages.",
-  "version": "0.3.0",
+  "title": "dislop",
+  "description": "Zero-dependency anti-slop linter & Cloud MCP for AI-written docs, slides, and web UI.",
+  "version": "0.6.0",
   "websiteUrl": "https://dislop.com",
   "repository": {
     "url": "https://github.com/dislop-ai/dislop",
@@ -12,7 +13,7 @@
     {
       "registryType": "npm",
       "identifier": "dislop",
-      "version": "0.2.0",
+      "version": "0.6.0",
       "runtimeHint": "npx",
       "packageArguments": [
         {
@@ -27,7 +28,7 @@
     {
       "registryType": "pypi",
       "identifier": "dislop",
-      "version": "0.2.0",
+      "version": "0.6.0",
       "runtimeHint": "uvx",
       "packageArguments": [
         {
@@ -38,6 +39,12 @@
       "transport": {
         "type": "stdio"
       }
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://dislop.com/mcp"
     }
   ]
 }
