@@ -16,8 +16,8 @@
     },
     "llmsFullTxt": {
       "path": "/llms-full.txt",
-      "bytes": 28405,
-      "approxTokens": 7101
+      "bytes": 28371,
+      "approxTokens": 7093
     },
     "awesomeJson": {
       "path": "/awesome/index.json",
@@ -505,14 +505,14 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 2752,
-      "approxTokens": 688,
+      "bytes": 2701,
+      "approxTokens": 675,
       "relatedTools": [
         "skill",
         "cli",
         "mcp"
       ],
-      "sha256": "882cb88b1a5451468904e16c59c468f7aaae278f62a1100b5a1f5041e2b80bab"
+      "sha256": "63b86aa8105e1fdebbcec6c9ddebcc8e33a25b58a968f5a51334d4dc897a30bd"
     },
     {
       "id": "tools-skill-ref-business-and-rfc",
@@ -699,13 +699,13 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 952,
-      "approxTokens": 238,
+      "bytes": 935,
+      "approxTokens": 234,
       "relatedTools": [
         "browser-workbench",
         "skill"
       ],
-      "sha256": "9071e37c43e92aa6fe5af5887d443cda6cd7a1d6f8a109e55cf01e7e3e8956e5"
+      "sha256": "9db1b16ae762fd46e62fc3c8f563182b39167a0b62d7a6ad22229167dd790dd9"
     },
     {
       "id": "tools-cli-hooks",
@@ -739,12 +739,12 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 2735,
-      "approxTokens": 684,
+      "bytes": 2565,
+      "approxTokens": 641,
       "relatedTools": [
         "cli"
       ],
-      "sha256": "ebeedb6ff807f77f050d6463493d7989bfba5facf9653c5270602308810496be"
+      "sha256": "4d4aa71401dd1bcf2573112457631a279e84080381d2b6002506fc3ec4a1f9a5"
     },
     {
       "id": "tools-mcp-sdk-api",
@@ -779,13 +779,13 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 3914,
-      "approxTokens": 979,
+      "bytes": 3897,
+      "approxTokens": 974,
       "relatedTools": [
         "mcp",
         "cli"
       ],
-      "sha256": "5aa88165abc73ed92f4ebbd6e7b7df63257c38c5d8c15a223f1bd7fd6352e08d"
+      "sha256": "99b50b84e0f1a8ff3cd81450ec8b76cbcb0fee17993eb643a273eb38381f697c"
     },
     {
       "id": "privacy-policy",
@@ -2337,15 +2337,15 @@
         "core",
         "business-brief"
       ],
-      "bytes": 4686,
-      "approxTokens": 1172,
+      "bytes": 4669,
+      "approxTokens": 1167,
       "relatedTools": [
         "browser-workbench",
         "skill",
         "cli",
         "mcp"
       ],
-      "sha256": "70ef472a3607f477fef44c5d68f7a970b402add8b2ad16fe5ebfb795db1164c0"
+      "sha256": "e2e5162f0092213eabf8c1157fc15333fffd0cba089793c9d426bc176d59d747"
     },
     {
       "id": "task-web-and-deck",
@@ -2371,15 +2371,15 @@
         "core",
         "deck-and-ui"
       ],
-      "bytes": 3299,
-      "approxTokens": 825,
+      "bytes": 3282,
+      "approxTokens": 821,
       "relatedTools": [
         "browser-workbench",
         "skill",
         "cli",
         "mcp"
       ],
-      "sha256": "d34beeed4722b4bd20c34a1d42729983db0aa00339e2aae2d754cf0eab914393"
+      "sha256": "f9520344fc014630dafbabb26f611a440d8ef2a574ddf7e01c79eb6526e32dbb"
     },
     {
       "id": "task-editorial-writing",
@@ -2404,15 +2404,15 @@
         "core",
         "literary-essay"
       ],
-      "bytes": 3455,
-      "approxTokens": 864,
+      "bytes": 3438,
+      "approxTokens": 860,
       "relatedTools": [
         "browser-workbench",
         "skill",
         "cli",
         "mcp"
       ],
-      "sha256": "f4eaa6af1d080b372d49d7dfc96b411c48e0aec282ce28f99158a55c4692d36f"
+      "sha256": "c1dee16caa7c1ea0c29161ce4865cd9e8e7dedd1c88abed040a01280acc5f467"
     },
     {
       "id": "task-pre-release-gate",
@@ -2441,13 +2441,13 @@
       "packs": [
         "core"
       ],
-      "bytes": 1372,
-      "approxTokens": 343,
+      "bytes": 1338,
+      "approxTokens": 335,
       "relatedTools": [
         "cli",
         "mcp"
       ],
-      "sha256": "d90a877436d76d6f5377369d62c9acad1cf13a7402d14f75749ba3d567e2ea70"
+      "sha256": "68aeeb791643b9015722aba74e27118c24283cc9c32d26cc0af8548c024be3e5"
     },
     {
       "id": "awesome-anti-slop-md",
@@ -2510,15 +2510,15 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 12973,
-      "approxTokens": 3243,
+      "bytes": 12608,
+      "approxTokens": 3152,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp",
         "skill"
       ],
-      "sha256": "8d4a422973ddc6bce4611c1c816be2bdcc8236866d57c15f69e83c82e2585906"
+      "sha256": "2dcceafb16d33d1ad25e7b91378d9ae728eb77fe8d5d338552ddce0f63b2e595"
     }
   ]
 }

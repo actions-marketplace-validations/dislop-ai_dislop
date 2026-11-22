@@ -181,4 +181,4 @@ To filter the list offline, open [dislop.com/awesome](https://dislop.com/awesome
 
 Open a pull request updating [docs/research/anti-slop-radar-index.json](../docs/research/anti-slop-radar-index.json) and run `node scripts/build_site.mjs`. Every entry needs a live HTTPS link, a topic, a locale, and one plain sentence saying what it does.
 
-To check a local draft with dislop itself, see [the main README](../README.md) or run `npx --yes github:dislop-ai/dislop check .`.
+To check a local draft with dislop itself, see [the main README](../README.md) or run `npx --yes dislop check .`.

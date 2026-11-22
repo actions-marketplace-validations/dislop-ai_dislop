@@ -20,10 +20,10 @@ Use this bundle when gating pull requests, release docs, or agent-produced Offic
 
 ```bash
 # Gate only git-changed lines against main (exit 1 on core error)
-npx --yes github:dislop-ai/dislop check --changed origin/main --fail-on error --format github
+npx --yes dislop check --changed origin/main --fail-on error --format github
 
 # Emit SARIF 2.1.0 for GitHub Code Scanning
-npx --yes github:dislop-ai/dislop check . --fail-on error --format sarif > dislop.sarif
+npx --yes dislop check . --fail-on error --format sarif > dislop.sarif
 ```
 
 Deep dives: [Pack `core`](../packs/core.md) · [CLI & Hooks](../tools/cli-and-hooks.md) · [MCP & SDK](../tools/mcp-sdk-api.md)

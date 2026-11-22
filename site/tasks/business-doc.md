@@ -51,7 +51,7 @@ good: 本次改造按问题紧急度拆分工单队列，一线客服首次响�
 ## 4. Deterministic Verification Command
 
 ```bash
-npx --yes github:dislop-ai/dislop check brief.md --pack business-brief
+npx --yes dislop check brief.md --pack business-brief
 ```
 
 Deep dives: [Pack `business-brief`](../packs/business-brief.md) · [Deletion Test](../methodology/deletion-test.md) · [Skill](../tools/skill.md)

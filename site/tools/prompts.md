@@ -11,7 +11,7 @@ version: 0.6.0
 1. Remove unfilled placeholders and chatbot wrappers.
 2. Cut throat-clearing openers, stock promotional adjectives, and moralizing endings.
 3. Do not replace cut filler with binary negation slogans ("Not X, but Y") or three-word staccato fragments.
-4. Re-check the revised draft locally with: npx --yes github:dislop-ai/dislop check draft.md
+4. Re-check the revised draft locally with: npx --yes dislop check draft.md
 ```
 
 ## Web UI & Slide Deck Checklist

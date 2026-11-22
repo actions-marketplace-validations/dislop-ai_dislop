@@ -8,6 +8,7 @@
 <p align="center">
   <a href="./README.md">English</a> ·
   <a href="https://dislop.com">去 dislop.com 试试</a> ·
+  <a href="https://www.npmjs.com/package/dislop">npm</a> ·
   <a href="https://pypi.org/project/dislop/">PyPI</a> ·
   <a href="./awesome/README.zh-CN.md">Awesome Anti-Slop 工具清单</a> ·
   <a href="./ROADMAP.zh-CN.md">路线图</a> ·
@@ -38,24 +39,24 @@
 
 ## 上手
 
-### Node.js 20+（零外部依赖，内置全部 7 套规则包）
+### Node.js 20+（已上架 npm，零外部依赖，内置全部 7 套规则包）
 
 ```bash
 # 检查当前目录（命中硬伤时退出码为 1，同时标出套话提醒）
-npx --yes github:dislop-ai/dislop check .
+npx --yes dislop check .
 
 # 自动路由文体包，同时开启 5 轴节奏统计、14.6 KB 轻量模型与扩展模式库扫描
-npx --yes github:dislop-ai/dislop check draft.md --pack auto --profile --ml --patterns
+npx --yes dislop check draft.md --pack auto --profile --ml --patterns
 
 # 离线提取你自己的句长与标点声纹，或按本机内存查看选装本地小模型建议
-npx --yes github:dislop-ai/dislop voice my-notes.md
-npx --yes github:dislop-ai/dislop model --lang zh
+npx --yes dislop voice my-notes.md
+npx --yes dislop model --lang zh
 
 # 只查相对 main 新改的行，并输出 GitHub PR 行内批注
-npx --yes github:dislop-ai/dislop check --changed origin/main --format github
+npx --yes dislop check --changed origin/main --format github
 
 # 查看某条规则的判断方法和改前/改后示例
-npx --yes github:dislop-ai/dislop explain negation-pivot-frame --lang zh
+npx --yes dislop explain negation-pivot-frame --lang zh
 ```
 
 ### Python 3.10+（已上架 PyPI，零外部依赖）
@@ -99,7 +100,8 @@ Node.js 版（`bin/dislop.mjs`）和 Python 版（`src/dislop/`）都零外部�
 | **Claude Code 插件** | `/plugin marketplace add dislop-ai/dislop` 后执行 `/plugin install dislop@dislop-ai` | 一键装好 Skill 与本地离线 MCP（常驻上下文仅约 `130` tokens） |
 | **OpenAI Codex 插件** | `codex plugin marketplace add dislop-ai/dislop` 后执行 `codex plugin add dislop@dislop-ai` | 附带 [openai.yaml](./skills/dislop/agents/openai.yaml) 原生应用卡片与 `$dislop` 快捷指令 |
 | **Gemini CLI 扩展** | `gemini extensions install https://github.com/dislop-ai/dislop` | 基于根目录 [gemini-extension.json](./gemini-extension.json) 直接挂载本地 `bin/dislop-mcp.mjs` |
-| **VS Code / Cursor 一键装 MCP** | [装进 VS Code（本地离线）](https://vscode.dev/redirect/mcp/install?name=dislop&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22--yes%22%2C%22github%3Adislop-ai%2Fdislop%22%2C%22--mcp%22%5D%7D) · [装进 VS Code（云端免环境）](https://vscode.dev/redirect/mcp/install?name=dislop-cloud&config=%7B%22url%22%3A%22https%3A%2F%2Fdislop.com%2Fmcp%22%7D) · [装进 Cursor（本地离线）](cursor://anysphere.cursor-deeplink/mcp/install?name=dislop&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyItLXllcyIsImdpdGh1YjpkaXNsb3AtYWkvZGlzbG9wIiwiLS1tY3AiXX0=) | 浏览器点击直接拉起编辑器确认框，不用手改 JSON |
+| **官方 MCP 注册表** | 在 `registry.modelcontextprotocol.io` 检索 `io.github.dislop-ai/dislop` | 同时提供本地 `npx` / `uvx` 离线包与远程 `https://dislop.com/mcp` |
+| **VS Code / Cursor 一键装 MCP** | [装进 VS Code（本地离线）](https://vscode.dev/redirect/mcp/install?name=dislop&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22--yes%22%2C%22dislop%22%2C%22--mcp%22%5D%7D) · [装进 VS Code（云端免环境）](https://vscode.dev/redirect/mcp/install?name=dislop-cloud&config=%7B%22url%22%3A%22https%3A%2F%2Fdislop.com%2Fmcp%22%7D) · [装进 Cursor（本地离线）](cursor://anysphere.cursor-deeplink/mcp/install?name=dislop&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyItLXllcyIsImRpc2xvcCIsIi0tbWNwIl19) | 浏览器点击直接拉起编辑器确认框，不用手改 JSON |
 | **GitHub Action / `pre-commit`** | 在工作流里引用 `uses: dislop-ai/dislop@main`（见 [action.yml](./action.yml) 与 [.pre-commit-hooks.yaml](./.pre-commit-hooks.yaml)） | PR 只查本次改动行并输出行内批注或 SARIF 2.1.0 |
 
 ### 手动接入本地 MCP（`Claude Code`、`Codex`、`Cursor`、`Windsurf`）
@@ -109,7 +111,7 @@ Node.js 版（`bin/dislop.mjs`）和 Python 版（`src/dislop/`）都零外部�
   "mcpServers": {
     "dislop": {
       "command": "npx",
-      "args": ["--yes", "github:dislop-ai/dislop", "--mcp"]
+      "args": ["--yes", "dislop", "--mcp"]
     }
   }
 }
@@ -143,8 +145,8 @@ Node.js 版（`bin/dislop.mjs`）和 Python 版（`src/dislop/`）都零外部�
 ### 本地一次安装（真断网 / 快速 Hook 推荐）
 
 ```bash
-# Node.js 20+（装一次后完全离网运行，包体 < 250 KB）
-npm install -g github:dislop-ai/dislop
+# Node.js 20+（已上架 npm，装一次后完全离网运行，包体 < 250 KB）
+npm install -g dislop
 dislop check .
 
 # 或 Python 3.10+（已上架 PyPI，零外部依赖）
