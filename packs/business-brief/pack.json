@@ -333,6 +333,266 @@
           "- `--pack`: Select a Taste Pack ID.\n- `--fail-on`: Minimum exit-1 severity."
         ]
       }
+    },
+    {
+      "id": "cooccurrence-slop-cluster",
+      "tier": "taste",
+      "severity": "warning",
+      "family": "lexicon/cooccurrence",
+      "probe": "cooccurrence-slop-cluster",
+      "zones": ["prose"],
+      "modalities": ["markdown", "text", "html", "docx", "pptx"],
+      "message": {
+        "en": "Multiple subtle corporate/AI fluff verbs and modifiers co-occur in one low-evidence paragraph.",
+        "zh": "同一低事实段落内密集堆叠多个弱套词组合（如“有效推动/持续优化/显著提升”或“leverage/streamline/robust”），冲淡了具体改动。"
+      },
+      "deletionTest": {
+        "en": "Do not swap one buzzword for another; replace the whole cluster with who changed what and the measured delta.",
+        "zh": "不要把一个套词换成另一个近义词；整片替换成具体改动、执行主体与实测变化。"
+      },
+      "exemplar": {
+        "bad": "本次客服系统按工单紧急度拆成 3 级队列，旨在有效推动跨部门协同效率，持续优化客户交互体验，并进一步助力业务团队实现精细化运营，最终显著提升整体服务质量，首响时间从 110 秒降到 42 秒。",
+        "trap": "客服系统升级不是功能叠加，而是首响从 110 秒降到 42 秒的服务跃升。",
+        "good": "本次客服系统按工单紧急度拆成 3 级队列，平均首响时间从 110 秒降到 42 秒。",
+        "note": {
+          "en": "Single normal words like 'robust' or '助力' never trigger; only low-evidence clusters do.",
+          "zh": "单次正常使用“助力”或“robust”不会触发，仅在低具体度段落密集共现时提醒。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": [
+          "The updated workflow leverages automated routing to seamlessly streamline cross-functional collaboration, fostering a robust foundation.",
+          "本次系统改造有效推动协同效率，持续优化交互体验，显著提升整体服务质量。"
+        ],
+        "clean": [
+          "We used a robust exponential backoff capped at 8 seconds with full jitter after observing 0.4% TCP drops.",
+          "We fitted a robust estimator across primary outcomes and sequence alignment metrics (n = 120).",
+          "周四给订单表补了联合索引后，慢查询从每小时 430 条降到 12 条，直接助力值班同学少接了一半夜班告警。"
+        ]
+      }
+    },
+    {
+      "id": "semicolon-tricolon",
+      "tier": "taste",
+      "severity": "warning",
+      "family": "punctuation/tricolon",
+      "probe": "semicolon-tricolon",
+      "zones": ["prose"],
+      "modalities": ["markdown", "text", "html", "docx", "pptx"],
+      "message": {
+        "en": "Three-part balanced semicolon pitch sentence reads like generated marketing cadence.",
+        "zh": "单句内连续使用两个及以上分号构成三段对称排比，呈现典型 AI 推销腔。"
+      },
+      "deletionTest": {
+        "en": "Break the symmetry: split into plain sentences of unequal length or keep only the concrete behaviors.",
+        "zh": "打破三段工整对称：拆成长短不一的平实句子，或删掉充数的并列分句。"
+      },
+      "exemplar": {
+        "bad": "前端把表单校验前置到输入时；后端将异步任务拆进独立队列；监控台实时追踪每笔超时请求。",
+        "trap": "校验前置。任务异步。超时可追。",
+        "good": "前端在输入时先做字段校验，后端把异步任务放进独立队列，监控台则负责追踪每笔超时请求。",
+        "note": {
+          "en": "Two-clause contrasts, parenthetical citations, and legal obligations ('shall ...; must ...') stay clean.",
+          "zh": "单分号对照、括号多文献引用以及法律条款（“应当……；不得……”）不会误报。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": [
+          "Engineers ship cleaner diffs; designers catch layout bugs earlier; reviewers spend less time debating trivia.",
+          "前端负责实时校验；后端负责队列削峰；监控台负责追踪超时请求。"
+        ],
+        "clean": [
+          "上海机房默认走专线同步；北京机房因合同下月到期，暂时走公网加密隧道。",
+          "Prior benchmarks report similar variance (Smith, 2020; Lee, 2021; Wu, 2022).",
+          "The licensee shall maintain audit logs; must notify regulators within 72 hours; and shall retain receipts for five years."
+        ]
+      }
+    },
+    {
+      "id": "rhetorical-qa-cadence",
+      "tier": "taste",
+      "severity": "warning",
+      "family": "punctuation/rhetorical-qa",
+      "probe": "rhetorical-qa-cadence",
+      "zones": ["prose"],
+      "modalities": ["markdown", "text", "html", "docx", "pptx"],
+      "message": {
+        "en": "Formulaic self-answered rhetorical question ('Why...? Because...' / 'The result?') mimics LLM blog hooks.",
+        "zh": "自问自答式设问套路（“为什么……？因为……”“结果呢？”），带有明显生成式营销文节奏。"
+      },
+      "deletionTest": {
+        "en": "Delete the staged question and state the cause-and-effect directly in one sentence.",
+        "zh": "删掉摆拍式设问，直接在一句话里写出原因与结果。"
+      },
+      "exemplar": {
+        "bad": "Why do internal dashboards collect dust after launch? Because they show vanity totals instead of next actions. The result? Teams export CSVs every Monday.",
+        "trap": "Dashboards fail. Numbers pile up. Teams export CSVs.",
+        "good": "Internal dashboards go unused when they show vanity totals without next actions, so teams end up exporting CSVs every Monday.",
+        "note": {
+          "en": "FAQ headings (`## Why...?` followed by an answer paragraph) and reported questions stay clean.",
+          "zh": "FAQ 标题与下方正文答案以及复盘记录里的转述提问不会误报。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": [
+          "为什么大多数团队的文档没人愿意读？因为大家都在堆砌信息。",
+          "Why do promising initiatives stall? Because context gets scattered. The result? Teams miss deadlines."
+        ],
+        "clean": [
+          "周三复盘会上有人问：为什么备用库 12 秒后才接管？日志确认是心跳超时配成了 4 秒乘以 3 次。",
+          "## Why does the cache miss on cold start?\nBecause the local index is rebuilt on first boot.",
+          "During the postmortem we asked why the worker pool stalled at 14:05 UTC."
+        ]
+      }
+    },
+    {
+      "id": "comma-chain-runon",
+      "tier": "taste",
+      "severity": "info",
+      "family": "punctuation/comma-chain",
+      "probe": "comma-chain-runon",
+      "zones": ["prose"],
+      "modalities": ["markdown", "text", "html", "docx"],
+      "message": {
+        "en": "Single sentence chains 5+ comma clauses in breathless LLM cadence.",
+        "zh": "单句内连续串接 5 个及以上逗号分句，节奏平铺拖沓。"
+      },
+      "deletionTest": {
+        "en": "Split into 2–3 shorter sentences with a clear main verb in each, and drop redundant parallel clauses.",
+        "zh": "拆成 2 到 3 句主干清晰的短句，顺手删掉凑排比的空分句。"
+      },
+      "exemplar": {
+        "bad": "通过建立跨部门沟通机制，明确周二评审与周五发版节点，优化内部评审流程，加强文档沉淀管理，完善接口超时预警体系，同步推进自动化落地，我们让团队交付过程更稳。",
+        "trap": "建机制。明节点。优评审。强沉淀。",
+        "good": "我们固定了周二评审和周五发版两个节点，并补齐了接口超时预警和自动化检查，交付过程稳定多了。",
+        "note": {
+          "en": "Numeric thousands separators like 1,200 or 4,800 are excluded before counting commas.",
+          "zh": "千分位数字逗号（如 1,200、4,800）会自动排除，不计入分句逗号。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": [
+          "By aligning product goals, refining operational processes, clarifying stakeholder roles, strengthening communication channels, expanding visibility dashboards, and encouraging continuous improvement, teams build resilience.",
+          "通过建立沟通机制，明确交付节点，优化评审流程，加强文档沉淀，完善异常预警，同步推进工具落地，团队效率得到提升。"
+        ],
+        "clean": [
+          "Q4 结算引擎峰值 TPS 从 1,200 提升至 4,800，P99 延迟从 210ms 降至 42ms，一致性达 99.99%。",
+          "Supported formats include md, txt, html, css, jsx, svg, docx, and pptx."
+        ]
+      }
+    },
+    {
+      "id": "narrative-sandwich-frame",
+      "tier": "taste",
+      "severity": "warning",
+      "family": "structure/narrative-frame",
+      "probe": "narrative-sandwich-frame",
+      "zones": ["prose"],
+      "modalities": ["markdown", "text", "html", "docx"],
+      "message": {
+        "en": "Macro-trend opener, future-facing closer, or dense transition-marker cluster ('Furthermore/Moreover/Additionally') follows the stock LLM essay sandwich.",
+        "zh": "出现宏大趋势开场（“随着……的飞速发展”）、展望式升华收尾（“展望未来……”）或连接词堆叠（“此外/与此同时/不仅如此”），呈现典型 AI 三明治叙事壳。"
+      },
+      "deletionTest": {
+        "en": "Cut the opening trend preamble and closing cheerleading; start on the concrete fact or decision and end on the next action or limit.",
+        "zh": "切掉开头趋势帽和结尾展望帽，直接从具体事实或改动起笔，在下一步动作或边界条件处收束。"
+      },
+      "exemplar": {
+        "bad": "随着人工智能技术的飞速发展，研发团队正面临效率变革。此外，我们在 11 月把 PR 静态检查接入了 CI。与此同时，配置错误提前被拦了下来。不仅如此，下周还会覆盖剩余 4 个仓库。展望未来，主动拥抱变化的团队必将赢得先机。",
+        "trap": "时代变了。工具变了。协作也在变。",
+        "good": "11 月我们把 PR 静态检查接入了 CI，配置错误会在合并前被拦下，下周计划覆盖剩余 4 个仓库。",
+        "note": {
+          "en": "Cut the macro preamble, stacked transitions, and future-facing closer while keeping all source facts intact.",
+          "zh": "删掉大背景帽子、机械过渡词与展望收尾，原样保留时间与仓库数。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": [
+          "随着企业数字化转型的不断深入，高效的信息流转正变得愈发关键。",
+          "As organizations navigate an increasingly complex ecosystem, productivity matters. Looking ahead, teams that embrace these habits will be well-positioned to thrive.",
+          "此外，测试已覆盖核心路径。与此同时，监控告警已上线。不仅如此，文档也已同步更新。"
+        ],
+        "clean": [
+          "Q3 我们把灰度发布窗口缩成每周四下午一次，回滚次数从 7 次降到 2 次。",
+          "Last Tuesday we tested a cold restore of the 1.8 TB cluster in `us-west-2` and updated PR #412."
+        ]
+      }
+    },
+    {
+      "id": "template-skeleton-echo",
+      "tier": "taste",
+      "severity": "warning",
+      "family": "structure/skeleton-echo",
+      "probe": "template-skeleton-echo",
+      "zones": ["prose"],
+      "modalities": ["markdown", "text", "html", "docx"],
+      "message": {
+        "en": "Three or more paragraphs or sentences repeat the exact same syntactic opener skeleton ('By <verb>ing...', '在……方面，', 'First/Second/Third/Finally').",
+        "zh": "连续 3 个及以上段落或句子复用同一句首骨架（如“在……方面，”“首先/其次/再次/最后”“By …ing,”），结构像套模板填词。"
+      },
+      "deletionTest": {
+        "en": "Merge related points into natural prose with varied openings, or use a compact table if you are listing parallel specs.",
+        "zh": "把同构段落按因果或主次合并成自然段并变化句首；若是并列参数对照，直接改成简洁表格。"
+      },
+      "exemplar": {
+        "bad": "在数据采集方面，系统接入了业务日志。\n\n在模型训练方面，团队定期更新权重。\n\n在结果应用方面，业务方通过看板查看波动。",
+        "trap": "采数据。训模型。看看板。",
+        "good": "系统接入业务日志后，团队定期更新模型权重，业务方直接在看板里查看指标波动。",
+        "note": {
+          "en": "Structural opener shingling catches templated repetition even when every surface noun changes.",
+          "zh": "句首骨架比对即使在实词全部替换后，仍能识破机械套模板的段落重复。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": [
+          "By automating triage, teams reply faster.\n\nBy centralizing timelines, managers spot bottlenecks.\n\nBy standardizing checklists, owners cut rollbacks.",
+          "首先，明确核心目标。\n\n其次，梳理现有流程。\n\n再次，建立反馈机制。\n\n最后，定期复盘成果。"
+        ],
+        "clean": [
+          "11 月 18 日的 v2.4 修了三处问题。第一，CSV 导出固定成 UTF-8 with BOM。\n\n第二处改动在重试队列：429 限流改为指数退避。\n\n权限页也顺手隐藏了只读账号的删除按钮。"
+        ]
+      }
+    },
+    {
+      "id": "low-burstiness-vapor",
+      "tier": "taste",
+      "severity": "info",
+      "family": "statistics/monotony",
+      "probe": "low-burstiness-vapor",
+      "zones": ["prose"],
+      "modalities": ["markdown", "text"],
+      "message": {
+        "en": "Multi-sentence passage combines robotically uniform sentence lengths (low burstiness CV < 0.24) with near-zero concrete anchors (numbers, dates, files, or verifiable actions).",
+        "zh": "多句段落同时出现句长高度齐平（突发性变异系数 CV < 0.24）且几乎没有具体锚点（数字、时间、文件名或可核查动作），空泛同质感强。"
+      },
+      "deletionTest": {
+        "en": "Cut abstract summary sentences in half, vary sentence length naturally, and anchor every kept claim with a number, file, date, or concrete failure mode.",
+        "zh": "砍掉一半抽象概括句，拉开长短句节奏，并为保留的每条判断补上数字、文件、时间或真实边界。"
+      },
+      "exemplar": {
+        "bad": "该方案注重用户体验的全面改善。系统架构保持了良好的扩展能力。团队协作形成了清晰的责任分工。日常运维建立了规范的处理流程。产品迭代围绕核心需求稳步推进。业务指标呈现出健康的增长态势。",
+        "trap": "体验改善。架构扩展。分工清晰。运维规范。",
+        "good": "本段暂未提供具体指标、改动文件或责任人，请先删去概括句，再由作者补入实测数据和变更项。",
+        "note": {
+          "en": "Dual-gated on both low burstiness AND low concreteness; never fabricate missing metrics during editing.",
+          "zh": "采用“低突发性 + 低具体度”双门控；改写空话时绝不替作者编造缺失数字。"
+        },
+        "source": "original"
+      },
+      "fixtures": {
+        "hit": [
+          "The platform delivers consistent performance across diverse enterprise workflows. Teams maintain clear visibility into ongoing operational priorities. Stakeholders receive timely updates regarding strategic project milestones. Automated processes reduce repetitive overhead for busy specialists. Flexible configurations support evolving organizational requirements smoothly. Reliable infrastructure sustains long-term confidence among partner teams."
+        ],
+        "clean": [
+          "Anonymous visitors get 5 free calls per day up to 4,000 characters. Free accounts include 30 monthly credits up to 12,000 characters. If the upstream LLM times out or returns 5xx, the server refunds the credit automatically."
+        ]
+      }
     }
   ]
 }

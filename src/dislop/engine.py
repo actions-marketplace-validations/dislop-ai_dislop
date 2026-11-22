@@ -6,13 +6,15 @@ import bisect
 import colorsys
 import fnmatch
 import json
+import math
 import os
 import re
 import zipfile
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
-ENGINE_VERSION = "0.3.0"
+ENGINE_VERSION = "0.6.0"
 
 SEVERITY_RANK = {
     "info": 1,
@@ -263,16 +265,34 @@ def offset_to_line_col(line_starts: list[int], offset: int) -> tuple[int, int]:
     return line_idx + 1, col
 
 
+def _is_sentence_break_at(text: str, idx: int) -> bool:
+    if idx < 0 or idx >= len(text):
+        return False
+    ch = text[idx]
+    if ch not in "\n.!?。！？":
+        return False
+    if ch != ".":
+        return True
+    prev_ch = text[idx - 1] if idx > 0 else ""
+    next_ch = text[idx + 1] if idx + 1 < len(text) else ""
+    if prev_ch.isdigit() and next_ch.isdigit():
+        return False
+    before_word = text[max(0, idx - 6) : idx]
+    if re.search(r"(?:^|\s)(?:vs|v|approx|e\.g|i\.e)$", before_word, re.I):
+        return False
+    return True
+
+
 def enclosing_sentence(text: str, start: int, end: int) -> str:
     left = start
-    while left > 0 and text[left - 1] not in "\n.!?。！？":
+    while left > 0 and not _is_sentence_break_at(text, left - 1):
         left -= 1
     right = end
-    while right < len(text) and text[right] not in "\n.!?。！？":
+    while right < len(text) and not _is_sentence_break_at(text, right):
         right += 1
     if right < len(text) and text[right] in ".!?。！？":
         right += 1
-    return text[left:right].strip()[:240]
+    return re.sub(r"^[\s\ufeff]+|[\s\ufeff]+$", "", text[left:right])[:240]
 
 
 def parse_suppressions(text: str) -> tuple[dict[int, list[dict[str, Any]]], list[dict[str, Any]]]:
@@ -305,16 +325,19 @@ def parse_suppressions(text: str) -> tuple[dict[int, list[dict[str, Any]]], list
 
 
 def build_zones(raw_text: str, modality: str) -> dict[str, str]:
-    raw = re.sub(r"<!--\s*dislop-[\s\S]*?-->", _preserve_lines_blank, raw_text, flags=re.I)
+    norm_text = str(raw_text or "").replace("\ufeff", " ")
+    raw = re.sub(r"<!--\s*dislop-[\s\S]*?-->", _preserve_lines_blank, norm_text, flags=re.I)
     raw = re.sub(r"/\*\s*dislop-[\s\S]*?\*/", _preserve_lines_blank, raw, flags=re.I)
 
+    # Mask quote-specimen blocks BEFORE masking general HTML comments/directives
     ui_text = re.sub(
         r"<!--\s*dislop-quote-start\s*-->[\s\S]*?<!--\s*dislop-quote-end\s*-->",
         _preserve_lines_blank,
-        raw,
+        norm_text,
         flags=re.I,
     )
     ui_text = re.sub(r"<!--[\s\S]*?-->", _preserve_lines_blank, ui_text)
+    ui_text = re.sub(r"/\*\s*dislop-[\s\S]*?\*/", _preserve_lines_blank, ui_text, flags=re.I)
     ui_text = re.sub(r"<(script|style|code|pre|del|kbd)\b[^>]*>[\s\S]*?</\1>", _preserve_lines_blank, ui_text, flags=re.I)
 
     prose = ui_text
@@ -322,6 +345,8 @@ def build_zones(raw_text: str, modality: str) -> dict[str, str]:
         prose = re.sub(r"^---[ \t]*\r?\n[\s\S]*?\r?\n---[ \t]*(?=\r?\n|$)", _preserve_lines_blank, prose)
         prose = re.sub(r"```[\s\S]*?```", _preserve_lines_blank, prose)
         prose = re.sub(r"~~~[\s\S]*?~~~", _preserve_lines_blank, prose)
+        prose = re.sub(r"^[ \t]*```[\s\S]*$", _preserve_lines_blank, prose, flags=re.M)
+        prose = re.sub(r"^[ \t]*~~~[\s\S]*$", _preserve_lines_blank, prose, flags=re.M)
         prose = re.sub(r"`[^`\n]+`", _preserve_lines_blank, prose)
         prose = re.sub(r"~~[^~\n]+~~", _preserve_lines_blank, prose)
         prose = re.sub(r"^[ \t]*>.*$", _preserve_lines_blank, prose, flags=re.M)
@@ -348,8 +373,8 @@ def make_finding(
     match: str,
     sentence: str = "",
 ) -> dict[str, Any]:
-    norm_match = match.lower().strip()
-    norm_sent = re.sub(r"\s+", " ", (sentence or norm_match).lower()).strip()
+    norm_match = re.sub(r"^[\s\ufeff]+|[\s\ufeff]+$", "", match.lower())
+    norm_sent = re.sub(r"[\s\ufeff]+", " ", (sentence or norm_match).lower()).strip()
     fp = f"{rule['id']}:{fnv1a_hex(f'{rule['id']}|{norm_match}|{norm_sent}')}"
     return {
         "fingerprint": fp,
@@ -541,6 +566,573 @@ def _probe_em_dash_density(prose_text: str, max_per_300: int = 4) -> list[dict[s
     return hits
 
 
+# ---------- Multi-Angle Text Anti-Slop Probes & Stylometric Profile ----------
+
+ZH_SUBTLE_MARKERS = [
+    "有效推动", "持续优化", "显著提升", "进一步助力", "助力", "精细化运营",
+    "深度融合", "充分释放", "创新潜能", "高度敏捷", "决策支撑体系", "复杂多变",
+    "整体服务质量", "品牌竞争力", "协同效率", "交互体验", "核心竞争力",
+    "新篇章", "新台阶", "新阶段", "充分保障", "轻量化交互", "一线响应速度",
+    "不可逆转", "集体记忆", "呼吸感", "宏大叙事", "触手可及",
+]
+
+EN_SUBTLE_MARKERS = [
+    "leverages", "leverage", "leveraging", "seamlessly", "streamline", "streamlines",
+    "foster", "fostering", "robust", "empowers", "empower", "stakeholders",
+    "navigate", "comprehensive", "harnesses", "harness", "elevate", "pivotal",
+    "transformative", "transformative outcomes", "pivotal alignment", "transparent alignment",
+    "resilience", "synergy", "holistic", "ecosystem", "actionable", "unparalleled",
+]
+
+ZH_DISCOURSE_MARKERS = [
+    "此外", "与此同时", "不仅如此", "总而言之", "综上所述", "换言之",
+    "进一步来看", "诚然", "综合来看", "归根结底",
+]
+
+EN_DISCOURSE_MARKERS = [
+    "furthermore", "moreover", "additionally", "consequently",
+    "in conclusion", "notably", "at the same time",
+]
+
+
+def _build_ascii_phrase_regex(phrase: str, flags: int = re.I) -> re.Pattern[str]:
+    body = r"\s+".join(re.escape(part) for part in str(phrase).strip().split())
+    return re.compile(rf"(?<![A-Za-z0-9_]){body}(?![A-Za-z0-9_])", flags)
+
+
+def _round_non_neg(val: float, digits: int = 2) -> float:
+    factor = 10 ** digits
+    return math.floor(max(0.0, float(val)) * factor + 0.5) / factor
+
+
+def _count_text_units_tenths(s: str) -> int:
+    cjk = len(re.findall(r"[\u4e00-\u9fff]", s))
+    en = len(re.findall(r"[A-Za-z0-9]+", s))
+    return cjk * 6 + en * 10
+
+
+def _count_text_units(s: str) -> float:
+    return _count_text_units_tenths(s) / 10.0
+
+
+def _count_concreteness_anchors(raw_slice: str) -> int:
+    s = re.sub(r"<!--[\s\S]*?-->", " ", str(raw_slice or ""))
+    count = 0
+    count += len(re.findall(r"(?<![A-Za-z0-9_])\d+(?:[.,:]\d+)?%?(?![A-Za-z0-9_])", s))
+    count += len(re.findall(r"`[^`\n]+`", s))
+    count += len(re.findall(r"[/\\][A-Za-z0-9._-]+\.[a-z]{1,5}(?![A-Za-z0-9_])", s, re.I))
+    count += len(re.findall(r"(?<![A-Za-z0-9_])(?:PR\s*#?\d+|v\d+\.\d+|HTTP\s*\d{3}|UTC|Q[1-4])(?![A-Za-z0-9_])", s))
+    count += len(
+        re.findall(
+            r"(?:[一二三四五六七八九十两百千万]+[天月年次个张条座块斤米秒分时]|周[一二三四五六日天]|昨天|昨晚|今早|上周|下周|去年|前年|清晨|傍晚|凌晨|午后|十月|十一月|十二月)",
+            s,
+        )
+    )
+    return count
+
+
+def _is_structured_line(trimmed_line: str) -> bool:
+    return bool(re.match(r"^(?:#{1,6}\s|[-*+]\s|\d+[.)]\s|\||>)", trimmed_line))
+
+
+def _extract_prose_paragraphs(prose_text: str, raw_text: str) -> list[dict[str, Any]]:
+    paras: list[dict[str, Any]] = []
+    n = len(prose_text)
+    pos = 0
+    cur_start = -1
+    cur_end = -1
+
+    def flush() -> None:
+        nonlocal cur_start, cur_end
+        if cur_start == -1 or cur_end <= cur_start:
+            cur_start = -1
+            cur_end = -1
+            return
+        text = prose_text[cur_start:cur_end]
+        trimmed = text.strip()
+        if trimmed:
+            lead = text.find(trimmed)
+            start = cur_start + max(0, lead)
+            raw_slice = raw_text[cur_start:cur_end]
+            paras.append({"start": start, "end": cur_end, "base": cur_start, "text": text, "trimmed": trimmed, "rawSlice": raw_slice})
+        cur_start = -1
+        cur_end = -1
+
+    while pos <= n:
+        nl = prose_text.find("\n", pos)
+        line_end = n if nl == -1 else nl
+        trim_prose = prose_text[pos:line_end].strip()
+        trim_raw = raw_text[pos:line_end].strip()
+        if not trim_prose or _is_structured_line(trim_prose) or _is_structured_line(trim_raw):
+            flush()
+        else:
+            if cur_start == -1:
+                cur_start = pos
+            cur_end = line_end
+        if nl == -1:
+            break
+        pos = nl + 1
+    flush()
+    return paras
+
+
+def _split_prose_sentences_with_offsets(para: dict[str, Any]) -> list[dict[str, Any]]:
+    """Linear O(n) sentence scanner with exact offsets (zero regex backtracking)."""
+    out: list[dict[str, Any]] = []
+    text = para["text"]
+    base = para["base"]
+    n = len(text)
+    i = 0
+    end_punct = set("。！？.!?")
+
+    while i < n:
+        while i < n and text[i] in "\n\r \t":
+            i += 1
+        if i >= n:
+            break
+        seg_start = i
+        while i < n and text[i] != "\n" and text[i] not in end_punct:
+            i += 1
+        while i < n and text[i] in end_punct:
+            i += 1
+        seg_end = i
+        while seg_end > seg_start and text[seg_end - 1] in " \t\r":
+            seg_end -= 1
+        if seg_end - seg_start >= 3:
+            out.append({"start": base + seg_start, "end": base + seg_end, "text": text[seg_start:seg_end]})
+        if i < n and text[i] == "\n":
+            i += 1
+    return out
+
+
+def _probe_cooccurrence_slop_cluster(prose_text: str, raw_text: str) -> list[dict[str, Any]]:
+    hits: list[dict[str, Any]] = []
+    en_sci_robust_re = re.compile(
+        r"(?<![A-Za-z0-9_])(?:robust\s+(?:estimator|regression|standard|statistics|variance|backoff|retry|inference|control|error\s+handling|parser|parsing|validation|recovery|fallback)|comprehensive\s+test(?:s|\s+suite)?)(?![A-Za-z0-9_])",
+        re.I,
+    )
+    for para in _extract_prose_paragraphs(prose_text, raw_text):
+        found: dict[str, tuple[int, int]] = {}
+        base = para["base"]
+        for term in ZH_SUBTLE_MARKERS:
+            idx = para["text"].find(term)
+            if idx != -1:
+                if term == "助力" and "进一步助力" in found:
+                    continue
+                found[term] = (base + idx, base + idx + len(term))
+        low_para = en_sci_robust_re.sub(lambda m: " " * len(m.group(0)), para["text"].lower())
+        for term in EN_SUBTLE_MARKERS:
+            m = _build_ascii_phrase_regex(term, re.I).search(low_para)
+            if m:
+                stem = re.sub(r"(?:ing|es|s)$", "", term)
+                key = f"en:{stem}"
+                if key not in found:
+                    found[key] = (base + m.start(), base + m.end())
+        distinct = len(found)
+        if distinct < 2:
+            continue
+        units_tenths = max(10, _count_text_units_tenths(para["text"]))
+        concreteness = (_count_concreteness_anchors(para["rawSlice"]) * 1000.0) / units_tenths
+        if distinct >= 3 or (distinct >= 2 and concreteness < 6.0):
+            spans = sorted(found.values(), key=lambda x: x[0])
+            first = spans[0][0]
+            last = spans[-1][1]
+            hits.append({"index": first, "length": min(140, max(1, last - first))})
+    return hits
+
+
+def _probe_semicolon_tricolon(prose_text: str, raw_text: str) -> list[dict[str, Any]]:
+    hits: list[dict[str, Any]] = []
+    legal_guard = re.compile(
+        r"(?<![A-Za-z0-9_])(?:shall|must|hereby|pursuant\s+to|provided\s+that)(?![A-Za-z0-9_])|(?:应当|须于|不得|依照)",
+        re.I,
+    )
+    for para in _extract_prose_paragraphs(prose_text, raw_text):
+        masked = para["text"]
+        masked = re.sub(r"\([^)\n]*[;；][^)\n]*\)", lambda m: " " * len(m.group(0)), masked)
+        masked = re.sub(r"（[^）\n]*[;；][^）\n]*）", lambda m: " " * len(m.group(0)), masked)
+        masked = re.sub(r"“[^”\n]*[;；][^”\n]*”", lambda m: " " * len(m.group(0)), masked)
+        masked = re.sub(r'"[^"\n]*[;；][^"\n]*"', lambda m: " " * len(m.group(0)), masked)
+        masked_para = {**para, "text": masked}
+        for s in _split_prose_sentences_with_offsets(masked_para):
+            if re.search(r"[A-Za-z0-9_-]+\s*[:=]\s*[^;；\n]+[;；]", s["text"]):
+                continue
+            if re.match(r"^[^;；。！？.!?\n]{2,32}[：:]", s["text"]):
+                continue
+            if legal_guard.search(s["text"]):
+                continue
+            raw_sent = raw_text[s["start"] : s["end"]]
+            tech_refs = len(re.findall(r"`[^`\n]+`|\]\([^)\n]+\)", raw_sent))
+            if tech_refs >= 2:
+                continue
+            semis = len(re.findall(r"[;；]", s["text"]))
+            if semis >= 2:
+                hits.append({"index": s["start"], "length": min(140, len(s["text"]))})
+    return hits
+
+
+def _probe_rhetorical_qa_cadence(prose_text: str, raw_text: str) -> list[dict[str, Any]]:
+    hits: list[dict[str, Any]] = []
+    for para in _extract_prose_paragraphs(prose_text, raw_text):
+        base = para["base"]
+        text = para["text"]
+        for m in re.finditer(r"(?:为什么|为何)[^？?\n]{3,35}[？?]\s*(?:因为|原因(?:很|其实)?(?:简单|在于))", text):
+            abs_idx = base + m.start()
+            prev = raw_text[abs_idx - 1] if abs_idx > 0 else ""
+            if prev and prev in '：:“"「『':
+                continue
+            hits.append({"index": abs_idx, "length": m.end() - m.start()})
+        for m in re.finditer(r"(?:^|[。！？\n]\s*)(?:结果呢|原因呢|真相呢|代价呢)[？?]", text):
+            lead = re.match(r"^[。！？\s]+", m.group(0))
+            off = len(lead.group(0)) if lead else 0
+            hits.append({"index": base + m.start() + off, "length": m.end() - m.start() - off})
+        for m in re.finditer(r"(?<![A-Za-z0-9_])Why\s+(?:do|does|did|is|are)\s+[^?\n]{6,80}\?\s*Because(?![A-Za-z0-9_])", text, re.I):
+            hits.append({"index": base + m.start(), "length": m.end() - m.start()})
+        for m in re.finditer(r"(?:^|[.!?]\s+)(?:The\s+(?:result|reason|catch|truth|reality|secret))\?\s+[A-Z]", text):
+            lead = re.match(r"^[.!?\s]+", m.group(0))
+            off = len(lead.group(0)) if lead else 0
+            hits.append({"index": base + m.start() + off, "length": m.end() - m.start() - off})
+    return hits
+
+
+def _probe_comma_chain_runon(prose_text: str, raw_text: str) -> list[dict[str, Any]]:
+    hits: list[dict[str, Any]] = []
+    for para in _extract_prose_paragraphs(prose_text, raw_text):
+        for s in _split_prose_sentences_with_offsets(para):
+            cleaned = re.sub(r"(\d),(\d{3})(?!\d)", r"\1\2", s["text"])
+            cleaned = re.sub(r"\([^)\n]{1,60}\)", " ", cleaned)
+            cleaned = re.sub(r"（[^）\n]{1,60}）", " ", cleaned)
+            commas = len(re.findall(r"[，,]", cleaned))
+            if commas < 5:
+                continue
+            parts = [p.strip() for p in re.split(r"[，,]", cleaned) if p.strip()]
+            if len(parts) < 6:
+                continue
+            clause_parts = 0
+            for p in parts:
+                cjk = len(re.findall(r"[\u4e00-\u9fff]", p))
+                en_words = len(re.findall(r"[A-Za-z]+", p))
+                has_gerund = bool(re.search(r"\b[a-z]{3,}ing\b", p, re.I))
+                if cjk >= 6 or en_words >= 4 or (en_words >= 3 and has_gerund):
+                    clause_parts += 1
+            if clause_parts < 5:
+                continue
+            hits.append({"index": s["start"], "length": min(140, len(s["text"]))})
+    return hits
+
+
+def _probe_narrative_sandwich_frame(prose_text: str, raw_text: str) -> list[dict[str, Any]]:
+    hits: list[dict[str, Any]] = []
+    pats = [
+        (r"(?:^|\n\s*)(?:随着[^，。\n]{2,18}(?:飞速|快速|不断|持续)(?:发展|深入|演进|推进)|在(?:当今|快节奏的)[^，。\n]{2,16}(?:时代|生活|社会)中?)", 0),
+        (r"(?:^|\n\s*)(?:As\s+(?:organizations|teams|companies|distributed\s+teams)\s+(?:navigate|scale|adapt)[^,.\n]{2,60}|In\s+an\s+era\s+(?:defined\s+by|of|where)[^,.\n]{2,60})", re.I),
+        (r"(?:展望未来[，,]|携手[^，。！？\n]{1,16}(?:开启|迈向)[^。！？\n]{2,20}|必将迎来[^。！？\n]{2,16}|值得每一个[^。！？\n]{2,16}深思)", 0),
+        (r"\b(?:Looking\s+ahead,|Moving\s+forward,)[^.!?\n]{5,120}(?:well-positioned\s+to\s+thrive|vital\s+role|essential\s+for|year\s+ahead|remind\s+us)\b", re.I),
+    ]
+    for pat, flags in pats:
+        for m in re.finditer(pat, prose_text, flags):
+            lead = re.match(r"^\s+", m.group(0))
+            off = len(lead.group(0)) if lead else 0
+            hits.append({"index": m.start() + off, "length": m.end() - m.start() - off})
+
+    disc_hits: list[dict[str, int]] = []
+    for para in _extract_prose_paragraphs(prose_text, raw_text):
+        base = para["base"]
+        for marker in ZH_DISCOURSE_MARKERS:
+            pos = 0
+            while True:
+                idx = para["text"].find(marker, pos)
+                if idx == -1:
+                    break
+                disc_hits.append({"index": base + idx, "length": len(marker)})
+                pos = idx + len(marker)
+        low = para["text"].lower()
+        for marker in EN_DISCOURSE_MARKERS:
+            for m in _build_ascii_phrase_regex(marker, re.I).finditer(low):
+                disc_hits.append({"index": base + m.start(), "length": m.end() - m.start()})
+
+    if len(disc_hits) >= 3:
+        disc_hits.sort(key=lambda h: h["index"])
+        first = disc_hits[0]
+        third = disc_hits[2]
+        hits.append({
+            "index": first["index"],
+            "length": min(140, max(first["length"], third["index"] + third["length"] - first["index"])),
+        })
+    return hits
+
+
+def _classify_opener_skeleton(text: str, explicit_only: bool = False) -> str | None:
+    s = text.strip()
+    if re.match(r"^[A-Za-z][A-Za-z0-9 _-]{1,28}:\s", s) or re.match(r"^[\u4e00-\u9fff]{2,8}：", s):
+        return None
+    if re.match(r"^在[\u4e00-\u9fff]{2,6}方面[，,]", s):
+        return "ZH_ZAI_X_FANGMIAN"
+    if re.match(r"^(?:首先|其次|再次|最后)[，,]", s):
+        return "ZH_ORDINAL_STEP"
+    if re.match(r"^By\s+[a-z]+ing\b", s, re.I):
+        return "EN_BY_GERUND"
+    if re.match(r"^(?:First|Second|Third|Fourth|Finally|Lastly),\s+", s, re.I):
+        return "EN_ORDINAL_STEP"
+    if explicit_only:
+        return None
+    if len(s) < 24:
+        return None
+    en_pre = re.match(r"^([A-Za-z]+\s+[A-Za-z]+)\b", s)
+    if en_pre:
+        low = en_pre.group(1).lower()
+        if not re.match(r"^(?:in the|on the|at the|of the|to the|it is|this is|there is|we have|we are|the [a-z]+)$", low):
+            return f"EN_PRE:{low}"
+        return None
+    zh_pre = re.match(r"^([\u4e00-\u9fff]{3})", s)
+    if zh_pre:
+        return f"ZH_PRE:{zh_pre.group(1)}"
+    return None
+
+
+def _has_repeated_post_ordinal_stem(items: list[dict[str, Any]]) -> bool:
+    stems: dict[str, int] = {}
+    for it in items:
+        rest = re.sub(
+            r"^(?:首先|其次|再次|最后|First|Second|Third|Fourth|Finally|Lastly)[，,]\s*",
+            "",
+            it["text"],
+            flags=re.I,
+        ).strip()
+        m_en = re.match(r"^([A-Za-z]+(?:\s+[A-Za-z-]+){0,2})", rest)
+        m_zh = re.match(r"^([\u4e00-\u9fff]{2,4})", rest)
+        key = f"en:{m_en.group(1).lower()}" if m_en else f"zh:{m_zh.group(1)}" if m_zh else None
+        if not key:
+            continue
+        stems[key] = stems.get(key, 0) + 1
+        if stems[key] >= 2:
+            return True
+    return False
+
+
+def _probe_template_skeleton_echo(prose_text: str, raw_text: str) -> list[dict[str, Any]]:
+    hits: list[dict[str, Any]] = []
+    paras = _extract_prose_paragraphs(prose_text, raw_text)
+
+    def check_items(items: list[dict[str, Any]], explicit_only: bool, inside_single_para: bool) -> bool:
+        groups: dict[str, list[dict[str, Any]]] = {}
+        for item in items:
+            skel = _classify_opener_skeleton(item["text"], explicit_only)
+            if not skel:
+                continue
+            groups.setdefault(skel, []).append(item)
+        for skel, matched in groups.items():
+            if len(matched) >= 3:
+                if (
+                    inside_single_para
+                    and skel in {"EN_ORDINAL_STEP", "ZH_ORDINAL_STEP"}
+                    and not _has_repeated_post_ordinal_stem(matched)
+                ):
+                    continue
+                hits.append({"index": matched[0]["start"], "length": min(120, len(matched[0]["text"]))})
+                return True
+        return False
+
+    if len(paras) >= 3:
+        if check_items([{"start": p["start"], "text": p["trimmed"]} for p in paras], False, False):
+            return hits
+
+    all_sents: list[dict[str, Any]] = []
+    for para in paras:
+        all_sents.extend(_split_prose_sentences_with_offsets(para))
+    if len(all_sents) >= 3:
+        check_items(all_sents, True, True)
+    return hits
+
+
+def _probe_low_burstiness_vapor(prose_text: str, raw_text: str) -> list[dict[str, Any]]:
+    paras = _extract_prose_paragraphs(prose_text, raw_text)
+    if not paras:
+        return []
+    sents: list[dict[str, Any]] = []
+    for para in paras:
+        for s in _split_prose_sentences_with_offsets(para):
+            u = _count_text_units_tenths(s["text"])
+            if u > 0:
+                sents.append({**s, "tenths": u})
+    if len(sents) < 5:
+        return []
+    sum_tenths = sum(s["tenths"] for s in sents)
+    mean_tenths = sum_tenths / len(sents)
+    if mean_tenths <= 0:
+        return []
+    variance_tenths = sum((s["tenths"] - mean_tenths) ** 2 for s in sents) / len(sents)
+    cv = math.sqrt(variance_tenths) / mean_tenths
+    total_tenths = max(10, sum_tenths)
+    total_anchors = sum(_count_concreteness_anchors(p["rawSlice"]) for p in paras)
+    concreteness = (total_anchors * 1000.0) / total_tenths
+    if cv < 0.24 and concreteness < 1.5:
+        return [{"index": paras[0]["start"], "length": min(80, len(paras[0]["trimmed"]))}]
+    return []
+
+
+def analyze_text_profile(text: str, *, modality: str = "markdown") -> dict[str, Any]:
+    """Compute an explainable 5-axis offline statistical & structural text profile."""
+    raw = str(text or "").replace("\r\n", "\n").replace("\r", "\n")
+    zones = build_zones(raw, modality)
+    prose = zones.get("prose", "")
+    paras = _extract_prose_paragraphs(prose, raw)
+    sents: list[dict[str, Any]] = []
+    for para in paras:
+        for s in _split_prose_sentences_with_offsets(para):
+            u = _count_text_units_tenths(s["text"])
+            if u > 0:
+                sents.append({**s, "tenths": u})
+
+    n_sents = len(sents)
+    mean_len = 0.0
+    cv = 0.0
+    adj_contrast = 0.0
+    if n_sents >= 2:
+        sum_tenths = sum(s["tenths"] for s in sents)
+        mean_tenths = sum_tenths / n_sents
+        mean_len = mean_tenths / 10.0
+        variance_tenths = sum((s["tenths"] - mean_tenths) ** 2 for s in sents) / n_sents
+        cv = math.sqrt(variance_tenths) / mean_tenths if mean_tenths > 0 else 0.0
+        diff_sum_tenths = sum(abs(sents[i]["tenths"] - sents[i - 1]["tenths"]) for i in range(1, n_sents))
+        adj_contrast = (diff_sum_tenths / (n_sents - 1)) / mean_tenths if mean_tenths > 0 else 0.0
+    elif n_sents == 1:
+        mean_len = sents[0]["tenths"] / 10.0
+
+    joined_prose = "\n".join(p["trimmed"] for p in paras)
+    total_tenths = max(10, _count_text_units_tenths(joined_prose))
+    total_units = total_tenths / 10.0
+
+    tokens = re.findall(r"[\u4e00-\u9fff]|[a-z]{2,}", joined_prose.lower())
+    n_tok = len(tokens)
+    ttr = len(set(tokens)) / n_tok if n_tok > 0 else 0.0
+    mattr = ttr
+    win = 25
+    if n_tok > win:
+        acc = 0.0
+        steps = 0
+        for i in range(0, n_tok - win + 1, 5):
+            acc += len(set(tokens[i : i + win])) / win
+            steps += 1
+        mattr = acc / steps if steps > 0 else ttr
+
+    bigram_echo = 0.0
+    if n_tok >= 2:
+        b_set = {f"{tokens[i]}|{tokens[i + 1]}" for i in range(n_tok - 1)}
+        bigram_echo = 1.0 - len(b_set) / (n_tok - 1)
+
+    char_entropy = 0.0
+    if joined_prose:
+        counts = Counter(joined_prose)
+        total_c = len(joined_prose)
+        for c in counts.values():
+            p = c / total_c
+            char_entropy -= p * math.log2(p)
+
+    anchor_count = sum(_count_concreteness_anchors(p["rawSlice"]) for p in paras)
+    concreteness_per_100 = (anchor_count / total_units) * 100.0
+
+    em_dashes = joined_prose.replace("——", "—").count("—")
+    em_dash_per_300 = (em_dashes / total_units) * 300.0
+    max_semi = 0
+    max_comma = 0
+    for s in sents:
+        sc = len(re.findall(r"[;；]", re.sub(r"\([^)\n]*[;；][^)\n]*\)", " ", s["text"])))
+        cc_txt = re.sub(r"\([^)\n]{1,60}\)", " ", re.sub(r"(\d),(\d{3})(?!\d)", r"\1\2", s["text"]))
+        cc = len(re.findall(r"[，,]", cc_txt))
+        if sc > max_semi:
+            max_semi = sc
+        if cc > max_comma:
+            max_comma = cc
+
+    cooc_hits = len(_probe_cooccurrence_slop_cluster(prose, raw))
+    semi_hits = len(_probe_semicolon_tricolon(prose, raw))
+    rhet_qa_count = len(_probe_rhetorical_qa_cadence(prose, raw))
+    comma_hits = len(_probe_comma_chain_runon(prose, raw))
+    skel_hits = len(_probe_template_skeleton_echo(prose, raw))
+    narrative_hits = len(_probe_narrative_sandwich_frame(prose, raw))
+    vapor_hits = len(_probe_low_burstiness_vapor(prose, raw))
+
+    signals: list[str] = []
+    risk_score = 0
+    if cooc_hits > 0:
+        risk_score += 28
+        signals.append("cooccurrence-slop-cluster")
+    if semi_hits > 0:
+        risk_score += 24
+        signals.append("semicolon-tricolon")
+    if rhet_qa_count > 0:
+        risk_score += 24
+        signals.append("rhetorical-qa-cadence")
+    if comma_hits > 0:
+        risk_score += 18
+        signals.append("comma-chain-runon")
+    if narrative_hits > 0:
+        risk_score += 26
+        signals.append("narrative-sandwich-frame")
+    if skel_hits > 0:
+        risk_score += 26
+        signals.append("template-skeleton-echo")
+    if vapor_hits > 0:
+        risk_score += 24
+        signals.append("low-burstiness-vapor")
+    elif n_sents >= 5 and cv < 0.24:
+        risk_score += 10
+        signals.append("flat-sentence-rhythm")
+    if n_sents >= 3 and anchor_count == 0:
+        risk_score += 10
+        signals.append("zero-concrete-anchors")
+    if em_dash_per_300 > 4.0 and em_dashes >= 5:
+        risk_score += 12
+        signals.append("high-em-dash-density")
+    risk_score = min(100, risk_score)
+
+    burstiness_status = "short" if n_sents < 3 else "flat" if cv < 0.24 else "varied" if cv >= 0.35 else "moderate"
+    concreteness_status = "grounded" if concreteness_per_100 >= 4.0 else "moderate" if concreteness_per_100 >= 1.5 else "vapor"
+    risk_level = "high" if risk_score >= 45 else "medium" if risk_score >= 20 else "low"
+
+    return {
+        "schema": "dislop.text-profile/1",
+        "sentenceCount": n_sents,
+        "paragraphCount": len(paras),
+        "unitCount": _round_non_neg(total_units, 1),
+        "burstiness": {
+            "meanLength": _round_non_neg(mean_len, 1),
+            "cv": _round_non_neg(cv, 2),
+            "adjacentContrast": _round_non_neg(adj_contrast, 2),
+            "status": burstiness_status,
+        },
+        "lexical": {
+            "ttr": _round_non_neg(ttr, 2),
+            "mattr": _round_non_neg(mattr, 2),
+            "bigramEcho": _round_non_neg(bigram_echo, 2),
+            "charEntropy": _round_non_neg(char_entropy, 2),
+            "cooccurrenceClusters": cooc_hits,
+        },
+        "concreteness": {
+            "anchorCount": anchor_count,
+            "per100Units": _round_non_neg(concreteness_per_100, 1),
+            "status": concreteness_status,
+        },
+        "punctuation": {
+            "emDashPer300": _round_non_neg(em_dash_per_300, 1),
+            "maxSemicolonsInSentence": max_semi,
+            "maxCommasInSentence": max_comma,
+            "rhetoricalQaCount": rhet_qa_count,
+        },
+        "structure": {
+            "skeletonEchoHits": skel_hits,
+            "narrativeFrameHits": narrative_hits,
+            "lowBurstinessVapor": vapor_hits > 0,
+        },
+        "telemetryRisk": {
+            "score": risk_score,
+            "level": risk_level,
+            "signals": signals,
+        },
+    }
+
+
 def _parse_color_rgb(raw: str | None) -> tuple[int, int, int] | None:
     if not raw:
         return None
@@ -701,6 +1293,42 @@ def _probe_ui_box_in_box(raw_text: str) -> list[dict[str, Any]]:
     return hits
 
 
+def _normalize_ascii_digits(s: str) -> str:
+    return re.sub(r"[０-９]", lambda m: chr(ord(m.group(0)) - 0xFEE0), str(s or ""))
+
+
+def _has_multiplier_baseline(sentence: str) -> bool:
+    s = _normalize_ascii_digits(sentence)
+    if re.search(r"(?<![A-Za-z0-9_])from\s+\S+[\s\S]{0,36}(?<![A-Za-z0-9_])to\s+\S*[0-9]", s, re.I):
+        return True
+    if re.search(r"(?<![A-Za-z0-9_])(?:vs\.?|compared\s+(?:to|with))\s+\S*[0-9]", s, re.I):
+        return True
+    if re.search(r"(?:从|由)\s*[0-9][\s\S]{0,28}(?:到|至|升至|降至|压到|降到|缩短至)\s*[0-9]", s):
+        return True
+    measured = re.findall(
+        r"(?<![A-Za-z0-9_])[0-9][0-9,.]*\s*(?:%|(?:milliseconds?|ms|minutes?|mins?|seconds?|secs?|s|hours?|hrs?|KB|MB|GB|TB|QPS|TPS|RPS)(?![A-Za-z0-9_])|秒|分钟|小时|毫秒|万|亿|元|美元)",
+        s,
+        re.I,
+    )
+    return len(measured) >= 2
+
+
+def _probe_unanchored_multiplier(zone_text: str, raw_text: str) -> list[dict[str, int]]:
+    norm_zone = _normalize_ascii_digits(zone_text)
+    hits: list[dict[str, int]] = []
+    patterns = [
+        (r"(?<![A-Za-z0-9_])(?:[0-9]+(?:\.[0-9]+)?x)\s+(?:faster|more\s+efficient|higher\s+(?:productivity|throughput|conversion)|lower\s+cost|cheaper|speedup)(?![A-Za-z0-9_])", re.I),
+        (r"(?:效率|性能|速度|产能|转化率|吞吐量)(?:提升|提高|加快|翻了?|暴涨)(?:了?\s*)?(?:数倍|十倍|百倍|几十倍|好几倍|[0-9]+(?:\.[0-9]+)?\s*倍)", 0),
+    ]
+    for pat, flags in patterns:
+        for m in re.finditer(pat, norm_zone, flags):
+            sent = enclosing_sentence(raw_text, m.start(), m.end())
+            if _has_multiplier_baseline(sent):
+                continue
+            hits.append({"index": m.start(), "length": m.end() - m.start()})
+    return hits
+
+
 def _eval_synthetic_binary_fixture(fixture: str, rule: dict[str, Any], thresholds: dict[str, Any]) -> list[dict[str, str]]:
     probe = rule.get("probe")
     if probe == "office-markdown-leak" and fixture.startswith("DOCX_RAW_MARKDOWN:"):
@@ -719,6 +1347,10 @@ def _eval_synthetic_binary_fixture(fixture: str, rule: dict[str, Any], threshold
             return [{"location": "slide 1", "match": f"fontScale={scale}"}]
     if probe == "slide-weak-topic-title" and fixture.startswith("PPTX_WEAK_TITLE:"):
         return [{"location": "slide 1", "match": fixture.split(":")[1]}]
+    if probe == "pptx-layout-monotony" and fixture.startswith("PPTX_MONOTONY:"):
+        run = int(fixture.split(":")[1] or 0)
+        if run >= thresholds.get("maxIdenticalSlideRun", 4):
+            return [{"location": f"slide {run}", "match": f"{run} consecutive identical slide layouts"}]
     return []
 
 
@@ -775,6 +1407,9 @@ def audit_text(
                             if lead and len(lead.group(0)) < length:
                                 idx += len(lead.group(0))
                                 length -= len(lead.group(0))
+                        while length > 1 and text[idx] == "\ufeff":
+                            idx += 1
+                            length -= 1
                         raw_hits.append({"index": idx, "length": length})
         elif probe == "negation-pivot":
             raw_hits = _probe_negation_pivot(zone_text, text)
@@ -793,6 +1428,22 @@ def audit_text(
                 {"index": m.start(), "length": m.end() - m.start()}
                 for m in re.finditer(r"[\u4e00-\u9fff][,;:!?][\u4e00-\u9fff]", zone_text)
             ]
+        elif probe == "cooccurrence-slop-cluster":
+            raw_hits = _probe_cooccurrence_slop_cluster(zone_text, text)
+        elif probe == "semicolon-tricolon":
+            raw_hits = _probe_semicolon_tricolon(zone_text, text)
+        elif probe == "rhetorical-qa-cadence":
+            raw_hits = _probe_rhetorical_qa_cadence(zone_text, text)
+        elif probe == "comma-chain-runon":
+            raw_hits = _probe_comma_chain_runon(zone_text, text)
+        elif probe == "narrative-sandwich-frame":
+            raw_hits = _probe_narrative_sandwich_frame(zone_text, text)
+        elif probe == "template-skeleton-echo":
+            raw_hits = _probe_template_skeleton_echo(zone_text, text)
+        elif probe == "low-burstiness-vapor":
+            raw_hits = _probe_low_burstiness_vapor(zone_text, text)
+        elif probe == "unanchored-multiplier":
+            raw_hits = _probe_unanchored_multiplier(zone_text, text)
         elif probe == "ui-dead-control":
             raw_hits = _probe_ui_dead_control(text)
         elif probe == "ui-ai-gradient":
@@ -836,7 +1487,7 @@ def audit_text(
                     line=line,
                     col=col,
                     span={"start": start, "end": end},
-                    match=re.sub(r"\s+", " ", matched_raw).strip()[:140],
+                    match=re.sub(r"[\s\ufeff]+", " ", matched_raw).strip()[:140],
                     sentence=enclosing_sentence(text, start, end),
                 )
             )
@@ -853,13 +1504,25 @@ def audit_text(
 # ---------- OOXML Inspection (.docx / .pptx) ----------
 
 def _decode_xml_entities(s: str) -> str:
-    return (
-        s.replace("&lt;", "<")
-        .replace("&gt;", ">")
-        .replace("&quot;", '"')
-        .replace("&apos;", "'")
-        .replace("&amp;", "&")
-    )
+    def _repl(m: re.Match[str]) -> str:
+        full = m.group(0)
+        if m.group(1):
+            cp = int(m.group(1), 10)
+            return chr(cp) if 0 < cp <= 0x10FFFF else full
+        if m.group(2):
+            cp = int(m.group(2), 16)
+            return chr(cp) if 0 < cp <= 0x10FFFF else full
+        if full == "&lt;":
+            return "<"
+        if full == "&gt;":
+            return ">"
+        if full == "&quot;":
+            return '"'
+        if full == "&apos;":
+            return "'"
+        return "&"
+
+    return re.sub(r"&(?:#([0-9]+)|#x([0-9a-fA-F]+)|lt|gt|quot|apos|amp);", _repl, str(s))
 
 
 def audit_ooxml_entries(
@@ -929,12 +1592,16 @@ def audit_ooxml_entries(
         bullet_rule = rules_by_id.get("slide-bullet-overload")
         autofit_rule = rules_by_id.get("slide-autofit-shrink")
         weak_title_rule = rules_by_id.get("slide-weak-topic-title")
+        process_title_rule = rules_by_id.get("slide-process-not-finding-title")
+        monotony_rule = rules_by_id.get("pptx-layout-monotony")
         thresholds = pack.get("thresholds", {})
+        prev_layout_sig: str | None = None
+        layout_run_count = 0
 
         for idx, slide_entry in enumerate(ordered_slides):
             slide_num = idx + 1
             xml = entries[slide_entry]
-            is_hidden = bool(re.search(r'<p:sld\b[^>]*\bshow="0"', xml))
+            is_hidden = bool(re.search(r'<p:sld\b[^>]*\bshow="(?:0|false)"', xml, re.I))
             if is_hidden:
                 skipped.append({"file": f"{filename}#slide-{slide_num}", "reason": "Hidden slide (show=0) skipped for density rules"})
 
@@ -949,10 +1616,13 @@ def audit_ooxml_entries(
             slide_paras: list[str] = []
             title_text = ""
             bullet_count = 0
+            non_footer_sp_count = 0
             for spm in re.finditer(r"<p:sp\b[\s\S]*?</p:sp>", xml):
                 sp = spm.group(0)
                 is_title = bool(re.search(r'<p:ph\b[^>]*\btype="(?:title|ctrTitle)"', sp))
                 is_footer = bool(re.search(r'<p:ph\b[^>]*\btype="(?:sldNum|ftr|dt)"', sp))
+                if not is_footer:
+                    non_footer_sp_count += 1
                 paras: list[str] = []
                 for apm in re.finditer(r"<a:p\b[^>]*>([\s\S]*?)</a:p>", sp):
                     p_inner = apm.group(1)
@@ -1006,9 +1676,61 @@ def audit_ooxml_entries(
                                 match=f'Title: "{title_text.strip()}"',
                             )
                         )
+                if process_title_rule and title_text:
+                    tt = re.sub(r"\s*#+\s*$", "", title_text.strip()).strip()
+                    if re.match(
+                        r"^(?:Analysis\s+of|Overview\s+of|Update\s+on|Discussion\s+of|Deep\s+Dive\s+into|Thoughts\s+on)\s+\S[^\n#]{1,64}$",
+                        tt,
+                        re.I,
+                    ) or re.match(
+                        r"^(?:关于[^\n#]{2,36}的(?:分析(?:汇报|报告)?|汇报|思考|探讨|情况(?:说明|汇报)?)|[^\n#]{2,24}(?:阶段性进展汇报|情况分析汇报))$",
+                        tt,
+                    ):
+                        findings.append(
+                            make_finding(
+                                rule=process_title_rule,
+                                filename=filename,
+                                modality=modality,
+                                location=f"slide {slide_num}",
+                                line=slide_num,
+                                match=f'Title: "{tt}"',
+                            )
+                        )
+                if monotony_rule:
+                    has_data_graphic = bool(re.search(r"<c:chart\b|<a:tbl\b", xml))
+                    pic_count = len(re.findall(r"<p:pic\b", xml))
+                    bullet_bucket = 0 if bullet_count == 0 else (1 if bullet_count <= 3 else 2)
+                    offs = ";".join(
+                        f"{math.floor(int(mx) / 914400 + 0.5)},{math.floor(int(my) / 914400 + 0.5)}"
+                        for mx, my in re.findall(r'<a:off\b[^>]*\bx="(-?\d+)"[^>]*\by="(-?\d+)"', xml)[:6]
+                    )
+                    geom_part = f"|g:{offs}" if offs else ""
+                    sig = (
+                        f"sp:{non_footer_sp_count}|b:{bullet_bucket}|p:{pic_count}{geom_part}"
+                        if (not has_data_graphic and non_footer_sp_count >= 2 and (latin_words > 8 or cjk_chars > 16))
+                        else None
+                    )
+                    if sig and sig == prev_layout_sig:
+                        layout_run_count += 1
+                    else:
+                        prev_layout_sig = sig
+                        layout_run_count = 1 if sig else 0
+                    if layout_run_count == thresholds.get("maxIdenticalSlideRun", 4):
+                        findings.append(
+                            make_finding(
+                                rule=monotony_rule,
+                                filename=filename,
+                                modality=modality,
+                                location=f"slide {slide_num}",
+                                line=slide_num,
+                                match=f"{layout_run_count} consecutive identical slide layouts ({sig})",
+                            )
+                        )
 
             sub = audit_text(full_text, filename=filename, modality="markdown", pack=pack, config=config)
             for f in sub["findings"]:
+                if is_hidden and f.get("severity") != "error":
+                    continue
                 findings.append({**f, "modality": "pptx", "location": f"slide {slide_num}", "line": slide_num})
 
         return {"findings": findings, "skipped": skipped}
@@ -1070,7 +1792,7 @@ def inspect_file(
             }
 
     try:
-        text = abs_path.read_text(encoding="utf-8")
+        text = abs_path.read_bytes().decode("utf-8")
     except UnicodeDecodeError:
         return {
             "checked": False,
@@ -1117,3 +1839,625 @@ def collect_target_files(targets: list[str], cwd: Path, config: dict[str, Any]) 
     for t in targets:
         walk((cwd / t).resolve(), True)
     return files, skipped
+
+
+# ---------- Anti-Pattern Catalog & Pattern Library (dislop.catalog/1) ----------
+
+FAMILY_TO_CATEGORY = {
+    "hygiene/": "delivery-hygiene",
+    "office/": "office-structure",
+    "lexicon/": "language-lexicon",
+    "frame/": "language-template",
+    "rhythm/": "language-rhythm",
+    "punctuation/": "language-punctuation",
+    "structure/": "discourse-structure",
+    "statistics/": "statistical-rhythm",
+    "evidence/": "evidence-rigor",
+    "deck/": "deck-layout",
+    "ui/": "ui-design",
+    "composite/": "composite-signal",
+}
+
+
+def find_patterns_dir() -> Path:
+    pkg_patterns = Path(__file__).resolve().parent / "patterns"
+    if pkg_patterns.is_dir():
+        return pkg_patterns
+    return Path(__file__).resolve().parent.parent.parent / "patterns"
+
+
+def load_pattern_library(patterns_dir: Path | None = None) -> dict[str, dict[str, Any]]:
+    root = patterns_dir or find_patterns_dir()
+    dim_dir = root / "dimensions"
+    by_rule_id: dict[str, dict[str, Any]] = {}
+    if not dim_dir.is_dir():
+        return by_rule_id
+    for child in sorted(dim_dir.glob("*.json")):
+        data = json.loads(child.read_text(encoding="utf-8"))
+        dim = data.get("dimension")
+        for pat in data.get("patterns", []):
+            rid = pat.get("ruleId")
+            if rid:
+                by_rule_id[rid] = {"dimension": dim, **pat}
+    return by_rule_id
+
+
+def infer_rule_category(family: str = "") -> str:
+    fam = str(family or "")
+    for prefix, cat in FAMILY_TO_CATEGORY.items():
+        if fam.startswith(prefix):
+            return cat
+    return "general"
+
+
+def infer_rule_languages(rule_id: str = "") -> list[str]:
+    rid = str(rule_id or "")
+    if rid.startswith("zh-"):
+        return ["zh"]
+    if rid.startswith("en-"):
+        return ["en"]
+    return ["en", "zh"]
+
+
+def build_catalog(
+    packs_by_id: dict[str, dict[str, Any]],
+    pattern_by_rule_id: dict[str, dict[str, Any]] | None = None,
+) -> list[dict[str, Any]]:
+    pack_order = [
+        "core",
+        "business-brief",
+        "engineering-spec",
+        "regulated-comms",
+        "literary-essay",
+        "deck-and-ui",
+        "executive-deck",
+    ]
+
+    def sort_key(pid: str) -> tuple[int, str]:
+        return (pack_order.index(pid), pid) if pid in pack_order else (len(pack_order), pid)
+
+    entries: list[dict[str, Any]] = []
+    seen_rule_ids: set[str] = set()
+    for pid in sorted(packs_by_id.keys(), key=sort_key):
+        pack = packs_by_id.get(pid)
+        if not pack:
+            continue
+        for rule in pack.get("rules", []):
+            rid = rule["id"]
+            seen_rule_ids.add(rid)
+            pat = pattern_by_rule_id.get(rid) if pattern_by_rule_id else None
+            category = rule.get("category") or (pat.get("category") if pat else None) or infer_rule_category(rule.get("family", ""))
+            languages = rule.get("languages") or (pat.get("languages") if pat else None) or infer_rule_languages(rid)
+            tags: list[str] = []
+            for t in [*(rule.get("tags") or []), *((pat.get("tags") or []) if pat else [])]:
+                if t not in tags:
+                    tags.append(t)
+            evidence_level = (
+                rule.get("evidenceLevel")
+                or (pat.get("evidenceLevel") if pat else None)
+                or ("objective-invariant" if rule.get("tier") == "invariant" else "editorial-consensus")
+            )
+            entries.append(
+                {
+                    "id": rid,
+                    "packId": pack["id"],
+                    "tier": rule.get("tier") or pack.get("tier") or "taste",
+                    "severity": rule.get("severity") or "warning",
+                    "family": rule.get("family") or "general",
+                    "category": category,
+                    "dimension": pat.get("dimension") if pat else None,
+                    "detectionAngle": (pat.get("detectionAngle") if pat else None) or rule.get("probe") or "regex",
+                    "languages": languages,
+                    "tags": tags,
+                    "evidenceLevel": evidence_level,
+                    "modelTendencies": rule.get("modelTendencies") or (pat.get("modelTendencies") if pat else []) or [],
+                    "probe": rule.get("probe") or "regex",
+                    "modalities": rule.get("modalities") or pack.get("modalities") or [],
+                    "message": rule.get("message") or {"en": "", "zh": ""},
+                    "deletionTest": rule.get("deletionTest"),
+                    "exemplar": rule.get("exemplar"),
+                    "anchorUrl": f"https://dislop.com/#rule-{rid}",
+                }
+            )
+    if pattern_by_rule_id:
+        for rid in sorted(pattern_by_rule_id.keys()):
+            if rid in seen_rule_ids:
+                continue
+            pat = pattern_by_rule_id[rid]
+            if not pat or pat.get("status") != "active-bank":
+                continue
+            guards_list = pat.get("falsePositiveGuards") or []
+            guards_text = " ".join(guards_list) if isinstance(guards_list, list) else ""
+            dim = pat.get("dimension")
+            entries.append(
+                {
+                    "id": rid,
+                    "packId": pat.get("packId") or "pattern-bank",
+                    "tier": "taste",
+                    "severity": pat.get("severityDefault") or "info",
+                    "family": f"{dim}/{rid}" if dim else "pattern-bank",
+                    "category": pat.get("category") or "general",
+                    "dimension": dim,
+                    "detectionAngle": pat.get("detectionAngle") or "pattern-bank",
+                    "languages": pat.get("languages") or infer_rule_languages(rid),
+                    "tags": list(pat.get("tags") or []),
+                    "evidenceLevel": pat.get("evidenceLevel") or "empirical-corpus",
+                    "modelTendencies": list(pat.get("modelTendencies") or []),
+                    "probe": pat.get("detectionAngle") or "pattern-bank",
+                    "modalities": list(pat.get("modalities") or ["markdown", "text"]),
+                    "message": pat.get("mechanism") or pat.get("name") or {"en": "", "zh": ""},
+                    "deletionTest": {"en": guards_text, "zh": guards_text} if guards_text else None,
+                    "exemplar": pat.get("exemplar"),
+                    "anchorUrl": f"https://dislop.com/patterns/#{rid}",
+                }
+            )
+    return entries
+
+
+def query_catalog(entries: list[dict[str, Any]], filters: dict[str, Any] | None = None) -> dict[str, Any]:
+    f = filters or {}
+    q = str(f.get("query") or "").strip().lower()
+    terms = [t for t in q.split() if t]
+    include_exemplars = f.get("includeExemplars", True) is not False
+    limit = f.get("limit") if isinstance(f.get("limit"), int) and f.get("limit", 0) > 0 else None
+
+    matched: list[dict[str, Any]] = []
+    for e in entries:
+        if f.get("pack") and e["packId"] != f["pack"]:
+            continue
+        if f.get("tier") and e["tier"] != f["tier"]:
+            continue
+        if f.get("severity") and e["severity"] != f["severity"]:
+            continue
+        if f.get("category") and e["category"] != f["category"]:
+            continue
+        if f.get("dimension") and e.get("dimension") != f["dimension"]:
+            continue
+        if f.get("family") and not str(e["family"]).lower().startswith(str(f["family"]).lower()):
+            continue
+        if f.get("modality") and f["modality"] not in (e.get("modalities") or []):
+            continue
+        if terms:
+            ex = e.get("exemplar") or {}
+            msg = e.get("message") or {}
+            dt = e.get("deletionTest") or {}
+            haystack = "\n".join(
+                [
+                    str(e["id"]),
+                    str(e["packId"]),
+                    str(e["family"]),
+                    str(e["category"]),
+                    str(e.get("dimension") or ""),
+                    str(e.get("detectionAngle") or ""),
+                    " ".join(e.get("tags") or []),
+                    str(msg.get("en") or ""),
+                    str(msg.get("zh") or ""),
+                    str(dt.get("en") or ""),
+                    str(dt.get("zh") or ""),
+                    str(ex.get("bad") or ""),
+                    str(ex.get("trap") or ""),
+                    str(ex.get("good") or ""),
+                ]
+            ).lower()
+            if not all(t in haystack for t in terms):
+                continue
+        matched.append(e)
+
+    facets: dict[str, dict[str, int]] = {"pack": {}, "category": {}, "severity": {}}
+    for item in matched:
+        facets["pack"][item["packId"]] = facets["pack"].get(item["packId"], 0) + 1
+        facets["category"][item["category"]] = facets["category"].get(item["category"], 0) + 1
+        facets["severity"][item["severity"]] = facets["severity"].get(item["severity"], 0) + 1
+
+    sliced = matched[:limit] if limit else matched
+    items = sliced if include_exemplars else [{k: v for k, v in item.items() if k != "exemplar"} for item in sliced]
+
+    return {
+        "schema": "dislop.catalog/1",
+        "total": len(entries),
+        "matched": len(matched),
+        "facets": facets,
+        "items": items,
+    }
+
+
+# ---------- Zero-Entropy Fact-Lock Ledger (`dislop.fact-ledger/1`) & Stet Spans ----------
+
+_FACT_QUALIFIER_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
+    ("max_inc", re.compile(r"^(?:up\s+to|no\s+more\s+than|at\s+most|within|max(?:imum)?(?:\s+of)?|<=|≤)\s*", re.I)),
+    ("max_lt", re.compile(r"^(?:under|below|less\s+than|fewer\s+than|<)\s*", re.I)),
+    ("max_inc", re.compile(r"^(?:最多|不超过|不高于|至多|以内|上限(?:为)?)\s*")),
+    ("max_lt", re.compile(r"^(?:低于|小于|少于|不到)\s*")),
+    ("min_inc", re.compile(r"^(?:at\s+least|no\s+less\s+than|no\s+fewer\s+than|minimum\s+of|>=|≥)\s*", re.I)),
+    ("min_gt", re.compile(r"^(?:more\s+than|greater\s+than|over|above|>)\s*", re.I)),
+    ("min_inc", re.compile(r"^(?:至少|不少于|不低于|下限(?:为)?)\s*")),
+    ("min_gt", re.compile(r"^(?:超过|高于|大于)\s*")),
+    ("approx", re.compile(r"^(?:approx(?:imately)?\.?|roughly|about|around|~|≈)\s*", re.I)),
+    ("approx", re.compile(r"^(?:约|大约|近)\s*")),
+    ("asof", re.compile(r"^(?:as\s+of|since|until)\s+", re.I)),
+    ("asof", re.compile(r"^(?:截至|截止到?)\s*")),
+]
+
+_FACT_SUFFIX_QUALIFIERS: list[tuple[str, re.Pattern[str]]] = [
+    ("max_inc", re.compile(r"^\s*(?:以内|以下|上限)")),
+    ("min_inc", re.compile(r"^\s*(?:以上|起)")),
+    ("approx", re.compile(r"^\s*(?:左右)")),
+]
+
+_UNIT_CANON_MAP: dict[str, str] = {
+    "ms": "ms",
+    "millisecond": "ms",
+    "milliseconds": "ms",
+    "毫秒": "ms",
+    "s": "s",
+    "sec": "s",
+    "secs": "s",
+    "second": "s",
+    "seconds": "s",
+    "秒": "s",
+    "min": "min",
+    "mins": "min",
+    "minute": "min",
+    "minutes": "min",
+    "分钟": "min",
+    "hr": "h",
+    "hrs": "h",
+    "hour": "h",
+    "hours": "h",
+    "小时": "h",
+    "day": "d",
+    "days": "d",
+    "天": "d",
+    "month": "mo",
+    "months": "mo",
+    "个月": "mo",
+    "year": "yr",
+    "years": "yr",
+    "年": "yr",
+    "row": "row",
+    "rows": "row",
+    "行": "row",
+    "美元": "$",
+    "元": "cny",
+}
+
+
+def _canonicalize_numeric_token(token: str) -> str:
+    clean = token.replace(",", "").strip()
+    if re.match(r"^[+-]?v[0-9]+(?:\.[0-9]+){1,3}$", clean, re.I):
+        return clean.lower()
+    if re.match(r"^(?:Q[1-4]|P(?:50|90|95|99))$", clean, re.I):
+        return clean.upper()
+    sign = ""
+    rest = clean
+    if rest.startswith(("+", "-")):
+        sign = rest[0]
+        rest = rest[1:].strip()
+    curr = ""
+    if rest and rest[0] in "$€¥£":
+        curr = "cny" if rest[0] == "¥" else rest[0]
+        rest = rest[1:].strip()
+    nm = re.match(r"^([0-9]+(?:\.[0-9]+)?)\s*(.*)$", rest)
+    if not nm:
+        return f"{sign}{curr}{rest.lower()}"
+    num_part = nm.group(1)
+    raw_unit = nm.group(2).strip()
+    norm_unit = (_UNIT_CANON_MAP.get(raw_unit.lower()) or _UNIT_CANON_MAP.get(raw_unit) or raw_unit.lower()) if raw_unit else ""
+    return f"{sign}{curr}{num_part}{norm_unit}"
+
+
+def _blank_markup_for_fact_scan(raw: str, modality: str) -> str:
+    s = re.sub(r"```[\s\S]*?```", lambda m: " " * len(m.group(0)), str(raw or ""))
+    if modality == "css":
+        return " " * len(s)
+    if modality in {"html", "jsx", "svg"} or re.search(r"<[a-zA-Z][^>]*>", s):
+        s = re.sub(r"<style\b[^>]*>[\s\S]*?</style>", lambda m: " " * len(m.group(0)), s, flags=re.I)
+        s = re.sub(r"<script\b[^>]*>[\s\S]*?</script>", lambda m: " " * len(m.group(0)), s, flags=re.I)
+        s = re.sub(r"<[^>]+>", lambda m: " " * len(m.group(0)), s)
+    return s
+
+
+def extract_protected_facts(text: str, *, modality: str = "markdown") -> list[dict[str, Any]]:
+    raw = str(text or "")
+    if not raw.strip() or modality == "css":
+        return []
+    line_starts = build_line_starts(raw)
+    items: list[dict[str, Any]] = []
+    occupied: list[tuple[int, int]] = []
+
+    def overlaps(start: int, end: int) -> bool:
+        return any(start < b and end > a for a, b in occupied)
+
+    def claim(item: dict[str, Any]) -> None:
+        s, e = item["span"]["start"], item["span"]["end"]
+        if overlaps(s, e):
+            return
+        occupied.append((s, e))
+        line, col = offset_to_line_col(line_starts, s)
+        items.append({**item, "line": line, "col": col})
+
+    without_fences = re.sub(r"```[\s\S]*?```", lambda m: " " * len(m.group(0)), raw)
+
+    # 1. Inline code spans
+    for m in re.finditer(r"`([^`\n]{2,80})`", without_fences):
+        inner = m.group(1).strip()
+        if not inner:
+            continue
+        claim({
+            "kind": "code",
+            "raw": m.group(0),
+            "canonical": inner,
+            "qualifier": None,
+            "span": {"start": m.start(), "end": m.end()},
+        })
+
+    # 2. Explicit URLs and HTML hrefs
+    for m in re.finditer(r"\bhttps?://[^\s)>\]\"']+", without_fences, re.I):
+        cleaned = re.sub(r"[.,;!?。，；！？]+$", "", m.group(0))
+        claim({
+            "kind": "url",
+            "raw": cleaned,
+            "canonical": cleaned,
+            "qualifier": None,
+            "span": {"start": m.start(), "end": m.start() + len(cleaned)},
+        })
+
+    if modality in {"html", "jsx"}:
+        for m in re.finditer(r"\bhref=[\"']([^\"'#\s][^\"']*?)[\"']", raw, re.I):
+            target = m.group(1).strip()
+            if target.lower().startswith("javascript:"):
+                continue
+            val_start = m.start() + m.group(0).find(target)
+            claim({
+                "kind": "url",
+                "raw": target,
+                "canonical": target,
+                "qualifier": None,
+                "span": {"start": val_start, "end": val_start + len(target)},
+            })
+
+    # 3. Visible prose numbers + units + bounding qualifiers
+    prose_scan = _blank_markup_for_fact_scan(raw, modality)
+    chars = list(prose_scan)
+    for s, e in occupied:
+        for i in range(s, min(e, len(chars))):
+            chars[i] = " "
+    clean_scan = "".join(chars)
+
+    _unit_tail = r"(?:\s?(?:%|(?:milliseconds?|ms|minutes?|mins?|seconds?|secs?|s|hours?|hrs?|days?|months?|years?|KB|MB|GB|TB|QPS|TPS|RPS|fps|px|rows?)(?![A-Za-z0-9_])|倍|秒|分钟|小时|天|个月|年|万|亿|元|美元|次|个|条|份|页|行|人|席))?"
+    num_re = re.compile(
+        r"(?<![A-Za-z0-9_])(?:"
+        r"v[0-9]+(?:\.[0-9]+){1,3}(?![A-Za-z0-9_.])"
+        r"|[0-9]+(?:\.[0-9]+){2,3}(?![A-Za-z0-9_.])"
+        r"|Q[1-4](?![A-Za-z0-9_])"
+        r"|P(?:50|90|95|99)(?![A-Za-z0-9_])"
+        r"|(?<![.-])[+-][$€¥£]\s?[0-9][0-9,]*(?:\.[0-9]+)?(?:\s?[kKmMbB](?![A-Za-z0-9_])|万|亿)?"
+        r"|[$€¥£]\s?[0-9][0-9,]*(?:\.[0-9]+)?(?:\s?[kKmMbB](?![A-Za-z0-9_])|万|亿)?"
+        rf"|(?<![.-])[+-][0-9][0-9,]*(?:\.[0-9]+)?{_unit_tail}"
+        rf"|[0-9][0-9,]*(?:\.[0-9]+)?{_unit_tail}"
+        r")"
+    )
+
+    for m in num_re.finditer(clean_scan):
+        num_start, num_end = m.start(), m.end()
+        token = m.group(0).strip()
+
+        line_start_idx = clean_scan.rfind("\n", 0, num_start) + 1
+        is_line_lead = clean_scan[line_start_idx:num_start].strip() == ""
+        after_slice = clean_scan[num_end : num_end + 2]
+        if is_line_lead and token.isdigit() and re.match(r"^[.)、](?:\s|$)", after_slice):
+            continue
+
+        lookbehind_start = max(0, num_start - 24)
+        prefix_window = clean_scan[lookbehind_start:num_start]
+        qualifier: str | None = None
+        span_start = num_start
+        span_end = num_end
+
+        for q_group, q_re in _FACT_QUALIFIER_PATTERNS:
+            for offset in range(len(prefix_window)):
+                sub = prefix_window[offset:]
+                qm = q_re.match(sub)
+                if qm and len(qm.group(0)) == len(sub):
+                    qualifier = q_group
+                    span_start = lookbehind_start + offset
+                    break
+            if qualifier:
+                break
+
+        if not qualifier:
+            suffix_window = clean_scan[num_end : min(len(clean_scan), num_end + 6)]
+            for s_group, s_re in _FACT_SUFFIX_QUALIFIERS:
+                sm = s_re.match(suffix_window)
+                if sm:
+                    qualifier = s_group
+                    span_end = num_end + len(sm.group(0))
+                    break
+
+        canonical = _canonicalize_numeric_token(token)
+
+        claim({
+            "kind": "qualified-number" if qualifier else "number",
+            "raw": raw[span_start:span_end].strip(),
+            "canonical": canonical,
+            "qualifier": qualifier,
+            "span": {"start": span_start, "end": span_end},
+        })
+
+    items.sort(key=lambda it: it["span"]["start"])
+    return items
+
+
+def verify_revision(
+    before_text: str,
+    after_text: str,
+    *,
+    modality: str = "markdown",
+    allow_added: bool = False,
+) -> dict[str, Any]:
+    before_facts = extract_protected_facts(before_text, modality=modality)
+    after_facts = extract_protected_facts(after_text, modality=modality)
+    pool = [{**f, "used": False} for f in after_facts]
+    preserved: list[dict[str, Any]] = []
+    missing: list[dict[str, Any]] = []
+    qualifier_dropped: list[dict[str, Any]] = []
+
+    for bf in before_facts:
+        is_num = bf["kind"] in {"number", "qualified-number"}
+        match_idx = -1
+        for idx, af in enumerate(pool):
+            if af["used"]:
+                continue
+            same_kind = af["kind"] in {"number", "qualified-number"} if is_num else af["kind"] == bf["kind"]
+            if same_kind and af["canonical"] == bf["canonical"] and (not bf["qualifier"] or af["qualifier"] == bf["qualifier"]):
+                match_idx = idx
+                break
+        if match_idx != -1:
+            pool[match_idx]["used"] = True
+            preserved.append({
+                "before": bf["raw"],
+                "after": pool[match_idx]["raw"],
+                "kind": bf["kind"],
+                "canonical": bf["canonical"],
+                "qualifier": bf["qualifier"],
+            })
+            continue
+
+        if bf["qualifier"]:
+            bare_idx = -1
+            for idx, af in enumerate(pool):
+                if not af["used"] and af["kind"] in {"number", "qualified-number"} and af["canonical"] == bf["canonical"]:
+                    bare_idx = idx
+                    break
+            if bare_idx != -1:
+                pool[bare_idx]["used"] = True
+                qualifier_dropped.append({
+                    "before": bf["raw"],
+                    "after": pool[bare_idx]["raw"],
+                    "canonical": bf["canonical"],
+                    "expectedQualifier": bf["qualifier"],
+                    "actualQualifier": pool[bare_idx]["qualifier"],
+                })
+                continue
+
+        missing.append({
+            "raw": bf["raw"],
+            "kind": bf["kind"],
+            "canonical": bf["canonical"],
+            "qualifier": bf["qualifier"],
+            "line": bf["line"],
+            "col": bf["col"],
+        })
+
+    added_numbers = [
+        {"raw": af["raw"], "canonical": af["canonical"], "line": af["line"], "col": af["col"]}
+        for af in pool
+        if not af["used"] and af["kind"] in {"number", "qualified-number"}
+    ]
+
+    has_drift = bool(missing or qualifier_dropped or (not allow_added and added_numbers))
+    total_prot = len(before_facts)
+    ret_rate = 1 if total_prot == 0 else round(len(preserved) / total_prot, 4)
+    if isinstance(ret_rate, float) and ret_rate.is_integer():
+        ret_rate = int(ret_rate)
+
+    return {
+        "schema": "dislop.fact-ledger/1",
+        "status": "drifted" if has_drift else "preserved",
+        "totalProtected": total_prot,
+        "retainedCount": len(preserved),
+        "retentionRate": ret_rate,
+        "preserved": preserved,
+        "missing": missing,
+        "qualifierDropped": qualifier_dropped,
+        "addedNumbers": added_numbers,
+    }
+
+
+def _clean_num(v: float | int) -> float | int:
+    return int(v) if isinstance(v, float) and v.is_integer() else v
+
+
+def _round_half_up_1(v: float | int) -> float | int:
+    return _clean_num(math.floor(float(v) * 10.0 + 0.5) / 10.0)
+
+
+def extract_voice_profile_offline(samples: list[str] | str, *, lang: str = "auto") -> dict[str, Any]:
+    raw_list = samples if isinstance(samples, list) else [samples]
+    clean_samples = [str(s or "").strip() for s in raw_list if str(s or "").strip()]
+    combined = "\n\n".join(clean_samples)
+    cjk_count = len(re.findall(r"[\u4e00-\u9fff]", combined))
+    latin_words = len(re.findall(r"[A-Za-z]{2,}", combined))
+    resolved_lang = lang if lang in {"zh", "en"} else ("zh" if cjk_count >= latin_words else "en")
+
+    prof = analyze_text_profile(combined, modality="markdown")
+    mean_len = _clean_num(prof["burstiness"]["meanLength"])
+    cv = _clean_num(prof["burstiness"]["cv"])
+    conc = _clean_num(prof["concreteness"]["per100Units"])
+    em_dash = _clean_num(prof["punctuation"]["emDashPer300"])
+    min_band = _round_half_up_1(max(4.0, float(mean_len) * 0.65))
+    max_band = _round_half_up_1(max(float(min_band) + 6.0, float(mean_len) * 1.45))
+
+    if resolved_lang == "zh":
+        tone = (
+            "直接、重实据的平实技术/工作表达，优先给数字与具体对象"
+            if conc >= 4
+            else "克制、自然的白话叙述，少修饰词与铺垫帽"
+        )
+        sentence_habits = [
+            f"长短句自然错落（平均句长 {mean_len}，起伏系数 {cv}）"
+            if cv >= 0.35
+            else f"句幅平稳克制（目标句长区间 {min_band}–{max_band}）",
+            "几乎不用破折号插话，靠逗号与句号自然断句"
+            if em_dash <= 1
+            else f"适度使用破折号补充限定（约 {em_dash}/300 词单元）",
+        ]
+        preferred_patterns = [
+            "每段保留可核对的数字、时间或配置锚点" if conc >= 3 else "第一句直接交代动作主体与结论",
+            "条件与数字紧贴写出，不拆成排比口号",
+        ]
+        avoid_patterns = ["开头寒暄与宏大时代背景铺垫", "“不是 A，而是 B”反转与三段对称分号句"]
+    else:
+        tone = (
+            "Direct, evidence-dense maker prose grounded in numbers and concrete nouns"
+            if conc >= 4
+            else "Plain, conversational prose with minimal throat-clearing or hype"
+        )
+        sentence_habits = [
+            f"Varied sentence cadence (mean {mean_len} units, CV {cv})"
+            if cv >= 0.35
+            else f"Steady sentence cadence (target band {min_band}–{max_band} units)",
+            "Minimal em-dash interruptions; relies on periods and plain clauses"
+            if em_dash <= 1
+            else f"Moderate parenthetical em-dashes (~{em_dash} per 300 units)",
+        ]
+        preferred_patterns = [
+            "Anchor claims with specific metrics, versions, or file paths"
+            if conc >= 3
+            else "Lead paragraphs with concrete subjects and active verbs",
+            "Keep bounding qualifiers ('up to', 'at least') attached to numbers",
+        ]
+        avoid_patterns = ["Throat-clearing openers and 'Looking ahead' closers", "'Not X, but Y' pivots and 3-part semicolon pitches"]
+
+    return {
+        "schema": "dislop.voice/1",
+        "mode": "offline-deterministic",
+        "lang": resolved_lang,
+        "stylometrics": {
+            "sampleCount": len(clean_samples),
+            "sentenceCount": prof["sentenceCount"],
+            "meanLength": mean_len,
+            "lengthCV": cv,
+            "targetLengthBand": [min_band, max_band],
+            "concretenessPer100": conc,
+            "mattr": prof["lexical"]["mattr"],
+            "emDashPer300": em_dash,
+            "maxSemicolonsInSentence": prof["punctuation"]["maxSemicolonsInSentence"],
+        },
+        "profile": {
+            "tone": tone,
+            "sentenceHabits": sentence_habits,
+            "preferredPatterns": preferred_patterns,
+            "avoidPatterns": avoid_patterns,
+        },
+    }
