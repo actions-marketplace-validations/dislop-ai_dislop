@@ -36,6 +36,8 @@
 
 ## 5. GitHub 协作约定
 
-- **开干前先查 Issue 与 Discussions**：认领较大轨道或改动规则前，先核对 GitHub 开放 Issue、里程碑与 Discussions 结论，避免重复劳动；开新 PR 时在正文用 `Closes #<编号>` 关联对应 Issue。
-- **分支与 `main` 护栏**：非微调改动建议拉短分支（`feat/...`、`fix/...`、`docs/...`）提 PR（`.github/CODEOWNERS` 自动分配评审，合并后自动删分支）；`main` 禁强推与删分支，保留快进推送以配合自动发版脚本。
-- **公开与私有讨论严格分离**：商业计费、配额策略、运营台账与本机私密资料只放私有仓 `dislop-cloud` 或本地忽略目录，严禁写入公开仓 Issue、PR、Discussions 或提交说明。
+1. 开工前先对齐现场：先看 `git log -n 10 --oneline`、开放 Issue（`gh issue list`）和近期 Discussions，避免和协作者或另一台 Agent 撞车。
+2. 认领再动手：较大改动先在对应 Issue 挂负责人（`Assignee`）或留一句开始处理，按 `ROADMAP.zh-CN.md` 目录边界并行。
+3. 小改直推，大改走 PR：文案微调、小修和发版可直接快进推 `main`；新功能、改规则或跨模块改动拉短分支（`feat/...`、`fix/...`、`docs/...`）提 PR，正文写 `Closes #<编号>`，CI 通过即可合入，不设阻塞审批。
+4. 不记两套账：日常进度只记在 GitHub Issue 与看板，不在仓库里另建零散待办清单；`ROADMAP.zh-CN.md` 与 `ROADMAP.md` 只在发版或大里程碑收口时统一勾选。
+5. 公开与私有边界：商业计费、配额策略、运营台账与本机路径只放私有仓 `dislop-cloud` 或本地忽略目录，严禁写入公开 Issue、PR、Discussions 或提交说明。

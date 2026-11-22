@@ -2510,15 +2510,15 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 12732,
-      "approxTokens": 3183,
+      "bytes": 12973,
+      "approxTokens": 3243,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp",
         "skill"
       ],
-      "sha256": "7625ca1c2a9293a7790fa240741889eb58972b81dc5c68fd8824bbe73d0b4de9"
+      "sha256": "8d4a422973ddc6bce4611c1c816be2bdcc8236866d57c15f69e83c82e2585906"
     }
   ]
 }
