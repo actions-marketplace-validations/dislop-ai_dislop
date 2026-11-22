@@ -1,6 +1,6 @@
 ---
 name: dislop
-version: 0.6.0
+version: 0.6.1
 description: Prevent, diagnose, and clean up AI slop in docs, RFCs, slide decks, and web pages. Local progressive references + offline CLI (7 packs, 42 rules, 14.6 KB Pocket ML, offline voice) + optional Cloud MCP.
 ---
 

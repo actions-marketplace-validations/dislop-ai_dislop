@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.6.0
+version: 0.6.1
 snapshot: 2026-11-21
 ---
 
@@ -8,7 +8,7 @@ snapshot: 2026-11-21
 
 [简体中文](./roadmap.zh-CN.md)
 
-Last updated: `2026-11-22` · Current baseline: `v0.6.0` (`dislop.com` live)
+Last updated: `2026-11-22` · Current baseline: `v0.6.1` (`dislop.com` live)
 
 This roadmap tracks what `dislop` ships today, how we are rolling out universal editor and agent integrations next, and the open design questions we want to decide together. To pick up a track, push back on a rule threshold, or propose a new idea, start a thread in [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) or claim an [Issue](https://github.com/dislop-ai/dislop/issues).
 
