@@ -2,7 +2,7 @@
   "name": "dislop",
   "displayName": "dislop",
   "description": "Offline anti-slop linter and Agent tool for Markdown, HTML/CSS/JSX, and docs (7 built-in packs, 42 rules, 0 uploads).",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "publisher": "dislop-ai",
   "license": "Apache-2.0",
   "homepage": "https://dislop.com",

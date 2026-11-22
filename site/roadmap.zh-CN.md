@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.6.0
+version: 0.6.1
 snapshot: 2026-11-21
 ---
 
@@ -8,7 +8,7 @@ snapshot: 2026-11-21
 
 [English](./roadmap.md)
 
-最后更新：`2026-11-22` · 当前基线：`v0.6.0`（`dislop.com` 已上线）
+最后更新：`2026-11-22` · 当前基线：`v0.6.1`（`dislop.com` 已上线）
 
 这份路线图记录 `dislop` 现在已经做到哪一步、接下来按什么顺序推进全平台适配与规则深化，以及还没写死、欢迎团队一起拍板的开放问题。认领任务、反馈误报，或者聊新点子，直接在 [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) 开帖，或建一个 [Issue](https://github.com/dislop-ai/dislop/issues) 即可。
 

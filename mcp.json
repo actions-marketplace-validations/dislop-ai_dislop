@@ -5,7 +5,7 @@
       "command": "npx",
       "args": [
         "--yes",
-        "dislop@0.6.0",
+        "dislop@0.6.1",
         "--mcp"
       ]
     }

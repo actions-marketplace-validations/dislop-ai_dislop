@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.6.0
+version: 0.6.1
 ---
 
 # Architectural Galley Proof Design System

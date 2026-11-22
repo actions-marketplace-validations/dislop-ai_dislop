@@ -1,6 +1,6 @@
 {
   "name": "dislop",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Open-source zero-dependency anti-slop Skill, CLI, and offline checker for AI-written docs, Word/PowerPoint files, and web pages.",
   "license": "Apache-2.0",
   "homepage": "https://dislop.com",

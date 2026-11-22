@@ -1,6 +1,6 @@
 {
   "schema": "dislop.catalog/1",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "snapshotDate": "2026-11-21",
   "baseUrl": "https://dislop.com",
   "pillars": [
@@ -67,7 +67,7 @@
         "mcp",
         "cli"
       ],
-      "sha256": "27add18ff8503c351798f56573948bf1b4d72244b650517f46e57ed0719f2069"
+      "sha256": "bb4835ed689320d7ab46621814d0c1af4fda90fdcdd4accbc4c4d799c2584c74"
     },
     {
       "id": "methodology-index",
@@ -108,7 +108,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "9f518081a00f1a378c0c605cc0dfd345e4e62026f7e9cdf78b7714f3c3c075da"
+      "sha256": "e38c7f7f5d1ab327ee5a57c2aac11d893bea185750f0c47135306e00856e6058"
     },
     {
       "id": "methodology-deletion-test",
@@ -142,7 +142,7 @@
         "mcp",
         "browser-workbench"
       ],
-      "sha256": "53fb4ba3bc0ff31de87be419862e770f0a4817daa378babe44d093c52f1f656b"
+      "sha256": "3a4f6b42cca50139d4595514c863bdd4e5fcdbc6844462e1918ba705194589e1"
     },
     {
       "id": "methodology-anti-pattern-map",
@@ -182,7 +182,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "a217e28aebc1dff5ad99579f8a93d4264a8c0d70fdee6faca907b67c1fbc69d9"
+      "sha256": "3139f7a7d0820d53677b7cd76d975410ed2d1c5ab2ae4e3e9b68a53bf4ffffd7"
     },
     {
       "id": "methodology-positive-divergence",
@@ -216,7 +216,7 @@
         "browser-workbench",
         "skill"
       ],
-      "sha256": "7c289bf21f79b16c9dbde592387425e85acfcf99bd0f8a8b2a89e13e2981d510"
+      "sha256": "08e3d7dd977353680547b383ce577c8d3a85f6c5eab92f73c9ec02ecc333df87"
     },
     {
       "id": "methodology-brand-voice",
@@ -253,7 +253,7 @@
         "browser-workbench",
         "cli"
       ],
-      "sha256": "5d70cdba943c734f704de906740cd591593d8a9a289678900b6cce7d1b12ce98"
+      "sha256": "90057ce6af0e980312efe68ffd487982a087bf4961e6852e10336b56f2d5b4f7"
     },
     {
       "id": "methodology-design-system",
@@ -284,7 +284,7 @@
         "browser-workbench",
         "cli"
       ],
-      "sha256": "c9c83863d5b1d43d7009b2abd045d71689e40e29b8f7f9e4d69b0dd6876e59ba"
+      "sha256": "f2e902bae678111f7b84eb46483f473a4acec8c49765c5b711192e8edaef8e4b"
     },
     {
       "id": "cases-index",
@@ -325,7 +325,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "315cea435dd9efdcb1fc808856e0abf502d304012e980da814701c40d35ffbf7"
+      "sha256": "1e1504e4d8404665c4cd0891a07dc5b8f70116b56dc953a8ffd3b739e7a0a6cc"
     },
     {
       "id": "cases-copy-contrasts",
@@ -366,7 +366,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "67eaededad244b1496357eb5e50db2ecbf5bcdf6948a600ba04a46dc28f80688"
+      "sha256": "fd043022e3db6cea14c46efb58d40ab5688b325fd94e8ced7e46d14b3bc1344f"
     },
     {
       "id": "cases-dogfood-audit",
@@ -398,7 +398,7 @@
         "cli",
         "browser-workbench"
       ],
-      "sha256": "9e9392941e5d8b877456a96cb5391c377c628c140a268c1d79edba9736172f91"
+      "sha256": "f60681c19591b763f3caa791551edc18dbf2033b86e5dcf5a249930e654c1929"
     },
     {
       "id": "cases-ui-specimens",
@@ -427,7 +427,7 @@
       "relatedTools": [
         "browser-workbench"
       ],
-      "sha256": "50fcbaab30838ff79bb0974eaa453483ef6c68e28891f883fbfea794176bc936"
+      "sha256": "9333ef6ebbd166b9b6f0b6bc72abf36a0b3d905fd9842a4778929cc4a366bf19"
     },
     {
       "id": "tools-index",
@@ -470,7 +470,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "4c62d6bac12e9ee47c927191c13b0c7a19f93cf8619fa627b38f2191141db8e2"
+      "sha256": "120cee47c59d88613418e54f3ea221a8170ca7a46f0621f70b038a9a132989d5"
     },
     {
       "id": "tools-skill",
@@ -512,7 +512,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "63b86aa8105e1fdebbcec6c9ddebcc8e33a25b58a968f5a51334d4dc897a30bd"
+      "sha256": "f2209d616eba2393b290b5bd6554aa8b488123065090969731a7dd395785074f"
     },
     {
       "id": "tools-skill-ref-business-and-rfc",
@@ -705,7 +705,7 @@
         "browser-workbench",
         "skill"
       ],
-      "sha256": "9db1b16ae762fd46e62fc3c8f563182b39167a0b62d7a6ad22229167dd790dd9"
+      "sha256": "c680e7c1550875c8177996e8b572dfaadcb75e560afef9ed4815ddd32e1eb48a"
     },
     {
       "id": "tools-cli-hooks",
@@ -744,7 +744,7 @@
       "relatedTools": [
         "cli"
       ],
-      "sha256": "4d4aa71401dd1bcf2573112457631a279e84080381d2b6002506fc3ec4a1f9a5"
+      "sha256": "b91e2d8c071f43cfef0afc29914e0f56d57e340d295ad1d3c896a7adeb0033b2"
     },
     {
       "id": "tools-mcp-sdk-api",
@@ -785,7 +785,7 @@
         "mcp",
         "cli"
       ],
-      "sha256": "99b50b84e0f1a8ff3cd81450ec8b76cbcb0fee17993eb643a273eb38381f697c"
+      "sha256": "e8e806e0c0c12963855a4c2b1ceecaaba26abdeefc0a0c25e60c69726156d280"
     },
     {
       "id": "privacy-policy",
@@ -812,7 +812,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "0325b686f79ffe8f91aae027cf3a32541931a73ccace111700e47290a537176d"
+      "sha256": "c7700aec1455ef74894a6ff45ceef3f9574608dd5a084610bbc26db1edc0529c"
     },
     {
       "id": "pack-core",
@@ -2345,7 +2345,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "e2e5162f0092213eabf8c1157fc15333fffd0cba089793c9d426bc176d59d747"
+      "sha256": "8cb3c4c183ed65715f11acea342370eeff879114af233446d407a165fffb8932"
     },
     {
       "id": "task-web-and-deck",
@@ -2379,7 +2379,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "f9520344fc014630dafbabb26f611a440d8ef2a574ddf7e01c79eb6526e32dbb"
+      "sha256": "842a1b5e5b28925f065eb821faa3fd779b23370acfa0ae4f7a449c2cff5e12a1"
     },
     {
       "id": "task-editorial-writing",
@@ -2412,7 +2412,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "c1dee16caa7c1ea0c29161ce4865cd9e8e7dedd1c88abed040a01280acc5f467"
+      "sha256": "75a312c8d4c32bf76b7f04c05cb060c40f27dd24778cf3ffa382368e37bbd4e4"
     },
     {
       "id": "task-pre-release-gate",
@@ -2447,7 +2447,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "68aeeb791643b9015722aba74e27118c24283cc9c32d26cc0af8548c024be3e5"
+      "sha256": "80e48ed422ae17ddcf4dc56e5191b1078f7079842a7f3b6e6679c95676c71119"
     },
     {
       "id": "awesome-anti-slop-md",
@@ -2518,7 +2518,7 @@
         "mcp",
         "skill"
       ],
-      "sha256": "2dcceafb16d33d1ad25e7b91378d9ae728eb77fe8d5d338552ddce0f63b2e595"
+      "sha256": "ccadc2d2e84e1c4ea12cedd5ebff925cd459d3ee70a719cc916538cd0bb7c6c9"
     }
   ]
 }
