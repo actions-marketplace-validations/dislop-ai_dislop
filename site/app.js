@@ -1,7 +1,9 @@
 import {
+  analyzeTextProfile,
   auditOoxmlEntries,
   auditText,
   detectModality,
+  extractVoiceProfileOffline,
   resolveEffectivePack,
 } from "./engine/core.mjs";
 import { PACKS_BY_ID, RULE_UI_META } from "./engine/packs-data.mjs";
@@ -27,14 +29,14 @@ const I18N = {
     "lead.strike": "好的，以下是为您润色后的版本。",
     "lead.title": "发之前，把文案和设计里的 AI 味过一遍",
     "lead.sub":
-      "开源的 Skill 与 CLI 完全本地离线运行、零上传，免费查文档、Word、PPT 和网页；需要大模型深度审校与一键去味时，也能按需直连官方云端与远程 MCP（每月 30 免费额度）。",
+      "开源的 Skill 与 CLI（含全部 7 套场景包）完全本地离线运行、零上传，免费查文档、研发复盘、Word、PPT 和网页；需要免环境接入或一键自愈改写时，再按需连官方云端远程 MCP（每月 30 免费额度）。",
     "lead.promptLabel": "或者免安装：复制这句话直接发给任意联网 AI / Agent",
     "lead.promptText":
       "先读 https://dislop.com/llms.txt，按里面整理的文案和设计去 AI 味规矩与检查方法，帮我把接下来这份稿子发之前过一遍。",
     "lead.copyPromptBtn": "复制发给 AI",
     "lead.cta": "立刻贴一段在线试 ↓",
     "lead.cloudBtn": "免费领 30 额度远程 MCP 密钥",
-    "lead.installBtn": "装开源 Skill / CLI",
+    "lead.installBtn": "装开源 Skill / CLI（全内置 0 联网）",
     "lead.awesomeBtn": "工具清单 →",
     "lead.starBtn": "GitHub ★",
     "lead.reassure": "默认离线查 0 上传；仅在你主动点击 AI 按钮时发往付费级零训练端点，不存草稿。",
@@ -45,12 +47,12 @@ const I18N = {
     "hp.meta": "用同一个检查引擎实时跑的",
     "hp.openWb": "在下面工作台打开 →",
 
-    "m1.title": "开源本地：Skill + CLI 零上传",
-    "m1.desc": "Apache-2.0 永久免费。25 条离线规则在 64 份公开对抗样本上达 100% 检出与 0% 误报，直接查文档、Word、PPT、网页与 PR。",
-    "m2.title": "自愈云端 AI：一键去味保数字",
-    "m2.desc": "5 模型实测相比裸提示词提分 +15.8 至 +22.3。先查再改再复检，自带数字核对防漏防编，上游异常自动退额度，远程 MCP 每月 30 免费额度。",
-    "m3.title": "免费静态资源 + 87 条精选清单",
-    "m3.desc": "/llms.txt、按场景切好的任务卡、真实翻车复盘和 87 个核验过的去 AI 味工具与设计参考，人读或给 Agent 读都零门槛。",
+    "m1.title": "1. 开源 Skill：自带本地参考卡",
+    "m1.desc": "装进 Claude Code、Codex 或 Cursor，自带 4 张分场景本地渐进参考卡，全程 0 联网不弹外网审批框，动笔前防套话，写完引导跑本地 CLI。",
+    "m2.title": "2. 开源 CLI：全内置 + 按需本地模型",
+    "m2.desc": "< 250 KB 零依赖内置全部 7 套场景包（42 条规则）、5 轴节奏统计与离线声纹；支持按本机内存与芯片选装本地小模型。",
+    "m3.title": "3. 云端远程 MCP：重能力按需用",
+    "m3.desc": "免本地环境接入网页 AI 与自动化流，自愈改写比裸提示词提分 +15.8 至 +22.3、改写时保留原稿数字并跨端同步个人文风（每月 30 免费额度）。",
 
     "cases.title": "三个真实案例：为什么删了套词还是像 AI",
     "cases.desc":
@@ -58,20 +60,25 @@ const I18N = {
     "cases.readAll": "看全部对照案例（.md）→",
 
     "wb.heading": "直接在这里试一试（支持粘贴或拖拽本地文件）",
-    "wb.packLabel": "按哪种稿子查：",
+    "wb.packLabel": "内置场景包（0 联网）：",
     "pack.brief": "工作文档 / 方案",
+    "pack.eng": "研发文档 / PR / 复盘",
+    "pack.reg": "对外发布 / 严谨合规",
+    "pack.exec": "汇报 PPT / 结论页",
     "pack.essay": "随笔 / 长文",
-    "pack.ui": "PPT 和网页",
+    "pack.ui": "网页与组件",
     "wb.openFile": "打开本地文件（.md / .html / .docx / .pptx）",
     "wb.specimensTitle": "示例",
     "wb.privacyNote": "离线检查默认留在当前标签页，0 上传；仅在你主动点击下方 AI 按钮时发往官方同源模型端点，不用于训练、不落盘留存。",
+    "wb.jumpNotes": "看批注详情 ↓",
     "ai.reviewBtn": "AI 深度审校（1 额度）",
     "ai.deslopBtn": "AI 一键去味（2 额度）",
     "ai.anonHint": "免登录每天 5 试用额度 · 登录后每月 30 额度",
     "ai.claimLink": "领免费密钥 →",
-    "voice.drawerTitle": "可选：提取个人文风（2 额度 · 需免费密钥）",
-    "voice.drawerDesc": "贴入 1–3 段你自己写过的干净文字（用空行隔开），提取文风后会保存在本机浏览器，后续点击「AI 一键去味」时自动按你的口吻改写。",
-    "voice.extractBtn": "提取我的文风（2 额度）",
+    "voice.drawerTitle": "可选：提取个人文风（支持本地 0 上传统计声纹，或云端 AI 提炼）",
+    "voice.drawerDesc": "贴入 1–3 段你自己写过的干净文字（用空行隔开）。点「离线统计声纹」完全在当前标签页完成、0 上传；也可登录免费密钥调用云端模型深度提炼并跨端复用。",
+    "voice.offlineBtn": "离线统计声纹（0 额度 · 不联网）",
+    "voice.extractBtn": "云端 AI 提炼文风（2 额度）",
     "voice.clearBtn": "清除已保存文风",
     "wb.modeProof": "标出问题",
     "wb.modeEdit": "编辑原文",
@@ -79,7 +86,7 @@ const I18N = {
     "wb.applyClean": "看改好的",
     "wb.tryTrap": "看换了种 AI 味的",
     "wb.reset": "还原",
-    "wb.voiceTitle": "句长统计",
+    "wb.voiceTitle": "5 轴节奏与细节体检",
     "wb.nudgeText": "试完觉得顺手？重视隐私可装开源 Skill / CLI 本地离线跑；想免装环境直接用大模型，10 秒领免费 30 额度远程 MCP。",
     "wb.nudgeCloud": "领免费 30 额度 ↓",
     "wb.nudgeInstall": "装开源 Skill / CLI ↓",
@@ -88,18 +95,18 @@ const I18N = {
     "legend.error": "红实线：AI 残留硬伤",
     "legend.warn": "蓝虚线：套话与模板味",
 
-    "surf.title": "怎么用：发给你的 AI，或者装给编程 Agent",
+    "surf.title": "怎么用：从免装 Skill 到纯本地 CLI，再到云端远程 MCP",
     "surf.desc":
-      "按你平时用的工具选一种就行。普通对话用户直接复制一句话就能用；用 Claude Code、Codex、Cursor 的开发者装一次 Skill 或 Plugin，以后写前自动避坑、写完自动复检。",
+      "按数据敏感度和工作环境选就行。重视隐私直接用纯本地开源 Skill + CLI（内置全部规则与行业包，全程 0 联网）；没有本地终端或需要一键自愈改写时再连云端远程 MCP。",
     "surf.readTools": "完整接入文档（.md）→",
-    "surf.w1Title": "1. 直接发给 AI（免安装）",
-    "surf.w1Desc": "适合 ChatGPT、Claude、Kimi 等任意联网对话。复制一句话丢给它，它会自己读 dislop.com/llms.txt 按规矩审稿。",
-    "surf.w2Title": "2. Agent Skill（跨工具通用）",
-    "surf.w2Desc": "一行命令装进 Claude Code、Codex、Cursor、Windsurf 或 Antigravity。写之前防 AI 味，写完自动复检。",
-    "surf.w3Title": "3. 远程 MCP 与本地 Plugin",
-    "surf.w3Desc": "注重隐私用开源本地 stdio MCP；需要大模型深度改写、三阶审校和文风提取，直接填官方远程 MCP 地址 https://dislop.com/mcp（每月 30 次免费）。",
-    "surf.w4Title": "4. 开源命令行与 PR 卡点",
-    "surf.w4Desc": "终端用 npx 或 uvx 完全离线查整个目录、Word、PPT 或本次 Git 改动，也能放进 GitHub Actions 卡住 AI 残留硬伤。",
+    "surf.w1Title": "1. 跨工具 Agent Skill（本地渐进参考）",
+    "surf.w1Desc": "一行命令装进 Claude Code、Codex、Cursor、Windsurf 或 Antigravity。自带 4 张本地场景参考卡按需读取，全程 0 联网不弹外网审批框，并引导调用本地 CLI。",
+    "surf.w2Title": "2. 开源 CLI 与本地 MCP（全内置 + 按需小模型）",
+    "surf.w2Desc": "< 250 KB 零依赖直接内置全部 7 套规则与行业包，断网秒查目录、Word、PPT 与 Git 改动；支持 dislop voice 离线声纹和 dislop model 按本机内存推荐选装本地小模型。",
+    "surf.w3Title": "3. 官方云端远程 MCP（免装环境重能力）",
+    "surf.w3Desc": "在网页对话、手机端或自动化工作流里直连 https://dislop.com/mcp，调用 1.2 秒自愈改写、三阶审校与跨端同步个人文风（每月 30 次免费）。",
+    "surf.w4Title": "4. 免装聊天框一句话（/llms.txt）",
+    "surf.w4Desc": "不装任何工具时，复制一句话发给 ChatGPT、Claude 或 Kimi 等联网对话，让它先读 dislop.com/llms.txt 再帮你过稿。",
     "snip.prompt": "发给 AI",
     "snip.cloud": "远程 MCP（云端）",
     "snip.localMcp": "本地 MCP",
@@ -107,15 +114,15 @@ const I18N = {
 
     "price.title": "开源本地免费，云端按需升级",
     "price.desc":
-      "Skill、CLI 与规则库按 Apache-2.0 完全开源、离线运行、零上传。需要大模型三阶审校、自愈一键去味和远程 HTTP MCP 时，可以直接用官方托管云端（免费版每月 30 次额度，付费用量级接口绝不用于模型训练）。",
+      "Skill、CLI 与全部 7 套场景规则包按 Apache-2.0 完全开源、纯本地离线运行、零上传。需要免装环境远程 MCP、1.2 秒自愈去味与跨端文风同步时，再按需选用官方托管云端（免费版每月 30 额度，付费级零训练接口）。",
     "price.benchLink": "看 5 模型实测对比 →",
     "price.t1Name": "开源本地（Skill + CLI）",
     "price.t1Price": "$0 · 永久免费",
-    "price.t1Sub": "适合重视数据隐私的个人与开发团队，规则与代码全部开源透明。",
-    "price.t1F1": "Agent Skill、命令行与本地离线 MCP（Apache-2.0）",
-    "price.t1F2": "100% 离线确定性检查，支持 Markdown、HTML/CSS、Word、PPT 与 Git Diff",
-    "price.t1F3": "免费读取官网静态任务卡与工具清单",
-    "price.t1F4": "零联网、零上传、零大模型 API 成本",
+    "price.t1Sub": "适合重视数据隐私的个人、研发团队与内网环境，代码与规则全部开源透明。",
+    "price.t1F1": "Agent Skill（含本地参考卡）、命令行与本地 MCP（Apache-2.0）",
+    "price.t1F2": "全量内置 7 套场景与行业包（42 条规则），离线查文档、Word、PPT 与 PR",
+    "price.t1F3": "内置 5 轴节奏体检、14.6 KB 轻量本地模型（--ml）与 dislop voice 离线声纹",
+    "price.t1F4": "零联网零上传；支持按本机内存与芯片选装可选本地小模型",
     "price.t1Cta": "安装 Skill / CLI ↑",
     "price.t2Name": "云端免费版（远程 MCP）",
     "price.t2Price": "$0 · 30 额度 / 月",
@@ -155,11 +162,11 @@ const I18N = {
     "ep.skill": "跨宿主 Agent Skill",
     "ep.awesome": "87 条工具清单 JSON",
     "ep.method": "文案与设计基准",
-    "ep.full": "单次拉取的全部 25 条规则",
+    "ep.full": "单次拉取的全部 42 条规则",
 
-    "awesome.title": "Awesome Anti-Slop：87 个去 AI 味工具与资料",
+    "awesome.title": "去 AI 味工具清单：87 个核验工具与参考资料",
     "awesome.desc":
-      "除了 dislop 自己，我们也维护了一份按场景整理的去 AI 味资源索引，包含 Vale、Impeccable 等成熟工具、中英文写作规范、代码 PR 治理规则和实证论文。全部链接在 2026-11-21 逐条核过一遍。",
+      "除了 dislop 自己，我们也维护了一份按场景整理的去 AI 味资源索引，包含成熟检查器、中英文写作规范、代码提交治理规则和实证论文。全部链接在 2026-11-21 逐条核过一遍。",
     "awesome.openFull": "打开完整清单 →",
     "awesome.ecoTitle": "按用途筛选，也可以直接给 Agent 读",
     "awesome.ecoDesc": "按写作、网页、代码、研究分类筛选，或者只看能本地自动检查的工具。AI 检测器和规避工具单独放在最下面做对照。",
@@ -175,13 +182,13 @@ const I18N = {
     "stat.zh": "条中文 / 多语种",
 
     "share.title": "觉得顺手？发给同事，或者去 GitHub 收藏",
-    "share.desc": "Skill、CLI 与 25 条确定性规则按 Apache-2.0 永久开源、离线零上传；云端 AI 仅在你主动点击时调用且不存草稿。如果团队里有人天天给 AI 稿子改味道，下面三个入口最直接。",
+    "share.desc": "Skill、CLI 与全部 42 条内置规则按 Apache-2.0 永久开源、离线零上传；云端 AI 仅在你主动点击时调用且不存草稿。如果团队里有人天天给 AI 稿子改味道，下面三个入口最直接。",
     "share.c1Title": "一键分享给团队或朋友",
     "share.c1Desc": "复制一段直白不浮夸的介绍（带官网试用链接、案例页和工具清单），直接贴到群聊或文档里就行。",
     "share.copySiteBtn": "复制项目推荐语",
     "share.copyCasesBtn": "复制案例页链接",
     "share.c2Title": "去 GitHub 收藏仓库",
-    "share.c2Desc": "检查引擎、Agent Skill、Plugin、本地 MCP 和 Awesome Anti-Slop 清单都在同一个仓库，点个 Star 方便以后找。",
+    "share.c2Desc": "检查引擎、Agent Skill、Plugin、本地 MCP 和去 AI 味工具清单都在同一个仓库，收藏一下方便以后找。",
     "share.starCta": "GitHub 点 Star ★",
     "share.c3Title": "一起补案例、规则和工具",
     "share.c3Desc": "遇到特别典型的 AI 味翻车案例，或者发现好用的去 AI 味工具没进清单，欢迎在路线图或 Issue 里一起补。",
@@ -195,35 +202,38 @@ const I18N = {
     "cov.colFormat": "扩展名",
     "cov.colScope": "查什么",
     "cov.colStatus": "现状",
-    "cov.r1Name": "文稿与笔记",
-    "cov.r1Scope": "开头寒暄、未填占位符、公文黑话、英文高频空词、“不是 A，而是 B”套句、连发短句和四字排比、段尾说教、没出处的统计、满屏加粗清单、破折号过密、中文里混半角标点。",
+    "cov.r1Name": "文稿与研发文档",
+    "cov.r1Scope": "开头寒暄、未填占位符、公文黑话、“不是 A，而是 B”套句、三段分号推销句、自问自答、五连逗号句、同构句首、句长齐平空话、PR 摘要壳与浅层复盘归因。",
     "cov.r2Name": "Word 和 PPT",
-    "cov.r2Scope": "贴进文档没渲染的 Markdown 星号、正文套话、PPT 单页字墙、要点超 6 条、文字自动缩太小、空泛标题（如“背景”“概述”）。",
+    "cov.r2Scope": "贴进文档没渲染的 Markdown 星号、正文套话、PPT 单页字墙、要点过多、文字自动缩太小、过程标签式标题与连续 4 页同版式。",
     "cov.r4Name": "网页与组件",
     "cov.r4Scope": "点不动的空链接和占位按钮、默认紫粉渐变、满屏胶囊标签、三层套盒、把提示词口号印成装饰徽章。",
     "cov.r5Name": "Git 改动与 PR",
     "cov.r5Scope": "只查本次改过的行，拦住残留寒暄、占位符和文字/页面里的 AI 味，支持 GitHub PR 批注和 SARIF。代码语法树检查还没做。",
-    "cov.r6Name": "个人文风与节奏单调",
-    "cov.r6Scope": "云端 Remote MCP / API 已支持从 1–5 篇旧稿提取个人文风并带入改写；本地离线节奏单调与 PPT 连同版式探针处于原型阶段。",
+    "cov.r6Name": "离线声纹、轻量本地模型与按需小模型",
+    "cov.r6Scope": "工作台与本地 CLI 均支持零上传统计声纹提取；本地 CLI 与 MCP 额外内置扩展模式库扫描（--patterns）、14.6 KB 轻量空话识别（--ml）并按本机硬件内存推荐选装本地小模型，云端同步提供远程文风提炼。",
     "status.live": "可用",
     "status.partial": "改动检查可用，AST 未做",
-    "status.partialVoice": "云端文风可用，本地原型中",
+    "status.partialVoice": "本地与云端均可用",
     "status.notYet": "还没上线（原型阶段）",
 
-    "rules.title": "全部 25 条规则明细（Agent 与深度用户参考）",
+    "rules.title": "全部 42 条内置规则明细（7 套场景包）",
     "rules.desc": "平时不需要背规则，直接交给 Agent 或贴进工作台就行。想逐条查判断依据、看正反例或者点「试试 ↑」加载单条规则时，展开下面这张表。",
     "rules.readCases": "单文件拉取全部规则（llms-full.txt）→",
-    "rules.foldTitle": "展开查看 25 条规则明细与在线筛选",
+    "rules.foldTitle": "展开查看内置规则明细与在线筛选",
     "rules.modAll": "全部格式",
     "rules.sevAll": "全部级别",
     "rules.sevError": "硬伤（error）",
     "rules.sevWarn": "提醒（warning）",
     "rules.sevInfo": "轻提示（info）",
     "rules.filterAll": "全部",
-    "rules.filterCore": "硬伤",
+    "rules.filterCore": "交付底线",
     "rules.filterBrief": "工作文档",
+    "rules.filterEng": "研发复盘",
+    "rules.filterReg": "对外合规",
     "rules.filterEssay": "随笔长文",
     "rules.filterUi": "PPT 和网页",
+    "rules.filterExec": "管理汇报",
     "rules.colId": "规则",
     "rules.colPack": "分类",
     "rules.colMod": "格式",
@@ -263,14 +273,14 @@ const I18N = {
     "lead.strike": "Certainly! Here is your polished draft.",
     "lead.title": "Clear the AI slop from your writing and design",
     "lead.sub":
-      "Open-source Skill & CLI run 100% offline with zero uploads across docs, Word, PowerPoint, and web pages—plus optional Cloud AI rewriting and hosted Remote MCP (30 free credits/month).",
+      "Open-source Skill & CLI (all 7 scenario packs built in) run 100% offline with zero uploads across docs, RFCs, Word, PowerPoint, and web UI—plus optional hosted Remote MCP (30 free credits/month).",
     "lead.promptLabel": "Or zero install: copy this line into any web-capable AI / coding agent",
     "lead.promptText":
       "Read https://dislop.com/llms.txt and follow its writing and design anti-slop rules and checks before delivering my next doc, slide deck, or web page.",
     "lead.copyPromptBtn": "Copy for AI",
     "lead.cta": "Try a draft right now ↓",
     "lead.cloudBtn": "Free 30-credit Remote MCP key",
-    "lead.installBtn": "Install open-source Skill / CLI",
+    "lead.installBtn": "Install Skill / CLI (all packs offline)",
     "lead.awesomeBtn": "87-tool directory →",
     "lead.starBtn": "GitHub ★",
     "lead.reassure": "Offline checks upload nothing; Cloud AI sends your draft only when clicked, on a paid-tier zero-training endpoint with zero draft storage.",
@@ -281,12 +291,12 @@ const I18N = {
     "hp.meta": "Running live on the same linter engine",
     "hp.openWb": "Open in workbench ↓",
 
-    "m1.title": "Open-source local: Skill + CLI",
-    "m1.desc": "Apache-2.0 forever free. 25 offline rules scoring 100% recall and 0% false positives across 64 adversarial samples for docs, Word, PPTX, web UI, and PR diffs.",
-    "m2.title": "Self-healing Cloud AI & Remote MCP",
-    "m2.desc": "+15.8 to +22.3 point lift over bare prompts across 5 live models. Built-in numeric retention guard, automatic credit refund on upstream errors, 30 free credits/month.",
-    "m3.title": "Free static resources + 87 tools",
-    "m3.desc": "/llms.txt, focused task guides, real copy autopsies, and 87 checked anti-slop tools and design references ready for humans or agents.",
+    "m1.title": "1. Open-source Skill: local references",
+    "m1.desc": "Installs into Claude Code, Codex, or Cursor with 4 bundled local reference cards—zero web-fetch popups, prevents clichés upfront, and guides local CLI checks.",
+    "m2.title": "2. Open-source CLI: all-in + hardware-fit model",
+    "m2.desc": "< 250 KB zero-dep CLI bundles all 7 domain packs (42 rules), 5-axis rhythm telemetry, 14.6 KB Pocket ML (--ml), and offline voice—plus optional local small-model tiers matched to your RAM/chip.",
+    "m3.title": "3. Hosted Cloud MCP: heavy backend on demand",
+    "m3.desc": "Zero local setup for web chats and workflows: +15.8 to +22.3 pt benchmark lift via self-healing rewrite, numeric fidelity guard, and cloud-synced voice (30 free credits/mo).",
 
     "cases.title": "Three real cases: why cutting buzzwords still sounds like AI",
     "cases.desc":
@@ -294,20 +304,25 @@ const I18N = {
     "cases.readAll": "All contrast cases (.md) →",
 
     "wb.heading": "Try it right here (paste text or drop a local file)",
-    "wb.packLabel": "Check as:",
+    "wb.packLabel": "Built-in pack (0 network):",
     "pack.brief": "Work doc / spec",
+    "pack.eng": "Engineering RFC / PR / postmortem",
+    "pack.reg": "External & regulated copy",
+    "pack.exec": "Executive slide deck",
     "pack.essay": "Essay / longform",
-    "pack.ui": "Slides & UI",
+    "pack.ui": "Web UI & components",
     "wb.openFile": "Open a local file (.md / .html / .docx / .pptx)",
     "wb.specimensTitle": "Examples",
     "wb.privacyNote": "Offline checks stay in this tab with zero uploads. Drafts are sent to our same-origin paid-tier model endpoint (no training, no draft storage) only when you click an AI button below.",
+    "wb.jumpNotes": "Jump to margin notes ↓",
     "ai.reviewBtn": "AI Review (1 credit)",
     "ai.deslopBtn": "AI Rewrite (2 credits)",
-    "ai.anonHint": "5 free anonymous credits/day · 30/mo with free token",
-    "ai.claimLink": "Get free token →",
-    "voice.drawerTitle": "Optional: extract your personal voice (2 credits · free key required)",
-    "voice.drawerDesc": "Paste 1-3 clean paragraphs you wrote (separated by blank lines). The extracted voice profile stays in this browser and is automatically passed into AI Rewrite.",
-    "voice.extractBtn": "Extract my voice (2 credits)",
+    "ai.anonHint": "5 free anonymous credits/day · 30/mo with free key",
+    "ai.claimLink": "Get free key →",
+    "voice.drawerTitle": "Optional: extract personal voice (0-upload offline stats or Cloud AI)",
+    "voice.drawerDesc": "Paste 1-3 clean paragraphs you wrote (separated by blank lines). 'Offline statistical voice' runs 100% in this tab with zero uploads, or use a free key for Cloud AI extraction.",
+    "voice.offlineBtn": "Offline statistical voice (0 credits · offline)",
+    "voice.extractBtn": "Cloud AI voice extract (2 credits)",
     "voice.clearBtn": "Clear saved voice",
     "wb.modeProof": "Highlights",
     "wb.modeEdit": "Edit text",
@@ -315,7 +330,7 @@ const I18N = {
     "wb.applyClean": "Clean version",
     "wb.tryTrap": "2nd-order AI slop",
     "wb.reset": "Reset",
-    "wb.voiceTitle": "Sentence stats",
+    "wb.voiceTitle": "5-axis rhythm & detail check",
     "wb.nudgeText": "Like how it feels? Install the open-source Skill / CLI for 100% offline privacy, or grab a free 30-credit Remote MCP key in 10 seconds.",
     "wb.nudgeCloud": "Claim 30 free credits ↓",
     "wb.nudgeInstall": "Install open-source Skill / CLI ↓",
@@ -324,18 +339,18 @@ const I18N = {
     "legend.error": "Red solid: AI artifact",
     "legend.warn": "Blue dashed: cliché / template slop",
 
-    "surf.title": "How to use it: hand it to your AI or install it for your agent",
+    "surf.title": "How to use it: local Skill -> all-in offline CLI -> optional Cloud MCP",
     "surf.desc":
-      "Pick whichever fits how you work. Everyday AI chat users can paste one sentence with zero setup; Claude Code, Codex, and Cursor users can install the Skill or Plugin once for automatic prevent-and-check.",
+      "Match your privacy boundary. Keep drafts 100% on-device with the open-source Skill + CLI (all 7 packs bundled, 0 network calls), or connect Hosted Cloud MCP when you have no local shell or want 1-call self-healing rewrites.",
     "surf.readTools": "Full setup guide (.md) →",
-    "surf.w1Title": "1. Send to any AI (zero install)",
-    "surf.w1Desc": "Works in ChatGPT, Claude, or any web-capable agent. Paste one sentence and it reads dislop.com/llms.txt directly.",
-    "surf.w2Title": "2. Agent Skill (cross-host)",
-    "surf.w2Desc": "One command for Claude Code, Codex, Cursor, Windsurf, or Antigravity. Covers plain writing habits plus local re-checking.",
-    "surf.w3Title": "3. Remote MCP & Local Plugin",
-    "surf.w3Desc": "Use the open-source local stdio MCP for strict offline privacy, or point your agent to our hosted Remote MCP at https://dislop.com/mcp (30 free credits/month) for LLM rewriting and voice extraction.",
-    "surf.w4Title": "4. Open-source CLI & PR gate",
-    "surf.w4Desc": "Run npx or uvx 100% offline on folders, Word/PPT files, or git diffs, or block AI artifact bugs automatically in GitHub Actions.",
+    "surf.w1Title": "1. Cross-host Agent Skill (local references)",
+    "surf.w1Desc": "One command for Claude Code, Codex, Cursor, Windsurf, or Antigravity. Ships 4 local reference cards on disk—zero web-fetch popups—and guides local CLI checks.",
+    "surf.w2Title": "2. Open-source CLI & Local MCP (all-in + optional model)",
+    "surf.w2Desc": "< 250 KB zero-dep CLI bundles all 7 packs, git-diff CI gates, and offline voice; 'dislop model' recommends optional local small models matched to your RAM/chip.",
+    "surf.w3Title": "3. Hosted Cloud Remote MCP (zero local setup)",
+    "surf.w3Desc": "Connect https://dislop.com/mcp in web chats or workflows for 1.2s self-healing rewrites, 3rd-order review, and synced personal voice (30 free credits/mo).",
+    "surf.w4Title": "4. Zero-install chat prompt (/llms.txt)",
+    "surf.w4Desc": "Using browser ChatGPT or Claude with nothing installed? Paste one line so it reads dislop.com/llms.txt before reviewing your draft.",
     "snip.prompt": "Send to AI",
     "snip.cloud": "Remote MCP (Cloud)",
     "snip.localMcp": "Local MCP",
@@ -343,15 +358,15 @@ const I18N = {
 
     "price.title": "Free open-source local tools, optional cloud LLM",
     "price.desc":
-      "The Skill, CLI, and 25 deterministic rules are Apache-2.0 open source, zero-network, and zero-upload. When you want 3rd-order LLM review, self-healing rewriting, or zero-setup Remote HTTP MCP, use our hosted cloud (30 free credits/month on a paid-tier zero-training endpoint).",
+      "The Skill, CLI, and all 7 scenario packs (42 rules) are Apache-2.0 open source, zero-network, and zero-upload. When you want zero-setup Remote HTTP MCP, self-healing rewriting, or synced voice profiles, use our hosted cloud (30 free credits/month on a paid-tier zero-training endpoint).",
     "price.benchLink": "Read 5-model benchmark →",
     "price.t1Name": "Open Source Local (Skill + CLI)",
     "price.t1Price": "$0 · Forever free",
-    "price.t1Sub": "Built for privacy-first writers and engineering teams. Full transparency, zero uploads.",
-    "price.t1F1": "Agent Skill, Node/Python CLI, and local offline MCP (Apache-2.0)",
-    "price.t1F2": "100% offline deterministic checks for Markdown, HTML/CSS, DOCX, PPTX, and git diffs",
-    "price.t1F3": "Free read-only access to static task guides and the curated tool directory",
-    "price.t1F4": "Zero network calls during check, zero uploads, zero API keys",
+    "price.t1Sub": "Built for privacy-first writers, air-gapped repos, and engineering teams. Full transparency, zero uploads.",
+    "price.t1F1": "Agent Skill (with local references), Node/Python CLI & local MCP (Apache-2.0)",
+    "price.t1F2": "All 7 domain packs (42 rules) bundled offline for Markdown, HTML/CSS, DOCX, PPTX & PRs",
+    "price.t1F3": "Built-in 5-axis rhythm telemetry, 14.6 KB Pocket ML (--ml) & offline dislop voice",
+    "price.t1F4": "Zero network during check; hardware-aware optional local small-model advisor",
     "price.t1Cta": "Install Skill / CLI ↑",
     "price.t2Name": "Cloud Free (Remote MCP)",
     "price.t2Price": "$0 · 30 credits / mo",
@@ -391,7 +406,7 @@ const I18N = {
     "ep.skill": "Cross-host Agent Skill",
     "ep.awesome": "Raw JSON for 87 anti-slop tools",
     "ep.method": "Voice & design guide",
-    "ep.full": "All 25 rules in one file",
+    "ep.full": "All 42 rules in one file",
 
     "awesome.title": "Awesome Anti-Slop: 87 checked tools, guides & papers",
     "awesome.desc":
@@ -411,7 +426,7 @@ const I18N = {
     "stat.zh": "zh / multilingual",
 
     "share.title": "Found this useful? Share it or bookmark the repo",
-    "share.desc": "The Skill, CLI, and 25 deterministic rules are Apache-2.0 open source and run 100% offline; optional cloud AI runs only when clicked and stores no drafts. If your team deals with AI slop every week, these three links help the most.",
+    "share.desc": "The Skill, CLI, and all 42 built-in rules are Apache-2.0 open source and run 100% offline; optional cloud AI runs only when clicked and stores no drafts. If your team deals with AI slop every week, these three links help the most.",
     "share.c1Title": "Share with a teammate or friend",
     "share.c1Desc": "Copy a plain, no-hype blurb with the live workbench, real cases, and curated tool directory.",
     "share.copySiteBtn": "Copy project blurb",
@@ -431,35 +446,38 @@ const I18N = {
     "cov.colFormat": "Extensions",
     "cov.colScope": "What gets checked",
     "cov.colStatus": "Status",
-    "cov.r1Name": "Docs & notes",
-    "cov.r1Scope": "Chat replies, unfilled placeholders, throat-clearing openers, buzzwords, 'Not X, but Y' frames, staccato slogan runs, moralizing endings, unsourced claims, bold-lead bullet walls, and em-dash overuse.",
+    "cov.r1Name": "Docs & engineering specs",
+    "cov.r1Scope": "Chat wrappers, placeholders, buzz-clusters, 'Not X, but Y' frames, 3-part semicolon pitches, rhetorical Q&A, 5-comma chains, flat-cadence filler, PR diff-parrots, and shallow 'human error' root causes.",
     "cov.r2Name": "Word & PowerPoint",
-    "cov.r2Scope": "Raw Markdown asterisks pasted from chat, prose clichés, crowded slides, more than 6 bullets, shrunk autofit text, and vague slide titles ('Overview', 'Background').",
+    "cov.r2Scope": "Raw Markdown asterisks pasted from chat, prose clichés, crowded slides, > 6 bullets, shrunk autofit text, process-label headlines, and 4+ monotonous bullet slides.",
     "cov.r4Name": "Web pages & components",
     "cov.r4Scope": "Dead href='#' placeholder links, unexplained disabled buttons, purple-pink AI gradients, pill walls, 3-level nested boxes, and 'AI-Powered' prompt-echo badges.",
     "cov.r5Name": "Git diffs & PRs",
     "cov.r5Scope": "Checks only modified lines for chat wrappers, placeholders, prose clichés, and UI template slop, with GitHub annotations and SARIF output. Code AST linting is not built.",
-    "cov.r6Name": "Voice profiles & rhythm probes",
-    "cov.r6Scope": "Cloud Remote MCP / API extracts personal dislop.voice/1 profiles from 1-5 samples; local offline rhythm monotony and slide layout probes are in prototype.",
+    "cov.r6Name": "Offline voice, Pocket ML & optional local models",
+    "cov.r6Scope": "Both the browser workbench and CLI extract 0-upload statistical voice profiles; the local CLI & MCP add extended pattern-bank probes (--patterns), 14.6 KB Pocket ML (--ml), and RAM/chip-matched optional local small models.",
     "status.live": "Works now",
     "status.partial": "Diff checks work; no AST",
-    "status.partialVoice": "Cloud voice live; local prototype",
+    "status.partialVoice": "Live offline & cloud",
     "status.notYet": "Not shipped (prototype)",
 
-    "rules.title": "All 25 rules (Agent & power-user reference)",
+    "rules.title": "All 42 built-in rules (7 scenario packs)",
     "rules.desc": "You don't need to memorize rules—just hand dislop to your agent or paste into the workbench. Expand the table below whenever you want exact rule details or to test a single rule.",
     "rules.readCases": "Single-file rule digest (llms-full.txt) →",
-    "rules.foldTitle": "Expand all 25 rules and filter online",
+    "rules.foldTitle": "Expand built-in rules and filter online",
     "rules.modAll": "All formats",
     "rules.sevAll": "All levels",
     "rules.sevError": "Hard bug (error)",
     "rules.sevWarn": "Warning",
     "rules.sevInfo": "Info",
     "rules.filterAll": "All",
-    "rules.filterCore": "Hard bugs",
+    "rules.filterCore": "Core",
     "rules.filterBrief": "Work docs",
+    "rules.filterEng": "Engineering",
+    "rules.filterReg": "Regulated",
     "rules.filterEssay": "Essays",
     "rules.filterUi": "Slides & UI",
+    "rules.filterExec": "Exec decks",
     "rules.colId": "Rule",
     "rules.colPack": "Group",
     "rules.colMod": "Formats",
@@ -494,11 +512,11 @@ const HERO_PROOF_BY_LANG = {
     trap: "队列分级已经落地，故障恢复时间最多 45 秒。这不是一次简单的升级，而是一场效率革命。",
     good: "这次改造给队列分了级，一线运维团队的故障恢复时间最多 45 秒。",
     badNotes: [
-      { kind: "error", label: "红线：", text: "开头留着 AI 寒暄，删掉就行。" },
-      { kind: "warn", label: "蓝线：", text: "“值得注意的是”“抓手”“全面赋能”都是空话，可以直接说做了什么。" },
+      { kind: "error", label: "红实线：", text: "开头留着 AI 寒暄，删掉就行。" },
+      { kind: "warn", label: "蓝虚线：", text: "“值得注意的是”“抓手”“全面赋能”都是空话，可以直接说做了什么。" },
     ],
-    trapVerdict: "依然标出 1 处。旧套话删掉了，但换成了“不是……而是……”这种二阶 AI 腔。",
-    goodVerdict: "0 处问题。寒暄和空话都清掉了。",
+    trapVerdict: "没通过：旧套词删掉了，但换上了“不是……而是……”这种二阶 AI 腔。",
+    goodVerdict: "0 处问题。寒暄和空话都清掉了，句子直接说清改动和结果。",
   },
   en: {
     filename: "launch-note.md",
@@ -508,15 +526,15 @@ const HERO_PROOF_BY_LANG = {
     trap: "CSV exports finish in up to 12 minutes for workspaces above 500,000 rows. This isn't just an upgrade — it's a new standard.",
     good: "CSV exports finish in up to 12 minutes for workspaces above 500,000 rows.",
     badNotes: [
-      { kind: "error", label: "Red:", text: "Stray chat reply on line one. Delete it." },
-      { kind: "warn", label: "Blue:", text: "Filler opener and hype noun ('game-changer'). Say what changed instead." },
+      { kind: "error", label: "Red: ", text: "Stray chat reply on line one. Delete it." },
+      { kind: "warn", label: "Blue: ", text: "Filler opener and hype noun ('game-changer'). Say what changed instead." },
     ],
-    trapVerdict: "Still flagged (1 issue). Old buzzwords are gone, replaced by a 'Not X, but Y' AI slogan.",
+    trapVerdict: "Still fails: old buzzwords are gone, replaced by a 'Not X, but Y' AI slogan.",
     goodVerdict: "0 issues. Chat wrapper and stock phrasing removed.",
   },
 };
 
-// ---------- Language-Pure Workbench Specimens (5 ZH + 5 EN, ZERO Mixing) ----------
+// ---------- Language-Pure Workbench Specimens (7 ZH + 7 EN, ZERO Mixing) ----------
 
 const SPECIMENS_BY_LANG = {
   zh: [
@@ -644,6 +662,54 @@ const SPECIMENS_BY_LANG = {
         "北京大学、清华大学、复旦大学三校联合公开了这份语料，单次推理平均延迟降至 18 毫秒。",
       ].join("\n"),
     },
+    {
+      id: "eng-postmortem",
+      num: "06",
+      label: "研发 PR 与故障复盘",
+      pack: "engineering-spec",
+      filename: "postmortem-412.md",
+      modality: "markdown",
+      bad: [
+        "本次 PR 旨在通过重构连接池管理逻辑进一步提升整体系统的可维护性。",
+        "",
+        "故障单 412：常驻连接上限最多 64，告警延迟阈值 400ms。",
+        "",
+        "根本原因：人为操作不当。",
+        "",
+        "- [ ] 加强监控与告警",
+      ].join("\n"),
+      trap: [
+        "这不是一次普通的代码重构，而是连接池稳定性的底层重塑。",
+        "",
+        "故障单 412：常驻连接上限 64，告警延迟阈值 400ms。",
+      ].join("\n"),
+      good: [
+        "修复重连分支未释放旧句柄导致的连接泄漏。",
+        "",
+        "故障单 412：常驻连接上限最多 64，告警延迟阈值 400ms。",
+        "",
+        "根本原因：生产迁移脚本缺少库名白名单预检。",
+        "",
+        "- [ ] 给结算接口补齐延迟超阈值自动告警（负责人：李工，周五前合入）",
+      ].join("\n"),
+    },
+    {
+      id: "reg-external",
+      num: "07",
+      label: "对外发布与严谨合规",
+      pack: "regulated-comms",
+      filename: "security-brief.md",
+      modality: "markdown",
+      bad: [
+        "新备份架构承诺绝对安全与零风险承诺（月度可用性至少 99.95%）。大表导出效率提升数倍。",
+      ].join("\n"),
+      trap: [
+        "新备份架构不是简单存储升级，而是企业数据安全的坚固防线，月度可用性 99.95%。",
+      ].join("\n"),
+      good: [
+        "新备份架构采用同城双活与离线快照，合同承诺月度可用性至少 99.95%。大表导出改为流式分页读取。",
+      ].join("\n"),
+    },
   ],
   en: [
     {
@@ -760,6 +826,54 @@ const SPECIMENS_BY_LANG = {
         "The Delve debugger inspected a 19th-century wool tapestry archive on 2026-10-15.",
         "",
         "The bug is not in `parser.py`, but in `loader.py` line 42.",
+      ].join("\n"),
+    },
+    {
+      id: "eng-postmortem",
+      num: "06",
+      label: "Engineering PR & postmortem",
+      pack: "engineering-spec",
+      filename: "postmortem-412.md",
+      modality: "markdown",
+      bad: [
+        "This PR updates the retry middleware to ensure a more seamless and resilient developer experience.",
+        "",
+        "Incident 412 context: retry backoff cap up to 8s; checkout alert threshold 400ms.",
+        "",
+        "Root cause: human error.",
+        "",
+        "- [ ] Add more monitoring.",
+      ].join("\n"),
+      trap: [
+        "This isn't a minor retry tweak — it's a resilience milestone.",
+        "",
+        "Incident 412 context: retry backoff cap 8s; checkout alert threshold 400ms.",
+      ].join("\n"),
+      good: [
+        "Cap retry jitter when upstream returns HTTP 503.",
+        "",
+        "Incident 412 context: retry backoff cap up to 8s; checkout alert threshold 400ms.",
+        "",
+        "Root cause: deploy runner skipped schema validation when `--fast` was passed.",
+        "",
+        "- [ ] Wire P99 alert on `checkout-api` (@payments-oncall, Friday).",
+      ].join("\n"),
+    },
+    {
+      id: "reg-external",
+      num: "07",
+      label: "External & regulated copy",
+      pack: "regulated-comms",
+      filename: "security-brief.md",
+      modality: "markdown",
+      bad: [
+        "Our vault architecture is 100% secure with a zero-risk migration (monthly uptime at least 99.95%). Incident triage is 10x faster.",
+      ].join("\n"),
+      trap: [
+        "Our vault architecture isn't just storage — it's enterprise peace of mind with 99.95% monthly uptime.",
+      ].join("\n"),
+      good: [
+        "Vault backups use AES-256 encryption at rest with monthly uptime at least 99.95%. Incident triage now indexes trace IDs directly at ingest.",
       ].join("\n"),
     },
   ],
@@ -965,10 +1079,10 @@ const SNIPPETS_BY_LANG = {
     skill: `# 一行安装跨宿主 Agent Skill（Claude Code / Codex / Cursor / Windsurf / Antigravity）
 npx skills add dislop-ai/dislop
 
-# 装完后你的 Agent 会按三步工作：
-# 1. 动笔前套用去 AI 味写作与 UI 规矩（避开一阶套词、二阶口号和三阶推销句）
-# 2. 写完调用本地 dislop 检查文档、HTML、Word 或 PPT
-# 3. 局部改干净后再复检一遍`,
+# 装完后全程本地离线运行（0 联网，不弹外网审批框）：
+# 1. 按需读取自带的 4 张本地场景参考卡（skills/dislop/references/*.md）
+# 2. 写完调用本地 dislop 检查文档、研发复盘、对外合规稿、HTML、Word 或 PPT
+# 3. 用 dislop check --profile --ml 复检节奏与空话残留`,
     plugin: `# 在 Claude Code 里一键安装 Plugin（同时装好 SKILL.md + 本地 MCP 服务）
 /plugin marketplace add dislop-ai/dislop
 /plugin install dislop@dislop-ai
@@ -993,17 +1107,17 @@ npx skills add dislop-ai/dislop
     }
   }
 }`,
-    cli: `# 检查当前目录（命中硬伤时退出码为 1，同时标出套话提醒）
+    cli: `# 离线检查当前目录（内置全部 7 套场景包，0 联网）
 npx --yes github:dislop-ai/dislop check .
 
-# 只查相对 main 新改的行，并输出 SARIF 报告
-npx --yes github:dislop-ai/dislop check --changed origin/main --format sarif > dislop.sarif
+# 开启 5 轴节奏统计与内置 14.6 KB 轻量模型复检
+npx --yes github:dislop-ai/dislop check draft.md --profile --ml
 
-# 用 Python 3.10+ 检查 PPT 或 Word（零外部依赖）
-uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review.pptx
+# 离线提取你自己的句长与标点声纹（0 上传）
+npx --yes github:dislop-ai/dislop voice my-notes.md
 
-# 查看某条规则的判断方法和改前/改后示例
-npx --yes github:dislop-ai/dislop explain negation-pivot-frame --lang zh`,
+# 按本机内存与芯片查看选装本地小模型建议（不撑大安装包）
+npx --yes github:dislop-ai/dislop model --lang zh`,
     ci: `name: dislop
 on: [pull_request]
 jobs:
@@ -1022,7 +1136,8 @@ jobs:
   "ignore": ["vendor/**", "dist/**"],
   "overrides": [
     { "files": ["docs/**/*.md"], "pack": "business-brief" },
-    { "files": ["essays/**/*.md"], "pack": "literary-essay" },
+    { "files": ["rfcs/**/*.md", "postmortems/**/*.md"], "pack": "engineering-spec" },
+    { "files": ["press/**/*.md"], "pack": "regulated-comms" },
     { "files": ["site/**/*.{html,css,svg}"], "pack": "deck-and-ui" }
   ],
   "allow": ["无缝钢管"]
@@ -1037,10 +1152,10 @@ Read https://dislop.com/llms.txt and follow its anti-slop rules before we ship t
     skill: `# Install the cross-host Agent Skill (Claude Code, Codex, Cursor, Windsurf, Antigravity)
 npx skills add dislop-ai/dislop
 
-# Once installed, your agent runs a 3-step loop:
-# 1. Draft plainly using the anti-slop prose & UI rules
-# 2. Check the Markdown, HTML, DOCX, or PPTX locally
-# 3. Clean up flagged spans and re-check`,
+# Runs 100% locally after install (0 network calls, 0 WebFetch permission prompts):
+# 1. Loads bundled local reference cards on demand (skills/dislop/references/*.md)
+# 2. Checks Markdown, RFCs, press drafts, HTML, DOCX, or PPTX locally
+# 3. Runs dislop check --profile --ml for rhythm telemetry and stealth-vapor scoring`,
     plugin: `# Install as a Claude Code Plugin (bundles SKILL.md + local stdio MCP server)
 /plugin marketplace add dislop-ai/dislop
 /plugin install dislop@dislop-ai
@@ -1065,17 +1180,17 @@ npx skills add dislop-ai/dislop
     }
   }
 }`,
-    cli: `# Check the current folder (exits 1 on core errors, prints style warnings)
+    cli: `# Check the current folder offline (ships all 7 built-in packs, 0 network calls)
 npx --yes github:dislop-ai/dislop check .
 
-# Check only lines changed against main and emit SARIF 2.1.0
-npx --yes github:dislop-ai/dislop check --changed origin/main --format sarif > dislop.sarif
+# Run with 5-axis rhythm telemetry and bundled 14.6 KB Pocket ML
+npx --yes github:dislop-ai/dislop check draft.md --profile --ml
 
-# Inspect a PowerPoint deck or Word file with Python 3.10+ (zero external deps)
-uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review.pptx
+# Extract a deterministic personal voice profile offline (0 uploads)
+npx --yes github:dislop-ai/dislop voice my-notes.md
 
-# Show the check question and examples for a rule
-npx --yes github:dislop-ai/dislop explain negation-pivot-frame`,
+# Inspect hardware-matched optional local small-model tiers (never bloats install)
+npx --yes github:dislop-ai/dislop model`,
     ci: `name: dislop
 on: [pull_request]
 jobs:
@@ -1094,7 +1209,8 @@ jobs:
   "ignore": ["vendor/**", "dist/**"],
   "overrides": [
     { "files": ["docs/**/*.md"], "pack": "business-brief" },
-    { "files": ["essays/**/*.md"], "pack": "literary-essay" },
+    { "files": ["rfcs/**/*.md", "postmortems/**/*.md"], "pack": "engineering-spec" },
+    { "files": ["press/**/*.md"], "pack": "regulated-comms" },
     { "files": ["site/**/*.{html,css,svg}"], "pack": "deck-and-ui" }
   ],
   "allow": ["Delve", "Bayeux Tapestry"]
@@ -1104,16 +1220,22 @@ jobs:
 
 const PACK_LABELS = {
   zh: {
-    core: "硬伤",
+    core: "交付底线",
     "business-brief": "工作文档",
+    "engineering-spec": "研发复盘",
+    "regulated-comms": "对外合规",
     "literary-essay": "随笔长文",
     "deck-and-ui": "PPT 和网页",
+    "executive-deck": "管理汇报",
   },
   en: {
-    core: "Hard bugs",
+    core: "Core",
     "business-brief": "Work docs",
+    "engineering-spec": "Engineering",
+    "regulated-comms": "Regulated",
     "literary-essay": "Essays",
     "deck-and-ui": "Slides & UI",
+    "executive-deck": "Exec decks",
   },
 };
 
@@ -1161,7 +1283,7 @@ let currentFilename = activeSpecimen.filename;
 let currentModality = activeSpecimen.modality;
 let currentPackId = activeSpecimen.pack;
 let viewMode = "proof";
-let focusedFindingIdx = 0;
+let focusedFindingIdx = -1;
 let binaryAuditResult = null;
 let lastUploadedFile = null;
 let uploadedOriginalText = null;
@@ -1324,7 +1446,34 @@ function setViewMode(mode) {
     : "";
 }
 
-function renderAnnotatedLine(lineText, lineGlobalStart, findings) {
+function cpOffsetToUtf16(str, cpTarget) {
+  if (!/[\uD800-\uDBFF]/.test(str)) return cpTarget;
+  let cp = 0;
+  let u16 = 0;
+  while (u16 < str.length && cp < cpTarget) {
+    const code = str.codePointAt(u16);
+    u16 += code > 0xffff ? 2 : 1;
+    cp += 1;
+  }
+  return u16;
+}
+
+function withUtf16Spans(text, rawFindings) {
+  if (!rawFindings?.length || !/[\uD800-\uDBFF]/.test(text)) return rawFindings || [];
+  return rawFindings.map((f) =>
+    f.span
+      ? {
+          ...f,
+          span: {
+            start: cpOffsetToUtf16(text, f.span.start),
+            end: cpOffsetToUtf16(text, f.span.end),
+          },
+        }
+      : f
+  );
+}
+
+function renderAnnotatedLine(lineText, lineGlobalStart, findings, focusIdx = focusedFindingIdx) {
   const lineEnd = lineGlobalStart + lineText.length;
   const tokens = [];
 
@@ -1353,7 +1502,7 @@ function renderAnnotatedLine(lineText, lineGlobalStart, findings) {
       html += escapeHtml(lineText.slice(cursor, t.start));
     }
     const piece = escapeHtml(lineText.slice(t.start, t.end));
-    const focused = t.findingIdx === focusedFindingIdx ? " is-focused" : "";
+    const focused = t.findingIdx === focusIdx ? " is-focused" : "";
     html += `<span class="${t.cls}${focused}" data-finding-idx="${t.findingIdx}" title="${escapeHtml(t.title)}" tabindex="0">${piece}</span>`;
     cursor = t.end;
   }
@@ -1374,7 +1523,7 @@ function renderHeroProof() {
   const pack = resolveEffectivePack(data.pack, PACKS_BY_ID);
   const text = data[heroProofState] || data.bad;
   const audit = auditText(text, { filename: data.filename, modality: data.modality, pack });
-  stageEl.innerHTML = renderAnnotatedLine(text, 0, audit.findings);
+  stageEl.innerHTML = renderAnnotatedLine(text, 0, withUtf16Spans(text, audit.findings), -1);
 
   if (heroProofState === "bad") {
     fbEl.innerHTML = `<ul class="hero-proof-notes">${data.badNotes
@@ -1435,7 +1584,7 @@ function renderSpecimenRail() {
       currentModality = sp.modality;
       baselineText = sp.bad;
       currentText = sp.bad;
-      focusedFindingIdx = 0;
+      focusedFindingIdx = -1;
       document.getElementById("pack-select").value = sp.pack;
       setViewMode("proof");
       updateSpecimenRailSelection();
@@ -1446,27 +1595,153 @@ function renderSpecimenRail() {
   titleEl.textContent = I18N[currentLang]["wb.specimensTitle"];
 }
 
+function buildRhythmCellHtml({ label, state, tone, pct, tip }) {
+  const stateCls = tone === "bad" ? " is-bad" : tone === "warn" ? " is-warn" : " is-good";
+  const fillCls = tone === "bad" ? " is-bad" : tone === "warn" ? " is-warn" : "";
+  const clamped = Math.max(6, Math.min(100, Math.round(pct)));
+  return `<div class="rhythm-cell" title="${escapeHtml(tip || "")}">
+    <div class="rhythm-cell-top">
+      <span class="rhythm-label">${escapeHtml(label)}</span>
+      <span class="rhythm-state${stateCls}">${escapeHtml(state)}</span>
+    </div>
+    <div class="rhythm-track" aria-hidden="true"><div class="rhythm-fill${fillCls}" style="width:${clamped}%;"></div></div>
+  </div>`;
+}
+
 function renderVoiceMeter(text, modality, isBinary) {
   const valuesEl = document.getElementById("voice-meter-values");
+  const subEl = document.getElementById("voice-meter-summary");
   if (!valuesEl) return;
+  const isZh = currentLang === "zh";
+
   if (isBinary) {
-    valuesEl.textContent =
-      currentLang === "zh"
-        ? "二进制文档不统计句长节奏，仅做结构与内容体检。"
-        : "Rhythm stats are skipped for binary Office/PDF files.";
+    if (subEl) subEl.textContent = isZh ? "本地内存检查 · 0 上传" : "Local browser RAM · 0 uploads";
+    valuesEl.innerHTML = `<div class="rhythm-empty">${
+      isZh ? "Word / PPT 文档仅做结构与正文体检，不统计散文句长节奏。" : "Rhythm gauges apply to editable prose drafts; Office files run structure & text checks."
+    }</div>`;
     return;
   }
-  const st = computeStylometrics(text, modality);
-  if (!st) {
-    valuesEl.textContent =
-      currentLang === "zh" ? "代码或空白稿件不统计句长节奏。" : "Rhythm stats apply to prose drafts.";
+  if (modality !== "markdown" && modality !== "text") {
+    if (subEl) subEl.textContent = isZh ? "标记与样式体检 · 0 上传" : "Markup & style check · 0 uploads";
+    valuesEl.innerHTML = `<div class="rhythm-empty">${
+      isZh ? "网页与组件片段按配色、嵌套和交互控件规则检查，不统计散文句长。" : "HTML/CSS drafts are checked for gradients, nested cards, and dead controls."
+    }</div>`;
     return;
   }
-  if (currentLang === "zh") {
-    valuesEl.textContent = `句数：${st.sentences} · 平均句长：${st.meanLen} 字 · 句长变化：${st.cv} · 破折号：${st.emDashes}`;
+  if (!text || !text.trim()) {
+    if (subEl) subEl.textContent = isZh ? "等待输入 · 0 上传" : "Waiting for text · 0 uploads";
+    valuesEl.innerHTML = `<div class="rhythm-empty">${
+      isZh ? "贴入一段文字后，这里会实时显示句长起伏、细节密度与套路痕迹。" : "Paste a prose draft to inspect sentence cadence, concrete detail, and template risk."
+    }</div>`;
+    return;
+  }
+
+  const p = analyzeTextProfile(text, { modality });
+  if (p.sentenceCount === 0) {
+    if (subEl) subEl.textContent = isZh ? "实时离线计算 · 0 上传" : "Computed offline · 0 uploads";
+    valuesEl.innerHTML = `<div class="rhythm-empty">${
+      isZh ? "正文不含可统计的完整句子。" : "No prose sentences detected."
+    }</div>`;
+    return;
+  }
+
+  if (subEl) {
+    subEl.textContent = isZh
+      ? `共 ${p.sentenceCount} 句 · 平均句长 ${p.burstiness.meanLength} · 离线计算`
+      : `${p.sentenceCount} ${p.sentenceCount === 1 ? "sentence" : "sentences"} · avg length ${p.burstiness.meanLength} · offline`;
+  }
+
+  const cv = p.burstiness.cv;
+  let cadenceState;
+  let cadenceTone;
+  let cadencePct;
+  if (p.sentenceCount < 2) {
+    cadenceState = isZh ? "单句" : "1 sent";
+    cadenceTone = "warn";
+    cadencePct = 48;
+  } else if (cv >= 0.32) {
+    cadenceState = isZh ? "错落自然" : "Natural";
+    cadenceTone = "good";
+    cadencePct = Math.min(100, 55 + Math.round((cv - 0.32) * 110));
+  } else if (cv >= 0.22) {
+    cadenceState = isZh ? "偏平" : "Even";
+    cadenceTone = "warn";
+    cadencePct = 42;
   } else {
-    valuesEl.textContent = `sentences: ${st.sentences} · mean length: ${st.meanLen} · variation (CV): ${st.cv} · em-dashes: ${st.emDashes}`;
+    cadenceState = isZh ? "句句等长" : "Monotone";
+    cadenceTone = "bad";
+    cadencePct = 20;
   }
+
+  const conc = p.concreteness.per100Units;
+  const anchors = p.concreteness.anchorCount;
+  const detailTone = conc >= 3 ? "good" : conc >= 1.5 ? "warn" : "bad";
+  const detailState = isZh ? `${anchors} 处实据` : `${anchors} ${anchors === 1 ? "fact" : "facts"}`;
+  const detailPct = Math.min(100, Math.max(12, Math.round((conc / 6) * 100)));
+
+  const varietyPct = Math.round(p.lexical.mattr * 100);
+  const varietyTone = p.lexical.mattr >= 0.72 ? "good" : p.lexical.mattr >= 0.58 ? "warn" : "bad";
+  const varietyState = `${varietyPct}%`;
+
+  const semi = p.punctuation.maxSemicolonsInSentence;
+  const dash = p.punctuation.emDashPer300;
+  let punctTone = "good";
+  let punctState = isZh ? "克制" : "Clean";
+  let punctPct = 92;
+  if (semi >= 2 || dash > 7) {
+    punctTone = "bad";
+    punctState = semi >= 2 ? (isZh ? "排比分号" : `${semi} semicolons`) : isZh ? "破折号偏密" : "Dash-heavy";
+    punctPct = 26;
+  } else if (dash > 3.5) {
+    punctTone = "warn";
+    punctState = isZh ? "略密" : "Watch";
+    punctPct = 55;
+  }
+
+  const riskScore = p.telemetryRisk.score;
+  const riskLevel = p.telemetryRisk.level;
+  const riskTone = riskLevel === "high" ? "bad" : riskLevel === "medium" ? "warn" : "good";
+  const riskState = isZh
+    ? `${riskScore}/100 ${riskLevel === "high" ? "高" : riskLevel === "medium" ? "中" : "低"}`
+    : `${riskScore}/100 ${riskLevel}`;
+
+  valuesEl.innerHTML = [
+    buildRhythmCellHtml({
+      label: isZh ? "句长起伏" : "Sentence cadence",
+      state: cadenceState,
+      tone: cadenceTone,
+      pct: cadencePct,
+      tip: isZh ? "长短句交替越自然，越不容易读出机器匀速感" : "Varied short and long sentences read more naturally than uniform length",
+    }),
+    buildRhythmCellHtml({
+      label: isZh ? "具体细节" : "Concrete detail",
+      state: detailState,
+      tone: detailTone,
+      pct: detailPct,
+      tip: isZh ? "数字、时间、单位、代码或配置项等可核对锚点数量" : "Count of checkable numbers, dates, units, paths, and code tokens",
+    }),
+    buildRhythmCellHtml({
+      label: isZh ? "用词变化" : "Word variety",
+      state: varietyState,
+      tone: varietyTone,
+      pct: varietyPct,
+      tip: isZh ? "滑动窗口内的词汇丰富度，防止同一套连接词反复打转" : "Sliding-window vocabulary variety across consecutive sentences",
+    }),
+    buildRhythmCellHtml({
+      label: isZh ? "标点克制" : "Punctuation",
+      state: punctState,
+      tone: punctTone,
+      pct: punctPct,
+      tip: isZh ? "检查单句多重分号排比与高频破折号插话" : "Watches for multi-semicolon pitch clauses and heavy em-dash habits",
+    }),
+    buildRhythmCellHtml({
+      label: isZh ? "套路风险" : "Template risk",
+      state: riskState,
+      tone: riskTone,
+      pct: Math.max(10, riskScore),
+      tip: isZh ? "综合句式骨架复读、匀速空话与标点密度计算的模板痕迹分（越低越好）" : "Combined structural repetition and uniform-cadence risk score (lower is cleaner)",
+    }),
+  ].join("");
 }
 
 function renderWorkbench() {
@@ -1480,12 +1755,18 @@ function renderWorkbench() {
         pack,
       });
   const elapsedMs = (performance.now() - t0).toFixed(1);
-  const findings = auditRes.findings || [];
+  const findings = binaryAuditResult
+    ? auditRes.findings || []
+    : withUtf16Spans(currentText, auditRes.findings);
   const skipped = auditRes.skipped || [];
+  if (focusedFindingIdx >= findings.length) {
+    focusedFindingIdx = -1;
+  }
 
   const proofView = document.getElementById("proof-view");
   const editArea = document.getElementById("edit-textarea");
   const summaryEl = document.getElementById("wb-summary");
+  const mobileCountsEl = document.getElementById("wb-mobile-counts");
   const notesEl = document.getElementById("notes-container");
 
   setViewMode(viewMode);
@@ -1503,15 +1784,16 @@ function renderWorkbench() {
 
   const isEmptySheet = !binaryAuditResult && currentText.trim().length === 0;
   if (isEmptySheet) {
-    summaryEl.innerHTML =
-      currentLang === "zh"
-        ? `<span>空稿纸 · 等你贴字进来</span><span>${elapsedMs} ms</span>`
-        : `<span>Blank sheet · paste a draft</span><span>${elapsedMs} ms</span>`;
+    const emptyLabel = currentLang === "zh" ? "空稿纸 · 等你贴字进来" : "Blank sheet · paste a draft";
+    summaryEl.innerHTML = `<span>${emptyLabel}</span><span>${elapsedMs} ms</span>`;
+    if (mobileCountsEl) mobileCountsEl.textContent = emptyLabel;
   } else {
-    summaryEl.innerHTML =
+    const countLabel =
       currentLang === "zh"
-        ? `<span>${errorsCount} 处硬伤 · ${queriesCount} 条提醒</span><span>${elapsedMs} ms</span>`
-        : `<span>${errorsCount} ${errorsCount === 1 ? "error" : "errors"} · ${queriesCount} ${queriesCount === 1 ? "warning" : "warnings"}</span><span>${elapsedMs} ms</span>`;
+        ? `${errorsCount} 处硬伤 · ${queriesCount} 条提醒`
+        : `${errorsCount} ${errorsCount === 1 ? "error" : "errors"} · ${queriesCount} ${queriesCount === 1 ? "warning" : "warnings"}`;
+    summaryEl.innerHTML = `<span>${countLabel}</span><span>${elapsedMs} ms</span>`;
+    if (mobileCountsEl) mobileCountsEl.textContent = countLabel;
   }
 
   renderVoiceMeter(currentText, currentModality, Boolean(binaryAuditResult));
@@ -1532,7 +1814,7 @@ function renderWorkbench() {
     const htmlLines = lines.map((line, i) => {
       const annotated = binaryAuditResult
         ? escapeHtml(line)
-        : renderAnnotatedLine(line, offset, findings);
+        : renderAnnotatedLine(line, offset, findings, focusedFindingIdx);
       offset += line.length + 1;
       return `<li class="proof-line"><span class="line-num">${i + 1}</span><span class="line-content">${annotated}</span></li>`;
     });
@@ -1540,10 +1822,13 @@ function renderWorkbench() {
 
     proofView.querySelectorAll("[data-finding-idx]").forEach((el) => {
       const focusHandler = () => {
-        focusedFindingIdx = Number(el.getAttribute("data-finding-idx"));
+        const clickedIdx = Number(el.getAttribute("data-finding-idx"));
+        focusedFindingIdx = focusedFindingIdx === clickedIdx ? -1 : clickedIdx;
         renderWorkbench();
-        const noteCard = notesEl.querySelector(`[data-note-idx="${focusedFindingIdx}"]`);
-        if (noteCard) noteCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        if (focusedFindingIdx >= 0) {
+          const noteCard = notesEl.querySelector(`[data-note-idx="${focusedFindingIdx}"]`);
+          if (noteCard) noteCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
       };
       el.addEventListener("click", focusHandler);
       el.addEventListener("keydown", (ev) => {
@@ -1594,6 +1879,23 @@ function renderWorkbench() {
     const focusedCls = idx === focusedFindingIdx ? " is-focused" : "";
     const dotCls = isErr ? "is-error" : "is-warn";
 
+    const actionButtons = [];
+    if (!binaryAuditResult && f.span) {
+      if (f.ruleId === "chatbot-artifact") {
+        actionButtons.push(
+          `<button type="button" class="ctrl-btn ctrl-btn-sm" data-quick-strip="${idx}">${
+            currentLang === "zh" ? "删掉这句寒暄" : "Strip wrapper"
+          }</button>`
+        );
+      }
+      actionButtons.push(
+        `<button type="button" class="ctrl-btn ctrl-btn-sm" data-jump-edit="${idx}">${
+          currentLang === "zh" ? "定位修改" : "Edit span"
+        }</button>`
+      );
+    }
+    const actionsHtml = actionButtons.length ? `<div class="note-actions">${actionButtons.join("")}</div>` : "";
+
     const exHtml = ex
       ? `<div class="note-exemplar">
           <div><span class="ex-label">${currentLang === "zh" ? "原句：" : "Before:"}</span> ${escapeHtml(sanitizePublicExemplar(ex.bad))}</div>
@@ -1611,6 +1913,7 @@ function renderWorkbench() {
       </div>
       ${excerpt ? `<div class="note-snippet">“${escapeHtml(sanitizePublicExemplar(excerpt))}”</div>` : ""}
       ${dt ? `<div class="note-test"><strong>${currentLang === "zh" ? "判断方法：" : "Check:"}</strong> ${formatRuleProseHtml(dt)}</div>` : ""}
+      ${actionsHtml}
       <details class="note-details">
         <summary>${currentLang === "zh" ? "规则和示例" : "Rule & examples"}</summary>
         <div class="note-why" style="margin-top:6px;">${formatRuleProseHtml(msg)}</div>
@@ -1623,11 +1926,55 @@ function renderWorkbench() {
   });
 
   notesEl.innerHTML = cards.join("");
+  notesEl.querySelectorAll("[data-quick-strip]").forEach((btn) => {
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      const idx = Number(btn.getAttribute("data-quick-strip"));
+      const f = findings[idx];
+      if (!f?.span) return;
+      let s = f.span.start;
+      let e = f.span.end;
+      // Strip trailing punctuation/whitespace belonging to the chat wrapper sentence
+      while (e < currentText.length && /[：:！!。.，,\s]/.test(currentText[e])) {
+        if (currentText[e] === "\n") {
+          e += 1;
+          break;
+        }
+        e += 1;
+      }
+      currentText = (currentText.slice(0, s) + currentText.slice(e)).replace(/^\n+/, "");
+      focusedFindingIdx = -1;
+      renderWorkbench();
+    });
+  });
+
+  notesEl.querySelectorAll("[data-jump-edit]").forEach((btn) => {
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      const idx = Number(btn.getAttribute("data-jump-edit"));
+      const f = findings[idx];
+      if (!f?.span || binaryAuditResult) return;
+      setViewMode("edit");
+      renderWorkbench();
+      editArea.focus();
+      try {
+        editArea.setSelectionRange(f.span.start, f.span.end);
+      } catch {
+        // ignore selection errors
+      }
+    });
+  });
+
   notesEl.querySelectorAll("[data-note-idx]").forEach((card) => {
     card.addEventListener("click", (ev) => {
-      if (ev.target.closest("summary, a")) return;
-      focusedFindingIdx = Number(card.getAttribute("data-note-idx"));
+      if (ev.target.closest("summary, a, button")) return;
+      const clickedIdx = Number(card.getAttribute("data-note-idx"));
+      focusedFindingIdx = focusedFindingIdx === clickedIdx ? -1 : clickedIdx;
       renderWorkbench();
+      if (focusedFindingIdx >= 0 && viewMode === "proof") {
+        const spanEl = proofView.querySelector(`[data-finding-idx="${focusedFindingIdx}"]`);
+        if (spanEl) spanEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
     });
   });
 
@@ -1689,7 +2036,7 @@ function loadSpecimenById(specimenId) {
   currentModality = sp.modality;
   baselineText = sp.bad;
   currentText = sp.bad;
-  focusedFindingIdx = 0;
+  focusedFindingIdx = -1;
   document.getElementById("pack-select").value = sp.pack;
   setViewMode("proof");
   updateSpecimenRailSelection();
@@ -1723,7 +2070,7 @@ function loadCaseIntoWorkbench(caseObj) {
     currentModality = "markdown";
     baselineText = badText;
     currentText = badText;
-    focusedFindingIdx = 0;
+    focusedFindingIdx = -1;
     document.getElementById("pack-select").value = "business-brief";
     setViewMode("proof");
     updateSpecimenRailSelection();
@@ -1864,7 +2211,7 @@ function loadRuleInWorkbench(ruleId) {
   currentModality = modality;
   baselineText = activeSpecimen.bad;
   currentText = activeSpecimen.bad;
-  focusedFindingIdx = 0;
+  focusedFindingIdx = -1;
   document.getElementById("pack-select").value = targetPack;
   setViewMode("proof");
   updateSpecimenRailSelection();
@@ -1895,7 +2242,15 @@ function renderRulesTable() {
   let visibleInLangCount = 0;
   let matchedCount = 0;
   const q = activeRuleSearch.trim().toLowerCase();
-  const order = ["core", "business-brief", "literary-essay", "deck-and-ui"];
+  const order = [
+    "core",
+    "business-brief",
+    "engineering-spec",
+    "regulated-comms",
+    "literary-essay",
+    "deck-and-ui",
+    "executive-deck",
+  ];
   const textMods = new Set(["markdown", "text", "html", "css", "jsx", "svg"]);
 
   for (const pid of order) {
@@ -1965,7 +2320,7 @@ function renderRulesTable() {
             <a class="rule-md-link" href="./rules/${escapeHtml(r.id)}.md">.md</a>
           </div>
         </td>
-        <td>${escapeHtml(packLabel)}<br><span class="sev-tag ${sevCls}" style="font-size:0.75rem;">${escapeHtml(sevLabel)}</span></td>
+        <td class="rule-pack-cell"><span class="rule-pack-name">${escapeHtml(packLabel)}</span><span class="sev-tag ${sevCls}" style="font-size:0.75rem;">${escapeHtml(sevLabel)}</span></td>
         <td><code>${escapeHtml((r.modalities || []).join(", "))}</code></td>
         <td><div>${formatRuleProseHtml(why)}</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>${
         currentLang === "zh" ? "判断方法：" : "Check:"
@@ -2151,6 +2506,11 @@ function applyI18n(isUserSwitch = false) {
         ? "https://github.com/dislop-ai/dislop/blob/main/awesome/README.zh-CN.md"
         : "https://github.com/dislop-ai/dislop/tree/main/awesome";
   }
+  document.querySelectorAll('a[href^="./awesome/"]').forEach((aEl) => {
+    const rawHref = aEl.getAttribute("href") || "./awesome/";
+    if (rawHref.endsWith(".json") || rawHref.endsWith(".md")) return;
+    aEl.setAttribute("href", currentLang === "en" ? "./awesome/?lang=en" : "./awesome/");
+  });
   const roadmapHref =
     currentLang === "zh"
       ? "https://github.com/dislop-ai/dislop/blob/main/ROADMAP.zh-CN.md"
@@ -2217,7 +2577,7 @@ function applyI18n(isUserSwitch = false) {
       currentModality = nextSp.modality;
       baselineText = nextSp.bad;
       currentText = nextSp.bad;
-      focusedFindingIdx = 0;
+      focusedFindingIdx = -1;
       document.getElementById("pack-select").value = nextSp.pack;
     }
   }
@@ -2290,6 +2650,14 @@ function saveVoiceProfile(profile) {
   safeSetStorage(VOICE_STORE_KEY, JSON.stringify(profile));
 }
 
+function formatVoiceHabits(habits, isZh) {
+  if (!habits) return "";
+  if (Array.isArray(habits)) {
+    return habits.filter(Boolean).join(isZh ? "；" : "; ");
+  }
+  return String(habits);
+}
+
 function renderSavedVoiceState(forceRefreshText = false) {
   const saved = loadSavedVoiceProfile();
   const badge = document.getElementById("voice-active-badge");
@@ -2303,8 +2671,9 @@ function renderSavedVoiceState(forceRefreshText = false) {
     }
     if (clearBtn) clearBtn.hidden = false;
     if (outBox && (outBox.hidden || forceRefreshText)) {
+      const habitsStr = formatVoiceHabits(saved.sentenceHabits, isZh);
       outBox.hidden = false;
-      outBox.innerHTML = `<strong>${isZh ? "当前生效文风：" : "Active voice profile:"}</strong> ${escapeHtmlSafe(saved.tone)}${saved.sentenceHabits ? ` · ${escapeHtmlSafe(saved.sentenceHabits)}` : ""}`;
+      outBox.innerHTML = `<strong>${isZh ? "当前生效文风：" : "Active voice profile:"}</strong> ${escapeHtmlSafe(saved.tone)}${habitsStr ? ` · ${escapeHtmlSafe(habitsStr)}` : ""}`;
     }
   } else {
     if (badge) badge.hidden = true;
@@ -2314,6 +2683,33 @@ function renderSavedVoiceState(forceRefreshText = false) {
       outBox.innerHTML = "";
     }
   }
+}
+
+function handleVoiceOfflineClick() {
+  const isZh = currentLang === "zh";
+  const outBox = document.getElementById("voice-output-box");
+  if (!outBox) return;
+  const raw = String(document.getElementById("voice-samples-input")?.value || "").trim();
+  const samples = raw.split(/\n\s*\n/).map((s) => s.trim()).filter(Boolean).slice(0, 5);
+  if (samples.length === 0) {
+    outBox.hidden = false;
+    outBox.innerHTML = `<p class="ai-error-msg" style="margin:0;">${isZh ? "请先贴入至少 1 段你自己的文字样稿。" : "Paste at least 1 paragraph of your own writing first."}</p>`;
+    return;
+  }
+
+  const res = extractVoiceProfileOffline(samples, { lang: isZh ? "zh" : "en" });
+  saveVoiceProfile(res.profile);
+  const st = res.stylometrics;
+  const habitsStr = formatVoiceHabits(res.profile?.sentenceHabits, isZh);
+  outBox.hidden = false;
+  outBox.innerHTML = `<div><strong>${isZh ? "已在本地提取并保存个人文风（0 上传 · 0 额度）：" : "Personal voice extracted offline (0 uploads · 0 credits):"}</strong></div>
+    <div style="margin-top:4px;">${escapeHtmlSafe(res.profile?.tone || "")}${habitsStr ? ` · ${escapeHtmlSafe(habitsStr)}` : ""}</div>
+    <div style="margin-top:4px;font-family:var(--font-mono);font-size:0.74rem;color:var(--ink-2);">${
+      isZh
+        ? `统计样稿 ${st.sampleCount} 段 / ${st.sentenceCount} 句 · 平均句长 ${st.meanLength} · 细节密度 ${st.concretenessPer100}`
+        : `${st.sampleCount} sample(s) / ${st.sentenceCount} sentences · avg length ${st.meanLength} · detail density ${st.concretenessPer100}`
+    }</div>`;
+  renderSavedVoiceState();
 }
 
 async function handleVoiceExtractClick() {
@@ -2326,7 +2722,7 @@ async function handleVoiceExtractClick() {
   if (!savedAcct?.token) {
     outBox.hidden = false;
     outBox.innerHTML = `<p class="ai-error-msg" style="margin:0 0 8px;">${
-      isZh ? "提取个人文风需要先领取免费 30 额度密钥。" : "Claim a free 30-credit key first to extract a personal voice profile."
+      isZh ? "云端 AI 提炼需要先领取免费 30 额度密钥（也可直接点旁边「离线统计声纹」0 联网提取）。" : "Claim a free 30-credit key for Cloud AI extraction, or click 'Offline voice stats' right beside it."
     }</p><a href="#cloud-token-box" class="btn-primary" style="min-height:30px;padding:5px 12px;font-size:0.8rem;">${
       isZh ? "去下方 10 秒免费领密钥 ↓" : "Claim free key below ↓"
     }</a>`;
@@ -2358,9 +2754,10 @@ async function handleVoiceExtractClick() {
     }
     updateCreditsFromBilling(data.billing);
     saveVoiceProfile(data.profile);
+    const habitsStr = formatVoiceHabits(data.profile?.sentenceHabits, isZh);
     outBox.hidden = false;
     outBox.innerHTML = `<div><strong>${isZh ? "个人文风已保存，后续「AI 一键去味」将自动套用：" : "Personal voice saved and wired into AI Rewrite:"}</strong></div>
-      <div style="margin-top:4px;">${escapeHtmlSafe(data.profile?.tone || "")}${data.profile?.sentenceHabits ? ` · ${escapeHtmlSafe(data.profile.sentenceHabits)}` : ""}</div>`;
+      <div style="margin-top:4px;">${escapeHtmlSafe(data.profile?.tone || "")}${habitsStr ? ` · ${escapeHtmlSafe(habitsStr)}` : ""}</div>`;
     renderSavedVoiceState();
   } catch (err) {
     outBox.innerHTML = `<p class="ai-error-msg" style="margin:0;">${escapeHtmlSafe(err.message || "Network error")}</p>`;
@@ -2415,7 +2812,7 @@ function renderCloudAccountState() {
         : `Signed in as ${saved.email} · ${rem} credits left`;
     }
     if (tokenLinkEl) {
-      tokenLinkEl.textContent = isZh ? "管理 Token →" : "Manage token →";
+      tokenLinkEl.textContent = isZh ? "管理密钥 →" : "Manage key →";
     }
     if (statusEl) {
       statusEl.hidden = false;
@@ -2454,11 +2851,11 @@ function renderCloudAccountState() {
   } else {
     if (quotaEl) {
       quotaEl.textContent = isZh
-        ? "免登录每天 5 次试用额度 · 登录后每月 30 次"
-        : "5 free anonymous credits/day · 30/mo with free token";
+        ? "免登录每天 5 试用额度 · 登录后每月 30 额度"
+        : "5 free anonymous credits/day · 30/mo with free key";
     }
     if (tokenLinkEl) {
-      tokenLinkEl.textContent = isZh ? "领免费 Token →" : "Get free token →";
+      tokenLinkEl.textContent = isZh ? "领免费密钥 →" : "Get free key →";
     }
     if (statusEl) {
       statusEl.hidden = true;
@@ -2508,7 +2905,7 @@ function renderAiError(errCode, message) {
   const isZh = currentLang === "zh";
   const needsToken = errCode === "anon_limit_reached" || errCode === "anon_text_too_long" || errCode === "insufficient_credits";
   const ctaHtml = needsToken
-    ? `<div class="quick-actions"><a href="#cloud-token-box" class="btn-primary" style="min-height:30px;padding:5px 12px;font-size:0.8rem;">${isZh ? "免费领取 30 次额度 Token ↓" : "Claim free 30-credit token ↓"}</a></div>`
+    ? `<div class="quick-actions"><a href="#cloud-token-box" class="btn-primary" style="min-height:30px;padding:5px 12px;font-size:0.8rem;">${isZh ? "免费领取 30 额度密钥 ↓" : "Claim free 30-credit key ↓"}</a></div>`
     : "";
   panel.innerHTML = `<p class="ai-error-msg">${escapeHtmlSafe(message)}</p>${ctaHtml}`;
 }
@@ -2580,7 +2977,7 @@ async function runCloudAction(kind) {
         ? `<ul class="ai-changes-list">${issues
             .map(
               (it) =>
-                `<li><strong>${escapeHtmlSafe(it.category || "style")}</strong>：${escapeHtmlSafe(it.why || "")}${it.fix ? ` → ${escapeHtmlSafe(it.fix)}` : ""}</li>`
+                `<li><strong>${escapeHtmlSafe(it.layer || it.category || (isZh ? "结构与文风" : "style"))}</strong>：${escapeHtmlSafe(it.why || "")}${it.fix ? ` → ${escapeHtmlSafe(it.fix)}` : ""}</li>`
             )
             .join("")}</ul>`
         : "";
@@ -2634,7 +3031,7 @@ async function runCloudAction(kind) {
         currentText = revised;
         const editEl = document.getElementById("edit-textarea");
         if (editEl) editEl.value = revised;
-        focusedFindingIdx = 0;
+        focusedFindingIdx = -1;
         panel.hidden = true;
         setViewMode("proof");
         renderWorkbench();
@@ -2653,7 +3050,7 @@ async function runCloudAction(kind) {
               if (ta) ta.value = preRewriteDraft;
               preRewriteDraft = null;
               appliedEl.hidden = true;
-              focusedFindingIdx = 0;
+              focusedFindingIdx = -1;
               setViewMode("proof");
               renderWorkbench();
             }
@@ -2692,7 +3089,7 @@ async function handleFreeTokenSubmit(e) {
 
   if (submitBtn) submitBtn.disabled = true;
   outBox.hidden = false;
-  outBox.textContent = isZh ? "正在生成专属 Token…" : "Generating Bearer token...";
+  outBox.textContent = isZh ? "正在生成专属密钥…" : "Generating API key...";
 
   try {
     const resp = await fetch("/api/v1/auth/register", {
@@ -2718,7 +3115,7 @@ async function handleFreeTokenSubmit(e) {
     const mcpJsonStr = JSON.stringify(data.mcpConfig, null, 2);
     outBox.innerHTML = `
       <div><strong>${isZh ? "已自动绑定到本页工作台（每月 30 额度）" : "Saved to this browser (30 monthly credits active)"}</strong></div>
-      <div style="margin-top:6px;">Token: <code>${escapeHtmlSafe(data.apiKey)}</code></div>
+      <div style="margin-top:6px;">${isZh ? "专属密钥：" : "API key:"} <code>${escapeHtmlSafe(data.apiKey)}</code></div>
       <div style="margin-top:6px;font-size:0.78rem;color:var(--ink-2);">${isZh ? "远程 HTTP MCP 配置（粘进 Claude Code / Cursor / Codex）：" : "Remote HTTP MCP config (paste into Claude Code / Cursor / Codex):"}</div>
       <pre class="cloud-output-pre" id="generated-mcp-config">${escapeHtmlSafe(mcpJsonStr)}</pre>
       <div class="quick-actions" style="margin-top:8px;">
@@ -2827,7 +3224,7 @@ function init() {
     currentModality = data.modality;
     baselineText = data.bad;
     currentText = data[heroProofState] || data.bad;
-    focusedFindingIdx = 0;
+    focusedFindingIdx = -1;
     document.getElementById("pack-select").value = data.pack;
     setViewMode("proof");
     updateSpecimenRailSelection();
@@ -2844,6 +3241,12 @@ function init() {
   });
 
   document.getElementById("mode-proof-btn").addEventListener("click", () => {
+    if (customRuleTitle === "user-draft" && !baselineText && currentText.trim()) {
+      baselineText = currentText;
+      if (activeSpecimen && activeSpecimen.id === "user-draft") {
+        activeSpecimen.bad = currentText;
+      }
+    }
     setViewMode("proof");
     renderWorkbench();
   });
@@ -2855,11 +3258,41 @@ function init() {
     document.getElementById("edit-textarea").focus();
   });
 
+  document.getElementById("edit-textarea").addEventListener("paste", () => {
+    if (binaryAuditResult) return;
+    if (customRuleTitle === "user-draft" && !baselineText) {
+      setTimeout(() => {
+        const val = document.getElementById("edit-textarea")?.value || "";
+        if (val.trim() && !baselineText) {
+          baselineText = val;
+          if (activeSpecimen && activeSpecimen.id === "user-draft") {
+            activeSpecimen.bad = val;
+          }
+          renderWorkbench();
+        }
+      }, 0);
+    }
+  });
+
   document.getElementById("edit-textarea").addEventListener("input", (e) => {
     if (binaryAuditResult) return;
     clearWorkbenchTransientPanels();
     currentText = e.target.value;
     renderWorkbench();
+  });
+
+  document.getElementById("edit-textarea").addEventListener("keydown", (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+      e.preventDefault();
+      if (customRuleTitle === "user-draft" && !baselineText && currentText.trim()) {
+        baselineText = currentText;
+        if (activeSpecimen && activeSpecimen.id === "user-draft") {
+          activeSpecimen.bad = currentText;
+        }
+      }
+      setViewMode("proof");
+      renderWorkbench();
+    }
   });
 
   document.getElementById("btn-paste-own")?.addEventListener("click", () => {
@@ -2868,11 +3301,20 @@ function init() {
     lastUploadedFile = null;
     uploadedOriginalText = null;
     customRuleTitle = "user-draft";
-    currentFilename = "my-draft.md";
     currentModality = currentPackId === "deck-and-ui" ? "html" : "markdown";
+    currentFilename = currentModality === "html" ? "my-draft.html" : "my-draft.md";
+    activeSpecimen = {
+      id: "user-draft",
+      pack: currentPackId,
+      filename: currentFilename,
+      modality: currentModality,
+      bad: "",
+      trap: null,
+      good: null,
+    };
     baselineText = "";
     currentText = "";
-    focusedFindingIdx = 0;
+    focusedFindingIdx = -1;
     const appliedEl = document.getElementById("wb-applied-banner");
     if (appliedEl) appliedEl.hidden = true;
     const aiPanel = document.getElementById("ai-result-panel");
@@ -2887,14 +3329,14 @@ function init() {
   document.getElementById("btn-apply-good").addEventListener("click", () => {
     if (lastUploadedFile || binaryAuditResult || typeof activeSpecimen?.good !== "string") return;
     currentText = activeSpecimen.good;
-    focusedFindingIdx = 0;
+    focusedFindingIdx = -1;
     renderWorkbench();
   });
 
   document.getElementById("btn-apply-trap").addEventListener("click", () => {
     if (lastUploadedFile || binaryAuditResult || typeof activeSpecimen?.trap !== "string") return;
     currentText = activeSpecimen.trap;
-    focusedFindingIdx = 0;
+    focusedFindingIdx = -1;
     renderWorkbench();
   });
 
@@ -2908,7 +3350,7 @@ function init() {
         binaryAuditResult = null;
         baselineText = uploadedOriginalText;
         currentText = uploadedOriginalText;
-        focusedFindingIdx = 0;
+        focusedFindingIdx = -1;
         renderWorkbench();
       } else {
         await handleUploadedFile(lastUploadedFile, false);
@@ -2923,14 +3365,25 @@ function init() {
     document.getElementById("pack-select").value = currentPackId;
     baselineText = activeSpecimen.bad;
     currentText = activeSpecimen.bad;
-    focusedFindingIdx = 0;
+    focusedFindingIdx = -1;
     updateSpecimenRailSelection();
     renderWorkbench();
   });
 
   async function handleUploadedFile(file, autoSelectPack = true) {
+    const mod = detectModality(file.name);
+    if (!mod) {
+      const appliedEl = document.getElementById("wb-applied-banner");
+      if (appliedEl) {
+        appliedEl.hidden = false;
+        appliedEl.textContent =
+          currentLang === "zh"
+            ? `暂不支持打开 ${file.name}。请选择 .md、.txt、.html、.css、.jsx、.tsx、.svg、.docx 或 .pptx 文件。`
+            : `Unsupported file type: ${file.name}. Open a .md, .txt, .html, .css, .jsx, .tsx, .svg, .docx, or .pptx file.`;
+      }
+      return;
+    }
     const token = ++uploadSeq;
-    const mod = detectModality(file.name) || "markdown";
     const nextPackId =
       autoSelectPack && (mod === "pptx" || mod === "html" || mod === "css" || mod === "jsx" || mod === "svg")
         ? "deck-and-ui"
@@ -2968,7 +3421,7 @@ function init() {
         const buf = await file.arrayBuffer();
         let text;
         try {
-          text = new TextDecoder("utf-8", { fatal: true }).decode(new Uint8Array(buf));
+          text = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(new Uint8Array(buf));
         } catch {
           throw new Error("File is not valid UTF-8 text");
         }
@@ -2996,7 +3449,7 @@ function init() {
     uploadedOriginalText = nextOriginalText;
     baselineText = nextBaselineText;
     currentText = nextCurrentText;
-    focusedFindingIdx = 0;
+    focusedFindingIdx = -1;
     if (binaryAuditResult) {
       setViewMode("proof");
     }
@@ -3136,6 +3589,7 @@ function init() {
 
   document.getElementById("btn-ai-review")?.addEventListener("click", () => runCloudAction("review"));
   document.getElementById("btn-ai-deslop")?.addEventListener("click", () => runCloudAction("deslop"));
+  document.getElementById("btn-voice-offline")?.addEventListener("click", handleVoiceOfflineClick);
   document.getElementById("btn-voice-extract")?.addEventListener("click", handleVoiceExtractClick);
   document.getElementById("btn-voice-clear")?.addEventListener("click", () => {
     saveVoiceProfile(null);

@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.4.0
+version: 0.6.0
 ---
 
 # Local MCP, Hosted Remote MCP & HTTP API
@@ -31,10 +31,14 @@ Python 3.10+ (zero external deps):
 }
 ```
 
-Local deterministic tools:
-- `dislop_check`: Arguments `{ "text"?: string, "path"?: string, "filename"?: string, "pack"?: "core"|"business-brief"|"literary-essay"|"deck-and-ui" }`. Returns `{ pack, modality, count, findings }` with 0 network calls.
-- `dislop_explain`: Arguments `{ "ruleId": string, "lang"?: "en"|"zh" }`. Returns rationale and `bad -> trap -> good` examples.
-- `dislop_packs`: Arguments `{}`. Lists installed packs.
+Local deterministic tools (7 offline tools, `verbosity: "compact"` by default; zero negative fixtures leaked):
+- `dislop_check`: Arguments `{ "text"?: string, "path"?: string, "filename"?: string, "pack"?: "auto"|"core"|"business-brief"|"engineering-spec"|"regulated-comms"|"literary-essay"|"deck-and-ui"|"executive-deck", "profile"?: boolean, "ml"?: boolean, "patterns"?: boolean, "verbosity"?: "compact"|"full", "lang"?: "en"|"zh" }`. Returns `{ pack, modality, count, findings, explainHint?, profile? }` with 0 network calls.
+- `dislop_voice_extract_offline`: Arguments `{ "samples": string[], "lang"?: "auto"|"en"|"zh" }`. Computes deterministic `dislop.voice/1` offline with 0 network calls.
+- `dislop_model_score`: Runs bundled 14.6 KB `pocket-slop-v1` stealth-vapor scoring and pack routing offline.
+- `dislop_model_status`: Inspects hardware RAM/chip and optional local small-model tiers.
+- `dislop_explain`: Arguments `{ "ruleId": string, "lang"?: "en"|"zh" }`. Returns localized rationale and `bad -> trap -> good` examples without test fixtures.
+- `dislop_packs`: Lists all 7 bundled packs (42 built-in rules).
+- `dislop_catalog`: Searches all 53 structured patterns across 6 dimensions (42 built-in pack rules + 11 extended pattern-bank probes).
 
 ## 2. Hosted Remote HTTP MCP (Cloud LLM, Free 30 Credits/Month)
 

@@ -89,7 +89,7 @@
 | **Phase 0：契约冻结（1 天）** | 当前（与 v0.2.0 发包并行筹备） | 冻结 `dislop.radar/3` 字段契约与拆条目脚本（将现有 87 条 JSON 无损拆分为 `data/entries/<id>.json`）；确定分类枚举与中立准入宪章 | 所有下游消费者（GitHub README、`dislop.com/radar/`、`llms.txt`）从第一天起绑定同一份 `dislop.radar/3` 契约，后续无需改字段名 |
 | **Phase 1：独立仓冷启动（1–2 天）** | **`dislop v0.2.0` 上架 npm 与 PyPI 后立刻执行** | 创建公开仓 `dislop-ai/awesome-anti-slop`，迁入 87 条基线数据、英文主 `README.md` + `README.zh-CN.md`、CC0-1.0 协议、Issue 表单、PR 模板与 4 条自动化 GitHub Actions；发布 `v0.1.0` | **选择在 Phase 1 就直接建独立仓而非留在主仓孵化**，原因有三：① 固化规范 URL 与外链；② 立刻启动 `sindresorhus/awesome` 的 30 天仓库存活计时；③ 主仓的 `docs/research/anti-slop-radar-index.json` 在迁移后仅保留一份指向独立仓的归档说明，彻底切断双份维护 |
 | **Phase 2：官网双读目录联动（1–2 天）** | Phase 1 稳定运行 1–2 周后 | 在 `dislop` 主仓的 `scripts/build_site.mjs` 中增加离线快照消费步骤，自动渲染 `site/radar/index.html`、`site/radar/index.json`、`site/radar/index.md` 与站点根路径 `site/llms.txt`；配置 `repository_dispatch` 自动提 PR 同步快照 | 官网仍是纯静态文件，继续满足 `CSP: connect-src 'none'` 与单一规范主站部署（`dislop.com`）；主仓 CI 离线构建不依赖外网，零破坏既有测试红线 |
-| **Phase 3：基准护城河与语料反哺（持续）** | `dislop verify` 离线评测基准 v1 发布后 | 在 `dislop.radar/3` 中启用可选 `benchmarkRef` 字段，在目录中展示可复算的「事实保留率 / 二阶漂移率」实测链接；按季度从 `corpus-source` 标签条目中筛选规则样本反哺 `dislop` `packs/` 与 `dislop catalog` | 纯增量可选字段，旧条目无需改动即可平滑兼容；目录由此从「静态外链清单」跃升为「带公开实测证据的行业参考系」 |
+| **Phase 3：基准护城河与语料反哺（持续）** | `dislop-bench v2`（`Suite B` 改稿评测基准）发布后 | 在 `dislop.radar/3` 中启用可选 `benchmarkRef` 字段，在目录中展示可复算的「二阶漂移率 / 数字保留率」实测链接；按季度从 `corpus-source` 标签条目中筛选规则样本反哺 `dislop` `packs/` 与 `dislop catalog` | 纯增量可选字段，旧条目无需改动即可平滑兼容；目录由此从「静态外链清单」跃升为「带公开实测证据的行业参考系」 |
 
 ---
 
@@ -181,7 +181,7 @@
 3. **从目录到产品护城河的三条反哺链路**：
    - **反模式规则源回流（对接 [anti-pattern-detection-and-catalog.zh-CN.md](./anti-pattern-detection-and-catalog.zh-CN.md)）**：在目录中带有 `corpus-source` 或 `empirical-study` 标签的新条目（如新发表的风格计量论文、跨模型对照语料、高星前端规则集），自动汇总进季度复盘 Issue，由 `dislop` 维护者抽样验证误报率后转化为 `packs/*/pack.json` 新规则或 `dislop catalog` 词条。
    - **正向写作与设计基准库**：目录的 `standards-research-policy` 分栏与高星写作/编辑部手册作为 `dislop` 负样本之外的「纯人类高质对照语料源」，直接用于校验 `packs/` 的误报基线（`core` 0 误报，文体包低误报）。
-   - **离线实测基准联动**：当 `dislop` 完成「改稿事实丢失与二阶漂移离线基准 v1」后，目录中受测的改写技能与工具通过 `benchmarkRef` 链接至可复算的客观指标页。这使得 `awesome-anti-slop` 拥有其他纯链接目录与 `skills.sh` 榜单都没有的硬数据壁垒，同时也以最自然、无推销感的方式展示 `dislop verify` 的技术价值。
+   - **离线实测基准联动**：依托已落地的 `dislop-bench v2`（`Suite A` 检出与 `Suite B` 改稿漂移/数字保真双轨基准），目录中受测的改写技能与工具可通过 `benchmarkRef` 链接至可复算的客观指标页。这使得 `awesome-anti-slop` 拥有其他纯链接目录与 `skills.sh` 榜单都没有的硬数据壁垒，同时也以最自然、无推销感的方式展示 `dislop` 多维确定性评测的技术价值。
 
 ---
 

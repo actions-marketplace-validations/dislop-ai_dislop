@@ -2,108 +2,105 @@
 
 [简体中文](./ROADMAP.zh-CN.md)
 
-Last updated: `2026-11-21` · Current baseline: `v0.3.0` (`dislop.com` live)
+Last updated: `2026-11-22` · Current baseline: `v0.6.0` (`dislop.com` live)
 
-This roadmap tracks what `dislop` ships today, what we are building next, and the open design questions we want to decide together. If you want to pick up a track, push back on a threshold, or propose a rule, open a thread in [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) or claim an [Issue](https://github.com/dislop-ai/dislop/issues).
+This roadmap tracks what `dislop` ships today, how we are rolling out universal editor and agent integrations next, and the open design questions we want to decide together. To pick up a track, push back on a rule threshold, or propose a new idea, start a thread in [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) or claim an [Issue](https://github.com/dislop-ai/dislop/issues).
 
 ---
 
-## 1. Where We Are (`v0.3.0` Shipped)
+## 1. Where We Are (`v0.6.0` Shipped)
 
 | Area | Shipped today | Key files |
 |---|---|---|
-| Core engine & parity | Zero-dependency Node.js 20+ and Python 3.10+ engines passing 88 rule fixtures and 10 cross-runtime conformance/unit tests | `src/core.mjs`, `src/dislop/engine.py`, `tests/test_conformance.py` |
-| Rules & packs | 25 pure anti-slop rules across `core` (4 AI delivery artifacts, `error`) and 3 style/template packs (`business-brief`, `literary-essay`, `deck-and-ui`) | `packs/*/pack.json` |
-| Formats | `.md`, `.mdx`, `.txt`, `.html`, `.css`, `.jsx`, `.tsx`, `.docx`, `.pptx` | `src/binary-node.mjs`, `src/dislop/engine.py` |
-| Website & Workbench | Default-Chinese `dislop.com` with native English toggle, zero language mixing, live 3-state hero proof card (`Original` / `Still sounds like AI` / `Cleaned up`), offline-first browser workbench + opt-in same-origin cloud AI (`CSP: connect-src 'self'`), and `/llms.txt` endpoints | `scripts/build_site.mjs`, `site/` |
+| Core engine & parity | Zero-dependency Node.js 20+ and Python 3.10+ engines passing 160 rule fixtures (83 hit + 77 clean), 53-pattern catalog checks, offline `extractVoiceProfileOffline`, and 26 Python `unittest` conformance and engine tests | `src/core.mjs`, `src/dislop/engine.py`, `tests/test_conformance.py` |
+| Built-in packs & local model advisor | All 7 scenario and vertical packs (`42` rules) bundled offline (`core`, `business-brief`, `engineering-spec`, `regulated-comms`, `literary-essay`, `deck-and-ui`, `executive-deck`), plus 11 extended pattern-bank probes (`--patterns`), a bundled `14.6 KB` gzip Pocket ML ensemble (`pocket-slop-v1`), and hardware-aware local model advisor (`dislop model`) | `packs/*/pack.json`, `patterns/`, `models/`, `src/local-model.mjs` |
+| Formats | `.md`, `.mdx`, `.txt`, `.html`, `.css`, `.jsx`, `.tsx`, `.svg`, `.docx`, `.pptx` | `src/binary-node.mjs`, `src/dislop/engine.py` |
+| Website & Workbench | Default-Chinese `dislop.com` with native English toggle, 2 proof marks (red solid `error` + blue dashed `warning`/`info`), 5-cell rhythm gauges, offline + cloud voice profile drawer, and `/llms.txt` endpoints | `scripts/build_site.mjs`, `site/` |
 | Awesome Anti-Slop | 87 checked bilingual entries (`dislop.radar/2`), pure English `awesome/README.md`, pure Chinese `awesome/README.zh-CN.md`, and offline filter at `dislop.com/awesome/` | `docs/research/anti-slop-radar-index.json`, `awesome/` |
-| Agent & editor entry points | Cross-host `skills/dislop/SKILL.md`, stdio MCP server (`dislop_check`, `dislop_explain`, `dislop_packs`), Git diff gating (`--changed`/`--staged`), SARIF 2.1.0 & GitHub PR annotations | `skills/dislop/SKILL.md`, `bin/`, `server.json` |
+| Multi-surface manifests & CI gates | 10 CI-locked manifests generated from one source: Agent Skill (`skills/dislop/` with 4 local reference cards + `agents/openai.yaml`), Claude Code plugin (`.claude-plugin/`, ~130 always-on tokens), Codex plugin (`.codex-plugin/` + `.agents/plugins/marketplace.json`), Agent Plugins 1.0 (`plugin.json` + `mcp.json`), Gemini CLI extension (`gemini-extension.json`), dual-mode MCP Registry (`server.json` declaring both local `stdio` and remote `https://dislop.com/mcp`), GitHub Action (`action.yml`), and `.pre-commit-hooks.yaml` | `scripts/sync_manifests.mjs`, `plugin.json`, `server.json`, `action.yml` |
 
 ---
 
 ## 2. Active Tracks & Milestones
 
-Tracks are scoped so maintainers can work in parallel with minimal merge conflicts.
+Full ecosystem research and marketplace ranking live in [docs/research/universal-adaptation-and-marketplace-strategy.zh-CN.md](./docs/research/universal-adaptation-and-marketplace-strategy.zh-CN.md). Tracks are split along clean directory boundaries so contributors can work in parallel.
 
-### Track A — `v0.3.x` Packaging, Polish & Distribution (Now)
+### Track A — Public Package Registries & First 6 Marketplace Listings (Now)
 
-Goal: make `dislop` one command away from standard registries and tighten anti-slop coverage.
+Goal: finish account-side publishing so every install command resolves from public registries in milliseconds and claim first-wave marketplace slots.
 
-- [ ] Publish `dislop` to npm and PyPI (`npx dislop` / `uvx dislop`), and register `server.json` in the MCP registry.
-- [ ] Catch 1-word English staccato chains (`Faster. Leaner. Done.`), broader Chinese chatbot openings (`好的，以下是你的稿子`), and 3-part symmetrical semicolon pitch sentences with clean near-miss fixtures.
-- [ ] Ship copy-ready `pre-commit` hook config and a thin reusable GitHub Action workflow.
+- [x] Ship single-source manifest generator (`scripts/sync_manifests.mjs`), automated Trusted Publishing release workflow (`.github/workflows/release.yml`), reusable GitHub Action (`action.yml`), and `pre-commit` hooks (`.pre-commit-hooks.yaml`).
+- [x] Default local MCP `dislop_check` to `verbosity: "compact"`, expose the focused 7-tool stdio surface, strip negative test fixtures from `dislop_explain`, pass `claude plugin validate` and `codex plugin` install checks, and set GitHub repository crawler topics (`gemini-cli-extension`, `claude-code-plugin`, `agent-plugins`).
+- [ ] Run initial `npm publish` (`dislop`) and PyPI Trusted Publishing (`dislop`), flip `.mcp.json` / `mcp.json` via `node scripts/sync_manifests.mjs --channel registry`, and push `server.json` to `registry.modelcontextprotocol.io` (claiming Smithery and Glama listings).
+- [ ] Submit both the GitHub plugin bundle and the remote `https://dislop.com/mcp` connector on Anthropic's directory portal (`claude.ai/directory/manage`), submit to OpenAI's universal plugin directory, and verify automatic indexing on `skills.sh` and `geminicli.com/extensions`.
 
-**Done when**: `npx dislop check .` and `uvx dislop check .` work from public registries, and all new fixtures pass in both Node and Python.
+**Done when**: `npx dislop check .`, `uvx dislop check .`, and `gemini extensions install` work straight from public registries, and the Official MCP Registry lists both local `stdio` and remote `streamable-http` transports.
 
-### Track B — `v0.3.x` Rhythm & Template Probes (Next)
+### Track B — Dual-Published Editor Extension & Multi-Agent Fleet Orchestrators (Next)
 
-Goal: promote our verified cadence and UI template probes into both production runtimes without adding dependencies.
+Goal: ship one zero-dependency Web extension across both major VS Code registries and solve Git worktree handoff checks for parallel agent runners like Orca, Herdr, and Conductor.
 
-- [ ] Merge the 5 prototype-verified probes from [scripts/prototype_antipattern_lab.mjs](./scripts/prototype_antipattern_lab.mjs) (`comma-chain-cadence`, `sentence-length-monotony`, `discourse-marker-cluster`, `ui-glassmorphism-overuse`, `ui-accent-stripe-card`) into `src/core.mjs` and `src/dislop/engine.py` per [docs/specs/anti-pattern-catalog-and-probes-v0.3.md](./docs/specs/anti-pattern-catalog-and-probes-v0.3.md).
-- [ ] Implement `pptx-layout-monotony` (detecting 4+ consecutive identical slide templates) in both Node and Python OOXML readers.
-- [ ] Ship `dislop catalog` CLI subcommand and `dislop_catalog` MCP tool for structured filtering by modality, language, severity, and pack.
-- [ ] Extract shared host helpers (`src/node-host.mjs`, `src/mcp.mjs`) so CLI and MCP do not duplicate I/O or config loading.
+- [ ] Build a lightweight Web-compatible extension `integrations/vscode/` (`< 150 KB`) directly around `src/core.mjs`: on-save/idle squiggles, hover before/trap/after cards, `Cmd+.` quick-ignore comments + optional cloud rewrite, and automatic agent registration via `mcpServerDefinitions` / `languageModelTools`; publish simultaneously to **VS Code Marketplace** and **Open VSX** (covering VS Code, Cursor, Windsurf, Antigravity, VSCodium, and `vscode.dev`).
+- [ ] Package `integrations/antigravity/` (square high-contrast logo + 3 starter prompts), pass `agy plugin validate --strict` with zero warnings for Antigravity Partner Intake, and submit `.cursor-plugin/` + Cline MCP Marketplace PRs.
+- [ ] Ship parallel-fleet templates: `integrations/orca/orca.yaml` and Conductor `post-setup.d` hooks (symlinking gitignored `.dislop.local.json` into isolated child Git worktrees and gating previews on `core` errors), `integrations/herdr/herdr-plugin.toml` for one-key pane checks, and Agent Hook scripts with a 2-strike circuit breaker.
 
-**Done when**: Node and Python pass identical `pack-test` and `test_conformance.py` assertions on all 31 rules, and the repository passes `dislop check . --fail-on warning`.
+**Done when**: installing `.vsix` activates both human diagnostics and editor agent tools with zero manual JSON edits, and child Git worktrees inherit `.dislop.local.json` cleanly.
 
-### Track C — Offline Anti-Slop Benchmark (`v1` Shipped, Expanding)
+### Track C — Writer & Desktop Productivity Stores + Benchmark Expansion (Parallel)
 
-Goal: measure false-positive rate, recall, and end-to-end de-slop quality with reproducible offline numbers rather than opinions.
+Goal: reach writers, researchers, and PMs outside code editors while expanding reproducible benchmark coverage.
 
-- [x] Curate 48 original `CC0-1.0` detection samples across Chinese briefs, Chinese essays, English specs, English essays, HTML/CSS components, and `.pptx` decks plus 12 end-to-end revision tasks ([benchmarks/](./benchmarks/README.md)).
-- [x] Measure precision (`100%`), recall (`100%`), clean FPR (`0%`), adversarial near-miss FPR (`0%`), 2nd-order trap recall (`100%`), Node/Python parity (`100%`), and `raw_ai` vs. `naive_humanizer` vs. `dislop_clean` scores offline.
-- [x] Ship one-command offline evaluation, CI regression gates (`node scripts/run_benchmark.mjs --assert`), external model/Skill evaluation (`--eval`), randomized blind human A/B review sheets (`--export-blind-sheet`), and generated [benchmarks/REPORT.md](./benchmarks/REPORT.md).
-- [ ] Expand with longer real-world drafts, multi-slide decks, and cross-model A/B runs via `dislop-cloud`.
+- [x] Ship `dislop-bench v2`: 112 core detection samples + 154 multi-angle pattern samples (`100.0%` precision/recall, `0.0%` clean FPR, `100.0%` Node/Python parity), 18 end-to-end revision tasks (`18/18` all-clear), and 5-model live cloud comparisons ([benchmarks/REPORT.md](./benchmarks/REPORT.md)).
+- [ ] Reuse `src/core.mjs` to publish an offline-first **Obsidian Community Plugin** and a **Raycast Store** extension (`Check Selected Text` / `Clean Clipboard Slop`).
+- [ ] Add longer real-world drafts and multi-slide executive `.pptx` benchmarks, reviewing store install and free-tier cloud conversion telemetry every two weeks.
 
-**Done when**: gated in CI; anyone can run `node scripts/run_benchmark.mjs --assert` offline to reproduce the exact score tables.
+**Done when**: `node scripts/run_benchmark.mjs --assert` stays green offline in CI and both Obsidian and Raycast packages pass upstream automated checks.
 
 ### Track D — `Awesome Anti-Slop` Maintenance & Split Threshold (Ongoing, Parallel)
 
-Goal: keep the 87-entry directory accurate, neutral, and useful in both English and Chinese without draining core engine time.
+Goal: keep the 87-entry directory accurate, neutral, and easy to filter in both English and Chinese without splitting focus.
 
-- [ ] Add an Issue form template for submitting new entries (URL, topic, locale, one-sentence EN & ZH summary) and an optional monthly link/star refresh script.
-- [ ] Keep `awesome/README.md`, `awesome/README.zh-CN.md`, and `https://dislop.com/awesome/` inside `dislop-ai/dislop` while the project is in early growth.
-- [ ] **Split threshold**: spin out a standalone CC0-1.0 `dislop-ai/awesome-anti-slop` repository (using the deferred `dislop.radar/3` contract in `docs/research/awesome-anti-slop-topology/`) only once sustained external directory PRs reach `>= 5/month`, keeping `https://dislop.com/awesome/` canonical permanently.
+- [ ] Add a GitHub Issue form template for resource submissions (URL, topic, locale, one-sentence EN & ZH summary) and an optional monthly link/star refresh script.
+- [ ] Keep `awesome/README.md`, `awesome/README.zh-CN.md`, and `https://dislop.com/awesome/` inside `dislop-ai/dislop` during early growth.
+- [ ] **Split threshold**: spin out a standalone CC0-1.0 `dislop-ai/awesome-anti-slop` repository (`dislop.radar/3`) only once sustained external directory PRs reach `>= 5/month`, keeping `https://dislop.com/awesome/` canonical permanently.
 
-### Track E — Open-Core Cloud Value-Adds & Longer-Term (`v0.4.0+`)
+### Track E — Open-Core Cloud Value-Adds & Longer-Term (`v0.6.0+`)
 
-Full market pricing research and unit economics live in [docs/research/business-model-and-open-core.zh-CN.md](./docs/research/business-model-and-open-core.zh-CN.md). **Open-source boundary**: `SKILL.md`, Node/Python CLI, Plugin, local stdio MCP, 25 deterministic rules, offline browser workbench, `Awesome Anti-Slop`, and `dislop-bench` remain Apache-2.0 open source (`dislop-ai/dislop`). The hosted LLM backend and Remote Streamable HTTP MCP live in the private `dislop-cloud` service:
+Market pricing benchmarks and unit economics live in [docs/research/business-model-and-open-core.zh-CN.md](./docs/research/business-model-and-open-core.zh-CN.md). **Open-source boundary**: `SKILL.md`, Node/Python CLI, local plugins, 7-tool local stdio MCP, all 7 built-in packs (`42` rules), 53-pattern catalog, bundled `14.6 KB` Pocket ML, offline browser workbench, `Awesome Anti-Slop`, and `dislop-bench v2` remain Apache-2.0 open source (`dislop-ai/dislop`). Hosted LLM endpoints and Remote HTTP MCP run in private `dislop-cloud`:
 
-- [x] **Phase 0 (Live Hosted Cloud & Demand Validation)**: Hosted `dislop-cloud` live at `https://dislop.com/mcp` and `/api/v1/*` with tiered Gemini routing (`gemini-3.1-flash-lite` review + `gemini-3.5-flash` self-healing rewrite), 5 anonymous web demo credits/day, 30 free monthly credits after email token registration, global daily budget cap, and Pro / PAYGO / Team waitlist.
-- [ ] **Format-Preserving `.docx` / `.pptx` Round-Trip Rewrite**: Clean prose and slides while keeping native Office styles, masters, and numbers intact.
-- [ ] **Visual Multimodal Audit**: Headless screenshot rendering + VLM design critique for web pages and slide decks.
-- [ ] **Team Brand Voice Libraries & GitHub App PR Reviewer**: Shared `dislop.voice/1` profiles across teams and automated PR anti-slop review comments.
-- [ ] Abstract design grammar cards (`dislop.taste/1`) and typed JS/Python SDK facades.
+- [x] **Phase 0 (Live Hosted Cloud & Demand Validation)**: `dislop-cloud` live at `https://dislop.com/mcp` and `/api/v1/*` with 5 anonymous web demo credits/day, 30 free monthly credits after email signup, global daily budget cap, and Pro / PAYGO / Team waitlist.
+- [ ] **Format-Preserving `.docx` / `.pptx` Round-Trip Rewrite**: Clean prose and slides while keeping native Office styles, masters, numbers, and bounding qualifiers intact.
+- [ ] **Visual Multimodal Audit**: Headless screenshot rendering + VLM layout critique for web pages and slide decks.
+- [ ] **Team Brand Voice Libraries & GitHub App PR Reviewer**: Shared `dislop.voice/1` profiles across teams and single-comment sticky PR summaries.
+- [ ] Typed JS/TS (`.d.ts`) and Python (`py.typed`) in-memory byte-stream SDK facades.
 
 ---
 
 ## 3. Open Questions for Discussion
 
-These five questions are open for co-maintainers and contributors to weigh in on before we lock code:
+These five design choices are open for co-maintainers and contributors to weigh in on:
 
-1. **3rd-order structural AI slop probes**: Can we reliably detect symmetrical 3-part semicolon pitches or pull-quote closers deterministically without false positives on normal human writing?
-2. **Default severity for `v0.3` rhythm probes**: Should `comma-chain-cadence` and `sentence-length-monotony` default to `info` in both `business-brief` and `literary-essay`, or stay opt-in on `literary-essay` so intentional stylistic repetition is never nagged?
-3. **Offline benchmark scope**: Which 3–4 document genres matter most for our first public 50-sample benchmark (e.g., Chinese product/weekly reports, WeChat/newsletter articles, English READMEs/specs, `.pptx` decks)?
-4. **Code-comment & PR hygiene boundary**: Should `dislop` stay focused on prose, docs, decks, and UI files inside PR diffs (leaving language AST linting to Oxlint/ESLint/Ruff), or add lightweight comment/stub-doc probes?
-5. **First editor/workflow integration after npm & PyPI**: Which unlocks the most daily use first—a reusable GitHub Action, a `pre-commit` hook repo, or a VS Code / Cursor extension?
+1. **VS Code / Open VSX diagnostic cadence**: Should editor underlines update only on file save (`onSave`) by default, or after a `300ms` typing pause? Does live underlining distract during first-draft writing?
+2. **Agent Hook blocking scope & circuit breaker**: Our default hook blocks only on `packs/core` `error` artifacts and yields to the human after 2 consecutive blocks on the same file. Should we also ship a strict preset that blocks `regulated-comms` superlatives?
+3. **Orca / Conductor worktree shared files**: Beyond `.dislop.local.json`, should our `orca.yaml` template also symlink `.dislop.local/voice.json` into child worktrees by default?
+4. **Code-comment & PR hygiene boundary**: Should `dislop` stay strictly focused on prose, docs, decks, and UI files inside PR diffs (leaving AST checks to Oxlint/ESLint/Ruff), or add an opt-in probe for boilerplate AI PR descriptions and empty docstrings?
+5. **Obsidian plugin primary UI**: Do longform Obsidian writers prefer a side-pane rhythm & findings summary, or inline dashed underlines inside Live Preview?
 
 ---
 
 ## 4. How We Collaborate
 
-- **Discuss first on direction**: Use [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) for open design questions and new rule ideas; open an [Issue](https://github.com/dislop-ai/dislop/issues) when claiming a track or reporting a false positive.
+- **Discuss first on direction**: Use [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) for open design questions and rule proposals; open an [Issue](https://github.com/dislop-ai/dislop/issues) when claiming a track or reporting a false positive.
 - **Parallel-friendly file boundaries**:
-  - Core probes & parity: `packs/`, `src/core.mjs`, `src/dislop/`, `tests/test_engine.py`, `tests/test_conformance.py`
+  - Core probes & parity: `packs/`, `patterns/`, `src/core.mjs`, `src/dislop/`, `tests/test_conformance.py`
+  - Marketplaces & editor integrations: `scripts/sync_manifests.mjs`, `plugin.json`, `integrations/`, `action.yml`
   - Website & Awesome directory: `docs/research/anti-slop-radar-index.json`, `scripts/build_site.mjs`, `site/`, `tests/test_site.mjs`
-  - Benchmarks & docs: `scripts/`, `docs/`, `README*.md`, `ROADMAP*.md`
+  - Benchmarks & docs: `benchmarks/`, `docs/`, `README*.md`, `ROADMAP*.md`
 - **Hard guardrails (always on)**:
-  - Zero external runtime dependencies in `src/core.mjs` and `src/dislop/`.
+  - Zero external runtime dependencies in `src/core.mjs` and `src/dislop/` core checkers.
   - Zero external font CDNs, analytics, or third-party requests on `dislop.com` (`CSP: connect-src 'self'`; offline check stays 0-upload by default).
   - Visitor-facing copy follows [docs/brand-and-voice-guide.md](./docs/brand-and-voice-guide.md) and keeps Chinese and English examples strictly separated.
-- **Run before opening a PR**:
+- **Run one command before opening a PR or cutting a release** (platform publishing rules live in [docs/releasing.md](./docs/releasing.md)):
   ```bash
-  node scripts/build_site.mjs
-  node bin/dislop.mjs pack-test && PYTHONPATH=src python3 -m dislop.cli pack-test
-  node tests/test_site.mjs && PYTHONPATH=src python3 -m unittest discover -s tests -v
-  node bin/dislop.mjs check . --fail-on warning && PYTHONPATH=src python3 -m dislop.cli check . --fail-on warning
+  npm run release:check
   ```

@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.4.0
+version: 0.6.0
 snapshot: 2026-11-21
 ---
 
@@ -10,8 +10,8 @@ snapshot: 2026-11-21
 
 ## 1. Open-Source Offline Tools (Zero Uploads, Zero Telemetry)
 
-- **CLI (`dislop check`, `explain`, `packs`, `resources`)**, **Agent Skill (`SKILL.md`)**, **Local stdio MCP (`--mcp`)**, and the **default browser workbench** run 100% locally.
-- `dislop check` makes zero network calls.
+- **CLI (`dislop check`, `patterns`, `voice`, `model --no-loopback`, `explain`, `packs`, `catalog`, `resources`)**, **Agent Skill (`SKILL.md` + local `references/*.md`)**, **Local stdio MCP (`--mcp`, 7 offline tools)**, and the **default browser workbench** run 100% locally.
+- `dislop check`, `dislop patterns`, and `dislop voice` make zero network calls; `dislop model` only probes `127.0.0.1` loopback runners locally unless you choose to install an optional local runner yourself.
 - `dislop.com` loads zero third-party fonts, analytics, or external scripts (`Content-Security-Policy: connect-src 'self'`).
 
 ## 2. Optional Hosted Cloud AI (`/api/v1/*` & `/mcp`)

@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.4.0
+version: 0.6.0
 ---
 
 # Revision Contrasts & Positive Specimens
@@ -91,6 +91,60 @@ trap: 工具已至。底气自生。交付无忧。
 good: `dislop` 在发稿前标出本机路径泄露、未填占位符和超载幻灯片。
 ```
 
+## Pack: `engineering-spec`
+
+### `eng-pr-diff-parrot` (warning)
+
+Generic AI PR summary parrots file changes without stating the concrete bug, constraint, or metric.
+
+```text
+bad:  本次 PR 旨在通过重构连接池管理逻辑进一步提升系统的稳定性与可维护性。
+trap: 这不是一次普通的代码重构，而是连接池稳定性的底层重塑。
+good: 修复 Redis 重连分支未释放旧句柄导致的连接泄漏（#412），压测 2 小时常驻连接数稳定在 64 以内。
+```
+
+### `eng-shallow-root-cause` (warning)
+
+Postmortem stops at 'human error' instead of identifying the missing system guardrail.
+
+```text
+bad:  根本原因：人为失误。
+trap: 根本原因：值班人员风险意识有待进一步强化。
+good: 根本原因：生产迁移脚本缺少库名白名单与行数上限预检，未拦截误指向主库的删除语句。
+```
+
+### `eng-vague-action-item` (info)
+
+Wishful action item lacks a concrete target component, threshold, owner, or due date.
+
+```text
+bad:  - [ ] 加强监控与告警。
+trap: - [ ] 全面排查并持续跟进线上隐患。
+good: - [ ] 给 `checkout-api` 增加 P99 > 400ms 持续 3 分钟告警并接入值班群（负责人：李工，11 月 30 日前完成）。
+```
+
+## Pack: `regulated-comms`
+
+### `reg-unsubstantiated-superlative` (warning)
+
+Absolute or superlative claim creates legal/compliance exposure where scoped SLA terms belong.
+
+```text
+bad:  新同城双活备份方案提供绝对安全与永久零故障保障（SLA 99.95%），客户迁移零风险承诺。
+trap: 新同城双活备份方案打造坚不可摧的行业标杆级防线（SLA 99.95%）。
+good: 新同城双活备份方案合同承诺月度可用性 99.95%，迁移前支持演练回滚。
+```
+
+### `reg-unanchored-multiplier` (warning)
+
+Floating speedup or efficiency multiplier ('10x faster') omits the before/after baseline.
+
+```text
+bad:  接入新版流式批处理引擎后，对账单导出效率提升数倍。
+trap: 接入新版流式批处理引擎后，对账单导出迎来质的飞跃。
+good: 接入新版流式批处理引擎后，对账单改为按块流式导出，无需等待全表缓存在内存。
+```
+
 ## Pack: `literary-essay`
 
 ### `zh-essay-moralizing-ending` (warning)
@@ -173,6 +227,28 @@ Content-heavy slide uses a generic topic label (`Overview`, `Background`, `背�
 bad:  Title: 'Background' (above 65 words detailing 38% cart abandonment on mobile Safari)
 trap: Title: 'Reimagining Checkout Excellence'
 good: Title: 'Mobile Safari accounts for 38% of cart abandonment due to 4-step address entry'
+```
+
+## Pack: `executive-deck`
+
+### `slide-process-not-finding-title` (warning)
+
+Topic-label headline names the work done ('Analysis of X') instead of stating the finding.
+
+```text
+bad:  ## 关于三季度新客首周流失率（34% 降至 19%）的分析汇报
+trap: ## 重塑新客留存增长飞轮
+good: ## 三季度新客首周流失率从 34% 降至 19%
+```
+
+### `pptx-layout-monotony` (info)
+
+Four or more consecutive slides repeat the exact same plain text-box skeleton without tables, charts, or visual variation.
+
+```text
+bad:  Slides 2–5 all use identical 'Title + 4 plain bullets' boxes with zero tables, charts, or diagrams.
+trap: Slides 2–5 keep the exact same 4 bullets per slide and add decorative stock icons.
+good: Slide 3 presents regional latency in a 4-row table and Slide 4 plots weekly error budget burn.
 ```
 
 ## Positive Structural Specimens (Draft `dislop.voice/1`)

@@ -1,7 +1,7 @@
 ---
 content-type: reference-data
 task: editorial-writing
-version: 0.4.0
+version: 0.6.0
 ---
 
 # Task Bundle: Editorial & Literary Writing
@@ -29,6 +29,9 @@ Use this bundle for longform essays, non-fiction reporting, and narrative drafts
 - [`literary-negation-pivot`](../rules/literary-negation-pivot.md) (`warning`): Formulaic `Not X, but Y` / `不是 A，而是 B` aphorism interrupts narrative texture.
 - [`excessive-em-dash-density`](../rules/excessive-em-dash-density.md) (`info`): High em-dash (`—` / `——`) frequency creates breathless LLM parenthetical rhythm.
 - [`zh-halfwidth-punctuation`](../rules/zh-halfwidth-punctuation.md) (`warning`): Half-width ASCII punctuation (`,;:!?`) wedged directly between Chinese characters.
+- [`literary-semicolon-tricolon`](../rules/literary-semicolon-tricolon.md) (`warning`): Balanced three-part semicolon sentence turns scene description into synthetic lyrical cadence.
+- [`literary-rhetorical-qa`](../rules/literary-rhetorical-qa.md) (`warning`): Staged self-answered rhetorical question ('Why does ...? Because ...') lectures the reader instead of showing the scene.
+- [`literary-narrative-frame`](../rules/literary-narrative-frame.md) (`warning`): Sweeping era opener ('In an era defined by...') or uplifting takeaway closer wraps a personal essay in an LLM template.
 
 ## 3. Reference Contrast
 

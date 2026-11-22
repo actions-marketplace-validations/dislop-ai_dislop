@@ -2,10 +2,10 @@
   "schema": "dislop.bench-report/1",
   "detection": {
     "schema": "dislop.bench-detection/1",
-    "totalSamples": 64,
-    "tp": 32,
+    "totalSamples": 112,
+    "tp": 56,
     "fp": 0,
-    "tn": 32,
+    "tn": 56,
     "fn": 0,
     "precision": 1,
     "recall": 1,
@@ -17,34 +17,35 @@
     "pythonAvailable": true,
     "pythonError": null,
     "parityRate": 1,
+    "profileParityRate": 1,
     "byDomain": {
       "zh-brief": {
-        "tp": 8,
+        "tp": 18,
         "fp": 0,
-        "tn": 8,
+        "tn": 17,
         "fn": 0,
-        "total": 16
+        "total": 35
       },
       "zh-essay": {
-        "tp": 5,
-        "fp": 0,
-        "tn": 4,
-        "fn": 0,
-        "total": 9
-      },
-      "en-brief": {
-        "tp": 8,
+        "tp": 7,
         "fp": 0,
         "tn": 7,
         "fn": 0,
-        "total": 15
+        "total": 14
+      },
+      "en-brief": {
+        "tp": 18,
+        "fp": 0,
+        "tn": 16,
+        "fn": 0,
+        "total": 34
       },
       "en-essay": {
-        "tp": 3,
+        "tp": 5,
         "fp": 0,
-        "tn": 4,
+        "tn": 7,
         "fn": 0,
-        "total": 7
+        "total": 12
       },
       "web-ui": {
         "tp": 4,
@@ -103,11 +104,35 @@
       },
       "near-miss": {
         "hit": 0,
-        "total": 5
+        "total": 17
       },
       "clean": {
         "hit": 0,
-        "total": 3
+        "total": 15
+      },
+      "cooccurrence-cluster": {
+        "hit": 4,
+        "total": 4
+      },
+      "punctuation-cadence": {
+        "hit": 6,
+        "total": 6
+      },
+      "narrative-structure": {
+        "hit": 4,
+        "total": 4
+      },
+      "skeleton-echo": {
+        "hit": 4,
+        "total": 4
+      },
+      "statistical-monotony": {
+        "hit": 2,
+        "total": 2
+      },
+      "subtle-multi-signal": {
+        "hit": 4,
+        "total": 4
       }
     },
     "details": [
@@ -980,22 +1005,697 @@
         "nodeRuleIds": [],
         "pyRuleIds": [],
         "parityOk": true
+      },
+      {
+        "id": "th2-01-zh-cooc-slop",
+        "domain": "zh-brief",
+        "expected": "slop",
+        "category": "cooccurrence-cluster",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "cooccurrence-slop-cluster"
+        ],
+        "pyRuleIds": [
+          "cooccurrence-slop-cluster"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-02-zh-cooc-slop2",
+        "domain": "zh-brief",
+        "expected": "slop",
+        "category": "cooccurrence-cluster",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "cooccurrence-slop-cluster"
+        ],
+        "pyRuleIds": [
+          "cooccurrence-slop-cluster"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-03-en-cooc-slop",
+        "domain": "en-brief",
+        "expected": "slop",
+        "category": "cooccurrence-cluster",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "cooccurrence-slop-cluster"
+        ],
+        "pyRuleIds": [
+          "cooccurrence-slop-cluster"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-04-en-cooc-slop2",
+        "domain": "en-brief",
+        "expected": "slop",
+        "category": "cooccurrence-cluster",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "cooccurrence-slop-cluster"
+        ],
+        "pyRuleIds": [
+          "cooccurrence-slop-cluster"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-05-zh-cooc-clean",
+        "domain": "zh-brief",
+        "expected": "clean",
+        "category": "near-miss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-06-zh-cooc-clean2",
+        "domain": "zh-brief",
+        "expected": "clean",
+        "category": "near-miss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-07-en-cooc-clean",
+        "domain": "en-brief",
+        "expected": "clean",
+        "category": "near-miss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-08-en-cooc-clean2",
+        "domain": "en-brief",
+        "expected": "clean",
+        "category": "near-miss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-09-zh-punct-tricolon-slop",
+        "domain": "zh-brief",
+        "expected": "slop",
+        "category": "punctuation-cadence",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "semicolon-tricolon"
+        ],
+        "pyRuleIds": [
+          "semicolon-tricolon"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-10-zh-punct-rhetqa-slop",
+        "domain": "zh-brief",
+        "expected": "slop",
+        "category": "punctuation-cadence",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "rhetorical-qa-cadence",
+          "rhetorical-qa-cadence"
+        ],
+        "pyRuleIds": [
+          "rhetorical-qa-cadence",
+          "rhetorical-qa-cadence"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-11-en-punct-tricolon-slop",
+        "domain": "en-brief",
+        "expected": "slop",
+        "category": "punctuation-cadence",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "semicolon-tricolon"
+        ],
+        "pyRuleIds": [
+          "semicolon-tricolon"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-12-en-punct-rhetqa-slop",
+        "domain": "en-brief",
+        "expected": "slop",
+        "category": "punctuation-cadence",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "rhetorical-qa-cadence",
+          "rhetorical-qa-cadence"
+        ],
+        "pyRuleIds": [
+          "rhetorical-qa-cadence",
+          "rhetorical-qa-cadence"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-13-zh-punct-clean",
+        "domain": "zh-brief",
+        "expected": "clean",
+        "category": "near-miss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-14-zh-punct-semi-clean",
+        "domain": "zh-brief",
+        "expected": "clean",
+        "category": "near-miss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-15-en-punct-clean",
+        "domain": "en-brief",
+        "expected": "clean",
+        "category": "near-miss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-16-en-punct-semi-clean",
+        "domain": "en-brief",
+        "expected": "clean",
+        "category": "near-miss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-17-zh-narrative-sandwich-slop",
+        "domain": "zh-brief",
+        "expected": "slop",
+        "category": "narrative-structure",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "narrative-sandwich-frame",
+          "narrative-sandwich-frame",
+          "narrative-sandwich-frame"
+        ],
+        "pyRuleIds": [
+          "narrative-sandwich-frame",
+          "narrative-sandwich-frame",
+          "narrative-sandwich-frame"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-18-zh-narrative-hedge-slop",
+        "domain": "zh-essay",
+        "expected": "slop",
+        "category": "narrative-structure",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "literary-narrative-frame",
+          "literary-narrative-frame",
+          "literary-narrative-frame"
+        ],
+        "pyRuleIds": [
+          "literary-narrative-frame",
+          "literary-narrative-frame",
+          "literary-narrative-frame"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-19-en-narrative-sandwich-slop",
+        "domain": "en-brief",
+        "expected": "slop",
+        "category": "narrative-structure",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "cooccurrence-slop-cluster",
+          "narrative-sandwich-frame",
+          "narrative-sandwich-frame",
+          "narrative-sandwich-frame"
+        ],
+        "pyRuleIds": [
+          "cooccurrence-slop-cluster",
+          "narrative-sandwich-frame",
+          "narrative-sandwich-frame",
+          "narrative-sandwich-frame"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-20-en-narrative-hedge-slop",
+        "domain": "en-essay",
+        "expected": "slop",
+        "category": "narrative-structure",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "literary-narrative-frame",
+          "literary-narrative-frame"
+        ],
+        "pyRuleIds": [
+          "literary-narrative-frame",
+          "literary-narrative-frame"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-21-zh-narrative-clean",
+        "domain": "zh-brief",
+        "expected": "clean",
+        "category": "clean",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-22-zh-essay-clean",
+        "domain": "zh-essay",
+        "expected": "clean",
+        "category": "clean",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-23-en-narrative-clean",
+        "domain": "en-brief",
+        "expected": "clean",
+        "category": "clean",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-24-en-essay-clean",
+        "domain": "en-essay",
+        "expected": "clean",
+        "category": "clean",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-25-zh-skeleton-echo-slop",
+        "domain": "zh-brief",
+        "expected": "slop",
+        "category": "skeleton-echo",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "template-skeleton-echo"
+        ],
+        "pyRuleIds": [
+          "template-skeleton-echo"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-26-zh-skeleton-firstly-slop",
+        "domain": "zh-brief",
+        "expected": "slop",
+        "category": "skeleton-echo",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "template-skeleton-echo"
+        ],
+        "pyRuleIds": [
+          "template-skeleton-echo"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-27-en-skeleton-echo-slop",
+        "domain": "en-brief",
+        "expected": "slop",
+        "category": "skeleton-echo",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "template-skeleton-echo"
+        ],
+        "pyRuleIds": [
+          "template-skeleton-echo"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-28-en-skeleton-firstly-slop",
+        "domain": "en-brief",
+        "expected": "slop",
+        "category": "skeleton-echo",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "template-skeleton-echo"
+        ],
+        "pyRuleIds": [
+          "template-skeleton-echo"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-29-zh-skeleton-clean",
+        "domain": "zh-brief",
+        "expected": "clean",
+        "category": "near-miss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-30-zh-skeleton-clean2",
+        "domain": "zh-essay",
+        "expected": "clean",
+        "category": "near-miss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-31-en-skeleton-clean",
+        "domain": "en-brief",
+        "expected": "clean",
+        "category": "near-miss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-32-en-skeleton-clean2",
+        "domain": "en-essay",
+        "expected": "clean",
+        "category": "near-miss",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-33-zh-monotony-vapor-slop",
+        "domain": "zh-brief",
+        "expected": "slop",
+        "category": "statistical-monotony",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "low-burstiness-vapor"
+        ],
+        "pyRuleIds": [
+          "low-burstiness-vapor"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-34-zh-comma-chain-slop",
+        "domain": "zh-brief",
+        "expected": "slop",
+        "category": "punctuation-cadence",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "comma-chain-runon"
+        ],
+        "pyRuleIds": [
+          "comma-chain-runon"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-35-en-monotony-vapor-slop",
+        "domain": "en-brief",
+        "expected": "slop",
+        "category": "statistical-monotony",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "low-burstiness-vapor"
+        ],
+        "pyRuleIds": [
+          "low-burstiness-vapor"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-36-en-comma-chain-slop",
+        "domain": "en-brief",
+        "expected": "slop",
+        "category": "punctuation-cadence",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "comma-chain-runon"
+        ],
+        "pyRuleIds": [
+          "comma-chain-runon"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-37-zh-bursty-clean",
+        "domain": "zh-brief",
+        "expected": "clean",
+        "category": "clean",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-38-zh-short-spec-clean",
+        "domain": "zh-brief",
+        "expected": "clean",
+        "category": "clean",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-39-en-bursty-clean",
+        "domain": "en-brief",
+        "expected": "clean",
+        "category": "clean",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-40-en-short-spec-clean",
+        "domain": "en-brief",
+        "expected": "clean",
+        "category": "clean",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-41-zh-multisig-slop",
+        "domain": "zh-brief",
+        "expected": "slop",
+        "category": "subtle-multi-signal",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "cooccurrence-slop-cluster",
+          "narrative-sandwich-frame",
+          "narrative-sandwich-frame",
+          "rhetorical-qa-cadence",
+          "template-skeleton-echo"
+        ],
+        "pyRuleIds": [
+          "cooccurrence-slop-cluster",
+          "narrative-sandwich-frame",
+          "narrative-sandwich-frame",
+          "rhetorical-qa-cadence",
+          "template-skeleton-echo"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-42-zh-multisig-essay-slop",
+        "domain": "zh-essay",
+        "expected": "slop",
+        "category": "subtle-multi-signal",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "literary-narrative-frame",
+          "literary-negation-pivot",
+          "literary-rhetorical-qa",
+          "literary-semicolon-tricolon"
+        ],
+        "pyRuleIds": [
+          "literary-narrative-frame",
+          "literary-negation-pivot",
+          "literary-rhetorical-qa",
+          "literary-semicolon-tricolon"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-43-en-multisig-slop",
+        "domain": "en-brief",
+        "expected": "slop",
+        "category": "subtle-multi-signal",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "cooccurrence-slop-cluster",
+          "narrative-sandwich-frame",
+          "narrative-sandwich-frame",
+          "rhetorical-qa-cadence",
+          "template-skeleton-echo"
+        ],
+        "pyRuleIds": [
+          "cooccurrence-slop-cluster",
+          "narrative-sandwich-frame",
+          "narrative-sandwich-frame",
+          "rhetorical-qa-cadence",
+          "template-skeleton-echo"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-44-en-multisig-essay-slop",
+        "domain": "en-essay",
+        "expected": "slop",
+        "category": "subtle-multi-signal",
+        "predicted": "slop",
+        "correct": true,
+        "nodeRuleIds": [
+          "literary-narrative-frame",
+          "literary-narrative-frame",
+          "literary-rhetorical-qa",
+          "literary-semicolon-tricolon"
+        ],
+        "pyRuleIds": [
+          "literary-narrative-frame",
+          "literary-narrative-frame",
+          "literary-rhetorical-qa",
+          "literary-semicolon-tricolon"
+        ],
+        "parityOk": true
+      },
+      {
+        "id": "th2-45-zh-multisig-clean",
+        "domain": "zh-brief",
+        "expected": "clean",
+        "category": "clean",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-46-zh-multisig-essay-clean",
+        "domain": "zh-essay",
+        "expected": "clean",
+        "category": "clean",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-47-en-multisig-clean",
+        "domain": "en-brief",
+        "expected": "clean",
+        "category": "clean",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
+      },
+      {
+        "id": "th2-48-en-multisig-essay-clean",
+        "domain": "en-essay",
+        "expected": "clean",
+        "category": "clean",
+        "predicted": "clean",
+        "correct": true,
+        "nodeRuleIds": [],
+        "pyRuleIds": [],
+        "parityOk": true
       }
     ]
   },
   "revision": {
-    "schema": "dislop.bench-revision/1",
-    "totalTasks": 12,
+    "schema": "dislop.bench-revision/2",
+    "totalTasks": 18,
     "arms": {
       "raw_ai": {
-        "evaluatedTasks": 12,
-        "avgComposite": 61.4,
-        "avgD1DetClearance": 11.4,
-        "avgD2ThirdOrder": 25,
+        "evaluatedTasks": 18,
+        "missingTasks": 0,
+        "missingTaskIds": [],
+        "avgComposite": 60.8,
+        "avgD1DetClearance": 9.6,
+        "avgD2ThirdOrder": 16.7,
         "avgD3Retention": 25,
-        "totalDetFindings": 29,
+        "avgD4Telemetry": 9.6,
+        "totalDetFindings": 51,
         "totalCoreErrors": 6,
-        "totalThirdOrderHits": 4,
+        "totalThirdOrderHits": 6,
         "avgNumericRetention": 100,
         "totalInventedNumbers": 0,
         "allClearTasks": 0,
@@ -1016,10 +1716,13 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 0,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
               "composite": 55
             },
             "cleanAllClear": false
@@ -1028,9 +1731,11 @@
             "taskId": "rev-zh-02-homepage-pitch",
             "domain": "zh-brief",
             "coreErrors": 0,
-            "styleFindings": 0,
-            "totalDetFindings": 0,
-            "detRuleIds": [],
+            "styleFindings": 1,
+            "totalDetFindings": 1,
+            "detRuleIds": [
+              "semicolon-tricolon"
+            ],
             "thirdOrderCount": 2,
             "thirdOrderProbes": [
               "struct-semicolon-tricolon",
@@ -1038,11 +1743,14 @@
             ],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 34,
             "scores": {
-              "d1": 45,
+              "d1": 31,
               "d2": 0,
               "d3": 25,
-              "composite": 70
+              "d4": 6,
+              "composite": 62
             },
             "cleanAllClear": false
           },
@@ -1060,11 +1768,14 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
-              "d1": 15,
-              "d2": 30,
+              "d1": 17,
+              "d2": 20,
               "d3": 25,
-              "composite": 70
+              "d4": 10,
+              "composite": 72
             },
             "cleanAllClear": false
           },
@@ -1083,11 +1794,14 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
-              "d1": 0,
-              "d2": 30,
+              "d1": 3,
+              "d2": 20,
               "d3": 25,
-              "composite": 55
+              "d4": 10,
+              "composite": 58
             },
             "cleanAllClear": false
           },
@@ -1106,10 +1820,13 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 0,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
               "composite": 55
             },
             "cleanAllClear": false
@@ -1118,9 +1835,11 @@
             "taskId": "rev-en-02-homepage-pitch",
             "domain": "en-brief",
             "coreErrors": 0,
-            "styleFindings": 0,
-            "totalDetFindings": 0,
-            "detRuleIds": [],
+            "styleFindings": 1,
+            "totalDetFindings": 1,
+            "detRuleIds": [
+              "semicolon-tricolon"
+            ],
             "thirdOrderCount": 2,
             "thirdOrderProbes": [
               "struct-semicolon-tricolon",
@@ -1128,11 +1847,14 @@
             ],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 34,
             "scores": {
-              "d1": 45,
+              "d1": 31,
               "d2": 0,
               "d3": 25,
-              "composite": 70
+              "d4": 6,
+              "composite": 62
             },
             "cleanAllClear": false
           },
@@ -1150,11 +1872,14 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
-              "d1": 15,
-              "d2": 30,
+              "d1": 17,
+              "d2": 20,
               "d3": 25,
-              "composite": 70
+              "d4": 10,
+              "composite": 72
             },
             "cleanAllClear": false
           },
@@ -1172,11 +1897,14 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 12,
             "scores": {
-              "d1": 15,
-              "d2": 30,
+              "d1": 17,
+              "d2": 20,
               "d3": 25,
-              "composite": 70
+              "d4": 10,
+              "composite": 72
             },
             "cleanAllClear": false
           },
@@ -1196,10 +1924,13 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 0,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
               "composite": 55
             },
             "cleanAllClear": false
@@ -1220,10 +1951,13 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 0,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
               "composite": 55
             },
             "cleanAllClear": false
@@ -1243,10 +1977,13 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 0,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
               "composite": 55
             },
             "cleanAllClear": false
@@ -1265,27 +2002,195 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
-              "d1": 2,
-              "d2": 30,
+              "d1": 3,
+              "d2": 20,
               "d3": 25,
-              "composite": 57
+              "d4": 10,
+              "composite": 58
+            },
+            "cleanAllClear": false
+          },
+          {
+            "taskId": "rev2-zh-01-saas-launch",
+            "domain": "zh-brief",
+            "coreErrors": 0,
+            "styleFindings": 6,
+            "totalDetFindings": 6,
+            "detRuleIds": [
+              "narrative-sandwich-frame",
+              "rhetorical-qa-cadence",
+              "template-skeleton-echo",
+              "cooccurrence-slop-cluster",
+              "narrative-sandwich-frame",
+              "narrative-sandwich-frame"
+            ],
+            "thirdOrderCount": 0,
+            "thirdOrderProbes": [],
+            "numericRetentionRate": 1,
+            "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 100,
+            "scores": {
+              "d1": 0,
+              "d2": 20,
+              "d3": 25,
+              "d4": 10,
+              "composite": 55
+            },
+            "cleanAllClear": false
+          },
+          {
+            "taskId": "rev2-zh-02-infra-memo",
+            "domain": "zh-brief",
+            "coreErrors": 0,
+            "styleFindings": 1,
+            "totalDetFindings": 1,
+            "detRuleIds": [
+              "template-skeleton-echo"
+            ],
+            "thirdOrderCount": 0,
+            "thirdOrderProbes": [],
+            "numericRetentionRate": 1,
+            "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 26,
+            "scores": {
+              "d1": 31,
+              "d2": 20,
+              "d3": 25,
+              "d4": 10,
+              "composite": 86
+            },
+            "cleanAllClear": false
+          },
+          {
+            "taskId": "rev2-zh-03-essay-bookshop",
+            "domain": "zh-essay",
+            "coreErrors": 0,
+            "styleFindings": 3,
+            "totalDetFindings": 3,
+            "detRuleIds": [
+              "literary-narrative-frame",
+              "literary-rhetorical-qa",
+              "literary-negation-pivot"
+            ],
+            "thirdOrderCount": 1,
+            "thirdOrderProbes": [
+              "struct-semicolon-tricolon"
+            ],
+            "numericRetentionRate": 1,
+            "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 50,
+            "scores": {
+              "d1": 3,
+              "d2": 10,
+              "d3": 25,
+              "d4": 10,
+              "composite": 48
+            },
+            "cleanAllClear": false
+          },
+          {
+            "taskId": "rev2-en-01-api-release",
+            "domain": "en-brief",
+            "coreErrors": 0,
+            "styleFindings": 5,
+            "totalDetFindings": 5,
+            "detRuleIds": [
+              "narrative-sandwich-frame",
+              "rhetorical-qa-cadence",
+              "template-skeleton-echo",
+              "cooccurrence-slop-cluster",
+              "narrative-sandwich-frame"
+            ],
+            "thirdOrderCount": 0,
+            "thirdOrderProbes": [],
+            "numericRetentionRate": 1,
+            "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 100,
+            "scores": {
+              "d1": 0,
+              "d2": 20,
+              "d3": 25,
+              "d4": 10,
+              "composite": 55
+            },
+            "cleanAllClear": false
+          },
+          {
+            "taskId": "rev2-en-02-postmortem",
+            "domain": "en-brief",
+            "coreErrors": 0,
+            "styleFindings": 2,
+            "totalDetFindings": 2,
+            "detRuleIds": [
+              "template-skeleton-echo",
+              "narrative-sandwich-frame"
+            ],
+            "thirdOrderCount": 1,
+            "thirdOrderProbes": [
+              "struct-discourse-cluster"
+            ],
+            "numericRetentionRate": 1,
+            "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 52,
+            "scores": {
+              "d1": 17,
+              "d2": 10,
+              "d3": 25,
+              "d4": 10,
+              "composite": 62
+            },
+            "cleanAllClear": false
+          },
+          {
+            "taskId": "rev2-en-03-essay-bakery",
+            "domain": "en-essay",
+            "coreErrors": 0,
+            "styleFindings": 3,
+            "totalDetFindings": 3,
+            "detRuleIds": [
+              "literary-narrative-frame",
+              "literary-rhetorical-qa",
+              "literary-narrative-frame"
+            ],
+            "thirdOrderCount": 0,
+            "thirdOrderProbes": [],
+            "numericRetentionRate": 1,
+            "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 50,
+            "scores": {
+              "d1": 3,
+              "d2": 20,
+              "d3": 25,
+              "d4": 10,
+              "composite": 58
             },
             "cleanAllClear": false
           }
         ]
       },
       "naive_humanizer": {
-        "evaluatedTasks": 12,
-        "avgComposite": 72.1,
-        "avgD1DetClearance": 33.8,
-        "avgD2ThirdOrder": 20,
-        "avgD3Retention": 18.3,
-        "totalDetFindings": 9,
+        "evaluatedTasks": 18,
+        "missingTasks": 0,
+        "missingTaskIds": [],
+        "avgComposite": 70.8,
+        "avgD1DetClearance": 31,
+        "avgD2ThirdOrder": 12.2,
+        "avgD3Retention": 18.1,
+        "avgD4Telemetry": 9.6,
+        "totalDetFindings": 18,
         "totalCoreErrors": 0,
-        "totalThirdOrderHits": 8,
-        "avgNumericRetention": 75.8,
-        "totalInventedNumbers": 3,
+        "totalThirdOrderHits": 14,
+        "avgNumericRetention": 77.2,
+        "totalInventedNumbers": 5,
         "allClearTasks": 1,
         "tasks": [
           {
@@ -1301,11 +2206,14 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 0,
             "inventedNumbers": 1,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
-              "d1": 30,
-              "d2": 30,
+              "d1": 31,
+              "d2": 20,
               "d3": 0,
-              "composite": 60
+              "d4": 10,
+              "composite": 61
             },
             "cleanAllClear": false
           },
@@ -1313,9 +2221,11 @@
             "taskId": "rev-zh-02-homepage-pitch",
             "domain": "zh-brief",
             "coreErrors": 0,
-            "styleFindings": 0,
-            "totalDetFindings": 0,
-            "detRuleIds": [],
+            "styleFindings": 1,
+            "totalDetFindings": 1,
+            "detRuleIds": [
+              "semicolon-tricolon"
+            ],
             "thirdOrderCount": 2,
             "thirdOrderProbes": [
               "struct-semicolon-tricolon",
@@ -1323,11 +2233,14 @@
             ],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 34,
             "scores": {
-              "d1": 45,
+              "d1": 31,
               "d2": 0,
               "d3": 25,
-              "composite": 70
+              "d4": 6,
+              "composite": 62
             },
             "cleanAllClear": false
           },
@@ -1344,11 +2257,14 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 0,
             "inventedNumbers": 1,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
-              "d1": 30,
-              "d2": 30,
+              "d1": 31,
+              "d2": 20,
               "d3": 0,
-              "composite": 60
+              "d4": 10,
+              "composite": 61
             },
             "cleanAllClear": false
           },
@@ -1365,11 +2281,14 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
-              "d1": 30,
-              "d2": 30,
+              "d1": 31,
+              "d2": 20,
               "d3": 25,
-              "composite": 85
+              "d4": 10,
+              "composite": 86
             },
             "cleanAllClear": false
           },
@@ -1386,11 +2305,14 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 0.5,
             "inventedNumbers": 1,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
-              "d1": 30,
-              "d2": 30,
+              "d1": 31,
+              "d2": 20,
               "d3": 5,
-              "composite": 65
+              "d4": 10,
+              "composite": 66
             },
             "cleanAllClear": false
           },
@@ -1398,9 +2320,11 @@
             "taskId": "rev-en-02-homepage-pitch",
             "domain": "en-brief",
             "coreErrors": 0,
-            "styleFindings": 0,
-            "totalDetFindings": 0,
-            "detRuleIds": [],
+            "styleFindings": 1,
+            "totalDetFindings": 1,
+            "detRuleIds": [
+              "semicolon-tricolon"
+            ],
             "thirdOrderCount": 2,
             "thirdOrderProbes": [
               "struct-semicolon-tricolon",
@@ -1408,11 +2332,14 @@
             ],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 34,
             "scores": {
-              "d1": 45,
+              "d1": 31,
               "d2": 0,
               "d3": 25,
-              "composite": 70
+              "d4": 6,
+              "composite": 62
             },
             "cleanAllClear": false
           },
@@ -1429,11 +2356,14 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
-              "d1": 30,
-              "d2": 30,
+              "d1": 31,
+              "d2": 20,
               "d3": 25,
-              "composite": 85
+              "d4": 10,
+              "composite": 86
             },
             "cleanAllClear": false
           },
@@ -1450,11 +2380,14 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
-              "d1": 30,
-              "d2": 30,
+              "d1": 31,
+              "d2": 20,
               "d3": 25,
-              "composite": 85
+              "d4": 10,
+              "composite": 86
             },
             "cleanAllClear": false
           },
@@ -1474,11 +2407,14 @@
             ],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
-              "d1": 30,
+              "d1": 31,
               "d2": 0,
               "d3": 25,
-              "composite": 55
+              "d4": 10,
+              "composite": 66
             },
             "cleanAllClear": false
           },
@@ -1498,11 +2434,14 @@
             ],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
-              "d1": 30,
+              "d1": 31,
               "d2": 0,
               "d3": 25,
-              "composite": 55
+              "d4": 10,
+              "composite": 66
             },
             "cleanAllClear": false
           },
@@ -1519,11 +2458,14 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 0.6,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
-              "d1": 30,
-              "d2": 30,
+              "d1": 31,
+              "d2": 20,
               "d3": 15,
-              "composite": 75
+              "d4": 10,
+              "composite": 76
             },
             "cleanAllClear": false
           },
@@ -1538,28 +2480,189 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 45,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
               "composite": 100
             },
             "cleanAllClear": true
+          },
+          {
+            "taskId": "rev2-zh-01-saas-launch",
+            "domain": "zh-brief",
+            "coreErrors": 0,
+            "styleFindings": 0,
+            "totalDetFindings": 0,
+            "detRuleIds": [],
+            "thirdOrderCount": 2,
+            "thirdOrderProbes": [
+              "struct-semicolon-tricolon",
+              "struct-pull-quote-closer"
+            ],
+            "numericRetentionRate": 0.8,
+            "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
+            "scores": {
+              "d1": 45,
+              "d2": 0,
+              "d3": 20,
+              "d4": 10,
+              "composite": 75
+            },
+            "cleanAllClear": false
+          },
+          {
+            "taskId": "rev2-zh-02-infra-memo",
+            "domain": "zh-brief",
+            "coreErrors": 0,
+            "styleFindings": 1,
+            "totalDetFindings": 1,
+            "detRuleIds": [
+              "semicolon-tricolon"
+            ],
+            "thirdOrderCount": 1,
+            "thirdOrderProbes": [
+              "struct-semicolon-tricolon"
+            ],
+            "numericRetentionRate": 0.6666666666666666,
+            "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 24,
+            "scores": {
+              "d1": 31,
+              "d2": 10,
+              "d3": 17,
+              "d4": 10,
+              "composite": 68
+            },
+            "cleanAllClear": false
+          },
+          {
+            "taskId": "rev2-zh-03-essay-bookshop",
+            "domain": "zh-essay",
+            "coreErrors": 0,
+            "styleFindings": 1,
+            "totalDetFindings": 1,
+            "detRuleIds": [
+              "literary-negation-pivot"
+            ],
+            "thirdOrderCount": 0,
+            "thirdOrderProbes": [],
+            "numericRetentionRate": 1,
+            "inventedNumbers": 1,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
+            "scores": {
+              "d1": 31,
+              "d2": 20,
+              "d3": 17,
+              "d4": 10,
+              "composite": 78
+            },
+            "cleanAllClear": false
+          },
+          {
+            "taskId": "rev2-en-01-api-release",
+            "domain": "en-brief",
+            "coreErrors": 0,
+            "styleFindings": 2,
+            "totalDetFindings": 2,
+            "detRuleIds": [
+              "semicolon-tricolon",
+              "negation-pivot-frame"
+            ],
+            "thirdOrderCount": 1,
+            "thirdOrderProbes": [
+              "struct-semicolon-tricolon"
+            ],
+            "numericRetentionRate": 0.6666666666666666,
+            "inventedNumbers": 1,
+            "degenerateProse": false,
+            "telemetryRiskScore": 24,
+            "scores": {
+              "d1": 17,
+              "d2": 10,
+              "d3": 9,
+              "d4": 10,
+              "composite": 46
+            },
+            "cleanAllClear": false
+          },
+          {
+            "taskId": "rev2-en-02-postmortem",
+            "domain": "en-brief",
+            "coreErrors": 0,
+            "styleFindings": 1,
+            "totalDetFindings": 1,
+            "detRuleIds": [
+              "semicolon-tricolon"
+            ],
+            "thirdOrderCount": 1,
+            "thirdOrderProbes": [
+              "struct-semicolon-tricolon"
+            ],
+            "numericRetentionRate": 0.6666666666666666,
+            "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 24,
+            "scores": {
+              "d1": 31,
+              "d2": 10,
+              "d3": 17,
+              "d4": 10,
+              "composite": 68
+            },
+            "cleanAllClear": false
+          },
+          {
+            "taskId": "rev2-en-03-essay-bakery",
+            "domain": "en-essay",
+            "coreErrors": 0,
+            "styleFindings": 2,
+            "totalDetFindings": 2,
+            "detRuleIds": [
+              "literary-semicolon-tricolon",
+              "literary-negation-pivot"
+            ],
+            "thirdOrderCount": 1,
+            "thirdOrderProbes": [
+              "struct-semicolon-tricolon"
+            ],
+            "numericRetentionRate": 1,
+            "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 24,
+            "scores": {
+              "d1": 17,
+              "d2": 10,
+              "d3": 25,
+              "d4": 10,
+              "composite": 62
+            },
+            "cleanAllClear": false
           }
         ]
       },
       "dislop_clean": {
-        "evaluatedTasks": 12,
+        "evaluatedTasks": 18,
+        "missingTasks": 0,
+        "missingTaskIds": [],
         "avgComposite": 100,
         "avgD1DetClearance": 45,
-        "avgD2ThirdOrder": 30,
+        "avgD2ThirdOrder": 20,
         "avgD3Retention": 25,
+        "avgD4Telemetry": 10,
         "totalDetFindings": 0,
         "totalCoreErrors": 0,
         "totalThirdOrderHits": 0,
         "avgNumericRetention": 100,
         "totalInventedNumbers": 0,
-        "allClearTasks": 12,
+        "allClearTasks": 18,
         "tasks": [
           {
             "taskId": "rev-zh-01-launch-note",
@@ -1572,10 +2675,13 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 45,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
               "composite": 100
             },
             "cleanAllClear": true
@@ -1591,10 +2697,13 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 45,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
               "composite": 100
             },
             "cleanAllClear": true
@@ -1610,10 +2719,13 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 45,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
               "composite": 100
             },
             "cleanAllClear": true
@@ -1629,10 +2741,13 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 45,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
               "composite": 100
             },
             "cleanAllClear": true
@@ -1648,10 +2763,13 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 45,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
               "composite": 100
             },
             "cleanAllClear": true
@@ -1667,10 +2785,13 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 45,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
               "composite": 100
             },
             "cleanAllClear": true
@@ -1686,10 +2807,13 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 45,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
               "composite": 100
             },
             "cleanAllClear": true
@@ -1705,10 +2829,13 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 45,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
               "composite": 100
             },
             "cleanAllClear": true
@@ -1724,10 +2851,13 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 45,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
               "composite": 100
             },
             "cleanAllClear": true
@@ -1743,10 +2873,13 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 45,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
               "composite": 100
             },
             "cleanAllClear": true
@@ -1762,10 +2895,13 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 45,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
               "composite": 100
             },
             "cleanAllClear": true
@@ -1781,10 +2917,145 @@
             "thirdOrderProbes": [],
             "numericRetentionRate": 1,
             "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
             "scores": {
               "d1": 45,
-              "d2": 30,
+              "d2": 20,
               "d3": 25,
+              "d4": 10,
+              "composite": 100
+            },
+            "cleanAllClear": true
+          },
+          {
+            "taskId": "rev2-zh-01-saas-launch",
+            "domain": "zh-brief",
+            "coreErrors": 0,
+            "styleFindings": 0,
+            "totalDetFindings": 0,
+            "detRuleIds": [],
+            "thirdOrderCount": 0,
+            "thirdOrderProbes": [],
+            "numericRetentionRate": 1,
+            "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
+            "scores": {
+              "d1": 45,
+              "d2": 20,
+              "d3": 25,
+              "d4": 10,
+              "composite": 100
+            },
+            "cleanAllClear": true
+          },
+          {
+            "taskId": "rev2-zh-02-infra-memo",
+            "domain": "zh-brief",
+            "coreErrors": 0,
+            "styleFindings": 0,
+            "totalDetFindings": 0,
+            "detRuleIds": [],
+            "thirdOrderCount": 0,
+            "thirdOrderProbes": [],
+            "numericRetentionRate": 1,
+            "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
+            "scores": {
+              "d1": 45,
+              "d2": 20,
+              "d3": 25,
+              "d4": 10,
+              "composite": 100
+            },
+            "cleanAllClear": true
+          },
+          {
+            "taskId": "rev2-zh-03-essay-bookshop",
+            "domain": "zh-essay",
+            "coreErrors": 0,
+            "styleFindings": 0,
+            "totalDetFindings": 0,
+            "detRuleIds": [],
+            "thirdOrderCount": 0,
+            "thirdOrderProbes": [],
+            "numericRetentionRate": 1,
+            "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
+            "scores": {
+              "d1": 45,
+              "d2": 20,
+              "d3": 25,
+              "d4": 10,
+              "composite": 100
+            },
+            "cleanAllClear": true
+          },
+          {
+            "taskId": "rev2-en-01-api-release",
+            "domain": "en-brief",
+            "coreErrors": 0,
+            "styleFindings": 0,
+            "totalDetFindings": 0,
+            "detRuleIds": [],
+            "thirdOrderCount": 0,
+            "thirdOrderProbes": [],
+            "numericRetentionRate": 1,
+            "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
+            "scores": {
+              "d1": 45,
+              "d2": 20,
+              "d3": 25,
+              "d4": 10,
+              "composite": 100
+            },
+            "cleanAllClear": true
+          },
+          {
+            "taskId": "rev2-en-02-postmortem",
+            "domain": "en-brief",
+            "coreErrors": 0,
+            "styleFindings": 0,
+            "totalDetFindings": 0,
+            "detRuleIds": [],
+            "thirdOrderCount": 0,
+            "thirdOrderProbes": [],
+            "numericRetentionRate": 1,
+            "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
+            "scores": {
+              "d1": 45,
+              "d2": 20,
+              "d3": 25,
+              "d4": 10,
+              "composite": 100
+            },
+            "cleanAllClear": true
+          },
+          {
+            "taskId": "rev2-en-03-essay-bakery",
+            "domain": "en-essay",
+            "coreErrors": 0,
+            "styleFindings": 0,
+            "totalDetFindings": 0,
+            "detRuleIds": [],
+            "thirdOrderCount": 0,
+            "thirdOrderProbes": [],
+            "numericRetentionRate": 1,
+            "inventedNumbers": 0,
+            "degenerateProse": false,
+            "telemetryRiskScore": 0,
+            "scores": {
+              "d1": 45,
+              "d2": 20,
+              "d3": 25,
+              "d4": 10,
               "composite": 100
             },
             "cleanAllClear": true

@@ -6,7 +6,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { auditText, resolveEffectivePack } from "../src/core.mjs";
-import { PACKS_BY_ID } from "../site/engine/packs-data.mjs";
+import { PACKS_BY_ID, RULE_UI_META } from "../site/engine/packs-data.mjs";
 import { AWESOME_DATA } from "../site/awesome/awesome-data.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -37,7 +37,7 @@ function contrastRatio(rgbA, rgbB) {
   return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
 }
 
-// 1. Verify packs-data.mjs ships zero raw fixtures arrays & all 23 Try rules trigger cleanly
+// 1. Verify packs-data.mjs ships zero raw fixtures arrays & all 36 Try rules trigger cleanly
 let totalRules = 0;
 let tryRulesChecked = 0;
 const textMods = new Set(["markdown", "text", "html", "css", "jsx", "svg"]);
@@ -76,12 +76,26 @@ for (const [pid, pack] of Object.entries(PACKS_BY_ID)) {
         `Try rule ${rule.id} did not trigger itself in browser workbench sample`
       );
     }
+
+    // Verify complete RULE_UI_META coverage & strict EN/ZH exemplar purity
+    const meta = RULE_UI_META[rule.id];
+    assert.ok(meta, `Missing RULE_UI_META entry for rule ${pid}/${rule.id}`);
+    assert.ok(meta.title?.zh && meta.title.zh !== rule.id, `Raw slug or missing ZH title for ${rule.id}`);
+    assert.ok(meta.title?.en, `Missing EN title for ${rule.id}`);
+    if (meta.lang !== "zh" && rule.exemplar) {
+      const enEx = meta.enEx || rule.exemplar;
+      assert.equal(
+        /[\u4E00-\u9FFF]/.test([enEx.bad, enEx.trap, enEx.good].filter(Boolean).join(" ")),
+        false,
+        `EN exemplar for ${rule.id} leaked Chinese characters`
+      );
+    }
   }
 }
-assert.equal(totalRules, 25, `Expected 25 total rules, got ${totalRules}`);
-assert.equal(tryRulesChecked, 20, `Expected 20 Try rules, got ${tryRulesChecked}`);
+assert.equal(totalRules, 42, `Expected 42 total rules, got ${totalRules}`);
+assert.equal(tryRulesChecked, 36, `Expected 36 Try rules, got ${tryRulesChecked}`);
 
-// 2. Verify Hero Proof Cards (ZH + EN) and all 10 language-pure specimens (5 ZH + 5 EN)
+// 2. Verify Hero Proof Cards (ZH + EN) and all 14 language-pure specimens (7 ZH + 7 EN)
 const appSource = fs.readFileSync(path.join(SITE_DIR, "app.js"), "utf8");
 const heroBlock = appSource.match(/const HERO_PROOF_BY_LANG = \{[\s\S]*?\n\};/);
 const specimenBlock = appSource.match(/const SPECIMENS_BY_LANG = \{[\s\S]*?\n\};/);
@@ -106,7 +120,7 @@ for (const lang of ["zh", "en"]) {
 let specimenCount = 0;
 for (const lang of ["zh", "en"]) {
   const list = specimensByLang[lang];
-  assert.equal(list.length, 5, `Expected 5 specimens for ${lang}`);
+  assert.equal(list.length, 7, `Expected 7 specimens for ${lang}`);
   for (const sp of list) {
     specimenCount += 1;
     const pack = resolveEffectivePack(sp.pack, PACKS_BY_ID);
@@ -179,7 +193,7 @@ const lightTokens = {
   ink3: "#5E646E",
   err: "#B42318",
   warn: "#1B52B0",
-  stet: "#1E6B47",
+  ok: "#1E6B47",
   ctrl: "#767C85",
 };
 const darkTokens = {
@@ -191,7 +205,7 @@ const darkTokens = {
   ink3: "#8C939E",
   err: "#FF7A6B",
   warn: "#85B4FF",
-  stet: "#6CD49B",
+  ok: "#6CD49B",
   ctrl: "#6F7784",
 };
 assert.ok(css.includes(`--control-border: ${lightTokens.ctrl};`), "Missing light --control-border token");
@@ -201,7 +215,7 @@ for (const [mode, t] of [
   ["light", lightTokens],
   ["dark", darkTokens],
 ]) {
-  for (const fg of [t.ink, t.ink2, t.ink3, t.err, t.warn, t.stet]) {
+  for (const fg of [t.ink, t.ink2, t.ink3, t.err, t.warn, t.ok]) {
     assert.ok(
       contrastRatio(parseHex(fg), parseHex(t.sheet)) >= 4.5,
       `${mode} text token ${fg} on sheet failed 4.5:1`
@@ -215,9 +229,14 @@ for (const [mode, t] of [
   }
 }
 
-// 6. Verify default Chinese HTML, brand baseline tokens, and OG card assets
+// 6. Verify default Chinese HTML, brand baseline tokens, 2-mark system, and OG card assets
 assert.ok(css.includes("--pen: #F04438;"), "Missing master Vermilion --pen token in site/styles.css");
-assert.ok(css.includes("border-bottom: 2px dotted var(--mark-stet);"), "Missing dotted stet underline in site/styles.css");
+assert.ok(css.includes("border-bottom: 2px solid var(--mark-error);"), "Missing solid error underline in site/styles.css");
+assert.ok(css.includes("border-bottom: 1.5px dashed var(--mark-warn);"), "Missing dashed warning underline in site/styles.css");
+assert.equal(css.includes("--mark-stet"), false, "site/styles.css must not define removed --mark-stet token");
+assert.equal(css.includes(".mark-stet"), false, "site/styles.css must not define removed .mark-stet rule");
+assert.equal(css.includes(".fact-lock-bar"), false, "site/styles.css must not define removed .fact-lock-bar rule");
+assert.equal(css.includes(".verify-banner"), false, "site/styles.css must not define dead .verify-banner rule");
 assert.ok(fs.existsSync(path.join(SITE_DIR, "methodology", "brand-and-voice.md")), "Missing site/methodology/brand-and-voice.md");
 assert.ok(fs.existsSync(path.join(ROOT, "ROADMAP.md")), "Missing root ROADMAP.md");
 assert.ok(fs.existsSync(path.join(ROOT, "ROADMAP.zh-CN.md")), "Missing root ROADMAP.zh-CN.md");
@@ -228,6 +247,7 @@ assert.ok(fs.existsSync(path.join(SITE_DIR, "assets", "og-card.svg")), "Missing 
 
 const indexHtml = fs.readFileSync(path.join(SITE_DIR, "index.html"), "utf8");
 const awesomeHtml = fs.readFileSync(path.join(SITE_DIR, "awesome", "index.html"), "utf8");
+const llmsTxt = fs.readFileSync(path.join(SITE_DIR, "llms.txt"), "utf8");
 assert.ok(indexHtml.includes('<html lang="zh-CN">'), "site/index.html should default to zh-CN");
 assert.ok(awesomeHtml.includes('<html lang="zh-CN">'), "site/awesome/index.html should default to zh-CN");
 assert.ok(indexHtml.includes('property="og:image" content="https://dislop.com/assets/og-card.png"'));
@@ -235,19 +255,52 @@ assert.equal(indexHtml.includes('data-theme="light"'), false, "index.html should
 assert.equal(/^[ \t]+$/m.test(indexHtml), false, "index.html contains whitespace-only lines");
 assert.equal(indexHtml.includes("NaN KB"), false, "index.html contains NaN KB in endpoints ledger");
 assert.equal(indexHtml.includes("undefined tok"), false, "index.html contains undefined tok in endpoints ledger");
+assert.equal(indexHtml.includes("dislop_verify"), false, "site/index.html must not reference dislop_verify");
+assert.equal(indexHtml.includes("dislop verify"), false, "site/index.html must not reference dislop verify");
+assert.equal(indexHtml.includes("fact-lock-bar"), false, "site/index.html must not contain #fact-lock-bar");
+assert.equal(indexHtml.includes("mark-stet"), false, "site/index.html must not contain mark-stet");
+assert.equal(llmsTxt.includes("dislop_verify"), false, "site/llms.txt must not reference dislop_verify");
+assert.equal(llmsTxt.includes("dislop verify"), false, "site/llms.txt must not reference dislop verify");
+assert.equal(llmsTxt.includes("fact-lock-bar"), false, "site/llms.txt must not reference fact-lock-bar");
+assert.equal(appSource.includes("verifyRevision"), false, "site/app.js must not import or call verifyRevision");
+assert.equal(appSource.includes("fact-lock-bar"), false, "site/app.js must not reference fact-lock-bar");
+assert.equal(appSource.includes("mark-stet"), false, "site/app.js must not render mark-stet spans");
 assert.equal(appSource.includes("rulesById"), false, "site/app.js must look up rules via pack.rules, not pack.rulesById");
 assert.equal(appSource.includes("f.column"), false, "site/app.js must use f.col, not f.column");
 assert.equal(appSource.includes("f.snippet"), false, "site/app.js must use f.match, not f.snippet");
 
-// 7. Verify Agent Plugin & MCP manifests plus Cases language purity
+// 7. Verify Agent Plugin, Codex, Gemini CLI & MCP Registry manifests plus Cases language purity
 const pluginJson = JSON.parse(fs.readFileSync(path.join(ROOT, ".claude-plugin", "plugin.json"), "utf8"));
 const marketplaceJson = JSON.parse(fs.readFileSync(path.join(ROOT, ".claude-plugin", "marketplace.json"), "utf8"));
+const portablePluginJson = JSON.parse(fs.readFileSync(path.join(ROOT, "plugin.json"), "utf8"));
+const portableMcpJson = JSON.parse(fs.readFileSync(path.join(ROOT, "mcp.json"), "utf8"));
+const codexPluginJson = JSON.parse(fs.readFileSync(path.join(ROOT, ".codex-plugin", "plugin.json"), "utf8"));
+const codexMarketplaceJson = JSON.parse(fs.readFileSync(path.join(ROOT, ".agents", "plugins", "marketplace.json"), "utf8"));
+const geminiExtensionJson = JSON.parse(fs.readFileSync(path.join(ROOT, "gemini-extension.json"), "utf8"));
+const serverJson = JSON.parse(fs.readFileSync(path.join(ROOT, "server.json"), "utf8"));
 const mcpJson = JSON.parse(fs.readFileSync(path.join(ROOT, ".mcp.json"), "utf8"));
 assert.equal(pluginJson.name, "dislop", "plugin.json name should be dislop");
 assert.equal(pluginJson.skills, "./skills/", "plugin.json should point to ./skills/");
 assert.equal(pluginJson.mcpServers, "./.mcp.json", "plugin.json should point to ./.mcp.json");
 assert.equal(marketplaceJson.plugins?.[0]?.name, "dislop", "marketplace.json should list dislop plugin");
+assert.equal(portablePluginJson.$schema, "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json");
+assert.equal("skills" in portablePluginJson, false, "portable plugin.json must not include top-level skills");
+assert.equal("mcpServers" in portablePluginJson, false, "portable plugin.json must not include top-level mcpServers");
+assert.ok(portableMcpJson.mcpServers?.dislop?.command, "mcp.json should define dislop stdio MCP command");
+assert.equal(codexPluginJson.name, "dislop", ".codex-plugin/plugin.json name should be dislop");
+assert.equal(codexMarketplaceJson.plugins?.[0]?.name, "dislop", ".agents/plugins/marketplace.json should list dislop");
+assert.equal(geminiExtensionJson.name, "dislop", "gemini-extension.json name should be dislop");
+assert.ok(serverJson.packages?.length >= 2, "server.json should declare npm and pypi packages");
+assert.equal(serverJson.remotes?.[0]?.type, "streamable-http", "server.json should declare remote streamable-http MCP");
+assert.equal(serverJson.remotes?.[0]?.url, "https://dislop.com/mcp", "server.json remote URL should point to dislop.com/mcp");
+assert.ok(fs.existsSync(path.join(ROOT, "skills", "dislop", "agents", "openai.yaml")), "Missing skills/dislop/agents/openai.yaml");
+assert.ok(fs.existsSync(path.join(ROOT, "action.yml")), "Missing root GitHub Action action.yml");
+assert.ok(fs.existsSync(path.join(ROOT, ".pre-commit-hooks.yaml")), "Missing .pre-commit-hooks.yaml");
 assert.ok(mcpJson.mcpServers?.dislop?.command, ".mcp.json should define dislop stdio MCP command");
+for (const refFile of ["business-and-rfc.md", "editorial-and-essay.md", "web-ui-and-deck.md", "regulated-and-precision.md"]) {
+  assert.ok(fs.existsSync(path.join(ROOT, "skills", "dislop", "references", refFile)), `Missing local Skill reference ${refFile}`);
+  assert.ok(fs.existsSync(path.join(SITE_DIR, "tools", "references", refFile)), `Missing compiled site Skill reference ${refFile}`);
+}
 
 const casesBlock = appSource.match(/const CASES_BY_LANG = \{[\s\S]*?\n\};/);
 assert.ok(casesBlock, "Could not locate CASES_BY_LANG in site/app.js");

@@ -12,7 +12,11 @@
       "filename": "rollout.md",
       "expected": "slop",
       "category": "artifact",
-      "expectedRuleIds": ["chatbot-artifact"],
+      "expectedRuleIds": [
+        "chatbot-artifact"
+      ],
+      "source": "original-dislop-bench-v2",
+      "license": "CC0-1.0",
       "text": "周二 10:00 切流，预计耗时 15 分钟。希望这对你有帮助！"
     },
     {
@@ -23,7 +27,11 @@
       "filename": "arch.md",
       "expected": "slop",
       "category": "second-order",
-      "expectedRuleIds": ["negation-pivot-frame"],
+      "expectedRuleIds": [
+        "negation-pivot-frame"
+      ],
+      "source": "original-dislop-bench-v2",
+      "license": "CC0-1.0",
       "text": "这绝非简单的参数调优，而是底层架构的彻底重塑。"
     },
     {
@@ -34,7 +42,11 @@
       "filename": "rain.md",
       "expected": "slop",
       "category": "slop",
-      "expectedRuleIds": ["zh-essay-moralizing-ending"],
+      "expectedRuleIds": [
+        "zh-essay-moralizing-ending"
+      ],
+      "source": "original-dislop-bench-v2",
+      "license": "CC0-1.0",
       "text": "窗外的雨停了。归根结底，效率从来不是工具赋予的，而是团队共同的选择。"
     },
     {
@@ -45,7 +57,11 @@
       "filename": "rfc.md",
       "expected": "slop",
       "category": "artifact",
-      "expectedRuleIds": ["chatbot-artifact"],
+      "expectedRuleIds": [
+        "chatbot-artifact"
+      ],
+      "source": "original-dislop-bench-v2",
+      "license": "CC0-1.0",
       "text": "Happy to help! Below is the updated RFC for cache invalidation."
     },
     {
@@ -56,7 +72,11 @@
       "filename": "search.md",
       "expected": "slop",
       "category": "second-order",
-      "expectedRuleIds": ["negation-pivot-frame"],
+      "expectedRuleIds": [
+        "negation-pivot-frame"
+      ],
+      "source": "original-dislop-bench-v2",
+      "license": "CC0-1.0",
       "text": "It is not merely a redesign, but a complete reimagining of search."
     },
     {
@@ -67,7 +87,11 @@
       "filename": "intro.md",
       "expected": "slop",
       "category": "slop",
-      "expectedRuleIds": ["en-throat-clearing-opener"],
+      "expectedRuleIds": [
+        "en-throat-clearing-opener"
+      ],
+      "source": "original-dislop-bench-v2",
+      "license": "CC0-1.0",
       "text": "In today's fast-paced digital landscape, teams need clear metrics."
     },
     {
@@ -78,7 +102,11 @@
       "filename": "sdk.html",
       "expected": "slop",
       "category": "artifact",
-      "expectedRuleIds": ["ui-dead-control"],
+      "expectedRuleIds": [
+        "ui-dead-control"
+      ],
+      "source": "original-dislop-bench-v2",
+      "license": "CC0-1.0",
       "text": "<a href=\"javascript:void(0)\">Download SDK</a>"
     },
     {
@@ -89,7 +117,11 @@
       "filename": "canary.md",
       "expected": "slop",
       "category": "artifact",
-      "expectedRuleIds": ["unfilled-placeholder"],
+      "expectedRuleIds": [
+        "unfilled-placeholder"
+      ],
+      "source": "original-dislop-bench-v2",
+      "license": "CC0-1.0",
       "text": "本次灰度覆盖 [待填写] 个集群，下周三全量。"
     },
     {
@@ -101,6 +133,8 @@
       "expected": "clean",
       "category": "near-miss",
       "expectedRuleIds": [],
+      "source": "original-dislop-bench-v2",
+      "license": "CC0-1.0",
       "text": "示例输入如下：\n```text\nCertainly! Here is your draft. 全面赋能抓手。\n```\n实测耗时 12ms。"
     },
     {
@@ -112,6 +146,8 @@
       "expected": "clean",
       "category": "near-miss",
       "expectedRuleIds": [],
+      "source": "original-dislop-bench-v2",
+      "license": "CC0-1.0",
       "text": "The timeout wasn't 30s — it was 300s because of the proxy default."
     },
     {
@@ -123,6 +159,8 @@
       "expected": "clean",
       "category": "near-miss",
       "expectedRuleIds": [],
+      "source": "original-dislop-bench-v2",
+      "license": "CC0-1.0",
       "text": "报错原因不是磁盘满，而是 inode 耗尽导致无法创建临时文件。"
     },
     {
@@ -134,6 +172,8 @@
       "expected": "clean",
       "category": "clean",
       "expectedRuleIds": [],
+      "source": "original-dislop-bench-v2",
+      "license": "CC0-1.0",
       "text": "Run `dlv debug` (the Go debugger) to inspect goroutines on port 2345."
     },
     {
@@ -145,6 +185,8 @@
       "expected": "clean",
       "category": "near-miss",
       "expectedRuleIds": [],
+      "source": "original-dislop-bench-v2",
+      "license": "CC0-1.0",
       "text": "<button type=\"button\" disabled title=\"Disabled until a CSV is uploaded\">Export CSV</button>"
     },
     {
@@ -156,6 +198,8 @@
       "expected": "clean",
       "category": "near-miss",
       "expectedRuleIds": [],
+      "source": "original-dislop-bench-v2",
+      "license": "CC0-1.0",
       "text": "<a href=\"#pricing\">See pricing</a>"
     },
     {
@@ -167,6 +211,8 @@
       "expected": "clean",
       "category": "clean",
       "expectedRuleIds": [],
+      "source": "original-dislop-bench-v2",
+      "license": "CC0-1.0",
       "text": "Q4 结算引擎采用全链路异步化架构，峰值 TPS 从 1,200 提升至 4,800，P99 延迟从 210ms 降至 42ms，数据一致性达 99.99%。"
     },
     {
@@ -178,6 +224,8 @@
       "expected": "clean",
       "category": "clean",
       "expectedRuleIds": [],
+      "source": "original-dislop-bench-v2",
+      "license": "CC0-1.0",
       "text": "At 05:40 the crane stopped—two bolts had sheared on the south rail—and the crew waited for the replacement kit from Rotterdam."
     }
   ]

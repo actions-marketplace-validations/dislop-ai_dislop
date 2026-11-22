@@ -103,7 +103,7 @@
 | [sam-paech/slop-forensics](https://github.com/sam-paech/slop-forensics) | `prose` / `en` | 自动检查 | 374★ · 2025-11-01 | 面向大模型输出语料的统计取证与高频词、三元组挖掘工具包。 |
 | [eric-tramel/slop-guard](https://github.com/eric-tramel/slop-guard) | `prose` / `en` | 自动检查 | 168★ · 2026-07-09 | 零 LLM 裁判的规则驱动英文散文 0–100 打分器。 |
 | [FeedHive/ai-slop-detector](https://github.com/FeedHive/ai-slop-detector) | `prose` / `en` | 自动检查 | 113★ · 2026-10-12 | 9 大类 120 条英文模式清单，提供浏览器在线检查页与配套 Agent Skill。 |
-| [dislop-ai/dislop (本仓库)](https://github.com/dislop-ai/dislop) | `multi-modal` / `multilingual` | 自动检查 | 1★ · 2026-11-21 | 给 AI 写的东西配一支红笔：零依赖检查中英文稿、网页/SVG、Word、PPT 和 PDF 元数据，改完拿原稿对一遍数字、链接和引用，附不上传的浏览器工作台与 MCP。 |
+| [dislop-ai/dislop (本仓库)](https://github.com/dislop-ai/dislop) | `multi-modal` / `multilingual` | 自动检查 | 2026-11-22 | 开源本地零依赖去 AI 味工具：内置 7 套场景规则包与 5 轴节奏统计，离线检查中英文稿、网页组件、Word 与 PPT 并锁死改稿数字与限定词，附零上传浏览器工作台、Skill 与 MCP。 |
 
 ## 前端界面、设计与图表
 

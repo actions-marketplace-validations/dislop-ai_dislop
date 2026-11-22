@@ -897,20 +897,21 @@
       "url": "https://github.com/dislop-ai/dislop",
       "homepage": "https://dislop.com",
       "repo": "dislop-ai/dislop",
-      "stars": 1,
-      "pushedAt": "2026-11-21",
+      "stars": null,
+      "pushedAt": "2026-11-22",
       "archived": false,
       "license": "Apache-2.0",
       "modality": "multi-modal",
       "locale": "multilingual",
       "stages": [
+        "upstream-prompt",
         "downstream-lint"
       ],
       "format": "cli-linter",
       "hasDeterministicCheck": true,
-      "summary": "给 AI 写的东西配一支红笔：零依赖检查中英文稿、网页/SVG、Word、PPT 和 PDF 元数据，改完拿原稿对一遍数字、链接和引用，附不上传的浏览器工作台与 MCP。",
+      "summary": "开源本地零依赖去 AI 味工具：内置 7 套场景规则包与 5 轴节奏统计，离线检查中英文稿、网页组件、Word 与 PPT 并锁死改稿数字与限定词，附零上传浏览器工作台、Skill 与 MCP。",
       "nameEn": "dislop-ai/dislop (this repo)",
-      "summaryEn": "A red pen for AI-written drafts, decks, and pages: zero-dependency checks for EN/ZH prose, HTML/CSS/SVG, DOCX, PPTX, and PDF metadata, plus edit comparison, offline browser workbench, and MCP."
+      "summaryEn": "Open-source zero-dependency anti-slop toolkit: ships 7 built-in packs, 5-axis rhythm telemetry, and zero-entropy fact verification across EN/ZH prose, HTML/CSS/JSX, DOCX, and PPTX, plus an offline browser workbench, Skill, and MCP."
     },
     {
       "id": "anthropics-skills-frontend-design",

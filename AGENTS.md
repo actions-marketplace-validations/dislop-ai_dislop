@@ -28,7 +28,8 @@
 - **样本脱敏与不编造事实**：纳入 `packs/` 或 `tests/` 的正反例样本须为原创构造或明确允许再分发的公开材料，每条 `exemplar` 记录 `source` 字段，且 `good` 改写稿不得凭空编造原句没有的事实或数值。
 - **离线确定性测试**：单测默认离线运行，严禁发起外部网络请求或调用付费模型接口；网站严禁加载第三方字体、统计脚本或外域请求（`connect-src 'self'`），离线检查保持默认零上传，仅在用户主动点击云端 AI 按钮时发往同源付费模型端点。
 
-## 4. 交付前跑什么
+## 4. 交付与发版前跑什么
 
-- 新增或修改规则时，在对应 `pack.json` 补至少 1 条命中样本（`fixtures.hit`）与 1 条易误报干净样本（`fixtures.clean`），并跑通 `node bin/dislop.mjs pack-test`、`PYTHONPATH=src python3 -m dislop.cli pack-test`、`node tests/test_site.mjs` 与 `PYTHONPATH=src python3 -m unittest discover -s tests`。
+- 新增或修改规则时，在对应 `pack.json` 补至少 1 条命中样本（`fixtures.hit`）与 1 条易误报干净样本（`fixtures.clean`），并跑通 `npm run release:check`（自动串联清单同源校验、开源脱敏扫描、官网构建、双端 `pack-test`、27 项跨端单测、全仓去 AI 味自查与打包校验）。
 - 修改 CLI 参数、MCP 工具协议或规则包结构时，同步更新 `README.md`、`README.zh-CN.md`、`docs/architecture.md` 与 `docs/architecture.zh-CN.md`。
+- 发新版本、打 Tag 或向各插件市场推送更新时，统一执行 `npm run release -- <X.Y.Z> ...`，各平台硬限制与上线顺序见 [docs/releasing.zh-CN.md](./docs/releasing.zh-CN.md)。

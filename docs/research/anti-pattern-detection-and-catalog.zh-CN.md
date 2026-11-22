@@ -1,15 +1,15 @@
 # `dislop` 反模式识别与查询体系：深度研究、分层架构与演进路线
 
-> 快照日期：2026-11-21 · 关联文档：[生态全景调研](./anti-slop-landscape-2026.zh-CN.md) · [路线图](../../ROADMAP.zh-CN.md) · 精确改造 Spec：[anti-pattern-catalog-and-probes-v0.3.md](../specs/anti-pattern-catalog-and-probes-v0.3.md) · 验证原型：[prototype_antipattern_lab.mjs](../../scripts/prototype_antipattern_lab.mjs)
+> 快照日期：2026-11-21（`v0.6.0` 状态已于 2026-11-22 核对更新） · 关联文档：[生态全景调研](./anti-slop-landscape-2026.zh-CN.md) · [5 轮模式库实证](./ai-slop-pattern-library-5-rounds.zh-CN.md) · [路线图](../../ROADMAP.zh-CN.md)
 >
 > 证据纪律：本文严格区分「经论文或公开基准核验的实证发现」与「基于开源规则集及社区公开实践的经验共识」，不把社区印象写成定量定理。
 
 ## 核心结论
 
 1. **去 AI 味的前提是可解释、可定位、可检索的反模式识别**。大模型在长文、汇报、文案与界面生成中存在显著的「风格惯性（style inertia）」，且不同模型家族会留下稳定的词法、句法与节奏指纹（Bitton et al., `arXiv:2503.01659`）。但单靠黑盒概率百分比无法指导改稿，也会因误报引发创作者抵触；真正可落地的是「**确定性探针 + 结构化反模式目录（Catalog）+ 可选轻量小模型增量**」的漏斗架构。
-2. **「低智能高专用」分层路线在工程与成本上完全成立**。早期 70%–80% 的高频反模式（客观交付事故、固定句式壳、逗号链与句长均一等节奏指标、CSS/Tailwind/SVG/PPTX 模板样式）可用零依赖确定性脚本在毫秒级检出；中后期对隐蔽语篇空洞、上下文歧义与视觉布局审美问题，可引入 150M–4B 级别的专用小模型（如多语种 `mmBERT` / `ModernBERT-base`、`Qwen3-0.6B/1.5B/4B + LoRA`、以及 `SmolVLM2` / `Qwen2.5-VL-3B`）作为可选插件，严格与零依赖核心包解耦。
-3. **「反模式查询（Catalog）」应建在现有 `packs/*/pack.json` 单一事实源之上**。`dislop` 当前 29 条规则已自带 `family`、`modalities`、`deletionTest` 与 `bad -> trap -> good` 三态示例，但缺少按关键词、症状、模态、维度与模型倾向检索的查询层，且 `site/` 规则表尚缺 SARIF 约定的 `#rule-<id>` 锚点与搜索过滤。优先将 `packs/` 升级为可执行、可检索的 `dislop catalog`（CLI + MCP + 浏览器目录），既不偏离「Agent 交付物印前检查」定位，又能把社区贡献引导至规则样本与对照案例。
-4. **独立原型已验证新探针与查询层可行性**。仓内新增零依赖原型 [prototype_antipattern_lab.mjs](../../scripts/prototype_antipattern_lab.mjs) 完成了全量 29 条规则多维检索与 5 条新型节奏/UI 确定性探针验证（全部正反断言通过，扫描仓内既有文件耗时约 30 ms，零误报），并实证暴露了中英文短语长度需分语种校准的关键工程细节。
+2. **「低智能高专用」分层路线在工程与成本上完全成立**。高频反模式（AI 交付残留、固定句式壳、逗号链与句长均一等节奏指标、CSS/Tailwind/PPTX 模板样式）可用零依赖确定性脚本在毫秒级检出；针对避开禁用词的隐蔽温吞水段落，`v0.6.0` 已随包内置 `14.6 KB` 去词面化传统集成模型（`models/pocket-slop-v1.json`），并把重型生成小模型与视觉 VLM 严格与零依赖核心包解耦。
+3. **「反模式查询（Catalog）」已建在 `packs/*/pack.json` 与 `patterns/dimensions/*.json` 之上**。`v0.6.0` 已落地 7 套内置规则包（42 条活跃规则）与 6 维度 7 角度 53 条结构化反模式库，并同步交付 `dislop catalog` CLI、MCP `dislop_catalog` 与 `site/` 规则表 `#rule-<id>` 锚点检索。
+4. **原型探索阶段验证的节奏与 UI 探针均已正式合入生产引擎**：`comma-chain-runon`、`low-burstiness-vapor`、`pptx-layout-monotony` 已进入 `packs/` 与 `src/core.mjs` / `src/dislop/engine.py`，`discourse-marker-cluster`、`ui-glassmorphism-overuse`、`ui-accent-stripe-card` 已进入 `patterns/banks/` 与 `src/pattern-engine.mjs` / `src/dislop/pattern_engine.py`（全量 154 样本实测见 [PATTERN-BENCHMARK.md](../../benchmarks/PATTERN-BENCHMARK.md)）。
 
 ---
 
@@ -54,7 +54,7 @@
 
 | 检出层级 | 适用媒介与输入源 | 典型 AI 设计反模式 | 确定性/技术实现方式 | 误报风险与边界 |
 |---|---|---|---|---|
-| **A. 零渲染静态可检层**（`dislop` 核心主场） | `.html` / `.css` / `.jsx` / `.tsx` / `.svg` / `.pptx` / `.docx` / `.pdf` 源码与 XML | 1. 紫粉/蓝紫霓虹渐变与 `background-clip: text` 渐变大字<br>2. 胶囊标签泛滥（单视图 `> 6` 个 `rounded-full`）<br>3. 三层套盒（`box-in-box-in-box`）<br>4. **毛玻璃滥用**（`backdrop-blur` 单视图 `>= 3` 处）<br>5. **侧边粗彩条卡片**（`border-l-4` / `border-left: 4px solid` 堆叠 `>= 3` 处）<br>6. WCAG AA 对比度不达标与深色模式 Z 轴亮度倒置<br>7. 死点击控件与提示词回声标签（`AI-Powered`）<br>8. SVG `<text>` 越出 `viewBox` 与缺失 `<title>`<br>9. PPTX 文字墙、要点超限、`normAutofit < 80%`、文本框越界、**全套演示跨页版式高度单一** | 正则 + 轻量词法/标签栈解析 + CSS 变量颜色求值 + OOXML 几何坐标与属性统计 + PDF 对象字典检查 | 单文件静态分析无法计算跨 CSS 文件级联覆盖后的最终计算样式；须明确声明「仅检静态可解析声明」 |
+| **A. 零渲染静态可检层**（`dislop` 核心主场） | `.html` / `.css` / `.jsx` / `.tsx` / `.svg` / `.pptx` / `.docx` 源码与 XML | 1. 紫粉/蓝紫霓虹渐变与 `background-clip: text` 渐变大字<br>2. 胶囊标签泛滥（单视图 `> 6` 个 `rounded-full`）<br>3. 三层套盒（`box-in-box-in-box`）<br>4. **毛玻璃滥用**（`backdrop-blur` 单视图 `>= 3` 处）<br>5. **侧边粗彩条卡片**（`border-l-4` / `border-left: 4px solid` 堆叠 `>= 3` 处）<br>6. 死点击控件（`<a href="#">`、无说明 `<button disabled>`）与提示词回声标签（`AI-Powered`）<br>7. PPTX 文字墙、要点超限、`normAutofit < 80%`、空泛过程标题与**全套演示跨页版式高度单一** | 正则 + 轻量词法/标签栈解析 + OOXML 几何坐标与属性统计（不做通用 WCAG 对比度审计或 PDF 印前检查） | 单文件静态分析无法计算跨 CSS 文件级联覆盖后的最终计算样式；须明确声明「仅检静态可解析声明」 |
 | **B. 渲染态 DOM / 几何可检层**（可选 Headless / Playwright 扩展） | 渲染后的网页 DOM 树、`getComputedStyle`、元素 `getBoundingClientRect`、PDF 渲染坐标 | 1. **均等三栏图标卡片模板**（3 个同宽同高兄弟节点，均含顶部图标 + 居中标题 + 2 行说明）<br>2. **巨型居中指标 + 微小副标模板**与过多居中对齐正文<br>3. 真实重叠遮挡、小屏横向溢出（`scrollWidth > innerWidth`）、动态背景上的真实文字对比度<br>4. 布局抖动动效（对 `width`/`height`/`top`/`left` 做 transition）<br>5. 字体阶梯扁平（`h1` 到正文缺乏清晰比例跨度） | Headless Chromium 抓取计算样式与布局框（bounding box），执行确定性几何规则 | 依赖外部浏览器运行时，不放入 `dislop` 零依赖核心包，适合作为可选 CI 插件或与 `impeccable` 互补 |
 | **C. 视觉 / 多模态模型必要层**（P2 轻量 VLM） | 网页整页截图、海报/宣传图、PPT 渲染图、配图素材 | 1. **平面构图与留白呼吸感失衡**（元素虽未越界但重心偏斜或视觉拥挤）<br>2. **信息层级失效**（首屏找不到主视觉焦点，所有卡片同等抢眼）<br>3. **配图「塑料感」与风格割裂**（过度光滑皮肤、虚假霓虹反光、同页混用写实图与扁平矢量）<br>4. **第二代审美同质化**（虽避开紫粉渐变，但整体观感仍像默认暖米白 SaaS 模板）<br>5. 复杂海报中的图文遮挡与阅读动线断裂 | 截图缩放至 `768–1024px` 后送入轻量 VLM（`Qwen2.5-VL-3B` / `SmolVLM2` / `Gemma-3 4B`）输出结构化 JSON 诊断 | 存在主观波动与较高延迟，仅作 `info` 级设计审校建议，禁止设为 CI 硬阻断错误 |
 
@@ -67,30 +67,29 @@
 核心设计判断：**不需要也不应该用大参数通用 LLM 去干基础反模式识别**。大模型既慢又贵、结果不可复现，还容易在审校时产生幻觉；而纯规则脚本难以处理高度依赖上下文的隐蔽套话与整页视觉构图。最优工程形态是四级漏斗，逐层递减调用量、逐层提升语义覆盖：
 
 ```text
-输入交付物 (.md / .html / .css / .svg / .docx / .pptx / .pdf / 可选截图)
+输入交付物 (.md / .html / .css / .jsx / .svg / .docx / .pptx / 可选截图)
    │
    ▼
-[Stage L0: 确定性硬底线 · packs/core · < 5 ms · 0 误报目标]
-   ├── 路径泄露、占位符、AI 寒暄残迹、Office 修订/批注、死控件、对比度、越界
+[Stage L0: 确定性 AI 残留底线 · packs/core · < 5 ms · 0 误报目标]
+   ├── 正文 AI 寒暄、未填占位符、Word/PPT 裸 Markdown、空链接与占位禁用按钮
    └── 直接触发 error，阻断 CI / 提交（绝不交由模型覆盖）
    │
    ▼
-[Stage L1: 确定性统计、节奏与结构探针 · packs/<genre> · 5–40 ms]
+[Stage L1: 确定性统计、节奏与结构探针 · packs/<genre> + patterns/banks · 5–40 ms]
    ├── 长度保真掩码区（屏蔽代码块、URL、引用、专名白名单）
-   ├── 词法/句式探针 + 节奏指标（逗号链、句长 CV、路标簇）+ 静态 UI/PPTX 探针
-   └── 输出精确行号、量化指标、删除测试与 bad -> trap -> good 对照
+   ├── 词法共现/句式探针 + 节奏指标（逗号链、句长 CV、路标簇）+ 静态 UI/PPTX 探针
+   └── 输出精确行号、量化指标、判断方法与 bad -> trap -> good 对照
    │
-   ▼ (仅当用户显式开启 `--ml` / 本地插件，且 L1 存在灰区段落或需深度体检)
-[Stage L2: 轻量编码器 / 分类器 · 86M–300M INT8 ONNX · 20–120 ms/文档]
-   ├── 职责 A（歧义消解）：复核 L1 边界命中（如真技术对比 vs. 虚假“不是 A，而是 B”）
-   ├── 职责 B（细粒度多标签分类）：检出隐蔽空话、防御性废话、中英翻译腔、过度均衡套话
-   └── 仅输出段落级定位 + 校准概率 + 所属反模式 ID，不改写原文
+   ▼ (开启 `--ml` 时零依赖毫秒级触发)
+[Stage L2: 随包内置传统集成模型 · models/pocket-slop-v1.json · 14.6 KB gzip · < 0.5 ms]
+   ├── 检出避开全部禁用词的 2–4 句隐蔽温吞水段落，并输出前三大可解释归因
+   └── 无后缀文本 `--pack auto` 自动场景路由
    │
-   ▼ (按需触发：视觉截图审查或复杂语篇归因)
-[Stage L3: 0.5B–4B 开源小模型 / 轻量 VLM · 本地 llama.cpp / WebGPU · 0.3–2.5 s]
-   ├── 文本：Qwen3-0.6B/1.5B/4B + LoRA + JSON Grammar 约束输出结构化证据句
-   ├── 视觉：Qwen2.5-VL-3B / SmolVLM2 审计 UI 截图与 PPT 渲染页的层级、留白与塑料感
-   └── 严格降级为 `info` 商榷建议，并保留规则层 `dislop verify` 做改后事实锁死
+   ▼ (按需触发：离线改写或视觉截图审查)
+[Stage L3: 0.6B–4B 开源小模型 / 托管云端自愈与轻量 VLM]
+   ├── 文本：可选本地 Qwen3-0.6B/1.7B/4B（`dislop deslop --local`）或托管 `dislop-cloud`
+   ├── 视觉：未来云端 VLM 审计 UI 截图与 PPT 渲染页的层级、留白与塑料感
+   └── 自动改写阶段内置内部数字与边界限定词保真护栏，不作为独立 diff 命令暴露
 ```
 
 ### 2.2 早期核心：确定性静态层的误报控制与可解释设计
@@ -152,35 +151,19 @@
    - 在现有按 Pack 筛选基础上，增加实时中英搜索框 + 维度/模态/严重级筛选器；
    - 表格支持展开查看完整的 `bad -> trap -> good` 三态对照（当前表格只渲染了 `bad` 和 `good`，漏掉了极具教学价值的 `trap` 二阶陷阱！）及「在上方工作台试运行此样本」一键按钮。
 
-### 3.2 「反模式识别」增量蓝图
+### 3.2 「反模式识别」落地状态总览（`v0.6.0` 已合入生产）
 
-结合前述研究与现存 29 条规则版图，优先补齐 **6 条高信噪比确定性探针**（完整数学定义、阈值与 `hit`/`clean` 测试用例见 [v0.3 Spec](../specs/anti-pattern-catalog-and-probes-v0.3.md)）：
+下表记录调研阶段提出的 6 条高信噪比确定性探针在 `v0.6.0` 中的最终落点（现已全部合入 7 套内置规则包与 `patterns/banks/`，共组成 53 条结构化反模式库）：
 
-| 候选规则 ID | 所属包 | 级别 | 家族 (`family`) | 适用模态 | 检出核心与误报护栏 |
+| 调研原型 ID | `v0.6.0` 生产 ID 与落点 | 级别 | 家族 (`family`) | 适用模态 | 检出核心与误报护栏 |
 |---|---|---|---|---|---|
-| `comma-chain-cadence` | `business-brief` / `literary-essay` | `info` | `rhythm/comma-chain` | `md`, `txt`, `html`, `docx` | 单句逗号 `>= 5` 且满足分语种长分句门槛；剥离千分位数字、括号引用、短格式枚举与链接列表 |
-| `sentence-length-monotony` | `literary-essay` / `business-brief` | `info` | `rhythm/monotony` | `md`, `txt`, `html`, `docx` | 有效正文段内句数 `>= 5`、均长过门槛且句长变异系数 `CV < 0.16`；跳过标题/列表/表格/短段 |
-| `discourse-marker-cluster` | `business-brief` | `warning` | `rhythm/discourse-signpost` | `md`, `txt`, `html`, `docx` | 连续 3 段及以上或单段 3 句以上堆叠机械过渡路标（`首先/其次/此外/最后`、`Furthermore/Moreover/Additionally`） |
-| `ui-glassmorphism-overuse` | `deck-and-ui` | `warning` | `ui/slop-chrome` | `html`, `css`, `jsx` | 单视图出现 `>= 3` 处 `backdrop-blur` / `backdrop-filter: blur(...)`；允许顶栏或弹窗单处合法使用 |
-| `ui-accent-stripe-card` | `deck-and-ui` | `warning` | `ui/slop-chrome` | `html`, `css`, `jsx` | 单视图堆叠 `>= 3` 处侧边粗彩条（`border-l-4`/`border-l-8`/`border-left: >=3px solid`）；豁免 `blockquote` |
-| `pptx-layout-monotony` | `deck-and-ui` | `info` | `deck/layout-variety` | `pptx` | 内容页 `>= 5` 页的演示文稿中，连续 4 页及以上采用完全相同的版式指纹（同标题+单文本框要点结构且无图表/表格/图片） |
+| `comma-chain-cadence` | `comma-chain-runon`（`packs/business-brief`） | `info` | `rhythm/comma-chain` | `md`, `txt`, `html`, `docx` | 单句逗号 `>= 5` 且满足分语种长分句门槛；剥离千分位数字、括号引用、短格式枚举与链接列表 |
+| `sentence-length-monotony` | `low-burstiness-vapor`（`packs/business-brief`） | `info` | `rhythm/monotony` | `md`, `txt`, `html`, `docx` | 有效正文段内句数 `>= 5`、变异系数过低且缺乏具体事实锚点；跳过标题/列表/表格/短段 |
+| `discourse-marker-cluster` | `discourse-marker-cluster`（`patterns/banks/discourse-rhythm.json`） | `warning` | `rhythm/discourse-signpost` | `md`, `txt`, `html`, `docx` | 连续 3 段及以上或单段 3 句以上堆叠机械过渡路标（`首先/其次/此外/最后`、`Furthermore/Moreover/Additionally`） |
+| `ui-glassmorphism-overuse` | `ui-glassmorphism-overuse`（`patterns/banks/visual-deck.json`） | `warning` | `ui/slop-chrome` | `html`, `css`, `jsx` | 单视图出现 `>= 3` 处 `backdrop-blur` / `backdrop-filter: blur(...)`；允许顶栏或弹窗单处合法使用 |
+| `ui-accent-stripe-card` | `ui-accent-stripe-card`（`patterns/banks/visual-deck.json`） | `warning` | `ui/slop-chrome` | `html`, `css`, `jsx` | 单视图堆叠 `>= 3` 处侧边粗彩条（`border-l-4`/`border-l-8`/`border-left: >=4px solid`）；豁免 `blockquote` 与 `<= 3px` 语义条 |
+| `pptx-layout-monotony` | `pptx-layout-monotony`（`packs/executive-deck`） | `info` | `deck/layout-variety` | `pptx` | 内容页 `>= 5` 页的演示文稿中，连续 4 页及以上采用完全相同的版式指纹且无图表/表格/图片 |
 
-同时，在 `dislop verify` 协同层面，建议将 `rhythm/discourse-signpost` 纳入 `DISPLACEMENT_FAMILIES` 观察集合，防止模型在改写套词时退回机械分点过渡。
+### 3.3 演进验收复盘
 
-### 3.3 分阶段演进路线（P0 / P1 / P2）
-
-与仓内 [ROADMAP.zh-CN.md](../../ROADMAP.zh-CN.md) 的分阶段节奏保持一致，所有演进围绕「Agent 交付物印前检查」主航道展开：
-
-| 阶段 | 定位与周期 | 核心交付项 | 验收与门禁标准 |
-|---|---|---|---|
-| **P0：立即能上（v0.3.0，1–2 周）** | 零依赖确定性内核增强 + 可执行反模式目录 | 1. 落地 `dislop catalog` CLI、MCP `dislop_catalog` 与 `site/` 规则搜索/筛选/`#rule-<id>` 锚点/`trap` 展示。<br>2. 将经原型验证的 5–6 条节奏与 UI/PPT 确定性探针合入 `src/core.mjs` 与 `src/dislop/engine.py`（补齐双端一致性测试）。<br>3. 同步上架 npm / PyPI 并提供 Claude Code 保存钩子与 GitHub Action 模板。 | `dislop pack-test` 全绿；`tests/test_conformance.py` Node/Python 100% 一致；全仓 `dislop check . --fail-on warning` 与 `docs/` `--fail-on info` 零命中；冻结人写测试集 `core` 误报率 `= 0` |
-| **P1：短期优化（v0.4.0，3–6 周）** | 语料校准 + 离线基准 + 渲染态可选扩展 | 1. 建立公开冻结的双语人写/多模型配对基准集（衡量各探针精确率、召回率与 `verify` 事实丢失率）。<br>2. 将 `dislop verify` 升级为支持严格阻断与「可确认事实变更账本（Fact Diff Ledger）」双模式。<br>3. 提供可选渲染态 UI 检查脚本（Playwright 抓取真实计算对比度、三栏均等卡片模板与小屏溢出），作为外部扩展而非核心依赖。 | 公开离线可复算基准脚本一键跑通；每条 `taste` 规则在人写基准集上的误报率公开透明并完成阈值校准 |
-| **P2：中后期演进（v0.5+，按外部采用 Gate 触发）** | 开源轻量小模型插件化增量（`@dislop/ml-local` / `dislop[ml]`） | 1. 基于 `mmBERT` / `ModernBERT-base` 微调多标签反模式分类器（INT8 ONNX），承担 L1 歧义复核与隐蔽语篇空洞识别。<br>2. 提供本地 `llama.cpp` 桥接，可选调用 `Qwen3-1.5B/4B + LoRA`（文本证据抽取）与 `Qwen2.5-VL-3B` / `SmolVLM2`（PPT/UI 截图层级与塑料感审校）。<br>3. 保持主包零依赖与官网默认 `connect-src 'none'` 不变。 | 仅在冻结双语评测集上证明相比纯确定性层在 `FPR <= 1%` 约束下 Macro-F1 提升 `>= 8%` 时才正式发布；所有 ML 发现严格限定为 `info` 商榷级 |
-
-### 3.4 本次独立原型实测结果
-
-为在不动核心引擎文件的前提下提前验证架构假设，仓内新增零依赖独立原型脚本 [prototype_antipattern_lab.mjs](../../scripts/prototype_antipattern_lab.mjs)，直接只读加载 `packs/*/pack.json` 与 `src/core.mjs` 掩码工具，并完成了三项本机实测：
-
-1. **反模式目录检索验证**：成功索引全部 4 个 Pack 的 29 条规则，按中文关键词（如 `--query "不是"` 命中 5 条跨包规则）与多维过滤（如 `--category ui-design` 命中 7 条 UI/SVG 规则）均在毫秒级返回准确结果。
-2. **新探针正反样本自测（`self-test`）**：覆盖 `comma-chain-cadence`、`sentence-length-monotony`、`discourse-marker-cluster`、`ui-glassmorphism-overuse`、`ui-accent-stripe-card` 共 5 条新探针与目录查询断言（20 项断言全部通过）。首轮实测直接发现了中英文子句长度单位不一致导致的英文漏检问题，随即在原型中升级为中英分语种长度校准并复测通过。
-3. **仓内真实文档误报体检（`probe .`）**：对本仓库既有 19 份 Markdown、HTML、CSS、SVG 文档执行全量扫描，总耗时约 **30 ms**，**0 误报**，验证了豁免条件在高质量真实文档上的可用性。
+上述早期规划中的确定性目录、节奏与 UI/PPT 探针、离线基准与轻量集成模型均已在 `v0.6.0` 落地并由 `npm run release:check` 持续把关（完整最新路线见 [ROADMAP.zh-CN.md](../../ROADMAP.zh-CN.md)，154 样本多角度消融结果见 [ai-slop-pattern-library-5-rounds.zh-CN.md](./ai-slop-pattern-library-5-rounds.zh-CN.md) 与 [PATTERN-BENCHMARK.md](../../benchmarks/PATTERN-BENCHMARK.md)）。

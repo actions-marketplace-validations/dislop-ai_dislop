@@ -37,22 +37,22 @@ No metaphors, no quotable mic-drop at the end, and no three-way parallel bundle.
 Andrej Karpathy's writing advice and READMEs (`nanoGPT`, `micrograd`) pair **80% ASD-STE100** (Simplified Technical English) clarity with a casual, unpretentious tone. Combined with structural cuts from `stop-slop`, we follow six rules:
 
 1. **One thought per sentence, with uneven lengths.** If a sentence binds two or three claims with semicolons or symmetrical clauses, split it.
-2. **Use the same plain word for the same thing.** Do not rotate synonyms to sound lively. Stick to plain labels across the whole product: `hard bug`, `warning`, `passed`, `rejected`, `Awesome list` (in Chinese: `硬伤`, `提醒`, `通过`, `没通过`, `工具清单`).
+2. **Use the same plain word for the same thing.** Do not rotate synonyms to sound lively. Stick to plain labels across the whole product: `hard bug`, `warning`, `passed`, `rejected`, `Awesome list`.
 3. **Cut every pull-quote closer and roleplay metaphor.** If a line sounds like a poster slogan or a costumed persona (`Pass for press`, `the pen stays in your hand`, `the sheet is set by machine`), delete it or rewrite it flat.
 4. **Start with something concrete.** Open with an actual draft, file, number, or command instead of throat-clearing background.
 5. **State limits plainly.** Unreadable archives and unshipped work (like code AST linting) are marked as skipped or not built yet.
-6. **Keep English and Chinese completely separate.** `dislop.com` and `/awesome/` default to Simplified Chinese with one-click switching to English. Chinese pages show only Chinese examples and notes; English pages show only English examples and notes. Keep internal design terms (`Level 0`, `L0–L3`, `Stage-3`, `Negative Defense`, `Positive Pull`, `Three-Band Entropy Partition`, `Dual-Native`) in `docs/research/`.
+6. **Keep English and Chinese completely separate.** `dislop.com` and `/awesome/` default to Simplified Chinese with one-click switching to English. Chinese pages show only Chinese examples and notes; English pages show only English examples and notes. Keep internal architecture tier codes, academic jargon, and research shorthand inside `docs/research/`, never in public copy.
 
 ### Copy Table
 
-| Surface | Avoid (AI-flavored / performative) | Use (EN) | Use (ZH) |
-|---|---|---|---|
-| **Headline** | `Your draft, minus the slop.` | `Catch the AI slop before you send it` | `把稿子里的 AI 味挑出来` |
-| **Intro copy** | `dislop strikes what can't ship... the pen stays in your hand.` | `dislop only marks what looks off so you can edit it yourself.` | `dislop 只负责把这些问题标出来，不替你重写。你对照标出来的地方自己改就行。` |
-| **Clean check** | `Pass for press. 0 findings; protected spans stayed as written.` | `0 issues. Chat wrapper and stock phrasing removed.` | `0 处问题。寒暄和空话都清掉了。` |
-| **2nd-order slop** | `Sent back: displacement detected` | `Still flagged (1 issue). Old buzzwords are gone, replaced by a 'Not X, but Y' AI slogan.` | `依然标出 1 处。旧套话删掉了，但换成了“不是……而是……”这种二阶 AI 腔。` |
-| **Directory name** | `同路清单` | `Awesome list` / `Awesome Anti-Slop` | `工具清单` / `去 AI 味工具清单` |
-| **Privacy note** | `Physically locked from outbound requests` | `Runs only in this browser tab. Nothing gets uploaded.` | `只在当前浏览器标签页里跑，不上传文件。` |
+| Surface | Avoid (AI-flavored / performative) | Use (plain English) |
+|---|---|---|
+| **Headline** | `Your draft, minus the slop.` | `Catch the AI slop before you send it` |
+| **Intro copy** | `dislop strikes what can't ship... the pen stays in your hand.` | `dislop only marks what looks off so you can edit it yourself.` |
+| **Clean check** | `Pass for press. 0 findings; protected spans stayed as written.` | `0 issues. Chat wrapper and stock phrasing removed.` |
+| **2nd-order slop** | `Sent back: displacement detected` | `Still flagged (1 issue). Old buzzwords are gone, replaced by a 'Not X, but Y' AI slogan.` |
+| **Directory name** | `Fellow travelers directory` | `Awesome list` / `Awesome Anti-Slop` |
+| **Privacy note** | `Physically locked from outbound requests` | `Runs only in this browser tab. Nothing gets uploaded.` |
 
 ### Honesty Boundaries
 
