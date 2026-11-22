@@ -4,6 +4,13 @@ All notable changes to `dislop` are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.2] - 2026-11-22
+
+### Fixed
+
+- **Python 3.10 / 3.11 import crash**: `src/dislop/engine.py` nested same-quote f-strings, which only Python 3.12+ accepts, so `pip install dislop` on 3.10 or 3.11 failed with `SyntaxError` on import. The package now runs on every version `requires-python` promises (`>=3.10`).
+- **CI coverage**: a new `python-compat` job runs the Python test suite on 3.10 and the newest stable 3.x, so syntax that older Pythons reject fails CI before release.
+
 ## [0.6.1] - 2026-11-22
 
 ### Added

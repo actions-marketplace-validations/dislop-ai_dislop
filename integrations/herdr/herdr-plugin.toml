@@ -1,5 +1,5 @@
 name = "dislop"
-version = "0.6.1"
+version = "0.6.2"
 description = "Check changed docs, slides, and web UI in this pane for AI artifacts and slop."
 
 [[actions]]

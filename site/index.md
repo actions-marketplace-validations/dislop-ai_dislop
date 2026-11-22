@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.6.1
+version: 0.6.2
 snapshot: 2026-11-21
 ---
 
@@ -19,11 +19,11 @@ Good writing habits, web and slide design rules, an offline zero-dependency chec
 
 | Target | Formats / Scope | Status |
 |---|---|---|
-| Writing, Specs, RFCs & Copy | `.md`, `.mdx`, `.txt` (EN & ZH, 7 built-in packs, 53 patterns across 6 dimensions) | LIVE `v0.6.1` |
-| Word & PowerPoint | `.docx`, `.pptx` (incl. layout monotony & conclusion titles) | LIVE `v0.6.1` |
-| Web UI & Components | `.html`, `.css`, `.jsx`, `.tsx` | LIVE `v0.6.1` |
-| Offline Voice & Pocket ML | `dislop voice` (`dislop.voice/1`) & 14.6 KB `--ml` stealth-vapor scorer | LIVE `v0.6.1` |
-| Optional Local Small Models | `dislop model` hardware-aware advisor (`0.6B` / `1.7B` / `4B`) | LIVE `v0.6.1` |
+| Writing, Specs, RFCs & Copy | `.md`, `.mdx`, `.txt` (EN & ZH, 7 built-in packs, 53 patterns across 6 dimensions) | LIVE `v0.6.2` |
+| Word & PowerPoint | `.docx`, `.pptx` (incl. layout monotony & conclusion titles) | LIVE `v0.6.2` |
+| Web UI & Components | `.html`, `.css`, `.jsx`, `.tsx` | LIVE `v0.6.2` |
+| Offline Voice & Pocket ML | `dislop voice` (`dislop.voice/1`) & 14.6 KB `--ml` stealth-vapor scorer | LIVE `v0.6.2` |
+| Optional Local Small Models | `dislop model` hardware-aware advisor (`0.6B` / `1.7B` / `4B`) | LIVE `v0.6.2` |
 | Git Diffs & PRs | `--changed` / `--staged` & SARIF 2.1.0 | LIVE (diff check) · Roadmap (code AST) |
 
 ## Rule Layers
