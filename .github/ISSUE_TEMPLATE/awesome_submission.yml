@@ -1,0 +1,56 @@
+name: Awesome Anti-Slop Submission
+description: Suggest an open-source tool, linter, style guide, or benchmark for the Awesome Anti-Slop directory.
+title: "[Awesome] "
+labels: ["awesome-submission", "track:D-awesome"]
+body:
+  - type: input
+    id: url
+    attributes:
+      label: Resource URL
+      placeholder: "https://github.com/..."
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Writing & Prose Guides
+        - Text & Copy Linters
+        - Design, UI & Deck Systems
+        - Agent Skills & Prompts
+        - Benchmarks & Datasets
+        - Research & Articles
+    validations:
+      required: true
+  - type: dropdown
+    id: locale
+    attributes:
+      label: Language coverage
+      options:
+        - English
+        - Chinese
+        - Bilingual (English & Chinese)
+    validations:
+      required: true
+  - type: input
+    id: summary_en
+    attributes:
+      label: One-sentence English summary
+      description: Plain, neutral description with no marketing hype.
+    validations:
+      required: true
+  - type: input
+    id: summary_zh
+    attributes:
+      label: One-sentence Chinese summary
+      description: Plain Chinese summary matching the English scope without mixing languages.
+    validations:
+      required: true
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Why it belongs on the list
+      description: Note what problem it solves or what benchmark/evidence backs it up.
+    validations:
+      required: true

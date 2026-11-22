@@ -33,3 +33,9 @@
 - 新增或修改规则时，在对应 `pack.json` 补至少 1 条命中样本（`fixtures.hit`）与 1 条易误报干净样本（`fixtures.clean`），并跑通 `npm run release:check`（自动串联清单同源校验、开源脱敏扫描、官网构建、双端 `pack-test`、27 项跨端单测、全仓去 AI 味自查与打包校验）。
 - 修改 CLI 参数、MCP 工具协议或规则包结构时，同步更新 `README.md`、`README.zh-CN.md`、`docs/architecture.md` 与 `docs/architecture.zh-CN.md`。
 - 发新版本、打 Tag 或向各插件市场推送更新时，统一执行 `npm run release -- <X.Y.Z> ...`，各平台硬限制与上线顺序见 [docs/releasing.zh-CN.md](./docs/releasing.zh-CN.md)。
+
+## 5. GitHub 协作约定
+
+- **开干前先查 Issue 与 Discussions**：认领较大轨道或改动规则前，先核对 GitHub 开放 Issue、里程碑与 Discussions 结论，避免重复劳动；开新 PR 时在正文用 `Closes #<编号>` 关联对应 Issue。
+- **分支与 `main` 护栏**：非微调改动建议拉短分支（`feat/...`、`fix/...`、`docs/...`）提 PR（`.github/CODEOWNERS` 自动分配评审，合并后自动删分支）；`main` 禁强推与删分支，保留快进推送以配合自动发版脚本。
+- **公开与私有讨论严格分离**：商业计费、配额策略、运营台账与本机私密资料只放私有仓 `dislop-cloud` 或本地忽略目录，严禁写入公开仓 Issue、PR、Discussions 或提交说明。
