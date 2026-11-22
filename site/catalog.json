@@ -16,8 +16,8 @@
     },
     "llmsFullTxt": {
       "path": "/llms-full.txt",
-      "bytes": 28452,
-      "approxTokens": 7113
+      "bytes": 28405,
+      "approxTokens": 7101
     },
     "awesomeJson": {
       "path": "/awesome/index.json",
@@ -739,12 +739,12 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 2724,
-      "approxTokens": 681,
+      "bytes": 2735,
+      "approxTokens": 684,
       "relatedTools": [
         "cli"
       ],
-      "sha256": "89d070a00829d4944b5bd4647558fd2dac337b6d7dddbc060a8c56c59e8e9c50"
+      "sha256": "ebeedb6ff807f77f050d6463493d7989bfba5facf9653c5270602308810496be"
     },
     {
       "id": "tools-mcp-sdk-api",
@@ -779,13 +779,13 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 3961,
-      "approxTokens": 990,
+      "bytes": 3914,
+      "approxTokens": 979,
       "relatedTools": [
         "mcp",
         "cli"
       ],
-      "sha256": "9689fe1672a8b1ccc9c5d993a3e69330e3e3a9ed6f6dc91a80bfe0ed30498fd7"
+      "sha256": "5aa88165abc73ed92f4ebbd6e7b7df63257c38c5d8c15a223f1bd7fd6352e08d"
     },
     {
       "id": "privacy-policy",
@@ -2371,15 +2371,15 @@
         "core",
         "deck-and-ui"
       ],
-      "bytes": 3346,
-      "approxTokens": 837,
+      "bytes": 3299,
+      "approxTokens": 825,
       "relatedTools": [
         "browser-workbench",
         "skill",
         "cli",
         "mcp"
       ],
-      "sha256": "18f4dc57e72a8d105a528f4b405b962d4a83a564fb623b5547ef547f4a308817"
+      "sha256": "d34beeed4722b4bd20c34a1d42729983db0aa00339e2aae2d754cf0eab914393"
     },
     {
       "id": "task-editorial-writing",

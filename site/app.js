@@ -1107,8 +1107,9 @@ npx skills add dislop-ai/dislop
     }
   }
 }`,
-    cli: `# 离线检查当前目录（内置全部 7 套场景包，0 联网）
+    cli: `# 离线检查当前目录（Node 或 Python PyPI 包，内置全部 7 套场景包，0 联网）
 npx --yes github:dislop-ai/dislop check .
+uvx dislop check .
 
 # 开启 5 轴节奏统计与内置 14.6 KB 轻量模型复检
 npx --yes github:dislop-ai/dislop check draft.md --profile --ml
@@ -1180,8 +1181,9 @@ npx skills add dislop-ai/dislop
     }
   }
 }`,
-    cli: `# Check the current folder offline (ships all 7 built-in packs, 0 network calls)
+    cli: `# Check the current folder offline (Node or PyPI, ships all 7 built-in packs, 0 network calls)
 npx --yes github:dislop-ai/dislop check .
+uvx dislop check .
 
 # Run with 5-axis rhythm telemetry and bundled 14.6 KB Pocket ML
 npx --yes github:dislop-ai/dislop check draft.md --profile --ml

@@ -44,7 +44,7 @@ good: <h1 class="page-title">Release Notes v2.4</h1>
 
 ```bash
 npx --yes github:dislop-ai/dislop check site/ --pack deck-and-ui --fail-on warning
-uvx --from git+https://github.com/dislop-ai/dislop dislop check deck.pptx
+uvx dislop check deck.pptx
 ```
 
 Deep dives: [Pack `deck-and-ui`](../packs/deck-and-ui.md) · [Design System](../methodology/design-system.md) · [UI References](../cases/ui-specimens.md)

@@ -1124,8 +1124,8 @@ npx --yes github:dislop-ai/dislop check .
 npx --yes github:dislop-ai/dislop check --changed origin/main --format github
 npx --yes github:dislop-ai/dislop check --changed origin/main --format sarif > dislop.sarif
 
-# Inspect DOCX/PPTX with Python
-uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review.pptx
+# Inspect DOCX/PPTX with Python (published on PyPI)
+uvx dislop check quarterly-review.pptx
 
 # Explain a rule's check question and examples
 npx --yes github:dislop-ai/dislop explain negation-pivot-frame
@@ -1158,6 +1158,7 @@ Install once locally so hooks run offline with zero network fetch latency:
 
 \`\`\`bash
 npm install -g github:dislop-ai/dislop
+# or Python 3.10+: pip install dislop
 \`\`\`
 
 Note: \`PostToolUse\` fires **after** \`Write\`/\`Edit\` completes and receives tool context as JSON on stdin (\`tool_input.file_path\`). Parse and validate that path before invoking \`dislop check\`, and map CLI exit \`1\` to exit \`2\` to return structured post-write feedback to Claude Code:
@@ -1214,13 +1215,13 @@ Node.js 20+:
 }
 \`\`\`
 
-Python 3.10+ (zero external deps):
+Python 3.10+ (PyPI, zero external deps):
 \`\`\`json
 {
   "mcpServers": {
     "dislop": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/dislop-ai/dislop", "dislop", "--mcp"]
+      "args": ["dislop", "--mcp"]
     }
   }
 }
@@ -1527,7 +1528,7 @@ ${fencedExemplar(packsById["deck-and-ui"].rules[4].exemplar)}
 
 \`\`\`bash
 npx --yes github:dislop-ai/dislop check site/ --pack deck-and-ui --fail-on warning
-uvx --from git+https://github.com/dislop-ai/dislop dislop check deck.pptx
+uvx dislop check deck.pptx
 \`\`\`
 
 Deep dives: [Pack \`deck-and-ui\`](../packs/deck-and-ui.md) · [Design System](../methodology/design-system.md) · [UI References](../cases/ui-specimens.md)
@@ -2080,7 +2081,7 @@ Note: Prefer \`/llms.txt\` + one \`/tasks/*.md\` page for smaller context window
 \`\`\`bash
 npx --yes github:dislop-ai/dislop check .
 npx --yes github:dislop-ai/dislop explain negation-pivot-frame
-uvx --from git+https://github.com/dislop-ai/dislop dislop check deck.pptx
+uvx dislop check deck.pptx
 \`\`\`
 
 ${fullPackDigest}
