@@ -1,6 +1,10 @@
 # dislop for VS Code & Open VSX
 
-Zero-dependency offline anti-slop linter and Agent tool built on `src/core.mjs`.
+Linter for AI Slop built on `src/core.mjs` — helps you (and your agent) catch and fix AI-sounding text and template layouts locally.
+
+## Preview
+
+![dislop auditing a launch note across three states](https://dislop.com/assets/demos/proof-cycle-en-v1.gif)
 
 ## Features
 

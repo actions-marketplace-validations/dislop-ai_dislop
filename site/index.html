@@ -4,21 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
-  <title>dislop — 发之前，把文案和设计里的 AI 味过一遍</title>
-  <meta name="description" content="把全网靠谱的写作规矩、网页和 PPT 设计原则、离线检查工具和 87 条精选资源收在一起。复制一句话发给你的 AI 立刻就能用，也可以在线试查，或装成 Skill / Plugin / MCP / CLI。">
+  <title>dislop — AI 味检查工具（Linter for AI Slop）</title>
+  <meta name="description" content="专用的 AI 味检查工具。整合社区验证过的去味规则与经验，帮你和你的 Agent 发现并改掉文档、网页和 PPT 里的 AI 味。一行命令接入主流 Agent 与编辑器，可纯本地离线运行。">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="dislop">
   <meta property="og:url" content="https://dislop.com/">
-  <meta property="og:title" content="dislop — 发之前，把文案和设计里的 AI 味过一遍">
-  <meta property="og:description" content="把靠谱的写作规矩、网页和 PPT 设计原则、离线检查工具和 87 条精选资源收在一起。在线试查、发给你的 AI，或装成 Skill / Plugin / MCP / CLI。">
+  <meta property="og:title" content="dislop — AI 味检查工具（Linter for AI Slop）">
+  <meta property="og:description" content="专用的 AI 味检查工具。整合社区验证过的去味规则与 87 条精选工具，帮你和你的 Agent 发现并改掉文档、网页和 PPT 里的 AI 味。">
   <meta property="og:image" content="https://dislop.com/assets/og-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@dislop_ai">
   <meta name="twitter:creator" content="@dislop_ai">
-  <meta name="twitter:title" content="dislop — Clear the AI slop from your writing and design">
-  <meta name="twitter:description" content="Good writing habits, web and slide design rules, an offline checker, and 87 vetted tools gathered in one place. Test drafts offline or install for your agent.">
+  <meta name="twitter:title" content="dislop — Linter for AI Slop">
+  <meta name="twitter:description" content="A dedicated linter for AI slop. Vetted community rules to help your agent find and fix AI slop in docs, web UI, and slides. Connects in one command and can run offline.">
   <meta name="twitter:image" content="https://dislop.com/assets/og-card.png">
   <link rel="canonical" href="https://dislop.com/">
   <link rel="alternate" type="text/plain" href="./llms.txt" title="LLMs Resource Index">
@@ -67,18 +67,18 @@
               </svg>
             </div>
             <!-- dislop-quote-end -->
-            <h1 class="lead-heading" data-i18n="lead.title">发之前，把文案和设计里的 AI 味过一遍</h1>
+            <h1 class="lead-heading" data-i18n="lead.title">帮你（的 Agent）挑出并改掉文档、网页和 PPT 里的 AI 味</h1>
             <p class="lead-sub" data-i18n="lead.sub">
-              开源的 Skill 与 CLI（含全部 7 套场景包）完全本地离线运行、零上传，免费查文档、研发复盘、Word、PPT 和网页；需要免环境接入或一键自愈改写时，再按需连官方云端远程 MCP（每月 30 免费额度）。
+              专用的 AI 味检查工具（Linter for AI Slop）。整合社区验证过的去味规则、语料经验与 87 条精选工具，一行命令接入主流 Coding Agent、办公 Agent 与编辑器；CLI 与本地插件可纯本地零上传，下方工作台可随时切换本地检查与云增强（MCP）模式。
             </p>
           </div>
 
           <div style="display:flex;flex-direction:column;gap:10px;">
             <div class="hero-cta-row">
-              <a href="#workbench" class="btn-primary" style="min-height:36px;padding:7px 16px;font-size:0.86rem;" data-i18n="lead.cta">立刻贴一段在线试 ↓</a>
-              <a href="#surfaces" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="lead.installBtn">装开源 Skill / CLI（全内置 0 联网）</a>
+              <a href="#workbench" class="btn-primary" style="min-height:36px;padding:7px 16px;font-size:0.86rem;" data-i18n="lead.cta">在工作台试用（本地 / 云增强）↓</a>
+              <a href="#surfaces" class="ctrl-btn" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="lead.installBtn">装进 Agent / 编辑器（可纯本地）</a>
             </div>
-            <p class="hero-reassure" data-i18n="lead.reassure">默认离线查 0 上传；仅在你主动点击 AI 按钮时发往付费级零训练端点，不存草稿。</p>
+            <p class="hero-reassure" data-i18n="lead.reassure">CLI 与本地插件纯本地运行、零上传；网页工作台支持本地规则检查与云增强（MCP）模式切换。</p>
           </div>
 
           <div class="hero-cli-inline">
@@ -121,25 +121,25 @@
         </div>
       </div>
 
-      <!-- Three Areas: 3-Rung Sovereign-to-Cloud Architecture -->
-      <div class="marks-strip" aria-label="三层架构与开源云端边界">
+      <!-- Three Pillars: Aligned with PRODUCT.md -->
+      <div class="marks-strip" aria-label="核心卖点">
         <div class="mark-pillar">
           <div class="mark-pillar-head">
-            <h2 class="mark-pillar-title" data-i18n="m1.title">1. 开源 Skill：自带本地参考卡</h2>
+            <h2 class="mark-pillar-title" data-i18n="m1.title">1. 集成社区优质成果</h2>
           </div>
-          <p class="mark-pillar-desc" data-i18n="m1.desc">装进 Claude Code、Codex 或 Cursor，自带 4 张分场景本地渐进参考卡，全程 0 联网不弹外网审批框，动笔前防套话，写完引导跑本地 CLI。</p>
+          <p class="mark-pillar-desc" data-i18n="m1.desc">整合经过核验的开源去味项目、语料经验与 87 条精选工具，覆盖文稿、网页和 Word/PPT，不用自己到处搜集拼凑。</p>
         </div>
         <div class="mark-pillar">
           <div class="mark-pillar-head">
-            <h2 class="mark-pillar-title" data-i18n="m2.title">2. 开源 CLI：全内置 + 按需本地模型</h2>
+            <h2 class="mark-pillar-title" data-i18n="m2.title">2. 多端与多场景兼容</h2>
           </div>
-          <p class="mark-pillar-desc" data-i18n="m2.desc">&lt; 250 KB 零依赖内置全部 7 套场景包（42 条规则）、5 轴节奏统计与离线声纹；支持按本机内存与芯片选装本地小模型。</p>
+          <p class="mark-pillar-desc" data-i18n="m2.desc">内置研发、商务、前端与演示等 7 套场景包，提供 Skill、Plugin、CLI 与 MCP，一行命令接入 Codex、Claude Code、Cursor、WorkBuddy 等 Agent 与编辑器。</p>
         </div>
         <div class="mark-pillar">
           <div class="mark-pillar-head">
-            <h2 class="mark-pillar-title" data-i18n="m3.title">3. 云端远程 MCP：重能力按需用</h2>
+            <h2 class="mark-pillar-title" data-i18n="m3.title">3. 本地离线 + 云增强 MCP 切换</h2>
           </div>
-          <p class="mark-pillar-desc" data-i18n="m3.desc">免本地环境接入网页 AI 与自动化流，自愈改写比裸提示词提分 +15.8 至 +22.3、改写时保留原稿数字并跨端同步个人文风（每月 30 免费额度）。</p>
+          <p class="mark-pillar-desc" data-i18n="m3.desc">CLI 与本地插件纯本地运行、零上传；在工作台或远程 MCP 切到云增强模式，即可直接用大模型深层审校、一键改写并同步个人文风（每月 30 免费额度）。</p>
         </div>
       </div>
     </section>
@@ -174,7 +174,7 @@
           <div class="rail-title" data-i18n="wb.specimensTitle">示例</div>
           <!-- Populated by app.js -->
           <div class="privacy-note" data-i18n="wb.privacyNote">
-            离线检查默认留在当前标签页，0 上传；仅在你主动点击下方 AI 按钮时发往官方同源模型端点，不用于训练、不落盘留存。
+            本地基础检查在当前标签页运行；点击下方云增强（MCP）按钮时才会调用官方零训练模型端点，不存草稿。
           </div>
         </aside>
 
@@ -215,11 +215,11 @@
 
           <div class="ai-assist-bar" id="ai-assist-bar">
             <div class="ai-assist-actions">
-              <button type="button" id="btn-ai-review" class="ctrl-btn" data-i18n="ai.reviewBtn">AI 深度审校（1 额度）</button>
-              <button type="button" id="btn-ai-deslop" class="btn-primary ai-deslop-btn" data-i18n="ai.deslopBtn">AI 一键去味（2 额度）</button>
+              <button type="button" id="btn-ai-review" class="ctrl-btn" data-i18n="ai.reviewBtn">云增强审校 · MCP（1 额度）</button>
+              <button type="button" id="btn-ai-deslop" class="btn-primary ai-deslop-btn" data-i18n="ai.deslopBtn">云增强一键改写 · MCP（2 额度）</button>
             </div>
             <div class="ai-assist-meta">
-              <span id="ai-quota-label" data-i18n="ai.anonHint">免登录每天 5 试用额度 · 登录后每月 30 额度</span>
+              <span id="ai-quota-label" data-i18n="ai.anonHint">免登录每天 5 试用额度 · 登录后每月 30 额度（同源远程 MCP）</span>
               <a href="#cloud-token-box" id="ai-token-link" data-i18n="ai.claimLink">领免费密钥 →</a>
             </div>
           </div>
@@ -228,14 +228,14 @@
 
           <details class="voice-drawer" id="voice-drawer">
             <summary class="voice-drawer-summary">
-              <span data-i18n="voice.drawerTitle">可选：提取个人文风（支持本地 0 上传统计声纹，或云端 AI 提炼）</span>
+              <span data-i18n="voice.drawerTitle">可选：提取个人文风（支持本地统计，或云端 AI 提炼）</span>
               <span id="voice-active-badge" class="voice-active-badge" hidden></span>
             </summary>
             <div class="voice-drawer-body">
-              <p class="voice-drawer-desc" data-i18n="voice.drawerDesc">贴入 1–3 段你自己写过的干净文字（用空行隔开）。点「离线统计声纹」完全在当前标签页完成、0 上传；也可登录免费密钥调用云端模型深度提炼并跨端复用。</p>
+              <p class="voice-drawer-desc" data-i18n="voice.drawerDesc">贴入 1–3 段你自己写过的干净文字（用空行隔开）。点「本地统计文风」在当前标签页完成；也可登录免费密钥调用云端模型提炼并跨端同步。</p>
               <textarea id="voice-samples-input" class="voice-textarea" rows="3" placeholder="粘贴 1–3 段你自己写过的段落，段与段之间留一个空行…" aria-label="个人写作样稿"></textarea>
               <div class="quick-actions" style="margin-top:8px;">
-                <button type="button" id="btn-voice-offline" class="ctrl-btn ctrl-btn-sm" data-i18n="voice.offlineBtn">离线统计声纹（0 额度 · 不联网）</button>
+                <button type="button" id="btn-voice-offline" class="ctrl-btn ctrl-btn-sm" data-i18n="voice.offlineBtn">本地统计文风（0 额度 · 不联网）</button>
                 <button type="button" id="btn-voice-extract" class="ctrl-btn ctrl-btn-sm" data-i18n="voice.extractBtn">云端 AI 提炼文风（2 额度）</button>
                 <button type="button" id="btn-voice-clear" class="ctrl-btn ctrl-btn-sm" hidden data-i18n="voice.clearBtn">清除已保存文风</button>
               </div>
@@ -260,7 +260,7 @@
       </div>
 
       <div class="wb-nudge">
-        <span id="wb-nudge-text" data-i18n="wb.nudgeText">试完觉得顺手？重视隐私可装开源 Skill / CLI 本地离线跑；想免装环境直接用大模型，10 秒领免费 30 额度远程 MCP。</span>
+        <span id="wb-nudge-text" data-i18n="wb.nudgeText">试完觉得顺手？需要绝对离线可装 CLI / 本地插件；想让办公 Agent 直接用上云端改写，10 秒领免费 30 额度远程 MCP。</span>
         <div class="quick-actions">
           <a href="#cloud-token-box" class="btn-primary" style="min-height:30px;padding:5px 12px;font-size:0.8rem;" data-i18n="wb.nudgeCloud">领免费 30 额度 ↓</a>
           <a href="#surfaces" class="ctrl-btn ctrl-btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;" data-i18n="wb.nudgeInstall">装开源 Skill / CLI ↓</a>
@@ -275,7 +275,7 @@
         <div>
           <h2 class="section-title" id="cases-heading" data-i18n="cases.title">三个真实案例：为什么删了套词还是像 AI</h2>
           <p class="section-desc" data-i18n="cases.desc">
-            AI 味分三层：一阶是“抓手”“赋能”这类套词，二阶是“不是 A，而是 B”这类口号，三阶是就算工具报 0 问题、读起来依然像在念推销稿的写法。下面三组对照可以直接试，也可以一键复制分享。
+            删掉“抓手”“赋能”这类高频词之后，模型常会换成“不是 A，而是 B”这类反转口号，或者写出规则报 0 问题、读起来依然像推销稿的句子。下面三组对照可以直接试，也可以一键复制分享。
           </p>
         </div>
         <a href="./cases/copy-contrasts.md" data-i18n="cases.readAll">看全部对照案例（.md）→</a>
@@ -284,12 +284,12 @@
       <!-- dislop-quote-start -->
       <div class="cases-grid" id="cases-grid">
         <article class="case-card">
-          <span class="case-kicker">案例 01 · 发版简报（自愈去味 + 数字保真）</span>
+          <span class="case-kicker">案例 01 · 发版简报（去套话 + 核对数字）</span>
           <h3 class="case-title">清掉寒暄、官话与口号，四个核心指标一个不丢</h3>
           <div class="case-body">
             <!-- dislop-ignore-next-line chatbot-artifact -- intentional before-edit case example -->
             <div class="case-step is-bad"><span class="case-step-label">原稿（AI 寒暄 + 黑话 + 喊口号）</span>好的，以下是 Q4 结算引擎升级说明。值得注意的是，本次以异步化为核心抓手，全面赋能商户体验。峰值 TPS 从 1,200 升至 4,800，P99 延迟从 210ms 降至 42ms，一致性达 99.99%。</div>
-            <div class="case-step is-trap"><span class="case-step-label">改过头（掉进二阶 AI 腔）</span>这绝非一次普通升级，而是结算架构的效率跃迁，性能实现数倍提升。</div>
+            <div class="case-step is-trap"><span class="case-step-label">改过头（掉进反转口号）</span>这绝非一次普通升级，而是结算架构的效率跃迁，性能实现数倍提升。</div>
             <div class="case-step is-good"><span class="case-step-label">改干净（只留动作和真实数字）</span>Q4 结算引擎改为全链路异步化后，峰值 TPS 从 1,200 升至 4,800，P99 延迟从 210ms 降至 42ms，数据一致性 99.99%。</div>
           </div>
           <div class="case-actions">
@@ -299,12 +299,12 @@
         </article>
 
         <article class="case-card">
-          <span class="case-kicker">案例 02 · 真实自查（三阶结构味）</span>
+          <span class="case-kicker">案例 02 · 真实自查（句式推销味）</span>
           <h3 class="case-title">检查报 0 处问题，但我们自己上一版首屏照样像 AI</h3>
           <div class="case-body">
             <div class="case-step is-bad"><span class="case-step-label">翻车原稿（0 命中，却满屏 AI 味）</span>把稿子、PPT 或网页贴进来。不能发的硬伤，dislop 直接划掉；听着像套话的地方，它在页边问你一句；等你改完，再拿原稿逐条对一遍。它不替你改稿，笔一直在你手里。</div>
-            <p class="case-note">毛病不在单个词，在于“三段对称分号推销句 + 假装老校对 + 段尾金句收尾”。这就是为什么单靠脚本标红线不够，必须把写作规矩一起写进 Skill，并在云端叠加三阶审校。</p>
-            <div class="case-step is-good"><span class="case-step-label">改回人话</span>开源的 Skill 与 CLI 完全本地离线运行、零上传，免费查文档、Word、PPT 和网页；需要大模型深度审校与一键去味时，也能按需直连官方云端与远程 MCP。</div>
+            <p class="case-note">毛病不在单个词，在于“三段对称分号推销句 + 假装老校对 + 段尾金句收尾”。这就是为什么单靠脚本标红线不够，必须把写作规矩一起写进 Skill，并在云端叠加深度文风审校。</p>
+            <div class="case-step is-good"><span class="case-step-label">改回人话</span>AI 写完的文档、Word、PPT 和网页，经常留着开头寒暄、空话套话、满页字墙或默认紫粉模板。你可以装进本地 Coding Agent 离线运行，也可以在这里切换本地检查与云增强（MCP）模式。</div>
           </div>
           <div class="case-actions">
             <a href="./methodology/brand-and-voice.md" class="ctrl-btn ctrl-btn-sm" style="text-decoration:none;display:inline-flex;align-items:center;">看完整复盘 →</a>
@@ -329,13 +329,80 @@
       <!-- dislop-quote-end -->
     </section>
 
+    <!-- Animated Demos (Zero-External, Reduced-Motion Poster Fallback) -->
+    <section id="demos" class="section-block band-rule" aria-labelledby="demos-heading">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" id="demos-heading" data-i18n="demos.title">6 秒看懂怎么查：从原稿到改干净</h2>
+          <p class="section-desc" data-i18n="demos.desc">
+            四段动画对应四个最常见场景：三态文字校样、终端离线检查、浏览器工作台实操，以及网页模板味清理。全部本地渲染，无外域请求。
+          </p>
+        </div>
+        <a href="https://github.com/dislop-ai/dislop/blob/main/docs/gif-production-guide.zh-CN.md" target="_blank" rel="noopener" data-i18n="demos.guideLink">GIF 制作与规范 →</a>
+      </div>
+
+      <div class="demos-grid">
+        <figure class="demo-card">
+          <div class="demo-media">
+            <picture>
+              <source media="(prefers-reduced-motion: reduce)" srcset="./assets/demos/proof-cycle-zh-v1-poster.png" data-demo-poster="proof-cycle">
+              <img src="./assets/demos/proof-cycle-zh-v1.gif" alt="dislop 三态印刷校样：标出 AI 寒暄与空话、拦下二阶口号、改干净后退出码 0" width="960" height="500" loading="lazy" decoding="async" data-demo-gif="proof-cycle">
+            </picture>
+          </div>
+          <figcaption class="demo-caption">
+            <strong class="demo-cap-title" data-i18n="demos.c1Title">1. 三态文字校样：防改过头换成反转口号</strong>
+            <span class="demo-cap-desc" data-i18n="demos.c1Desc">先用红实线划掉开头寒暄，再用蓝虚线抓出“不是……而是……”反转口号，最后只留动作和 45 秒真实指标。</span>
+          </figcaption>
+        </figure>
+
+        <figure class="demo-card">
+          <div class="demo-media">
+            <picture>
+              <source media="(prefers-reduced-motion: reduce)" srcset="./assets/demos/cli-check-zh-v1-poster.png" data-demo-poster="cli-check">
+              <img src="./assets/demos/cli-check-zh-v1.gif" alt="dislop CLI 本地离线检查：原稿退出码 1，清掉套话后复检退出码 0" width="920" height="460" loading="lazy" decoding="async" data-demo-gif="cli-check">
+            </picture>
+          </div>
+          <figcaption class="demo-caption">
+            <strong class="demo-cap-title" data-i18n="demos.c2Title">2. 命令行门禁：Node 与 Python 结果一致</strong>
+            <span class="demo-cap-desc" data-i18n="demos.c2Desc">本地跑 dislop check --profile，硬伤直接返回退出码 1 卡住 CI，顺带输出句长起伏与具体度体检。</span>
+          </figcaption>
+        </figure>
+
+        <figure class="demo-card">
+          <div class="demo-media">
+            <picture>
+              <source media="(prefers-reduced-motion: reduce)" srcset="./assets/demos/workbench-live-zh-v1-poster.png" data-demo-poster="workbench-live">
+              <img src="./assets/demos/workbench-live-zh-v1.gif" alt="dislop.com 浏览器离线工作台真实操作：点击切换原稿、二阶 AI 味与改干净版本" width="1140" height="580" loading="lazy" decoding="async" data-demo-gif="workbench-live">
+            </picture>
+          </div>
+          <figcaption class="demo-caption">
+            <strong class="demo-cap-title" data-i18n="demos.c3Title">3. 浏览器离线工作台：真机操作实录</strong>
+            <span class="demo-cap-desc" data-i18n="demos.c3Desc">就是本页上方的工作台。贴稿子、点切规则包、实时对齐右侧行号批注，全程在当前标签页内完成。</span>
+          </figcaption>
+        </figure>
+
+        <figure class="demo-card">
+          <div class="demo-media">
+            <picture>
+              <source media="(prefers-reduced-motion: reduce)" srcset="./assets/demos/ui-slop-zh-v1-poster.png" data-demo-poster="ui-slop">
+              <img src="./assets/demos/ui-slop-zh-v1.gif" alt="网页组件模板味排查：标出紫粉渐变、胶囊标签墙与空链接，改为冷白纸面 1px 校样" width="960" height="500" loading="lazy" decoding="async" data-demo-gif="ui-slop">
+            </picture>
+          </div>
+          <figcaption class="demo-caption">
+            <strong class="demo-cap-title" data-i18n="demos.c4Title">4. 网页与组件：清掉默认紫粉模板和死按钮</strong>
+            <span class="demo-cap-desc" data-i18n="demos.c4Desc">直接扫 HTML/CSS/JSX 里的渐变标题、装饰徽章、胶囊堆叠和 href=&quot;#&quot; 假按钮，退回干净可用的界面。</span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
     <!-- How to Use & Install (Human-friendly guide + Folded Agent technical details) -->
     <section id="surfaces" class="section-block band-rule">
       <div class="section-header">
         <div>
-          <h2 class="section-title" data-i18n="surf.title">怎么用：发给你的 AI，或者装给编程 Agent</h2>
+          <h2 class="section-title" data-i18n="surf.title">怎么用：从免装 Skill 到纯本地 CLI，再到云端远程 MCP</h2>
           <p class="section-desc" data-i18n="surf.desc">
-            按你平时用的工具选一种就行。普通对话用户直接复制一句话就能用；用 Claude Code、Codex、Cursor 的开发者装一次 Skill 或 Plugin，以后写前自动避坑、写完自动复检。
+            从 Coding Agent（Codex、Claude Code、Antigravity、Cursor）到办公 Agent（WorkBuddy、千问、Claude Cowork），一行命令接入；重视隐私选纯本地 Skill + CLI，免装环境直接连云端远程 MCP。
           </p>
         </div>
         <a href="./tools/index.md" data-i18n="surf.readTools">完整接入文档（.md）→</a>
@@ -348,11 +415,11 @@
         </div>
         <div class="where-item">
           <h3 data-i18n="surf.w2Title">2. 开源 CLI 与本地 MCP（全内置 + 按需小模型）</h3>
-          <p data-i18n="surf.w2Desc">&lt; 250 KB 零依赖直接内置全部 7 套规则与行业包，断网秒查目录、Word、PPT 与 Git 改动；支持 dislop voice 离线声纹和 dislop model 按本机内存推荐选装本地小模型。</p>
+          <p data-i18n="surf.w2Desc">&lt; 250 KB 零依赖直接内置全部 7 套规则与行业包，断网秒查目录、Word、PPT 与 Git 改动；支持 dislop voice 离线提取个人文风和 dislop model 选装本地小模型。</p>
         </div>
         <div class="where-item">
-          <h3 data-i18n="surf.w3Title">3. 官方云端远程 MCP（免装环境重能力）</h3>
-          <p data-i18n="surf.w3Desc">在网页对话、手机端或自动化工作流里直连 https://dislop.com/mcp，调用 1.2 秒自愈改写、三阶审校与跨端同步个人文风（每月 30 次免费）。</p>
+          <h3 data-i18n="surf.w3Title">3. 官方云端远程 MCP（办公 Agent 与网页直连）</h3>
+          <p data-i18n="surf.w3Desc">在 WorkBuddy、千问、Claude Cowork 或自动化工作流里直连 https://dislop.com/mcp，调用云端深层审校、复检改写与跨端同步个人文风（每月 30 次免费）。</p>
         </div>
         <div class="where-item">
           <h3 data-i18n="surf.w4Title">4. 免装聊天框一句话（/llms.txt）</h3>
@@ -405,14 +472,14 @@
               <a class="endpoint-path" href="./llms.txt">/llms.txt</a>
               <div class="endpoint-desc" data-i18n="ep.llms">Agent 入口索引</div>
             </div>
-            <span class="endpoint-meta">2.4 KB · ~611 tok</span>
+            <span class="endpoint-meta">2.4 KB · ~607 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
               <a class="endpoint-path" href="./catalog.json">/catalog.json</a>
               <div class="endpoint-desc" data-i18n="ep.catalog">全部文档的 JSON 目录</div>
             </div>
-            <span class="endpoint-meta">55.8 KB · ~14276 tok</span>
+            <span class="endpoint-meta">56.7 KB · ~14510 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
@@ -447,7 +514,7 @@
               <a class="endpoint-path" href="./tools/skill.md">/tools/skill.md</a>
               <div class="endpoint-desc" data-i18n="ep.skill">跨宿主 Agent Skill</div>
             </div>
-            <span class="endpoint-meta">2.6 KB · ~675 tok</span>
+            <span class="endpoint-meta">2.6 KB · ~678 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
@@ -458,17 +525,24 @@
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
+              <a class="endpoint-path" href="./methodology/product-brief.md">/methodology/product-brief.md</a>
+              <div class="endpoint-desc" data-i18n="ep.brief">产品定义（定位 / 用户 / 卖点）</div>
+            </div>
+            <span class="endpoint-meta">2.3 KB · ~592 tok</span>
+          </div>
+          <div class="endpoint-row">
+            <div class="endpoint-main">
               <a class="endpoint-path" href="./methodology/brand-and-voice.md">/methodology/brand-and-voice.md</a>
               <div class="endpoint-desc" data-i18n="ep.method">文案与设计基准</div>
             </div>
-            <span class="endpoint-meta">7.2 KB · ~1850 tok</span>
+            <span class="endpoint-meta">7.5 KB · ~1923 tok</span>
           </div>
           <div class="endpoint-row">
             <div class="endpoint-main">
               <a class="endpoint-path" href="./llms-full.txt">/llms-full.txt</a>
               <div class="endpoint-desc" data-i18n="ep.full">单次拉取的全部 42 条规则</div>
             </div>
-            <span class="endpoint-meta">27.7 KB · ~7093 tok</span>
+            <span class="endpoint-meta">27.7 KB · ~7087 tok</span>
           </div>
 <!-- /BUILD:ENDPOINTS -->
             </div>
@@ -483,7 +557,7 @@
         <div>
           <h2 class="section-title" id="pricing-heading" data-i18n="price.title">开源本地免费，云端按需升级</h2>
           <p class="section-desc" data-i18n="price.desc">
-            Skill、CLI 与规则库按 Apache-2.0 完全开源、离线运行、零上传。需要大模型三阶审校、自愈一键去味和远程 HTTP MCP 时，可以直接用官方托管云端（免费版每月 30 次额度，付费用量级接口绝不用于模型训练）。
+            Skill、CLI 与规则库按 Apache-2.0 开源，支持纯本地离线运行、零上传。需要大模型深层文风审校、复检改写与远程 HTTP MCP 时，可以在工作台或 Agent 里切到官方托管云端（免费版每月 30 次额度，付费端点不用于模型训练）。
           </p>
         </div>
         <a href="https://github.com/dislop-ai/dislop/blob/main/benchmarks/MODEL-COMPARISON.md" target="_blank" rel="noopener" data-i18n="price.benchLink">看 5 模型实测对比 →</a>
@@ -499,7 +573,7 @@
           <ul class="pricing-list">
             <li data-i18n="price.t1F1">Agent Skill（含本地参考卡）、命令行与本地 MCP（Apache-2.0）</li>
             <li data-i18n="price.t1F2">全量内置 7 套场景与行业包（42 条规则），离线查文档、Word、PPT 与 PR</li>
-            <li data-i18n="price.t1F3">内置 5 轴节奏体检、14.6 KB 轻量本地模型（--ml）与 dislop voice 离线声纹</li>
+            <li data-i18n="price.t1F3">内置 5 轴节奏体检、14.6 KB 轻量本地模型（--ml）与 dislop voice 离线个人文风</li>
             <li data-i18n="price.t1F4">零联网零上传；支持按本机内存与芯片选装可选本地小模型</li>
           </ul>
           <div class="quick-actions" style="margin-top:auto;padding-top:12px;">
@@ -515,8 +589,8 @@
           <p class="pricing-sub" data-i18n="price.t2Sub">邮箱领取免费密钥，无需绑卡，立即在官网工作台或远程 MCP 使用。</p>
           <ul class="pricing-list">
             <li data-i18n="price.t2F1">直连 https://dislop.com/mcp，免本地装环境（单次最长 12,000 字）</li>
-            <li data-i18n="price.t2F2">AI 深度审校（1 额度）：查出推销腔、官话与套话，给出具体改法</li>
-            <li data-i18n="price.t2F3">AI 一键去味（2 额度）：自动改写、核对原数字不丢失、二次兜底修复</li>
+            <li data-i18n="price.t2F2">云增强审校（1 额度）：查出推销腔、官话与套话，给出具体改法</li>
+            <li data-i18n="price.t2F3">云增强改写（2 额度）：自动改写后复检，核对原稿数字与限定词</li>
             <li data-i18n="price.t2F4">个人文风提取（2 额度）：1–3 篇旧稿提炼专属文风，工作台与远程 MCP 均可用</li>
           </ul>
           <div class="quick-actions" style="margin-top:auto;padding-top:12px;">
@@ -638,9 +712,9 @@
     <section id="share" class="section-block band-rule" aria-labelledby="share-heading">
       <div class="section-header">
         <div>
-          <h2 class="section-title" id="share-heading" data-i18n="share.title">觉得顺手？发给同事，或者去 GitHub 留个 Star</h2>
+          <h2 class="section-title" id="share-heading" data-i18n="share.title">觉得顺手？发给同事，或者去 GitHub 收藏</h2>
           <p class="section-desc" data-i18n="share.desc">
-            Skill、CLI 与全部 42 条内置规则按 Apache-2.0 永久开源、离线零上传；云端 AI 仅在你主动点击时调用且不存草稿。如果团队里有人天天给 AI 稿子改味道，下面三个入口最直接。
+            Skill、Plugin、CLI 与全部 42 条内置规则按 Apache-2.0 开源，纯本地零上传；网页工作台可随时切换云端 MCP 增强模式且不存草稿。从 Coding Agent 到办公 Agent，只要团队用 AI 交稿，下面三个入口最直接。
           </p>
         </div>
       </div>
@@ -720,9 +794,9 @@
               <td data-i18n="status.partial">改动检查可用，AST 未做</td>
             </tr>
             <tr>
-              <td><strong data-i18n="cov.r6Name">离线声纹、轻量本地模型与按需小模型</strong></td>
+              <td><strong data-i18n="cov.r6Name">个人文风、轻量模型与按需本地小模型</strong></td>
               <td><code>voice</code>, <code>--ml</code>, <code>model</code></td>
-              <td data-i18n="cov.r6Scope">本地 CLI 与工作台支持零上传统计声纹提取、内置 14.6 KB 轻量空话识别（--ml），并可按本机硬件内存推荐选装本地小模型；云端同步提供远程文风提炼。</td>
+              <td data-i18n="cov.r6Scope">本地 CLI 与工作台支持离线统计个人文风、内置 14.6 KB 轻量空话识别（--ml），并可按本机硬件内存选装本地小模型；云端同步提供远程文风提炼。</td>
               <td data-i18n="status.live">可用</td>
             </tr>
           </tbody>
@@ -1155,7 +1229,7 @@
               <td><div class="ex-stack">
                  <div class="ex-row-bad"><strong>原句：</strong> <code>本次 PR 旨在通过重构连接池管理逻辑进一步提升系统的稳定性与可维护性。</code></div>
                  <div class="ex-row-trap"><strong>改过头：</strong> <code>这不是一次普通的代码重构，而是连接池稳定性的底层重塑。</code></div>
-                 <div class="ex-row-good"><strong>改好：</strong> <code>修复 Redis 重连分支未释放旧句柄导致的连接泄漏（#412），压测 2 小时常驻连接数稳定在 64 以内。</code></div>
+                 <div class="ex-row-good"><strong>改好：</strong> <code>修复连接池重连分支未释放旧句柄导致的连接泄漏，避免长运行后连接耗尽。</code></div>
                </div></td>
             </tr>
             <tr id="rule-eng-shallow-root-cause" class="rule-row" data-rule-lang="both">

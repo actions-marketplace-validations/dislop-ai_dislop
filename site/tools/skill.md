@@ -1,7 +1,7 @@
 ---
 name: dislop
 version: 0.6.2
-description: Prevent, diagnose, and clean up AI slop in docs, RFCs, slide decks, and web pages. Local progressive references + offline CLI (7 packs, 42 rules, 14.6 KB Pocket ML, offline voice) + optional Cloud MCP.
+description: Linter for AI Slop. Helps coding and office agents catch and fix AI-sounding text and template layouts in docs, web UI, and slides using local references, offline CLI (7 packs, 42 rules), or optional Cloud MCP.
 ---
 
 # dislop

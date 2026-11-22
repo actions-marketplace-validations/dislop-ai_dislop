@@ -1,6 +1,6 @@
 name: "dislop Anti-Slop Check"
 author: "dislop-ai"
-description: "Zero-dependency anti-slop linter for AI-written Markdown, Word (.docx), PowerPoint (.pptx), and HTML/CSS/JSX."
+description: "Linter for AI Slop in Markdown, Word (.docx), PowerPoint (.pptx), and HTML/CSS/JSX — zero dependencies."
 branding:
   icon: "edit-3"
   color: "red"

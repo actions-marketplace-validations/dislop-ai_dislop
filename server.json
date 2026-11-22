@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.dislop-ai/dislop",
   "title": "dislop",
-  "description": "Zero-dependency anti-slop linter & Cloud MCP for AI-written docs, slides, and web UI.",
+  "description": "Linter for AI Slop in docs, web UI, and slides — offline stdio & Cloud MCP.",
   "version": "0.6.2",
   "websiteUrl": "https://dislop.com",
   "repository": {

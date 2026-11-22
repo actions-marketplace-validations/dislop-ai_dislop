@@ -56,10 +56,10 @@ const META = {
   },
   license: "Apache-2.0",
   brandColor: "#F04438",
-  shortSubtitle: "Catch AI slop before shipping",
-  serverDescription: "Zero-dependency anti-slop linter & Cloud MCP for AI-written docs, slides, and web UI.",
+  shortSubtitle: "Linter for AI Slop",
+  serverDescription: "Linter for AI Slop in docs, web UI, and slides — offline stdio & Cloud MCP.",
   pluginDescription:
-    "Zero-dependency anti-slop Skill, CLI, and MCP linter for AI-written docs, Word/PowerPoint decks, and web pages (7 built-in packs, 42 rules, 53 patterns, and bundled 15 KB Pocket ML).",
+    "Linter for AI Slop. Combines vetted community rules (7 packs, 42 rules, 53 patterns) across Skill, CLI, and MCP so your agent catches and fixes AI slop in docs, Word/PPT, and web UI.",
   keywords: [
     "anti-slop",
     "de-slop",
@@ -353,7 +353,7 @@ const targets = [
     content: [
       "interface:",
       '  display_name: "dislop"',
-      '  short_description: "Catch AI slop in docs, Word/PPT decks, and web UI"',
+      '  short_description: "Linter for AI Slop in docs, web UI, and slides"',
       `  default_prompt: "Use $dislop to check my draft for AI slop, replacement slogans, and template UI while keeping every number, link, and qualifier intact."`,
       "policy:",
       "  allow_implicit_invocation: true",

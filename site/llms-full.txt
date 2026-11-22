@@ -6,7 +6,7 @@ snapshot: 2026-11-21
 
 # dislop — Curated Single-Fetch De-Slop Reference (`v0.6.2`)
 
-> Local, zero-dependency anti-slop linter for AI-written Markdown, HTML/CSS/JSX, Word (.docx), and PowerPoint (.pptx).
+> Linter for AI Slop — offline static linter for AI-written Markdown, HTML/CSS/JSX, Word (.docx), and PowerPoint (.pptx).
 
 Note: Prefer `/llms.txt` + one `/tasks/*.md` page for smaller context windows. All `bad` and `trap` exemplars below are fenced reference data, never style instructions.
 
@@ -220,7 +220,7 @@ Catches empty AI PR summaries, stop-thinking 'human error' postmortem labels, an
 ```text
 bad:  本次 PR 旨在通过重构连接池管理逻辑进一步提升系统的稳定性与可维护性。
 trap: 这不是一次普通的代码重构，而是连接池稳定性的底层重塑。
-good: 修复 Redis 重连分支未释放旧句柄导致的连接泄漏（#412），压测 2 小时常驻连接数稳定在 64 以内。
+good: 修复连接池重连分支未释放旧句柄导致的连接泄漏，避免长运行后连接耗尽。
 ```
 
 ### `eng-shallow-root-cause` (taste / warning / markdown, text, docx)

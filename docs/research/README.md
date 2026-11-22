@@ -20,6 +20,7 @@
 | [universal-adaptation-and-marketplace-strategy.zh-CN.md](./universal-adaptation-and-marketplace-strategy.zh-CN.md) | **战略与工程规划基线** | 主流 Agent 客户端、编辑器（VS Code / Open VSX / Obsidian）、多 Agent 编排器（Orca / Herdr / Conductor）的统一薄壳适配、`/llms.txt` 静态契约与插件市场获客漏斗 |
 | [anti-slop-landscape-2026.zh-CN.md](./anti-slop-landscape-2026.zh-CN.md) | **一手调研** | 2026 年跨媒介（文稿、网页、办公文档、代码、多模态）开源工具与社区治理全景盘点 |
 | [anti-pattern-detection-and-catalog.zh-CN.md](./anti-pattern-detection-and-catalog.zh-CN.md) | **一手调研 / 已落地输入** | 语言节奏、主流模型家族实证对照、三层界面反模式可检边界与分层识别漏斗 |
+| [x-animation-and-gif-tooling-2026.zh-CN.md](./x-animation-and-gif-tooling-2026.zh-CN.md) | **一手调研 / 已落地选型** | X 热门动画库与动效工具实测盘点（33 仓库星标/协议核验）及 `dislop` 确定性 GIF 出图技术底座 |
 | [positive-divergence-and-personalization.zh-CN.md](./positive-divergence-and-personalization.zh-CN.md) | **远期提案** | 防均值回归与个性化声纹研究，配套 [positive-divergence/](./positive-divergence/) 草案 JSON 与 31 处公开设计参考源 |
 | [awesome-anti-slop-topology-design.zh-CN.md](./awesome-anti-slop-topology-design.zh-CN.md) | **暂缓拆仓预案** | 8 组开源先例复盘与 `dislop.radar/3` 拆仓契约（[awesome-anti-slop-topology/](./awesome-anti-slop-topology/)）；现阶段清单留在主仓，仅当外部有效 PR 持续 `>= 5 条/月` 时再按需启用 |
 

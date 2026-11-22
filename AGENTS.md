@@ -12,7 +12,7 @@
 
 ## 2. 写给人看的字
 
-`0 findings` 只说明没踩中规则，不代表文字不像 AI 写的。访客读得到的字（README、官网、`/awesome/`、CLI 提示、发布说明、仓库与组织简介），动笔前先读 [docs/brand-and-voice-guide.zh-CN.md](./docs/brand-and-voice-guide.zh-CN.md)，按朴实、轻松、直接的开发者口吻写（参考 80% 简化技术表达），守住七条：
+`0 findings` 只说明没踩中规则，不代表文字不像 AI 写的。访客读得到的字（README、官网、`/awesome/`、CLI 提示、发布说明、仓库与组织简介），动笔前先对照 [PRODUCT.md](./PRODUCT.md) 对齐定位、用户阶梯、卖点与一句话介绍，再读 [docs/brand-and-voice-guide.zh-CN.md](./docs/brand-and-voice-guide.zh-CN.md)，按朴实、轻松、直接的开发者口吻写（参考 80% 简化技术表达），守住七条：
 
 1. 第一句落在具体的东西上：一段原文、一个文件、一个数字或一条命令，不说空话。
 2. 不写三段对称分号推销句，不写段尾“金句”收尾（如 `笔一直在你手里`），不穿校对编辑戏服（如 `可以付印`、`页边问你一句`、`蓝笔商榷`、`同路清单`）。

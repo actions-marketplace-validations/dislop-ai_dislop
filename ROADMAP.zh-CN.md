@@ -1,10 +1,10 @@
 # 路线图与协作计划（Roadmap）
 
-[English](./ROADMAP.md)
+[English](./ROADMAP.md) · [产品定义](./PRODUCT.md)
 
 最后更新：`2026-11-22` · 当前基线：`v0.6.2`（`dislop.com` 已上线）
 
-这份路线图记录 `dislop` 现在已经做到哪一步、接下来按什么顺序推进全平台适配与规则深化，以及还没写死、欢迎团队一起拍板的开放问题。认领任务、反馈误报，或者聊新点子，直接在 [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) 开帖，或建一个 [Issue](https://github.com/dislop-ai/dislop/issues) 即可。
+这份路线图记录 `dislop` 现在已经做到哪一步、接下来按什么顺序覆盖 Coding Agent 用户、办公 Agent（WorkBuddy、千问、Claude Cowork 等）用户与日常办公人群，以及还没写死、欢迎团队一起拍板的开放问题。认领任务、反馈误报，或者聊新点子，直接在 [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) 开帖，或建一个 [Issue](https://github.com/dislop-ai/dislop/issues) 即可。
 
 ---
 
@@ -12,10 +12,10 @@
 
 | 模块 | 现已实现 | 核心目录 |
 |---|---|---|
-| 双端零依赖内核 | Node.js 20+ 与 Python 3.10+ 双端零外部依赖，通过 160 项规则样本断言（83 命中 + 77 干净）、53 条反模式库核验、离线声纹提取及 26 项 Python `unittest` 跨运行时一致性与引擎单测 | `src/core.mjs`、`src/dislop/engine.py`、`tests/test_conformance.py` |
+| 双端零依赖内核 | Node.js 20+ 与 Python 3.10+ 双端零外部依赖，通过 160 项规则样本断言（83 命中 + 77 干净）、53 条反模式库核验、离线个人文风提取及 26 项 Python `unittest` 跨运行时一致性与引擎单测 | `src/core.mjs`、`src/dislop/engine.py`、`tests/test_conformance.py` |
 | 全内置规则包与轻量模型 | 全部 7 套场景与行业包（42 条规则）直接内置离线运行：`core`、`business-brief`、`engineering-spec`、`regulated-comms`、`literary-essay`、`deck-and-ui`、`executive-deck`；附 11 条扩展模式库探针（`--patterns`）、随包 `14.6 KB` gzip 零依赖集成模型（`pocket-slop-v1`）与本机内存/芯片小模型选装向导（`dislop model`） | `packs/*/pack.json`、`patterns/`、`models/`、`src/local-model.mjs` |
 | 支持格式 | `.md`、`.mdx`、`.txt`、`.html`、`.css`、`.jsx`、`.tsx`、`.svg`、`.docx`、`.pptx` | `src/binary-node.mjs`、`src/dislop/engine.py` |
-| 官网与在线工作台 | 默认简体中文的 `dislop.com`（一键切原生英文、严格零混排），采用两种标线（红实线硬伤 / 蓝虚线套话提醒）、5 格白话节奏条、离线与云端双模式声纹抽屉及 `/llms.txt` 端点 | `scripts/build_site.mjs`、`site/` |
+| 官网与在线工作台 | 默认简体中文的 `dislop.com`（一键切原生英文、严格零混排），采用两种标线（红实线硬伤 / 蓝虚线套话提醒）、5 格白话节奏条、本地检查与云增强（MCP）双模式文风抽屉及 `/llms.txt` 端点 | `scripts/build_site.mjs`、`site/` |
 | Awesome Anti-Slop | 87 条双语核验清单（`dislop.radar/2`），同源生成纯英文 `awesome/README.md`、纯中文 `awesome/README.zh-CN.md` 与 `dislop.com/awesome/` 离线筛选页 | `docs/research/anti-slop-radar-index.json`、`awesome/` |
 | 多平台清单与编辑器集成 | 同源生成并受 CI 校验的分发清单与集成包：npm（`dislop`）、PyPI（`dislop`）、官方 MCP Registry（`io.github.dislop-ai/dislop` 含本地 `stdio` 与远程 `https://dislop.com/mcp`）、Agent Skill（`skills/dislop/` 含 4 张本地参考卡与 `agents/openai.yaml`）、Claude Code 插件（`.claude-plugin/`，常驻仅约 130 tokens）、Codex 插件（`.codex-plugin/` 与 `.agents/plugins/marketplace.json`）、Cursor 插件（`.cursor-plugin/`）、Antigravity 插件包（`integrations/antigravity/`）、VS Code / Open VSX 轻量 Web 扩展（`integrations/vscode/`）、可复用 GitHub Action（`action.yml`）与 `.pre-commit-hooks.yaml` | `scripts/sync_manifests.mjs`、`integrations/`、`server.json`、`action.yml` |
 
@@ -46,9 +46,9 @@
 
 **验收标准**：本地实装 `.vsix` 验证波浪线与 Agent 工具双挂载生效；模拟多 Worktree 并行场景验证私有禁词继承与 `--fail-on error` 拦截退出码准确。
 
-### 轨道 C — 写作与桌面效率商店破圈及基准扩充（持续推进）
+### 轨道 C — 办公 Agent 与日常办公人群破圈及基准扩充（持续推进）
 
-目标：触达不写代码但高频产出文章、方案与周报的创作者群体，并用公开可复现数据持续验证检出率。
+目标：从首批 Coding Agent 用户向 WorkBuddy、千问、Claude Cowork 等办公 Agent 用户及日常写方案、周报的人群延伸，并用公开可复现数据持续验证检出率。
 
 - [x] 交付 `dislop-bench v2`：112 份核心检测基准与 154 份多角度反模式基准（准确率 `100.0%`、召回率 `100.0%`、干净原稿误报率 `0.0%`、双端一致率 `100.0%`）、18 组端到端改稿评测（`18/18` 全过）与 5 模型真实在线对比（[benchmarks/REPORT.md](./benchmarks/REPORT.md)）。
 - [ ] 复用纯 JS `src/core.mjs` 打包上架 **Obsidian Community Plugins**（单文件离线检查 + 可选云端改写）与 **Raycast Store**（系统快捷键检查选中文本 / 剪贴板）。
@@ -70,9 +70,9 @@
 完整定价与成本测算见 [docs/research/business-model-and-open-core.zh-CN.md](./docs/research/business-model-and-open-core.zh-CN.md)。**开源与闭源边界**：`SKILL.md`、Node/Python CLI、各平台本地插件包、7 工具本地 stdio MCP、全部 7 套内置规则包（42 条规则）、53 条反模式库、`14.6 KB` 零依赖集成模型、浏览器离线工作台、`Awesome Anti-Slop` 与 `dislop-bench v2` 永久按 Apache-2.0 开源；官方托管大模型后台与远程 HTTP MCP 独立在闭源 `dislop-cloud` 运营：
 
 - [x] **阶段 0（云端上线与需求验证）**：官方 `dislop-cloud` 已上线 `https://dislop.com/mcp` 与 `/api/v1/*`，支持每日 5 匿名试用额度、邮箱注册每月 30 免费额度、全局日限额硬熔断与 Pro / 按量包 / Team 预约登记。
-- [ ] **原排版文档一键洗稿（`.docx` / `.pptx` Round-Trip）**：拆解 OOXML、去 AI 味并复核数字与限定词保真后保留原样式导出。
+- [ ] **保留原排版去味导出（`.docx` / `.pptx` Round-Trip）**：拆解 OOXML、去掉 AI 味并复核数字与限定词后保留原样式导出。
 - [ ] **网页与 PPT 视觉多模态审查（Visual Anti-Slop）**：无头渲染真实截图 + VLM 审校版式拥挤度、模板审美与连续同版式。
-- [ ] **团队共享声纹库与 GitHub App PR 自动巡检**：跨成员复用 `dislop.voice/1` 品牌口吻卡并在 PR 自动输出单条刷新摘要。
+- [ ] **团队共享文风库与 GitHub App PR 自动巡检**：跨成员复用 `dislop.voice/1` 团队口吻卡并在 PR 自动输出单条刷新摘要。
 - [ ] 强类型 JS/TS（`.d.ts`）与 Python（`py.typed`）内存字节流 SDK 门面。
 
 ---

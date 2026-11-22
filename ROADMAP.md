@@ -1,10 +1,10 @@
 # Roadmap
 
-[简体中文](./ROADMAP.zh-CN.md)
+[简体中文](./ROADMAP.zh-CN.md) · [Product Brief](./PRODUCT.md)
 
 Last updated: `2026-11-22` · Current baseline: `v0.6.2` (`dislop.com` live)
 
-This roadmap tracks what `dislop` ships today, how we are rolling out universal editor and agent integrations next, and the open design questions we want to decide together. To pick up a track, push back on a rule threshold, or propose a new idea, start a thread in [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) or claim an [Issue](https://github.com/dislop-ai/dislop/issues).
+This roadmap tracks what `dislop` ships today, how we expand from coding agent users to office agent users (Claude Cowork, WorkBuddy, Qwen) and everyone delivering work with AI, and the open design questions we want to decide together. To pick up a track, push back on a rule threshold, or propose a new idea, start a thread in [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) or claim an [Issue](https://github.com/dislop-ai/dislop/issues).
 
 ---
 
@@ -46,9 +46,9 @@ Goal: ship one zero-dependency Web extension across both major VS Code registrie
 
 **Done when**: installing `.vsix` activates both human diagnostics and editor agent tools with zero manual JSON edits, and child Git worktrees inherit `.dislop.local.json` cleanly.
 
-### Track C — Writer & Desktop Productivity Stores + Benchmark Expansion (Parallel)
+### Track C — Office Agents, Everyday Writers & Benchmark Expansion (Parallel)
 
-Goal: reach writers, researchers, and PMs outside code editors while expanding reproducible benchmark coverage.
+Goal: expand beyond coding agent users to office agent workflows and anyone delivering docs, slides, or reports with AI while keeping reproducible benchmark coverage growing.
 
 - [x] Ship `dislop-bench v2`: 112 core detection samples + 154 multi-angle pattern samples (`100.0%` precision/recall, `0.0%` clean FPR, `100.0%` Node/Python parity), 18 end-to-end revision tasks (`18/18` all-clear), and 5-model live cloud comparisons ([benchmarks/REPORT.md](./benchmarks/REPORT.md)).
 - [ ] Reuse `src/core.mjs` to publish an offline-first **Obsidian Community Plugin** and a **Raycast Store** extension (`Check Selected Text` / `Clean Clipboard Slop`).

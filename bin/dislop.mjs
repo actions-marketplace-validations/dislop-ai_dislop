@@ -1898,7 +1898,7 @@ async function runModel(args, packs) {
 }
 
 function printHelp() {
-  console.log(`dislop v${ENGINE_VERSION} — Local linter for AI-written docs, slides, and web pages
+  console.log(`dislop v${ENGINE_VERSION} — Linter for AI Slop in docs, web UI, and slides
 
 Usage:
   dislop check [paths... | -] [--pack <id|auto>] [--ml] [--patterns] [--fail-on error|warning|info|never]

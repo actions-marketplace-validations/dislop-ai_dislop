@@ -1,7 +1,7 @@
 {
   "name": "dislop",
   "version": "0.6.2",
-  "description": "Zero-dependency anti-slop Skill, CLI, and MCP linter for AI-written docs, Word/PowerPoint decks, and web pages (7 built-in packs, 42 rules, 53 patterns, and bundled 15 KB Pocket ML).",
+  "description": "Linter for AI Slop. Combines vetted community rules (7 packs, 42 rules, 53 patterns) across Skill, CLI, and MCP so your agent catches and fixes AI slop in docs, Word/PPT, and web UI.",
   "mcpServers": {
     "dislop": {
       "command": "node",

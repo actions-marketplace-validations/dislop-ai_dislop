@@ -14,7 +14,7 @@ Before starting or wrapping up a batch of work, check live alignment across ever
 npm run release:status
 ```
 
-In about 1.5 seconds, `release:status` queries local `HEAD`, the latest GitHub Release (including `.vsix`), the repository description and `dislop-ai/.github` profile, `https://dislop.com` static catalog, `/api/health`, `npm`, `PyPI`, and the Official MCP Registry, marking each surface `[OK]` or `[LAG]`.
+In about 1.5 seconds, `release:status` checks local `HEAD`, the latest GitHub Release (including `.vsix`), and the repository/org profiles. It also queries `https://dislop.com` (`/catalog.json` and `/api/health`), `npm`, `PyPI`, and the Official MCP Registry, marking each surface `[OK]` or `[LAG]`.
 
 Choose one of three tracks based on what actually changed:
 

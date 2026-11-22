@@ -12,7 +12,7 @@ import { PACKS_BY_ID, RULE_UI_META } from "./engine/packs-data.mjs";
 
 const I18N = {
   zh: {
-    "page.title": "dislop — 发之前，把文案和设计里的 AI 味过一遍",
+    "page.title": "dislop — AI 味检查工具（Linter for AI Slop）",
     "nav.skip": "跳至正文",
     "nav.cases": "案例",
     "nav.workbench": "在线试",
@@ -27,19 +27,19 @@ const I18N = {
     "btn.copied": "已复制",
 
     "lead.strike": "好的，以下是为您润色后的版本。",
-    "lead.title": "发之前，把文案和设计里的 AI 味过一遍",
+    "lead.title": "帮你（的 Agent）挑出并改掉文档、网页和 PPT 里的 AI 味",
     "lead.sub":
-      "开源的 Skill 与 CLI（含全部 7 套场景包）完全本地离线运行、零上传，免费查文档、研发复盘、Word、PPT 和网页；需要免环境接入或一键自愈改写时，再按需连官方云端远程 MCP（每月 30 免费额度）。",
+      "专用的 AI 味检查工具（Linter for AI Slop）。整合社区验证过的去味规则、语料经验与 87 条精选工具，一行命令接入主流 Coding Agent、办公 Agent 与编辑器；CLI 与本地插件可纯本地零上传，下方工作台可随时切换本地检查与云增强（MCP）模式。",
     "lead.promptLabel": "或者免安装：复制这句话直接发给任意联网 AI / Agent",
     "lead.promptText":
       "先读 https://dislop.com/llms.txt，按里面整理的文案和设计去 AI 味规矩与检查方法，帮我把接下来这份稿子发之前过一遍。",
     "lead.copyPromptBtn": "复制发给 AI",
-    "lead.cta": "立刻贴一段在线试 ↓",
+    "lead.cta": "在工作台试用（本地 / 云增强）↓",
     "lead.cloudBtn": "免费领 30 额度远程 MCP 密钥",
-    "lead.installBtn": "装开源 Skill / CLI（全内置 0 联网）",
+    "lead.installBtn": "装进 Agent / 编辑器（可纯本地）",
     "lead.awesomeBtn": "工具清单 →",
     "lead.starBtn": "GitHub ★",
-    "lead.reassure": "默认离线查 0 上传；仅在你主动点击 AI 按钮时发往付费级零训练端点，不存草稿。",
+    "lead.reassure": "CLI 与本地插件纯本地运行、零上传；网页工作台支持本地规则检查与云增强（MCP）模式切换。",
 
     "hp.tabBad": "原稿",
     "hp.tabTrap": "换了种 AI 味",
@@ -47,17 +47,30 @@ const I18N = {
     "hp.meta": "用同一个检查引擎实时跑的",
     "hp.openWb": "在下面工作台打开 →",
 
-    "m1.title": "1. 开源 Skill：自带本地参考卡",
-    "m1.desc": "装进 Claude Code、Codex 或 Cursor，自带 4 张分场景本地渐进参考卡，全程 0 联网不弹外网审批框，动笔前防套话，写完引导跑本地 CLI。",
-    "m2.title": "2. 开源 CLI：全内置 + 按需本地模型",
-    "m2.desc": "< 250 KB 零依赖内置全部 7 套场景包（42 条规则）、5 轴节奏统计与离线声纹；支持按本机内存与芯片选装本地小模型。",
-    "m3.title": "3. 云端远程 MCP：重能力按需用",
-    "m3.desc": "免本地环境接入网页 AI 与自动化流，自愈改写比裸提示词提分 +15.8 至 +22.3、改写时保留原稿数字并跨端同步个人文风（每月 30 免费额度）。",
+    "m1.title": "1. 集成社区优质成果",
+    "m1.desc": "整合经过核验的开源去味项目、语料经验与 87 条精选工具，覆盖文稿、网页和 Word/PPT，不用自己到处搜集拼凑。",
+    "m2.title": "2. 多端与多场景兼容",
+    "m2.desc": "内置研发、商务、前端与演示等 7 套场景包，提供 Skill、Plugin、CLI 与 MCP，一行命令接入 Codex、Claude Code、Cursor、WorkBuddy 等 Agent 与编辑器。",
+    "m3.title": "3. 本地离线 + 云增强 MCP 切换",
+    "m3.desc": "CLI 与本地插件纯本地运行、零上传；在工作台或远程 MCP 切到云增强模式，即可直接用大模型深层审校、一键改写并同步个人文风（每月 30 免费额度）。",
 
     "cases.title": "三个真实案例：为什么删了套词还是像 AI",
     "cases.desc":
-      "AI 味分三层：一阶是“抓手”“赋能”这类套词，二阶是“不是 A，而是 B”这类口号，三阶是就算工具报 0 问题、读起来依然像在念推销稿的写法。下面三组对照可以直接试，也可以一键复制分享。",
+      "删掉“抓手”“赋能”这类高频词之后，模型常会换成“不是 A，而是 B”这类反转口号，或者写出规则报 0 问题、读起来依然像推销稿的句子。下面三组对照可以直接试，也可以一键复制分享。",
     "cases.readAll": "看全部对照案例（.md）→",
+
+    "demos.title": "6 秒看懂怎么查：从原稿到改干净",
+    "demos.desc":
+      "四段动画对应四个最常见场景：三态文字校样、终端离线检查、浏览器工作台实操，以及网页模板味清理。全部本地渲染，无外域请求。",
+    "demos.guideLink": "GIF 制作与规范 →",
+    "demos.c1Title": "1. 三态文字校样：防改过头换成反转口号",
+    "demos.c1Desc": "先用红实线划掉开头寒暄，再用蓝虚线抓出“不是……而是……”反转口号，最后只留动作和 45 秒真实指标。",
+    "demos.c2Title": "2. 命令行门禁：Node 与 Python 结果一致",
+    "demos.c2Desc": "本地跑 dislop check --profile，硬伤直接返回退出码 1 卡住 CI，顺带输出句长起伏与具体度体检。",
+    "demos.c3Title": "3. 浏览器离线工作台：真机操作实录",
+    "demos.c3Desc": "就是本页上方的工作台。贴稿子、点切规则包、实时对齐右侧行号批注，全程在当前标签页内完成。",
+    "demos.c4Title": "4. 网页与组件：清掉默认紫粉模板和死按钮",
+    "demos.c4Desc": "直接扫 HTML/CSS/JSX 里的渐变标题、装饰徽章、胶囊堆叠和 href=\"#\" 假按钮，退回干净可用的界面。",
 
     "wb.heading": "直接在这里试一试（支持粘贴或拖拽本地文件）",
     "wb.packLabel": "内置场景包（0 联网）：",
@@ -69,15 +82,15 @@ const I18N = {
     "pack.ui": "网页与组件",
     "wb.openFile": "打开本地文件（.md / .html / .docx / .pptx）",
     "wb.specimensTitle": "示例",
-    "wb.privacyNote": "离线检查默认留在当前标签页，0 上传；仅在你主动点击下方 AI 按钮时发往官方同源模型端点，不用于训练、不落盘留存。",
+    "wb.privacyNote": "本地基础检查在当前标签页运行；点击下方云增强（MCP）按钮时才会调用官方零训练模型端点，不存草稿。",
     "wb.jumpNotes": "看批注详情 ↓",
-    "ai.reviewBtn": "AI 深度审校（1 额度）",
-    "ai.deslopBtn": "AI 一键去味（2 额度）",
-    "ai.anonHint": "免登录每天 5 试用额度 · 登录后每月 30 额度",
+    "ai.reviewBtn": "云增强审校 · MCP（1 额度）",
+    "ai.deslopBtn": "云增强一键改写 · MCP（2 额度）",
+    "ai.anonHint": "免登录每天 5 试用额度 · 登录后每月 30 额度（同源远程 MCP）",
     "ai.claimLink": "领免费密钥 →",
-    "voice.drawerTitle": "可选：提取个人文风（支持本地 0 上传统计声纹，或云端 AI 提炼）",
-    "voice.drawerDesc": "贴入 1–3 段你自己写过的干净文字（用空行隔开）。点「离线统计声纹」完全在当前标签页完成、0 上传；也可登录免费密钥调用云端模型深度提炼并跨端复用。",
-    "voice.offlineBtn": "离线统计声纹（0 额度 · 不联网）",
+    "voice.drawerTitle": "可选：提取个人文风（支持本地统计，或云端 AI 提炼）",
+    "voice.drawerDesc": "贴入 1–3 段你自己写过的干净文字（用空行隔开）。点「本地统计文风」在当前标签页完成；也可登录免费密钥调用云端模型提炼并跨端同步。",
+    "voice.offlineBtn": "本地统计文风（0 额度 · 不联网）",
     "voice.extractBtn": "云端 AI 提炼文风（2 额度）",
     "voice.clearBtn": "清除已保存文风",
     "wb.modeProof": "标出问题",
@@ -87,7 +100,7 @@ const I18N = {
     "wb.tryTrap": "看换了种 AI 味的",
     "wb.reset": "还原",
     "wb.voiceTitle": "5 轴节奏与细节体检",
-    "wb.nudgeText": "试完觉得顺手？重视隐私可装开源 Skill / CLI 本地离线跑；想免装环境直接用大模型，10 秒领免费 30 额度远程 MCP。",
+    "wb.nudgeText": "试完觉得顺手？需要绝对离线可装 CLI / 本地插件；想让办公 Agent 直接用上云端改写，10 秒领免费 30 额度远程 MCP。",
     "wb.nudgeCloud": "领免费 30 额度 ↓",
     "wb.nudgeInstall": "装开源 Skill / CLI ↓",
     "wb.nudgeCopy": "复制发给 AI",
@@ -97,14 +110,14 @@ const I18N = {
 
     "surf.title": "怎么用：从免装 Skill 到纯本地 CLI，再到云端远程 MCP",
     "surf.desc":
-      "按数据敏感度和工作环境选就行。重视隐私直接用纯本地开源 Skill + CLI（内置全部规则与行业包，全程 0 联网）；没有本地终端或需要一键自愈改写时再连云端远程 MCP。",
+      "从 Coding Agent（Codex、Claude Code、Antigravity、Cursor）到办公 Agent（WorkBuddy、千问、Claude Cowork），一行命令接入；重视隐私选纯本地 Skill + CLI，免装环境直接连云端远程 MCP。",
     "surf.readTools": "完整接入文档（.md）→",
     "surf.w1Title": "1. 跨工具 Agent Skill（本地渐进参考）",
     "surf.w1Desc": "一行命令装进 Claude Code、Codex、Cursor、Windsurf 或 Antigravity。自带 4 张本地场景参考卡按需读取，全程 0 联网不弹外网审批框，并引导调用本地 CLI。",
     "surf.w2Title": "2. 开源 CLI 与本地 MCP（全内置 + 按需小模型）",
-    "surf.w2Desc": "< 250 KB 零依赖直接内置全部 7 套规则与行业包，断网秒查目录、Word、PPT 与 Git 改动；支持 dislop voice 离线声纹和 dislop model 按本机内存推荐选装本地小模型。",
-    "surf.w3Title": "3. 官方云端远程 MCP（免装环境重能力）",
-    "surf.w3Desc": "在网页对话、手机端或自动化工作流里直连 https://dislop.com/mcp，调用 1.2 秒自愈改写、三阶审校与跨端同步个人文风（每月 30 次免费）。",
+    "surf.w2Desc": "< 250 KB 零依赖直接内置全部 7 套规则与行业包，断网秒查目录、Word、PPT 与 Git 改动；支持 dislop voice 离线提取个人文风和 dislop model 选装本地小模型。",
+    "surf.w3Title": "3. 官方云端远程 MCP（办公 Agent 与网页直连）",
+    "surf.w3Desc": "在 WorkBuddy、千问、Claude Cowork 或自动化工作流里直连 https://dislop.com/mcp，调用云端深层审校、复检改写与跨端同步个人文风（每月 30 次免费）。",
     "surf.w4Title": "4. 免装聊天框一句话（/llms.txt）",
     "surf.w4Desc": "不装任何工具时，复制一句话发给 ChatGPT、Claude 或 Kimi 等联网对话，让它先读 dislop.com/llms.txt 再帮你过稿。",
     "snip.prompt": "发给 AI",
@@ -114,22 +127,22 @@ const I18N = {
 
     "price.title": "开源本地免费，云端按需升级",
     "price.desc":
-      "Skill、CLI 与全部 7 套场景规则包按 Apache-2.0 完全开源、纯本地离线运行、零上传。需要免装环境远程 MCP、1.2 秒自愈去味与跨端文风同步时，再按需选用官方托管云端（免费版每月 30 额度，付费级零训练接口）。",
+      "Skill、CLI 与规则库按 Apache-2.0 开源，支持纯本地离线运行、零上传。需要大模型深层文风审校、复检改写与远程 HTTP MCP 时，可以在工作台或 Agent 里切到官方托管云端（免费版每月 30 次额度，付费端点不用于模型训练）。",
     "price.benchLink": "看 5 模型实测对比 →",
     "price.t1Name": "开源本地（Skill + CLI）",
     "price.t1Price": "$0 · 永久免费",
     "price.t1Sub": "适合重视数据隐私的个人、研发团队与内网环境，代码与规则全部开源透明。",
     "price.t1F1": "Agent Skill（含本地参考卡）、命令行与本地 MCP（Apache-2.0）",
     "price.t1F2": "全量内置 7 套场景与行业包（42 条规则），离线查文档、Word、PPT 与 PR",
-    "price.t1F3": "内置 5 轴节奏体检、14.6 KB 轻量本地模型（--ml）与 dislop voice 离线声纹",
+    "price.t1F3": "内置 5 轴节奏体检、14.6 KB 轻量本地模型（--ml）与 dislop voice 离线个人文风",
     "price.t1F4": "零联网零上传；支持按本机内存与芯片选装可选本地小模型",
     "price.t1Cta": "安装 Skill / CLI ↑",
     "price.t2Name": "云端免费版（远程 MCP）",
     "price.t2Price": "$0 · 30 额度 / 月",
     "price.t2Sub": "邮箱领取免费密钥，无需绑卡，立即在官网工作台或远程 MCP 使用。",
     "price.t2F1": "直连 https://dislop.com/mcp，免本地装环境（单次最长 12,000 字）",
-    "price.t2F2": "AI 深度审校（1 额度）：查出推销腔、官话与套话，给出具体改法",
-    "price.t2F3": "AI 一键去味（2 额度）：自动改写、核对原数字不丢失、二次兜底修复",
+    "price.t2F2": "云增强审校（1 额度）：查出推销腔、官话与套话，给出具体改法",
+    "price.t2F3": "云增强改写（2 额度）：自动改写后复检，核对原稿数字与限定词",
     "price.t2F4": "个人文风提取（2 额度）：1–3 篇旧稿提炼专属文风，工作台与远程 MCP 均可用",
     "price.t2Cta": "下方 10 秒免费领密钥 ↓",
     "price.t3Name": "Pro · 按量包 · Team（早鸟预约）",
@@ -161,6 +174,7 @@ const I18N = {
     "ep.taskGate": "任务卡：发稿前 AI 残留硬伤检查",
     "ep.skill": "跨宿主 Agent Skill",
     "ep.awesome": "87 条工具清单 JSON",
+    "ep.brief": "产品定义（定位 / 用户 / 卖点）",
     "ep.method": "文案与设计基准",
     "ep.full": "单次拉取的全部 42 条规则",
 
@@ -182,7 +196,7 @@ const I18N = {
     "stat.zh": "条中文 / 多语种",
 
     "share.title": "觉得顺手？发给同事，或者去 GitHub 收藏",
-    "share.desc": "Skill、CLI 与全部 42 条内置规则按 Apache-2.0 永久开源、离线零上传；云端 AI 仅在你主动点击时调用且不存草稿。如果团队里有人天天给 AI 稿子改味道，下面三个入口最直接。",
+    "share.desc": "Skill、Plugin、CLI 与全部 42 条内置规则按 Apache-2.0 开源，纯本地零上传；网页工作台可随时切换云端 MCP 增强模式且不存草稿。从 Coding Agent 到办公 Agent，只要团队用 AI 交稿，下面三个入口最直接。",
     "share.c1Title": "一键分享给团队或朋友",
     "share.c1Desc": "复制一段直白不浮夸的介绍（带官网试用链接、案例页和工具清单），直接贴到群聊或文档里就行。",
     "share.copySiteBtn": "复制项目推荐语",
@@ -210,8 +224,8 @@ const I18N = {
     "cov.r4Scope": "点不动的空链接和占位按钮、默认紫粉渐变、满屏胶囊标签、三层套盒、把提示词口号印成装饰徽章。",
     "cov.r5Name": "Git 改动与 PR",
     "cov.r5Scope": "只查本次改过的行，拦住残留寒暄、占位符和文字/页面里的 AI 味，支持 GitHub PR 批注和 SARIF。代码语法树检查还没做。",
-    "cov.r6Name": "离线声纹、轻量本地模型与按需小模型",
-    "cov.r6Scope": "工作台与本地 CLI 均支持零上传统计声纹提取；本地 CLI 与 MCP 额外内置扩展模式库扫描（--patterns）、14.6 KB 轻量空话识别（--ml）并按本机硬件内存推荐选装本地小模型，云端同步提供远程文风提炼。",
+    "cov.r6Name": "个人文风、轻量模型与按需本地小模型",
+    "cov.r6Scope": "本地 CLI 与工作台支持离线统计个人文风、内置 14.6 KB 轻量空话识别（--ml），并可按本机硬件内存选装本地小模型；云端同步提供远程文风提炼。",
     "status.live": "可用",
     "status.partial": "改动检查可用，AST 未做",
     "status.partialVoice": "本地与云端均可用",
@@ -256,7 +270,7 @@ const I18N = {
     "footer.design": "视觉规范",
   },
   en: {
-    "page.title": "dislop — Clear the AI slop from your writing and design",
+    "page.title": "dislop — Linter for AI Slop",
     "nav.skip": "Skip to main content",
     "nav.cases": "Cases",
     "nav.workbench": "Try it",
@@ -271,19 +285,19 @@ const I18N = {
     "btn.copied": "Copied",
 
     "lead.strike": "Certainly! Here is your polished draft.",
-    "lead.title": "Clear the AI slop from your writing and design",
+    "lead.title": "Linter for AI Slop in docs, web pages, and slides",
     "lead.sub":
-      "Open-source Skill & CLI (all 7 scenario packs built in) run 100% offline with zero uploads across docs, RFCs, Word, PowerPoint, and web UI—plus optional hosted Remote MCP (30 free credits/month).",
+      "Helps you (and your agent) catch and fix AI-sounding text and template layouts before sending. Combines vetted community rules and 87 curated tools across Skill, Plugin, CLI, and MCP. Run completely offline locally, or switch to Cloud MCP mode in the workbench below.",
     "lead.promptLabel": "Or zero install: copy this line into any web-capable AI / coding agent",
     "lead.promptText":
       "Read https://dislop.com/llms.txt and follow its writing and design anti-slop rules and checks before delivering my next doc, slide deck, or web page.",
     "lead.copyPromptBtn": "Copy for AI",
-    "lead.cta": "Try a draft right now ↓",
+    "lead.cta": "Try in workbench (Local / Cloud) ↓",
     "lead.cloudBtn": "Free 30-credit Remote MCP key",
-    "lead.installBtn": "Install Skill / CLI (all packs offline)",
+    "lead.installBtn": "Install for Agent / Editor (runs offline)",
     "lead.awesomeBtn": "87-tool directory →",
     "lead.starBtn": "GitHub ★",
-    "lead.reassure": "Offline checks upload nothing; Cloud AI sends your draft only when clicked, on a paid-tier zero-training endpoint with zero draft storage.",
+    "lead.reassure": "CLI and local plugins run completely offline with zero uploads. The browser workbench switches between local rule checks and Cloud MCP mode.",
 
     "hp.tabBad": "Original",
     "hp.tabTrap": "Still sounds like AI",
@@ -291,17 +305,30 @@ const I18N = {
     "hp.meta": "Running live on the same linter engine",
     "hp.openWb": "Open in workbench ↓",
 
-    "m1.title": "1. Open-source Skill: local references",
-    "m1.desc": "Installs into Claude Code, Codex, or Cursor with 4 bundled local reference cards—zero web-fetch popups, prevents clichés upfront, and guides local CLI checks.",
-    "m2.title": "2. Open-source CLI: all-in + hardware-fit model",
-    "m2.desc": "< 250 KB zero-dep CLI bundles all 7 domain packs (42 rules), 5-axis rhythm telemetry, 14.6 KB Pocket ML (--ml), and offline voice—plus optional local small-model tiers matched to your RAM/chip.",
-    "m3.title": "3. Hosted Cloud MCP: heavy backend on demand",
-    "m3.desc": "Zero local setup for web chats and workflows: +15.8 to +22.3 pt benchmark lift via self-healing rewrite, numeric fidelity guard, and cloud-synced voice (30 free credits/mo).",
+    "m1.title": "1. Curated community work",
+    "m1.desc": "Combines vetted open-source rules, corpus findings, and 87 curated tools across docs, web UI, Word, and PowerPoint, without hunting down scattered prompts.",
+    "m2.title": "2. Broad host and scenario fit",
+    "m2.desc": "Ships 7 domain packs across Skill, Plugin, CLI, and MCP, connecting to Codex, Claude Code, Cursor, Claude Cowork, and editors in one command.",
+    "m3.title": "3. Local offline + Cloud MCP toggle",
+    "m3.desc": "CLI and local plugins run on your machine with zero uploads. Switch to Cloud MCP in the workbench or an office agent for deeper review, rewrites, and synced style (30 free credits/mo).",
 
     "cases.title": "Three real cases: why cutting buzzwords still sounds like AI",
     "cases.desc":
-      "AI slop shows up in three layers: 1st-order clichés, 2nd-order slogan frames ('Not X, but Y'), and 3rd-order pitch cadence that passes a linter with 0 findings. Try them live or copy any case to share.",
+      "After cutting cliché nouns, models often fall back on contrast slogans ('Not X, but Y') or pitch cadence that passes basic checks with 0 issues. Try them live or copy any case to share.",
     "cases.readAll": "All contrast cases (.md) →",
+
+    "demos.title": "Four 6-second loops: from raw draft to clean copy",
+    "demos.desc":
+      "Every GIF is rendered offline from the real rules and browser workbench, covering 3-state proofing, CLI gating, interactive browser checks, and UI template cleanup.",
+    "demos.guideLink": "GIF production guide →",
+    "demos.c1Title": "1. 3-state galley proof: catch fallback slogans too",
+    "demos.c1Desc": "Strikes the leftover chatbot greeting in red, flags a 'Not X, but Y' rewrite in blue, then settles on plain prose with numbers intact.",
+    "demos.c2Title": "2. Offline CLI gate: Node & Python parity",
+    "demos.c2Desc": "Run dislop check --profile in CI or pre-commit—core artifacts exit 1 alongside 5-axis rhythm and concreteness telemetry.",
+    "demos.c3Title": "3. Live browser workbench capture",
+    "demos.c3Desc": "Real Playwright capture of the offline workbench above: switching from draft to fallback slogan to clean copy in this tab.",
+    "demos.c4Title": "4. Web & UI: strip AI gradients and dead links",
+    "demos.c4Desc": "Flags purple-pink gradients, pill-badge walls, prompt-echo stickers, and dead href=\"#\" controls before handing off to a plain 1px sheet.",
 
     "wb.heading": "Try it right here (paste text or drop a local file)",
     "wb.packLabel": "Built-in pack (0 network):",
@@ -313,25 +340,25 @@ const I18N = {
     "pack.ui": "Web UI & components",
     "wb.openFile": "Open a local file (.md / .html / .docx / .pptx)",
     "wb.specimensTitle": "Examples",
-    "wb.privacyNote": "Offline checks stay in this tab with zero uploads. Drafts are sent to our same-origin paid-tier model endpoint (no training, no draft storage) only when you click an AI button below.",
+    "wb.privacyNote": "Local checks run in this browser tab. Clicking Cloud MCP buttons below sends the draft to our paid-tier zero-training model endpoint with no draft storage.",
     "wb.jumpNotes": "Jump to margin notes ↓",
-    "ai.reviewBtn": "AI Review (1 credit)",
-    "ai.deslopBtn": "AI Rewrite (2 credits)",
-    "ai.anonHint": "5 free anonymous credits/day · 30/mo with free key",
+    "ai.reviewBtn": "Cloud Review · MCP (1 credit)",
+    "ai.deslopBtn": "Cloud Rewrite · MCP (2 credits)",
+    "ai.anonHint": "5 free anonymous credits/day · 30/mo with free key (Remote MCP)",
     "ai.claimLink": "Get free key →",
-    "voice.drawerTitle": "Optional: extract personal voice (0-upload offline stats or Cloud AI)",
-    "voice.drawerDesc": "Paste 1-3 clean paragraphs you wrote (separated by blank lines). 'Offline statistical voice' runs 100% in this tab with zero uploads, or use a free key for Cloud AI extraction.",
-    "voice.offlineBtn": "Offline statistical voice (0 credits · offline)",
-    "voice.extractBtn": "Cloud AI voice extract (2 credits)",
-    "voice.clearBtn": "Clear saved voice",
+    "voice.drawerTitle": "Optional: extract personal style (local stats or Cloud AI)",
+    "voice.drawerDesc": "Paste 1-3 clean paragraphs you wrote (separated by blank lines). 'Local style stats' runs in this tab with zero uploads, or use a free key for Cloud AI extraction.",
+    "voice.offlineBtn": "Local style stats (0 credits · offline)",
+    "voice.extractBtn": "Cloud AI style extract (2 credits)",
+    "voice.clearBtn": "Clear saved style",
     "wb.modeProof": "Highlights",
     "wb.modeEdit": "Edit text",
     "wb.pasteOwn": "Paste my draft",
     "wb.applyClean": "Clean version",
-    "wb.tryTrap": "2nd-order AI slop",
+    "wb.tryTrap": "Fallback AI slogan",
     "wb.reset": "Reset",
     "wb.voiceTitle": "5-axis rhythm & detail check",
-    "wb.nudgeText": "Like how it feels? Install the open-source Skill / CLI for 100% offline privacy, or grab a free 30-credit Remote MCP key in 10 seconds.",
+    "wb.nudgeText": "Like how it feels? Install the open-source CLI / local plugin for offline privacy, or grab a free 30-credit Remote MCP key for office agents.",
     "wb.nudgeCloud": "Claim 30 free credits ↓",
     "wb.nudgeInstall": "Install open-source Skill / CLI ↓",
     "wb.nudgeCopy": "Copy for AI",
@@ -339,16 +366,16 @@ const I18N = {
     "legend.error": "Red solid: AI artifact",
     "legend.warn": "Blue dashed: cliché / template slop",
 
-    "surf.title": "How to use it: local Skill -> all-in offline CLI -> optional Cloud MCP",
+    "surf.title": "How to use it: local Skill -> offline CLI -> Cloud Remote MCP",
     "surf.desc":
-      "Match your privacy boundary. Keep drafts 100% on-device with the open-source Skill + CLI (all 7 packs bundled, 0 network calls), or connect Hosted Cloud MCP when you have no local shell or want 1-call self-healing rewrites.",
+      "Built first for coding agents (Codex, Claude Code, Antigravity, Cursor) and office agents (Claude Cowork, WorkBuddy, Qwen). Install the Skill + CLI locally for zero uploads, or connect Hosted Cloud MCP where no shell exists.",
     "surf.readTools": "Full setup guide (.md) →",
     "surf.w1Title": "1. Cross-host Agent Skill (local references)",
     "surf.w1Desc": "One command for Claude Code, Codex, Cursor, Windsurf, or Antigravity. Ships 4 local reference cards on disk—zero web-fetch popups—and guides local CLI checks.",
     "surf.w2Title": "2. Open-source CLI & Local MCP (all-in + optional model)",
-    "surf.w2Desc": "< 250 KB zero-dep CLI bundles all 7 packs, git-diff CI gates, and offline voice; 'dislop model' recommends optional local small models matched to your RAM/chip.",
-    "surf.w3Title": "3. Hosted Cloud Remote MCP (zero local setup)",
-    "surf.w3Desc": "Connect https://dislop.com/mcp in web chats or workflows for 1.2s self-healing rewrites, 3rd-order review, and synced personal voice (30 free credits/mo).",
+    "surf.w2Desc": "< 250 KB zero-dep CLI bundles all 7 packs, git-diff CI gates, and offline style stats; 'dislop model' recommends optional local small models matched to your RAM/chip.",
+    "surf.w3Title": "3. Hosted Cloud Remote MCP (office agents & web)",
+    "surf.w3Desc": "Connect https://dislop.com/mcp in Claude Cowork, web chats, or workflows for Cloud MCP review, re-checked rewrites, and synced personal style (30 free credits/mo).",
     "surf.w4Title": "4. Zero-install chat prompt (/llms.txt)",
     "surf.w4Desc": "Using browser ChatGPT or Claude with nothing installed? Paste one line so it reads dislop.com/llms.txt before reviewing your draft.",
     "snip.prompt": "Send to AI",
@@ -356,14 +383,14 @@ const I18N = {
     "snip.localMcp": "Local MCP",
     "snip.cli": "CLI",
 
-    "price.title": "Free open-source local tools, optional cloud LLM",
+    "price.title": "Free open-source local tools, optional cloud MCP",
     "price.desc":
-      "The Skill, CLI, and all 7 scenario packs (42 rules) are Apache-2.0 open source, zero-network, and zero-upload. When you want zero-setup Remote HTTP MCP, self-healing rewriting, or synced voice profiles, use our hosted cloud (30 free credits/month on a paid-tier zero-training endpoint).",
+      "The Skill, CLI, and all 7 scenario packs (42 rules) are Apache-2.0 open source and run completely offline locally. Switch to Cloud MCP in the workbench or an office agent when you want zero-setup remote review, re-checked rewrites, or synced style (30 free credits/mo, zero training).",
     "price.benchLink": "Read 5-model benchmark →",
     "price.t1Name": "Open Source Local (Skill + CLI)",
     "price.t1Price": "$0 · Forever free",
     "price.t1Sub": "Built for privacy-first writers, air-gapped repos, and engineering teams. Full transparency, zero uploads.",
-    "price.t1F1": "Agent Skill (with local references), Node/Python CLI & local MCP (Apache-2.0)",
+    "price.t1F1": "Agent Skill (with local references), CLI & local MCP (Apache-2.0)",
     "price.t1F2": "All 7 domain packs (42 rules) bundled offline for Markdown, HTML/CSS, DOCX, PPTX & PRs",
     "price.t1F3": "Built-in 5-axis rhythm telemetry, 14.6 KB Pocket ML (--ml) & offline dislop voice",
     "price.t1F4": "Zero network during check; hardware-aware optional local small-model advisor",
@@ -372,9 +399,9 @@ const I18N = {
     "price.t2Price": "$0 · 30 credits / mo",
     "price.t2Sub": "Enter your email for a free key—no card required—for Remote MCP and the web workbench.",
     "price.t2F1": "Direct https://dislop.com/mcp endpoint with zero local setup (up to 12,000 chars/call)",
-    "price.t2F2": "AI Review (1 credit): catches pitch cadence, filler, and clichés with concrete edits",
-    "price.t2F3": "AI Rewrite (2 credits): plain rewrite with numeric fidelity guard and auto-repair",
-    "price.t2F4": "Voice Extract (2 credits): build a reusable style profile in the workbench or Remote MCP",
+    "price.t2F2": "Cloud Review (1 credit): catches pitch cadence, filler, and clichés with concrete edits",
+    "price.t2F3": "Cloud Rewrite (2 credits): plain rewrite that re-checks rules, numbers, and qualifiers",
+    "price.t2F4": "Style Extract (2 credits): build a reusable style profile in the workbench or Remote MCP",
     "price.t2Cta": "Claim free key below ↓",
     "price.t3Name": "Pro · Credit Packs · Team (Early Access)",
     "price.t3Price": "$12/mo · $10 PAYGO",
@@ -405,6 +432,7 @@ const I18N = {
     "ep.taskGate": "Guide: pre-release AI artifact checks",
     "ep.skill": "Cross-host Agent Skill",
     "ep.awesome": "Raw JSON for 87 anti-slop tools",
+    "ep.brief": "Product brief (positioning & pitch)",
     "ep.method": "Voice & design guide",
     "ep.full": "All 42 rules in one file",
 
@@ -426,7 +454,7 @@ const I18N = {
     "stat.zh": "zh / multilingual",
 
     "share.title": "Found this useful? Share it or bookmark the repo",
-    "share.desc": "The Skill, CLI, and all 42 built-in rules are Apache-2.0 open source and run 100% offline; optional cloud AI runs only when clicked and stores no drafts. If your team deals with AI slop every week, these three links help the most.",
+    "share.desc": "The Skill, Plugin, CLI, and all 42 built-in rules are Apache-2.0 open source and run offline with zero uploads; the web workbench switches between local checks and optional Cloud MCP without storing drafts. Built for coding agents, office agents, and any team shipping AI-assisted work.",
     "share.c1Title": "Share with a teammate or friend",
     "share.c1Desc": "Copy a plain, no-hype blurb with the live workbench, real cases, and curated tool directory.",
     "share.copySiteBtn": "Copy project blurb",
@@ -454,8 +482,8 @@ const I18N = {
     "cov.r4Scope": "Dead href='#' placeholder links, unexplained disabled buttons, purple-pink AI gradients, pill walls, 3-level nested boxes, and 'AI-Powered' prompt-echo badges.",
     "cov.r5Name": "Git diffs & PRs",
     "cov.r5Scope": "Checks only modified lines for chat wrappers, placeholders, prose clichés, and UI template slop, with GitHub annotations and SARIF output. Code AST linting is not built.",
-    "cov.r6Name": "Offline voice, Pocket ML & optional local models",
-    "cov.r6Scope": "Both the browser workbench and CLI extract 0-upload statistical voice profiles; the local CLI & MCP add extended pattern-bank probes (--patterns), 14.6 KB Pocket ML (--ml), and RAM/chip-matched optional local small models.",
+    "cov.r6Name": "Personal style, Pocket ML & optional local models",
+    "cov.r6Scope": "The CLI and workbench support offline style stats, bundled 14.6 KB Pocket ML (--ml), and hardware-aware local small models; Cloud MCP adds remote style extraction.",
     "status.live": "Works now",
     "status.partial": "Diff checks work; no AST",
     "status.partialVoice": "Live offline & cloud",
@@ -885,7 +913,7 @@ const CASES_BY_LANG = {
   zh: [
     {
       id: "doc",
-      kicker: "案例 01 · 发版简报（自愈去味 + 数字保真）",
+      kicker: "案例 01 · 发版简报（去套话 + 核对数字）",
       title: "清掉寒暄、官话与口号，四个核心指标一个不丢",
       steps: [
         {
@@ -895,7 +923,7 @@ const CASES_BY_LANG = {
         },
         {
           cls: "is-trap",
-          label: "改过头（掉进二阶 AI 腔）",
+          label: "改过头（掉进反转口号）",
           text: "这绝非一次普通升级，而是结算架构的效率跃迁，性能实现数倍提升。",
         },
         {
@@ -917,7 +945,7 @@ const CASES_BY_LANG = {
     },
     {
       id: "autopsy",
-      kicker: "案例 02 · 真实自查（三阶结构味）",
+      kicker: "案例 02 · 真实自查（句式推销味）",
       title: "检查报 0 处问题，但我们自己上一版首屏照样像 AI",
       steps: [
         {
@@ -928,7 +956,7 @@ const CASES_BY_LANG = {
         {
           cls: "is-good",
           label: "改回人话",
-          text: "AI 写完的文档、Word、PPT 和网页，经常留着开头寒暄、空话套话、满页字墙或默认紫粉模板。你可以直接复制一句话发给你的 AI，或者在这里在线试查。",
+          text: "AI 写完的文档、Word、PPT 和网页，经常留着开头寒暄、空话套话、满页字墙或默认紫粉模板。你可以装进本地 Coding Agent 离线运行，也可以在这里切换本地检查与云增强（MCP）模式。",
         },
       ],
       note: "毛病不在单个词，在于“三段对称分号推销句 + 假装老校对 + 段尾金句收尾”。这就是为什么单靠脚本标红线不够，必须把写作规矩一起写进 Skill 和 Plugin。",
@@ -970,7 +998,7 @@ const CASES_BY_LANG = {
   en: [
     {
       id: "doc",
-      kicker: "Case 01 · Release note (self-healing rewrite + number guard)",
+      kicker: "Case 01 · Release note (rewrite + number check)",
       title: "Stripping chat wrappers and hype while keeping every metric exact",
       steps: [
         {
@@ -980,7 +1008,7 @@ const CASES_BY_LANG = {
         },
         {
           cls: "is-trap",
-          label: "Overcorrected (dropped numbers + 2nd-order slogan)",
+          label: "Overcorrected (dropped numbers + fallback slogan)",
           text: "This isn't just an upgrade — it's a new standard for blazing-fast settlement.",
         },
         {
@@ -1002,7 +1030,7 @@ const CASES_BY_LANG = {
     },
     {
       id: "autopsy",
-      kicker: "Case 02 · Real self-audit (3rd-order cadence)",
+      kicker: "Case 02 · Real self-audit (pitch cadence)",
       title: "0 linter findings, yet our own previous hero still sounded like AI",
       steps: [
         {
@@ -1013,7 +1041,7 @@ const CASES_BY_LANG = {
         {
           cls: "is-good",
           label: "Plain rewrite",
-          text: "AI-written docs, Word files, slides, and web pages often ship with chat replies, stock phrasing, crowded slides, or purple-pink template chrome. Copy one line to hand dislop to your AI right now, or test a draft here.",
+          text: "AI-written docs, Word files, slides, and web pages often ship with chat replies, stock phrasing, crowded slides, or purple-pink template chrome. Install dislop into your coding agent offline, or switch between local and Cloud MCP checks here.",
         },
       ],
       note: "Zero buzzwords triggered a rule, yet the 3-part semicolon pitch, editor roleplay, and pull-quote closer still screamed AI. That's why we put plain writing rules into SKILL.md and the Plugin alongside the linter.",
@@ -1056,12 +1084,12 @@ const CASES_BY_LANG = {
 
 const SHARE_BLURBS_BY_LANG = {
   zh: {
-    site: "分享一个开源的去 AI 味工具箱 dislop：发文档、PPT 或网页前，可以直接复制一句话发给你的 AI 按规矩过一遍，也能装成 Claude Code / Codex / Cursor 的 Skill、Plugin 或 MCP，官网还附了一份核验过的 87 条 Awesome Anti-Slop 工具清单。官网：https://dislop.com GitHub：https://github.com/dislop-ai/dislop",
+    site: "分享一个 AI 味检查工具 dislop（Linter for AI Slop）：整合了 87 条精选去味工具和社区规则，帮你（的 Agent）在文档、网页和 PPT 发出前挑出并改掉 AI 味，一行命令就能接进 Codex / Claude Code / Cursor / WorkBuddy 等，支持纯本地离线运行。官网：https://dislop.com GitHub：https://github.com/dislop-ai/dislop",
     awesome: "整理了一份 87 条去 AI 味工具与资料清单（Awesome Anti-Slop），涵盖中英文写作规范、Vale / Impeccable 等自动检查器、网页设计规则、PR 治理和论文，支持在线筛选也提供给 Agent 读的 JSON：https://dislop.com/awesome/ （GitHub：https://github.com/dislop-ai/dislop/blob/main/awesome/README.zh-CN.md）",
     cases: "https://dislop.com/#cases",
   },
   en: {
-    site: "Checking out dislop — an open-source, zero-dependency anti-slop kit for docs, slides, and web pages. You can paste one line into any AI chat, install it as a Skill / Plugin / MCP for Claude Code, Codex, or Cursor, try drafts offline, or browse 87 Awesome Anti-Slop tools: https://dislop.com (GitHub: https://github.com/dislop-ai/dislop)",
+    site: "Checking out dislop — a dedicated linter for AI slop. It brings together vetted community rules and 87 curated tools to help your agent find and fix AI slop in docs, web UI, and slides. Connects to Codex, Claude Code, Cursor, and office agents in one command and can run offline: https://dislop.com (GitHub: https://github.com/dislop-ai/dislop)",
     awesome: "Awesome Anti-Slop: 87 verified anti-slop tools, writing guides, UI standards, PR policies, and papers with an offline filter UI and agent-ready JSON: https://dislop.com/awesome/ (GitHub: https://github.com/dislop-ai/dislop/tree/main/awesome)",
     cases: "https://dislop.com/#cases",
   },
@@ -1114,7 +1142,7 @@ uvx dislop check .
 # 开启 5 轴节奏统计与内置 14.6 KB 轻量模型复检
 npx --yes dislop check draft.md --profile --ml
 
-# 离线提取你自己的句长与标点声纹（0 上传）
+# 离线提取你自己的句长与标点个人文风（0 上传）
 npx --yes dislop voice my-notes.md
 
 # 按本机内存与芯片查看选装本地小模型建议（不撑大安装包）
@@ -1188,7 +1216,7 @@ uvx dislop check .
 # Run with 5-axis rhythm telemetry and bundled 14.6 KB Pocket ML
 npx --yes dislop check draft.md --profile --ml
 
-# Extract a deterministic personal voice profile offline (0 uploads)
+# Extract a deterministic personal style profile offline (0 uploads)
 npx --yes dislop voice my-notes.md
 
 # Inspect hardware-matched optional local small-model tiers (never bloats install)
@@ -2490,6 +2518,33 @@ function applyI18n(isUserSwitch = false) {
   // Update struck opener text safely without touching the sibling SVG path
   const strikeEl = document.getElementById("hero-strike-text");
   if (strikeEl) strikeEl.textContent = dict["lead.strike"];
+
+  // Switch demo GIFs and reduced-motion posters strictly between ZH and EN assets
+  const demoAlts = {
+    zh: {
+      "proof-cycle": "dislop 三态印刷校样：标出 AI 寒暄与空话、拦下二阶口号、改干净后退出码 0",
+      "cli-check": "dislop CLI 本地离线检查：原稿退出码 1，清掉套话后复检退出码 0",
+      "workbench-live": "dislop.com 浏览器离线工作台真实操作：点击切换原稿、二阶 AI 味与改干净版本",
+      "ui-slop": "网页组件模板味排查：标出紫粉渐变、胶囊标签墙与空链接，改为冷白纸面 1px 校样",
+    },
+    en: {
+      "proof-cycle": "dislop 3-state proof: flagging chatbot artifact, catching 2nd-order slogan, passing with exit 0",
+      "cli-check": "dislop CLI offline check: exit code 1 on draft and exit code 0 after cleanup",
+      "workbench-live": "dislop.com browser workbench capture: checking draft, 2nd-order slop, and clean copy",
+      "ui-slop": "UI template slop check: flagging AI gradient, pill wall, and dead href='#' control",
+    },
+  };
+  document.querySelectorAll("img[data-demo-gif]").forEach((imgEl) => {
+    const slug = imgEl.getAttribute("data-demo-gif");
+    if (!slug) return;
+    imgEl.src = `./assets/demos/${slug}-${currentLang}-v1.gif`;
+    if (demoAlts[currentLang]?.[slug]) imgEl.alt = demoAlts[currentLang][slug];
+  });
+  document.querySelectorAll("source[data-demo-poster]").forEach((srcEl) => {
+    const slug = srcEl.getAttribute("data-demo-poster");
+    if (!slug) return;
+    srcEl.srcset = `./assets/demos/${slug}-${currentLang}-v1-poster.png`;
+  });
 
   // Footer agent hint with link
   const agentHintEl = document.querySelector("[data-i18n='footer.agentHint']");

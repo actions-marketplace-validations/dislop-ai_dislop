@@ -22,6 +22,7 @@
 - **字标**：全小写无衬线粗体 `dislop`（`letter-spacing: -0.025em`），不挂版本号胶囊、星芒图标或多层套框。
 - **仓库双主题横幅（`assets/banner-light.svg`、`assets/banner-dark.svg`）**：在 `README` 中通过 `<picture>` 标签自适应 GitHub 浅色与深色模式，双主题图标均保留同一枚朱红笔迹（`#F04438`），右侧标本严格遵循红蓝两套语义：朱红实线仅标出 `core` AI 残留硬伤（`chatbot-artifact`），群青虚线标出套话与模板味提醒。
 - **社交预览卡（`assets/og-card.svg`、`assets/og-card.png`，`1200×630`）**：印刷校样风 Open Graph 预览图，构建期同步至 `site/assets/`，适配 X、GitHub、Slack、Discord 与微信链接转发。
+- **对外演示动效 GIF（`assets/demos/*-{zh,en}-v1.gif`）**：面向 README、官网、接入手册与社媒的分语种演示图，完整制作与托管规范见 [gif-production-guide.zh-CN.md](./gif-production-guide.zh-CN.md)。
 
 ## 3. 色彩令牌与深色模式单调亮度阶梯
 

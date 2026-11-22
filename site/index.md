@@ -4,12 +4,13 @@ version: 0.6.2
 snapshot: 2026-11-21
 ---
 
-# dislop — Clear the AI slop from your writing and design
+# dislop — Linter for AI Slop
 
-Good writing habits, web and slide design rules, an offline zero-dependency checker, and 87 vetted tools—gathered in one place. Hand `/llms.txt` to any AI chat, install the Agent Skill / Claude Code Plugin / MCP server, or test drafts offline in your browser.
+A dedicated linter for AI slop. It brings together vetted community rules, corpus findings, and 87 curated tools to help you (and your agent) catch and fix AI-sounding text and template layouts in docs, web UI, and slides. Connects in one command to coding agents (Codex, Claude Code, Antigravity, Cursor), office agents (Claude Cowork, WorkBuddy, Qwen), and editors, and can run completely offline locally.
 
-- Runtime dependencies: 0 (Node.js 20+ and Python 3.10+ parity verified by 160 pack fixtures and 26 unit/conformance tests)
-- Live browser workbench: https://dislop.com/#workbench (offline in RAM by default + opt-in same-origin cloud AI, `CSP: connect-src 'self'`)
+- Product brief (EN/ZH): https://dislop.com/methodology/product-brief.md
+- Runtime dependencies: 0 (CLI and local plugins run offline with zero uploads)
+- Live browser workbench: https://dislop.com/#workbench (switches between local rule checks and Cloud MCP mode, `CSP: connect-src 'self'`)
 - Hosted Remote HTTP MCP: https://dislop.com/mcp (30 free monthly credits via https://dislop.com/#pricing)
 - Agent routing index: https://dislop.com/llms.txt
 - Machine-readable catalog: https://dislop.com/catalog.json

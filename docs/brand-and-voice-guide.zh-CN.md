@@ -1,8 +1,8 @@
 # 文案、表达与视觉基准
 
-[English](./brand-and-voice-guide.md)
+[English](./brand-and-voice-guide.md) · [产品定义（Product Brief）](../PRODUCT.md)
 
-写 `dislop` 的文档、官网、CLI 提示或发布说明时，只有一个总要求：**像做这个工具的人在平时说话一样写，朴实、轻松、直接。**
+写 `dislop` 的文档、官网、CLI 提示或发布说明时，只有一个总要求：**像做这个工具的人在平时说话一样写，朴实、轻松、直接。** 对外定位、目标用户、卖点与标准一句话介绍一律以 [PRODUCT.md](../PRODUCT.md) 为准。
 
 不用四平八稳，不用讨好谁，也不用刻意显得“专业”“克制”或“有文采”。
 
@@ -25,7 +25,7 @@
 ```text
 新版（朴实、直接）：
 把稿子里的 AI 味挑出来
-AI 写完的文档、PPT 或网页，经常夹着开头寒暄、空话套话、满页字墙或默认紫粉渐变。dislop 只负责把这些问题标出来，不替你重写。你对照标出来的地方自己改就行。
+AI 写完的文档、PPT 或网页，经常夹着开头寒暄、空话套话、满页字墙或默认紫粉渐变。dislop 负责在本地把这些问题标出来，方便你或你的 Agent 对照修改；在网页工作台或远程 MCP 里也可以按需切换云增强改写。
 ```
 
 不玩比喻，不甩金句，不把三个功能绑在分号里排排坐。读者三秒就能看懂它是干什么的。
@@ -48,7 +48,7 @@ Andrej Karpathy 在写技术说明和开源 README（例如 `nanoGPT`、`microgr
 | 场景 | 别这么写（AI 腔 / 角色扮演） | 直接这么写（中文） | 直接这么写（英文） |
 |---|---|---|---|
 | **主标题** | `你的稿子，不带 AI 味。` | `把稿子里的 AI 味挑出来` | `Catch the AI slop before you send it` |
-| **说明段落** | `不能发的硬伤直接划掉；听着像套话的问你一句……笔一直在你手里。` | `dislop 只负责把这些问题标出来，不替你重写。你对照标出来的地方自己改就行。` | `dislop only marks what looks off so you can edit it yourself.` |
+| **说明段落** | `不能发的硬伤直接划掉；听着像套话的问你一句……笔一直在你手里。` | `dislop 负责在本地把问题标出来，方便你或 Agent 对照改掉；需要时也能在工作台切到云增强改写。` | `dislop marks what looks off locally so you or your agent can fix it, with optional Cloud MCP rewrites.` |
 | **检查干净** | `可以付印。0 处标记，受保护事实完好保留。` | `0 处问题。寒暄和空话都清掉了。` | `0 issues. Chat wrapper and stock phrasing removed.` |
 | **换了种 AI 味** | `退回重对：二阶位移拦截` | `依然标出 1 处。旧套话删掉了，但换成了“不是……而是……”这种二阶 AI 腔。` | `Still flagged (1 issue). Old buzzwords are gone, replaced by a 'Not X, but Y' AI slogan.` |
 | **目录名** | `同路清单` | `工具清单` / `去 AI 味工具清单` | `Awesome list` / `Awesome Anti-Slop` |

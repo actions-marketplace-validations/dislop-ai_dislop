@@ -457,7 +457,7 @@ async function runLiveStatusAudit({ asJson = false, strict = false } = {}) {
   const repoDesc = ghRepoApi.data?.description || "";
   const repoDescAligned =
     !repoDesc ||
-    ([facts.packCount, facts.ruleCount, facts.patternCount, facts.awesomeCount].every((n) => new RegExp(`\\b${n}\\b`).test(repoDesc)));
+    /Linter for AI Slop/i.test(repoDesc);
 
   let orgProfileAligned = null;
   if (ghOrgReadme.ok && ghOrgReadme.data?.content) {

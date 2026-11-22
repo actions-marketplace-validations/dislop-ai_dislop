@@ -34,8 +34,8 @@
       "modalities": ["markdown", "text", "html", "jsx", "svg", "docx", "pptx"],
       "patterns": [
         "(?<![A-Za-z])(?:lorem ipsum|dolor sit amet)(?![A-Za-z])",
-        "\\[(?:insert|add|your|placeholder|tbd|todo)(?:\\s+[^\\]\\n]{1,50})?\\]",
-        "\\[(?:待补充|待填写|此处插入|占位符)\\]",
+        "\\[(?:insert|add|your|placeholder|tbd|todo)(?:\\s+[^\\]\\n]{1,50})?\\](?!\\s*\\()",
+        "\\[(?:待补充|待填写|此处插入|占位符)\\](?!\\s*\\()",
         "\\{\\{\\s*[A-Za-z_][A-Za-z0-9_.-]{0,40}\\s*\\}\\}",
         "【[^】\\n]{0,20}(?:待补充|待填写|此处插入|占位符)[^】\\n]{0,20}】",
         "(?:Click to add (?:title|subtitle|text)|单击此处添加(?:标题|副标题|文本))"
@@ -68,6 +68,7 @@
         "clean": [
           "Contact the on-call engineer before Friday.",
           "Array indexing uses items[0] in JavaScript.",
+          "Read [Your First GitHub Commit](https://example.com/guide) before opening a PR.",
           "已完成第 3 节压测记录。"
         ]
       }
@@ -82,12 +83,14 @@
       "modalities": ["markdown", "text", "html", "jsx", "docx", "pptx"],
       "patterns": [
         "(?:^|\\n)\\s*(?:Certainly|Sure|Absolutely|Of course|Happy to help|Glad to help)[!,.]?\\s+(?:[Hh]ere(?:'s| is| are)|[Bb]elow is)\\b",
+        "(?:^|\\n)\\s*Here\\s+(?:is|are)\\s+the\\s+(?:revised|updated|polished)\\s+",
         "\\bAs an AI(?: language model| assistant)?\\b",
         "\\bI hope this helps[!.]?",
         "\\bFeel free to (?:reach out|let me know|ask) if you (?:need|have) (?:anything|any (?:other |further )?questions)[!.]?",
         "(?:^|\\n)\\s*(?:好的|当然可以|没问题)[，,！!]?\\s*(?:以下|下面)是",
+        "(?:^|\\n)\\s*以下是为您(?:整理|撰写|润色|生成|修改)的",
         "(?:希望这对(?:你|您)有(?:所)?帮助|如果(?:你|您)(?:还有|需要)(?:任何|其他)?(?:问题|帮助)[，,]?请随时告诉我)[！!。.]?",
-        "\\b作为一个?\\s*AI(?:\\s*语言模型|\\s*助手)?",
+        "作为一个?\\s*AI(?:\\s*语言模型|\\s*助手)?",
         "\\[oaicite:\\d+\\]",
         "contentReference\\[oaicite:\\d+\\]",
         "【\\d+†[^】\\n]{1,40}】",
@@ -118,7 +121,10 @@
           "Latency dropped 18%【4†source】.",
           "好的，以下是修改后的会议纪要：周三上线。",
           "好的，以下是本周进展：接口延迟降到 120ms。",
-          "周二 10:00 切流。希望这对你有帮助！"
+          "周二 10:00 切流。希望这对你有帮助！",
+          "以下是为您整理的会议纪要：周四发布。",
+          "Here is the revised launch note: deploys at 14:00 UTC.",
+          "作为一个 AI 助手，我建议先做灰度验证。"
         ],
         "clean": [
           "Sure enough, the cache warmed within 40 seconds.",

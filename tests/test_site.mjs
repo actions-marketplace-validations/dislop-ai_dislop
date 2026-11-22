@@ -376,7 +376,26 @@ assert.equal(/&(?!amp;|lt;|gt;|quot;|apos;)/.test(sitemapXml), false, "sitemap.x
 const sitemapUrlCount = (sitemapXml.match(/<url>/g) || []).length;
 assert.ok(sitemapUrlCount >= 50, `Expected >= 50 <url> entries in sitemap.xml, got ${sitemapUrlCount}`);
 
+// 11. Verify animated demo GIFs & reduced-motion posters exist in site/assets/demos/ and match HTML references
+const DEMOS_DIR = path.join(SITE_DIR, "assets", "demos");
+const demoSlugs = ["proof-cycle", "cli-check", "workbench-live", "ui-slop"];
+for (const lang of ["zh", "en"]) {
+  for (const slug of demoSlugs) {
+    const gifPath = path.join(DEMOS_DIR, `${slug}-${lang}-v1.gif`);
+    const posterPath = path.join(DEMOS_DIR, `${slug}-${lang}-v1-poster.png`);
+    assert.ok(fs.existsSync(gifPath), `Missing demo GIF: ${path.relative(ROOT, gifPath)}`);
+    assert.ok(fs.existsSync(posterPath), `Missing demo poster: ${path.relative(ROOT, posterPath)}`);
+    const gifBuf = fs.readFileSync(gifPath);
+    assert.ok(gifBuf.subarray(0, 6).toString("ascii").startsWith("GIF8"), `Invalid GIF header on ${path.basename(gifPath)}`);
+    assert.ok(gifBuf.length <= 600 * 1024, `Demo GIF exceeds 600 KB budget: ${path.basename(gifPath)} (${(gifBuf.length / 1024).toFixed(1)} KB)`);
+    assert.ok(fs.statSync(posterPath).size <= 70 * 1024, `Demo poster exceeds 70 KB budget: ${path.basename(posterPath)}`);
+  }
+}
+for (const m of indexHtml.matchAll(/\.\/assets\/demos\/([A-Za-z0-9._-]+)/g)) {
+  assert.ok(fs.existsSync(path.join(DEMOS_DIR, m[1])), `Broken demo asset reference ./assets/demos/${m[1]} in site/index.html`);
+}
+
 console.log(
   `dislop site-test: ok (${totalRules} rules, ${tryRulesChecked} Try demos, ${specimenCount} ZH/EN specimens + 2 hero proofs + 6 cases, ` +
-    `${catalog.resources.length} catalog resources, ${sitemapUrlCount} sitemap URLs, ${checkedJsonBlocks} valid JSON configs, ${htmlI18nKeys.length} bilingual i18n keys, CSS braces balanced, ${AWESOME_DATA.entries.length} Awesome entries & WCAG AA passed)`
+    `${catalog.resources.length} catalog resources, ${sitemapUrlCount} sitemap URLs, ${demoSlugs.length * 2} demo GIFs, ${checkedJsonBlocks} valid JSON configs, ${htmlI18nKeys.length} bilingual i18n keys, CSS braces balanced, ${AWESOME_DATA.entries.length} Awesome entries & WCAG AA passed)`
 );
