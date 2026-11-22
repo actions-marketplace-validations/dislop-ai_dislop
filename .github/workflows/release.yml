@@ -7,29 +7,50 @@ on:
   workflow_dispatch:
     inputs:
       publish_registries:
-        description: "Force attempt npm, PyPI & Official MCP Registry publish"
+        description: "Force attempt npm, PyPI & Official MCP Registry publish (tag refs only)"
         type: boolean
         default: false
 
 permissions:
   contents: read
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   verify-and-github-release:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     outputs:
       npm_ready: ${{ steps.probe.outputs.npm_ready }}
       pypi_ready: ${{ steps.probe.outputs.pypi_ready }}
       vscode_ready: ${{ steps.probe.outputs.vscode_ready }}
+      is_tag: ${{ steps.probe.outputs.is_tag }}
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Verify tag matches package.json version
+        if: github.ref_type == 'tag'
+        run: |
+          TAG_VER="${GITHUB_REF_NAME#v}"
+          PKG_VER="$(node -p "require('./package.json').version")"
+          if [ "${TAG_VER}" != "${PKG_VER}" ]; then
+            echo "Tag version (${TAG_VER}) does not match package.json (${PKG_VER})" >&2
+            exit 1
+          fi
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
 
       - name: Set up Node.js 22
         uses: actions/setup-node@v4
@@ -40,7 +61,7 @@ jobs:
         run: node scripts/release.mjs --check --strict-clean
 
       - name: Build release archives for GitHub Release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: github.ref_type == 'tag'
         run: |
           mkdir -p dist-assets
           npm pack --pack-destination dist-assets
@@ -49,7 +70,7 @@ jobs:
           node scripts/release.mjs --extract-notes "${GITHUB_REF_NAME}" > release-notes.md
 
       - name: Create or update GitHub Release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: github.ref_type == 'tag'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -69,6 +90,11 @@ jobs:
           PYPI_OIDC_FLAG: ${{ vars.PYPI_OIDC_ENABLED }}
           FORCE_REGISTRIES: ${{ inputs.publish_registries }}
         run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            echo "is_tag=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "is_tag=false" >> "${GITHUB_OUTPUT}"
+          fi
           if [ "${HAS_NPM_SECRET}" = "true" ] || [ "${NPM_OIDC_FLAG}" = "true" ] || [ "${FORCE_REGISTRIES}" = "true" ] || curl -sf https://registry.npmjs.org/dislop >/dev/null 2>&1; then
             echo "npm_ready=true" >> "${GITHUB_OUTPUT}"
           else
@@ -89,13 +115,17 @@ jobs:
 
   publish-npm:
     needs: verify-and-github-release
-    if: needs.verify-and-github-release.outputs.npm_ready == 'true'
+    if: needs.verify-and-github-release.outputs.is_tag == 'true' && needs.verify-and-github-release.outputs.npm_ready == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: npm
     permissions:
       contents: read
       id-token: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Set up Node.js 22 with npm >= 11.5.1 for OIDC Trusted Publishing
         uses: actions/setup-node@v4
@@ -103,8 +133,8 @@ jobs:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Upgrade npm CLI for OIDC support
-        run: npm install -g npm@latest
+      - name: Pin npm >= 11.5.1 for OIDC support
+        run: npm install -g npm@11.5.1
 
       - name: Ensure MCP manifests use published registry package coordinate
         run: node scripts/sync_manifests.mjs --channel registry
@@ -127,8 +157,9 @@ jobs:
 
   publish-pypi:
     needs: verify-and-github-release
-    if: needs.verify-and-github-release.outputs.pypi_ready == 'true'
+    if: needs.verify-and-github-release.outputs.is_tag == 'true' && needs.verify-and-github-release.outputs.pypi_ready == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     environment:
       name: pypi
       url: https://pypi.org/p/dislop
@@ -137,6 +168,8 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
@@ -156,34 +189,47 @@ jobs:
   publish-mcp-registry:
     needs: [verify-and-github-release, publish-npm, publish-pypi]
     if: >-
+      needs.verify-and-github-release.outputs.is_tag == 'true' &&
       needs.verify-and-github-release.outputs.npm_ready == 'true' &&
       needs.verify-and-github-release.outputs.pypi_ready == 'true' &&
       needs.publish-npm.result == 'success' &&
       needs.publish-pypi.result == 'success'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
       id-token: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Install mcp-publisher and publish server.json via GitHub OIDC
         run: |
           set -euo pipefail
-          curl --fail --silent --show-error https://registry.npmjs.org/dislop >/dev/null
-          curl --fail --silent --show-error https://pypi.org/pypi/dislop/json >/dev/null
+          PKG_VER="$(node -p "require('./package.json').version")"
+          curl --fail --silent --show-error "https://registry.npmjs.org/dislop/${PKG_VER}" >/dev/null
+          curl --fail --silent --show-error "https://pypi.org/pypi/dislop/${PKG_VER}/json" >/dev/null
+          curl --fail --location --silent --show-error \
+            "https://github.com/modelcontextprotocol/registry/releases/download/v1.3.8/mcp-publisher_linux_amd64.tar.gz" \
+            -o mcp-publisher.tar.gz || \
           curl --fail --location --silent --show-error \
             "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" \
-            | tar -xz mcp-publisher
+            -o mcp-publisher.tar.gz
+          tar -xzf mcp-publisher.tar.gz mcp-publisher
           ./mcp-publisher login github-oidc
           ./mcp-publisher publish
 
   publish-editor-extensions:
     needs: verify-and-github-release
-    if: needs.verify-and-github-release.outputs.vscode_ready == 'true'
+    if: needs.verify-and-github-release.outputs.is_tag == 'true' && needs.verify-and-github-release.outputs.vscode_ready == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: marketplaces
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Set up Node.js 22
         uses: actions/setup-node@v4
@@ -196,10 +242,12 @@ jobs:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
           OVSX_PAT: ${{ secrets.OVSX_PAT }}
         run: |
-          npx --yes @vscode/vsce package --out dislop.vsix
+          node scripts/build.mjs
+          node test_extension.mjs
+          npx --yes @vscode/vsce@3.2.1 package --out dislop.vsix
           if [ -n "${VSCE_PAT}" ]; then
-            npx --yes @vscode/vsce publish --packagePath dislop.vsix -p "${VSCE_PAT}"
+            npx --yes @vscode/vsce@3.2.1 publish --packagePath dislop.vsix -p "${VSCE_PAT}"
           fi
           if [ -n "${OVSX_PAT}" ]; then
-            npx --yes ovsx publish dislop.vsix -p "${OVSX_PAT}"
+            npx --yes ovsx@0.10.2 publish dislop.vsix -p "${OVSX_PAT}"
           fi

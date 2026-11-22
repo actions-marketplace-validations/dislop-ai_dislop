@@ -88,9 +88,22 @@ function runPrivacyAndSecretGate() {
   const forbiddenPathRe = /(^|\/)(\.env(\.[^/]*)?|\.private\/.*|\.dislop\.local\.json|CLAUDE\.local\.md|[^/]*\.(pem|p12|key))$/;
   const allowedEnvExampleRe = /(^|\/)\.env\.(example|sample|template)$/;
   const tokenRe =
-    /(?<![A-Za-z0-9_-])sk-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{35}|dslp_[0-9a-f]{32,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY-----/;
-  const placeholderRe = /test|fake|dummy|example|sample|placeholder|never|redact|xxxx|your_token/i;
+    /(?<![A-Za-z0-9_-])sk-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{35}|AQ\.[A-Za-z0-9_-]{16,}|dslp_[0-9a-f]{32,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY-----/;
+  const gcpInfraRe =
+    /[a-z0-9-]+@[a-z0-9-]+\.iam\.gserviceaccount\.com|projects\/\d+\/locations\/[^/\s]+\/workloadIdentityPools\/[^\s'"]+/;
+  const placeholderRe = /test|fake|dummy|example|sample|placeholder|never|redact|xxxx|your_token|your-project/i;
   const internalSchemeRe = new RegExp("\\b(?:" + ["zx", "wxc"].join("|") + ")://[^\\s)`'\"]+");
+
+  let localForbidTerms = [];
+  try {
+    const localCfgPath = path.join(ROOT, ".dislop.local.json");
+    if (fs.existsSync(localCfgPath)) {
+      const localCfg = JSON.parse(fs.readFileSync(localCfgPath, "utf8"));
+      if (Array.isArray(localCfg?.forbid)) {
+        localForbidTerms = localCfg.forbid.map((s) => String(s || "").trim()).filter((s) => s.length >= 4);
+      }
+    }
+  } catch {}
 
   let localUserRe = null;
   try {
@@ -120,6 +133,15 @@ function runPrivacyAndSecretGate() {
     const tokMatch = content.match(tokenRe);
     if (tokMatch && !placeholderRe.test(tokMatch[0])) {
       issues.push(`Potential live credential in ${rel}: ${tokMatch[0].slice(0, 8)}...`);
+    }
+    const gcpMatch = content.match(gcpInfraRe);
+    if (gcpMatch && !placeholderRe.test(gcpMatch[0])) {
+      issues.push(`Private GCP identity/pool identifier leaked in ${rel}: ${gcpMatch[0].slice(0, 32)}...`);
+    }
+    for (const term of localForbidTerms) {
+      if (content.includes(term)) {
+        issues.push(`Forbidden local term leaked in ${rel}`);
+      }
     }
     const schemeMatch = content.match(internalSchemeRe);
     if (schemeMatch) {

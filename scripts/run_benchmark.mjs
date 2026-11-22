@@ -653,6 +653,10 @@ function main() {
   }
 }
 
+export function scoreRevision(task, candidatePayload) {
+  return scoreCandidate(task, candidatePayload);
+}
+
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   main();
 }

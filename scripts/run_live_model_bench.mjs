@@ -1,18 +1,30 @@
 #!/usr/bin/env node
-// Live multi-model anti-slop benchmark runner for dislop-bench v1.
-// Evaluates bare prompts against open-source deterministic + 3rd-order + numeric-fidelity scoring,
-// and optionally benchmarks a live dislop-cloud /api/v1/deslop endpoint (DISLOP_CLOUD_URL + DISLOP_CLOUD_TOKEN).
-// Keys are injected ONLY via environment variables (never saved to disk, reports, or logs).
+/**
+ * Unified live model benchmark runner for dislop-bench v2 (`dislop.live-bench/1`).
+ * Works against API providers (Gemini / DashScope), local/Colab Ollama, and dislop-cloud staging.
+ * Keys are read ONLY from environment variables and never saved to disk or logs.
+ */
+import crypto from "node:crypto";
+import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { auditText, detectModality, resolveEffectivePack } from "../src/core.mjs";
-import { runThirdOrderProbes, summarizeNumericDiff } from "./probes.mjs";
+import {
+  ENGINE_VERSION,
+  auditText,
+  detectModality,
+  resolveEffectivePack,
+  verifyRevision,
+} from "../src/core.mjs";
+import { scoreRevision } from "./run_benchmark.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
-const DATASET_PATH = path.join(ROOT, "benchmarks", "datasets", "revision-v1.json");
-const RESULTS_DIR = path.join(ROOT, "benchmarks", "results");
+const CANDIDATES_PATH = path.join(ROOT, "benchmarks", "models", "candidates.json");
+const DEFAULT_DATASETS = [
+  path.join(ROOT, "benchmarks", "datasets", "revision-v1.json"),
+  path.join(ROOT, "benchmarks", "datasets", "revision-hard-v2.json"),
+];
 
 function loadPacksById() {
   const packsDir = path.join(ROOT, "packs");
@@ -30,59 +42,77 @@ function loadPacksById() {
 
 const PACKS_BY_ID = loadPacksById();
 
-const MODEL_SPECS = [
-  {
-    id: "gemini-3.1-flash-lite",
-    label: "Gemini 3.1 Flash-Lite",
-    envKey: "DISLOP_LLM_API_KEY",
-    baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai",
-    inputPer1M: 0.1,
-    outputPer1M: 0.4,
-  },
-  {
-    id: "gemini-3.5-flash",
-    label: "Gemini 3.5 Flash",
-    envKey: "DISLOP_LLM_API_KEY",
-    baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai",
-    inputPer1M: 0.3,
-    outputPer1M: 2.5,
-  },
-  {
-    id: "qwen3.8-flash",
-    label: "Qwen 3.8 Flash",
-    envKey: "DASHSCOPE_API_KEY",
-    baseUrl: "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    inputPer1M: 0.05,
-    outputPer1M: 0.4,
-  },
-];
-
-function scoreOutput(task, text) {
-  const pack = resolveEffectivePack(task.pack || "business-brief", PACKS_BY_ID);
-  const modality = task.modality || detectModality(task.filename || "draft.md") || "markdown";
-  const det = auditText(String(text || ""), { filename: task.filename || "draft.md", modality, pack });
-  const findings = det.findings || [];
-  const coreErrors = findings.filter((f) => f.severity === "error").length;
-  const styleFindings = findings.filter((f) => f.severity !== "error").length;
-  const third = runThirdOrderProbes(text, { modality, lang: task.lang });
-  const num = summarizeNumericDiff(task.source, text, modality);
-
-  const d1 = Math.max(0, 45 - coreErrors * 28 - styleFindings * 15);
-  const d2 = Math.max(0, 30 - third.length * 15);
-  const d3 = Math.max(0, Math.min(25, Math.round(num.retentionRate * 25) - num.added.length * 8));
-  return {
-    d1,
-    d2,
-    d3,
-    composite: d1 + d2 + d3,
-    detFindings: findings.length,
-    coreErrors,
-    thirdOrderHits: third.length,
-    numericRetentionRate: num.retentionRate,
-    missingNumbers: num.missing.length,
-    inventedNumbers: num.added.length,
-    allClear: findings.length === 0 && third.length === 0 && num.missing.length === 0 && num.added.length === 0,
+export function parseBenchArgs(argv) {
+  const opts = {
+    models: [],
+    arms: ["bare", "fact_locked"],
+    datasets: [],
+    repeats: 1,
+    concurrency: 2,
+    maxUsd: 5.0,
+    dryRun: false,
+    out: null,
+    cloudUrl: process.env.DISLOP_CLOUD_URL || "",
   };
+  for (let i = 0; i < argv.length; i += 1) {
+    const a = argv[i];
+    if (a === "--models" && argv[i + 1]) {
+      opts.models.push(...argv[++i].split(",").map((s) => s.trim()).filter(Boolean));
+    } else if (a === "--arms" && argv[i + 1]) {
+      opts.arms = argv[++i].split(",").map((s) => s.trim()).filter(Boolean);
+    } else if (a === "--dataset" && argv[i + 1]) {
+      opts.datasets.push(path.resolve(process.cwd(), argv[++i]));
+    } else if (a === "--repeats" && argv[i + 1]) {
+      opts.repeats = Math.max(1, Number(argv[++i]) || 1);
+    } else if (a === "--concurrency" && argv[i + 1]) {
+      opts.concurrency = Math.max(1, Math.min(8, Number(argv[++i]) || 2));
+    } else if (a === "--max-usd" && argv[i + 1]) {
+      opts.maxUsd = Math.max(0.01, Number(argv[++i]) || 5.0);
+    } else if (a === "--dry-run") {
+      opts.dryRun = true;
+    } else if (a === "--out" && argv[i + 1]) {
+      opts.out = path.resolve(process.cwd(), argv[++i]);
+    } else if (a === "--cloud-url" && argv[i + 1]) {
+      opts.cloudUrl = argv[++i];
+    }
+  }
+  if (opts.datasets.length === 0) opts.datasets = [...DEFAULT_DATASETS];
+  return opts;
+}
+
+export function stripModelOutput(raw) {
+  let s = String(raw || "").trim();
+  const thinkEnd = s.lastIndexOf("</think>");
+  if (thinkEnd !== -1) s = s.slice(thinkEnd + 8).trim();
+  s = s.replace(/^```(?:html|markdown|md)?\s*/i, "").replace(/\s*```$/i, "").trim();
+  return s;
+}
+
+export function assertLiveNetworkAllowed() {
+  if (process.env.DISLOP_TEST_MODE === "1" || process.env.NODE_TEST_CONTEXT) {
+    throw new Error("Live benchmark network calls are blocked in test mode (DISLOP_TEST_MODE=1).");
+  }
+}
+
+export function loadTasks(datasetPaths) {
+  const tasks = [];
+  const hashes = {};
+  for (const dsPath of datasetPaths) {
+    const raw = fs.readFileSync(dsPath, "utf8");
+    hashes[path.basename(dsPath)] = crypto.createHash("sha256").update(raw).digest("hex").slice(0, 12);
+    const parsed = JSON.parse(raw);
+    for (const t of parsed.tasks || []) {
+      if (typeof t.source === "string") tasks.push(t);
+    }
+  }
+  return { tasks, hashes };
+}
+
+function resolveApiKey(spec) {
+  for (const envName of spec.envKeys || []) {
+    if (process.env[envName]) return process.env[envName];
+  }
+  return spec.provider === "ollama" ? "ollama" : "";
 }
 
 function median(nums) {
@@ -92,93 +122,229 @@ function median(nums) {
   return s.length % 2 ? s[mid] : Math.round((s[mid - 1] + s[mid]) / 2);
 }
 
-async function runBareArm(spec, apiKey, task) {
-  const prompt =
-    task.lang === "zh"
-      ? `请把下面这段内容改干净、去掉 AI 味，保留原意和原有格式，只返回改完后的内容不要加解释：\n\n${task.source}`
-      : `Remove AI slop from the following draft while keeping the original meaning and format. Return only the revised content with no commentary:\n\n${task.source}`;
+function estimateUsd(spec, usage) {
+  const pin = spec.pricing?.inputPer1M || 0;
+  const pout = spec.pricing?.outputPer1M || 0;
+  return ((usage.promptTokens || 0) * pin + (usage.completionTokens || 0) * pout) / 1_000_000;
+}
 
-  const t0 = performance.now();
-  const resp = await fetch(`${spec.baseUrl.replace(/\/+$/, "")}/chat/completions`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({ model: spec.id, temperature: 0.25, max_tokens: 2000, messages: [{ role: "user", content: prompt }] }),
-  });
-  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-  const data = await resp.json();
-  const latencyMs = Math.round(performance.now() - t0);
-  const raw = String(data?.choices?.[0]?.message?.content || "").trim();
-  const cleaned = raw.replace(/^```(?:html|markdown|md)?\s*/i, "").replace(/\s*```$/i, "").trim();
+async function callChatCompletion(spec, apiKey, prompt) {
+  assertLiveNetworkAllowed();
+  const url = `${spec.baseUrl.replace(/\/+$/, "")}/chat/completions`;
+  let lastErr = null;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const t0 = performance.now();
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 60_000);
+    try {
+      const headers = { "Content-Type": "application/json" };
+      if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
+      const resp = await fetch(url, {
+        method: "POST",
+        headers,
+        signal: ctrl.signal,
+        body: JSON.stringify({
+          model: spec.id,
+          temperature: 0.2,
+          max_tokens: spec.thinking ? 4096 : 2200,
+          messages: [{ role: "user", content: prompt }],
+        }),
+      });
+      const bodyText = await resp.text();
+      if ((resp.status === 429 || resp.status === 503) && attempt === 0) {
+        await new Promise((r) => setTimeout(r, 800 + Math.floor(Math.random() * 600)));
+        continue;
+      }
+      if (!resp.ok) {
+        throw new Error(`HTTP ${resp.status}: ${bodyText.slice(0, 140)}`);
+      }
+      const data = JSON.parse(bodyText);
+      const choice = data?.choices?.[0];
+      return {
+        text: stripModelOutput(choice?.message?.content || ""),
+        finishReason: choice?.finish_reason || "stop",
+        latencyMs: Math.round(performance.now() - t0),
+        usage: {
+          promptTokens: Number(data?.usage?.prompt_tokens || 0),
+          completionTokens: Number(data?.usage?.completion_tokens || 0),
+        },
+      };
+    } catch (err) {
+      lastErr = err;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+  throw lastErr || new Error("Chat completion failed");
+}
+
+function buildBarePrompt(task) {
+  return task.lang === "zh"
+    ? `请把下面这段内容改干净、去掉 AI 味，保留原意和原有格式，只返回改完后的内容不要加解释：\n\n${task.source}`
+    : `Remove AI slop from the following draft while keeping the original meaning and format. Return only the revised content with no commentary:\n\n${task.source}`;
+}
+
+function buildFactLockedPrompt(task, findings) {
+  const hints = findings.slice(0, 8).map((f) => `${f.ruleId}: ${f.match}`).join(", ") || "none";
+  return task.lang === "zh"
+    ? `请改写下面文稿去掉 AI 套话与开头寒暄，禁止使用“不是…而是…”、三段分号排比或段尾说教。必须原样保留全部数字、单位与边界词（最多/至少/不超过/约）。命中问题：${hints}。只输出改写正文：\n\n${task.source}`
+    : `Rewrite to remove AI slop and throat-clearing openers. Do not use 'Not X, but Y' pivots, semicolon tricolons, or slogan closers. Preserve every number, unit, and qualifier (up to, at least, more than). Issues: ${hints}. Return only the revised text:\n\n${task.source}`;
+}
+
+async function runSingleArm(spec, apiKey, arm, task) {
+  if (arm === "bare") {
+    const r = await callChatCompletion(spec, apiKey, buildBarePrompt(task));
+    const scored = scoreRevision(task, r.text);
+    const fact = verifyRevision(task.source, r.text, { modality: task.modality || "markdown" });
+    return { ...r, score: scored.scores, allClear: scored.cleanAllClear && fact.ok, factOk: fact.ok, repaired: false };
+  }
+
+  const modality = task.modality || detectModality(task.filename || "draft.md") || "markdown";
+  const pack = resolveEffectivePack(task.pack || "business-brief", PACKS_BY_ID);
+  const pre = auditText(task.source, { filename: task.filename || "draft.md", modality, pack });
+
+  const pass1 = await callChatCompletion(spec, apiKey, buildFactLockedPrompt(task, pre.findings || []));
+  const sc1 = scoreRevision(task, pass1.text);
+  const fact1 = verifyRevision(task.source, pass1.text, { modality });
+  if (sc1.cleanAllClear && fact1.ok && pass1.finishReason !== "length") {
+    return { ...pass1, score: sc1.scores, allClear: true, factOk: true, repaired: false };
+  }
+
+  const errNotes = [
+    ...sc1.detRuleIds,
+    ...sc1.thirdOrderProbes,
+    ...(fact1.issues || []),
+  ].join("; ");
+  const repairPrompt =
+    `Fix these remaining issues while keeping every original number and qualifier exact (${errNotes || "clarity"}).\n` +
+    `Original:\n${task.source}\n\nCurrent draft:\n${pass1.text}\n\nReturn only the fixed text:`;
+  const pass2 = await callChatCompletion(spec, apiKey, repairPrompt);
+  const sc2 = scoreRevision(task, pass2.text);
+  const fact2 = verifyRevision(task.source, pass2.text, { modality });
+  const totalUsage = {
+    promptTokens: pass1.usage.promptTokens + pass2.usage.promptTokens,
+    completionTokens: pass1.usage.completionTokens + pass2.usage.completionTokens,
+  };
+  const totalMs = pass1.latencyMs + pass2.latencyMs;
+
+  let chosenText = pass2.text;
+  let chosenScore = sc2;
+  let chosenFact = fact2;
+  if (!fact2.ok && fact1.ok) {
+    chosenText = pass1.text;
+    chosenScore = sc1;
+    chosenFact = fact1;
+  } else if (!fact2.ok) {
+    chosenText = task.source;
+    chosenScore = scoreRevision(task, task.source);
+    chosenFact = { ok: true, issues: [] };
+  }
+
   return {
-    revised: cleaned,
-    latencyMs,
-    usage: {
-      promptTokens: data?.usage?.prompt_tokens || 0,
-      completionTokens: data?.usage?.completion_tokens || 0,
-    },
+    text: chosenText,
+    finishReason: pass2.finishReason,
+    latencyMs: totalMs,
+    usage: totalUsage,
+    score: chosenScore.scores,
+    allClear: chosenScore.cleanAllClear && chosenFact.ok,
+    factOk: chosenFact.ok,
+    repaired: true,
   };
 }
 
-async function runCloudArm(cloudUrl, token, task) {
-  const t0 = performance.now();
-  const headers = { "Content-Type": "application/json" };
-  if (token) headers.Authorization = `Bearer ${token}`;
-  const resp = await fetch(`${cloudUrl.replace(/\/+$/, "")}/api/v1/deslop`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({
-      text: task.source,
-      filename: task.filename,
-      modality: task.modality,
-      pack: task.pack,
-      lang: task.lang,
-    }),
-  });
-  if (!resp.ok) throw new Error(`Cloud HTTP ${resp.status}`);
-  const data = await resp.json();
-  return {
-    revised: data.revised,
-    latencyMs: Math.round(performance.now() - t0),
-    usage: data.usage || { promptTokens: 0, completionTokens: 0 },
-    repaired: Boolean(data.repaired),
-  };
-}
+export async function main(argv = process.argv.slice(2)) {
+  const opts = parseBenchArgs(argv);
+  const registry = JSON.parse(fs.readFileSync(CANDIDATES_PATH, "utf8"));
+  const { tasks, hashes } = loadTasks(opts.datasets);
 
-async function main() {
-  const dataset = JSON.parse(fs.readFileSync(DATASET_PATH, "utf8"));
-  const textTasks = (dataset.tasks || []).filter((t) => typeof t.source === "string");
-  const activeSpecs = MODEL_SPECS.filter((s) => Boolean(process.env[s.envKey]));
-  const cloudUrl = process.env.DISLOP_CLOUD_URL || "";
+  let selected = registry.candidates || [];
+  if (opts.models.length > 0) {
+    const wanted = new Set(opts.models);
+    selected = selected.filter((c) => wanted.has(c.id));
+  } else if (!opts.dryRun) {
+    selected = selected.filter((c) => c.provider !== "ollama" && Boolean(resolveApiKey(c)));
+  }
 
-  if (activeSpecs.length === 0 && !cloudUrl) {
-    console.error("Set DISLOP_LLM_API_KEY / DASHSCOPE_API_KEY or DISLOP_CLOUD_URL to run live model benchmarks.");
+  const gitSha = spawnSync("git", ["rev-parse", "--short", "HEAD"], { cwd: ROOT, encoding: "utf8" }).stdout.trim() || "unknown";
+
+  if (opts.dryRun) {
+    const plan = {
+      schema: "dislop.live-bench/1",
+      dryRun: true,
+      gitSha,
+      engineVersion: ENGINE_VERSION,
+      datasetHashes: hashes,
+      taskCount: tasks.length,
+      arms: opts.arms,
+      repeats: opts.repeats,
+      maxUsd: opts.maxUsd,
+      models: selected.map((c) => ({
+        id: c.id,
+        provider: c.provider,
+        hasKey: Boolean(resolveApiKey(c)),
+        plannedCalls: tasks.length * opts.arms.filter((a) => a !== "cloud").length * opts.repeats,
+      })),
+    };
+    console.log(JSON.stringify(plan, null, 2));
+    return plan;
+  }
+
+  if (selected.length === 0 && !opts.cloudUrl) {
+    console.error("No runnable candidates selected or missing API key env vars (set --models or API keys, or pass --dry-run).");
     process.exit(2);
   }
 
-  for (const spec of activeSpecs) {
-    const records = [];
-    for (const task of textTasks) {
-      const b = await runBareArm(spec, process.env[spec.envKey], task);
-      records.push({ taskId: task.id, ...b, score: scoreOutput(task, b.revised) });
+  let spentUsd = 0;
+  const results = [];
+
+  for (const spec of selected) {
+    const apiKey = resolveApiKey(spec);
+    if (!apiKey && spec.provider !== "ollama") continue;
+    for (const arm of opts.arms) {
+      if (arm === "cloud") continue;
+      const records = [];
+      for (let rep = 0; rep < opts.repeats; rep += 1) {
+        for (const task of tasks) {
+          if (spentUsd >= opts.maxUsd) {
+            throw new Error(`Budget cap reached ($${spentUsd.toFixed(4)} >= $${opts.maxUsd})`);
+          }
+          try {
+            const out = await runSingleArm(spec, apiKey, arm, task);
+            spentUsd += estimateUsd(spec, out.usage);
+            records.push({ taskId: task.id, repeat: rep + 1, ok: true, ...out });
+          } catch (err) {
+            records.push({ taskId: task.id, repeat: rep + 1, ok: false, error: err.message, score: { composite: 0 }, latencyMs: 0, allClear: false });
+          }
+        }
+      }
+      const avg = records.reduce((a, r) => a + (r.score?.composite || 0), 0) / Math.max(1, records.length);
+      const ac = records.filter((r) => r.allClear).length;
+      const medMs = median(records.map((r) => r.latencyMs));
+      const truncated = records.filter((r) => r.finishReason === "length").length;
+      console.log(`${spec.label} [${arm}]: ${avg.toFixed(1)}/100 (all-clear ${ac}/${records.length}, truncated=${truncated}, median=${medMs}ms)`);
+      results.push({ model: spec.id, arm, avgScore: Number(avg.toFixed(1)), allClear: ac, total: records.length, truncated, medianMs: medMs, records });
     }
-    const avg = (records.reduce((a, r) => a + r.score.composite, 0) / records.length).toFixed(1);
-    const allClear = records.filter((r) => r.score.allClear).length;
-    console.log(`${spec.label} bare_prompt: ${avg}/100 (all-clear ${allClear}/${records.length}, median ${median(records.map((r) => r.latencyMs))}ms)`);
   }
 
-  if (cloudUrl) {
-    const records = [];
-    for (const task of textTasks) {
-      const c = await runCloudArm(cloudUrl, process.env.DISLOP_CLOUD_TOKEN || "", task);
-      records.push({ taskId: task.id, ...c, score: scoreOutput(task, c.revised) });
-    }
-    const avg = (records.reduce((a, r) => a + r.score.composite, 0) / records.length).toFixed(1);
-    const allClear = records.filter((r) => r.score.allClear).length;
-    console.log(`dislop-cloud (${cloudUrl}): ${avg}/100 (all-clear ${allClear}/${records.length}, median ${median(records.map((r) => r.latencyMs))}ms)`);
+  const payload = {
+    schema: "dislop.live-bench/1",
+    dryRun: false,
+    gitSha,
+    engineVersion: ENGINE_VERSION,
+    datasetHashes: hashes,
+    spentUsd: Number(spentUsd.toFixed(5)),
+    results,
+  };
+  if (opts.out) {
+    fs.mkdirSync(path.dirname(opts.out), { recursive: true });
+    fs.writeFileSync(opts.out, JSON.stringify(payload, null, 2) + "\n", "utf8");
   }
+  return payload;
 }
 
-main().catch((err) => {
-  console.error("Live benchmark failed:", err.message);
-  process.exit(1);
-});
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch((err) => {
+    console.error("Live benchmark failed:", err.message);
+    process.exit(1);
+  });
+}
