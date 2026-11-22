@@ -1,7 +1,7 @@
 ---
 content-type: reference-data
 task: editorial-writing
-version: 0.6.1
+version: 0.6.2
 ---
 
 # Task Bundle: Editorial & Literary Writing

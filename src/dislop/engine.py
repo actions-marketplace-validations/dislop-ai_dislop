@@ -14,7 +14,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-ENGINE_VERSION = "0.6.1"
+ENGINE_VERSION = "0.6.2"
 
 SEVERITY_RANK = {
     "info": 1,
@@ -375,7 +375,7 @@ def make_finding(
 ) -> dict[str, Any]:
     norm_match = re.sub(r"^[\s\ufeff]+|[\s\ufeff]+$", "", match.lower())
     norm_sent = re.sub(r"[\s\ufeff]+", " ", (sentence or norm_match).lower()).strip()
-    fp = f"{rule['id']}:{fnv1a_hex(f'{rule['id']}|{norm_match}|{norm_sent}')}"
+    fp = rule['id'] + ':' + fnv1a_hex(f"{rule['id']}|{norm_match}|{norm_sent}")
     return {
         "fingerprint": fp,
         "ruleId": rule["id"],

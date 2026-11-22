@@ -1,4 +1,4 @@
-# Architecture (`v0.6.1`)
+# Architecture (`v0.6.2`)
 
 [简体中文](./architecture.zh-CN.md)
 
