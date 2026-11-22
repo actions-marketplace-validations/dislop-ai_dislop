@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Official dislop plugin marketplace: anti-slop Agent Skill and local stdio MCP linter.",
-    "version": "0.6.1"
+    "version": "0.6.2"
   },
   "plugins": [
     {
       "name": "dislop",
       "source": "./",
       "description": "Zero-dependency anti-slop Skill, CLI, and MCP linter for AI-written docs, Word/PowerPoint decks, and web pages (7 built-in packs, 42 rules, 53 patterns, and bundled 15 KB Pocket ML).",
-      "version": "0.6.1",
+      "version": "0.6.2",
       "author": {
         "name": "dislop-ai",
         "url": "https://dislop.com"
