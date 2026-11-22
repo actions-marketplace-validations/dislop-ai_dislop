@@ -1,0 +1,322 @@
+{
+  "schema": "dislop.pattern-library/1",
+  "dimension": "visual-and-deck",
+  "version": "1.0.0",
+  "patterns": [
+    {
+      "id": "pat-slide-word-wall",
+      "ruleId": "slide-word-wall",
+      "packId": "deck-and-ui",
+      "category": "deck-layout",
+      "detectionAngle": "visual-markup-ooxml",
+      "status": "active",
+      "severityDefault": "warning",
+      "languages": ["en", "zh"],
+      "modalities": ["pptx"],
+      "evidenceLevel": "editorial-consensus",
+      "name": { "en": "PowerPoint Slide Word Wall", "zh": "单页幻灯片文字墙" },
+      "mechanism": {
+        "en": "AI slide generators dump whole paragraphs onto one slide (> 120 Latin words or > 280 Chinese chars).",
+        "zh": "AI 生成 PPT 常把整段方案原文直接塞进单页（英文 > 120 词或中文 > 280 字）。"
+      },
+      "tags": ["pptx", "slide", "word-wall", "density", "文字墙", "幻灯片"],
+      "falsePositiveGuards": ["Hidden slides (`show=\"0\"`) and footers/slide numbers are skipped."],
+      "modelTendencies": ["deck-generators", "gemini-family"],
+      "exemplar": {
+        "bad": "Slide 3 packs 215 words of full-sentence prose explaining migration history, rollback scripts, staffing, and Q4 SLA targets.",
+        "trap": "Slide 3 shrinks body font to 9pt so all 215 words fit inside one rounded box.",
+        "good": "Slide 3 headline: 'Zero-downtime migration cut p99 latency from 420 ms to 95 ms' + 3 short metric rows (54 words total); full runbook linked in notes.",
+        "source": "original"
+      }
+    },
+    {
+      "id": "pat-slide-bullet-overload",
+      "ruleId": "slide-bullet-overload",
+      "packId": "deck-and-ui",
+      "category": "deck-layout",
+      "detectionAngle": "visual-markup-ooxml",
+      "status": "active",
+      "severityDefault": "warning",
+      "languages": ["en", "zh"],
+      "modalities": ["pptx"],
+      "evidenceLevel": "editorial-consensus",
+      "name": { "en": "Slide Bullet Overload (> 6 Bullets)", "zh": "单页要点超载（> 6 条）" },
+      "mechanism": {
+        "en": "Packing more than 6 bullet points onto one slide flattens hierarchy and makes slides unreadable from a distance.",
+        "zh": "单页堆超过 6 条项目符号，信息主次彻底散架。"
+      },
+      "tags": ["pptx", "bullets", "overload", "要点过多"],
+      "falsePositiveGuards": ["Hidden slides and title/footer shapes are excluded."],
+      "modelTendencies": ["deck-generators"],
+      "exemplar": {
+        "bad": "Slide lists 9 separate top-level bullets covering pricing, onboarding, compliance, SLA, and billing.",
+        "trap": "Slide wraps 9 bullets into 9 tiny pill badges.",
+        "good": "Slide groups commercial terms into 3 columns: Pricing ($49/seat), Onboarding (2 days), SLA (99.95%).",
+        "source": "original"
+      }
+    },
+    {
+      "id": "pat-slide-autofit-shrink",
+      "ruleId": "slide-autofit-shrink",
+      "packId": "deck-and-ui",
+      "category": "deck-layout",
+      "detectionAngle": "visual-markup-ooxml",
+      "status": "active",
+      "severityDefault": "warning",
+      "languages": ["en", "zh"],
+      "modalities": ["pptx"],
+      "evidenceLevel": "objective-invariant",
+      "name": { "en": "PowerPoint Autofit Shrink (< 80%)", "zh": "PPT 文本框自动缩排（< 80%）" },
+      "mechanism": {
+        "en": "OOXML `<a:normAutofit fontScale=\"...\">` below 80000 is deterministic proof that copy overflowed its layout box.",
+        "zh": "OOXML 中 `normAutofit fontScale < 80000` 是文案撑破文本框、被强行缩小的确定性证据。"
+      },
+      "tags": ["pptx", "autofit", "overflow", "shrink", "自动缩排"],
+      "falsePositiveGuards": ["Hidden slides are skipped; only triggers below 80% scale."],
+      "modelTendencies": ["deck-generators"],
+      "exemplar": {
+        "bad": "<a:normAutofit fontScale=\"62500\" lnSpcReduction=\"20000\"/> on body placeholder",
+        "trap": "Manually hardcode 10pt font so `normAutofit` disappears while text stays illegible.",
+        "good": "<a:noAutofit/> with 42 words set at 18pt and full line spacing",
+        "source": "original"
+      }
+    },
+    {
+      "id": "pat-slide-weak-topic-title",
+      "ruleId": "slide-weak-topic-title",
+      "packId": "deck-and-ui",
+      "category": "deck-layout",
+      "detectionAngle": "visual-markup-ooxml",
+      "status": "active",
+      "severityDefault": "info",
+      "languages": ["en", "zh"],
+      "modalities": ["pptx"],
+      "evidenceLevel": "editorial-consensus",
+      "name": { "en": "Generic Slide Topic Title", "zh": "空泛名词幻灯片标题" },
+      "mechanism": {
+        "en": "Dense content slides titled `Overview` / `Background` / `项目背景` / `概述` waste the top visual slot instead of stating the takeaway.",
+        "zh": "正文密集页却只用“项目背景/概述/Overview”当标题，没有亮出本页结论。"
+      },
+      "tags": ["pptx", "title", "overview", "background", "空泛标题", "项目背景"],
+      "falsePositiveGuards": ["Section dividers with <= 25 Latin words and <= 50 CJK chars are exempt."],
+      "modelTendencies": ["deck-generators"],
+      "exemplar": {
+        "bad": "Title: 'Background' (above 65 words detailing 38% cart abandonment on mobile Safari)",
+        "trap": "Title: 'Reimagining Checkout Excellence'",
+        "good": "Title: 'Mobile Safari accounts for 38% of cart abandonment due to 4-step address entry'",
+        "source": "original"
+      }
+    },
+    {
+      "id": "pat-pptx-layout-monotony",
+      "ruleId": "pptx-layout-monotony",
+      "packId": "executive-deck",
+      "category": "deck-layout",
+      "detectionAngle": "visual-markup-ooxml",
+      "status": "active",
+      "severityDefault": "info",
+      "languages": ["en", "zh"],
+      "modalities": ["pptx"],
+      "evidenceLevel": "editorial-consensus",
+      "name": { "en": "Consecutive Plain-Bullet Slide Layout Monotony", "zh": "跨页幻灯片版式单调" },
+      "mechanism": {
+        "en": "Generated decks repeat the identical title + single plain-bullet box across 4+ consecutive content slides without any table, chart, or visual diagram.",
+        "zh": "在 5 页以上内容演示文稿中，连续 4 页及以上全部退化为“标题 + 单纯字要点框”（无图表、无表格、无配图），视觉极度单调。"
+      },
+      "tags": ["pptx", "layout", "monotony", "variety", "版式单一", "连页纯字"],
+      "falsePositiveGuards": [
+        "Skips hidden slides and short cover/section divider slides (< 12 words and < 25 CJK chars).",
+        "Resets run whenever a slide includes a chart (`<c:chart>`), table (`<a:tbl>`), image (`<p:pic>`), or multi-column structure."
+      ],
+      "modelTendencies": ["deck-generators"],
+      "exemplar": {
+        "bad": "Slides 2, 3, 4, 5, and 6 each contain only a top title and a single bullet list with zero tables, charts, or diagrams.",
+        "trap": "Slides 2–6 keep the same bullet lists but add purple gradient backgrounds.",
+        "good": "Slide 3 turns the comparison bullets into a 3-column table and Slide 5 uses a latency chart.",
+        "source": "original"
+      }
+    },
+    {
+      "id": "pat-ui-ai-gradient",
+      "ruleId": "ui-ai-gradient",
+      "packId": "deck-and-ui",
+      "category": "ui-design",
+      "detectionAngle": "visual-markup-ooxml",
+      "status": "active",
+      "severityDefault": "warning",
+      "languages": ["en", "zh"],
+      "modalities": ["html", "css", "jsx", "svg"],
+      "evidenceLevel": "editorial-consensus",
+      "name": { "en": "Default Purple-Pink AI Gradient & Clipped Gradient Text", "zh": "默认紫粉渐变与渐变大字" },
+      "mechanism": {
+        "en": "Default LLM Tailwind/CSS output falls back to indigo/purple/pink neon gradients and `bg-clip-text text-transparent` headlines.",
+        "zh": "默认前端生成习惯使用蓝紫/紫粉高饱和渐变和 `bg-clip-text` 渐变标题。"
+      },
+      "tags": ["ui", "gradient", "tailwind", "purple", "紫粉渐变", "霓虹"],
+      "falsePositiveGuards": ["Comments, scripts, and code blocks are masked; solid neutral palettes stay clean."],
+      "modelTendencies": ["frontend-codegen"],
+      "exemplar": {
+        "bad": "<h1 class=\"bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent\">Release Notes v2.4</h1>",
+        "trap": "<h1 class=\"bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent\">Release Notes v2.4</h1>",
+        "good": "<h1 class=\"page-title\">Release Notes v2.4</h1>",
+        "source": "original"
+      }
+    },
+    {
+      "id": "pat-ui-pill-soup",
+      "ruleId": "ui-pill-soup",
+      "packId": "deck-and-ui",
+      "category": "ui-design",
+      "detectionAngle": "visual-markup-ooxml",
+      "status": "active",
+      "severityDefault": "warning",
+      "languages": ["en", "zh"],
+      "modalities": ["html", "jsx"],
+      "evidenceLevel": "editorial-consensus",
+      "name": { "en": "Excessive Pill-Badge Soup", "zh": "满屏胶囊标签泛滥" },
+      "mechanism": {
+        "en": "Wrapping > 6 short metadata tokens per view in `rounded-full` / `999px` badges creates visual noise.",
+        "zh": "单视图堆叠超过 6 个 `rounded-full` / `999px` 文字胶囊，淹没真正的状态提示。"
+      },
+      "tags": ["ui", "pill", "badge", "rounded-full", "胶囊标签"],
+      "falsePositiveGuards": ["Exempts circular avatars/dots (`size-*` or equal `w-N h-N`) and <= 6 pills."],
+      "modelTendencies": ["frontend-codegen"],
+      "exemplar": {
+        "bad": "8 adjacent `rounded-full` badges on one card: `Active`, `v2.4`, `US-West`, `SOC2`, `Fast`, `AI`, `Pro`, `Verified`.",
+        "trap": "8 square pastel badges with 8 emoji icons on one card.",
+        "good": "Plain mono metadata line: `v2.4 · us-west-2 · SOC2` + single status word `degraded` when unhealthy.",
+        "source": "original"
+      }
+    },
+    {
+      "id": "pat-ui-box-in-box",
+      "ruleId": "ui-box-in-box",
+      "packId": "deck-and-ui",
+      "category": "ui-design",
+      "detectionAngle": "visual-markup-ooxml",
+      "status": "active",
+      "severityDefault": "warning",
+      "languages": ["en", "zh"],
+      "modalities": ["html", "jsx"],
+      "evidenceLevel": "editorial-consensus",
+      "name": { "en": "Triple Nested Card Boxes", "zh": "三层套盒（框套框套框）" },
+      "mechanism": {
+        "en": "Generated dashboards stack 3+ nested bordered/shadowed rounded containers around the same data, eating up padding and visual clarity.",
+        "zh": "AI 面板常把同一项内容包进 3 层及以上带边框/阴影/圆角的容器里，层层套盒。"
+      },
+      "tags": ["ui", "nested", "box-in-box", "cards", "套盒", "框套框"],
+      "falsePositiveGuards": ["Single-side dividers (`border-t`, `border-b`) and 1–2 level cards are exempt."],
+      "modelTendencies": ["frontend-codegen"],
+      "exemplar": {
+        "bad": "<div class=\"border rounded-xl p-6\"><div class=\"border rounded-lg p-4\"><div class=\"border rounded-md p-3\">99.98% uptime</div></div></div>",
+        "trap": "<div class=\"shadow-xl rounded-2xl p-6\"><div class=\"shadow-md rounded-xl p-4\"><div class=\"bg-slate-900 rounded-lg p-3\">99.98% uptime</div></div></div>",
+        "good": "<section class=\"metric-row\"><span>Uptime (90d)</span><strong>99.98%</strong></section>",
+        "source": "original"
+      }
+    },
+    {
+      "id": "pat-ui-prompt-echo-badge",
+      "ruleId": "ui-prompt-echo-badge",
+      "packId": "deck-and-ui",
+      "category": "ui-design",
+      "detectionAngle": "regex-invariant",
+      "status": "active",
+      "severityDefault": "warning",
+      "languages": ["en", "zh"],
+      "modalities": ["html", "jsx", "svg"],
+      "evidenceLevel": "editorial-consensus",
+      "name": { "en": "Prompt-Echo Marketing Chrome Badge", "zh": "提示词营销徽章" },
+      "mechanism": {
+        "en": "Generated UI copies hype labels (`AI-Powered`, `Zero Hallucination`, `AI 强力驱动`) straight into eyebrow tags instead of describing the real feature.",
+        "zh": "界面眉题或徽章直接印出“AI-Powered”“AI 强力驱动”“零幻觉保证”等空洞宣传语。"
+      },
+      "tags": ["ui", "badge", "ai-powered", "hype", "营销徽章", "AI强力驱动"],
+      "falsePositiveGuards": ["Scoped to `ui-text` zone so comments and scripts stay masked."],
+      "modelTendencies": ["frontend-codegen"],
+      "exemplar": {
+        "bad": "<span class=\"eyebrow\">AI-Powered · Zero Hallucination</span><h2>Document Checker</h2>",
+        "trap": "<span class=\"eyebrow\">Built for Craft · Pure Signal</span><h2>Document Checker</h2>",
+        "good": "<h2>Document Linter for Markdown, HTML, DOCX & PPTX</h2>",
+        "source": "original"
+      }
+    },
+    {
+      "id": "pat-ui-glassmorphism-overuse",
+      "ruleId": "ui-glassmorphism-overuse",
+      "packId": "pattern-bank",
+      "category": "ui-design",
+      "detectionAngle": "visual-markup-ooxml",
+      "status": "active-bank",
+      "severityDefault": "warning",
+      "languages": ["en", "zh"],
+      "modalities": ["html", "css", "jsx"],
+      "evidenceLevel": "editorial-consensus",
+      "name": { "en": "Glassmorphism Panel Overuse", "zh": "毛玻璃半透明面板滥用" },
+      "mechanism": {
+        "en": "Repeating `backdrop-blur` / `backdrop-filter: blur(...)` on 3+ panels per view mimics default AI glassmorphism dashboards and degrades legibility.",
+        "zh": "单视图堆砌 3 处及以上 `backdrop-blur` / `backdrop-filter: blur(` 毛玻璃面板，呈现典型生成式模板腔。"
+      },
+      "tags": ["ui", "glassmorphism", "backdrop-blur", "毛玻璃", "玻璃拟态"],
+      "falsePositiveGuards": ["Allows 1–2 legitimate uses (e.g., sticky top nav + modal overlay)."],
+      "modelTendencies": ["frontend-codegen"],
+      "exemplar": {
+        "bad": "<header class=\"backdrop-blur-md bg-white/10\">Nav</header><div class=\"backdrop-blur-lg bg-white/10\">A</div><div class=\"backdrop-blur-lg bg-white/10\">B</div>",
+        "trap": "<div class=\"bg-gradient-to-r from-indigo-500 to-pink-500\">A</div>",
+        "good": "<header class=\"backdrop-blur-sm bg-white/90\">Nav</header><section class=\"bg-white border\">Body</section>",
+        "source": "original"
+      }
+    },
+    {
+      "id": "pat-ui-accent-stripe-card",
+      "ruleId": "ui-accent-stripe-card",
+      "packId": "pattern-bank",
+      "category": "ui-design",
+      "detectionAngle": "visual-markup-ooxml",
+      "status": "active-bank",
+      "severityDefault": "warning",
+      "languages": ["en", "zh"],
+      "modalities": ["html", "css", "jsx"],
+      "evidenceLevel": "editorial-consensus",
+      "name": { "en": "Thick Left Accent-Stripe Card Stack", "zh": "侧边粗彩条卡片堆叠" },
+      "mechanism": {
+        "en": "Stacking 3+ `border-l-4` / `border-left: 4px solid` KPI cards replicates boilerplate AI admin dashboards.",
+        "zh": "单视图堆叠 3 处及以上左侧粗彩条卡片（`border-l-4` / `border-left: >=3px solid`），呈现典型 AI 后台面板套路。"
+      },
+      "tags": ["ui", "accent-stripe", "border-l-4", "dashboard", "侧边彩条", "粗边框"],
+      "falsePositiveGuards": ["Exempts `blockquote` selectors/tags and <= 2 occurrences per file."],
+      "modelTendencies": ["frontend-codegen"],
+      "exemplar": {
+        "bad": "<div class=\"border-l-4 border-indigo-500 p-4\">KPI 1</div><div class=\"border-l-4 border-purple-500 p-4\">KPI 2</div><div class=\"border-l-4 border-pink-500 p-4\">KPI 3</div>",
+        "trap": "<div class=\"border rounded-xl p-4\"><div class=\"border rounded-lg p-3\"><div class=\"border rounded p-2\">KPI 1</div></div></div>",
+        "good": "<section class=\"metric-grid\"><article class=\"metric\"><span>KPI 1</span></article></section>",
+        "source": "original"
+      }
+    },
+    {
+      "id": "pat-slide-process-not-finding-title",
+      "ruleId": "slide-process-not-finding-title",
+      "packId": "executive-deck",
+      "category": "deck-layout",
+      "detectionAngle": "discourse-structure",
+      "status": "active",
+      "severityDefault": "warning",
+      "languages": ["en", "zh"],
+      "modalities": ["markdown", "pptx"],
+      "evidenceLevel": "editorial-consensus",
+      "name": { "en": "Process-Label Slide Headline Instead of Finding", "zh": "过程标签式标题（缺结论句）" },
+      "mechanism": {
+        "en": "Executive slide headings say 'Analysis of Q3 Churn' or '关于……的分析汇报' instead of stating the conclusion and delta.",
+        "zh": "管理层汇报标题只写“关于……的分析汇报”，把听众最关心的结论埋进小字里。"
+      },
+      "tags": ["pptx", "deck", "action-title", "headline", "汇报标题", "结论先行"],
+      "falsePositiveGuards": ["Matches explicit process-label heading prefixes ('Analysis of...', '关于...的分析汇报'); assertion headings pass cleanly."],
+      "modelTendencies": ["deck-generators", "general-llm"],
+      "exemplar": {
+        "bad": "## 关于三季度新客首周流失率的分析汇报",
+        "trap": "## 重塑新客留存增长飞轮",
+        "good": "## 三季度简化实名认证步骤后，新客首周流失率从 34% 降至 19%",
+        "source": "original"
+      }
+    }
+  ]
+}
