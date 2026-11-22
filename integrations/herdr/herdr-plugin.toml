@@ -1,0 +1,9 @@
+name = "dislop"
+version = "0.6.0"
+description = "Check changed docs, slides, and web UI in this pane for AI artifacts and slop."
+
+[[actions]]
+id = "check-ai-slop"
+label = "Check AI Slop (changed files)"
+command = "npx --yes github:dislop-ai/dislop check --changed HEAD --fail-on error"
+scope = "workspace"

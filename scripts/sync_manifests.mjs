@@ -369,12 +369,46 @@ const targets = [
       "",
     ].join("\n"),
   },
+  {
+    rel: "integrations/antigravity/plugin.json",
+    content:
+      JSON.stringify(
+        {
+          name: META.name,
+          displayName: META.name,
+          version: META.version,
+          description: META.pluginDescription,
+          logo: "assets/logo.svg",
+          author: META.author,
+          homepage: META.homepage,
+          repository: META.repoUrl,
+          suggestedPrompts: META.defaultPrompts,
+        },
+        null,
+        2
+      ) + "\n",
+  },
+  {
+    rel: "integrations/antigravity/mcp_config.json",
+    content:
+      JSON.stringify(
+        {
+          mcpServers: {
+            dislop: stdioServerEntry,
+          },
+        },
+        null,
+        2
+      ) + "\n",
+  },
 ];
 
-// Validate package.json, pyproject.toml, and SKILL.md version lockstep
+// Validate package.json, pyproject.toml, SKILL.md, and integrations/vscode/package.json version lockstep
 const pkgJson = JSON.parse(fs.readFileSync(path.join(ROOT, "package.json"), "utf8"));
 const pyproject = fs.readFileSync(path.join(ROOT, "pyproject.toml"), "utf8");
 const skillMd = fs.readFileSync(path.join(ROOT, "skills", "dislop", "SKILL.md"), "utf8");
+const vscodePkgPath = path.join(ROOT, "integrations", "vscode", "package.json");
+const vscodePkg = fs.existsSync(vscodePkgPath) ? JSON.parse(fs.readFileSync(vscodePkgPath, "utf8")) : null;
 
 const pyProjVer = pyproject.match(/^version\s*=\s*"([^"]+)"/m)?.[1];
 const skillVer = skillMd.match(/^version:\s*([^\s]+)/m)?.[1];
@@ -391,6 +425,9 @@ if (pyProjVer !== VERSION) {
 }
 if (skillVer !== VERSION) {
   driftErrors.push(`skills/dislop/SKILL.md version (${skillVer}) !== ENGINE_VERSION (${VERSION})`);
+}
+if (vscodePkg && vscodePkg.version !== VERSION) {
+  driftErrors.push(`integrations/vscode/package.json version (${vscodePkg.version}) !== ENGINE_VERSION (${VERSION})`);
 }
 
 // Closed top-level schema check on portable plugin.json
