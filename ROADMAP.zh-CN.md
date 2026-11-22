@@ -61,7 +61,7 @@
 目标：保持 87 条中英文工具清单准确、中立、好查，同时不分散主仓库注意力。
 
 - [x] 增加 Awesome Anti-Slop 的 GitHub Issue 投稿表单模板（`.github/ISSUE_TEMPLATE/awesome_submission.yml`，含链接、类别、语种与中英各一句用途说明）。
-- [ ] 增加按月巡检 87 条清单链接与星标的可选脚本。
+- [x] 增加定时巡检 87 条清单外链与仓库健康度的脚本与工作流（`scripts/check_awesome_links.mjs` 与每周运行的 `.github/workflows/awesome-links.yml`）。
 - [ ] 冷启动阶段继续把 `awesome/README.md`、`awesome/README.zh-CN.md` 与 `https://dislop.com/awesome/` 留在 `dislop-ai/dislop` 主仓维护。
 - [ ] **拆仓阈值**：仅当外部有效目录 PR 持续达到 `>= 5 条/月` 时，再按 `dislop.radar/3` 预案切出独立 CC0-1.0 仓库 `dislop-ai/awesome-anti-slop`，永久保持 `https://dislop.com/awesome/` 地址不变。
 
@@ -91,9 +91,9 @@
 
 ## 4. 协作方式与合并前检查
 
-开放设计问题先在 [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) 对齐；具体任务认领、规则误报反馈与工具投稿统一建 [Issue](https://github.com/dislop-ai/dislop/issues)，按 `track:*`、`area:*`、`priority:*` 标签和里程碑（`v0.6.1`、`v0.7.0`、`v0.8.0`）汇总到协作看板。
+开放设计问题先在 [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) 对齐；具体任务认领、规则误报反馈与工具投稿统一建 [Issue](https://github.com/dislop-ai/dislop/issues)，按 `track:*`、`area:*`、`priority:*` 标签和里程碑（`v0.6.1`、`v0.7.0`、`v0.8.0`）汇总。日常状态只看 GitHub Issue 与看板，这份路线图只在发版或里程碑收口时统一勾选，不记两套账。
 
-较大改动建短分支（`feat/...`、`fix/...`、`docs/...`），PR 描述写 `Closes #<编号>` 关联任务；`.github/CODEOWNERS` 会自动请求维护者评审，合入后自动清理分支。`main` 分支禁强推和删分支，同时保留快进推送以配合自动发版脚本。商业计费、配额与云端托管后台在私有仓单独管理，不放进本仓。
+小修、文案微调和发版可直接快进推 `main`；新功能、改规则或跨模块改动建议建短分支（`feat/...`、`fix/...`、`docs/...`），PR 描述写 `Closes #<编号>` 关联任务，CI 通过即可合入。`.github/CODEOWNERS` 会自动请求维护者评审，合入后自动清理分支；`main` 禁强推和删分支。商业计费、配额与云端托管后台在私有仓单独管理，不放进本仓。
 
 - **并行分工参考（少冲突）**：
   - 规则与双端内核：`packs/`、`patterns/`、`src/core.mjs`、`src/dislop/`、`tests/test_conformance.py`

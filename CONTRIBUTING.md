@@ -26,9 +26,9 @@ Every new or updated rule in `packs/<pack-id>/pack.json` must include:
 
 ## 3. GitHub Workflow & Collaboration
 
-- **Issues vs. Discussions**: Open a [GitHub Discussion](https://github.com/dislop-ai/dislop/discussions) for open design questions or new rule debates. Open an [Issue](https://github.com/dislop-ai/dislop/issues) using the matching form when claiming a roadmap task, reporting a false positive, or submitting an Awesome Anti-Slop entry.
-- **Labels**: Issues use `track:*` (roadmap tracks A–D), `area:*` (`rules`, `voice-copy`, `site`, `mcp-cli`), and `priority: high` / `priority: medium` so tasks filter cleanly on the project board.
-- **Branches & Pull Requests**: Use short branch names such as `feat/<topic>`, `fix/<topic>`, or `docs/<topic>`, reference the tracked issue with `Closes #<number>` in the PR body, and rely on `.github/CODEOWNERS` for maintainer review routing. Merged PR branches are deleted automatically, and `main` blocks force-pushes and branch deletion.
+- **Discussions vs. Issues vs. Roadmap**: Open design questions live in [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) before coding. Concrete work, false positives, and Awesome submissions live in [Issues](https://github.com/dislop-ai/dislop/issues) (one issue per deliverable). [ROADMAP.md](./ROADMAP.md) stays a milestone overview updated on releases rather than on every commit.
+- **Small fixes vs. Pull Requests**: Maintainers may fast-forward push tiny fixes and releases to `main`. Feature work, rule changes, and cross-file edits use short topic branches (`feat/...`, `fix/...`, `docs/...`) with `Closes #<number>` in the PR body so merged PRs close issues and delete branches automatically, while `.github/CODEOWNERS` routes review requests.
+- **Minimal metadata**: New issues only need a clear title and one `track:*` or `area:*` label (`rules`, `voice-copy`, `site`, `mcp-cli`). Reserve `priority: high` for the 2–3 active focus items.
 
 ## 4. Local Verification & Releases
 
