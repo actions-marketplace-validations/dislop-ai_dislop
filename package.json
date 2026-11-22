@@ -24,8 +24,8 @@
     "./binary-node": "./src/binary-node.mjs"
   },
   "bin": {
-    "dislop": "./bin/dislop.mjs",
-    "dislop-mcp": "./bin/dislop-mcp.mjs"
+    "dislop": "bin/dislop.mjs",
+    "dislop-mcp": "bin/dislop-mcp.mjs"
   },
   "scripts": {
     "test": "node bin/dislop.mjs pack-test && node tests/test_site.mjs",
@@ -45,6 +45,7 @@
     ".agents/plugins/marketplace.json",
     ".claude-plugin/",
     ".codex-plugin/",
+    ".cursor-plugin/",
     ".mcp.json",
     ".pre-commit-hooks.yaml",
     "action.yml",
@@ -83,5 +84,9 @@
     "typography",
     "quality-gate"
   ],
-  "mcpName": "io.github.dislop-ai/dislop"
+  "mcpName": "io.github.dislop-ai/dislop",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  }
 }

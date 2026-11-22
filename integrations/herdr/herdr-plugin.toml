@@ -5,5 +5,5 @@ description = "Check changed docs, slides, and web UI in this pane for AI artifa
 [[actions]]
 id = "check-ai-slop"
 label = "Check AI Slop (changed files)"
-command = "npx --yes github:dislop-ai/dislop check --changed HEAD --fail-on error"
+command = "npx --yes dislop check --changed HEAD --fail-on error"
 scope = "workspace"

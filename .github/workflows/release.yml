@@ -51,6 +51,8 @@ jobs:
 
       - name: Set up uv
         uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: false
 
       - name: Set up Node.js 22
         uses: actions/setup-node@v7
@@ -90,7 +92,7 @@ jobs:
           PYPI_OIDC_FLAG: ${{ vars.PYPI_OIDC_ENABLED }}
           FORCE_REGISTRIES: ${{ inputs.publish_registries }}
         run: |
-          if [ "${{ github.ref_type }}" = "tag" ]; then
+          if [ "${{ github.ref_type }}" = "tag" ] || [ "${FORCE_REGISTRIES}" = "true" ]; then
             echo "is_tag=true" >> "${GITHUB_OUTPUT}"
           else
             echo "is_tag=false" >> "${GITHUB_OUTPUT}"
@@ -118,7 +120,6 @@ jobs:
     if: needs.verify-and-github-release.outputs.is_tag == 'true' && needs.verify-and-github-release.outputs.npm_ready == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    environment: npm
     permissions:
       contents: read
       id-token: write
@@ -225,7 +226,8 @@ jobs:
     if: needs.verify-and-github-release.outputs.is_tag == 'true' && needs.verify-and-github-release.outputs.vscode_ready == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    environment: marketplaces
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v7
         with:
@@ -236,18 +238,24 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Package and publish VSIX to VS Code Marketplace & Open VSX
+      - name: Package VSIX, attach to GitHub Release, and publish to VS Code / Open VSX
         working-directory: integrations/vscode
         env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
           OVSX_PAT: ${{ secrets.OVSX_PAT }}
         run: |
           node scripts/build.mjs
           node test_extension.mjs
-          npx --yes @vscode/vsce@3.2.1 package --out dislop.vsix
+          PKG_VER="$(node -p "require('./package.json').version")"
+          VSIX_NAME="dislop-${PKG_VER}.vsix"
+          npx --yes @vscode/vsce@3.2.1 package --out "${VSIX_NAME}"
+          if [ "${{ github.ref_type }}" = "tag" ] && gh release view "${GITHUB_REF_NAME}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+            gh release upload "${GITHUB_REF_NAME}" "${VSIX_NAME}" --clobber --repo "${GITHUB_REPOSITORY}"
+          fi
           if [ -n "${VSCE_PAT}" ]; then
-            npx --yes @vscode/vsce@3.2.1 publish --packagePath dislop.vsix -p "${VSCE_PAT}"
+            npx --yes @vscode/vsce@3.2.1 publish --packagePath "${VSIX_NAME}" -p "${VSCE_PAT}"
           fi
           if [ -n "${OVSX_PAT}" ]; then
-            npx --yes ovsx@0.10.2 publish dislop.vsix -p "${OVSX_PAT}"
+            npx --yes ovsx@0.10.2 publish "${VSIX_NAME}" -p "${OVSX_PAT}"
           fi

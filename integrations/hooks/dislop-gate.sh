@@ -17,7 +17,7 @@ resolve_dislop() {
   elif [ -f "./bin/dislop.mjs" ] && command -v node >/dev/null 2>&1; then
     echo "node ./bin/dislop.mjs"
   else
-    echo "npx --yes github:dislop-ai/dislop"
+    echo "npx --yes dislop"
   fi
 }
 

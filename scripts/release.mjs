@@ -191,6 +191,16 @@ function runArtifactSmokeChecks() {
         capture: true,
       });
     }
+    if (hasCommand("agy")) {
+      runStep("Antigravity plugin strict validation", "agy", ["plugin", "validate", "integrations/antigravity", "--strict"], {
+        capture: true,
+      });
+    }
+    if (fs.existsSync(path.join(ROOT, "integrations", "vscode", "test_extension.mjs"))) {
+      runStep("VS Code & Open VSX extension unit tests", "node", ["integrations/vscode/test_extension.mjs"], {
+        capture: true,
+      });
+    }
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
@@ -298,9 +308,25 @@ function bumpVersionEverywhere(nextVer, channel) {
     "ROADMAP.zh-CN.md baseline"
   );
 
+  const vscodePkgPath = path.join(ROOT, "integrations", "vscode", "package.json");
+  if (fs.existsSync(vscodePkgPath)) {
+    const vpkg = JSON.parse(fs.readFileSync(vscodePkgPath, "utf8"));
+    vpkg.version = nextVer;
+    fs.writeFileSync(vscodePkgPath, JSON.stringify(vpkg, null, 2) + "\n", "utf8");
+  }
+  const herdrTomlPath = path.join(ROOT, "integrations", "herdr", "herdr-plugin.toml");
+  if (fs.existsSync(herdrTomlPath)) {
+    replaceOnceOrThrow("integrations/herdr/herdr-plugin.toml", /^version\s*=\s*"[^"]+"/m, `version = "${nextVer}"`, "herdr-plugin.toml version");
+  }
+
   const syncArgs = ["scripts/sync_manifests.mjs"];
   if (channel) syncArgs.push("--channel", channel);
-  runStep(`Sync 10 manifests to v${nextVer}`, "node", syncArgs, { capture: true });
+  runStep(`Sync manifests to v${nextVer}`, "node", syncArgs, { capture: true });
+  if (fs.existsSync(path.join(ROOT, "integrations", "vscode", "scripts", "build.mjs"))) {
+    runStep(`Rebuild VS Code & Open VSX bundles for v${nextVer}`, "node", ["integrations/vscode/scripts/build.mjs"], {
+      capture: true,
+    });
+  }
   runStep(`Rebuild site/ & catalog for v${nextVer}`, "node", ["scripts/build_site.mjs"], { capture: true });
 }
 

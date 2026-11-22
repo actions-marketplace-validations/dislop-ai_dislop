@@ -33,9 +33,9 @@ description: Prevent, diagnose, and clean up AI slop in docs, RFCs, slide decks,
 Packs (`core` errors always on, or `--pack auto`): `business-brief`, `engineering-spec`, `regulated-comms`, `literary-essay`, `deck-and-ui`, `executive-deck`.
 
 ```bash
-npx --yes github:dislop-ai/dislop check <path> --pack auto --profile --ml --patterns --format json
-npx --yes github:dislop-ai/dislop voice <sample.md> -o .dislop.local/voice.json
-npx --yes github:dislop-ai/dislop model status
+npx --yes dislop check <path> --pack auto --profile --ml --patterns --format json
+npx --yes dislop voice <sample.md> -o .dislop.local/voice.json
+npx --yes dislop model status
 ```
 
 Local stdio MCP (7 tools): `dislop_check`, `dislop_voice_extract_offline`, `dislop_model_score`, `dislop_model_status`, `dislop_explain`, `dislop_packs`, `dislop_catalog`.

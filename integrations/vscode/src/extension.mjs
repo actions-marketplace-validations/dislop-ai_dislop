@@ -173,7 +173,7 @@ export function activate(context) {
       vscode.lm.registerMcpServerDefinitionProvider("dislop.mcp", {
         provideMcpServerDefinitions() {
           return [
-            new vscode.McpStdioServerDefinition("dislop", "npx", ["--yes", "github:dislop-ai/dislop", "--mcp"]),
+            new vscode.McpStdioServerDefinition("dislop", "npx", ["--yes", "dislop", "--mcp"]),
           ];
         },
       })
