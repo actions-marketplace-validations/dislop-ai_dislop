@@ -28,16 +28,19 @@
 - **样本脱敏与不编造事实**：纳入 `packs/` 或 `tests/` 的正反例样本须为原创构造或明确允许再分发的公开材料，每条 `exemplar` 记录 `source` 字段，且 `good` 改写稿不得凭空编造原句没有的事实或数值。
 - **离线确定性测试**：单测默认离线运行，严禁发起外部网络请求或调用付费模型接口；网站严禁加载第三方字体、统计脚本或外域请求（`connect-src 'self'`），离线检查保持默认零上传，仅在用户主动点击云端 AI 按钮时发往同源付费模型端点。
 
-## 4. 交付与发版前跑什么
+## 4. 日常更新与发版怎么跑
 
-- 新增或修改规则时，在对应 `pack.json` 补至少 1 条命中样本（`fixtures.hit`）与 1 条易误报干净样本（`fixtures.clean`），并跑通 `npm run release:check`（自动串联清单同源校验、开源脱敏扫描、官网构建、双端 `pack-test`、27 项跨端单测、全仓去 AI 味自查与打包校验）。
-- 修改 CLI 参数、MCP 工具协议或规则包结构时，同步更新 `README.md`、`README.zh-CN.md`、`docs/architecture.md` 与 `docs/architecture.zh-CN.md`。
-- 发新版本、打 Tag 或向各插件市场推送更新时，统一执行 `npm run release -- <X.Y.Z> ...`，各平台硬限制与上线顺序见 [docs/releasing.zh-CN.md](./docs/releasing.zh-CN.md)。
+按改动范围选最短路径，不做机械的全套发包（完整指南见 [docs/releasing.zh-CN.md](./docs/releasing.zh-CN.md)）：
 
-## 5. GitHub 协作约定
+- **先看现场与对外出口状态**：开工或收口前跑 `npm run release:status`，1 秒核对本机 `HEAD`、GitHub Release（含 `.vsix`）、仓库与组织简介、`dislop.com`（静态站 + `/api/health`）、`npm`、`PyPI` 与官方 MCP Registry 是否同号对齐。
+- **第 1 档（仅官网、文案或工具清单微调）**：未改动 `src/`、`bin/`、`packs/`、`patterns/`、`skills/` 与 `integrations/` 时，**不升版本号、不发包**；跑通 `npm run release:check` 推 `main` 并同步官网静态目录即可。
+- **第 2 档（补丁发版 `0.Y.Z`）**：新增或修改规则须在对应 `pack.json` 补至少 1 条 `fixtures.hit` 与 1 条 `fixtures.clean`；修改 CLI 参数、MCP 协议或规则包结构须同步更新 `README.md`、`README.zh-CN.md`、`docs/architecture.md` 与 `docs/architecture.zh-CN.md`；补齐 `CHANGELOG.md` 后跑 `npm run release -- <X.Y.Z> [--deploy] --commit --tag --push`，最后用 `npm run release:status` 验真全出口同号。
+- **第 3 档（特性 / 里程碑发版 `0.(Y+1).0`）**：当包数、规则数、模式数或工具数变化时，`release:check` 会自动拦截仓内文档数字滞后；发版后同步更新 GitHub 仓库简介（`gh repo edit`）、组织主页（`dislop-ai/.github`）、`ROADMAP*.md` 勾选与到期 Milestone，再由 Agent 按内容价值决定是否在官方号发帖（补丁小修静默不刷屏）。
 
-1. 开工前先对齐现场：先看 `git log -n 10 --oneline`、开放 Issue（`gh issue list`）和近期 Discussions，避免和协作者或另一台 Agent 撞车。
-2. 认领再动手：较大改动先在对应 Issue 挂负责人（`Assignee`）或留一句开始处理，按 `ROADMAP.zh-CN.md` 目录边界并行。
-3. 小改直推，大改走 PR：文案微调、小修和发版可直接快进推 `main`；新功能、改规则或跨模块改动拉短分支（`feat/...`、`fix/...`、`docs/...`）提 PR，正文写 `Closes #<编号>`，CI 通过即可合入，不设阻塞审批。
+## 5. GitHub 与多 Agent 并行协作约定
+
+1. 开工前先对齐现场：先看 `git status --short`、`git log -n 10 --oneline`、开放 Issue（`gh issue list`）和近期 Discussions，避免和协作者或另一台并行 Agent 撞车。
+2. 多会话同仓防踩踏：若工作区存在其他并行会话尚未提交的文件，**严禁执行 `git add -A` 或直接在脏工作区跑 `release --commit`**；先显式 `git add <本任务路径>` 提交，再建临时干净 Worktree（`git worktree add --detach /tmp/dislop-rel HEAD`）执行发版与推送，推完立即移除临时 Worktree。
+3. 认领与分支管理：较大改动先在对应 Issue 留一句或挂 `Assignee`；文案微调、小修和发版可直接快进推 `main`，新功能、改规则或跨模块改动拉短分支（`feat/...`、`fix/...`、`docs/...`）提 PR，正文写 `Closes #<编号>`，CI 通过即可合入并自动删分支。
 4. 不记两套账：日常进度只记在 GitHub Issue 与看板，不在仓库里另建零散待办清单；`ROADMAP.zh-CN.md` 与 `ROADMAP.md` 只在发版或大里程碑收口时统一勾选。
-5. 公开与私有边界：商业计费、配额策略、运营台账与本机路径只放私有仓 `dislop-cloud` 或本地忽略目录，严禁写入公开 Issue、PR、Discussions 或提交说明。
+5. 公开与私有边界：商业计费、配额策略、运营台账与本机路径只放私有仓 `dislop-cloud` 或本地忽略目录（`.private/`），严禁写入公开 Issue、PR、Discussions 或提交说明。

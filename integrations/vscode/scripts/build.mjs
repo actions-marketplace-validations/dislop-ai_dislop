@@ -76,6 +76,7 @@ function main() {
   const webPath = path.join(webDistDir, "extension.js");
   fs.writeFileSync(desktopPath, desktopBundle, "utf8");
   fs.writeFileSync(webPath, webBundle, "utf8");
+  fs.copyFileSync(path.join(REPO_ROOT, "LICENSE"), path.join(EXT_ROOT, "LICENSE"));
 
   const desktopKb = Buffer.byteLength(desktopBundle, "utf8") / 1024;
   const webKb = Buffer.byteLength(webBundle, "utf8") / 1024;

@@ -206,10 +206,88 @@ function runArtifactSmokeChecks() {
   }
 }
 
+function computeCanonicalFacts() {
+  const packsDir = path.join(ROOT, "packs");
+  let packCount = 0;
+  let ruleCount = 0;
+  for (const ent of fs.readdirSync(packsDir, { withFileTypes: true })) {
+    if (!ent.isDirectory()) continue;
+    const p = path.join(packsDir, ent.name, "pack.json");
+    if (!fs.existsSync(p)) continue;
+    const pack = JSON.parse(fs.readFileSync(p, "utf8"));
+    packCount += 1;
+    ruleCount += Array.isArray(pack.rules) ? pack.rules.length : 0;
+  }
+
+  const dimDir = path.join(ROOT, "patterns", "dimensions");
+  let patternCount = 0;
+  for (const ent of fs.readdirSync(dimDir, { withFileTypes: true })) {
+    if (!ent.isFile() || !ent.name.endsWith(".json")) continue;
+    const dim = JSON.parse(fs.readFileSync(path.join(dimDir, ent.name), "utf8"));
+    patternCount += Array.isArray(dim.patterns) ? dim.patterns.length : 0;
+  }
+
+  const radar = JSON.parse(fs.readFileSync(path.join(ROOT, "docs", "research", "anti-slop-radar-index.json"), "utf8"));
+  const awesomeCount = Array.isArray(radar.entries) ? radar.entries.length : 0;
+
+  return { version: readCurrentVersion(), packCount, ruleCount, patternCount, awesomeCount };
+}
+
+function runFactAndChangelogGate() {
+  const t0 = Date.now();
+  const facts = computeCanonicalFacts();
+  const errors = [];
+
+  const changelog = fs.readFileSync(path.join(ROOT, "CHANGELOG.md"), "utf8");
+  const escVer = facts.version.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const verSection = changelog.match(new RegExp(`## \\[${escVer}\\][^\\n]*\\n([\\s\\S]*?)(?=\\n## \\[|$)`));
+  if (!verSection || !verSection[1].trim()) {
+    errors.push(`CHANGELOG.md is missing a non-empty '## [${facts.version}]' section`);
+  }
+
+  const docTargets = [
+    { rel: "README.md", checks: [`${facts.packCount}`, `${facts.ruleCount}`, `${facts.awesomeCount}`] },
+    { rel: "README.zh-CN.md", checks: [`${facts.packCount}`, `${facts.ruleCount}`, `${facts.awesomeCount}`] },
+    { rel: "ROADMAP.md", checks: [`${facts.packCount}`, `${facts.ruleCount}`, `${facts.patternCount}`, `${facts.awesomeCount}`] },
+    { rel: "ROADMAP.zh-CN.md", checks: [`${facts.packCount}`, `${facts.ruleCount}`, `${facts.patternCount}`, `${facts.awesomeCount}`] },
+    { rel: "docs/architecture.md", checks: [`${facts.packCount}`, `${facts.ruleCount}`, `${facts.patternCount}`, `${facts.awesomeCount}`] },
+    { rel: "docs/architecture.zh-CN.md", checks: [`${facts.packCount}`, `${facts.ruleCount}`, `${facts.patternCount}`, `${facts.awesomeCount}`] },
+    { rel: "scripts/sync_manifests.mjs", checks: [`${facts.packCount}`, `${facts.ruleCount}`, `${facts.patternCount}`] },
+  ];
+
+  for (const { rel, checks } of docTargets) {
+    const content = fs.readFileSync(path.join(ROOT, rel), "utf8");
+    for (const token of checks) {
+      if (!new RegExp(`\\b${token}\\b`).test(content)) {
+        errors.push(`${rel} does not mention current canonical count '${token}' (expected ${facts.packCount} packs / ${facts.ruleCount} rules / ${facts.patternCount} patterns / ${facts.awesomeCount} awesome entries)`);
+      }
+    }
+  }
+
+  const mcpJson = JSON.parse(fs.readFileSync(path.join(ROOT, ".mcp.json"), "utf8"));
+  const usesRegistry = !(mcpJson?.mcpServers?.dislop?.args || []).some((a) => String(a).startsWith("github:"));
+  if (usesRegistry) {
+    for (const rel of ["README.md", "README.zh-CN.md", "skills/dislop/SKILL.md"]) {
+      const content = fs.readFileSync(path.join(ROOT, rel), "utf8");
+      if (content.includes("github:dislop-ai/dislop")) {
+        errors.push(`${rel} still contains fallback 'github:dislop-ai/dislop' while .mcp.json uses registry mode`);
+      }
+    }
+  }
+
+  if (errors.length > 0) {
+    throw new Error(`Cross-surface fact & changelog check failed:\n    - ${errors.join("\n    - ")}`);
+  }
+  console.log(
+    `  [ok] Cross-surface facts (${facts.packCount} packs, ${facts.ruleCount} rules, ${facts.patternCount} patterns, ${facts.awesomeCount} awesome) & CHANGELOG [${facts.version}] (${((Date.now() - t0) / 1000).toFixed(1)}s)`
+  );
+}
+
 function runPreflight({ quick = false, strictClean = false } = {}) {
   console.log(`\ndislop release preflight (v${readCurrentVersion()})${quick ? " [quick]" : ""}`);
   const pyEnv = { PYTHONPATH: path.join(ROOT, "src") };
   runStep("Manifest & version lockstep", "node", ["scripts/sync_manifests.mjs", "--check"], { capture: true });
+  runFactAndChangelogGate();
   runPrivacyAndSecretGate();
   runStep("Compile site & Awesome lists", "node", ["scripts/build_site.mjs"], { capture: true });
   if (strictClean) {
@@ -340,25 +418,163 @@ async function verifyLiveSiteSmoke() {
   console.log("  [ok] Live https://dislop.com/llms.txt & /api/health returned HTTP 200");
 }
 
+async function fetchJsonSafe(url, headers = {}) {
+  try {
+    const res = await fetch(url, {
+      headers: { "user-agent": "dislop-release-status/1.0", accept: "application/json", ...headers },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) return { ok: false, status: res.status };
+    return { ok: true, status: res.status, data: await res.json() };
+  } catch (err) {
+    return { ok: false, error: err?.message || String(err) };
+  }
+}
+
+async function runLiveStatusAudit({ asJson = false, strict = false } = {}) {
+  const facts = computeCanonicalFacts();
+  const gitDirty = spawnSync("git", ["status", "--porcelain"], { cwd: ROOT, encoding: "utf8" }).stdout.trim();
+  const headSha = spawnSync("git", ["rev-parse", "--short", "HEAD"], { cwd: ROOT, encoding: "utf8" }).stdout.trim();
+
+  const [siteCat, cloudHealth, npmLatest, pypiMeta, mcpReg, ghRepoApi, ghRelApi, ghOrgReadme] = await Promise.all([
+    fetchJsonSafe("https://dislop.com/catalog.json"),
+    fetchJsonSafe("https://dislop.com/api/health"),
+    fetchJsonSafe("https://registry.npmjs.org/dislop/latest"),
+    fetchJsonSafe("https://pypi.org/pypi/dislop/json"),
+    fetchJsonSafe("https://registry.modelcontextprotocol.io/v0/servers?search=io.github.dislop-ai/dislop"),
+    fetchJsonSafe("https://api.github.com/repos/dislop-ai/dislop"),
+    fetchJsonSafe("https://api.github.com/repos/dislop-ai/dislop/releases/latest"),
+    fetchJsonSafe("https://api.github.com/repos/dislop-ai/.github/contents/profile/README.md"),
+  ]);
+
+  const mcpEntry = (mcpReg.data?.servers || []).find((s) => s?.server?.name === "io.github.dislop-ai/dislop");
+  const mcpVer = mcpEntry?.server?.version || null;
+  const mcpState = mcpEntry?._meta?.["io.modelcontextprotocol.registry/official"]?.status || null;
+
+  const relTag = ghRelApi.data?.tag_name?.replace(/^v/, "") || null;
+  const relAssets = (ghRelApi.data?.assets || []).map((a) => a.name);
+  const hasVsix = relAssets.some((n) => n.endsWith(".vsix"));
+  const repoDesc = ghRepoApi.data?.description || "";
+  const repoDescAligned =
+    !repoDesc ||
+    ([facts.packCount, facts.ruleCount, facts.patternCount, facts.awesomeCount].every((n) => new RegExp(`\\b${n}\\b`).test(repoDesc)));
+
+  let orgProfileAligned = null;
+  if (ghOrgReadme.ok && ghOrgReadme.data?.content) {
+    const orgMd = Buffer.from(ghOrgReadme.data.content, "base64").toString("utf8");
+    orgProfileAligned =
+      !orgMd.includes("github:dislop-ai/dislop") &&
+      [facts.packCount, facts.ruleCount, facts.patternCount, facts.awesomeCount].every((n) => new RegExp(`\\b${n}\\b`).test(orgMd));
+  }
+
+  let openIssues = ghRepoApi.data?.open_issues_count ?? null;
+  let openMilestones = null;
+  if (hasCommand("gh")) {
+    const msRes = spawnSync("gh", ["api", "repos/dislop-ai/dislop/milestones", "--jq", "length"], {
+      cwd: ROOT,
+      encoding: "utf8",
+    });
+    if (msRes.status === 0) openMilestones = Number(msRes.stdout.trim());
+  }
+
+  const rows = [
+    {
+      surface: "Local HEAD",
+      version: `${facts.version} (${headSha})`,
+      ok: gitDirty.length === 0,
+      detail: gitDirty.length === 0 ? `clean · ${facts.packCount}p/${facts.ruleCount}r/${facts.patternCount}pat/${facts.awesomeCount}aw` : "working tree has uncommitted changes",
+    },
+    {
+      surface: "GitHub Release",
+      version: relTag || "unreachable",
+      ok: relTag === facts.version && hasVsix,
+      detail: relTag ? `${relAssets.length} assets${hasVsix ? " (incl. .vsix)" : " (missing .vsix)"}` : ghRelApi.error || `HTTP ${ghRelApi.status}`,
+    },
+    {
+      surface: "GitHub Repo & Org",
+      version: repoDescAligned && orgProfileAligned !== false ? "aligned" : "drift",
+      ok: Boolean(repoDescAligned && orgProfileAligned !== false),
+      detail: `About=${repoDescAligned ? "ok" : "stale"} · OrgProfile=${orgProfileAligned === null ? "skip" : orgProfileAligned ? "ok" : "stale"} · openIssues=${openIssues ?? "?"}${openMilestones !== null ? ` · openMilestones=${openMilestones}` : ""}`,
+    },
+    {
+      surface: "dislop.com (Static)",
+      version: siteCat.data?.version || "unreachable",
+      ok: siteCat.ok && siteCat.data?.version === facts.version,
+      detail: siteCat.ok ? `${siteCat.data?.resources?.length || 0} catalog resources` : siteCat.error || `HTTP ${siteCat.status}`,
+    },
+    {
+      surface: "dislop.com (/api/health)",
+      version: cloudHealth.data?.version || "unreachable",
+      ok: cloudHealth.ok && cloudHealth.data?.ok === true && cloudHealth.data?.version === facts.version,
+      detail: cloudHealth.ok ? `llm=${cloudHealth.data?.llmConfigured} · mail=${cloudHealth.data?.mailConfigured}` : cloudHealth.error || `HTTP ${cloudHealth.status}`,
+    },
+    {
+      surface: "PyPI (dislop)",
+      version: pypiMeta.data?.info?.version || "unreachable",
+      ok: pypiMeta.ok && pypiMeta.data?.info?.version === facts.version,
+      detail: pypiMeta.ok ? "uvx / pip live" : pypiMeta.error || `HTTP ${pypiMeta.status}`,
+    },
+    {
+      surface: "npm (dislop)",
+      version: npmLatest.data?.version || "unreachable",
+      ok: npmLatest.ok && npmLatest.data?.version === facts.version,
+      detail: npmLatest.ok ? (npmLatest.data?.version === facts.version ? "npx live (latest)" : `lags HEAD (${npmLatest.data?.version} < ${facts.version})`) : npmLatest.error || `HTTP ${npmLatest.status}`,
+    },
+    {
+      surface: "Official MCP Registry",
+      version: mcpVer || "unreachable",
+      ok: mcpState === "active" && mcpVer === facts.version,
+      detail: mcpEntry ? `status=${mcpState}${mcpVer === facts.version ? "" : ` · lags HEAD (${mcpVer} < ${facts.version})`}` : "not found",
+    },
+  ];
+
+  if (asJson) {
+    console.log(JSON.stringify({ targetVersion: facts.version, facts, surfaces: rows }, null, 2));
+  } else {
+    console.log(`\ndislop cross-surface status (target v${facts.version})`);
+    for (const r of rows) {
+      const badge = r.ok ? "[OK] " : "[LAG]";
+      console.log(`  ${badge} ${r.surface.padEnd(23)} ${String(r.version).padEnd(16)} ${r.detail}`);
+    }
+    const lagging = rows.filter((r) => !r.ok);
+    console.log(
+      lagging.length === 0
+        ? "\nAll public surfaces match local HEAD.\n"
+        : `\n${lagging.length} surface(s) differ from target v${facts.version}: ${lagging.map((r) => r.surface).join(", ")}\n`
+    );
+  }
+
+  if (strict && rows.some((r) => !r.ok)) {
+    process.exitCode = 1;
+  }
+}
+
 async function main() {
   const argv = process.argv.slice(2);
   if (argv.includes("--help") || argv.includes("-h") || argv.length === 0) {
     console.log(
       [
         "Usage:",
-        "  npm run release:check                        # Run all 6 release preflight & packaging gates",
-        "  node scripts/release.mjs --check --quick     # Fast preflight (skip tarball/wheel build)",
+        "  npm run release:status                       # Audit version & fact alignment across all live public outlets",
+        "  npm run release:check                        # Run all offline preflight, fact, dogfood & packaging gates",
+        "  node scripts/release.mjs --check --quick     # Fast offline preflight (skip tarball/wheel build)",
         "  node scripts/release.mjs --extract-notes [v] # Print release notes from CHANGELOG.md",
         "  npm run release -- <X.Y.Z> [options]         # Bump version across repo, rebuild & verify",
         "",
         "Options:",
-        "  --channel <github|registry>  MCP package coordinate mode (use 'registry' once npm package is live)",
+        "  --status [--json] [--strict] Audit live GitHub, dislop.com, npm, PyPI & Official MCP Registry alignment",
+        "  --channel <github|registry>  MCP package coordinate mode (defaults to 'registry')",
         "  --deploy                     Run optional gitignored .private/deploy.local.sh + live HTTP smoke test",
         "  --commit                     Commit release artifacts as 'chore(release): v<X.Y.Z>'",
         "  --tag                        Create annotated git tag 'v<X.Y.Z>'",
         "  --push                       Push branch and tag to origin (triggers GitHub Actions release.yml)",
       ].join("\n")
     );
+    return;
+  }
+
+  if (argv.includes("--status")) {
+    await runLiveStatusAudit({ asJson: argv.includes("--json"), strict: argv.includes("--strict") });
     return;
   }
 
