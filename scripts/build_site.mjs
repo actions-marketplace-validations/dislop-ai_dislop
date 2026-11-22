@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Zero-dependency Human + Agent Dual-Native static compiler for site/.
-// Single Source of Truth (SSOT):
+// Zero-dependency static site & agent-docs compiler for site/.
+// Inputs:
 //   - src/core.mjs
 //   - assets/logo.svg
 //   - packs/*/pack.json
@@ -25,7 +25,15 @@ const AWESOME_OUT = path.join(SITE_DIR, "awesome");
 const REPO_AWESOME_OUT = path.join(ROOT, "awesome");
 
 const BASE_URL = "https://dislop.com";
-const PACK_ORDER = ["core", "business-brief", "literary-essay", "deck-and-ui"];
+const PACK_ORDER = [
+  "core",
+  "business-brief",
+  "engineering-spec",
+  "regulated-comms",
+  "literary-essay",
+  "deck-and-ui",
+  "executive-deck",
+];
 
 // ---------- Helpers & Sanitizer ----------
 
@@ -155,7 +163,7 @@ function fencedExemplar(ex) {
 // ---------- Load SSOT Inputs ----------
 
 const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, "package.json"), "utf8"));
-const VERSION = pkg.version || "0.2.0";
+const VERSION = pkg.version || "0.6.0";
 
 const packsDir = path.join(ROOT, "packs");
 const packsById = {};
@@ -397,6 +405,159 @@ const RULE_UI_META = {
       good: '<span class="section-meta">本地离线运行</span>',
     },
   },
+  "cooccurrence-slop-cluster": {
+    lang: "both",
+    title: { zh: "低事实段落堆叠空泛动词", en: "Buzzword cluster in fact-free paragraph" },
+    enEx: {
+      bad: "This workflow upgrade leverages cross-functional alignment to streamline daily operations, fostering robust collaboration across stakeholders.",
+      trap: "Workflow upgrades aren't about process — they're about team velocity.",
+      good: "Splitting triage into 3 priority queues cut median first-response time from 110s to 42s in week one.",
+    },
+  },
+  "semicolon-tricolon": {
+    lang: "both",
+    title: { zh: "三段对称分号推销句", en: "Three-part balanced semicolon pitch" },
+    enEx: {
+      bad: "The client validates forms on input; the worker isolates slow jobs in queues; the dashboard tracks every timeout live.",
+      trap: "Validate early. Queue smart. Track live.",
+      good: "The client validates fields on input, slow jobs run in a separate queue, and requests over 5s trigger an on-call alert.",
+    },
+  },
+  "rhetorical-qa-cadence": {
+    lang: "both",
+    title: { zh: "自问自答式营销设问", en: "Self-answered rhetorical Q&A" },
+    zhEx: {
+      bad: "为什么很多内部看板上线两周就没人打开？因为上面只有汇总虚荣数字而没有下一步动作。结果呢？业务每周一还是手动导表格。",
+      trap: "看板失灵。数字堆砌。全靠导表。",
+      good: "内部看板如果只摆汇总数字、不标异常订单，运营每周一还是得手动导出表格排查。",
+    },
+  },
+  "comma-chain-runon": {
+    lang: "both",
+    title: { zh: "五连逗号一逗到底长句", en: "Five-comma run-on chain" },
+    enEx: {
+      bad: "By aligning cross-team priorities, defining milestone gates, refining review checklists, centralizing runbooks, expanding alert coverage, and automating rollbacks, we improved release stability.",
+      trap: "Align teams. Define gates. Automate rollbacks.",
+      good: "Fixing Tuesday design reviews and wiring HTTP 5xx auto-rollback cut post-release hotfixes by 40% this quarter.",
+    },
+  },
+  "narrative-sandwich-frame": {
+    lang: "both",
+    title: { zh: "趋势帽开场与展望帽收尾", en: "Macro-trend opener or future-gazing closer" },
+    enEx: {
+      bad: "As organizations navigate rapid digital transformation, CI pipelines face new demands. Furthermore, static checks are growing. Moreover, docs matter. Additionally, workflows evolve. Looking ahead, teams that adapt will thrive.",
+      trap: "Pipelines change. Checks grow. Teams adapt.",
+      good: "Adding static doc checks to CI in November caught configuration typos 18 minutes earlier per PR; 4 more repos join next week.",
+    },
+  },
+  "template-skeleton-echo": {
+    lang: "both",
+    title: { zh: "连续三段同构句首填表腔", en: "Repeated paragraph-opener skeleton" },
+    enEx: {
+      bad: "By standardizing log schemas, teams query events faster.\n\nBy automating nightly compaction, storage stays predictable.\n\nBy surfacing error budgets, on-call engineers spot regressions early.",
+      trap: "Standardize logs. Compact nightly. Surface budgets.",
+      good: "Standardized log schemas speed up ad-hoc queries, nightly compaction caps disk growth, and error-budget alerts catch regressions early.",
+    },
+  },
+  "low-burstiness-vapor": {
+    lang: "both",
+    title: { zh: "句长齐平且缺具体事实", en: "Flat sentence rhythm with zero concrete facts" },
+    enEx: {
+      bad: "The platform focuses on improving overall developer productivity. System modules maintain clean architectural boundaries. Team workflows follow consistent operational standards. Product releases progress steadily toward core goals. Customer feedback reflects positive adoption trends.",
+      trap: "Productivity rises. Boundaries hold. Releases ship.",
+      good: "Cutting the home bundle from 420 KB to 145 KB dropped mobile first paint to 0.9s, and 3 backend engineers now rotate weekly via `ops/oncall.yaml`.",
+    },
+  },
+  "literary-semicolon-tricolon": {
+    lang: "both",
+    title: { zh: "散文三段分号排比腔", en: "Lyrical three-part semicolon balance" },
+    enEx: {
+      bad: "Water meets freshly ground beans; steam curls toward the kitchen ceiling; the first sip steadies a scattered morning.",
+      trap: "Fresh beans. Curling steam. Steady morning.",
+      good: "Boiling water hit the ground beans and sent steam up toward the low kitchen ceiling.",
+    },
+  },
+  "literary-rhetorical-qa": {
+    lang: "both",
+    title: { zh: "随笔自问自答抒情腔", en: "Essay rhetorical self-Q&A" },
+    zhEx: {
+      bad: "早上六点半他照例冲了一壶手冲咖啡。为什么手冲咖啡总能让人安静下来？因为缓慢注水的节奏提醒我们停下脚步。",
+      trap: "热水落下。香气升起。脚步放慢。",
+      good: "早上六点半，他烧开水冲了一壶咖啡。",
+    },
+  },
+  "literary-narrative-frame": {
+    lang: "both",
+    title: { zh: "随笔时代大帽子与升华尾", en: "Sweeping era opener in personal essay" },
+    zhEx: {
+      bad: "在当今被弹窗消息包围的快节奏时代里，七点前的巷子只有送奶车经过。未来，守住内心的片刻宁静依然是我们生活的必修课。",
+      trap: "消息不断。奶车驶过。宁静仍在。",
+      good: "早上七点前，巷子里只有送奶车经过。",
+    },
+  },
+  "eng-pr-diff-parrot": {
+    lang: "both",
+    title: { zh: "空泛的 AI 提交摘要壳", en: "Empty AI PR diff summary" },
+    enEx: {
+      bad: "This PR updates the retry middleware to ensure a more seamless and resilient developer experience",
+      trap: "This isn't a minor retry tweak — it's rock-solid resilience.",
+      good: "Fixes #412: cap exponential backoff at 8s when upstream returns HTTP 503.",
+    },
+  },
+  "eng-shallow-root-cause": {
+    lang: "both",
+    title: { zh: "复盘止步于“人为失误”", en: "Stop-thinking 'human error' root cause" },
+    enEx: {
+      bad: "Root cause: human error.",
+      trap: "Root cause: engineer oversight during peak traffic.",
+      good: "Root cause: deploy runner skipped schema validation when `--fast` was passed.",
+    },
+  },
+  "eng-vague-action-item": {
+    lang: "both",
+    title: { zh: "无指标无负责人的改进项", en: "Unowned wishful action item" },
+    enEx: {
+      bad: "- [ ] Add more monitoring.",
+      trap: "- [ ] Proactively strengthen observability across services.",
+      good: "- [ ] Add P99 > 400ms alert on `checkout-api` (@payments-oncall, due 2026-11-30).",
+    },
+  },
+  "slide-process-not-finding-title": {
+    lang: "both",
+    title: { zh: "汇报标题只写“关于……的分析”", en: "Process-label slide title instead of takeaway" },
+    enEx: {
+      bad: "## Analysis of Q3 Churn Drop (6.2% to 4.1%)",
+      trap: "## Reimagining Customer Retention Excellence (6.2% to 4.1%)",
+      good: "## Q3 Customer Churn Dropped from 6.2% to 4.1%",
+    },
+  },
+  "pptx-layout-monotony": {
+    lang: "both",
+    title: { zh: "连续 4 页纯文字同版式 PPT", en: "4+ consecutive identical bullet slides" },
+    zhEx: {
+      bad: "第 2 至第 5 页连续使用完全相同的「标题 + 4 条纯文字要点」版式，无一页表格或图表。",
+      trap: "第 2 至第 5 页保留同样的 4 条纯文字，只给每页贴了四个装饰图标。",
+      good: "第 3 页改为四行区域延迟对照表，第 4 页改为周度错误率折线图。",
+    },
+  },
+  "reg-unsubstantiated-superlative": {
+    lang: "both",
+    title: { zh: "绝对化承诺与极限合规词", en: "Unsubstantiated '100% / zero-risk' claim" },
+    enEx: {
+      bad: "Our AES-256 vault is 100% secure with a zero-risk migration (99.95% monthly SLA).",
+      trap: "Our AES-256 vault is an unbreakable fortress for enterprise data (99.95% monthly SLA).",
+      good: "Backups use AES-256 encryption at rest and carry a 99.95% monthly uptime SLA.",
+    },
+  },
+  "reg-unanchored-multiplier": {
+    lang: "both",
+    title: { zh: "无基线的悬空倍数宣称", en: "Multiplier claim without baseline" },
+    enEx: {
+      bad: "Streaming batch export makes monthly statements 10x faster.",
+      trap: "Streaming batch export transforms monthly statements at lightning speed.",
+      good: "Streaming batch export writes rows directly without buffering the full table in memory.",
+    },
+  },
 };
 
 const packsModule = `// Auto-generated by scripts/build_site.mjs from packs/*/pack.json (test fixtures stripped) — do not hand-edit.\nexport const PACKS_BY_ID = ${JSON.stringify(browserPacksById, null, 2)};\nexport const RULE_UI_META = ${JSON.stringify(RULE_UI_META, null, 2)};\n`;
@@ -450,7 +611,7 @@ snapshot: ${SNAPSHOT_DATE}
 
 Good writing habits, web and slide design rules, an offline zero-dependency checker, and 87 vetted tools—gathered in one place. Hand \`/llms.txt\` to any AI chat, install the Agent Skill / Claude Code Plugin / MCP server, or test drafts offline in your browser.
 
-- Runtime dependencies: 0 (Node.js 20+ and Python 3.10+ parity verified by 88 pack fixtures and \`tests/test_conformance.py\`)
+- Runtime dependencies: 0 (Node.js 20+ and Python 3.10+ parity verified by 160 pack fixtures and 26 unit/conformance tests)
 - Live browser workbench: ${BASE_URL}/#workbench (offline in RAM by default + opt-in same-origin cloud AI, \`CSP: connect-src 'self'\`)
 - Hosted Remote HTTP MCP: ${BASE_URL}/mcp (30 free monthly credits via ${BASE_URL}/#pricing)
 - Agent routing index: ${BASE_URL}/llms.txt
@@ -461,16 +622,17 @@ Good writing habits, web and slide design rules, an offline zero-dependency chec
 
 | Target | Formats / Scope | Status |
 |---|---|---|
-| Writing, Copy & Longform | \`.md\`, \`.mdx\`, \`.txt\` (EN & ZH) | LIVE \`v${VERSION}\` |
-| Word & PowerPoint | \`.docx\`, \`.pptx\` | LIVE \`v${VERSION}\` |
+| Writing, Specs, RFCs & Copy | \`.md\`, \`.mdx\`, \`.txt\` (EN & ZH, 7 built-in packs, 53 patterns across 6 dimensions) | LIVE \`v${VERSION}\` |
+| Word & PowerPoint | \`.docx\`, \`.pptx\` (incl. layout monotony & conclusion titles) | LIVE \`v${VERSION}\` |
 | Web UI & Components | \`.html\`, \`.css\`, \`.jsx\`, \`.tsx\` | LIVE \`v${VERSION}\` |
+| Offline Voice & Pocket ML | \`dislop voice\` (\`dislop.voice/1\`) & 14.6 KB \`--ml\` stealth-vapor scorer | LIVE \`v${VERSION}\` |
+| Optional Local Small Models | \`dislop model\` hardware-aware advisor (\`0.6B\` / \`1.7B\` / \`4B\`) | LIVE \`v${VERSION}\` |
 | Git Diffs & PRs | \`--changed\` / \`--staged\` & SARIF 2.1.0 | LIVE (diff check) · Roadmap (code AST) |
-| Rhythm, Layout Monotony & Voice | 5 prototype probes, \`dislop.voice/1\`, \`dislop.taste/1\` | Prototype / Spec \`v0.3+\` |
 
 ## Rule Layers
 
 1. **AI Delivery Artifacts (\`packs/core\`, \`error\`)**: stray chatbot wrappers, unfilled placeholders, raw Markdown pasted into Word/PPT, and dead \`href="#"\` placeholder controls.
-2. **Style & Template Packs (\`warning\` / \`info\`)**: \`business-brief\`, \`literary-essay\`, and \`deck-and-ui\` (${allRules.length} rules total), each pairing a check question with \`bad -> trap -> good\` examples.
+2. **Built-in Scenario Packs (\`warning\` / \`info\`)**: \`business-brief\`, \`engineering-spec\`, \`regulated-comms\`, \`literary-essay\`, \`deck-and-ui\`, and \`executive-deck\` (${allRules.length} built-in pack rules across 7 bundled packs, plus 11 extended pattern-bank probes for 53 structured patterns across 6 dimensions), each pairing a check question with \`bad -> trap -> good\` examples.
 
 ## Resource Pillars
 
@@ -503,8 +665,8 @@ version: ${VERSION}
 Read only the focused document matching your current task:
 
 - [Deletion Test & Anti-Slop Loop](./deletion-test.md): Why banning flat word lists causes second-order slogans, and how the \`prevent -> check -> clean up -> re-check\` loop works.
-- [Cross-Modality Anti-Pattern Map](./anti-pattern-map.md): Four-tier anti-slop model across prose, Web UI, Word, and PowerPoint.
-- [Positive Divergence & Personalization (Draft)](./positive-divergence.md): Three-band entropy partition, \`dislop.voice/1\` offline stylometrics, and \`dislop.taste/1\` positive design cards.
+- [Cross-Modality Anti-Pattern Map](./anti-pattern-map.md): How dislop groups 53 anti-slop patterns across prose, Web UI, Word, and PowerPoint.
+- [Positive Divergence & Personalization (Draft)](./positive-divergence.md): Keeping structure varied, \`dislop.voice/1\` offline stylometrics, and \`dislop.taste/1\` positive design cards.
 - [Brand & Voice Guide](./brand-and-voice.md): Plain maker voice grounded in Karpathy's 80% ASD-STE100 and our own copy before/after edits.
 - [Visual & Typographic Design System](./design-system.md): Architectural Galley Proof Sheet tokens and anti-template layout constraints.
 `,
@@ -568,12 +730,14 @@ version: ${VERSION}
 
 # Cross-Modality Anti-Pattern Map
 
-| Layer | Definition | Shipped \`v${VERSION}\` Deterministic Coverage | Roadmap Extensions (\`v0.3+\` Spec) |
-|---|---|---|---|
-| **L0 AI Delivery Artifacts** | Obvious AI leftovers (\`severity: error\`) | Stray chatbot wrappers, unfilled placeholders, raw Markdown in DOCX/PPTX, dead \`href="#"\` placeholder controls | Baseline suppression ledgers |
-| **L1 First-Order Lexicon & Default UI** | Stock filler words and default generator chrome | \`en-cliche-lexicon\`, \`en-throat-clearing-opener\`, \`zh-bureaucratic-padding\`, \`ui-ai-gradient\`, \`ui-pill-soup\`, \`ui-box-in-box\`, \`ui-prompt-echo-badge\` | \`ui-glassmorphism-overuse\`, \`ui-accent-stripe-card\` |
-| **L2 Second-Order Cadence & Layout** | Structural fallback after banning stock words | \`negation-pivot-frame\`, \`staccato-slogan-run\`, \`zh-four-char-triad\`, \`zh/en-essay-moralizing-ending\`, \`bold-lead-list-wall\`, \`excessive-em-dash-density\`, \`zh-halfwidth-punctuation\`, slide word-walls/bullets/autofit/weak-titles | 5 prototype-verified probes (\`comma-chain-cadence\`, \`sentence-length-monotony\`, \`discourse-marker-cluster\`, \`ui-glassmorphism-overuse\`, \`ui-accent-stripe-card\`) + \`pptx-layout-monotony\` in v0.3 spec |
-| **L3 Structural Voice & Visual Craft** | 3-part semicolon pitches, roleplay tone, page-level craft | Handled by \`SKILL.md\` plain writing & UI rules + 31 positive design references | Local \`dislop.voice/1\` stylometrics & optional local small-model plugins (advisory \`info\` only) |
+\`dislop\` ships 53 structured anti-slop patterns across 6 dimensions in \`v${VERSION}\` (${allRules.length} built-in pack rules across 7 packs + 11 extended pattern-bank probes), plus an offline 14.6 KB Pocket ML scorer (\`--ml\`) for uniform-cadence vapor prose.
+
+| Category | What It Covers | Shipped \`v${VERSION}\` Offline Coverage |
+|---|---|---|
+| **AI Delivery Artifacts** | Obvious AI leftovers (\`severity: error\`) | \`packs/core\`: stray chatbot wrappers, unfilled placeholders, raw Markdown in DOCX/PPTX, dead \`href="#"\` placeholder controls |
+| **Stock Lexicon & Default UI** | Filler words and default generator chrome | \`en-cliche-lexicon\`, \`en-throat-clearing-opener\`, \`zh-bureaucratic-padding\`, \`ui-ai-gradient\`, \`ui-pill-soup\`, \`ui-box-in-box\`, \`ui-prompt-echo-badge\`, plus pattern-bank probes \`ui-glassmorphism-overuse\` and \`ui-accent-stripe-card\` |
+| **Cadence, Frames & Slide Layout** | Structural fallback after banning stock words | \`negation-pivot-frame\`, \`staccato-slogan-run\`, \`zh-four-char-triad\`, \`semicolon-tricolon\`, \`rhetorical-qa-cadence\`, \`comma-chain-runon\`, \`narrative-sandwich-frame\`, \`template-skeleton-echo\`, \`low-burstiness-vapor\`, \`zh/en-essay-moralizing-ending\`, \`bold-lead-list-wall\`, \`excessive-em-dash-density\`, \`zh-halfwidth-punctuation\`, slide word-walls/bullets/autofit/weak-titles, \`pptx-layout-monotony\`, and extended pattern-bank probes |
+| **Domain Specs, Voice & Craft** | Engineering/regulated slop, personal cadence, and visual craft | \`engineering-spec\`, \`regulated-comms\`, and \`executive-deck\` packs; \`SKILL.md\` plain writing & UI rules; 31 print/type design references; \`dislop voice\` (\`dislop.voice/1\`) offline stylometrics; 14.6 KB \`--ml\` Pocket ML scorer; optional local small models (\`dislop model\`) |
 
 ## Coverage Honesty Principle
 
@@ -602,15 +766,15 @@ status: draft-protocol
 
 Empirical studies (Padmakumar & He, ICLR 2024; Doshi & Hauser, Science Advances 2024; Jiang et al., NeurIPS 2025 *Artificial Hivemind*) show post-trained LLMs exhibit both intra-model repetition and inter-model homogeneity. Swapping models or banning stock words alone pushes outputs toward safe statistical means or second-order templates.
 
-## Three-Band Entropy Partition
+## Three Practical Layers
 
-1. **Band 1 — Zero-Entropy Invariants**: Clear hard AI delivery artifacts first (\`dislop core\`).
-2. **Band 2 — Bounded Divergence Band**: Vary mid-layer structure using Verbalized Sampling (Zhang et al., 2025) and orthogonal prose skeletons:
+1. **Clear hard leftovers first**: Strip obvious AI delivery artifacts (\`packs/core\`).
+2. **Vary the structure**: Use Verbalized Sampling (Zhang et al., 2025) and distinct prose skeletons instead of one default summary template:
    - \`S1 Decision Ledger\`: 1-sentence conclusion -> measured sample & metrics -> explicit limitation -> concrete next action.
    - \`S2 Mechanism Teardown\`: observed anomaly -> flawed intuition -> underlying mechanism -> bounded fix.
    - \`S3 Field Note\`: time/place/physical detail -> direct quote or observation -> stop on final concrete image.
    - \`S4 Technical Spec\`: capability matrix -> explicit non-goals -> failure modes/exit codes -> minimal example.
-3. **Band 3 — Deterministic Pruning**: Filter out core errors, dropped facts, second-order slogan displacement, and cross-document template repetition.
+3. **Check the finished draft**: Run \`dislop check\` to catch core errors, second-order slogan displacement, and cross-document template repetition.
 
 ## Draft Schemas (Zero-LLM Core)
 
@@ -662,7 +826,7 @@ version: ${VERSION}
 
 \`dislop\` rejects both Generator Default #1 (dark slate + indigo/purple/pink neon gradients + pill soup) and Generator Default #2 (warm cream \`#F7F5F0\` + stone + terracotta fallback).
 
-## Verified Surface & Pencil Tokens (WCAG 2.2 AA)
+## Verified Surface & Mark Tokens (WCAG 2.2 AA)
 
 | Token | Role | Light | Dark | Dark Lightness / Contrast |
 |---|---|---|---|---|
@@ -673,9 +837,9 @@ version: ${VERSION}
 | \`--inset\` | Code / input well | \`#F1F3F0\` | \`#0A0C0E\` | \`L* = 3.2\` (recessed) |
 | \`--control-border\` | Inputs, selects & buttons | \`#767C85\` | \`#6F7784\` | \`4.2:1\` light / \`3.9:1\` dark (WCAG >= 3:1) |
 | \`--ink\` | Primary ink | \`#14171A\` | \`#ECEEF0\` | \`18.0:1\` light / \`15.3:1\` dark |
-| \`--mark-error\` | Invariant error (\`dele\`) | \`#B42318\` | \`#FF7A6B\` | \`6.6:1\` / \`7.0:1\` (2px solid) |
-| \`--mark-warn\` | Taste query (\`query\`) | \`#1B52B0\` | \`#85B4FF\` | \`7.3:1\` / \`8.5:1\` (1.5px dashed) |
-| \`--mark-stet\` | Protected span (\`stet\`) | \`#1E6B47\` | \`#6CD49B\` | \`6.5:1\` / \`9.8:1\` (2px dotted) |
+| \`--mark-error\` | Hard AI artifact (\`error\`) | \`#B42318\` | \`#FF7A6B\` | \`6.6:1\` / \`7.0:1\` (2px solid) |
+| \`--mark-warn\` | Cliché / template warning (\`warning\` / \`info\`) | \`#1B52B0\` | \`#85B4FF\` | \`7.3:1\` / \`8.5:1\` (1.5px dashed) |
+| \`--ok\` | Clean pass & active UI state | \`#1E6B47\` | \`#6CD49B\` | \`6.5:1\` / \`9.8:1\` |
 
 ## Structural Rules Enforced on \`site/\`
 
@@ -846,11 +1010,13 @@ Pick the lightest surface that fits your workflow:
 | Surface | Status | How to start |
 |---|---|---|
 | Zero-Install Prompt & Static Pages | Live | Hand [\`/llms.txt\`](../llms.txt) or [\`/catalog.json\`](../catalog.json) to any web-capable AI, or test drafts offline in the [Browser Workbench](${BASE_URL}/#workbench). |
-| Agent Skill | Live | Install [\`SKILL.md\`](./skill.md) with \`npx skills add dislop-ai/dislop\` in Claude Code, Codex, Cursor, Windsurf, or Antigravity (or see [\`/tools/prompts.md\`](./prompts.md)). |
-| Hosted Remote HTTP MCP (Cloud) | Live | Connect \`${BASE_URL}/mcp\` with a free 30-credit/month Bearer token from [\`/#pricing\`](${BASE_URL}/#pricing) for \`dislop_review\`, self-healing \`dislop_deslop\`, and \`dislop_voice_extract\`. |
-| Claude Code Plugin | Live | Install Skill + local offline stdio MCP in one step using \`.claude-plugin/marketplace.json\` (\`/plugin marketplace add dislop-ai/dislop\` then \`/plugin install dislop@dislop-ai\`). |
-| CLI, Git Diff & Hooks | Live | See [\`/tools/cli-and-hooks.md\`](./cli-and-hooks.md) for zero-network Node (\`npx\`), Python (\`uvx\`), \`dislop resources\`, SARIF, GitHub Actions, and hook templates. |
-| Local MCP, Remote MCP & JS Export | Live | See [\`/tools/mcp-sdk-api.md\`](./mcp-sdk-api.md) for local stdio MCP, hosted Remote HTTP MCP, HTTP API, and \`src/core.mjs\`. |
+| Agent Skill (Local Progressive References) | Live | Install [\`SKILL.md\`](./skill.md) + bundled \`references/*.md\` with \`npx skills add dislop-ai/dislop\` in Claude Code, Codex, Cursor, Windsurf, or Antigravity (0 network calls). |
+| CLI, Offline Voice & Local Models | Live | See [\`/tools/cli-and-hooks.md\`](./cli-and-hooks.md) for zero-network Node (\`npx\`), Python (\`uvx\`), all 7 built-in packs, 53 patterns, 14.6 KB \`--ml\`, \`dislop voice\`, and \`dislop model\`. |
+| Hosted Remote HTTP MCP (Cloud) | Live | Connect \`${BASE_URL}/mcp\` with a free 30-credit/month Bearer key from [\`/#pricing\`](${BASE_URL}/#pricing) for \`dislop_review\`, self-healing \`dislop_deslop\`, and \`dislop_voice_extract\`. |
+| Claude Code Plugin | Live | Install Skill + local offline stdio MCP in one step using \`.claude-plugin/marketplace.json\` (\`/plugin marketplace add dislop-ai/dislop\` then \`/plugin install dislop@dislop-ai\`; ~130 always-on tokens). |
+| OpenAI Codex Plugin & Gemini CLI Extension | Live | Codex: \`codex plugin marketplace add dislop-ai/dislop\` then \`codex plugin add dislop@dislop-ai\`; Gemini CLI: \`gemini extensions install https://github.com/dislop-ai/dislop\`. |
+| GitHub Action & pre-commit | Live | Gate modified PR lines with \`uses: dislop-ai/dislop@main\` (\`action.yml\`) or \`.pre-commit-hooks.yaml\`. |
+| Local MCP, Remote MCP & JS Export | Live | See [\`/tools/mcp-sdk-api.md\`](./mcp-sdk-api.md) for compact local stdio MCP, hosted Remote HTTP MCP, HTTP API, and \`src/core.mjs\`. |
 `,
 });
 
@@ -867,6 +1033,31 @@ registerResource({
   relatedTools: ["skill", "cli", "mcp"],
   content: canonicalSkillMd,
 });
+
+const SKILL_REFS = [
+  { file: "business-and-rfc.md", titleEn: "Skill Reference: Business Briefs, RFCs & Postmortems", titleZh: "Skill 本地参考卡：工作文档与研发复盘" },
+  { file: "editorial-and-essay.md", titleEn: "Skill Reference: Editorial & Literary Writing", titleZh: "Skill 本地参考卡：随笔与长文" },
+  { file: "web-ui-and-deck.md", titleEn: "Skill Reference: Web UI & Slide Decks", titleZh: "Skill 本地参考卡：网页与演示文稿" },
+  { file: "regulated-and-precision.md", titleEn: "Skill Reference: Regulated External Comms & Rewrite Precision", titleZh: "Skill 本地参考卡：对外合规与改写精度" },
+];
+for (const ref of SKILL_REFS) {
+  const refPath = path.join(ROOT, "skills", "dislop", "references", ref.file);
+  if (fs.existsSync(refPath)) {
+    registerResource({
+      id: `tools-skill-ref-${ref.file.replace(/\.md$/, "")}`,
+      pillar: "tools",
+      kind: "skill-reference",
+      titleEn: ref.titleEn,
+      titleZh: ref.titleZh,
+      relPath: `tools/references/${ref.file}`,
+      modalities: ["markdown", "text", "html", "css", "jsx", "docx", "pptx"],
+      languages: ["en", "zh"],
+      packs: PACK_ORDER,
+      relatedTools: ["skill", "cli"],
+      content: fs.readFileSync(refPath, "utf8"),
+    });
+  }
+}
 
 registerResource({
   id: "tools-prompts",
@@ -938,6 +1129,18 @@ uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review
 
 # Explain a rule's check question and examples
 npx --yes github:dislop-ai/dislop explain negation-pivot-frame
+
+# Check with 5-axis rhythm stats and bundled 14.6 KB Pocket ML
+npx --yes github:dislop-ai/dislop check draft.md --profile --ml
+
+# Run extended 53-pattern catalog probes offline
+npx --yes github:dislop-ai/dislop patterns draft.md
+
+# Extract an offline deterministic personal voice profile (0 network calls)
+npx --yes github:dislop-ai/dislop voice sample1.md sample2.md -o .dislop.local/voice.json
+
+# Inspect hardware RAM/chip and optional local small-model tiers (never bloats install)
+npx --yes github:dislop-ai/dislop model status
 
 # List bundled offline packs and optional read-only static / cloud URLs (check makes 0 network calls)
 npx --yes github:dislop-ai/dislop resources --json
@@ -1023,10 +1226,14 @@ Python 3.10+ (zero external deps):
 }
 \`\`\`
 
-Local deterministic tools:
-- \`dislop_check\`: Arguments \`{ "text"?: string, "path"?: string, "filename"?: string, "pack"?: "core"|"business-brief"|"literary-essay"|"deck-and-ui" }\`. Returns \`{ pack, modality, count, findings }\` with 0 network calls.
-- \`dislop_explain\`: Arguments \`{ "ruleId": string, "lang"?: "en"|"zh" }\`. Returns rationale and \`bad -> trap -> good\` examples.
-- \`dislop_packs\`: Arguments \`{}\`. Lists installed packs.
+Local deterministic tools (7 offline tools, \`verbosity: "compact"\` by default; zero negative fixtures leaked):
+- \`dislop_check\`: Arguments \`{ "text"?: string, "path"?: string, "filename"?: string, "pack"?: "auto"|"core"|"business-brief"|"engineering-spec"|"regulated-comms"|"literary-essay"|"deck-and-ui"|"executive-deck", "profile"?: boolean, "ml"?: boolean, "patterns"?: boolean, "verbosity"?: "compact"|"full", "lang"?: "en"|"zh" }\`. Returns \`{ pack, modality, count, findings, explainHint?, profile? }\` with 0 network calls.
+- \`dislop_voice_extract_offline\`: Arguments \`{ "samples": string[], "lang"?: "auto"|"en"|"zh" }\`. Computes deterministic \`dislop.voice/1\` offline with 0 network calls.
+- \`dislop_model_score\`: Runs bundled 14.6 KB \`pocket-slop-v1\` stealth-vapor scoring and pack routing offline.
+- \`dislop_model_status\`: Inspects hardware RAM/chip and optional local small-model tiers.
+- \`dislop_explain\`: Arguments \`{ "ruleId": string, "lang"?: "en"|"zh" }\`. Returns localized rationale and \`bad -> trap -> good\` examples without test fixtures.
+- \`dislop_packs\`: Lists all 7 bundled packs (42 built-in rules).
+- \`dislop_catalog\`: Searches all 53 structured patterns across 6 dimensions (42 built-in pack rules + 11 extended pattern-bank probes).
 
 ## 2. Hosted Remote HTTP MCP (Cloud LLM, Free 30 Credits/Month)
 
@@ -1101,8 +1308,8 @@ snapshot: ${SNAPSHOT_DATE}
 
 ## 1. Open-Source Offline Tools (Zero Uploads, Zero Telemetry)
 
-- **CLI (\`dislop check\`, \`explain\`, \`packs\`, \`resources\`)**, **Agent Skill (\`SKILL.md\`)**, **Local stdio MCP (\`--mcp\`)**, and the **default browser workbench** run 100% locally.
-- \`dislop check\` makes zero network calls.
+- **CLI (\`dislop check\`, \`patterns\`, \`voice\`, \`model --no-loopback\`, \`explain\`, \`packs\`, \`catalog\`, \`resources\`)**, **Agent Skill (\`SKILL.md\` + local \`references/*.md\`)**, **Local stdio MCP (\`--mcp\`, 7 offline tools)**, and the **default browser workbench** run 100% locally.
+- \`dislop check\`, \`dislop patterns\`, and \`dislop voice\` make zero network calls; \`dislop model\` only probes \`127.0.0.1\` loopback runners locally unless you choose to install an optional local runner yourself.
 - \`dislop.com\` loads zero third-party fonts, analytics, or external scripts (\`Content-Security-Policy: connect-src 'self'\`).
 
 ## 2. Optional Hosted Cloud AI (\`/api/v1/*\` & \`/mcp\`)
@@ -1171,7 +1378,7 @@ ${rulesBody}
   });
 }
 
-// 2f. Atomic Rule Cards (/rules/<id>.md) — 29 compact cards (<= 1.6 KB each), ZERO fixtures, ZERO raw patterns!
+// 2f. Atomic Rule Cards (/rules/<id>.md) — 42 compact cards (<= 1.6 KB each), ZERO fixtures, ZERO raw patterns!
 for (const { packId, rule: r } of allRules) {
   const parts = [
     `---`,
@@ -1638,7 +1845,7 @@ const awesomePreRenderedRows = radarData.entries
     return `<tr>
               <td><a href="${escapeHtml(e.url)}" target="_blank" rel="noopener"><strong>${escapeHtml(e.name)}</strong></a>${
       e.repo ? `<div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">${escapeHtml(e.repo)}</div>` : ""
-    }<div style="font-size:0.74rem;color:${isContrast ? "var(--mark-error)" : "var(--ink-3)"};margin-top:4px;">${escapeHtml(secLabel)}${e.hasDeterministicCheck ? ' · <span style="color:var(--mark-stet);">自动检查</span>' : ""}</div></td>
+    }<div style="font-size:0.74rem;color:${isContrast ? "var(--mark-error)" : "var(--ink-3)"};margin-top:4px;">${escapeHtml(secLabel)}${e.hasDeterministicCheck ? ' · <span style="color:var(--ink-2);font-weight:600;">自动检查</span>' : ""}</div></td>
               <td>${escapeHtml(e.summary)}</td>
               <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;text-align:right;">${escapeHtml(metaParts.join(" · ") || "—")}</td>
             </tr>`;
@@ -1732,7 +1939,7 @@ ${awesomePreRenderedRows}
       </div>
 
       <div class="contrast-notice" data-i18n="awesome.contrastNote">
-        说明：「检测与规避研究（仅供对照）」收录概率型 AI 文本检测器和规避工具，只作对照参考。dislop 只做去套话和改稿核对，不用于规避披露规则。
+        说明：「检测与规避研究（仅供对照）」收录概率型 AI 文本检测器和规避工具，只作对照参考。dislop 只清理文案和设计里的 AI 味，不用于规避披露规则。
       </div>
     </section>
     </main>
@@ -1796,9 +2003,9 @@ const llmsTxt = writeCleanFile(
   "llms.txt",
   `# dislop
 
-> Clear the AI slop from your writing and design. Gathers proven writing habits, web and slide design rules, an offline zero-dependency checker (Node, Python, MCP, browser), and 87 vetted anti-slop tools in one place.
+> Clear the AI slop from your writing and design. Zero-dependency offline checker (7 built-in packs, ${allRules.length} rules, 53 patterns, 14.6 KB \`--ml\`, offline \`voice\`, Node/Python/MCP/browser) + 87 vetted anti-slop tools.
 
-Choose the page matching your task below. Follow the Skill rules while drafting, then run \`dislop_check\` (MCP) or \`dislop check\` (CLI) before shipping.
+Choose the page matching your task below. If \`skills/dislop/\` is installed locally, read its \`./references/*.md\` and run \`dislop check\` offline (0 network calls).
 
 ## Start by task (~800-1,500 tokens each)
 - [Review a brief or proposal](${BASE_URL}/tasks/business-doc.md): AI artifacts and \`business-brief\` rules.
@@ -1809,22 +2016,22 @@ Choose the page matching your task below. Follow the Skill rules while drafting,
 ## Browse by topic
 - [Methodology & Voice Guide](${BASE_URL}/methodology/index.md): Plain writing guide, anti-pattern notes, and visual tokens.
 - [Examples & References](${BASE_URL}/cases/index.md): Before / overcorrected / after contrasts and 31 print/type design references.
-- [Install & Integrations](${BASE_URL}/tools/index.md): Prompt, \`SKILL.md\`, Claude Code Plugin, MCP server, CLI (\`npx\`/\`uvx\`), and CI hooks.
+- [Install & Integrations](${BASE_URL}/tools/index.md): Local Skill, Claude Code Plugin, CLI (\`check\`/\`patterns\`/\`voice\`/\`model\`), and MCP.
 - [Awesome Anti-Slop](${BASE_URL}/awesome/index.md): ${radarData.entries.length} checked tools, guides, and papers (\`dislop.radar/2\`, JSON at \`/awesome/index.json\`).
-- [Roadmap & Open Questions](${BASE_URL}/roadmap.md): Active tracks (\`v0.3\` -> \`v0.4+\`) and collaboration guide.
+- [Roadmap & Open Questions](${BASE_URL}/roadmap.md): Active tracks and collaboration guide.
 
 ## Machine index & packs
 - [JSON Catalog](${BASE_URL}/catalog.json): Versioned manifest (\`dislop.catalog/1\`) with sha256 and token estimates.
-- [Agent Skill](${BASE_URL}/tools/skill.md): Mirror of \`skills/dislop/SKILL.md\` (\`v${VERSION}\`); skip if already loaded locally.
-- [Hosted Remote MCP](${BASE_URL}/tools/mcp-sdk-api.md): Optional \`${BASE_URL}/mcp\` (\`dislop_review\`, \`dislop_deslop\`, \`dislop_voice_extract\`; 30 free credits/mo at \`/#cloud-token-box\`).
-- [Rule Packs](${BASE_URL}/packs/core.md): Also \`/packs/business-brief.md\`, \`/packs/literary-essay.md\`, \`/packs/deck-and-ui.md\`, and ${allRules.length} \`/rules/<id>.md\` cards.
+- [Agent Skill](${BASE_URL}/tools/skill.md): Mirror of \`skills/dislop/SKILL.md\` (\`v${VERSION}\`); skip if loaded locally.
+- [Hosted Remote MCP](${BASE_URL}/tools/mcp-sdk-api.md): Optional \`${BASE_URL}/mcp\` (\`dislop_review\`, \`dislop_deslop\`, \`dislop_voice_extract\`; 30 free credits/mo).
+- [Rule Packs](${BASE_URL}/packs/core.md): 7 packs (\`core\`, \`business-brief\`, \`engineering-spec\`, \`regulated-comms\`, \`literary-essay\`, \`deck-and-ui\`, \`executive-deck\`) & ${allRules.length} \`/rules/<id>.md\`.
 - [Single-Fetch Bundle](${BASE_URL}/llms-full.txt): All ${allRules.length} rules compiled without test fixtures.
 - [Privacy & Data Boundaries](${BASE_URL}/privacy.md): Offline core vs. optional zero-training cloud endpoint.
 `,
   { isAgentText: true }
 );
 
-// 2j. /llms-full.txt (L2 Curated Single-Fetch Compilation, <= 45 KB, ZERO fixtures/patterns)
+// 2j. /llms-full.txt (Curated Single-Fetch Compilation, <= 45 KB, ZERO fixtures/patterns)
 const fullPackDigest = PACK_ORDER.map((pid) => {
   const pack = packsById[pid];
   if (!pack) return "";
@@ -1902,10 +2109,13 @@ let indexHtml = fs.readFileSync(path.join(SITE_DIR, "index.html"), "utf8");
 // 3a. Pre-rendered Rules Table in default Chinese (en-only rules hidden on initial ZH load, preserving #rule-<id> anchors)
 const textMods = new Set(["markdown", "text", "html", "css", "jsx", "svg"]);
 const PACK_LABELS_ZH = {
-  core: "硬伤",
+  core: "交付底线",
   "business-brief": "工作文档",
+  "engineering-spec": "研发复盘",
+  "regulated-comms": "对外合规",
   "literary-essay": "随笔长文",
   "deck-and-ui": "PPT 和网页",
+  "executive-deck": "管理汇报",
 };
 const preRenderedRules = allRules
   .map(({ packId, rule: r }) => {
@@ -1943,7 +2153,7 @@ const preRenderedRules = allRules
 ${actionLines.join("\n")}
                 </div>
               </td>
-              <td>${escapeHtml(PACK_LABELS_ZH[packId] || packId)}<br><span class="sev-tag ${sevCls}" style="font-size:0.75rem;">${sevTextZh}</span></td>
+              <td class="rule-pack-cell"><span class="rule-pack-name">${escapeHtml(PACK_LABELS_ZH[packId] || packId)}</span><span class="sev-tag ${sevCls}" style="font-size:0.75rem;">${sevTextZh}</span></td>
               <td><code>${escapeHtml((r.modalities || []).join(", "))}</code></td>
               <td><div>${formatRuleProseHtml(r.message.zh || r.message.en)}</div><div style="color:var(--ink-2);font-size:0.82rem;margin-top:4px;"><strong>判断方法：</strong>${formatRuleProseHtml(r.deletionTest.zh || r.deletionTest.en)}</div></td>
               <td>${exLines}</td>
@@ -2100,7 +2310,7 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `Built dual-native site: core.mjs, logo.svg, og-card, ${Object.keys(packsById).length} packs (${allRules.length} rules), ` +
+  `Built static site & agent docs: core.mjs, logo.svg, og-card, ${Object.keys(packsById).length} packs (${allRules.length} rules), ` +
     `${radarData.entries.length} Awesome Anti-Slop entries, ${catalogResources.length} catalog resources, ` +
     `llms.txt (${llmsBytes} B), llms-full.txt (${llmsFullBytes} B).`
 );

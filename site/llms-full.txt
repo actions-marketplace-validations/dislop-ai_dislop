@@ -1,10 +1,10 @@
 ---
 content-type: reference-data
-version: 0.4.0
+version: 0.6.0
 snapshot: 2026-11-21
 ---
 
-# dislop — Curated Single-Fetch De-Slop Reference (`v0.4.0`)
+# dislop — Curated Single-Fetch De-Slop Reference (`v0.6.0`)
 
 > Local, zero-dependency anti-slop linter for AI-written Markdown, HTML/CSS/JSX, Word (.docx), and PowerPoint (.pptx).
 
@@ -143,6 +143,126 @@ trap: Speed. Privacy. Modularity. Clarity.
 good: `dislop` runs locally with no network calls, loads rules from plain JSON packs, and prints exact file and line coordinates.
 ```
 
+### `cooccurrence-slop-cluster` (taste / warning / markdown, text, html, docx, pptx)
+- Why: Multiple subtle corporate/AI fluff verbs and modifiers co-occur in one low-evidence paragraph.
+- Deletion Test: Do not swap one buzzword for another; replace the whole cluster with who changed what and the measured delta.
+```text
+bad:  本次客服系统按工单紧急度拆成 3 级队列，旨在有效推动跨部门协同效率，持续优化客户交互体验，并进一步助力业务团队实现精细化运营，最终显著提升整体服务质量，首响时间从 110 秒降到 42 秒。
+trap: 客服系统升级不是功能叠加，而是首响从 110 秒降到 42 秒的服务跃升。
+good: 本次客服系统按工单紧急度拆成 3 级队列，平均首响时间从 110 秒降到 42 秒。
+```
+
+### `semicolon-tricolon` (taste / warning / markdown, text, html, docx, pptx)
+- Why: Three-part balanced semicolon pitch sentence reads like generated marketing cadence.
+- Deletion Test: Break the symmetry: split into plain sentences of unequal length or keep only the concrete behaviors.
+```text
+bad:  前端把表单校验前置到输入时；后端将异步任务拆进独立队列；监控台实时追踪每笔超时请求。
+trap: 校验前置。任务异步。超时可追。
+good: 前端在输入时先做字段校验，后端把异步任务放进独立队列，监控台则负责追踪每笔超时请求。
+```
+
+### `rhetorical-qa-cadence` (taste / warning / markdown, text, html, docx, pptx)
+- Why: Formulaic self-answered rhetorical question ('Why...? Because...' / 'The result?') mimics LLM blog hooks.
+- Deletion Test: Delete the staged question and state the cause-and-effect directly in one sentence.
+```text
+bad:  Why do internal dashboards collect dust after launch? Because they show vanity totals instead of next actions. The result? Teams export CSVs every Monday.
+trap: Dashboards fail. Numbers pile up. Teams export CSVs.
+good: Internal dashboards go unused when they show vanity totals without next actions, so teams end up exporting CSVs every Monday.
+```
+
+### `comma-chain-runon` (taste / info / markdown, text, html, docx)
+- Why: Single sentence chains 5+ comma clauses in breathless LLM cadence.
+- Deletion Test: Split into 2–3 shorter sentences with a clear main verb in each, and drop redundant parallel clauses.
+```text
+bad:  通过建立跨部门沟通机制，明确周二评审与周五发版节点，优化内部评审流程，加强文档沉淀管理，完善接口超时预警体系，同步推进自动化落地，我们让团队交付过程更稳。
+trap: 建机制。明节点。优评审。强沉淀。
+good: 我们固定了周二评审和周五发版两个节点，并补齐了接口超时预警和自动化检查，交付过程稳定多了。
+```
+
+### `narrative-sandwich-frame` (taste / warning / markdown, text, html, docx)
+- Why: Macro-trend opener, future-facing closer, or dense transition-marker cluster ('Furthermore/Moreover/Additionally') follows the stock LLM essay sandwich.
+- Deletion Test: Cut the opening trend preamble and closing cheerleading; start on the concrete fact or decision and end on the next action or limit.
+```text
+bad:  随着人工智能技术的飞速发展，研发团队正面临效率变革。此外，我们在 11 月把 PR 静态检查接入了 CI。与此同时，配置错误提前被拦了下来。不仅如此，下周还会覆盖剩余 4 个仓库。展望未来，主动拥抱变化的团队必将赢得先机。
+trap: 时代变了。工具变了。协作也在变。
+good: 11 月我们把 PR 静态检查接入了 CI，配置错误会在合并前被拦下，下周计划覆盖剩余 4 个仓库。
+```
+
+### `template-skeleton-echo` (taste / warning / markdown, text, html, docx)
+- Why: Three or more paragraphs or sentences repeat the exact same syntactic opener skeleton ('By <verb>ing...', '在……方面，', 'First/Second/Third/Finally').
+- Deletion Test: Merge related points into natural prose with varied openings, or use a compact table if you are listing parallel specs.
+```text
+bad:  在数据采集方面，系统接入了业务日志。
+
+在模型训练方面，团队定期更新权重。
+
+在结果应用方面，业务方通过看板查看波动。
+trap: 采数据。训模型。看看板。
+good: 系统接入业务日志后，团队定期更新模型权重，业务方直接在看板里查看指标波动。
+```
+
+### `low-burstiness-vapor` (taste / info / markdown, text)
+- Why: Multi-sentence passage combines robotically uniform sentence lengths (low burstiness CV < 0.24) with near-zero concrete anchors (numbers, dates, files, or verifiable actions).
+- Deletion Test: Cut abstract summary sentences in half, vary sentence length naturally, and anchor every kept claim with a number, file, date, or concrete failure mode.
+```text
+bad:  该方案注重用户体验的全面改善。系统架构保持了良好的扩展能力。团队协作形成了清晰的责任分工。日常运维建立了规范的处理流程。产品迭代围绕核心需求稳步推进。业务指标呈现出健康的增长态势。
+trap: 体验改善。架构扩展。分工清晰。运维规范。
+good: 本段暂未提供具体指标、改动文件或责任人，请先删去概括句，再由作者补入实测数据和变更项。
+```
+
+## Pack `engineering-spec` — Engineering RFC, PR & Postmortem
+
+Catches empty AI PR summaries, stop-thinking 'human error' postmortem labels, and unowned wishful action items alongside core and brief checks.
+
+### `eng-pr-diff-parrot` (taste / warning / markdown, text)
+- Why: Generic AI PR summary parrots file changes without stating the concrete bug, constraint, or metric.
+- Deletion Test: Replace the wrapper sentence with why the change was needed, what breaks without it, and how it was verified.
+```text
+bad:  本次 PR 旨在通过重构连接池管理逻辑进一步提升系统的稳定性与可维护性。
+trap: 这不是一次普通的代码重构，而是连接池稳定性的底层重塑。
+good: 修复 Redis 重连分支未释放旧句柄导致的连接泄漏（#412），压测 2 小时常驻连接数稳定在 64 以内。
+```
+
+### `eng-shallow-root-cause` (taste / warning / markdown, text, docx)
+- Why: Postmortem stops at 'human error' instead of identifying the missing system guardrail.
+- Deletion Test: Ask why the tooling allowed a single manual action to cause an outage, and write that missing check as the root cause.
+```text
+bad:  根本原因：人为失误。
+trap: 根本原因：值班人员风险意识有待进一步强化。
+good: 根本原因：生产迁移脚本缺少库名白名单与行数上限预检，未拦截误指向主库的删除语句。
+```
+
+### `eng-vague-action-item` (taste / info / markdown, text, docx)
+- Why: Wishful action item lacks a concrete target component, threshold, owner, or due date.
+- Deletion Test: Rewrite as a binary-verifiable ticket: which service, what threshold or test case, who owns it, and by what date.
+```text
+bad:  - [ ] 加强监控与告警。
+trap: - [ ] 全面排查并持续跟进线上隐患。
+good: - [ ] 给 `checkout-api` 增加 P99 > 400ms 持续 3 分钟告警并接入值班群（负责人：李工，11 月 30 日前完成）。
+```
+
+## Pack `regulated-comms` — External & Regulated Communications
+
+Flags unsubstantiated absolute claims ('100% secure', 'zero risk') and floating hype multipliers ('10x faster' with no baseline) in external docs.
+
+### `reg-unsubstantiated-superlative` (taste / warning / markdown, text, html, docx, pptx)
+- Why: Absolute or superlative claim creates legal/compliance exposure where scoped SLA terms belong.
+- Deletion Test: Replace absolute promises with verifiable scope, encryption/audit standards, or contracted SLA numbers.
+```text
+bad:  新同城双活备份方案提供绝对安全与永久零故障保障（SLA 99.95%），客户迁移零风险承诺。
+trap: 新同城双活备份方案打造坚不可摧的行业标杆级防线（SLA 99.95%）。
+good: 新同城双活备份方案合同承诺月度可用性 99.95%，迁移前支持演练回滚。
+```
+
+### `reg-unanchored-multiplier` (taste / warning / markdown, text, html, docx, pptx)
+- Why: Floating speedup or efficiency multiplier ('10x faster') omits the before/after baseline.
+- Deletion Test: Either add the exact baseline ('from 18s to 1.8s on 10M rows') or remove the multiplier.
+```text
+bad:  接入新版流式批处理引擎后，对账单导出效率提升数倍。
+trap: 接入新版流式批处理引擎后，对账单导出迎来质的飞跃。
+good: 接入新版流式批处理引擎后，对账单改为按块流式导出，无需等待全表缓存在内存。
+```
+
 ## Pack `literary-essay` — Literary Essay & Longform Narrative
 
 Protects concrete observation and voice against moralizing paragraph endings, second-order negation pivots, em-dash saturation, and half-width Chinese punctuation.
@@ -190,6 +310,33 @@ good: The brass-rimmed station clock stopped at 4:10, right before the snow, whi
 bad:  冬至那天下了初雪,院子里的腊梅开了三朵;香气一直飘到走廊。
 trap: 冬至初雪。腊梅三朵。暗香盈袖。
 good: 冬至那天下了初雪，院子里的腊梅开了三朵；香气一直飘到走廊。
+```
+
+### `literary-semicolon-tricolon` (taste / warning / markdown, text, html, docx)
+- Why: Balanced three-part semicolon sentence turns scene description into synthetic lyrical cadence.
+- Deletion Test: Break the three-part balance into natural prose sentences and keep the one sensory detail that carries the scene.
+```text
+bad:  街道两旁的树叶逐渐染上金黄；午后的阳光变得柔和而绵长；行人的衣领也悄然立了起来。
+trap: 树叶金黄。阳光柔和。衣领立起。
+good: 午后阳光柔和，街道两旁的树叶已经发黄，路过的行人把衣领立了起来。
+```
+
+### `literary-rhetorical-qa` (taste / warning / markdown, text, html, docx)
+- Why: Staged self-answered rhetorical question ('Why does ...? Because ...') lectures the reader instead of showing the scene.
+- Deletion Test: Cut the rhetorical question and describe what actually happened in the scene.
+```text
+bad:  At 6:30 a.m. he brewed a cup of pour-over coffee. Why does brewing pour-over coffee feel so grounding? Because the deliberate pace invites us to pause.
+trap: Warm water. Slow pour. Quiet pause.
+good: At 6:30 a.m. he brewed a cup of pour-over coffee.
+```
+
+### `literary-narrative-frame` (taste / warning / markdown, text, html, docx)
+- Why: Sweeping era opener ('In an era defined by...') or uplifting takeaway closer wraps a personal essay in an LLM template.
+- Deletion Test: Delete the opening era backdrop and the closing takeaway; start directly inside the concrete time, place, or object.
+```text
+bad:  In an era defined by relentless notifications, the street stays quiet before seven except for the milk truck. Moving forward, protecting small pockets of stillness remains essential for living with intention.
+trap: Notifications beep. Milk truck passes. Stillness stays.
+good: Before seven the street stays quiet except for the milk truck.
 ```
 
 ## Pack `deck-and-ui` — Slide Deck, Web UI & Graphic Layout
@@ -266,4 +413,26 @@ good: <section class="metric-row"><span>Uptime (90d)</span><strong>99.98%</stron
 bad:  <span class="eyebrow">AI-Powered · Zero Hallucination</span><h2>Document Checker</h2>
 trap: <span class="eyebrow">Built for Craft · Pure Signal</span><h2>Document Checker</h2>
 good: <h2>Document Linter for Markdown, HTML, DOCX & PPTX</h2>
+```
+
+## Pack `executive-deck` — Executive Slide Deck & Board Readout
+
+Enforces conclusion-first slide headlines and flags monotonous multi-slide bullet skeletons on top of core deck and UI hygiene.
+
+### `slide-process-not-finding-title` (taste / warning / markdown, pptx)
+- Why: Topic-label headline names the work done ('Analysis of X') instead of stating the finding.
+- Deletion Test: Replace 'Analysis of X' with the one-sentence answer your audience should remember if they read only the headline.
+```text
+bad:  ## 关于三季度新客首周流失率（34% 降至 19%）的分析汇报
+trap: ## 重塑新客留存增长飞轮
+good: ## 三季度新客首周流失率从 34% 降至 19%
+```
+
+### `pptx-layout-monotony` (taste / info / pptx)
+- Why: Four or more consecutive slides repeat the exact same plain text-box skeleton without tables, charts, or visual variation.
+- Deletion Test: Convert comparative bullet slides into a structured table, timeline, or metric chart to break monotonous pacing.
+```text
+bad:  Slides 2–5 all use identical 'Title + 4 plain bullets' boxes with zero tables, charts, or diagrams.
+trap: Slides 2–5 keep the exact same 4 bullets per slide and add decorative stock icons.
+good: Slide 3 presents regional latency in a 4-row table and Slide 4 plots weekly error budget burn.
 ```

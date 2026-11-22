@@ -32,7 +32,7 @@ const I18N = {
     "awesome.colSummary": "做什么的",
     "awesome.colMeta": "星标 · 最近更新",
     "awesome.contrastNote":
-      "说明：「检测与规避研究（仅供对照）」收录概率型 AI 文本检测器和规避工具，只作对照参考。dislop 只做去套话和改稿核对，不用于规避披露规则。",
+      "说明：「检测与规避研究（仅供对照）」收录概率型 AI 文本检测器和规避工具，只作对照参考。dislop 只清理文案和设计里的 AI 味，不用于规避披露规则。",
     "footer.snapshot": `核验日期：${SNAPSHOT_DATE} · 离线运行，不发外网请求`,
     "footer.home": "返回首页",
     "footer.json": "JSON 数据",
@@ -56,7 +56,7 @@ const I18N = {
     "awesome.colSummary": "What it does",
     "awesome.colMeta": "Stars · last push",
     "awesome.contrastNote":
-      "Note: Contrast Watch lists probabilistic AI-text detectors and bypass tools for reference only. dislop flags clichés and checks edits against the original; it is not for evading disclosure policies.",
+      "Note: Contrast Watch lists probabilistic AI-text detectors and bypass tools for reference only. dislop flags AI slop in writing and design; it is not for evading disclosure policies.",
     "footer.snapshot": `Checked ${SNAPSHOT_DATE} · Runs offline with no outbound requests`,
     "footer.home": "Back to dislop",
     "footer.json": "JSON",
@@ -81,7 +81,24 @@ function safeSetStorage(key, value) {
   }
 }
 
-let currentLang = safeGetStorage("dislop-lang") === "en" ? "en" : "zh";
+function detectInitialLang() {
+  try {
+    const q = new URLSearchParams(window.location.search).get("lang");
+    if (q === "en" || q === "zh") {
+      safeSetStorage("dislop-lang", q);
+      return q;
+    }
+  } catch {
+    // Ignore URL parse issues
+  }
+  const saved = safeGetStorage("dislop-lang");
+  if (saved === "en" || saved === "zh") return saved;
+  const navLang = (typeof navigator !== "undefined" && navigator.language ? navigator.language : "").toLowerCase();
+  if (navLang && !navLang.startsWith("zh")) return "en";
+  return "zh";
+}
+
+let currentLang = detectInitialLang();
 let currentTheme = "light";
 let activeSection = "all";
 let activeLocale = "all";
@@ -195,7 +212,7 @@ function renderTable() {
         <td><a href="${escapeHtml(e.url)}" target="_blank" rel="noopener"><strong>${escapeHtml(displayName)}</strong></a>${
         e.repo ? `<div style="font-family:var(--font-mono);font-size:0.73rem;color:var(--ink-3);margin-top:2px;">${escapeHtml(e.repo)}</div>` : ""
       }<div style="font-size:0.74rem;color:${isContrast ? "var(--mark-error)" : "var(--ink-3)"};margin-top:4px;">${escapeHtml(secLabel)}${
-        e.hasDeterministicCheck ? ` · <span style="color:var(--mark-stet);">${autoTag}</span>` : ""
+        e.hasDeterministicCheck ? ` · <span style="color:var(--ink-2);font-weight:600;">${autoTag}</span>` : ""
       }</div></td>
         <td>${escapeHtml(displaySummary)}</td>
         <td style="font-family:var(--font-mono);font-size:0.74rem;white-space:nowrap;text-align:right;">${escapeHtml(metaParts.join(" · ") || "—")}</td>

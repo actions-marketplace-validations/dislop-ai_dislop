@@ -1,16 +1,18 @@
 ---
 content-type: reference-data
-version: 0.4.0
+version: 0.6.0
 ---
 
 # Cross-Modality Anti-Pattern Map
 
-| Layer | Definition | Shipped `v0.4.0` Deterministic Coverage | Roadmap Extensions (`v0.3+` Spec) |
-|---|---|---|---|
-| **L0 AI Delivery Artifacts** | Obvious AI leftovers (`severity: error`) | Stray chatbot wrappers, unfilled placeholders, raw Markdown in DOCX/PPTX, dead `href="#"` placeholder controls | Baseline suppression ledgers |
-| **L1 First-Order Lexicon & Default UI** | Stock filler words and default generator chrome | `en-cliche-lexicon`, `en-throat-clearing-opener`, `zh-bureaucratic-padding`, `ui-ai-gradient`, `ui-pill-soup`, `ui-box-in-box`, `ui-prompt-echo-badge` | `ui-glassmorphism-overuse`, `ui-accent-stripe-card` |
-| **L2 Second-Order Cadence & Layout** | Structural fallback after banning stock words | `negation-pivot-frame`, `staccato-slogan-run`, `zh-four-char-triad`, `zh/en-essay-moralizing-ending`, `bold-lead-list-wall`, `excessive-em-dash-density`, `zh-halfwidth-punctuation`, slide word-walls/bullets/autofit/weak-titles | 5 prototype-verified probes (`comma-chain-cadence`, `sentence-length-monotony`, `discourse-marker-cluster`, `ui-glassmorphism-overuse`, `ui-accent-stripe-card`) + `pptx-layout-monotony` in v0.3 spec |
-| **L3 Structural Voice & Visual Craft** | 3-part semicolon pitches, roleplay tone, page-level craft | Handled by `SKILL.md` plain writing & UI rules + 31 positive design references | Local `dislop.voice/1` stylometrics & optional local small-model plugins (advisory `info` only) |
+`dislop` ships 53 structured anti-slop patterns across 6 dimensions in `v0.6.0` (42 built-in pack rules across 7 packs + 11 extended pattern-bank probes), plus an offline 14.6 KB Pocket ML scorer (`--ml`) for uniform-cadence vapor prose.
+
+| Category | What It Covers | Shipped `v0.6.0` Offline Coverage |
+|---|---|---|
+| **AI Delivery Artifacts** | Obvious AI leftovers (`severity: error`) | `packs/core`: stray chatbot wrappers, unfilled placeholders, raw Markdown in DOCX/PPTX, dead `href="#"` placeholder controls |
+| **Stock Lexicon & Default UI** | Filler words and default generator chrome | `en-cliche-lexicon`, `en-throat-clearing-opener`, `zh-bureaucratic-padding`, `ui-ai-gradient`, `ui-pill-soup`, `ui-box-in-box`, `ui-prompt-echo-badge`, plus pattern-bank probes `ui-glassmorphism-overuse` and `ui-accent-stripe-card` |
+| **Cadence, Frames & Slide Layout** | Structural fallback after banning stock words | `negation-pivot-frame`, `staccato-slogan-run`, `zh-four-char-triad`, `semicolon-tricolon`, `rhetorical-qa-cadence`, `comma-chain-runon`, `narrative-sandwich-frame`, `template-skeleton-echo`, `low-burstiness-vapor`, `zh/en-essay-moralizing-ending`, `bold-lead-list-wall`, `excessive-em-dash-density`, `zh-halfwidth-punctuation`, slide word-walls/bullets/autofit/weak-titles, `pptx-layout-monotony`, and extended pattern-bank probes |
+| **Domain Specs, Voice & Craft** | Engineering/regulated slop, personal cadence, and visual craft | `engineering-spec`, `regulated-comms`, and `executive-deck` packs; `SKILL.md` plain writing & UI rules; 31 print/type design references; `dislop voice` (`dislop.voice/1`) offline stylometrics; 14.6 KB `--ml` Pocket ML scorer; optional local small models (`dislop model`) |
 
 ## Coverage Honesty Principle
 

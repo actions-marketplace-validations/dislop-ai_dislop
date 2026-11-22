@@ -1,7 +1,7 @@
 ---
 content-type: reference-data
 task: business-doc
-version: 0.4.0
+version: 0.6.0
 ---
 
 # Task Bundle: Business Brief & Technical Proposal
@@ -32,6 +32,13 @@ Use this bundle when auditing or revising PRDs, architecture specs, memos, Word 
 - [`zh-four-char-triad`](../rules/zh-four-char-triad.md) (`warning`): Chained four-character Chinese slogan triad pads prose without measurable detail.
 - [`unsourced-attribution`](../rules/unsourced-attribution.md) (`warning`): Vague authority claim (`studies show`, `业内人士指出`) without a named source, link, or citation.
 - [`bold-lead-list-wall`](../rules/bold-lead-list-wall.md) (`info`): Run of 4+ `- **Label**: description` bullets reads like an unedited LLM summary wall.
+- [`cooccurrence-slop-cluster`](../rules/cooccurrence-slop-cluster.md) (`warning`): Multiple subtle corporate/AI fluff verbs and modifiers co-occur in one low-evidence paragraph.
+- [`semicolon-tricolon`](../rules/semicolon-tricolon.md) (`warning`): Three-part balanced semicolon pitch sentence reads like generated marketing cadence.
+- [`rhetorical-qa-cadence`](../rules/rhetorical-qa-cadence.md) (`warning`): Formulaic self-answered rhetorical question ('Why...? Because...' / 'The result?') mimics LLM blog hooks.
+- [`comma-chain-runon`](../rules/comma-chain-runon.md) (`info`): Single sentence chains 5+ comma clauses in breathless LLM cadence.
+- [`narrative-sandwich-frame`](../rules/narrative-sandwich-frame.md) (`warning`): Macro-trend opener, future-facing closer, or dense transition-marker cluster ('Furthermore/Moreover/Additionally') follows the stock LLM essay sandwich.
+- [`template-skeleton-echo`](../rules/template-skeleton-echo.md) (`warning`): Three or more paragraphs or sentences repeat the exact same syntactic opener skeleton ('By <verb>ing...', '在……方面，', 'First/Second/Third/Finally').
+- [`low-burstiness-vapor`](../rules/low-burstiness-vapor.md) (`info`): Multi-sentence passage combines robotically uniform sentence lengths (low burstiness CV < 0.24) with near-zero concrete anchors (numbers, dates, files, or verifiable actions).
 
 ## 3. Reference Contrast
 

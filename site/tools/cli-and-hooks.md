@@ -1,9 +1,9 @@
 ---
 content-type: reference-data
-version: 0.4.0
+version: 0.6.0
 ---
 
-# CLI, Git Diff, Hooks & CI (`v0.4.0`)
+# CLI, Git Diff, Hooks & CI (`v0.6.0`)
 
 ## Node.js 20+ & Python 3.10+ (Shipped, Zero Dependencies)
 
@@ -20,6 +20,18 @@ uvx --from git+https://github.com/dislop-ai/dislop dislop check quarterly-review
 
 # Explain a rule's check question and examples
 npx --yes github:dislop-ai/dislop explain negation-pivot-frame
+
+# Check with 5-axis rhythm stats and bundled 14.6 KB Pocket ML
+npx --yes github:dislop-ai/dislop check draft.md --profile --ml
+
+# Run extended 53-pattern catalog probes offline
+npx --yes github:dislop-ai/dislop patterns draft.md
+
+# Extract an offline deterministic personal voice profile (0 network calls)
+npx --yes github:dislop-ai/dislop voice sample1.md sample2.md -o .dislop.local/voice.json
+
+# Inspect hardware RAM/chip and optional local small-model tiers (never bloats install)
+npx --yes github:dislop-ai/dislop model status
 
 # List bundled offline packs and optional read-only static / cloud URLs (check makes 0 network calls)
 npx --yes github:dislop-ai/dislop resources --json

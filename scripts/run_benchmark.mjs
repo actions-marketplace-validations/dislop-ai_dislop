@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Zero-dependency offline anti-slop benchmark runner & external-model evaluator (dislop-bench v1).
+// Zero-dependency offline anti-slop benchmark runner & external-model evaluator (dislop-bench v2).
 //
 // Usage:
 //   node scripts/run_benchmark.mjs
@@ -11,7 +11,8 @@ import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { auditOoxmlEntries, auditText, resolveEffectivePack } from "../src/core.mjs";
+import { analyzeTextProfile, auditOoxmlEntries, auditText, resolveEffectivePack } from "../src/core.mjs";
+import { runThirdOrderProbes as sharedRunThirdOrderProbes } from "./probes.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -60,7 +61,7 @@ function runPythonBatchAudit(samples) {
 import json, sys
 from pathlib import Path
 sys.path.insert(0, str(Path("src").resolve()))
-from dislop.engine import audit_text, audit_ooxml_entries, load_all_packs, resolve_effective_pack
+from dislop.engine import analyze_text_profile, audit_text, audit_ooxml_entries, load_all_packs, resolve_effective_pack
 
 packs = load_all_packs(Path("packs"))
 samples = json.loads(sys.stdin.read())
@@ -70,9 +71,11 @@ for s in samples:
     mod = s.get("modality", "markdown")
     if mod in ("pptx", "docx"):
         res = audit_ooxml_entries(s.get("ooxml") or {}, filename=s.get("filename", f"sample.{mod}"), modality=mod, pack=pack)
+        prof = None
     else:
         res = audit_text(s.get("text") or "", filename=s.get("filename", "sample.md"), modality=mod, pack=pack)
-    out[s["id"]] = sorted(f["ruleId"] for f in res.get("findings", []))
+        prof = analyze_text_profile(s.get("text") or "", modality=mod) if mod in ("markdown", "text") else None
+    out[s["id"]] = {"rules": sorted(f["ruleId"] for f in res.get("findings", [])), "profile": prof}
 print(json.dumps(out))
 `;
   const proc = spawnSync("python3", ["-c", pyCode], {
@@ -91,7 +94,7 @@ print(json.dumps(out))
   }
 }
 
-// ---------- 3rd-Order Structural Probes (Beyond Core 25 Rules) ----------
+// ---------- 3rd-Order Structural Probes (Beyond Pack Rules) ----------
 
 function extractPlainTextForScoring(payload, modality) {
   if (modality === "pptx" || modality === "docx") {
@@ -108,52 +111,8 @@ function extractPlainTextForScoring(payload, modality) {
   return String(payload || "");
 }
 
-export function runThirdOrderProbes(payload, { modality = "markdown", lang = "zh" } = {}) {
-  const hits = [];
-  const raw = extractPlainTextForScoring(payload, modality);
-
-  if (modality === "html" || modality === "css" || modality === "jsx" || modality === "tsx") {
-    if (/backdrop-blur(?:-[a-z0-9]+)?/i.test(raw) && /(?:bg-white\/|bg-slate-\d+\/|rgba\()/i.test(raw)) {
-      hits.push({ probeId: "struct-ui-glassmorphism", detail: "Translucent glassmorphism card chrome" });
-    }
-    if (/\bborder-l-[48]\b|border-left:\s*[4-9]px/i.test(raw)) {
-      hits.push({ probeId: "struct-ui-accent-stripe", detail: "Thick left accent-stripe card template" });
-    }
-    return hits;
-  }
-
-  // 1. 3-part balanced semicolon pitch (ZH & EN)
-  const zhSemiParts = raw.split(/[。！？\n]/).some((s) => (s.match(/；/g) || []).length >= 2);
-  const enSemiParts = raw.split(/[.!?\n]/).some((s) => (s.match(/;/g) || []).length >= 2);
-  if (zhSemiParts || enSemiParts) {
-    hits.push({ probeId: "struct-semicolon-tricolon", detail: "3-part balanced semicolon pitch sentence" });
-  }
-
-  // 2. Pull-quote / slogan closer ("笔一直在你手里", "the pen stays in your hand", "这才是...真正的...")
-  if (
-    /(?:笔一直在你手里|这才是[^。！？\n]{2,18}真正的[^。！？\n]{1,10}|the pen stays in your hand|built for the future|quality ships\.)/i.test(
-      raw
-    )
-  ) {
-    hits.push({ probeId: "struct-pull-quote-closer", detail: "Pull-quote / slogan closing punchline" });
-  }
-
-  // 3. Comma-chain cadence (5+ commas inside a single sentence)
-  const sentences = raw.split(/[。！？.!?\n]+/).filter((s) => s.trim().length > 0);
-  if (sentences.some((s) => (s.match(/[，,]/g) || []).length >= 5)) {
-    hits.push({ probeId: "struct-comma-chain", detail: "Sentence with 5+ comma-chained clauses" });
-  }
-
-  // 4. Discourse-marker cluster (3+ stock transitions in a short draft)
-  const markers =
-    lang === "zh"
-      ? raw.match(/(?:此外|与此同时|不仅如此|总而言之|综上所述|换言之|进一步来看)/g) || []
-      : raw.match(/\b(?:Furthermore|Moreover|Additionally|Consequently|In conclusion|Notably)\b/gi) || [];
-  if (markers.length >= 3) {
-    hits.push({ probeId: "struct-discourse-cluster", detail: `High transition-marker cluster (${markers.length})` });
-  }
-
-  return hits;
+export function runThirdOrderProbes(payload, opts = {}) {
+  return sharedRunThirdOrderProbes(payload, opts);
 }
 
 // ---------- Key-Token & Numeric Retention (Benchmark-Only Metric) ----------
@@ -209,7 +168,11 @@ function runDetectionSuite() {
   const holdoutSamples = fs.existsSync(holdoutPath)
     ? JSON.parse(fs.readFileSync(holdoutPath, "utf8")).samples || []
     : [];
-  const samples = [...(dataset.samples || []), ...holdoutSamples];
+  const textHardPath = path.join(DATASETS_DIR, "text-hard-v2.json");
+  const textHardSamples = fs.existsSync(textHardPath)
+    ? JSON.parse(fs.readFileSync(textHardPath, "utf8")).samples || []
+    : [];
+  const samples = [...(dataset.samples || []), ...holdoutSamples, ...textHardSamples];
   const pyBatch = runPythonBatchAudit(samples);
 
   let tp = 0;
@@ -217,6 +180,8 @@ function runDetectionSuite() {
   let tn = 0;
   let fn = 0;
   let parityMatches = 0;
+  let profileParityMatches = 0;
+  let profileComparableCount = 0;
   let expectedRulesTotal = 0;
   let expectedRulesHit = 0;
 
@@ -236,9 +201,19 @@ function runDetectionSuite() {
     else if (!isPos && !predictedSlop) tn += 1;
     else fn += 1;
 
-    const pyRuleIds = pyBatch.ok ? pyBatch.results[s.id] || [] : null;
+    const pyEntry = pyBatch.ok ? pyBatch.results[s.id] || null : null;
+    const pyRuleIds = pyEntry ? pyEntry.rules : null;
     const parityOk = pyBatch.ok ? JSON.stringify(nodeRuleIds) === JSON.stringify(pyRuleIds) : false;
     if (parityOk) parityMatches += 1;
+
+    const mod = s.modality || "markdown";
+    if (mod === "markdown" || mod === "text") {
+      profileComparableCount += 1;
+      const nodeProfile = analyzeTextProfile(String(s.text || ""), { modality: mod });
+      if (pyEntry && JSON.stringify(nodeProfile) === JSON.stringify(pyEntry.profile)) {
+        profileParityMatches += 1;
+      }
+    }
 
     for (const reqRule of s.expectedRuleIds || []) {
       expectedRulesTotal += 1;
@@ -273,8 +248,10 @@ function runDetectionSuite() {
   const recall = tp + fn > 0 ? tp / (tp + fn) : 1;
   const f1 = precision + recall > 0 ? (2 * precision * recall) / (precision + recall) : 0;
   const cleanFpr = fp + tn > 0 ? fp / (fp + tn) : 0;
-  const nearMiss = byCategory["clean-nearmiss"] || { hit: 0, total: 0 };
-  const nearMissFpr = nearMiss.total > 0 ? nearMiss.hit / nearMiss.total : 0;
+  const nearMissA = byCategory["clean-nearmiss"] || { hit: 0, total: 0 };
+  const nearMissB = byCategory["near-miss"] || { hit: 0, total: 0 };
+  const nearMissTotal = nearMissA.total + nearMissB.total;
+  const nearMissFpr = nearMissTotal > 0 ? (nearMissA.hit + nearMissB.hit) / nearMissTotal : 0;
   const secondOrder = byCategory["2nd-order"] || { hit: 0, total: 0 };
   const secondOrderRecall = secondOrder.total > 0 ? secondOrder.hit / secondOrder.total : 1;
 
@@ -295,6 +272,7 @@ function runDetectionSuite() {
     pythonAvailable: pyBatch.ok,
     pythonError: pyBatch.ok ? null : pyBatch.error,
     parityRate: samples.length > 0 ? parityMatches / samples.length : 0,
+    profileParityRate: profileComparableCount > 0 ? profileParityMatches / profileComparableCount : 1,
     byDomain,
     byCategory,
     details,
@@ -302,6 +280,22 @@ function runDetectionSuite() {
 }
 
 // ---------- Suite B / C: End-to-End De-Slop Effectiveness Evaluator ----------
+
+function countNonNumericContentUnits(text) {
+  const s = String(text || "").replace(/<[^>]+>/g, " ");
+  const cjk = (s.match(/[\u4e00-\u9fff]/gu) || []).length;
+  const words = (s.match(/[A-Za-z]{2,}/g) || []).length;
+  return cjk + words;
+}
+
+function loadAllRevisionTasks() {
+  const dataset = JSON.parse(fs.readFileSync(path.join(DATASETS_DIR, "revision-v1.json"), "utf8"));
+  const hardRevPath = path.join(DATASETS_DIR, "revision-hard-v2.json");
+  const hardTasks = fs.existsSync(hardRevPath)
+    ? JSON.parse(fs.readFileSync(hardRevPath, "utf8")).tasks || []
+    : [];
+  return [...(dataset.tasks || []), ...hardTasks];
+}
 
 function scoreCandidate(task, candidatePayload) {
   const sampleObj =
@@ -321,14 +315,41 @@ function scoreCandidate(task, candidatePayload) {
 
   const numMetrics = measureNumericRetention(task.source, candidatePayload, task.modality);
 
-  // Dimension scores (0-100 total):
-  //   D1 Deterministic Slop Clearance: 45 pts
-  //   D2 3rd-Order Structural Hygiene: 30 pts
-  //   D3 Key-Token / Numeric Retention (zero hallucination): 25 pts
-  const d1 = Math.max(0, 45 - coreErrors * 28 - styleFindings * 15);
-  const d2 = Math.max(0, 30 - thirdOrderHits.length * 15);
-  const d3 = Math.max(0, Math.min(25, Math.round(numMetrics.retentionRate * 25) - numMetrics.inventedCount * 8));
-  const composite = d1 + d2 + d3;
+  const isTextModality = task.modality === "markdown" || task.modality === "text";
+  const profile = isTextModality ? analyzeTextProfile(String(candidatePayload || ""), { modality: task.modality }) : null;
+
+  // Guard against degenerate "numbers-only" deletions (e.g., dumping "14:12 14:38 3 502...")
+  let degenerateProse = false;
+  if (isTextModality) {
+    const srcContent = countNonNumericContentUnits(task.source);
+    const candContent = countNonNumericContentUnits(candidatePayload);
+    const minRequired = Math.min(12, Math.max(4, Math.floor(srcContent * 0.25)));
+    if (candContent < minRequired || (profile && profile.sentenceCount === 0)) {
+      degenerateProse = true;
+    }
+  }
+
+  // Dimension scores (0-100 total, 4 orthogonal dimensions in dislop-bench v2):
+  //   D1 Deterministic Multi-Angle Clearance: 45 pts
+  //   D2 3rd-Order Structural Hygiene: 20 pts
+  //   D3 Key-Token / Numeric Retention + Non-Degenerate Prose: 25 pts
+  //   D4 Pure Statistical Rhythm & Concreteness Telemetry: 10 pts (decoupled from D1 rule counts)
+  const d1 = Math.max(0, 45 - coreErrors * 28 - styleFindings * 14);
+  const d2 = Math.max(0, 20 - thirdOrderHits.length * 10);
+  let d3 = Math.max(0, Math.min(25, Math.round(numMetrics.retentionRate * 25) - numMetrics.inventedCount * 8));
+  if (degenerateProse) {
+    d3 = Math.min(d3, 5);
+  }
+  let d4 = 10;
+  if (degenerateProse) {
+    d4 = 0;
+  } else if (profile) {
+    if (profile.sentenceCount >= 5 && profile.burstiness.status === "flat") d4 -= 5;
+    if (profile.structure.lowBurstinessVapor) d4 -= 5;
+    if (profile.sentenceCount >= 3 && profile.concreteness.anchorCount === 0) d4 -= 4;
+    d4 = Math.max(0, d4);
+  }
+  const composite = d1 + d2 + d3 + d4;
 
   return {
     taskId: task.id,
@@ -341,33 +362,47 @@ function scoreCandidate(task, candidatePayload) {
     thirdOrderProbes: thirdOrderHits.map((h) => h.probeId),
     numericRetentionRate: numMetrics.retentionRate,
     inventedNumbers: numMetrics.inventedCount,
-    scores: { d1, d2, d3, composite },
-    cleanAllClear: findings.length === 0 && thirdOrderHits.length === 0 && numMetrics.retentionRate === 1 && numMetrics.inventedCount === 0,
+    degenerateProse,
+    telemetryRiskScore: profile ? profile.telemetryRisk.score : 0,
+    scores: { d1, d2, d3, d4, composite },
+    cleanAllClear:
+      !degenerateProse &&
+      findings.length === 0 &&
+      thirdOrderHits.length === 0 &&
+      numMetrics.retentionRate === 1 &&
+      numMetrics.inventedCount === 0 &&
+      d4 === 10,
   };
 }
 
 function runRevisionSuite(externalArmsByName = null) {
-  const dataset = JSON.parse(fs.readFileSync(path.join(DATASETS_DIR, "revision-v1.json"), "utf8"));
-  const tasks = dataset.tasks || [];
+  const tasks = loadAllRevisionTasks();
 
   const armNames = externalArmsByName ? Object.keys(externalArmsByName) : ["raw_ai", "naive_humanizer", "dislop_clean"];
   const armsSummary = {};
 
   for (const arm of armNames) {
     const taskScores = [];
+    const missingTaskIds = [];
     for (const task of tasks) {
       const payload = externalArmsByName ? externalArmsByName[arm]?.[task.id] : task.arms?.[arm];
-      if (payload === undefined) continue;
+      if (payload === undefined) {
+        missingTaskIds.push(task.id);
+        continue;
+      }
       taskScores.push(scoreCandidate(task, payload));
     }
     const n = taskScores.length || 1;
     const avg = (fn) => taskScores.reduce((acc, x) => acc + fn(x), 0) / n;
     armsSummary[arm] = {
       evaluatedTasks: taskScores.length,
+      missingTasks: missingTaskIds.length,
+      missingTaskIds,
       avgComposite: Number(avg((x) => x.scores.composite).toFixed(1)),
       avgD1DetClearance: Number(avg((x) => x.scores.d1).toFixed(1)),
       avgD2ThirdOrder: Number(avg((x) => x.scores.d2).toFixed(1)),
       avgD3Retention: Number(avg((x) => x.scores.d3).toFixed(1)),
+      avgD4Telemetry: Number(avg((x) => x.scores.d4).toFixed(1)),
       totalDetFindings: taskScores.reduce((a, x) => a + x.totalDetFindings, 0),
       totalCoreErrors: taskScores.reduce((a, x) => a + x.coreErrors, 0),
       totalThirdOrderHits: taskScores.reduce((a, x) => a + x.thirdOrderCount, 0),
@@ -379,7 +414,7 @@ function runRevisionSuite(externalArmsByName = null) {
   }
 
   return {
-    schema: dataset.schema,
+    schema: "dislop.bench-revision/2",
     totalTasks: tasks.length,
     arms: armsSummary,
   };
@@ -396,7 +431,7 @@ function seededRandom(seed) {
 }
 
 function exportBlindSheet(armA, armB, { inputPath = null, outDir = RESULTS_DIR, seed = 42 } = {}) {
-  const dataset = JSON.parse(fs.readFileSync(path.join(DATASETS_DIR, "revision-v1.json"), "utf8"));
+  const allTasks = loadAllRevisionTasks();
   const external = inputPath ? JSON.parse(fs.readFileSync(inputPath, "utf8")).arms : null;
   const rand = seededRandom(seed);
   const key = { schema: "dislop.blind-key/1", seed, armA, armB, mapping: {} };
@@ -409,7 +444,7 @@ function exportBlindSheet(armA, armB, { inputPath = null, outDir = RESULTS_DIR, 
     "",
   ];
 
-  for (const task of dataset.tasks) {
+  for (const task of allTasks) {
     const valA = external ? external[armA]?.[task.id] : task.arms?.[armA];
     const valB = external ? external[armB]?.[task.id] : task.arms?.[armB];
     if (valA === undefined || valB === undefined) continue;
@@ -459,17 +494,17 @@ function buildMarkdownReport(det, rev) {
   const armRows = Object.entries(rev.arms)
     .map(
       ([arm, s]) =>
-        `| \`${arm}\` | **${s.avgComposite} / 100** | ${s.avgD1DetClearance} / 45 | ${s.avgD2ThirdOrder} / 30 | ${s.avgD3Retention} / 25 | ${s.totalDetFindings} | ${s.totalThirdOrderHits} | ${s.avgNumericRetention}% (${s.totalInventedNumbers} invented) | ${s.allClearTasks} / ${s.evaluatedTasks} |`
+        `| \`${arm}\` | **${s.avgComposite} / 100** | ${s.avgD1DetClearance} / 45 | ${s.avgD2ThirdOrder} / 20 | ${s.avgD3Retention} / 25 | ${s.avgD4Telemetry} / 10 | ${s.totalDetFindings} | ${s.totalThirdOrderHits} | ${s.avgNumericRetention}% (${s.totalInventedNumbers} invented) | ${s.allClearTasks} / ${s.evaluatedTasks} |`
     )
     .join("\n");
 
-  return `# dislop Anti-Slop Benchmark Report (\`dislop-bench v1\`)
+  return `# dislop Anti-Slop Benchmark Report (\`dislop-bench v2\`)
 
 Generated offline by \`node scripts/run_benchmark.mjs --write-report\`. Zero external APIs or network calls were used.
 
 ## 1. Suite A — Detection Benchmark (${det.totalSamples} Samples)
 
-Measures precision, recall, false-positive rate (including adversarial clean near-misses), 2nd-order AI slogan trap catch rate, and Node.js vs. Python exact parity across 6 writing and design domains.
+Measures precision, recall, false-positive rate (including adversarial clean near-misses and 48 subtle clean-lexicon text passages in \`text-hard-v2.json\`), 2nd-order AI slogan trap catch rate, and exact Node.js vs. Python parity across both findings and 5-axis statistical text profiles.
 
 | Metric | Measured Result |
 |---|---|
@@ -480,7 +515,8 @@ Measures precision, recall, false-positive rate (including adversarial clean nea
 | Adversarial Near-Miss FPR | **${pct(det.nearMissFpr)}** |
 | 2nd-Order Trap Recall | **${pct(det.secondOrderRecall)}** |
 | Expected Rule-ID Recall | **${pct(det.expectedRuleHitRate)}** |
-| Node.js vs. Python Parity | **${pct(det.parityRate)}** (${det.pythonAvailable ? "verified live" : `skipped: ${det.pythonError}`}) |
+| Node.js vs. Python Rule Parity | **${pct(det.parityRate)}** (${det.pythonAvailable ? "verified live" : `skipped: ${det.pythonError}`}) |
+| Node.js vs. Python Statistical Profile Parity | **${pct(det.profileParityRate)}** |
 
 ### Breakdown by Domain
 
@@ -490,19 +526,20 @@ ${domainRows}
 
 ## 2. Suite B — End-to-End De-Slop Effectiveness (${rev.totalTasks} Tasks × 3 Arms)
 
-Evaluates real writing and design outputs across 3 orthogonal dimensions:
+Evaluates real writing and design outputs (12 v1 tasks + 6 hard clean-lexicon multi-paragraph tasks in \`revision-hard-v2.json\`) across 4 orthogonal dimensions:
 
-- **D1 Deterministic Clearance (45 pts)**: Zero \`packs/core\` AI artifacts and zero 1st-/2nd-order \`dislop\` findings.
-- **D2 3rd-Order Structural Hygiene (30 pts)**: Zero 3-part balanced semicolon pitches, pull-quote closers, 5-comma chains, transition clusters, glassmorphism walls, or accent-stripe card templates.
-- **D3 Key-Number Retention & Zero Hallucination (25 pts)**: Keeps concrete source numbers intact without dropping metrics or inventing unverified figures.
+- **D1 Deterministic Multi-Angle Clearance (45 pts)**: Zero \`packs/core\` AI artifacts and zero multi-angle \`dislop\` findings (co-occurrence clusters, punctuation micro-habits, narrative framing, skeleton echoes, and low-burstiness vapor).
+- **D2 3rd-Order Structural Hygiene (20 pts)**: Zero pull-quote closers, glassmorphism walls, accent-stripe card templates, or structural echoes.
+- **D3 Key-Number Retention & Prose Coherence (25 pts)**: Keeps concrete source numbers intact without dropping metrics, inventing figures, or deleting prose into number dumps.
+- **D4 Pure Statistical Rhythm & Concreteness Telemetry (10 pts)**: Independent of D1 rule counts — verifies burstiness rhythm and concrete anchor density via \`analyzeTextProfile()\`.
 
-| Arm | Composite | D1 Det | D2 3rd-Order | D3 Retention | Det Findings | 3rd-Order Hits | Numeric Retention | All-Clear Tasks |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Arm | Composite | D1 Det | D2 3rd-Order | D3 Retention | D4 Telemetry | Det Findings | 3rd-Order Hits | Numeric Retention | All-Clear Tasks |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 ${armRows}
 
 ## 3. How to Benchmark Your Own Model, Prompt, or Backend
 
-1. Run your model, Skill, or hosted cloud endpoint (\`No Skill\` vs. \`dislop Skill\` vs. \`dislop-cloud /api/v1/deslop\`) on the 12 source inputs in [datasets/revision-v1.json](./datasets/revision-v1.json).
+1. Run your model, Skill, or hosted cloud endpoint (\`No Skill\` vs. \`dislop Skill\` vs. \`dislop-cloud /api/v1/deslop\`) on the 18 source inputs in [datasets/revision-v1.json](./datasets/revision-v1.json) and [datasets/revision-hard-v2.json](./datasets/revision-hard-v2.json).
 2. Save outputs as \`schema: "dislop.bench-run/1"\` and score them locally:
    \`\`\`bash
    node scripts/run_benchmark.mjs --eval path/to/run.json
@@ -560,12 +597,12 @@ function main() {
       `P=${pct(det.precision)} R=${pct(det.recall)} F1=${pct(det.f1)} ` +
       `CleanFPR=${pct(det.cleanFpr)} NearMissFPR=${pct(det.nearMissFpr)} ` +
       `2ndOrderR=${pct(det.secondOrderRecall)} RuleR=${pct(det.expectedRuleHitRate)} ` +
-      `Node/PyParity=${pct(det.parityRate)}`
+      `Node/PyParity=${pct(det.parityRate)} ProfileParity=${pct(det.profileParityRate)}`
   );
   for (const [arm, s] of Object.entries(rev.arms)) {
     console.log(
       `[Suite B — ${arm.padEnd(16)}] Composite=${String(s.avgComposite).padStart(5)}/100 ` +
-        `(D1=${s.avgD1DetClearance}/45, D2=${s.avgD2ThirdOrder}/30, D3=${s.avgD3Retention}/25) ` +
+        `(D1=${s.avgD1DetClearance}/45, D2=${s.avgD2ThirdOrder}/20, D3=${s.avgD3Retention}/25, D4=${s.avgD4Telemetry}/10) ` +
         `detFindings=${s.totalDetFindings} 3rdOrder=${s.totalThirdOrderHits} ` +
         `numRet=${s.avgNumericRetention}% invented=${s.totalInventedNumbers} allClear=${s.allClearTasks}/${s.evaluatedTasks}`
     );
@@ -593,6 +630,9 @@ function main() {
     if (det.expectedRuleHitRate < 0.95) failures.push(`Expected Rule Recall ${pct(det.expectedRuleHitRate)} < 95%`);
     if (!det.pythonAvailable || det.parityRate < 1) {
       failures.push(`Node/Python Parity ${pct(det.parityRate)} < 100% (${det.pythonError || "mismatch"})`);
+    }
+    if (!det.pythonAvailable || det.profileParityRate < 1) {
+      failures.push(`Node/Python Profile Parity ${pct(det.profileParityRate)} < 100%`);
     }
     const rawScore = rev.arms.raw_ai?.avgComposite ?? 0;
     const naiveScore = rev.arms.naive_humanizer?.avgComposite ?? 0;

@@ -323,6 +323,245 @@ export const PACKS_BY_ID = {
           },
           "source": "original"
         }
+      },
+      {
+        "id": "cooccurrence-slop-cluster",
+        "tier": "taste",
+        "severity": "warning",
+        "family": "lexicon/cooccurrence",
+        "probe": "cooccurrence-slop-cluster",
+        "zones": [
+          "prose"
+        ],
+        "modalities": [
+          "markdown",
+          "text",
+          "html",
+          "docx",
+          "pptx"
+        ],
+        "message": {
+          "en": "Multiple subtle corporate/AI fluff verbs and modifiers co-occur in one low-evidence paragraph.",
+          "zh": "同一低事实段落内密集堆叠多个弱套词组合（如“有效推动/持续优化/显著提升”或“leverage/streamline/robust”），冲淡了具体改动。"
+        },
+        "deletionTest": {
+          "en": "Do not swap one buzzword for another; replace the whole cluster with who changed what and the measured delta.",
+          "zh": "不要把一个套词换成另一个近义词；整片替换成具体改动、执行主体与实测变化。"
+        },
+        "exemplar": {
+          "bad": "本次客服系统按工单紧急度拆成 3 级队列，旨在有效推动跨部门协同效率，持续优化客户交互体验，并进一步助力业务团队实现精细化运营，最终显著提升整体服务质量，首响时间从 110 秒降到 42 秒。",
+          "trap": "客服系统升级不是功能叠加，而是首响从 110 秒降到 42 秒的服务跃升。",
+          "good": "本次客服系统按工单紧急度拆成 3 级队列，平均首响时间从 110 秒降到 42 秒。",
+          "note": {
+            "en": "Single normal words like 'robust' or '助力' never trigger; only low-evidence clusters do.",
+            "zh": "单次正常使用“助力”或“robust”不会触发，仅在低具体度段落密集共现时提醒。"
+          },
+          "source": "original"
+        }
+      },
+      {
+        "id": "semicolon-tricolon",
+        "tier": "taste",
+        "severity": "warning",
+        "family": "punctuation/tricolon",
+        "probe": "semicolon-tricolon",
+        "zones": [
+          "prose"
+        ],
+        "modalities": [
+          "markdown",
+          "text",
+          "html",
+          "docx",
+          "pptx"
+        ],
+        "message": {
+          "en": "Three-part balanced semicolon pitch sentence reads like generated marketing cadence.",
+          "zh": "单句内连续使用两个及以上分号构成三段对称排比，呈现典型 AI 推销腔。"
+        },
+        "deletionTest": {
+          "en": "Break the symmetry: split into plain sentences of unequal length or keep only the concrete behaviors.",
+          "zh": "打破三段工整对称：拆成长短不一的平实句子，或删掉充数的并列分句。"
+        },
+        "exemplar": {
+          "bad": "前端把表单校验前置到输入时；后端将异步任务拆进独立队列；监控台实时追踪每笔超时请求。",
+          "trap": "校验前置。任务异步。超时可追。",
+          "good": "前端在输入时先做字段校验，后端把异步任务放进独立队列，监控台则负责追踪每笔超时请求。",
+          "note": {
+            "en": "Two-clause contrasts, parenthetical citations, and legal obligations ('shall ...; must ...') stay clean.",
+            "zh": "单分号对照、括号多文献引用以及法律条款（“应当……；不得……”）不会误报。"
+          },
+          "source": "original"
+        }
+      },
+      {
+        "id": "rhetorical-qa-cadence",
+        "tier": "taste",
+        "severity": "warning",
+        "family": "punctuation/rhetorical-qa",
+        "probe": "rhetorical-qa-cadence",
+        "zones": [
+          "prose"
+        ],
+        "modalities": [
+          "markdown",
+          "text",
+          "html",
+          "docx",
+          "pptx"
+        ],
+        "message": {
+          "en": "Formulaic self-answered rhetorical question ('Why...? Because...' / 'The result?') mimics LLM blog hooks.",
+          "zh": "自问自答式设问套路（“为什么……？因为……”“结果呢？”），带有明显生成式营销文节奏。"
+        },
+        "deletionTest": {
+          "en": "Delete the staged question and state the cause-and-effect directly in one sentence.",
+          "zh": "删掉摆拍式设问，直接在一句话里写出原因与结果。"
+        },
+        "exemplar": {
+          "bad": "Why do internal dashboards collect dust after launch? Because they show vanity totals instead of next actions. The result? Teams export CSVs every Monday.",
+          "trap": "Dashboards fail. Numbers pile up. Teams export CSVs.",
+          "good": "Internal dashboards go unused when they show vanity totals without next actions, so teams end up exporting CSVs every Monday.",
+          "note": {
+            "en": "FAQ headings (`## Why...?` followed by an answer paragraph) and reported questions stay clean.",
+            "zh": "FAQ 标题与下方正文答案以及复盘记录里的转述提问不会误报。"
+          },
+          "source": "original"
+        }
+      },
+      {
+        "id": "comma-chain-runon",
+        "tier": "taste",
+        "severity": "info",
+        "family": "punctuation/comma-chain",
+        "probe": "comma-chain-runon",
+        "zones": [
+          "prose"
+        ],
+        "modalities": [
+          "markdown",
+          "text",
+          "html",
+          "docx"
+        ],
+        "message": {
+          "en": "Single sentence chains 5+ comma clauses in breathless LLM cadence.",
+          "zh": "单句内连续串接 5 个及以上逗号分句，节奏平铺拖沓。"
+        },
+        "deletionTest": {
+          "en": "Split into 2–3 shorter sentences with a clear main verb in each, and drop redundant parallel clauses.",
+          "zh": "拆成 2 到 3 句主干清晰的短句，顺手删掉凑排比的空分句。"
+        },
+        "exemplar": {
+          "bad": "通过建立跨部门沟通机制，明确周二评审与周五发版节点，优化内部评审流程，加强文档沉淀管理，完善接口超时预警体系，同步推进自动化落地，我们让团队交付过程更稳。",
+          "trap": "建机制。明节点。优评审。强沉淀。",
+          "good": "我们固定了周二评审和周五发版两个节点，并补齐了接口超时预警和自动化检查，交付过程稳定多了。",
+          "note": {
+            "en": "Numeric thousands separators like 1,200 or 4,800 are excluded before counting commas.",
+            "zh": "千分位数字逗号（如 1,200、4,800）会自动排除，不计入分句逗号。"
+          },
+          "source": "original"
+        }
+      },
+      {
+        "id": "narrative-sandwich-frame",
+        "tier": "taste",
+        "severity": "warning",
+        "family": "structure/narrative-frame",
+        "probe": "narrative-sandwich-frame",
+        "zones": [
+          "prose"
+        ],
+        "modalities": [
+          "markdown",
+          "text",
+          "html",
+          "docx"
+        ],
+        "message": {
+          "en": "Macro-trend opener, future-facing closer, or dense transition-marker cluster ('Furthermore/Moreover/Additionally') follows the stock LLM essay sandwich.",
+          "zh": "出现宏大趋势开场（“随着……的飞速发展”）、展望式升华收尾（“展望未来……”）或连接词堆叠（“此外/与此同时/不仅如此”），呈现典型 AI 三明治叙事壳。"
+        },
+        "deletionTest": {
+          "en": "Cut the opening trend preamble and closing cheerleading; start on the concrete fact or decision and end on the next action or limit.",
+          "zh": "切掉开头趋势帽和结尾展望帽，直接从具体事实或改动起笔，在下一步动作或边界条件处收束。"
+        },
+        "exemplar": {
+          "bad": "随着人工智能技术的飞速发展，研发团队正面临效率变革。此外，我们在 11 月把 PR 静态检查接入了 CI。与此同时，配置错误提前被拦了下来。不仅如此，下周还会覆盖剩余 4 个仓库。展望未来，主动拥抱变化的团队必将赢得先机。",
+          "trap": "时代变了。工具变了。协作也在变。",
+          "good": "11 月我们把 PR 静态检查接入了 CI，配置错误会在合并前被拦下，下周计划覆盖剩余 4 个仓库。",
+          "note": {
+            "en": "Cut the macro preamble, stacked transitions, and future-facing closer while keeping all source facts intact.",
+            "zh": "删掉大背景帽子、机械过渡词与展望收尾，原样保留时间与仓库数。"
+          },
+          "source": "original"
+        }
+      },
+      {
+        "id": "template-skeleton-echo",
+        "tier": "taste",
+        "severity": "warning",
+        "family": "structure/skeleton-echo",
+        "probe": "template-skeleton-echo",
+        "zones": [
+          "prose"
+        ],
+        "modalities": [
+          "markdown",
+          "text",
+          "html",
+          "docx"
+        ],
+        "message": {
+          "en": "Three or more paragraphs or sentences repeat the exact same syntactic opener skeleton ('By <verb>ing...', '在……方面，', 'First/Second/Third/Finally').",
+          "zh": "连续 3 个及以上段落或句子复用同一句首骨架（如“在……方面，”“首先/其次/再次/最后”“By …ing,”），结构像套模板填词。"
+        },
+        "deletionTest": {
+          "en": "Merge related points into natural prose with varied openings, or use a compact table if you are listing parallel specs.",
+          "zh": "把同构段落按因果或主次合并成自然段并变化句首；若是并列参数对照，直接改成简洁表格。"
+        },
+        "exemplar": {
+          "bad": "在数据采集方面，系统接入了业务日志。\n\n在模型训练方面，团队定期更新权重。\n\n在结果应用方面，业务方通过看板查看波动。",
+          "trap": "采数据。训模型。看看板。",
+          "good": "系统接入业务日志后，团队定期更新模型权重，业务方直接在看板里查看指标波动。",
+          "note": {
+            "en": "Structural opener shingling catches templated repetition even when every surface noun changes.",
+            "zh": "句首骨架比对即使在实词全部替换后，仍能识破机械套模板的段落重复。"
+          },
+          "source": "original"
+        }
+      },
+      {
+        "id": "low-burstiness-vapor",
+        "tier": "taste",
+        "severity": "info",
+        "family": "statistics/monotony",
+        "probe": "low-burstiness-vapor",
+        "zones": [
+          "prose"
+        ],
+        "modalities": [
+          "markdown",
+          "text"
+        ],
+        "message": {
+          "en": "Multi-sentence passage combines robotically uniform sentence lengths (low burstiness CV < 0.24) with near-zero concrete anchors (numbers, dates, files, or verifiable actions).",
+          "zh": "多句段落同时出现句长高度齐平（突发性变异系数 CV < 0.24）且几乎没有具体锚点（数字、时间、文件名或可核查动作），空泛同质感强。"
+        },
+        "deletionTest": {
+          "en": "Cut abstract summary sentences in half, vary sentence length naturally, and anchor every kept claim with a number, file, date, or concrete failure mode.",
+          "zh": "砍掉一半抽象概括句，拉开长短句节奏，并为保留的每条判断补上数字、文件、时间或真实边界。"
+        },
+        "exemplar": {
+          "bad": "该方案注重用户体验的全面改善。系统架构保持了良好的扩展能力。团队协作形成了清晰的责任分工。日常运维建立了规范的处理流程。产品迭代围绕核心需求稳步推进。业务指标呈现出健康的增长态势。",
+          "trap": "体验改善。架构扩展。分工清晰。运维规范。",
+          "good": "本段暂未提供具体指标、改动文件或责任人，请先删去概括句，再由作者补入实测数据和变更项。",
+          "note": {
+            "en": "Dual-gated on both low burstiness AND low concreteness; never fabricate missing metrics during editing.",
+            "zh": "采用“低突发性 + 低具体度”双门控；改写空话时绝不替作者编造缺失数字。"
+          },
+          "source": "original"
+        }
       }
     ]
   },
@@ -783,6 +1022,241 @@ export const PACKS_BY_ID = {
       }
     ]
   },
+  "engineering-spec": {
+    "schema": "dislop.pack/2",
+    "id": "engineering-spec",
+    "version": "0.6.0",
+    "tier": "taste",
+    "extends": [
+      "business-brief"
+    ],
+    "name": {
+      "en": "Engineering RFC, PR & Postmortem",
+      "zh": "研发文档、PR 与故障复盘"
+    },
+    "summary": {
+      "en": "Catches empty AI PR summaries, stop-thinking 'human error' postmortem labels, and unowned wishful action items alongside core and brief checks.",
+      "zh": "在技术文档与简报检查之上，专门拦截空洞的 AI 代码提交总结、把事故归结为“人为失误”的止步归因，以及无负责人无指标的许愿式改进项。"
+    },
+    "modalities": [
+      "markdown",
+      "text",
+      "docx"
+    ],
+    "thresholds": {
+      "boldLeadListRun": 4
+    },
+    "rules": [
+      {
+        "id": "eng-pr-diff-parrot",
+        "tier": "taste",
+        "severity": "warning",
+        "family": "frame/pr-wrapper",
+        "probe": "regex",
+        "zones": [
+          "prose"
+        ],
+        "modalities": [
+          "markdown",
+          "text"
+        ],
+        "patterns": [
+          "(?:^|\\n)\\s*(?:This\\s+(?:PR|pull\\s+request|commit|change)\\s+(?:introduces|updates|refactors|enhances|streamlines)\\b[^.\\n]{0,90}\\bto\\s+(?:ensure|provide|deliver|improve|enhance|facilitate)\\s+(?:a\\s+more\\s+)?(?:seamless|robust|scalable|maintainable|intuitive|streamlined|resilient)[^.\\n]{0,60})",
+          "(?:^|\\n)\\s*(?:本次\\s*(?:提交|改动|更新|PR|重构)\\s*(?:主要)?(?:旨在)?通过[^。！？\\n]{2,40}(?:进一步|全面|有效)?(?:提升|增强|保障)[^。！？\\n]{0,24}(?:可维护性|扩展性|健壮性|稳定性|研发效能))"
+        ],
+        "message": {
+          "en": "Generic AI PR summary parrots file changes without stating the concrete bug, constraint, or metric.",
+          "zh": "空泛的 AI 提交摘要只重复“通过优化提升可维护性”，未说明具体修掉的缺陷、边界条件或单号。"
+        },
+        "deletionTest": {
+          "en": "Replace the wrapper sentence with why the change was needed, what breaks without it, and how it was verified.",
+          "zh": "删掉套话壳，直接写出关联问题单、改动前后的具体行为差异及验证方法。"
+        },
+        "exemplar": {
+          "bad": "本次 PR 旨在通过重构连接池管理逻辑进一步提升系统的稳定性与可维护性。",
+          "trap": "这不是一次普通的代码重构，而是连接池稳定性的底层重塑。",
+          "good": "修复 Redis 重连分支未释放旧句柄导致的连接泄漏（#412），压测 2 小时常驻连接数稳定在 64 以内。",
+          "note": {
+            "en": "Name the leak trigger, issue number, and measured connection ceiling.",
+            "zh": "点明泄漏触发分支、单号与压测连接数上限。"
+          },
+          "source": "original"
+        }
+      },
+      {
+        "id": "eng-shallow-root-cause",
+        "tier": "taste",
+        "severity": "warning",
+        "family": "evidence/root-cause",
+        "probe": "regex",
+        "zones": [
+          "prose"
+        ],
+        "modalities": [
+          "markdown",
+          "text",
+          "docx"
+        ],
+        "patterns": [
+          "(?:Root\\s+[Cc]ause|Primary\\s+[Cc]ause)\\s*[:：]\\s*(?:human\\s+error|developer\\s+(?:error|mistake|oversight)|manual\\s+mistake|operator\\s+error|lack\\s+of\\s+attention)(?:\\s*[.!\\n]|$)",
+          "(?:根本原因|根因(?:分析)?|直接原因)\\s*[:：]\\s*(?:人为(?:失误|疏忽|操作不当)|研发(?:疏忽|粗心)|操作失误|人员意识不到位)(?:\\s*[。！？\\n]|$)"
+        ],
+        "message": {
+          "en": "Postmortem stops at 'human error' instead of identifying the missing system guardrail.",
+          "zh": "故障复盘停在“人为失误/操作不当”，没有追查缺失的系统校验或防呆机制。"
+        },
+        "deletionTest": {
+          "en": "Ask why the tooling allowed a single manual action to cause an outage, and write that missing check as the root cause.",
+          "zh": "追问“为什么发布或运维工具允许一次手误直接打挂线上”，把缺失的自动拦截写成根因。"
+        },
+        "exemplar": {
+          "bad": "根本原因：人为失误。",
+          "trap": "根本原因：值班人员风险意识有待进一步强化。",
+          "good": "根本原因：生产迁移脚本缺少库名白名单与行数上限预检，未拦截误指向主库的删除语句。",
+          "note": {
+            "en": "Point to the missing preflight check in the migration script rather than blaming the operator.",
+            "zh": "指出脚本缺失的白名单与预检机制，而非归咎个人粗心。"
+          },
+          "source": "original"
+        }
+      },
+      {
+        "id": "eng-vague-action-item",
+        "tier": "taste",
+        "severity": "info",
+        "family": "evidence/actionability",
+        "probe": "regex",
+        "zones": [
+          "prose"
+        ],
+        "modalities": [
+          "markdown",
+          "text",
+          "docx"
+        ],
+        "patterns": [
+          "(?:^|\\n)\\s*(?:[-*]|\\d+\\.)\\s*(?:\\[[ xX]\\]\\s*)?(?:Add\\s+more\\s+(?:monitoring|logging|tests)|Improve\\s+(?:test\\s+coverage|error\\s+handling|documentation)|Be\\s+more\\s+careful(?:\\s+during\\s+deploys?)?|Continue\\s+to\\s+monitor(?:\\s+the\\s+situation)?)\\s*[.!]?(?=\\n|$)",
+          "(?:^|\\n)\\s*(?:[-*]|\\d+[.、])\\s*(?:\\[[ xX]\\]\\s*)?(?:加强(?:监控(?:与告警)?|测试覆盖|代码审查|风险意识)|完善(?:监控体系|日志记录|相关文档)|后续持续(?:关注|观察|跟进)|提高(?:研发质量|值班警惕性))\\s*[。！]?(?=\\n|$)"
+        ],
+        "message": {
+          "en": "Wishful action item lacks a concrete target component, threshold, owner, or due date.",
+          "zh": "许愿式改进项（如“加强监控”“提高警惕”）缺少具体模块、阈值、负责人或截止时间，无法验收。"
+        },
+        "deletionTest": {
+          "en": "Rewrite as a binary-verifiable ticket: which service, what threshold or test case, who owns it, and by what date.",
+          "zh": "改成可验收的具体动作：给哪个服务加什么阈值告警或单测、谁负责、哪天上线。"
+        },
+        "exemplar": {
+          "bad": "- [ ] 加强监控与告警。",
+          "trap": "- [ ] 全面排查并持续跟进线上隐患。",
+          "good": "- [ ] 给 `checkout-api` 增加 P99 > 400ms 持续 3 分钟告警并接入值班群（负责人：李工，11 月 30 日前完成）。",
+          "note": {
+            "en": "Specify service, metric threshold, window, owner, and deadline.",
+            "zh": "写清服务名、延迟阈值、持续窗口、负责人与完成日期。"
+          },
+          "source": "original"
+        }
+      }
+    ]
+  },
+  "executive-deck": {
+    "schema": "dislop.pack/2",
+    "id": "executive-deck",
+    "version": "0.6.0",
+    "tier": "taste",
+    "extends": [
+      "deck-and-ui"
+    ],
+    "name": {
+      "en": "Executive Slide Deck & Board Readout",
+      "zh": "汇报 PPT 与管理层简报"
+    },
+    "summary": {
+      "en": "Enforces conclusion-first slide headlines and flags monotonous multi-slide bullet skeletons on top of core deck and UI hygiene.",
+      "zh": "在演示文稿与界面规范之上，检查非结论式“过程名词”幻灯片标题与连续同骨架纯文字页。"
+    },
+    "modalities": [
+      "markdown",
+      "pptx",
+      "html"
+    ],
+    "thresholds": {
+      "maxSlideWords": 110,
+      "maxSlideCharsZh": 260,
+      "maxSlideBullets": 5,
+      "minAutofitScale": 80000,
+      "maxIdenticalSlideRun": 4
+    },
+    "rules": [
+      {
+        "id": "slide-process-not-finding-title",
+        "tier": "taste",
+        "severity": "warning",
+        "family": "deck/headline",
+        "probe": "regex",
+        "zones": [
+          "prose"
+        ],
+        "modalities": [
+          "markdown",
+          "pptx"
+        ],
+        "patterns": [
+          "^#{1,3}\\s+(?:Analysis\\s+of|Overview\\s+of|Update\\s+on|Discussion\\s+of|Deep\\s+Dive\\s+into|Thoughts\\s+on)\\s+\\S[^\\n#]{1,64}\\s*#*\\s*$",
+          "^#{1,3}\\s*(?:关于[^#\\n]{2,36}的(?:分析(?:汇报|报告)?|汇报|思考|探讨|情况(?:说明|汇报)?)|[^#\\n]{2,24}(?:阶段性进展汇报|情况分析汇报))\\s*#*\\s*$"
+        ],
+        "message": {
+          "en": "Topic-label headline names the work done ('Analysis of X') instead of stating the finding.",
+          "zh": "标题只写了“关于……的分析/汇报”这类过程标签，没有直接亮出本页结论。"
+        },
+        "deletionTest": {
+          "en": "Replace 'Analysis of X' with the one-sentence answer your audience should remember if they read only the headline.",
+          "zh": "如果听众只扫一眼标题，最该记住哪一个结论或变化数字？直接拿那句话当标题。"
+        },
+        "exemplar": {
+          "bad": "## 关于三季度新客首周流失率（34% 降至 19%）的分析汇报",
+          "trap": "## 重塑新客留存增长飞轮",
+          "good": "## 三季度新客首周流失率从 34% 降至 19%",
+          "note": {
+            "en": "Put the 34% -> 19% finding directly in the heading instead of wrapping it in 'Analysis of...'.",
+            "zh": "去掉“关于……的分析汇报”外壳，直接把“34% 降至 19%”当标题。"
+          },
+          "source": "original"
+        }
+      },
+      {
+        "id": "pptx-layout-monotony",
+        "tier": "taste",
+        "severity": "info",
+        "family": "deck/cadence",
+        "probe": "pptx-layout-monotony",
+        "zones": [
+          "raw"
+        ],
+        "modalities": [
+          "pptx"
+        ],
+        "message": {
+          "en": "Four or more consecutive slides repeat the exact same plain text-box skeleton without tables, charts, or visual variation.",
+          "zh": "连续 4 页及以上幻灯片重复完全相同的纯文字要点骨架（无表格、图表或版式变化），容易引发审阅疲劳。"
+        },
+        "deletionTest": {
+          "en": "Convert comparative bullet slides into a structured table, timeline, or metric chart to break monotonous pacing.",
+          "zh": "把其中对比或趋势类的要点页改成双栏对照表、流程图或数据图表，打破连页同版式。"
+        },
+        "exemplar": {
+          "bad": "Slides 2–5 all use identical 'Title + 4 plain bullets' boxes with zero tables, charts, or diagrams.",
+          "trap": "Slides 2–5 keep the exact same 4 bullets per slide and add decorative stock icons.",
+          "good": "Slide 3 presents regional latency in a 4-row table and Slide 4 plots weekly error budget burn.",
+          "note": {
+            "en": "Match slide structure to the data type instead of pouring every page into the same bullet template.",
+            "zh": "按信息结构选用表格或趋势图，避免整份 PPT 套同一个纯文字框。"
+          },
+          "source": "original"
+        }
+      }
+    ]
+  },
   "literary-essay": {
     "schema": "dislop.pack/2",
     "id": "literary-essay",
@@ -988,6 +1462,211 @@ export const PACKS_BY_ID = {
           "note": {
             "en": "Normalize punctuation width without altering wording or numbers.",
             "zh": "仅修正标点全半角，不改动原文措辞与数量。"
+          },
+          "source": "original"
+        }
+      },
+      {
+        "id": "literary-semicolon-tricolon",
+        "tier": "taste",
+        "severity": "warning",
+        "family": "punctuation/tricolon",
+        "probe": "semicolon-tricolon",
+        "zones": [
+          "prose"
+        ],
+        "modalities": [
+          "markdown",
+          "text",
+          "html",
+          "docx"
+        ],
+        "message": {
+          "en": "Balanced three-part semicolon sentence turns scene description into synthetic lyrical cadence.",
+          "zh": "单句连续用两个及以上分号排比景物或情绪，带有明显的生成式散文腔。"
+        },
+        "deletionTest": {
+          "en": "Break the three-part balance into natural prose sentences and keep the one sensory detail that carries the scene.",
+          "zh": "打破工整的三段分号排比，改成长短自然的叙述句，留住最具体的一两处感官细节。"
+        },
+        "exemplar": {
+          "bad": "街道两旁的树叶逐渐染上金黄；午后的阳光变得柔和而绵长；行人的衣领也悄然立了起来。",
+          "trap": "树叶金黄。阳光柔和。衣领立起。",
+          "good": "午后阳光柔和，街道两旁的树叶已经发黄，路过的行人把衣领立了起来。",
+          "note": {
+            "en": "Two-clause sentences with a single semicolon stay clean.",
+            "zh": "只含一个分号的自然长句不会触发。"
+          },
+          "source": "original"
+        }
+      },
+      {
+        "id": "literary-rhetorical-qa",
+        "tier": "taste",
+        "severity": "warning",
+        "family": "punctuation/rhetorical-qa",
+        "probe": "rhetorical-qa-cadence",
+        "zones": [
+          "prose"
+        ],
+        "modalities": [
+          "markdown",
+          "text",
+          "html",
+          "docx"
+        ],
+        "message": {
+          "en": "Staged self-answered rhetorical question ('Why does ...? Because ...') lectures the reader instead of showing the scene.",
+          "zh": "散文里出现自问自答式设问（“为什么……？因为……”），像主持词而非真实叙述。"
+        },
+        "deletionTest": {
+          "en": "Cut the rhetorical question and describe what actually happened in the scene.",
+          "zh": "删掉自问自答的铺陈，直接写现场发生了什么。"
+        },
+        "exemplar": {
+          "bad": "At 6:30 a.m. he brewed a cup of pour-over coffee. Why does brewing pour-over coffee feel so grounding? Because the deliberate pace invites us to pause.",
+          "trap": "Warm water. Slow pour. Quiet pause.",
+          "good": "At 6:30 a.m. he brewed a cup of pour-over coffee.",
+          "note": {
+            "en": "Keep the concrete scene from the source and cut the staged rhetorical question.",
+            "zh": "保留原句的具体动作，删掉自问自答的抒情解释。"
+          },
+          "source": "original"
+        }
+      },
+      {
+        "id": "literary-narrative-frame",
+        "tier": "taste",
+        "severity": "warning",
+        "family": "structure/narrative-frame",
+        "probe": "narrative-sandwich-frame",
+        "zones": [
+          "prose"
+        ],
+        "modalities": [
+          "markdown",
+          "text",
+          "html",
+          "docx"
+        ],
+        "message": {
+          "en": "Sweeping era opener ('In an era defined by...') or uplifting takeaway closer wraps a personal essay in an LLM template.",
+          "zh": "以宏大时代背景起笔（“在快节奏的都市生活中……”）或未来式鸡汤收尾，给随笔套上了模板外壳。"
+        },
+        "deletionTest": {
+          "en": "Delete the opening era backdrop and the closing takeaway; start directly inside the concrete time, place, or object.",
+          "zh": "删掉开头“在当今/快节奏的时代”与结尾升华句，直接从具体时间、地点或器物写起。"
+        },
+        "exemplar": {
+          "bad": "In an era defined by relentless notifications, the street stays quiet before seven except for the milk truck. Moving forward, protecting small pockets of stillness remains essential for living with intention.",
+          "trap": "Notifications beep. Milk truck passes. Stillness stays.",
+          "good": "Before seven the street stays quiet except for the milk truck.",
+          "note": {
+            "en": "Cut the sweeping era opener and closing moral while keeping the source scene verbatim.",
+            "zh": "删掉时代大帽子与结尾说教，原样保留清晨七点前的实景。"
+          },
+          "source": "original"
+        }
+      }
+    ]
+  },
+  "regulated-comms": {
+    "schema": "dislop.pack/2",
+    "id": "regulated-comms",
+    "version": "0.6.0",
+    "tier": "taste",
+    "extends": [
+      "business-brief"
+    ],
+    "name": {
+      "en": "External & Regulated Communications",
+      "zh": "对外发布与严谨合规"
+    },
+    "summary": {
+      "en": "Flags unsubstantiated absolute claims ('100% secure', 'zero risk') and floating hype multipliers ('10x faster' with no baseline) in external docs.",
+      "zh": "面向对外公告、客户方案与合规审校，拦截绝对化极限承诺（“零风险”“绝对安全”“行业第一”）及无基线倍增夸大（“效率提升数倍”）。"
+    },
+    "modalities": [
+      "markdown",
+      "text",
+      "html",
+      "docx",
+      "pptx"
+    ],
+    "thresholds": {
+      "boldLeadListRun": 4
+    },
+    "rules": [
+      {
+        "id": "reg-unsubstantiated-superlative",
+        "tier": "taste",
+        "severity": "warning",
+        "family": "evidence/compliance",
+        "probe": "regex",
+        "zones": [
+          "prose"
+        ],
+        "modalities": [
+          "markdown",
+          "text",
+          "html",
+          "docx",
+          "pptx"
+        ],
+        "patterns": [
+          "\\b(?:100%\\s+(?:secure|safe|guaranteed|accurate|bug-free|risk-free)|zero[- ]risk\\s+(?:guarantee|deployment|migration|return)|guaranteed\\s+ROI|world's\\s+(?:#1|most\\s+advanced))\\b",
+          "(?:绝对(?:安全|可靠|零风险)|百分之百(?:安全|无误|零故障)|零风险(?:承诺|保障|收益)|国家级最高|全网第一|行业最顶尖|永久零故障)"
+        ],
+        "message": {
+          "en": "Absolute or superlative claim creates legal/compliance exposure where scoped SLA terms belong.",
+          "zh": "出现绝对化承诺或极限排他用语（如“绝对安全”“零风险保障”“全网第一”），存在合规与履约风险。"
+        },
+        "deletionTest": {
+          "en": "Replace absolute promises with verifiable scope, encryption/audit standards, or contracted SLA numbers.",
+          "zh": "删掉绝对化极限词，改写为具体的加密协议、审计认证编号或合同约定的 SLA 指标。"
+        },
+        "exemplar": {
+          "bad": "新同城双活备份方案提供绝对安全与永久零故障保障（SLA 99.95%），客户迁移零风险承诺。",
+          "trap": "新同城双活备份方案打造坚不可摧的行业标杆级防线（SLA 99.95%）。",
+          "good": "新同城双活备份方案合同承诺月度可用性 99.95%，迁移前支持演练回滚。",
+          "note": {
+            "en": "State the actual architecture and contracted 99.95% SLA instead of '100% safe' promises.",
+            "zh": "保留同城双活与合同约定的 99.95% 可用性，删掉绝对化极限词。"
+          },
+          "source": "original"
+        }
+      },
+      {
+        "id": "reg-unanchored-multiplier",
+        "tier": "taste",
+        "severity": "warning",
+        "family": "evidence/baseline",
+        "probe": "unanchored-multiplier",
+        "zones": [
+          "prose"
+        ],
+        "modalities": [
+          "markdown",
+          "text",
+          "html",
+          "docx",
+          "pptx"
+        ],
+        "message": {
+          "en": "Floating speedup or efficiency multiplier ('10x faster') omits the before/after baseline.",
+          "zh": "出现悬空的倍数宣称（如“10x faster”“效率提升数倍”），句内未给出改动前后的具体基线数值。"
+        },
+        "deletionTest": {
+          "en": "Either add the exact baseline ('from 18s to 1.8s on 10M rows') or remove the multiplier.",
+          "zh": "补齐改动前后的实测对比基线（如“从 18 秒降到 1.8 秒”），无实测基线时直接删去倍数词。"
+        },
+        "exemplar": {
+          "bad": "接入新版流式批处理引擎后，对账单导出效率提升数倍。",
+          "trap": "接入新版流式批处理引擎后，对账单导出迎来质的飞跃。",
+          "good": "接入新版流式批处理引擎后，对账单改为按块流式导出，无需等待全表缓存在内存。",
+          "note": {
+            "en": "When no before/after timing baseline is in the source, state the concrete mechanism and drop the unanchored multiplier.",
+            "zh": "原稿无实测前后耗时基线时，直接删去悬空的“提升数倍”，只保留具体机制改动。"
           },
           "source": "original"
         }
@@ -1238,6 +1917,210 @@ export const RULE_UI_META = {
     "zhEx": {
       "bad": "<span class=\"eyebrow\">AI-Powered · Zero Hallucination</span>",
       "good": "<span class=\"section-meta\">本地离线运行</span>"
+    }
+  },
+  "cooccurrence-slop-cluster": {
+    "lang": "both",
+    "title": {
+      "zh": "低事实段落堆叠空泛动词",
+      "en": "Buzzword cluster in fact-free paragraph"
+    },
+    "enEx": {
+      "bad": "This workflow upgrade leverages cross-functional alignment to streamline daily operations, fostering robust collaboration across stakeholders.",
+      "trap": "Workflow upgrades aren't about process — they're about team velocity.",
+      "good": "Splitting triage into 3 priority queues cut median first-response time from 110s to 42s in week one."
+    }
+  },
+  "semicolon-tricolon": {
+    "lang": "both",
+    "title": {
+      "zh": "三段对称分号推销句",
+      "en": "Three-part balanced semicolon pitch"
+    },
+    "enEx": {
+      "bad": "The client validates forms on input; the worker isolates slow jobs in queues; the dashboard tracks every timeout live.",
+      "trap": "Validate early. Queue smart. Track live.",
+      "good": "The client validates fields on input, slow jobs run in a separate queue, and requests over 5s trigger an on-call alert."
+    }
+  },
+  "rhetorical-qa-cadence": {
+    "lang": "both",
+    "title": {
+      "zh": "自问自答式营销设问",
+      "en": "Self-answered rhetorical Q&A"
+    },
+    "zhEx": {
+      "bad": "为什么很多内部看板上线两周就没人打开？因为上面只有汇总虚荣数字而没有下一步动作。结果呢？业务每周一还是手动导表格。",
+      "trap": "看板失灵。数字堆砌。全靠导表。",
+      "good": "内部看板如果只摆汇总数字、不标异常订单，运营每周一还是得手动导出表格排查。"
+    }
+  },
+  "comma-chain-runon": {
+    "lang": "both",
+    "title": {
+      "zh": "五连逗号一逗到底长句",
+      "en": "Five-comma run-on chain"
+    },
+    "enEx": {
+      "bad": "By aligning cross-team priorities, defining milestone gates, refining review checklists, centralizing runbooks, expanding alert coverage, and automating rollbacks, we improved release stability.",
+      "trap": "Align teams. Define gates. Automate rollbacks.",
+      "good": "Fixing Tuesday design reviews and wiring HTTP 5xx auto-rollback cut post-release hotfixes by 40% this quarter."
+    }
+  },
+  "narrative-sandwich-frame": {
+    "lang": "both",
+    "title": {
+      "zh": "趋势帽开场与展望帽收尾",
+      "en": "Macro-trend opener or future-gazing closer"
+    },
+    "enEx": {
+      "bad": "As organizations navigate rapid digital transformation, CI pipelines face new demands. Furthermore, static checks are growing. Moreover, docs matter. Additionally, workflows evolve. Looking ahead, teams that adapt will thrive.",
+      "trap": "Pipelines change. Checks grow. Teams adapt.",
+      "good": "Adding static doc checks to CI in November caught configuration typos 18 minutes earlier per PR; 4 more repos join next week."
+    }
+  },
+  "template-skeleton-echo": {
+    "lang": "both",
+    "title": {
+      "zh": "连续三段同构句首填表腔",
+      "en": "Repeated paragraph-opener skeleton"
+    },
+    "enEx": {
+      "bad": "By standardizing log schemas, teams query events faster.\n\nBy automating nightly compaction, storage stays predictable.\n\nBy surfacing error budgets, on-call engineers spot regressions early.",
+      "trap": "Standardize logs. Compact nightly. Surface budgets.",
+      "good": "Standardized log schemas speed up ad-hoc queries, nightly compaction caps disk growth, and error-budget alerts catch regressions early."
+    }
+  },
+  "low-burstiness-vapor": {
+    "lang": "both",
+    "title": {
+      "zh": "句长齐平且缺具体事实",
+      "en": "Flat sentence rhythm with zero concrete facts"
+    },
+    "enEx": {
+      "bad": "The platform focuses on improving overall developer productivity. System modules maintain clean architectural boundaries. Team workflows follow consistent operational standards. Product releases progress steadily toward core goals. Customer feedback reflects positive adoption trends.",
+      "trap": "Productivity rises. Boundaries hold. Releases ship.",
+      "good": "Cutting the home bundle from 420 KB to 145 KB dropped mobile first paint to 0.9s, and 3 backend engineers now rotate weekly via `ops/oncall.yaml`."
+    }
+  },
+  "literary-semicolon-tricolon": {
+    "lang": "both",
+    "title": {
+      "zh": "散文三段分号排比腔",
+      "en": "Lyrical three-part semicolon balance"
+    },
+    "enEx": {
+      "bad": "Water meets freshly ground beans; steam curls toward the kitchen ceiling; the first sip steadies a scattered morning.",
+      "trap": "Fresh beans. Curling steam. Steady morning.",
+      "good": "Boiling water hit the ground beans and sent steam up toward the low kitchen ceiling."
+    }
+  },
+  "literary-rhetorical-qa": {
+    "lang": "both",
+    "title": {
+      "zh": "随笔自问自答抒情腔",
+      "en": "Essay rhetorical self-Q&A"
+    },
+    "zhEx": {
+      "bad": "早上六点半他照例冲了一壶手冲咖啡。为什么手冲咖啡总能让人安静下来？因为缓慢注水的节奏提醒我们停下脚步。",
+      "trap": "热水落下。香气升起。脚步放慢。",
+      "good": "早上六点半，他烧开水冲了一壶咖啡。"
+    }
+  },
+  "literary-narrative-frame": {
+    "lang": "both",
+    "title": {
+      "zh": "随笔时代大帽子与升华尾",
+      "en": "Sweeping era opener in personal essay"
+    },
+    "zhEx": {
+      "bad": "在当今被弹窗消息包围的快节奏时代里，七点前的巷子只有送奶车经过。未来，守住内心的片刻宁静依然是我们生活的必修课。",
+      "trap": "消息不断。奶车驶过。宁静仍在。",
+      "good": "早上七点前，巷子里只有送奶车经过。"
+    }
+  },
+  "eng-pr-diff-parrot": {
+    "lang": "both",
+    "title": {
+      "zh": "空泛的 AI 提交摘要壳",
+      "en": "Empty AI PR diff summary"
+    },
+    "enEx": {
+      "bad": "This PR updates the retry middleware to ensure a more seamless and resilient developer experience",
+      "trap": "This isn't a minor retry tweak — it's rock-solid resilience.",
+      "good": "Fixes #412: cap exponential backoff at 8s when upstream returns HTTP 503."
+    }
+  },
+  "eng-shallow-root-cause": {
+    "lang": "both",
+    "title": {
+      "zh": "复盘止步于“人为失误”",
+      "en": "Stop-thinking 'human error' root cause"
+    },
+    "enEx": {
+      "bad": "Root cause: human error.",
+      "trap": "Root cause: engineer oversight during peak traffic.",
+      "good": "Root cause: deploy runner skipped schema validation when `--fast` was passed."
+    }
+  },
+  "eng-vague-action-item": {
+    "lang": "both",
+    "title": {
+      "zh": "无指标无负责人的改进项",
+      "en": "Unowned wishful action item"
+    },
+    "enEx": {
+      "bad": "- [ ] Add more monitoring.",
+      "trap": "- [ ] Proactively strengthen observability across services.",
+      "good": "- [ ] Add P99 > 400ms alert on `checkout-api` (@payments-oncall, due 2026-11-30)."
+    }
+  },
+  "slide-process-not-finding-title": {
+    "lang": "both",
+    "title": {
+      "zh": "汇报标题只写“关于……的分析”",
+      "en": "Process-label slide title instead of takeaway"
+    },
+    "enEx": {
+      "bad": "## Analysis of Q3 Churn Drop (6.2% to 4.1%)",
+      "trap": "## Reimagining Customer Retention Excellence (6.2% to 4.1%)",
+      "good": "## Q3 Customer Churn Dropped from 6.2% to 4.1%"
+    }
+  },
+  "pptx-layout-monotony": {
+    "lang": "both",
+    "title": {
+      "zh": "连续 4 页纯文字同版式 PPT",
+      "en": "4+ consecutive identical bullet slides"
+    },
+    "zhEx": {
+      "bad": "第 2 至第 5 页连续使用完全相同的「标题 + 4 条纯文字要点」版式，无一页表格或图表。",
+      "trap": "第 2 至第 5 页保留同样的 4 条纯文字，只给每页贴了四个装饰图标。",
+      "good": "第 3 页改为四行区域延迟对照表，第 4 页改为周度错误率折线图。"
+    }
+  },
+  "reg-unsubstantiated-superlative": {
+    "lang": "both",
+    "title": {
+      "zh": "绝对化承诺与极限合规词",
+      "en": "Unsubstantiated '100% / zero-risk' claim"
+    },
+    "enEx": {
+      "bad": "Our AES-256 vault is 100% secure with a zero-risk migration (99.95% monthly SLA).",
+      "trap": "Our AES-256 vault is an unbreakable fortress for enterprise data (99.95% monthly SLA).",
+      "good": "Backups use AES-256 encryption at rest and carry a 99.95% monthly uptime SLA."
+    }
+  },
+  "reg-unanchored-multiplier": {
+    "lang": "both",
+    "title": {
+      "zh": "无基线的悬空倍数宣称",
+      "en": "Multiplier claim without baseline"
+    },
+    "enEx": {
+      "bad": "Streaming batch export makes monthly statements 10x faster.",
+      "trap": "Streaming batch export transforms monthly statements at lightning speed.",
+      "good": "Streaming batch export writes rows directly without buffering the full table in memory."
     }
   }
 };

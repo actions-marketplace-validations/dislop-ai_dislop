@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.4.0
+version: 0.6.0
 snapshot: 2026-11-21
 ---
 
@@ -8,7 +8,7 @@ snapshot: 2026-11-21
 
 Good writing habits, web and slide design rules, an offline zero-dependency checker, and 87 vetted tools—gathered in one place. Hand `/llms.txt` to any AI chat, install the Agent Skill / Claude Code Plugin / MCP server, or test drafts offline in your browser.
 
-- Runtime dependencies: 0 (Node.js 20+ and Python 3.10+ parity verified by 88 pack fixtures and `tests/test_conformance.py`)
+- Runtime dependencies: 0 (Node.js 20+ and Python 3.10+ parity verified by 160 pack fixtures and 26 unit/conformance tests)
 - Live browser workbench: https://dislop.com/#workbench (offline in RAM by default + opt-in same-origin cloud AI, `CSP: connect-src 'self'`)
 - Hosted Remote HTTP MCP: https://dislop.com/mcp (30 free monthly credits via https://dislop.com/#pricing)
 - Agent routing index: https://dislop.com/llms.txt
@@ -19,16 +19,17 @@ Good writing habits, web and slide design rules, an offline zero-dependency chec
 
 | Target | Formats / Scope | Status |
 |---|---|---|
-| Writing, Copy & Longform | `.md`, `.mdx`, `.txt` (EN & ZH) | LIVE `v0.4.0` |
-| Word & PowerPoint | `.docx`, `.pptx` | LIVE `v0.4.0` |
-| Web UI & Components | `.html`, `.css`, `.jsx`, `.tsx` | LIVE `v0.4.0` |
+| Writing, Specs, RFCs & Copy | `.md`, `.mdx`, `.txt` (EN & ZH, 7 built-in packs, 53 patterns across 6 dimensions) | LIVE `v0.6.0` |
+| Word & PowerPoint | `.docx`, `.pptx` (incl. layout monotony & conclusion titles) | LIVE `v0.6.0` |
+| Web UI & Components | `.html`, `.css`, `.jsx`, `.tsx` | LIVE `v0.6.0` |
+| Offline Voice & Pocket ML | `dislop voice` (`dislop.voice/1`) & 14.6 KB `--ml` stealth-vapor scorer | LIVE `v0.6.0` |
+| Optional Local Small Models | `dislop model` hardware-aware advisor (`0.6B` / `1.7B` / `4B`) | LIVE `v0.6.0` |
 | Git Diffs & PRs | `--changed` / `--staged` & SARIF 2.1.0 | LIVE (diff check) · Roadmap (code AST) |
-| Rhythm, Layout Monotony & Voice | 5 prototype probes, `dislop.voice/1`, `dislop.taste/1` | Prototype / Spec `v0.3+` |
 
 ## Rule Layers
 
 1. **AI Delivery Artifacts (`packs/core`, `error`)**: stray chatbot wrappers, unfilled placeholders, raw Markdown pasted into Word/PPT, and dead `href="#"` placeholder controls.
-2. **Style & Template Packs (`warning` / `info`)**: `business-brief`, `literary-essay`, and `deck-and-ui` (25 rules total), each pairing a check question with `bad -> trap -> good` examples.
+2. **Built-in Scenario Packs (`warning` / `info`)**: `business-brief`, `engineering-spec`, `regulated-comms`, `literary-essay`, `deck-and-ui`, and `executive-deck` (42 built-in pack rules across 7 bundled packs, plus 11 extended pattern-bank probes for 53 structured patterns across 6 dimensions), each pairing a check question with `bad -> trap -> good` examples.
 
 ## Resource Pillars
 

@@ -1,6 +1,6 @@
 {
   "schema": "dislop.catalog/1",
-  "version": "0.4.0",
+  "version": "0.6.0",
   "snapshotDate": "2026-11-21",
   "baseUrl": "https://dislop.com",
   "pillars": [
@@ -11,13 +11,13 @@
   "entryPoints": {
     "llmsTxt": {
       "path": "/llms.txt",
-      "bytes": 2461,
-      "approxTokens": 615
+      "bytes": 2444,
+      "approxTokens": 611
     },
     "llmsFullTxt": {
       "path": "/llms-full.txt",
-      "bytes": 16555,
-      "approxTokens": 4139
+      "bytes": 28452,
+      "approxTokens": 7113
     },
     "awesomeJson": {
       "path": "/awesome/index.json",
@@ -52,11 +52,14 @@
       "packs": [
         "core",
         "business-brief",
+        "engineering-spec",
+        "regulated-comms",
         "literary-essay",
-        "deck-and-ui"
+        "deck-and-ui",
+        "executive-deck"
       ],
-      "bytes": 2410,
-      "approxTokens": 603,
+      "bytes": 2794,
+      "approxTokens": 699,
       "relatedTools": [
         "browser-workbench",
         "skill",
@@ -64,7 +67,7 @@
         "mcp",
         "cli"
       ],
-      "sha256": "7ee95d0cb8fdafc797d8755577b5a05343d53457e0910670b2ae57b009562fd1"
+      "sha256": "27add18ff8503c351798f56573948bf1b4d72244b650517f46e57ed0719f2069"
     },
     {
       "id": "methodology-index",
@@ -91,18 +94,21 @@
       "packs": [
         "core",
         "business-brief",
+        "engineering-spec",
+        "regulated-comms",
         "literary-essay",
-        "deck-and-ui"
+        "deck-and-ui",
+        "executive-deck"
       ],
-      "bytes": 913,
-      "approxTokens": 228,
+      "bytes": 923,
+      "approxTokens": 231,
       "relatedTools": [
         "skill",
         "plugin",
         "cli",
         "mcp"
       ],
-      "sha256": "45b28bc4e831547e51dab225f577898d8a8cfa5e99a7b091c5a1ec968ef15eef"
+      "sha256": "9f518081a00f1a378c0c605cc0dfd345e4e62026f7e9cdf78b7714f3c3c075da"
     },
     {
       "id": "methodology-deletion-test",
@@ -136,7 +142,7 @@
         "mcp",
         "browser-workbench"
       ],
-      "sha256": "5178ecf1d37c77392fce39b200da4b9d6a634690ebdc0eabf24dbc692e3db162"
+      "sha256": "53fb4ba3bc0ff31de87be419862e770f0a4817daa378babe44d093c52f1f656b"
     },
     {
       "id": "methodology-anti-pattern-map",
@@ -164,16 +170,19 @@
       "packs": [
         "core",
         "business-brief",
+        "engineering-spec",
+        "regulated-comms",
         "literary-essay",
-        "deck-and-ui"
+        "deck-and-ui",
+        "executive-deck"
       ],
-      "bytes": 1752,
-      "approxTokens": 438,
+      "bytes": 2037,
+      "approxTokens": 509,
       "relatedTools": [
         "cli",
         "mcp"
       ],
-      "sha256": "62bf59933bf64577ef34e0d502c9bd2711fd99be8f889981a97850172d446af0"
+      "sha256": "a217e28aebc1dff5ad99579f8a93d4264a8c0d70fdee6faca907b67c1fbc69d9"
     },
     {
       "id": "methodology-positive-divergence",
@@ -201,13 +210,13 @@
         "literary-essay",
         "deck-and-ui"
       ],
-      "bytes": 1976,
-      "approxTokens": 494,
+      "bytes": 1947,
+      "approxTokens": 487,
       "relatedTools": [
         "browser-workbench",
         "skill"
       ],
-      "sha256": "c4592d99d9efe4092c1f062d522e72b8e7c962e62b8c28ce2328b561133e8992"
+      "sha256": "7c289bf21f79b16c9dbde592387425e85acfcf99bd0f8a8b2a89e13e2981d510"
     },
     {
       "id": "methodology-brand-voice",
@@ -232,16 +241,19 @@
       "packs": [
         "core",
         "business-brief",
+        "engineering-spec",
+        "regulated-comms",
         "literary-essay",
-        "deck-and-ui"
+        "deck-and-ui",
+        "executive-deck"
       ],
-      "bytes": 7913,
-      "approxTokens": 1978,
+      "bytes": 7398,
+      "approxTokens": 1850,
       "relatedTools": [
         "browser-workbench",
         "cli"
       ],
-      "sha256": "d9ed3297ad6545b99a146c013e9a0b15d051184a58dbfa7ab42694922258c506"
+      "sha256": "5d70cdba943c734f704de906740cd591593d8a9a289678900b6cce7d1b12ce98"
     },
     {
       "id": "methodology-design-system",
@@ -266,13 +278,13 @@
         "core",
         "deck-and-ui"
       ],
-      "bytes": 1896,
-      "approxTokens": 474,
+      "bytes": 1907,
+      "approxTokens": 477,
       "relatedTools": [
         "browser-workbench",
         "cli"
       ],
-      "sha256": "6c0a214de80e3296d82ca93f4ed5d063324ef67bb979bf4a8e1dcf2c67398a13"
+      "sha256": "c9c83863d5b1d43d7009b2abd045d71689e40e29b8f7f9e4d69b0dd6876e59ba"
     },
     {
       "id": "cases-index",
@@ -300,8 +312,11 @@
       "packs": [
         "core",
         "business-brief",
+        "engineering-spec",
+        "regulated-comms",
         "literary-essay",
-        "deck-and-ui"
+        "deck-and-ui",
+        "executive-deck"
       ],
       "bytes": 586,
       "approxTokens": 147,
@@ -310,7 +325,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "bbbefb6f4b48d64e35afd998a752d8d37fa3cac4e2697dd858a130041528de5d"
+      "sha256": "315cea435dd9efdcb1fc808856e0abf502d304012e980da814701c40d35ffbf7"
     },
     {
       "id": "cases-copy-contrasts",
@@ -338,17 +353,20 @@
       "packs": [
         "core",
         "business-brief",
+        "engineering-spec",
+        "regulated-comms",
         "literary-essay",
-        "deck-and-ui"
+        "deck-and-ui",
+        "executive-deck"
       ],
-      "bytes": 8091,
-      "approxTokens": 2023,
+      "bytes": 11114,
+      "approxTokens": 2779,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp"
       ],
-      "sha256": "a96623b6daaa6aeaf987a8b5c545a52f0560bc8e317f51f7f1b7a704f13d2876"
+      "sha256": "67eaededad244b1496357eb5e50db2ecbf5bcdf6948a600ba04a46dc28f80688"
     },
     {
       "id": "cases-dogfood-audit",
@@ -380,7 +398,7 @@
         "cli",
         "browser-workbench"
       ],
-      "sha256": "54cc133ddc0877ab8c0c730a3eead34bcd5bd93253672d0c413fcaa503e440c5"
+      "sha256": "9e9392941e5d8b877456a96cb5391c377c628c140a268c1d79edba9736172f91"
     },
     {
       "id": "cases-ui-specimens",
@@ -409,7 +427,7 @@
       "relatedTools": [
         "browser-workbench"
       ],
-      "sha256": "17bfdf7c0df2ea92a96dbfb011eb48ea1c09791885e5695d5a9d81796e3f4c8f"
+      "sha256": "50fcbaab30838ff79bb0974eaa453483ef6c68e28891f883fbfea794176bc936"
     },
     {
       "id": "tools-index",
@@ -437,11 +455,14 @@
       "packs": [
         "core",
         "business-brief",
+        "engineering-spec",
+        "regulated-comms",
         "literary-essay",
-        "deck-and-ui"
+        "deck-and-ui",
+        "executive-deck"
       ],
-      "bytes": 1431,
-      "approxTokens": 358,
+      "bytes": 1900,
+      "approxTokens": 475,
       "relatedTools": [
         "browser-workbench",
         "skill",
@@ -449,7 +470,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "5659df3d0ca2b5b36d03a6cd4ddfb1eddc638e5e4922a19829012d669c4c8578"
+      "sha256": "4c62d6bac12e9ee47c927191c13b0c7a19f93cf8619fa627b38f2191141db8e2"
     },
     {
       "id": "tools-skill",
@@ -478,17 +499,176 @@
       "packs": [
         "core",
         "business-brief",
+        "engineering-spec",
+        "regulated-comms",
         "literary-essay",
-        "deck-and-ui"
+        "deck-and-ui",
+        "executive-deck"
       ],
-      "bytes": 8323,
-      "approxTokens": 2081,
+      "bytes": 2752,
+      "approxTokens": 688,
       "relatedTools": [
         "skill",
         "cli",
         "mcp"
       ],
-      "sha256": "3743169c268c1704f791c1d1aef325ce8fa302a771888a3ea2eda3bc0d7b99cc"
+      "sha256": "882cb88b1a5451468904e16c59c468f7aaae278f62a1100b5a1f5041e2b80bab"
+    },
+    {
+      "id": "tools-skill-ref-business-and-rfc",
+      "pillar": "tools",
+      "kind": "skill-reference",
+      "title": {
+        "en": "Skill Reference: Business Briefs, RFCs & Postmortems",
+        "zh": "Skill 本地参考卡：工作文档与研发复盘"
+      },
+      "path": "/tools/references/business-and-rfc.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "jsx",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "engineering-spec",
+        "regulated-comms",
+        "literary-essay",
+        "deck-and-ui",
+        "executive-deck"
+      ],
+      "bytes": 1978,
+      "approxTokens": 495,
+      "relatedTools": [
+        "skill",
+        "cli"
+      ],
+      "sha256": "99f66e817c4370e76203097921671376b1f447fafe2d4c7cb4afc6e9fca5af01"
+    },
+    {
+      "id": "tools-skill-ref-editorial-and-essay",
+      "pillar": "tools",
+      "kind": "skill-reference",
+      "title": {
+        "en": "Skill Reference: Editorial & Literary Writing",
+        "zh": "Skill 本地参考卡：随笔与长文"
+      },
+      "path": "/tools/references/editorial-and-essay.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "jsx",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "engineering-spec",
+        "regulated-comms",
+        "literary-essay",
+        "deck-and-ui",
+        "executive-deck"
+      ],
+      "bytes": 1598,
+      "approxTokens": 400,
+      "relatedTools": [
+        "skill",
+        "cli"
+      ],
+      "sha256": "9b89a1d156351160d7c267f59dcb591704c8c94de3c2f25be60f30f2165ccb72"
+    },
+    {
+      "id": "tools-skill-ref-web-ui-and-deck",
+      "pillar": "tools",
+      "kind": "skill-reference",
+      "title": {
+        "en": "Skill Reference: Web UI & Slide Decks",
+        "zh": "Skill 本地参考卡：网页与演示文稿"
+      },
+      "path": "/tools/references/web-ui-and-deck.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "jsx",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "engineering-spec",
+        "regulated-comms",
+        "literary-essay",
+        "deck-and-ui",
+        "executive-deck"
+      ],
+      "bytes": 2100,
+      "approxTokens": 525,
+      "relatedTools": [
+        "skill",
+        "cli"
+      ],
+      "sha256": "ab44f799a229beed4a4b794a6d18f4abc49466f425c955ea5fac9160f950be2b"
+    },
+    {
+      "id": "tools-skill-ref-regulated-and-precision",
+      "pillar": "tools",
+      "kind": "skill-reference",
+      "title": {
+        "en": "Skill Reference: Regulated External Comms & Rewrite Precision",
+        "zh": "Skill 本地参考卡：对外合规与改写精度"
+      },
+      "path": "/tools/references/regulated-and-precision.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "css",
+        "jsx",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "core",
+        "business-brief",
+        "engineering-spec",
+        "regulated-comms",
+        "literary-essay",
+        "deck-and-ui",
+        "executive-deck"
+      ],
+      "bytes": 1950,
+      "approxTokens": 488,
+      "relatedTools": [
+        "skill",
+        "cli"
+      ],
+      "sha256": "1d33677d0039967a6b141e768eb14fc42f6850f6acc8f7cbc8eeb229c8865279"
     },
     {
       "id": "tools-prompts",
@@ -513,8 +693,11 @@
       "packs": [
         "core",
         "business-brief",
+        "engineering-spec",
+        "regulated-comms",
         "literary-essay",
-        "deck-and-ui"
+        "deck-and-ui",
+        "executive-deck"
       ],
       "bytes": 952,
       "approxTokens": 238,
@@ -522,7 +705,7 @@
         "browser-workbench",
         "skill"
       ],
-      "sha256": "ea2280904892a08bf6de4eeef822f7bf0dcb89367b4aae93933eeeb28043f7a3"
+      "sha256": "9071e37c43e92aa6fe5af5887d443cda6cd7a1d6f8a109e55cf01e7e3e8956e5"
     },
     {
       "id": "tools-cli-hooks",
@@ -550,15 +733,18 @@
       "packs": [
         "core",
         "business-brief",
+        "engineering-spec",
+        "regulated-comms",
         "literary-essay",
-        "deck-and-ui"
+        "deck-and-ui",
+        "executive-deck"
       ],
-      "bytes": 2191,
-      "approxTokens": 548,
+      "bytes": 2724,
+      "approxTokens": 681,
       "relatedTools": [
         "cli"
       ],
-      "sha256": "3278bf6fe96654d6ab9adb58bd1c330e0fb545d2f34c3bbe0d2a674c6d958994"
+      "sha256": "89d070a00829d4944b5bd4647558fd2dac337b6d7dddbc060a8c56c59e8e9c50"
     },
     {
       "id": "tools-mcp-sdk-api",
@@ -587,16 +773,19 @@
       "packs": [
         "core",
         "business-brief",
+        "engineering-spec",
+        "regulated-comms",
         "literary-essay",
-        "deck-and-ui"
+        "deck-and-ui",
+        "executive-deck"
       ],
-      "bytes": 3137,
-      "approxTokens": 784,
+      "bytes": 3961,
+      "approxTokens": 990,
       "relatedTools": [
         "mcp",
         "cli"
       ],
-      "sha256": "84aa731c01c255b4619f09d4c44e3e90e7e19cb2b6dffeaa104632e85531e2b8"
+      "sha256": "9689fe1672a8b1ccc9c5d993a3e69330e3e3a9ed6f6dc91a80bfe0ed30498fd7"
     },
     {
       "id": "privacy-policy",
@@ -616,14 +805,14 @@
         "zh"
       ],
       "packs": [],
-      "bytes": 1830,
-      "approxTokens": 458,
+      "bytes": 2094,
+      "approxTokens": 524,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp"
       ],
-      "sha256": "492945a8f4693d9e5512d2bb4d0742500e30c3478bd4c5f66b6e79905206ba07"
+      "sha256": "9b19343595eefb6fef96fb83a4382e118d53771bbde8e63e2ff64f69ba2b6882"
     },
     {
       "id": "pack-core",
@@ -665,8 +854,8 @@
       "pillar": "methodology",
       "kind": "pack",
       "title": {
-        "en": "Pack: Business Brief & Technical Proposal (8 rules)",
-        "zh": "规则包：商业方案与技术简报（8 条）"
+        "en": "Pack: Business Brief & Technical Proposal (15 rules)",
+        "zh": "规则包：商业方案与技术简报（15 条）"
       },
       "path": "/packs/business-brief.md",
       "modalities": [
@@ -683,22 +872,84 @@
       "packs": [
         "business-brief"
       ],
-      "bytes": 8275,
-      "approxTokens": 2069,
+      "bytes": 16605,
+      "approxTokens": 4151,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp"
       ],
-      "sha256": "2b2be94739077c1a6c07e01f62395d3ec96b201d5f64fd7d6184a4aa42bf4445"
+      "sha256": "38bcd241f29077603c50c62d6140ca48e7f1d455f534188eeb55119749d6f445"
+    },
+    {
+      "id": "pack-engineering-spec",
+      "pillar": "methodology",
+      "kind": "pack",
+      "title": {
+        "en": "Pack: Engineering RFC, PR & Postmortem (3 rules)",
+        "zh": "规则包：研发文档、PR 与故障复盘（3 条）"
+      },
+      "path": "/packs/engineering-spec.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "docx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "engineering-spec"
+      ],
+      "bytes": 3414,
+      "approxTokens": 854,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "a2adf0747c4152d1e61a817279806c76b3362ea71502489015705858d49710cd"
+    },
+    {
+      "id": "pack-regulated-comms",
+      "pillar": "methodology",
+      "kind": "pack",
+      "title": {
+        "en": "Pack: External & Regulated Communications (2 rules)",
+        "zh": "规则包：对外发布与严谨合规（2 条）"
+      },
+      "path": "/packs/regulated-comms.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "regulated-comms"
+      ],
+      "bytes": 2574,
+      "approxTokens": 644,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "4d3a83c7ba2822cadf0e81d1e171a91c1b9221122965a55c50a3c624671b8935"
     },
     {
       "id": "pack-literary-essay",
       "pillar": "methodology",
       "kind": "pack",
       "title": {
-        "en": "Pack: Literary Essay & Longform Narrative (5 rules)",
-        "zh": "规则包：散文随笔与深度非虚构（5 条）"
+        "en": "Pack: Literary Essay & Longform Narrative (8 rules)",
+        "zh": "规则包：散文随笔与深度非虚构（8 条）"
       },
       "path": "/packs/literary-essay.md",
       "modalities": [
@@ -714,14 +965,14 @@
       "packs": [
         "literary-essay"
       ],
-      "bytes": 5131,
-      "approxTokens": 1283,
+      "bytes": 8195,
+      "approxTokens": 2049,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp"
       ],
-      "sha256": "38a194d80bf411f941617bd801aaf6e16ddf2d46ad416d5ca9acfe2ef299823c"
+      "sha256": "12fe5dc5688aaaecc0c52d5bbb3f077ba8fda5af91406d52ade4f7faa304685c"
     },
     {
       "id": "pack-deck-and-ui",
@@ -754,6 +1005,36 @@
         "mcp"
       ],
       "sha256": "3b1f69f5536aae5e23014d62cc3e394637059508fbee4af758d794385457cc39"
+    },
+    {
+      "id": "pack-executive-deck",
+      "pillar": "methodology",
+      "kind": "pack",
+      "title": {
+        "en": "Pack: Executive Slide Deck & Board Readout (2 rules)",
+        "zh": "规则包：汇报 PPT 与管理层简报（2 条）"
+      },
+      "path": "/packs/executive-deck.md",
+      "modalities": [
+        "markdown",
+        "pptx",
+        "html"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "executive-deck"
+      ],
+      "bytes": 2344,
+      "approxTokens": 586,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "7c1866f9ba5719423ab74b065c730a6a6ca6950eeeb092a264bb7a6b6476dc26"
     },
     {
       "id": "rule-unfilled-placeholder",
@@ -1130,6 +1411,377 @@
       "sha256": "36d5957e83132e575fd7a6bec7f4625f67886abe9e12e213711fc67fb5eb7d85"
     },
     {
+      "id": "rule-cooccurrence-slop-cluster",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: cooccurrence-slop-cluster",
+        "zh": "规则：cooccurrence-slop-cluster"
+      },
+      "path": "/rules/cooccurrence-slop-cluster.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "business-brief"
+      ],
+      "bytes": 1464,
+      "approxTokens": 366,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "a594d27d1d231c0230f70be6d42c79978d2e8467a53f88752c3d241905b5b5ac"
+    },
+    {
+      "id": "rule-semicolon-tricolon",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: semicolon-tricolon",
+        "zh": "规则：semicolon-tricolon"
+      },
+      "path": "/rules/semicolon-tricolon.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "business-brief"
+      ],
+      "bytes": 1184,
+      "approxTokens": 296,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "132e04baaadb60a69defedead006f329b2139f9b30b8c36fc09e0fc150bf454f"
+    },
+    {
+      "id": "rule-rhetorical-qa-cadence",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: rhetorical-qa-cadence",
+        "zh": "规则：rhetorical-qa-cadence"
+      },
+      "path": "/rules/rhetorical-qa-cadence.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "business-brief"
+      ],
+      "bytes": 1232,
+      "approxTokens": 308,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "67d2606566d516eea159e893d96827db7c967a545b145aee64b4a028093d53c0"
+    },
+    {
+      "id": "rule-comma-chain-runon",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: comma-chain-runon",
+        "zh": "规则：comma-chain-runon"
+      },
+      "path": "/rules/comma-chain-runon.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "business-brief"
+      ],
+      "bytes": 1230,
+      "approxTokens": 308,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "9e2cca5bd9f6db7497f2c2d2370220ba3e7567e16318de1f98b19023e6f153fb"
+    },
+    {
+      "id": "rule-narrative-sandwich-frame",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: narrative-sandwich-frame",
+        "zh": "规则：narrative-sandwich-frame"
+      },
+      "path": "/rules/narrative-sandwich-frame.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "business-brief"
+      ],
+      "bytes": 1620,
+      "approxTokens": 405,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "c18ba1ef98ad77c09147e5c0701409de17d15f5cde6633eff0a2a18273bbb7df"
+    },
+    {
+      "id": "rule-template-skeleton-echo",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: template-skeleton-echo",
+        "zh": "规则：template-skeleton-echo"
+      },
+      "path": "/rules/template-skeleton-echo.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "business-brief"
+      ],
+      "bytes": 1394,
+      "approxTokens": 349,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "3bf90999e735c79dcde7c7beff793b5883833bbe361780aa4ad6a3577aeb359a"
+    },
+    {
+      "id": "rule-low-burstiness-vapor",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: low-burstiness-vapor",
+        "zh": "规则：low-burstiness-vapor"
+      },
+      "path": "/rules/low-burstiness-vapor.md",
+      "modalities": [
+        "markdown",
+        "text"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "business-brief"
+      ],
+      "bytes": 1586,
+      "approxTokens": 397,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "20b1a35d8ad1c166a006c6f9d683f73c5693cc6dabac433f98a560952add7dea"
+    },
+    {
+      "id": "rule-eng-pr-diff-parrot",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: eng-pr-diff-parrot",
+        "zh": "规则：eng-pr-diff-parrot"
+      },
+      "path": "/rules/eng-pr-diff-parrot.md",
+      "modalities": [
+        "markdown",
+        "text"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "engineering-spec"
+      ],
+      "bytes": 1236,
+      "approxTokens": 309,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "adf64eb0d35e29fa7307b26a76dfb78e3484e7196862eb3bf6e768c10a4f69fd"
+    },
+    {
+      "id": "rule-eng-shallow-root-cause",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: eng-shallow-root-cause",
+        "zh": "规则：eng-shallow-root-cause"
+      },
+      "path": "/rules/eng-shallow-root-cause.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "docx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "engineering-spec"
+      ],
+      "bytes": 1146,
+      "approxTokens": 287,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "22067fba51a7fec380bf2b77b4f9ac13526ac17b83b5fc3417f44f5a0b03bc4b"
+    },
+    {
+      "id": "rule-eng-vague-action-item",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: eng-vague-action-item",
+        "zh": "规则：eng-vague-action-item"
+      },
+      "path": "/rules/eng-vague-action-item.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "docx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "engineering-spec"
+      ],
+      "bytes": 1154,
+      "approxTokens": 289,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "95a019f8e14a8bf7714090821c419ef4fe37e09faef577b9c99d174ce4c03a7f"
+    },
+    {
+      "id": "rule-reg-unsubstantiated-superlative",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: reg-unsubstantiated-superlative",
+        "zh": "规则：reg-unsubstantiated-superlative"
+      },
+      "path": "/rules/reg-unsubstantiated-superlative.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "regulated-comms"
+      ],
+      "bytes": 1286,
+      "approxTokens": 322,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "0ea096ab03d4a30f7272319f8dbe90cbdc13567b4b0b34ea4441cd05e1aa46b3"
+    },
+    {
+      "id": "rule-reg-unanchored-multiplier",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: reg-unanchored-multiplier",
+        "zh": "规则：reg-unanchored-multiplier"
+      },
+      "path": "/rules/reg-unanchored-multiplier.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "regulated-comms"
+      ],
+      "bytes": 1209,
+      "approxTokens": 302,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "c85d4ca7be4724d84419afba8565747a7973ad08d116bd396284275aad2c26e5"
+    },
+    {
       "id": "rule-zh-essay-moralizing-ending",
       "pillar": "cases",
       "kind": "rule",
@@ -1280,6 +1932,99 @@
         "mcp"
       ],
       "sha256": "5f94365c25922e0d6579ab69b955db83c023eecb4cc10bdbd3fb709b77650634"
+    },
+    {
+      "id": "rule-literary-semicolon-tricolon",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: literary-semicolon-tricolon",
+        "zh": "规则：literary-semicolon-tricolon"
+      },
+      "path": "/rules/literary-semicolon-tricolon.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "literary-essay"
+      ],
+      "bytes": 1205,
+      "approxTokens": 301,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "5ffed1330226b566f69f2f402733eaae540f844d2c30986ea7e37519d5bd9c12"
+    },
+    {
+      "id": "rule-literary-rhetorical-qa",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: literary-rhetorical-qa",
+        "zh": "规则：literary-rhetorical-qa"
+      },
+      "path": "/rules/literary-rhetorical-qa.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "literary-essay"
+      ],
+      "bytes": 1125,
+      "approxTokens": 281,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "4a55ad1190a909fb48ec14c9687bdb985b53b91b4014fe43248098ff8294f455"
+    },
+    {
+      "id": "rule-literary-narrative-frame",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: literary-narrative-frame",
+        "zh": "规则：literary-narrative-frame"
+      },
+      "path": "/rules/literary-narrative-frame.md",
+      "modalities": [
+        "markdown",
+        "text",
+        "html",
+        "docx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "literary-essay"
+      ],
+      "bytes": 1328,
+      "approxTokens": 332,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "9af32b539fc21bd924ca8422b1affb2444554a77dd336894f3b09c224bbdfcf4"
     },
     {
       "id": "rule-slide-word-wall",
@@ -1513,6 +2258,63 @@
       "sha256": "d8eebdb90ec6d25f63a282b1d9772111dfa81fb1429758e597d6cac440a55eb6"
     },
     {
+      "id": "rule-slide-process-not-finding-title",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: slide-process-not-finding-title",
+        "zh": "规则：slide-process-not-finding-title"
+      },
+      "path": "/rules/slide-process-not-finding-title.md",
+      "modalities": [
+        "markdown",
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "executive-deck"
+      ],
+      "bytes": 1092,
+      "approxTokens": 273,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "47532a9af037442a4503d2212a6d37445b5fe6a622067f4474075a18975b3ce7"
+    },
+    {
+      "id": "rule-pptx-layout-monotony",
+      "pillar": "cases",
+      "kind": "rule",
+      "title": {
+        "en": "Rule: pptx-layout-monotony",
+        "zh": "规则：pptx-layout-monotony"
+      },
+      "path": "/rules/pptx-layout-monotony.md",
+      "modalities": [
+        "pptx"
+      ],
+      "languages": [
+        "en",
+        "zh"
+      ],
+      "packs": [
+        "executive-deck"
+      ],
+      "bytes": 1241,
+      "approxTokens": 310,
+      "relatedTools": [
+        "browser-workbench",
+        "cli",
+        "mcp"
+      ],
+      "sha256": "8d7a7457bb40385b9991c15a3deac71826e06ed0c284e78e67a65b70d39e1e73"
+    },
+    {
       "id": "task-business-doc",
       "pillar": "methodology",
       "kind": "task-bundle",
@@ -1535,15 +2337,15 @@
         "core",
         "business-brief"
       ],
-      "bytes": 3319,
-      "approxTokens": 830,
+      "bytes": 4686,
+      "approxTokens": 1172,
       "relatedTools": [
         "browser-workbench",
         "skill",
         "cli",
         "mcp"
       ],
-      "sha256": "46e68ae876ffd808e43c1b3d2386a06a37063027bc572c8c25e8b02c86324ba9"
+      "sha256": "70ef472a3607f477fef44c5d68f7a970b402add8b2ad16fe5ebfb795db1164c0"
     },
     {
       "id": "task-web-and-deck",
@@ -1577,7 +2379,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "746f366f2d5daf1beb0f203d936396755042e6dd4090b5b22de3dd772002187d"
+      "sha256": "18f4dc57e72a8d105a528f4b405b962d4a83a564fb623b5547ef547f4a308817"
     },
     {
       "id": "task-editorial-writing",
@@ -1602,15 +2404,15 @@
         "core",
         "literary-essay"
       ],
-      "bytes": 2871,
-      "approxTokens": 718,
+      "bytes": 3455,
+      "approxTokens": 864,
       "relatedTools": [
         "browser-workbench",
         "skill",
         "cli",
         "mcp"
       ],
-      "sha256": "d5385b36ebbb3f66d5757bffb8287b66e8828cc4604a62970999c285efdc37eb"
+      "sha256": "f4eaa6af1d080b372d49d7dfc96b411c48e0aec282ce28f99158a55c4692d36f"
     },
     {
       "id": "task-pre-release-gate",
@@ -1645,7 +2447,7 @@
         "cli",
         "mcp"
       ],
-      "sha256": "f49d6b788dd8508e08e9fc8857df1e504d8dbf3d06d6149c02db06aa411c72ce"
+      "sha256": "d90a877436d76d6f5377369d62c9acad1cf13a7402d14f75749ba3d567e2ea70"
     },
     {
       "id": "awesome-anti-slop-md",
@@ -1669,12 +2471,12 @@
         "zh"
       ],
       "packs": [],
-      "bytes": 21537,
-      "approxTokens": 5384,
+      "bytes": 21555,
+      "approxTokens": 5389,
       "relatedTools": [
         "browser-workbench"
       ],
-      "sha256": "cb9bfe7e9b5890e869dd1a8a5cb4700962549dc50ad704c09807e05a0e96a888"
+      "sha256": "8dfec60fe97578993c734e2e8eceb2ec9f59b1fcbf9e422bff875af509c33192"
     },
     {
       "id": "roadmap-en",
@@ -1702,18 +2504,21 @@
       "packs": [
         "core",
         "business-brief",
+        "engineering-spec",
+        "regulated-comms",
         "literary-essay",
-        "deck-and-ui"
+        "deck-and-ui",
+        "executive-deck"
       ],
-      "bytes": 10430,
-      "approxTokens": 2608,
+      "bytes": 12101,
+      "approxTokens": 3025,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp",
         "skill"
       ],
-      "sha256": "219e20b324e29eacb30a1902315165616ffd441330365de3e57697a8147a8e13"
+      "sha256": "baaee618c00f3ba54e1704f316087f0728ab26357f03f940d311675fada2bc2d"
     }
   ]
 }

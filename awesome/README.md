@@ -103,7 +103,7 @@ To filter the list offline, open [dislop.com/awesome](https://dislop.com/awesome
 | [sam-paech/slop-forensics](https://github.com/sam-paech/slop-forensics) | `prose` / `en` | yes | 374★ · 2025-11-01 | Statistical forensics toolkit for mining overrepresented words and trigrams in LLM corpora. |
 | [eric-tramel/slop-guard](https://github.com/eric-tramel/slop-guard) | `prose` / `en` | yes | 168★ · 2026-07-09 | Rule-driven 0-100 English prose scorer with no LLM judge. |
 | [FeedHive/ai-slop-detector](https://github.com/FeedHive/ai-slop-detector) | `prose` / `en` | yes | 113★ · 2026-10-12 | 120 English patterns across 9 categories, paired with a browser checker and an Agent Skill. |
-| [dislop-ai/dislop (this repo)](https://github.com/dislop-ai/dislop) | `multi-modal` / `multilingual` | yes | 1★ · 2026-11-21 | A red pen for AI-written drafts, decks, and pages: zero-dependency checks for EN/ZH prose, HTML/CSS/SVG, DOCX, PPTX, and PDF metadata, plus edit comparison, offline browser workbench, and MCP. |
+| [dislop-ai/dislop (this repo)](https://github.com/dislop-ai/dislop) | `multi-modal` / `multilingual` | yes | 2026-11-22 | Open-source zero-dependency anti-slop toolkit: ships 7 built-in packs, 5-axis rhythm telemetry, and zero-entropy fact verification across EN/ZH prose, HTML/CSS/JSX, DOCX, and PPTX, plus an offline browser workbench, Skill, and MCP. |
 
 ## UI, Design, and Diagrams
 

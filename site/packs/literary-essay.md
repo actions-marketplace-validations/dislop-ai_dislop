@@ -90,3 +90,51 @@ good: 冬至那天下了初雪，院子里的腊梅开了三朵；香气一直�
 ```
 
 Atomic card: [zh-halfwidth-punctuation.md](../rules/zh-halfwidth-punctuation.md)
+
+## `literary-semicolon-tricolon`
+- Tier: `taste` · Severity: `warning` · Family: `punctuation/tricolon`
+- Modalities: `markdown, text, html, docx`
+- EN: Balanced three-part semicolon sentence turns scene description into synthetic lyrical cadence.
+- ZH: 单句连续用两个及以上分号排比景物或情绪，带有明显的生成式散文腔。
+- Deletion Test (EN): Break the three-part balance into natural prose sentences and keep the one sensory detail that carries the scene.
+- Deletion Test (ZH): 打破工整的三段分号排比，改成长短自然的叙述句，留住最具体的一两处感官细节。
+
+```text
+bad:  街道两旁的树叶逐渐染上金黄；午后的阳光变得柔和而绵长；行人的衣领也悄然立了起来。
+trap: 树叶金黄。阳光柔和。衣领立起。
+good: 午后阳光柔和，街道两旁的树叶已经发黄，路过的行人把衣领立了起来。
+```
+
+Atomic card: [literary-semicolon-tricolon.md](../rules/literary-semicolon-tricolon.md)
+
+## `literary-rhetorical-qa`
+- Tier: `taste` · Severity: `warning` · Family: `punctuation/rhetorical-qa`
+- Modalities: `markdown, text, html, docx`
+- EN: Staged self-answered rhetorical question ('Why does ...? Because ...') lectures the reader instead of showing the scene.
+- ZH: 散文里出现自问自答式设问（`为什么……？因为……`），像主持词而非真实叙述。
+- Deletion Test (EN): Cut the rhetorical question and describe what actually happened in the scene.
+- Deletion Test (ZH): 删掉自问自答的铺陈，直接写现场发生了什么。
+
+```text
+bad:  At 6:30 a.m. he brewed a cup of pour-over coffee. Why does brewing pour-over coffee feel so grounding? Because the deliberate pace invites us to pause.
+trap: Warm water. Slow pour. Quiet pause.
+good: At 6:30 a.m. he brewed a cup of pour-over coffee.
+```
+
+Atomic card: [literary-rhetorical-qa.md](../rules/literary-rhetorical-qa.md)
+
+## `literary-narrative-frame`
+- Tier: `taste` · Severity: `warning` · Family: `structure/narrative-frame`
+- Modalities: `markdown, text, html, docx`
+- EN: Sweeping era opener ('In an era defined by...') or uplifting takeaway closer wraps a personal essay in an LLM template.
+- ZH: 以宏大时代背景起笔（`在快节奏的都市生活中……`）或未来式鸡汤收尾，给随笔套上了模板外壳。
+- Deletion Test (EN): Delete the opening era backdrop and the closing takeaway; start directly inside the concrete time, place, or object.
+- Deletion Test (ZH): 删掉开头`在当今/快节奏的时代`与结尾升华句，直接从具体时间、地点或器物写起。
+
+```text
+bad:  In an era defined by relentless notifications, the street stays quiet before seven except for the milk truck. Moving forward, protecting small pockets of stillness remains essential for living with intention.
+trap: Notifications beep. Milk truck passes. Stillness stays.
+good: Before seven the street stays quiet except for the milk truck.
+```
+
+Atomic card: [literary-narrative-frame.md](../rules/literary-narrative-frame.md)

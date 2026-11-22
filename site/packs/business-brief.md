@@ -141,3 +141,119 @@ good: `dislop` runs locally with no network calls, loads rules from plain JSON p
 ```
 
 Atomic card: [bold-lead-list-wall.md](../rules/bold-lead-list-wall.md)
+
+## `cooccurrence-slop-cluster`
+- Tier: `taste` · Severity: `warning` · Family: `lexicon/cooccurrence`
+- Modalities: `markdown, text, html, docx, pptx`
+- EN: Multiple subtle corporate/AI fluff verbs and modifiers co-occur in one low-evidence paragraph.
+- ZH: 同一低事实段落内密集堆叠多个弱套词组合（如`有效推动/持续优化/显著提升`或`leverage/streamline/robust`），冲淡了具体改动。
+- Deletion Test (EN): Do not swap one buzzword for another; replace the whole cluster with who changed what and the measured delta.
+- Deletion Test (ZH): 不要把一个套词换成另一个近义词；整片替换成具体改动、执行主体与实测变化。
+
+```text
+bad:  本次客服系统按工单紧急度拆成 3 级队列，旨在有效推动跨部门协同效率，持续优化客户交互体验，并进一步助力业务团队实现精细化运营，最终显著提升整体服务质量，首响时间从 110 秒降到 42 秒。
+trap: 客服系统升级不是功能叠加，而是首响从 110 秒降到 42 秒的服务跃升。
+good: 本次客服系统按工单紧急度拆成 3 级队列，平均首响时间从 110 秒降到 42 秒。
+```
+
+Atomic card: [cooccurrence-slop-cluster.md](../rules/cooccurrence-slop-cluster.md)
+
+## `semicolon-tricolon`
+- Tier: `taste` · Severity: `warning` · Family: `punctuation/tricolon`
+- Modalities: `markdown, text, html, docx, pptx`
+- EN: Three-part balanced semicolon pitch sentence reads like generated marketing cadence.
+- ZH: 单句内连续使用两个及以上分号构成三段对称排比，呈现典型 AI 推销腔。
+- Deletion Test (EN): Break the symmetry: split into plain sentences of unequal length or keep only the concrete behaviors.
+- Deletion Test (ZH): 打破三段工整对称：拆成长短不一的平实句子，或删掉充数的并列分句。
+
+```text
+bad:  前端把表单校验前置到输入时；后端将异步任务拆进独立队列；监控台实时追踪每笔超时请求。
+trap: 校验前置。任务异步。超时可追。
+good: 前端在输入时先做字段校验，后端把异步任务放进独立队列，监控台则负责追踪每笔超时请求。
+```
+
+Atomic card: [semicolon-tricolon.md](../rules/semicolon-tricolon.md)
+
+## `rhetorical-qa-cadence`
+- Tier: `taste` · Severity: `warning` · Family: `punctuation/rhetorical-qa`
+- Modalities: `markdown, text, html, docx, pptx`
+- EN: Formulaic self-answered rhetorical question ('Why...? Because...' / 'The result?') mimics LLM blog hooks.
+- ZH: 自问自答式设问套路（`为什么……？因为……``结果呢？`），带有明显生成式营销文节奏。
+- Deletion Test (EN): Delete the staged question and state the cause-and-effect directly in one sentence.
+- Deletion Test (ZH): 删掉摆拍式设问，直接在一句话里写出原因与结果。
+
+```text
+bad:  Why do internal dashboards collect dust after launch? Because they show vanity totals instead of next actions. The result? Teams export CSVs every Monday.
+trap: Dashboards fail. Numbers pile up. Teams export CSVs.
+good: Internal dashboards go unused when they show vanity totals without next actions, so teams end up exporting CSVs every Monday.
+```
+
+Atomic card: [rhetorical-qa-cadence.md](../rules/rhetorical-qa-cadence.md)
+
+## `comma-chain-runon`
+- Tier: `taste` · Severity: `info` · Family: `punctuation/comma-chain`
+- Modalities: `markdown, text, html, docx`
+- EN: Single sentence chains 5+ comma clauses in breathless LLM cadence.
+- ZH: 单句内连续串接 5 个及以上逗号分句，节奏平铺拖沓。
+- Deletion Test (EN): Split into 2–3 shorter sentences with a clear main verb in each, and drop redundant parallel clauses.
+- Deletion Test (ZH): 拆成 2 到 3 句主干清晰的短句，顺手删掉凑排比的空分句。
+
+```text
+bad:  通过建立跨部门沟通机制，明确周二评审与周五发版节点，优化内部评审流程，加强文档沉淀管理，完善接口超时预警体系，同步推进自动化落地，我们让团队交付过程更稳。
+trap: 建机制。明节点。优评审。强沉淀。
+good: 我们固定了周二评审和周五发版两个节点，并补齐了接口超时预警和自动化检查，交付过程稳定多了。
+```
+
+Atomic card: [comma-chain-runon.md](../rules/comma-chain-runon.md)
+
+## `narrative-sandwich-frame`
+- Tier: `taste` · Severity: `warning` · Family: `structure/narrative-frame`
+- Modalities: `markdown, text, html, docx`
+- EN: Macro-trend opener, future-facing closer, or dense transition-marker cluster ('Furthermore/Moreover/Additionally') follows the stock LLM essay sandwich.
+- ZH: 出现宏大趋势开场（`随着……的飞速发展`）、展望式升华收尾（`展望未来……`）或连接词堆叠（`此外/与此同时/不仅如此`），呈现典型 AI 三明治叙事壳。
+- Deletion Test (EN): Cut the opening trend preamble and closing cheerleading; start on the concrete fact or decision and end on the next action or limit.
+- Deletion Test (ZH): 切掉开头趋势帽和结尾展望帽，直接从具体事实或改动起笔，在下一步动作或边界条件处收束。
+
+```text
+bad:  随着人工智能技术的飞速发展，研发团队正面临效率变革。此外，我们在 11 月把 PR 静态检查接入了 CI。与此同时，配置错误提前被拦了下来。不仅如此，下周还会覆盖剩余 4 个仓库。展望未来，主动拥抱变化的团队必将赢得先机。
+trap: 时代变了。工具变了。协作也在变。
+good: 11 月我们把 PR 静态检查接入了 CI，配置错误会在合并前被拦下，下周计划覆盖剩余 4 个仓库。
+```
+
+Atomic card: [narrative-sandwich-frame.md](../rules/narrative-sandwich-frame.md)
+
+## `template-skeleton-echo`
+- Tier: `taste` · Severity: `warning` · Family: `structure/skeleton-echo`
+- Modalities: `markdown, text, html, docx`
+- EN: Three or more paragraphs or sentences repeat the exact same syntactic opener skeleton ('By <verb>ing...', '在……方面，', 'First/Second/Third/Finally').
+- ZH: 连续 3 个及以上段落或句子复用同一句首骨架（如`在……方面，``首先/其次/再次/最后``By …ing,`），结构像套模板填词。
+- Deletion Test (EN): Merge related points into natural prose with varied openings, or use a compact table if you are listing parallel specs.
+- Deletion Test (ZH): 把同构段落按因果或主次合并成自然段并变化句首；若是并列参数对照，直接改成简洁表格。
+
+```text
+bad:  在数据采集方面，系统接入了业务日志。
+
+在模型训练方面，团队定期更新权重。
+
+在结果应用方面，业务方通过看板查看波动。
+trap: 采数据。训模型。看看板。
+good: 系统接入业务日志后，团队定期更新模型权重，业务方直接在看板里查看指标波动。
+```
+
+Atomic card: [template-skeleton-echo.md](../rules/template-skeleton-echo.md)
+
+## `low-burstiness-vapor`
+- Tier: `taste` · Severity: `info` · Family: `statistics/monotony`
+- Modalities: `markdown, text`
+- EN: Multi-sentence passage combines robotically uniform sentence lengths (low burstiness CV < 0.24) with near-zero concrete anchors (numbers, dates, files, or verifiable actions).
+- ZH: 多句段落同时出现句长高度齐平（突发性变异系数 CV < 0.24）且几乎没有具体锚点（数字、时间、文件名或可核查动作），空泛同质感强。
+- Deletion Test (EN): Cut abstract summary sentences in half, vary sentence length naturally, and anchor every kept claim with a number, file, date, or concrete failure mode.
+- Deletion Test (ZH): 砍掉一半抽象概括句，拉开长短句节奏，并为保留的每条判断补上数字、文件、时间或真实边界。
+
+```text
+bad:  该方案注重用户体验的全面改善。系统架构保持了良好的扩展能力。团队协作形成了清晰的责任分工。日常运维建立了规范的处理流程。产品迭代围绕核心需求稳步推进。业务指标呈现出健康的增长态势。
+trap: 体验改善。架构扩展。分工清晰。运维规范。
+good: 本段暂未提供具体指标、改动文件或责任人，请先删去概括句，再由作者补入实测数据和变更项。
+```
+
+Atomic card: [low-burstiness-vapor.md](../rules/low-burstiness-vapor.md)
