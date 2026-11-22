@@ -10,6 +10,7 @@
   <a href="https://dislop.com">去 dislop.com 试试</a> ·
   <a href="./awesome/README.zh-CN.md">Awesome Anti-Slop 工具清单</a> ·
   <a href="./ROADMAP.zh-CN.md">路线图</a> ·
+  <a href="https://x.com/dislop_ai">X (@dislop_ai)</a> ·
   <a href="./LICENSE">Apache-2.0</a>
 </p>
 

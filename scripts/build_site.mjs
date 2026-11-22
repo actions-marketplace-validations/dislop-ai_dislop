@@ -1323,6 +1323,11 @@ Data is sent to \`dislop.com\` **only** when you explicitly click an AI button i
   - For anonymous web demos (5 credits/day), we keep an in-memory/ephemeral daily counter keyed by \`YYYY-MM-DD:<client-ip>\` that is pruned after the day ends.
   - Re-registering with the same email rotates and invalidates the previous token immediately.
 - **Confidential Drafts**: Never send confidential, regulated, or unreleased source documents to any hosted cloud endpoint; use the local offline CLI or local stdio MCP instead.
+
+## 3. Contact & Security Disclosures
+
+- **Support, account deletion & privacy inquiries**: \`hello@dislop.com\`
+- **Vulnerability & security reports**: \`security@dislop.com\`
 `,
 });
 
@@ -1867,6 +1872,7 @@ const awesomeHtml = `<!DOCTYPE html>
   <meta property="og:description" content="中英文去 AI 味工具、检查器、写作与设计规范、代码 PR 治理和论文清单，标签页离线筛选。">
   <meta property="og:image" content="https://dislop.com/assets/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@dislop_ai">
   <meta name="twitter:image" content="https://dislop.com/assets/og-card.png">
   <link rel="canonical" href="https://dislop.com/awesome/">
   <link rel="alternate" type="text/markdown" href="./index.md" title="Awesome Anti-Slop Markdown Directory">
@@ -1954,6 +1960,7 @@ ${awesomePreRenderedRows}
         <a href="./index.md">Markdown</a>
         <a href="../llms.txt">llms.txt</a>
         <a href="https://github.com/dislop-ai/dislop/blob/main/awesome/README.zh-CN.md" target="_blank" rel="noopener" id="awesome-gh-foot">GitHub</a>
+        <a href="https://x.com/dislop_ai" target="_blank" rel="noopener">X (@dislop_ai)</a>
       </div>
     </footer>
   </div>

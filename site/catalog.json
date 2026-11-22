@@ -805,14 +805,14 @@
         "zh"
       ],
       "packs": [],
-      "bytes": 2094,
-      "approxTokens": 524,
+      "bytes": 2267,
+      "approxTokens": 567,
       "relatedTools": [
         "browser-workbench",
         "cli",
         "mcp"
       ],
-      "sha256": "9b19343595eefb6fef96fb83a4382e118d53771bbde8e63e2ff64f69ba2b6882"
+      "sha256": "0325b686f79ffe8f91aae027cf3a32541931a73ccace111700e47290a537176d"
     },
     {
       "id": "pack-core",
