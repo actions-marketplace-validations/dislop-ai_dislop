@@ -1,7 +1,7 @@
 {
   "name": "dislop",
   "displayName": "dislop",
-  "description": "Offline anti-slop linter and Agent tool for Markdown, HTML/CSS/JSX, and docs (7 built-in packs, 42 rules, 0 uploads).",
+  "description": "Linter for AI Slop — helps you (and your agent) catch and fix AI-sounding text and layouts in docs and web UI (7 packs, 42 rules, offline).",
   "version": "0.6.2",
   "publisher": "dislop-ai",
   "license": "Apache-2.0",

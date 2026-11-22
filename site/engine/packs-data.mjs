@@ -612,8 +612,8 @@ export const PACKS_BY_ID = {
         ],
         "patterns": [
           "(?<![A-Za-z])(?:lorem ipsum|dolor sit amet)(?![A-Za-z])",
-          "\\[(?:insert|add|your|placeholder|tbd|todo)(?:\\s+[^\\]\\n]{1,50})?\\]",
-          "\\[(?:待补充|待填写|此处插入|占位符)\\]",
+          "\\[(?:insert|add|your|placeholder|tbd|todo)(?:\\s+[^\\]\\n]{1,50})?\\](?!\\s*\\()",
+          "\\[(?:待补充|待填写|此处插入|占位符)\\](?!\\s*\\()",
           "\\{\\{\\s*[A-Za-z_][A-Za-z0-9_.-]{0,40}\\s*\\}\\}",
           "【[^】\\n]{0,20}(?:待补充|待填写|此处插入|占位符)[^】\\n]{0,20}】",
           "(?:Click to add (?:title|subtitle|text)|单击此处添加(?:标题|副标题|文本))"
@@ -657,12 +657,14 @@ export const PACKS_BY_ID = {
         ],
         "patterns": [
           "(?:^|\\n)\\s*(?:Certainly|Sure|Absolutely|Of course|Happy to help|Glad to help)[!,.]?\\s+(?:[Hh]ere(?:'s| is| are)|[Bb]elow is)\\b",
+          "(?:^|\\n)\\s*Here\\s+(?:is|are)\\s+the\\s+(?:revised|updated|polished)\\s+",
           "\\bAs an AI(?: language model| assistant)?\\b",
           "\\bI hope this helps[!.]?",
           "\\bFeel free to (?:reach out|let me know|ask) if you (?:need|have) (?:anything|any (?:other |further )?questions)[!.]?",
           "(?:^|\\n)\\s*(?:好的|当然可以|没问题)[，,！!]?\\s*(?:以下|下面)是",
+          "(?:^|\\n)\\s*以下是为您(?:整理|撰写|润色|生成|修改)的",
           "(?:希望这对(?:你|您)有(?:所)?帮助|如果(?:你|您)(?:还有|需要)(?:任何|其他)?(?:问题|帮助)[，,]?请随时告诉我)[！!。.]?",
-          "\\b作为一个?\\s*AI(?:\\s*语言模型|\\s*助手)?",
+          "作为一个?\\s*AI(?:\\s*语言模型|\\s*助手)?",
           "\\[oaicite:\\d+\\]",
           "contentReference\\[oaicite:\\d+\\]",
           "【\\d+†[^】\\n]{1,40}】",
@@ -1075,10 +1077,10 @@ export const PACKS_BY_ID = {
         "exemplar": {
           "bad": "本次 PR 旨在通过重构连接池管理逻辑进一步提升系统的稳定性与可维护性。",
           "trap": "这不是一次普通的代码重构，而是连接池稳定性的底层重塑。",
-          "good": "修复 Redis 重连分支未释放旧句柄导致的连接泄漏（#412），压测 2 小时常驻连接数稳定在 64 以内。",
+          "good": "修复连接池重连分支未释放旧句柄导致的连接泄漏，避免长运行后连接耗尽。",
           "note": {
-            "en": "Name the leak trigger, issue number, and measured connection ceiling.",
-            "zh": "点明泄漏触发分支、单号与压测连接数上限。"
+            "en": "Name the concrete leak trigger and consequence instead of generic stability claims.",
+            "zh": "点明具体的泄漏触发分支与直接后果，不写空泛的稳定性套话。"
           },
           "source": "original"
         }

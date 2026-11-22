@@ -5,7 +5,9 @@ version: 0.6.2
 
 # Voice, Copy, and Visual Guide
 
-One rule covers every public word in `dislop`—the website, READMEs, CLI help, and release notes: **write like the person who built the tool talking to a colleague. Plain, relaxed, direct.**
+[简体中文](./brand-and-voice-guide.zh-CN.md) · [Product Brief](../PRODUCT.md)
+
+One rule covers every public word in `dislop`—the website, READMEs, CLI help, and release notes: **write like the person who built the tool talking to a colleague. Plain, relaxed, direct.** Public positioning, target users, selling points, and one-sentence pitch follow [PRODUCT.md](../PRODUCT.md).
 
 Do not sound corporate, do not try to impress or please the reader, and do not dress the tool up in a literary persona.
 
@@ -28,7 +30,7 @@ Strip the performance away and say what the tool actually does:
 ```text
 After (plain, direct):
 Catch the AI slop before you send it
-AI-written docs, slides, and web pages often leave behind chat replies, stock phrasing, crowded slides, or purple-pink template chrome. dislop only marks what looks off so you can edit it yourself.
+AI-written docs, slides, and web pages often leave behind chat replies, stock phrasing, crowded slides, or purple-pink template chrome. dislop marks what looks off locally so you or your agent can fix it, with optional Cloud MCP rewrites in the workbench.
 ```
 
 No metaphors, no quotable mic-drop at the end, and no three-way parallel bundle. A reader knows what it does in three seconds.
@@ -51,7 +53,7 @@ Andrej Karpathy's writing advice and READMEs (`nanoGPT`, `micrograd`) pair **80%
 | Surface | Avoid (AI-flavored / performative) | Use (plain English) |
 |---|---|---|
 | **Headline** | `Your draft, minus the slop.` | `Catch the AI slop before you send it` |
-| **Intro copy** | `dislop strikes what can't ship... the pen stays in your hand.` | `dislop only marks what looks off so you can edit it yourself.` |
+| **Intro copy** | `dislop strikes what can't ship... the pen stays in your hand.` | `dislop marks what looks off locally so you or your agent can fix it, with optional Cloud MCP rewrites.` |
 | **Clean check** | `Pass for press. 0 findings; protected spans stayed as written.` | `0 issues. Chat wrapper and stock phrasing removed.` |
 | **2nd-order slop** | `Sent back: displacement detected` | `Still flagged (1 issue). Old buzzwords are gone, replaced by a 'Not X, but Y' AI slogan.` |
 | **Directory name** | `Fellow travelers directory` | `Awesome list` / `Awesome Anti-Slop` |

@@ -1656,6 +1656,72 @@ html[lang^="zh"] .proof-lines {
   color: var(--ok);
 }
 
+/* Demos 2x2 Architectural Grid */
+.demos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: 1px solid var(--rule);
+  background-color: var(--sheet);
+}
+
+.demo-card {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--sheet);
+}
+
+.demo-card:nth-child(even) {
+  border-left: 1px solid var(--rule);
+}
+
+.demo-card:nth-child(n + 3) {
+  border-top: 1px solid var(--rule);
+}
+
+.demo-media {
+  background-color: var(--stage);
+  border-bottom: 1px solid var(--rule);
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.demo-media picture {
+  display: block;
+  width: 100%;
+}
+
+.demo-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+}
+
+.demo-caption {
+  padding: 14px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.demo-cap-title {
+  font-size: 0.94rem;
+  font-weight: 650;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.demo-cap-desc {
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
 /* Standard Content Sections */
 .section-block {
   padding: 52px 32px;
@@ -2599,8 +2665,15 @@ html[lang^="zh"] .proof-lines {
     border-top: 1px solid var(--rule);
   }
   .pricing-grid,
-  .cloud-forms-grid {
+  .cloud-forms-grid,
+  .demos-grid {
     grid-template-columns: 1fr;
+  }
+  .demo-card:nth-child(even) {
+    border-left: none;
+  }
+  .demo-card + .demo-card {
+    border-top: 1px solid var(--rule);
   }
   .filter-group {
     flex-wrap: nowrap;

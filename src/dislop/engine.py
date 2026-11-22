@@ -1410,6 +1410,14 @@ def audit_text(
                         while length > 1 and text[idx] == "\ufeff":
                             idx += 1
                             length -= 1
+                        if (
+                            rule.get("id") == "unfilled-placeholder"
+                            and text[idx] == "["
+                            and text[idx + length - 1] == "]"
+                            and idx + length < len(text)
+                            and text[idx + length] in "([:"
+                        ):
+                            continue
                         raw_hits.append({"index": idx, "length": length})
         elif probe == "negation-pivot":
             raw_hits = _probe_negation_pivot(zone_text, text)

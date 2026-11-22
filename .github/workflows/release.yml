@@ -153,6 +153,7 @@ jobs:
             NODE_AUTH_TOKEN="${BOOTSTRAP_NPM_TOKEN}" npm publish --access=public --provenance
           else
             rm -f "${NPM_CONFIG_USERCONFIG:-/nonexistent}" ~/.npmrc
+            unset NODE_AUTH_TOKEN NPM_CONFIG_USERCONFIG
             npm publish --access=public --provenance
           fi
 

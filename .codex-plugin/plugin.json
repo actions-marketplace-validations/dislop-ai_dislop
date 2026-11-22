@@ -1,7 +1,7 @@
 {
   "name": "dislop",
   "version": "0.6.2",
-  "description": "Zero-dependency anti-slop Skill, CLI, and MCP linter for AI-written docs, Word/PowerPoint decks, and web pages (7 built-in packs, 42 rules, 53 patterns, and bundled 15 KB Pocket ML).",
+  "description": "Linter for AI Slop. Combines vetted community rules (7 packs, 42 rules, 53 patterns) across Skill, CLI, and MCP so your agent catches and fixes AI slop in docs, Word/PPT, and web UI.",
   "author": {
     "name": "dislop-ai",
     "url": "https://dislop.com"
@@ -25,8 +25,8 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "dislop",
-    "shortDescription": "Catch AI slop before shipping",
-    "longDescription": "Zero-dependency anti-slop Skill, CLI, and MCP linter for AI-written docs, Word/PowerPoint decks, and web pages (7 built-in packs, 42 rules, 53 patterns, and bundled 15 KB Pocket ML).",
+    "shortDescription": "Linter for AI Slop",
+    "longDescription": "Linter for AI Slop. Combines vetted community rules (7 packs, 42 rules, 53 patterns) across Skill, CLI, and MCP so your agent catches and fixes AI slop in docs, Word/PPT, and web UI.",
     "developerName": "dislop-ai",
     "category": "Productivity",
     "capabilities": [

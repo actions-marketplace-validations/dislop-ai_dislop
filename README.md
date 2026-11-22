@@ -16,7 +16,7 @@
   <a href="./LICENSE">Apache-2.0</a>
 </p>
 
-`dislop` gathers proven anti-slop writing habits, web and slide design rules, an offline zero-dependency checker, and 87 vetted tools in one repository. You and your AI agent can clear AI slop before shipping docs, Word or PowerPoint files, or web pages.
+`dislop` is a dedicated **Linter for AI Slop**. It combines vetted community anti-slop rules, corpus findings, and 87 curated tools so you (and your agent) can catch and fix AI-sounding text and template layouts before sharing docs, web pages, or slides. Connects in one command to coding agents (Codex, Claude Code, Antigravity, Cursor), office agents (Claude Cowork, WorkBuddy, Qwen), and editors, and can run completely offline locally.
 
 Here is a short launch note straight from a model:
 
@@ -34,7 +34,11 @@ Certainly! Here is the launch note. It's worth noting that exports are a game-ch
 
 If you rewrite it into a second-order AI slogan (`This isn't just an upgrade — it's a new standard.`), running `dislop check` catches that too. Clean it up into plain prose and `dislop check` exits `0`.
 
-That's it. It reads Markdown, plain text, HTML/CSS/JSX, Word (`.docx`), and PowerPoint (`.pptx`). The browser workbench at [dislop.com](https://dislop.com/?lang=en) and the Node.js, Python, and local stdio MCP runtimes all run the same **7 built-in packs (`42` rules)**, 5-axis rhythm telemetry, and offline voice extraction 100% locally with zero uploads; the CLI and local MCP also add extended pattern-bank probes (`--patterns`), the bundled `14.6 KB` Pocket ML ensemble (`--ml`), and hardware-aware optional local model setup (`dislop model`). When you want zero-local-setup connectors or one-click self-healing LLM rewriting, the optional hosted cloud MCP (`https://dislop.com/mcp`) is one click away.
+<p align="center">
+  <img src="./assets/demos/proof-cycle-en-v1.gif" alt="dislop checking a launch note across 3 states: flagging chatbot artifact and filler, catching a second-order slogan, and passing with exit 0" width="840">
+</p>
+
+That's it. It inspects Markdown, plain text, HTML/CSS/JSX, Word (`.docx`), and PowerPoint (`.pptx`). The CLI and local plugins run completely offline with zero uploads. They share the same **7 built-in packs (`42` rules)**, 5-axis rhythm telemetry, offline style extraction, extended pattern probes (`--patterns`), bundled `14.6 KB` Pocket ML (`--ml`), and hardware-aware optional local models (`dislop model`). At [dislop.com](https://dislop.com/?lang=en), the browser workbench switches between local rule checks and Cloud MCP mode, and you can connect Hosted Cloud MCP (`https://dislop.com/mcp`) whenever no local shell is available.
 
 ## Quick start
 
@@ -66,6 +70,10 @@ uvx dislop check quarterly-review.pptx
 pip install dislop && dislop check .
 ```
 
+<p align="center">
+  <img src="./assets/demos/cli-check-en-v1.gif" alt="dislop CLI offline check failing with exit code 1 on draft and passing with exit code 0 after cleanup" width="840">
+</p>
+
 ## AI artifacts vs. style warnings
 
 Auto-rewriters often trade one AI cliché for another or flatten your voice into a generic template. Flat banned-word lists also cause false alarms on ordinary nouns (`Delve` debugger, `wool tapestry`).
@@ -85,6 +93,19 @@ Both the Node.js CLI (`bin/dislop.mjs`) and the Python CLI (`src/dislop/`) run w
 | Web pages & components | `.html`, `.css`, `.jsx`, `.tsx` | Dead `<a href="#">` placeholder links, unexplained `<button disabled>`, purple-pink AI gradients, pill-badge walls, 3-level nested boxes, `AI-Powered` prompt-echo badges | Static per-file inspection; runtime DOM state still needs browser tests |
 | Word | `.docx` | Joined `<w:t>` runs, raw Markdown asterisks pasted from chat, and prose slop rules (`para N`) | Reports paragraph number rather than rendered page number |
 | PowerPoint | `.pptx` | Presentation slide order (`p:sldIdLst`), joined `<a:t>` runs, raw Markdown, slide word-walls (`> 120` words / `> 280` Han chars), bullet caps (`> 6`), `<a:normAutofit>` shrink (`< 80%`), generic titles (`Overview`, `Background`), layout monotony, and prose rules | Hidden slides (`show="0"`) are reported as `[SKIP]` for density checks |
+
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <img src="./assets/demos/workbench-live-en-v1.gif" alt="dislop.com offline browser workbench checking original draft, 2nd-order slop, and clean copy" width="100%"><br>
+      <sub>Offline browser workbench in action</sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="./assets/demos/ui-slop-en-v1.gif" alt="Auditing AI gradient, pill wall, and dead href='#' control before switching to clean 1px galley card" width="100%"><br>
+      <sub>UI template slop audit before and after</sub>
+    </td>
+  </tr>
+</table>
 
 ## Awesome Anti-Slop
 
@@ -159,7 +180,7 @@ dislop check .
 ### Open-Source Local (`Skill` + `CLI`) vs. Hosted Cloud (`dislop.com/mcp`)
 
 - **Open Source (`dislop-ai/dislop`, Apache-2.0)**: `SKILL.md` + bundled local `./references/*.md`, Node/Python CLI (`dislop check [--pack <id|auto>] [--profile] [--ml] [--patterns] [--changed [ref]] [--staged] [--format text|json|sarif|github|md]`, `dislop patterns`, `dislop voice`, `dislop model [status|score|install|import|remove|deslop]`, `dislop setup`, `dislop deslop --local`, `dislop explain`, `dislop packs`, `dislop catalog`, `dislop resources`), 7-tool local stdio MCP (`--mcp`), all 7 built-in packs (`42` rules) + 53-pattern catalog (`patterns/`), bundled `14.6 KB` gzip (`49.0 KB` raw) Pocket ML ensemble (`models/pocket-slop-v1.json`, `< 0.5 ms`, `100.0%` F1 / `0.0%` Clean FPR on `stealth-vapor-v1`), `Awesome Anti-Slop`, and `dislop-bench v2`. Zero third-party packages, zero API keys, and `0` network calls during `check` / `patterns` / `voice` / `model score` so private drafts never leave your machine. For heavier local neural rewrites, `dislop setup` and `dislop model install` inspect RAM/disk budgets and let you optionally install `0.6B` (`~520 MB`), `1.7B` (`~1.3 GB`), or `4B` (`~2.5 GB`) local models (or import offline `.gguf`/`.onnx` weights with SHA-256 verification) protected by an internal numeric and qualifier retention guard during automated local rewrites.
-- **Hosted Cloud Remote MCP & Web AI (`https://dislop.com/mcp`, `https://dislop.com/?lang=en#pricing`)**: Optional closed-source cloud backend powered by a paid-tier zero-training Google Gemini endpoint (no draft logging; see [privacy.md](https://dislop.com/privacy.md)). Exposes `dislop_review` (1 credit, hybrid 3rd-order review), `dislop_deslop` (2 credits, self-healing rewrite with an internal numeric and qualifier retention guard and automatic repair), and `dislop_voice_extract` (2 credits, `dislop.voice/1`). Includes 5 free anonymous web demo credits/day, **30 free monthly credits** after email key signup, and early-access waitlists for Pro (`$12/mo`, 1,500 credits), PAYGO (`$10 / 800 credits`), and Team (`$29/seat/mo`).
+- **Hosted Cloud Remote MCP & Web AI (`https://dislop.com/mcp`, `https://dislop.com/?lang=en#pricing`)**: Optional closed-source cloud backend powered by a paid-tier zero-training Google Gemini endpoint (no draft logging; see [privacy.md](https://dislop.com/privacy.md)). Exposes `dislop_review` (1 credit, deeper cadence and prose review), `dislop_deslop` (2 credits, re-checked rewrite verifying numbers and qualifiers), and `dislop_voice_extract` (2 credits, `dislop.voice/1`). Includes 5 free anonymous web demo credits/day, **30 free monthly credits** after email key signup, and early-access waitlists for Pro (`$12/mo`, 1,500 credits), PAYGO (`$10 / 800 credits`), and Team (`$29/seat/mo`).
 
 ## Anti-slop benchmark (`dislop-bench v2`)
 
@@ -175,17 +196,17 @@ Latest measured baseline ([benchmarks/REPORT.md](./benchmarks/REPORT.md) and [be
 - **Multi-Angle Pattern Benchmark (`154` samples = 48 + 16 + 62 `pattern-challenge-v2` + 28 `holdout-v2`)**: Precision `100.0%` · Recall `100.0%` · F1 `100.0%` · Clean FPR `0.0%` · Node/Python Parity `100.0%`.
 - **Bundled Pocket ML (`stealth-vapor-v1`, 24 paired samples; 36 blind eval with holdouts)**: `14.6 KB` gzip (`49.0 KB` raw), `< 0.5 ms`, `100.0%` F1, `0.0%` Clean FPR.
 - **End-to-End Revision (`Suite B`, 18 tasks = 12 `revision-v1` + 6 `revision-hard-v2`, weights `D1=45 / D2=20 / D3=25 / D4=10`)**: `raw_ai` **60.8 / 100** → `naive_humanizer` **70.8 / 100** (doubles 3rd-order slop and drops or invents numbers) → `dislop_clean` **100.0 / 100** (`18/18` all-clear).
-- **Live 5-model comparison ([benchmarks/MODEL-COMPARISON.md](./benchmarks/MODEL-COMPARISON.md))**: Across `Gemini 3.1/3.5 Flash-Lite`, `Gemini 3.5/3.8 Flash`, and `Qwen 3.8 Flash`, bare prompts averaged `76.0–84.2 / 100` (`2/10–4/10` all-clear on the 10-task `revision-v1` live subset), while the `dislop` self-healing cloud pipeline lifted every model by **+15.8 to +22.3 points** (`97.0–100.0 / 100`, `8/10–10/10` all-clear; `Gemini 3.1 Flash-Lite` reached `98.5 / 100` in `1.2s` at `~$0.09 / 1k calls`).
+- **Live 5-model comparison ([benchmarks/MODEL-COMPARISON.md](./benchmarks/MODEL-COMPARISON.md))**: Across `Gemini 3.1/3.5 Flash-Lite`, `Gemini 3.5/3.8 Flash`, and `Qwen 3.8 Flash`, bare prompts averaged `76.0–84.2 / 100` (`2/10–4/10` all-clear on the 10-task `revision-v1` live subset), while the `dislop` re-checked cloud pipeline lifted every model by **+15.8 to +22.3 points** (`97.0–100.0 / 100`, `8/10–10/10` all-clear; `Gemini 3.1 Flash-Lite` reached `98.5 / 100` in `1.2s` at `~$0.09 / 1k calls`).
 
 See [benchmarks/README.md](./benchmarks/README.md) to score your own model, Skill, or cloud endpoint (`--eval`) or export randomized blind human A/B review sheets (`--export-blind-sheet`).
 
 ## dislop checks dislop
 
-GitHub Actions CI runs `dislop pack-test` (160 fixture assertions: 83 hit + 77 clean in both Node and Python), 26 Python `unittest` conformance and engine tests across 4 modules (`test_conformance`, `test_engine`, `test_pattern_library`, `test_pocket_and_local_models`), pattern catalog checks (`node scripts/pattern_lab.mjs verify` and `assert`), and site checks (`tests/test_site.mjs`). It also runs `dislop check . --fail-on warning` across this repository's docs, `awesome/`, and `site/`.
+GitHub Actions CI runs `dislop pack-test` (164 fixture assertions in both Node and Python), 26 Python `unittest` conformance and engine tests across 4 modules (`test_conformance`, `test_engine`, `test_pattern_library`, `test_pocket_and_local_models`), pattern catalog checks (`node scripts/pattern_lab.mjs verify` and `assert`), and site checks (`tests/test_site.mjs`). It also runs `dislop check . --fail-on warning` across this repository's docs, `awesome/`, and `site/`.
 
 ## Docs & layout
 
-- [Brand & Voice Guide](./docs/brand-and-voice-guide.md) ([zh-CN](./docs/brand-and-voice-guide.zh-CN.md))
+- [Product Brief](./PRODUCT.md) · [Brand & Voice Guide](./docs/brand-and-voice-guide.md) ([zh-CN](./docs/brand-and-voice-guide.zh-CN.md))
 - [Architecture](./docs/architecture.md) ([zh-CN](./docs/architecture.zh-CN.md)) · [Design System](./docs/design-system.md) ([zh-CN](./docs/design-system.zh-CN.md))
 - [Roadmap](./ROADMAP.md) ([zh-CN](./ROADMAP.zh-CN.md)) · [Releasing](./docs/releasing.md) · [Contributing](./CONTRIBUTING.md) · [Research Index](./docs/research/README.md) · [Changelog](./CHANGELOG.md)
 

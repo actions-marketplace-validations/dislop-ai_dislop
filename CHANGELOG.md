@@ -6,10 +6,28 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [0.6.2] - 2026-11-22
 
+### Added
+
+- **Canonical Bilingual Product Brief (`PRODUCT.md`)**:
+  - Defined positioning ("Linter for AI Slop."), three-stage audience rollout (coding agents, office agents, and everyone shipping AI-assisted work), three core selling points, and the bilingual one-sentence pitch as the single source of truth across docs and manifests.
+  - Published the brief as a static agent endpoint (`/methodology/product-brief.md`) linked from `/llms.txt` and the `/methodology/index.md` catalog.
+- **Bilingual Demo GIF & Poster Suite (`assets/demos/`)**:
+  - Added 8 rendered demo GIFs and poster PNGs (`cli-check`, `workbench-live`, `ui-slop`, `proof-cycle` in Chinese and English) with reproducible capture scripts under `scripts/media/`.
+
+### Changed
+
+- **Cross-Surface Positioning & Manifest Alignment (`site/`, `scripts/sync_manifests.mjs`)**:
+  - Aligned `README.md`, `README.zh-CN.md`, CLI help, VS Code / Herdr / Claude / Codex / Cursor / Gemini / Antigravity manifests, SVG banners, and `og-card` graphics with `PRODUCT.md` copy and current `npx --yes dislop` / `uvx dislop` commands.
+  - Updated the `dislop.com` workbench and copy to present offline CLI/plugin privacy alongside optional Local vs. Cloud MCP switching in the browser.
+
 ### Fixed
 
-- **Python 3.10 / 3.11 import crash**: `src/dislop/engine.py` nested same-quote f-strings, which only Python 3.12+ accepts, so `pip install dislop` on 3.10 or 3.11 failed with `SyntaxError` on import. The package now runs on every version `requires-python` promises (`>=3.10`).
-- **CI coverage**: a new `python-compat` job runs the Python test suite on 3.10 and the newest stable 3.x, so syntax that older Pythons reject fails CI before release.
+- **Python 3.10 / 3.11 Compatibility & CI Matrix**:
+  - Replaced nested same-quote f-strings in `src/dislop/engine.py` that failed with `SyntaxError` below Python 3.12 (`requires-python >=3.10`), and added a `python-compat` matrix job (Python 3.10 and 3.x) in `.github/workflows/ci.yml`.
+- **Deterministic Probe & Exemplar Fixes**:
+  - Exempted Markdown links from `unfilled-placeholder` across JS and Python cores, added Chinese and unprefixed greeting coverage to `chatbot-artifact`, and removed ungrounded numbers from the `eng-pr-diff-parrot` exemplar.
+- **CI Release & Status Verification**:
+  - Cleared `NODE_AUTH_TOKEN` and `NPM_CONFIG_USERCONFIG` before npm OIDC publishing in `.github/workflows/release.yml`, and updated `release:status` repository description checks to match `Linter for AI Slop`.
 
 ## [0.6.1] - 2026-11-22
 

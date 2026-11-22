@@ -40,10 +40,10 @@
       "exemplar": {
         "bad": "本次 PR 旨在通过重构连接池管理逻辑进一步提升系统的稳定性与可维护性。",
         "trap": "这不是一次普通的代码重构，而是连接池稳定性的底层重塑。",
-        "good": "修复 Redis 重连分支未释放旧句柄导致的连接泄漏（#412），压测 2 小时常驻连接数稳定在 64 以内。",
+        "good": "修复连接池重连分支未释放旧句柄导致的连接泄漏，避免长运行后连接耗尽。",
         "note": {
-          "en": "Name the leak trigger, issue number, and measured connection ceiling.",
-          "zh": "点明泄漏触发分支、单号与压测连接数上限。"
+          "en": "Name the concrete leak trigger and consequence instead of generic stability claims.",
+          "zh": "点明具体的泄漏触发分支与直接后果，不写空泛的稳定性套话。"
         },
         "source": "original"
       },

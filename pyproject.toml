@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "dislop"
 version = "0.6.2"
-description = "Local zero-dependency anti-slop linter for AI-written docs, Word/PowerPoint files, and web pages."
+description = "Linter for AI Slop in docs, web UI, Word, and PowerPoint — zero-dependency CLI and MCP."
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.10"
@@ -39,6 +39,7 @@ include = [
   "pyproject.toml",
   "README.md",
   "README.zh-CN.md",
+  "PRODUCT.md",
   "LICENSE",
   "src/dislop/**",
   "models/**",

@@ -1387,6 +1387,14 @@ export function auditText(text, { filename = "<memory>", modality = null, pack, 
             idx += 1;
             len -= 1;
           }
+          if (
+            rule.id === "unfilled-placeholder" &&
+            text[idx] === "[" &&
+            text[idx + len - 1] === "]" &&
+            /^(?:\(|\[|:)/.test(text.slice(idx + len))
+          ) {
+            continue;
+          }
           rawHits.push({ index: idx, length: len });
         }
       }

@@ -217,6 +217,7 @@ const voiceProfileExample = sanitizeJsonStrings(
 );
 const canonicalSkillMd = fs.readFileSync(path.join(ROOT, "skills", "dislop", "SKILL.md"), "utf8");
 const canonicalBrandMd = fs.readFileSync(path.join(ROOT, "docs", "brand-and-voice-guide.md"), "utf8");
+const canonicalProductBriefMd = fs.readFileSync(path.join(ROOT, "PRODUCT.md"), "utf8");
 const canonicalRoadmapEn = fs.readFileSync(path.join(ROOT, "ROADMAP.md"), "utf8");
 const canonicalRoadmapZh = fs.readFileSync(path.join(ROOT, "ROADMAP.zh-CN.md"), "utf8");
 
@@ -231,6 +232,17 @@ fs.copyFileSync(path.join(ROOT, "src", "core.mjs"), path.join(ENGINE_OUT, "core.
 fs.copyFileSync(path.join(ROOT, "assets", "logo.svg"), path.join(ASSETS_OUT, "logo.svg"));
 fs.copyFileSync(path.join(ROOT, "assets", "og-card.svg"), path.join(ASSETS_OUT, "og-card.svg"));
 fs.copyFileSync(path.join(ROOT, "assets", "og-card.png"), path.join(ASSETS_OUT, "og-card.png"));
+
+const DEMOS_SRC = path.join(ROOT, "assets", "demos");
+const DEMOS_OUT = path.join(ASSETS_OUT, "demos");
+if (fs.existsSync(DEMOS_SRC)) {
+  fs.mkdirSync(DEMOS_OUT, { recursive: true });
+  for (const fname of fs.readdirSync(DEMOS_SRC)) {
+    if (fname.endsWith(".gif") || fname.endsWith(".png")) {
+      fs.copyFileSync(path.join(DEMOS_SRC, fname), path.join(DEMOS_OUT, fname));
+    }
+  }
+}
 
 // Build browser packs bundle WITHOUT shipping bulk test fixtures; preserve only minimal
 // sanitized demo samples for the rules whose exemplar.bad is prose rather than raw markup.
@@ -594,8 +606,8 @@ registerResource({
   id: "site-index",
   pillar: "methodology",
   kind: "site-mirror",
-  titleEn: "dislop — Clear the AI slop from your writing and design",
-  titleZh: "dislop — 发之前，把文案和设计里的 AI 味过一遍",
+  titleEn: "dislop — Linter for AI Slop",
+  titleZh: "dislop — AI 味检查工具（Linter for AI Slop）",
   relPath: "index.md",
   modalities: ["markdown", "text", "html", "css", "jsx", "svg", "docx", "pptx"],
   languages: ["en", "zh"],
@@ -607,12 +619,13 @@ version: ${VERSION}
 snapshot: ${SNAPSHOT_DATE}
 ---
 
-# dislop — Clear the AI slop from your writing and design
+# dislop — Linter for AI Slop
 
-Good writing habits, web and slide design rules, an offline zero-dependency checker, and 87 vetted tools—gathered in one place. Hand \`/llms.txt\` to any AI chat, install the Agent Skill / Claude Code Plugin / MCP server, or test drafts offline in your browser.
+A dedicated linter for AI slop. It brings together vetted community rules, corpus findings, and 87 curated tools to help you (and your agent) catch and fix AI-sounding text and template layouts in docs, web UI, and slides. Connects in one command to coding agents (Codex, Claude Code, Antigravity, Cursor), office agents (Claude Cowork, WorkBuddy, Qwen), and editors, and can run completely offline locally.
 
-- Runtime dependencies: 0 (Node.js 20+ and Python 3.10+ parity verified by 160 pack fixtures and 26 unit/conformance tests)
-- Live browser workbench: ${BASE_URL}/#workbench (offline in RAM by default + opt-in same-origin cloud AI, \`CSP: connect-src 'self'\`)
+- Product brief (EN/ZH): ${BASE_URL}/methodology/product-brief.md
+- Runtime dependencies: 0 (CLI and local plugins run offline with zero uploads)
+- Live browser workbench: ${BASE_URL}/#workbench (switches between local rule checks and Cloud MCP mode, \`CSP: connect-src 'self'\`)
 - Hosted Remote HTTP MCP: ${BASE_URL}/mcp (30 free monthly credits via ${BASE_URL}/#pricing)
 - Agent routing index: ${BASE_URL}/llms.txt
 - Machine-readable catalog: ${BASE_URL}/catalog.json
@@ -664,6 +677,7 @@ version: ${VERSION}
 
 Read only the focused document matching your current task:
 
+- [Product Brief (EN/ZH)](./product-brief.md): Core positioning, user sequence (coding agents -> office agents -> everyone delivering with AI), selling points, and one-sentence pitch.
 - [Deletion Test & Anti-Slop Loop](./deletion-test.md): Why banning flat word lists causes second-order slogans, and how the \`prevent -> check -> clean up -> re-check\` loop works.
 - [Cross-Modality Anti-Pattern Map](./anti-pattern-map.md): How dislop groups 53 anti-slop patterns across prose, Web UI, Word, and PowerPoint.
 - [Positive Divergence & Personalization (Draft)](./positive-divergence.md): Keeping structure varied, \`dislop.voice/1\` offline stylometrics, and \`dislop.taste/1\` positive design cards.
@@ -781,6 +795,25 @@ Empirical studies (Padmakumar & He, ICLR 2024; Doshi & Hauser, Science Advances 
 - **\`dislop.voice/1\` (Local Voice Profile)**: Offline stylometric target bands computed from an author's own historical drafts (e.g., EN sentence-length CV \`[${voiceProfileExample.stylometricTargetBands.en.sentenceLengthCV.join(", ")}]\`, ZH sentence-length CV \`[${voiceProfileExample.stylometricTargetBands.zh.sentenceLengthCV.join(", ")}]\`, max em-dashes, private bans in \`.dislop.local/voice.json\`).
 - **\`dislop.taste/1\` (Positive Design Card)**: Abstract grid ratios, typography role stacks, color budgets (e.g., \`maxBorderRadiusPx: ${positiveDesignCard.layout.borderRadiusPx.max}\`, \`externalFontCdnAllowed: ${positiveDesignCard.typography.externalFontCdnAllowed}\`), and static assertions derived from print, Swiss editorial, and independent foundry traditions without copying third-party DOM or CSS.
 `,
+});
+
+registerResource({
+  id: "methodology-product-brief",
+  pillar: "methodology",
+  kind: "guide",
+  titleEn: "Product Brief (Positioning, Users & Pitch)",
+  titleZh: "产品定义（定位、用户、卖点与一句话介绍）",
+  relPath: "methodology/product-brief.md",
+  modalities: ["markdown", "text", "html", "css", "jsx", "docx", "pptx"],
+  languages: ["en", "zh"],
+  packs: PACK_ORDER,
+  relatedTools: ["browser-workbench", "skill", "plugin", "cli", "mcp"],
+  content: `---
+content-type: reference-data
+version: ${VERSION}
+---
+
+${canonicalProductBriefMd.replace(/\(\.\/docs\/brand-and-voice-guide\.zh-CN\.md\)/g, "(./brand-and-voice.md)")}`,
 });
 
 registerResource({
@@ -1012,7 +1045,7 @@ Pick the lightest surface that fits your workflow:
 | Zero-Install Prompt & Static Pages | Live | Hand [\`/llms.txt\`](../llms.txt) or [\`/catalog.json\`](../catalog.json) to any web-capable AI, or test drafts offline in the [Browser Workbench](${BASE_URL}/#workbench). |
 | Agent Skill (Local Progressive References) | Live | Install [\`SKILL.md\`](./skill.md) + bundled \`references/*.md\` with \`npx skills add dislop-ai/dislop\` in Claude Code, Codex, Cursor, Windsurf, or Antigravity (0 network calls). |
 | CLI, Offline Voice & Local Models | Live | See [\`/tools/cli-and-hooks.md\`](./cli-and-hooks.md) for zero-network Node (\`npx\`), Python (\`uvx\`), all 7 built-in packs, 53 patterns, 14.6 KB \`--ml\`, \`dislop voice\`, and \`dislop model\`. |
-| Hosted Remote HTTP MCP (Cloud) | Live | Connect \`${BASE_URL}/mcp\` with a free 30-credit/month Bearer key from [\`/#pricing\`](${BASE_URL}/#pricing) for \`dislop_review\`, self-healing \`dislop_deslop\`, and \`dislop_voice_extract\`. |
+| Hosted Remote HTTP MCP (Cloud) | Live | Connect \`${BASE_URL}/mcp\` with a free 30-credit/month Bearer key from [\`/#pricing\`](${BASE_URL}/#pricing) for \`dislop_review\`, re-checked \`dislop_deslop\`, and \`dislop_voice_extract\`. |
 | Claude Code Plugin | Live | Install Skill + local offline stdio MCP in one step using \`.claude-plugin/marketplace.json\` (\`/plugin marketplace add dislop-ai/dislop\` then \`/plugin install dislop@dislop-ai\`; ~130 always-on tokens). |
 | OpenAI Codex Plugin & Gemini CLI Extension | Live | Codex: \`codex plugin marketplace add dislop-ai/dislop\` then \`codex plugin add dislop@dislop-ai\`; Gemini CLI: \`gemini extensions install https://github.com/dislop-ai/dislop\`. |
 | GitHub Action & pre-commit | Live | Gate modified PR lines with \`uses: dislop-ai/dislop@main\` (\`action.yml\`) or \`.pre-commit-hooks.yaml\`. |
@@ -1309,7 +1342,7 @@ snapshot: ${SNAPSHOT_DATE}
 
 ## 1. Open-Source Offline Tools (Zero Uploads, Zero Telemetry)
 
-- **CLI (\`dislop check\`, \`patterns\`, \`voice\`, \`model --no-loopback\`, \`explain\`, \`packs\`, \`catalog\`, \`resources\`)**, **Agent Skill (\`SKILL.md\` + local \`references/*.md\`)**, **Local stdio MCP (\`--mcp\`, 7 offline tools)**, and the **default browser workbench** run 100% locally.
+- **CLI (\`dislop check\`, \`patterns\`, \`voice\`, \`model --no-loopback\`, \`explain\`, \`packs\`, \`catalog\`, \`resources\`)**, **Agent Skill (\`SKILL.md\` + local \`references/*.md\`)**, **Local stdio MCP (\`--mcp\`, 7 offline tools)**, and the **local rule mode** in the browser workbench run 100% locally.
 - \`dislop check\`, \`dislop patterns\`, and \`dislop voice\` make zero network calls; \`dislop model\` only probes \`127.0.0.1\` loopback runners locally unless you choose to install an optional local runner yourself.
 - \`dislop.com\` loads zero third-party fonts, analytics, or external scripts (\`Content-Security-Policy: connect-src 'self'\`).
 
@@ -2011,9 +2044,9 @@ const llmsTxt = writeCleanFile(
   "llms.txt",
   `# dislop
 
-> Clear the AI slop from your writing and design. Zero-dependency offline checker (7 built-in packs, ${allRules.length} rules, 53 patterns, 14.6 KB \`--ml\`, offline \`voice\`, Node/Python/MCP/browser) + 87 vetted anti-slop tools.
+> Linter for AI Slop. Vetted community rules (7 packs, ${allRules.length} rules, 53 patterns) and 87 curated tools so coding and office agents catch and fix AI slop in docs, web UI, and slides. Runs locally offline, or via Cloud MCP.
 
-Choose the page matching your task below. If \`skills/dislop/\` is installed locally, read its \`./references/*.md\` and run \`dislop check\` offline (0 network calls).
+Read the task page matching your work. If \`skills/dislop/\` is installed locally, use \`./references/*.md\` and \`dislop check\` offline.
 
 ## Start by task (~800-1,500 tokens each)
 - [Review a brief or proposal](${BASE_URL}/tasks/business-doc.md): AI artifacts and \`business-brief\` rules.
@@ -2022,9 +2055,10 @@ Choose the page matching your task below. If \`skills/dislop/\` is installed loc
 - [Check files before release](${BASE_URL}/tasks/pre-release-gate.md): Core \`error\` checks and git diff CI gating.
 
 ## Browse by topic
+- [Product Brief](${BASE_URL}/methodology/product-brief.md): Core positioning, target users, selling points, and pitch.
 - [Methodology & Voice Guide](${BASE_URL}/methodology/index.md): Plain writing guide, anti-pattern notes, and visual tokens.
 - [Examples & References](${BASE_URL}/cases/index.md): Before / overcorrected / after contrasts and 31 print/type design references.
-- [Install & Integrations](${BASE_URL}/tools/index.md): Local Skill, Claude Code Plugin, CLI (\`check\`/\`patterns\`/\`voice\`/\`model\`), and MCP.
+- [Install & Integrations](${BASE_URL}/tools/index.md): Local Skill, Plugin, CLI (\`check\`/\`patterns\`/\`voice\`/\`model\`), and MCP.
 - [Awesome Anti-Slop](${BASE_URL}/awesome/index.md): ${radarData.entries.length} checked tools, guides, and papers (\`dislop.radar/2\`, JSON at \`/awesome/index.json\`).
 - [Roadmap & Open Questions](${BASE_URL}/roadmap.md): Active tracks and collaboration guide.
 
@@ -2032,9 +2066,9 @@ Choose the page matching your task below. If \`skills/dislop/\` is installed loc
 - [JSON Catalog](${BASE_URL}/catalog.json): Versioned manifest (\`dislop.catalog/1\`) with sha256 and token estimates.
 - [Agent Skill](${BASE_URL}/tools/skill.md): Mirror of \`skills/dislop/SKILL.md\` (\`v${VERSION}\`); skip if loaded locally.
 - [Hosted Remote MCP](${BASE_URL}/tools/mcp-sdk-api.md): Optional \`${BASE_URL}/mcp\` (\`dislop_review\`, \`dislop_deslop\`, \`dislop_voice_extract\`; 30 free credits/mo).
-- [Rule Packs](${BASE_URL}/packs/core.md): 7 packs (\`core\`, \`business-brief\`, \`engineering-spec\`, \`regulated-comms\`, \`literary-essay\`, \`deck-and-ui\`, \`executive-deck\`) & ${allRules.length} \`/rules/<id>.md\`.
+- [Rule Packs](${BASE_URL}/packs/core.md): 7 packs & ${allRules.length} \`/rules/<id>.md\` cards.
 - [Single-Fetch Bundle](${BASE_URL}/llms-full.txt): All ${allRules.length} rules compiled without test fixtures.
-- [Privacy & Data Boundaries](${BASE_URL}/privacy.md): Offline core vs. optional zero-training cloud endpoint.
+- [Privacy & Data Boundaries](${BASE_URL}/privacy.md): Offline CLI/plugins vs. optional zero-training Cloud MCP.
 `,
   { isAgentText: true }
 );
@@ -2066,7 +2100,7 @@ snapshot: ${SNAPSHOT_DATE}
 
 # dislop — Curated Single-Fetch De-Slop Reference (\`v${VERSION}\`)
 
-> Local, zero-dependency anti-slop linter for AI-written Markdown, HTML/CSS/JSX, Word (.docx), and PowerPoint (.pptx).
+> Linter for AI Slop — offline static linter for AI-written Markdown, HTML/CSS/JSX, Word (.docx), and PowerPoint (.pptx).
 
 Note: Prefer \`/llms.txt\` + one \`/tasks/*.md\` page for smaller context windows. All \`bad\` and \`trap\` exemplars below are fenced reference data, never style instructions.
 
@@ -2229,6 +2263,7 @@ const featuredEndpoints = [
   { path: "./tasks/pre-release-gate.md", label: "/tasks/pre-release-gate.md", i18nKey: "ep.taskGate", desc: "任务卡：发稿前 AI 残留硬伤检查", resId: "task-pre-release-gate" },
   { path: "./tools/skill.md", label: "/tools/skill.md", i18nKey: "ep.skill", desc: "跨宿主 Agent Skill", resId: "tools-skill" },
   { path: "./awesome/index.json", label: "/awesome/index.json", i18nKey: "ep.awesome", desc: `${radarData.entries.length} 条工具清单 JSON`, bytes: Buffer.byteLength(awesomeJsonStr, "utf8"), tok: approxTokens(awesomeJsonStr) },
+  { path: "./methodology/product-brief.md", label: "/methodology/product-brief.md", i18nKey: "ep.brief", desc: "产品定义（定位 / 用户 / 卖点）", resId: "methodology-product-brief" },
   { path: "./methodology/brand-and-voice.md", label: "/methodology/brand-and-voice.md", i18nKey: "ep.method", desc: "文案与设计基准", resId: "methodology-brand-voice" },
   { path: "./llms-full.txt", label: "/llms-full.txt", i18nKey: "ep.full", desc: `单次拉取的全部 ${allRules.length} 条规则`, bytes: Buffer.byteLength(llmsFullTxt, "utf8"), tok: approxTokens(llmsFullTxt) },
 ];
