@@ -8,4 +8,4 @@ worktree:
 hooks:
   preReview:
     - name: dislop-gate
-      command: npx --yes github:dislop-ai/dislop check --changed origin/main --fail-on error
+      command: npx --yes dislop check --changed origin/main --fail-on error

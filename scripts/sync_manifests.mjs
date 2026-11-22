@@ -36,17 +36,8 @@ assert.equal(
 
 const VERSION = jsVerMatch[1];
 
-// Detect existing channel in .mcp.json if --channel is not explicitly provided
-let channel = explicitChannel;
-if (!channel) {
-  try {
-    const curMcp = JSON.parse(fs.readFileSync(path.join(ROOT, ".mcp.json"), "utf8"));
-    const curArgs = curMcp?.mcpServers?.dislop?.args || [];
-    channel = curArgs.some((a) => String(a).startsWith("github:")) ? "github" : "registry";
-  } catch {
-    channel = "github";
-  }
-}
+// Default to published npm/PyPI registry coordinates now that `dislop` is live on npmjs.org and PyPI
+const channel = explicitChannel || "registry";
 assert.ok(channel === "github" || channel === "registry", `Invalid --channel '${channel}' (expected github or registry)`);
 
 const npxPackageSpec = channel === "registry" ? `dislop@${VERSION}` : "github:dislop-ai/dislop";
@@ -370,6 +361,27 @@ const targets = [
     ].join("\n"),
   },
   {
+    rel: ".cursor-plugin/plugin.json",
+    content:
+      JSON.stringify(
+        {
+          name: META.name,
+          version: META.version,
+          description: META.pluginDescription,
+          author: META.author,
+          homepage: META.homepage,
+          repository: META.repoUrl,
+          license: META.license,
+          keywords: META.keywords,
+          logo: "./assets/logo.svg",
+          skills: "./skills/",
+          mcpServers: "./.mcp.json",
+        },
+        null,
+        2
+      ) + "\n",
+  },
+  {
     rel: "integrations/antigravity/plugin.json",
     content:
       JSON.stringify(
@@ -409,6 +421,31 @@ const pyproject = fs.readFileSync(path.join(ROOT, "pyproject.toml"), "utf8");
 const skillMd = fs.readFileSync(path.join(ROOT, "skills", "dislop", "SKILL.md"), "utf8");
 const vscodePkgPath = path.join(ROOT, "integrations", "vscode", "package.json");
 const vscodePkg = fs.existsSync(vscodePkgPath) ? JSON.parse(fs.readFileSync(vscodePkgPath, "utf8")) : null;
+const herdrPath = path.join(ROOT, "integrations", "herdr", "herdr-plugin.toml");
+const herdrToml = fs.existsSync(herdrPath) ? fs.readFileSync(herdrPath, "utf8") : null;
+const herdrVer = herdrToml ? herdrToml.match(/^version\s*=\s*"([^"]+)"/m)?.[1] : null;
+
+// Keep integrations/antigravity/skills/dislop/ mirrored byte-for-byte from skills/dislop/
+function walkRelativeFiles(baseDir, prefix = "") {
+  const out = [];
+  for (const ent of fs.readdirSync(path.join(baseDir, prefix), { withFileTypes: true })) {
+    const rel = prefix ? `${prefix}/${ent.name}` : ent.name;
+    if (ent.isDirectory()) out.push(...walkRelativeFiles(baseDir, rel));
+    else if (ent.isFile()) out.push(rel);
+  }
+  return out.sort();
+}
+const rootSkillDir = path.join(ROOT, "skills", "dislop");
+const openaiYamlTarget = targets.find((t) => t.rel === "skills/dislop/agents/openai.yaml");
+for (const subRel of walkRelativeFiles(rootSkillDir)) {
+  targets.push({
+    rel: `integrations/antigravity/skills/dislop/${subRel}`,
+    content:
+      subRel === "agents/openai.yaml" && openaiYamlTarget
+        ? openaiYamlTarget.content
+        : fs.readFileSync(path.join(rootSkillDir, subRel), "utf8"),
+  });
+}
 
 const pyProjVer = pyproject.match(/^version\s*=\s*"([^"]+)"/m)?.[1];
 const skillVer = skillMd.match(/^version:\s*([^\s]+)/m)?.[1];
@@ -428,6 +465,9 @@ if (skillVer !== VERSION) {
 }
 if (vscodePkg && vscodePkg.version !== VERSION) {
   driftErrors.push(`integrations/vscode/package.json version (${vscodePkg.version}) !== ENGINE_VERSION (${VERSION})`);
+}
+if (herdrToml && herdrVer !== VERSION) {
+  driftErrors.push(`integrations/herdr/herdr-plugin.toml version (${herdrVer}) !== ENGINE_VERSION (${VERSION})`);
 }
 
 // Closed top-level schema check on portable plugin.json
