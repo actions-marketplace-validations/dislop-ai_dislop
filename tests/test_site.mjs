@@ -361,7 +361,22 @@ for (const m of indexHtml.matchAll(/href="#([^"]+)"/g)) {
   assert.ok(htmlIds.has(m[1]), `Broken internal anchor href="#${m[1]}" in site/index.html`);
 }
 
+// 10. Verify robots.txt and sitemap.xml crawlability assets
+const robotsTxt = fs.readFileSync(path.join(SITE_DIR, "robots.txt"), "utf8");
+assert.ok(robotsTxt.includes("Sitemap: https://dislop.com/sitemap.xml"), "robots.txt missing Sitemap directive");
+assert.ok(robotsTxt.includes("Disallow: /api/"), "robots.txt missing Disallow: /api/");
+assert.ok(robotsTxt.includes("Disallow: /mcp"), "robots.txt missing Disallow: /mcp");
+
+const sitemapXml = fs.readFileSync(path.join(SITE_DIR, "sitemap.xml"), "utf8");
+assert.ok(sitemapXml.includes('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'), "sitemap.xml missing urlset root");
+assert.ok(sitemapXml.includes("<loc>https://dislop.com/</loc>"), "sitemap.xml missing root URL");
+assert.ok(sitemapXml.includes("<loc>https://dislop.com/awesome/</loc>"), "sitemap.xml missing /awesome/ URL");
+assert.equal(INVISIBLE_BIDI_RE.test(sitemapXml), false, "sitemap.xml contains invisible/bidi chars");
+assert.equal(/&(?!amp;|lt;|gt;|quot;|apos;)/.test(sitemapXml), false, "sitemap.xml contains unescaped '&'");
+const sitemapUrlCount = (sitemapXml.match(/<url>/g) || []).length;
+assert.ok(sitemapUrlCount >= 50, `Expected >= 50 <url> entries in sitemap.xml, got ${sitemapUrlCount}`);
+
 console.log(
   `dislop site-test: ok (${totalRules} rules, ${tryRulesChecked} Try demos, ${specimenCount} ZH/EN specimens + 2 hero proofs + 6 cases, ` +
-    `${catalog.resources.length} catalog resources, ${checkedJsonBlocks} valid JSON configs, ${htmlI18nKeys.length} bilingual i18n keys, CSS braces balanced, ${AWESOME_DATA.entries.length} Awesome entries & WCAG AA passed)`
+    `${catalog.resources.length} catalog resources, ${sitemapUrlCount} sitemap URLs, ${checkedJsonBlocks} valid JSON configs, ${htmlI18nKeys.length} bilingual i18n keys, CSS braces balanced, ${AWESOME_DATA.entries.length} Awesome entries & WCAG AA passed)`
 );
