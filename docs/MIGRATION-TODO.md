@@ -10,7 +10,7 @@ Currently retained untouched on disk (and excluded from npm `"files"` in `packag
 - `awesome/` — Curated Awesome Anti-Slop Markdown lists (`README.md`, `README.zh-CN.md`).
 
 ### Action Items
-1. Move `site/`, `content/`, and `awesome/` (along with `docs/research/anti-slop-radar-index.json` if needed by `/awesome/`) into either a dedicated website repository (e.g., `dislop-ai/dislop-site` / `dislop-ai.github.io`) or `dislop-cloud`, and remove legacy `docs/research/*.zh-CN.md` links in `site/roadmap*.md` and `site/methodology/brand-and-voice.md` during extraction.
+1. Move `site/`, `content/`, and `awesome/` (along with `docs/research/anti-slop-radar-index.json` if needed by `/awesome/`) into either a dedicated website repository (e.g., `dislop-ai/dislop-site` / `dislop-ai.github.io`) or `dislop-cloud`.
 2. Update the production static deploy pipeline to publish `/var/www/dislop/site` from the extracted website repository instead of `dislop`.
 3. Update the browser workbench in `site/` if client-side inspection is desired against the new `packs/` format, or route interactive checks through `dislop-cloud`.
 4. Delete `site/`, `content/`, and `awesome/` from `dislop` once the external deployment pipeline is live.
