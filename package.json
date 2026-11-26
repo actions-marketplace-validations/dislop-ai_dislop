@@ -1,6 +1,6 @@
 {
   "name": "dislop",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Pluggable Editorial & Artifact Linter (Node.js Micro-Kernel) — Dual-track Defect & Suggestion engine with local-first 3-Tier LLM routing, Fact Gate, interactive hunk review, and MCP.",
   "license": "Apache-2.0",
   "homepage": "https://dislop.com",
@@ -28,7 +28,7 @@
     "check:security": "node ./scripts/verify-packs-security.mjs",
     "bench": "node ./scripts/run-benchmark.mjs",
     "bench:assert": "node ./scripts/run-benchmark.mjs --assert",
-    "dogfood": "node ./bin/dislop.mjs check README.md README.zh-CN.md CONTRIBUTING.md PRODUCT.md AGENTS.md SECURITY.md docs/architecture.md docs/MIGRATION-TODO.md benchmarks/README.md benchmarks/REPORT.md skills/ --no-llm"
+    "dogfood": "node ./bin/dislop.mjs check README.md README.zh-CN.md CONTRIBUTING.md PRODUCT.md AGENTS.md SECURITY.md CHANGELOG.md llms-install.md docs/architecture.md docs/brand-and-voice-guide.md docs/brand-and-voice-guide.zh-CN.md docs/MIGRATION-TODO.md benchmarks/README.md benchmarks/REPORT.md skills/ assets/*.svg .github/PULL_REQUEST_TEMPLATE.md --no-llm"
   },
   "files": [
     ".agents/plugins/marketplace.json",

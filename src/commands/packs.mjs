@@ -1,11 +1,48 @@
+import fs from "node:fs";
+import path from "node:path";
+import { DislopConfigError } from "../kernel/config.mjs";
 import { listBuiltinPackIds, loadSinglePack } from "../kernel/pack-loader.mjs";
+import { validatePackPath } from "../kernel/pack-validator.mjs";
 
 /**
- * `dislop packs [--json]` — inspect built-in multi-level Packs via `pack.json` metadata
- * without importing `scripts/` or reading `prompts/`.
+ * `dislop packs [list | lint <path>] [--json]` — inspect built-in Packs via `pack.json` metadata
+ * or validate external `.pack.md` / Pack directories against security & schema checks.
  */
-export async function runPacksCommand(_positionals, flags, io = {}) {
-  const { cwd = process.cwd(), stdout = process.stdout } = io;
+export async function runPacksCommand(positionals = [], flags = {}, io = {}) {
+  const { cwd = process.cwd(), stdout = process.stdout, stderr = process.stderr } = io;
+  const subcommand = (positionals[0] || "list").trim();
+
+  if (subcommand === "lint" || subcommand === "validate") {
+    const target = positionals[1];
+    if (!target) {
+      throw new DislopConfigError("Usage: dislop packs lint <pack-dir|file.pack.md>");
+    }
+    const result = validatePackPath(target, { cwd });
+    if (!result.exists) {
+      throw new DislopConfigError(`Pack path does not exist: ${target}`);
+    }
+    if (flags.json || flags.format === "json") {
+      stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+    } else if (result.ok) {
+      const relTarget = path.relative(cwd, result.targetPath) || ".";
+      stdout.write(
+        `OK ${relTarget}: ${result.checkedFiles} file(s) validated with 0 violations.\n`,
+      );
+    } else {
+      for (const v of result.violations) {
+        const rel = path.relative(cwd, v.file) || v.file;
+        const loc = v.line ? `:${v.line}` : "";
+        stderr.write(`FAIL [${v.ruleId}] ${rel}${loc}: ${v.message}\n`);
+      }
+    }
+    return result.ok ? 0 : 1;
+  }
+
+  if (subcommand !== "list") {
+    throw new DislopConfigError(
+      `Unknown packs subcommand '${subcommand}'. Expected 'list', 'lint', or 'validate'.`,
+    );
+  }
 
   const ids = listBuiltinPackIds();
   const details = [];

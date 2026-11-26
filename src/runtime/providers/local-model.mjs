@@ -1,5 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
+import { DislopConfigError } from "../../kernel/config.mjs";
+import { extractHostname, isLoopbackHostname } from "../privacy-gate.mjs";
 import { invokeOpenAiCompatProvider } from "./openai-compat.mjs";
 
 export const LOCAL_MODEL_CATALOG = Object.freeze({
@@ -88,6 +90,12 @@ export function resolveInstalledLocalModel(config, env = process.env) {
   const entry = manifest.installed[activeKey];
   const baseUrl =
     env.DISLOP_LOCAL_MODEL_URL || entry.baseUrl || "http://127.0.0.1:11434/v1";
+  const hostname = extractHostname(baseUrl);
+  if (!hostname || !isLoopbackHostname(hostname)) {
+    throw new DislopConfigError(
+      `Refusing non-loopback endpoint '${baseUrl}' for local model tier. Only localhost/127.0.0.1 are permitted in local mode.`,
+    );
+  }
 
   return {
     tier: "local",

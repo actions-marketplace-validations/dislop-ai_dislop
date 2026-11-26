@@ -357,3 +357,124 @@ test("Custom URI schemes, .html/.md fallback, Gemini thought filtering, and veri
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
 });
+
+test("Pipeline preserves distinct defects in one segment, suppresses redundant LLM suggestions on full-segment DELETE, resets bold-lead walls across headings, and catches 'Certainly! Here it is:'", async () => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "dislop-phase1-fixes-"));
+  try {
+    // 1. Two distinct broken local links in the same sentence must both be reported
+    const twoLinksPath = path.join(tmpDir, "two-links.md");
+    fs.writeFileSync(twoLinksPath, "Compare [a](./missing-a.md) and [b](./missing-b.md).\n", "utf8");
+    const detCfg = resolveLayeredConfig({ cwd: tmpDir, env: { DISLOP_CONFIG_DIR: tmpDir }, cliFlags: { noLlm: true } });
+    const twoLinksRes = await runDocumentPipeline({ filePath: twoLinksPath, config: detCfg, route: null, cwd: tmpDir });
+    const brokenLinks = twoLinksRes.items.filter((i) => i.ruleId === "common/artifact-qa/broken-local-link");
+    assert.equal(brokenLinks.length, 2);
+
+    // 2. Redundant LLM suggestion on deterministic full-segment DELETE or same-rule overlap is suppressed
+    const wrapperPath = path.join(tmpDir, "wrapper.md");
+    fs.writeFileSync(
+      wrapperPath,
+      "Certainly! Here it is:\n\nIn today's fast-paced world, reliability matters.\n\nIt is worth noting that queue depth stayed under 12ms.\n",
+      "utf8",
+    );
+    const llmCfg = resolveLayeredConfig({ cwd: tmpDir, env: { DISLOP_CONFIG_DIR: tmpDir }, cliFlags: { engine: "byok" } });
+    const llmRes = await runDocumentPipeline({
+      filePath: wrapperPath,
+      config: llmCfg,
+      route: {
+        tier: "byok",
+        engineLabel: "byok:mock",
+        maxInputTokens: 8000,
+        execute: async () => ({
+          documentToneAnchor: "Release note",
+          items: [
+            {
+              ruleId: "en/artifact-qa/implicit-assistant-framing",
+              targetId: "P1-S1",
+              priority: "strong",
+              fixSafety: "review",
+              actionType: "delete",
+              originalQuote: "Certainly! Here it is:",
+              suggestedReplacement: "",
+              reason: "Assistant opener.",
+              rewritePrompt: "",
+            },
+            {
+              ruleId: "en/prose/moralizing-closer",
+              targetId: "P2-S1",
+              priority: "moderate",
+              fixSafety: "review",
+              actionType: "delete",
+              originalQuote: "In today's fast-paced world, reliability matters.",
+              suggestedReplacement: "",
+              reason: "Macro filler.",
+              rewritePrompt: "",
+            },
+            {
+              ruleId: "en/prose/throat-clearing",
+              targetId: "P3-S1",
+              priority: "moderate",
+              fixSafety: "review",
+              actionType: "replace",
+              originalQuote: "It is worth noting that",
+              suggestedReplacement: "",
+              reason: "Duplicate partial throat-clearing on same segment.",
+              rewritePrompt: "",
+            },
+            {
+              ruleId: "en/prose/stealth-vapor",
+              targetId: "P3-S1",
+              priority: "moderate",
+              fixSafety: "manual",
+              actionType: "prompt",
+              originalQuote: "It is worth noting that queue depth stayed under 12ms.",
+              suggestedReplacement: "",
+              reason: "Different rule on P3-S1 should survive.",
+              rewritePrompt: "Keep metric.",
+            },
+          ],
+        }),
+      },
+      cwd: tmpDir,
+    });
+    const rules = llmRes.items.map((i) => i.ruleId);
+    assert.ok(rules.includes("en/artifact-qa/chatbot-artifact"));
+    assert.ok(rules.includes("en/prose/hollow-transition"));
+    assert.ok(!rules.includes("en/artifact-qa/implicit-assistant-framing"));
+    assert.ok(!rules.includes("en/prose/moralizing-closer"));
+    assert.equal(rules.filter((r) => r === "en/prose/throat-clearing").length, 1);
+    assert.ok(rules.includes("en/prose/stealth-vapor"));
+
+    // 3. bold-lead-list-wall resets across headings while still catching 4+ consecutive items
+    const headingResetDoc = parseDocumentText(
+      [
+        "1. **Alpha**: First point.",
+        "2. **Beta**: Second point.",
+        "",
+        "## Next Section",
+        "",
+        "- **Gamma**: Third point.",
+        "- **Delta**: Fourth point.",
+      ].join("\n"),
+      "reset.md",
+      "md",
+    );
+    const enPacks = await resolveActivePacks(headingResetDoc);
+    const resetFindings = await runDeterministicPackChecks(headingResetDoc, enPacks);
+    assert.equal(resetFindings.some((f) => f.ruleId === "en/prose/bold-lead-list-wall"), false);
+
+    const consecutiveWallDoc = parseDocumentText(
+      [
+        "- **One**: First.",
+        "- **Two**: Second.",
+        "- **Three**: Third.",
+        "- **Four**: Fourth.",
+      ].join("\n"),
+      "wall.md",
+      "md",
+    );
+    const wallFindings = await runDeterministicPackChecks(consecutiveWallDoc, enPacks);
+    assert.equal(wallFindings.some((f) => f.ruleId === "en/prose/bold-lead-list-wall"), true);
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});

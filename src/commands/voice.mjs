@@ -63,7 +63,7 @@ export async function runVoiceCommand(positionals, flags, io = {}) {
         "Usage: dislop voice extract <files/globs...> (no reference files provided)",
       );
     }
-    const resolvedFiles = expandTargetInputs(fileInputs, { cwd });
+    const resolvedFiles = expandTargetInputs(fileInputs, { cwd, ignorePatterns: config.ignore });
     const isTty = isInteractiveHumanTty({ stdin, stdout, env });
     const route = await resolveExecutionRoute({ config, isTty, env, stdin, stderr, fetchImpl });
     const profile = await extractVoiceProfile(resolvedFiles, { route });

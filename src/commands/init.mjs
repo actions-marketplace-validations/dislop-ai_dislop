@@ -19,24 +19,30 @@ export async function runInitCommand(_positionals, flags, io = {}) {
 
   const voiceRefs = flags.voiceFiles && flags.voiceFiles.length > 0 ? flags.voiceFiles : [];
 
-  const template = {
-    routing: "local",
-    approvedHosts: [],
-    packs: ["artifact-qa", "web-ui", "slide-deck", "prose"],
-    voice: {
-      referenceFiles: voiceRefs,
-    },
-    providers: {
-      "local-ollama": {
-        protocol: "openai",
-        baseUrl: "http://127.0.0.1:11434/v1",
-        apiKey: "ollama",
-        model: "qwen2.5:7b",
-        structuredOutput: "json_object",
-        maxInputTokens: 8000,
-      },
-    },
-  };
+  const template = flags.global
+    ? {
+        routing: "local",
+        approvedHosts: [],
+        packs: ["artifact-qa", "web-ui", "slide-deck", "prose"],
+        voice: {
+          referenceFiles: voiceRefs,
+        },
+        providers: {
+          "local-ollama": {
+            protocol: "openai",
+            baseUrl: "http://127.0.0.1:11434/v1",
+            apiKey: "ollama",
+            model: "qwen2.5:7b",
+            structuredOutput: "json_object",
+            maxInputTokens: 8000,
+          },
+        },
+      }
+    : {
+        routing: "local",
+        ignore: [".private/**"],
+        ...(voiceRefs.length > 0 ? { voice: { referenceFiles: voiceRefs } } : {}),
+      };
 
   if (flags.global) {
     writeJsonFileSecure(targetPath, template, { mode: 0o600 });

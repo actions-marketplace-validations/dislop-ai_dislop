@@ -16,6 +16,7 @@ import zlib from "node:zlib";
 import { fileURLToPath } from "node:url";
 
 import { resolveLayeredConfig } from "../src/kernel/config.mjs";
+import { DISLOP_VERSION } from "../src/kernel/version.mjs";
 import { runDocumentPipeline, arbitrateExitCode } from "../src/kernel/pipeline.mjs";
 import { buildZipArchive } from "../src/kernel/ooxml-binary.mjs";
 import { verifyDocumentRevision } from "../src/kernel/fact-gate.mjs";
@@ -696,7 +697,7 @@ function renderReportMarkdown(summary) {
   const lines = [
     "# dislop-bench v3 Report",
     "",
-    `Run date: ${generatedAt} | Runtime: Node.js ${nodeVersion} | Kernel: v1.0.0 Micro-Kernel`,
+    `Run date: ${generatedAt} | Runtime: Node.js ${nodeVersion} | Kernel: v${DISLOP_VERSION} Micro-Kernel`,
     "",
     "## Summary Gates",
     "",

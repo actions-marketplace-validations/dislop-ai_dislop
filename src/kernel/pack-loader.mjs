@@ -2,6 +2,8 @@ import fs from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { DislopConfigError } from "./config.mjs";
+import { validatePackPath } from "./pack-validator.mjs";
 import {
   VALID_ACTION_TYPES,
   VALID_DEFECT_SEVERITIES,
@@ -435,7 +437,13 @@ async function loadFromFilesystemEntry(targetPath) {
  */
 export async function loadSinglePack(
   specifier,
-  { docLanguage = "en", cwd = process.cwd(), packsRoot = BUILTIN_PACKS_ROOT } = {},
+  {
+    docLanguage = "en",
+    cwd = process.cwd(),
+    packsRoot = BUILTIN_PACKS_ROOT,
+    packOrigin = "cli",
+    projectDir = null,
+  } = {},
 ) {
   if (specifier && typeof specifier === "object") {
     return wrapEagerPackAsLazyHandle(specifier);
@@ -445,20 +453,54 @@ export async function loadSinglePack(
     throw new Error("Empty Pack specifier");
   }
 
+  const isUntrustedOrigin = packOrigin === "project" || packOrigin === "mcp";
   const looksLikePath =
     raw.startsWith("./") ||
     raw.startsWith("../") ||
     path.isAbsolute(raw) ||
-    /\.(?:mjs|js|md|json)$/i.test(raw);
+    /\.(?:mjs|js|cjs|md|json)$/i.test(raw);
   if (looksLikePath) {
-    const abs = path.resolve(cwd, raw);
+    const baseDir = projectDir || cwd;
+    const abs = path.resolve(baseDir, raw);
     if (!fs.existsSync(abs)) {
       throw new Error(`Pack path not found: '${raw}' (resolved to '${abs}')`);
+    }
+    if (isUntrustedOrigin) {
+      const realBase = fs.realpathSync(baseDir);
+      const realTarget = fs.realpathSync(abs);
+      const rel = path.relative(realBase, realTarget);
+      if (rel.startsWith("..") || path.isAbsolute(rel)) {
+        throw new DislopConfigError(
+          `Pack path '${raw}' escapes project directory '${baseDir}' under untrusted origin '${packOrigin}'.`,
+        );
+      }
+      const stat = fs.statSync(realTarget);
+      if (stat.isFile() && !/\.md$/i.test(realTarget)) {
+        throw new DislopConfigError(
+          `Untrusted origin '${packOrigin}' cannot execute script pack '${raw}'. Only validated .pack.md files are permitted.`,
+        );
+      }
+      const validation = validatePackPath(realTarget, { cwd: baseDir });
+      if (!validation.ok) {
+        throw new DislopConfigError(
+          `Pack validation failed for '${raw}': ${validation.violations.map((v) => v.message).join("; ")}`,
+        );
+      }
+      const loaded = await loadFromFilesystemEntry(realTarget);
+      if (loaded.hasScripts) {
+        throw new DislopConfigError(
+          `Untrusted origin '${packOrigin}' cannot mount script-bearing pack '${raw}'.`,
+        );
+      }
+      return loaded;
     }
     return loadFromFilesystemEntry(abs);
   }
 
   let normalizedId = SHORTHAND_ALIASES[raw] || raw;
+  if (normalizedId.includes("\0") || normalizedId.includes("\\") || normalizedId.includes("..")) {
+    throw new DislopConfigError(`Invalid Pack identifier '${raw}'`);
+  }
   if (!normalizedId.includes("/")) {
     const langDir = path.join(packsRoot, docLanguage, normalizedId);
     const commonDir = path.join(packsRoot, "common", normalizedId);
@@ -469,9 +511,24 @@ export async function loadSinglePack(
     }
   }
 
-  const builtinDir = path.join(packsRoot, ...normalizedId.split("/"));
-  if (fs.existsSync(builtinDir) && fs.statSync(builtinDir).isDirectory()) {
-    return loadFromFilesystemEntry(builtinDir);
+  const builtinIds = new Set(listBuiltinPackIds(packsRoot));
+  if (builtinIds.has(normalizedId)) {
+    const realPacksRoot = fs.realpathSync(packsRoot);
+    const builtinDir = path.join(realPacksRoot, ...normalizedId.split("/"));
+    if (fs.existsSync(builtinDir) && fs.statSync(builtinDir).isDirectory()) {
+      const realBuiltinDir = fs.realpathSync(builtinDir);
+      const rel = path.relative(realPacksRoot, realBuiltinDir);
+      if (rel.startsWith("..") || path.isAbsolute(rel)) {
+        throw new DislopConfigError(`Built-in pack '${normalizedId}' escapes packs root`);
+      }
+      return loadFromFilesystemEntry(realBuiltinDir);
+    }
+  }
+
+  if (isUntrustedOrigin) {
+    throw new DislopConfigError(
+      `Untrusted origin '${packOrigin}' cannot resolve external npm pack '${raw}'. Built-in packs: ${listBuiltinPackIds(packsRoot).join(", ")}`,
+    );
   }
 
   // Installed npm package fallback
@@ -535,22 +592,26 @@ export function defaultPackSpecifiersForDoc(doc, packsRoot = BUILTIN_PACKS_ROOT)
   return specs;
 }
 
-function expandScenarioShorthands(rawSpecs, docLanguage, packsRoot) {
+function expandScenarioShorthands(rawSpecs, docLanguage, packsRoot, defaultOrigin = "cli") {
   const expanded = [];
-  for (const spec of rawSpecs) {
-    if (typeof spec !== "string") {
-      expanded.push(spec);
+  for (const entry of rawSpecs) {
+    const isWrapped = entry && typeof entry === "object" && typeof entry.spec === "string";
+    const specVal = isWrapped ? entry.spec : entry;
+    const itemOrigin = isWrapped && entry.origin ? entry.origin : defaultOrigin;
+
+    if (typeof specVal !== "string") {
+      expanded.push({ spec: specVal, origin: itemOrigin });
       continue;
     }
-    const trimmed = spec.trim();
+    const trimmed = specVal.trim();
     const looksLikePath =
       trimmed.startsWith("./") ||
       trimmed.startsWith("../") ||
       path.isAbsolute(trimmed) ||
-      /\.(?:mjs|js|md|json)$/i.test(trimmed);
+      /\.(?:mjs|js|cjs|md|json)$/i.test(trimmed);
 
     if (looksLikePath || trimmed.includes("/") || SHORTHAND_ALIASES[trimmed]) {
-      expanded.push(trimmed);
+      expanded.push({ spec: trimmed, origin: itemOrigin });
       continue;
     }
 
@@ -560,9 +621,9 @@ function expandScenarioShorthands(rawSpecs, docLanguage, packsRoot) {
     const hasLang = builtinPackExists(packsRoot, langId);
 
     if (hasCommon && hasLang) {
-      expanded.push(commonId, langId);
+      expanded.push({ spec: commonId, origin: itemOrigin }, { spec: langId, origin: itemOrigin });
     } else {
-      expanded.push(trimmed);
+      expanded.push({ spec: trimmed, origin: itemOrigin });
     }
   }
   return expanded;
@@ -590,17 +651,42 @@ export function packMetadataAppliesToDoc(pack, doc) {
  */
 export async function resolveActivePacks(
   doc,
-  { packSpecifiers = null, cwd = process.cwd(), packsRoot = BUILTIN_PACKS_ROOT } = {},
+  {
+    packSpecifiers = null,
+    extraPackSpecifiers = null,
+    cwd = process.cwd(),
+    packsRoot = BUILTIN_PACKS_ROOT,
+    packOrigin = "cli",
+    projectDir = null,
+  } = {},
 ) {
-  const requested =
+  let requested =
     packSpecifiers && packSpecifiers.length > 0
-      ? expandScenarioShorthands(packSpecifiers, doc.language, packsRoot)
-      : defaultPackSpecifiersForDoc(doc, packsRoot);
+      ? expandScenarioShorthands(packSpecifiers, doc.language, packsRoot, packOrigin)
+      : defaultPackSpecifiersForDoc(doc, packsRoot).map((spec) => ({ spec, origin: "default" }));
+
+  if (packOrigin !== "cli" && packSpecifiers && packSpecifiers.length > 0) {
+    if (!requested.some((r) => r.spec === "common/artifact-qa")) {
+      requested = [{ spec: "common/artifact-qa", origin: "default" }, ...requested];
+    }
+  }
+  if (extraPackSpecifiers && extraPackSpecifiers.length > 0) {
+    requested = [
+      ...requested,
+      ...expandScenarioShorthands(extraPackSpecifiers, doc.language, packsRoot, packOrigin),
+    ];
+  }
 
   const loaded = [];
   const seenNames = new Set();
-  for (const spec of requested) {
-    const pack = await loadSinglePack(spec, { docLanguage: doc.language, cwd, packsRoot });
+  for (const item of requested) {
+    const pack = await loadSinglePack(item.spec, {
+      docLanguage: doc.language,
+      cwd,
+      packsRoot,
+      packOrigin: item.origin,
+      projectDir,
+    });
     if (seenNames.has(pack.name)) continue;
     seenNames.add(pack.name);
     if (packMetadataAppliesToDoc(pack, doc)) {

@@ -4,11 +4,26 @@ All notable changes to `dislop` are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-11-26
+
+### Added
+- **Linter Configuration, Overrides, Declarative Rules & Git Workflows**: Added walk-up `.dislop.json` resolution bounded by `.git`, per-glob `overrides`, `extraPacks`, rule toggles (`rules`), declarative project regex/term rules (`.dislop/rules.json`), `--fail-on <none|error|warning>`, stdin auditing (`dislop check - --stdin-filename <name>`), and git-changed file discovery (`dislop check --changed` / `--since <ref>`).
+- **Shared Pack Linter CLI (`dislop packs lint <path>`)**: Extracted reusable static security and manifest validation into `src/kernel/pack-validator.mjs` so contributors and agents can lint `.pack.md` files and pack directories before PR submission (`Exit 0` clean, `1` violations, `2` missing path).
+- **Extended Artifact QA & Fact Gate Guards**: Added PDF `/URI` annotation link extraction, `common/artifact-qa/local-path-leak` (catching concrete user home/file paths while ignoring `/Users/<name>/` placeholders and `~/`), verb/guarantee/bound polarity reversal detection, fabricated currency/percentage blocking, and swapped `Label: <num>` metric guards in `verifyDocumentRevision`.
+- **Opt-In Local Dev Worklog & Reflection (`dislop worklog`)**: Added an off-by-default, CI-suppressed local telemetry and reflection subsystem (`status`, `list`, `show`, `stats`, `reflect`, `clear`) with `metadata` (hash-only), `redacted`, and `local-full` privacy tiers (`0700`/`0600` permissions, secret/path scrubbing, and rolling retention) to surface high-skip rules, manual edit hotspots, and Fact Gate downgrades without network uploads.
+
+### Changed
+- **Skill References, Voice Schema & Pack Refinements**: Aligned `skills/dislop/references/*.md`, `docs/brand-and-voice-guide*.md`, `docs/brand/voice.json`, and `assets/*.svg` (`data-dislop-ignore` on specimen text) with `v1.1.0` Dual-Track rule IDs, tightened `en/artifact-qa` wrapper matching (`Here it is`) and `en/prose` bold-list wall resets, and honored `config.ignore` in `dislop voice extract`.
+
+### Security
+- **Untrusted Repo Config & Pack Origin Hardening**: Restricted shared `.dislop.json` to an audited key allowlist (`off|local` routing only), blocked `providers`/`activeProvider`/`approvedHosts`/`worklog`/`voice.cachePath` from project configs, confined `voice.referenceFiles` and project `.pack.md` paths inside the project root, rejected git-tracked `.dislop.local.json`, enforced `packOrigin` sandboxing (`project` and `mcp` cannot execute JS/MJS packs or resolve npm packages), honored `ignore` on explicit targets, and closed BYOK consent bypasses.
+- **LLM/OOXML Safety & Release CI Parity**: Hardened `<established_tone_anchor>` isolation and LLM output field clamping (`<= 320` chars), avoided collapsing OOXML hyperlinks or mixed-style paragraphs during patching, added accurate per-item auto-fix accounting, skipped voice extraction under `--no-llm`, added `DISLOP_TEST_MODE=1` network fuse, and fixed `.github/workflows/release.yml` ESM manifest checks.
+
 ## [1.0.1] - 2026-11-26
 
 ### Changed
 - **PDF & Multi-Modal Real-Deliverable Hardening**: Extended the zero-dependency PDF parser with `ASCII85Decode` / `ASCIIHexDecode` filter chains and recursive `/Subtype /Form` XObject (`/Do`) expansion; exempted `#` table-header tokens in `raw-markdown-leak` and script-wired or loading-state `<button disabled>` controls in UI checks; raised Chinese `bold-lead-list-wall` restraint to skip concrete numeric/quoted domain lists.
-- **Provider Routing & Release Automation**: Added `--model <name>` CLI override, built-in `--provider <openai|anthropic|gemini>` ambient key resolution without `config.json`, updated default Gemini model to `gemini-3.8-flash` with `MAX_TOKENS` guard, added Official Cloud `dislop.findings/1` adaptation, expanded `dislop-bench v3` to 86 multimodal samples, and restored pure-Node OIDC/MCP Registry `release.yml`.
+- **Provider Routing & Release Automation**: Added `--model <name>` CLI override, built-in `--provider <openai|anthropic|gemini>` ambient key resolution without `config.json`, updated default Gemini model to `gemini-3.8-flash` with `MAX_TOKENS` guard, added Official Cloud `dislop.findings/1` adaptation, expanded `dislop-bench v3` to 86 multimodal samples, and trimmed `server.json` description (`<= 100` chars) with `workflow_dispatch` MCP Registry publish support.
 
 ## [1.0.0] - 2026-11-26
 
@@ -19,8 +34,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - **Pack Supply-Chain Security Scanner & `dislop-bench v3`**: Added `scripts/verify-packs-security.mjs` (`npm run check:security`) and `scripts/run-benchmark.mjs` (`benchmarks/datasets/*-v3.json`) validating multi-modal HTML/PDF/OOXML parsing, zero-FP CI gating, mock-LLM security clamping, and Fact Gate retention.
 
 ### Changed
-- **Hardened Multi-Modal Parsers & Ecosystem Manifests**: Upgraded zero-dependency PDF decoding (`FlateDecode`, `ASCII85Decode`, `ASCIIHexDecode` filter chains, `/ObjStm`, `/ToUnicode` CMaps, `TJ`, recursive `/Subtype /Form` XObjects via `/Do`, `/ActualText`, monospace exemption, and `#` table-header immunity), nested HTML/JSX/SVG prose extraction with `data-dislop-ignore` / `dislop-quote` / script-wired disabled button & loading-state exemptions, Markdown pipe-table & angle-bracket link support, PPTX hidden-slide skipping, high-restraint Chinese bold-lead list thresholds, and `v1.0.0` MCP/plugin/GitHub Action & npm OIDC/MCP Registry release workflows.
-- **Provider Routing & CLI Flag Ergonomics**: Added `--model <name>` CLI override, built-in `--provider <openai|anthropic|gemini>` ambient key resolution without requiring `config.json`, updated default Gemini model to `gemini-3.8-flash` with `MAX_TOKENS` truncation guard, and added backward-compatible `dislop.findings/1` adaptation in the Official Cloud adapter.
+- **Hardened Parsers & Manifest Parity**: Upgraded zero-dependency PDF decoding (`FlateDecode`, `/ObjStm`, `/ToUnicode` CMaps, `TJ`, `/ActualText`, monospace exemption), nested HTML/JSX/SVG prose extraction with `data-dislop-ignore` / `dislop-quote` exemptions, Markdown pipe-table & angle-bracket link support, PPTX hidden-slide skipping, and `v1.0.0` MCP/plugin/GitHub Action & npm OIDC release workflows.
 
 ## [0.9.1] - 2026-11-24
 
@@ -164,7 +178,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - **Workbench-First Site & Plain-Voice Copy Overhaul (`dislop.com`)**:
   - Restructured `https://dislop.com` as a human-first, agent-friendly anti-slop hub defaulting to Simplified Chinese (`zh-CN`) with native English (`en`) switching, zero language mixing, one-click "Copy for Agent" hero prompt, live 3-state Hero Proof Card, 3 before/after cases, instant browser workbench, 5-way usage guide, folded Agent technical endpoints (`/llms.txt`, `/catalog.json`, `/tasks/*.md`, `/rules/*.md`), and 87-entry `/awesome/` directory.
   - Rewrote visitor-facing copy across `dislop.com`, `README*.md`, `awesome/README*.md`, `docs/brand-and-voice-guide*.md`, `AGENTS.md`, CLI help strings, and SVG banners to drop 3-part semicolon pitches, pull-quote closers, and copy-editor roleplay.
-  - Consolidated project milestones and open design questions into root [ROADMAP.md](./ROADMAP.md) & [ROADMAP.zh-CN.md](./ROADMAP.zh-CN.md).
+  - Consolidated project milestones and open design questions into root `ROADMAP.md` & `ROADMAP.zh-CN.md`.
 
 ## [0.4.1] - 2026-11-21
 
@@ -192,7 +206,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ### Added
 
-- Added the initial offline benchmark suite (`dislop-bench v1`: 48 detection samples + 12 end-to-end revision tasks) in [benchmarks/README.md](./benchmarks/README.md) and [scripts/run_benchmark.mjs](./scripts/run_benchmark.mjs), plus the 5-model live comparison ([benchmarks/MODEL-COMPARISON.md](./benchmarks/MODEL-COMPARISON.md)) showing `+15.8` to `+22.3` composite lift over bare prompting.
+- Added the initial offline benchmark suite (`dislop-bench v1`: 48 detection samples + 12 end-to-end revision tasks) in [benchmarks/README.md](./benchmarks/README.md) and `scripts/run_benchmark.mjs`, plus the 5-model live comparison (`benchmarks/MODEL-COMPARISON.md`) showing `+15.8` to `+22.3` composite lift over bare prompting.
 - Added Claude Code plugin manifests (`.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.mcp.json`), brand guides ([docs/brand-and-voice-guide.md](./docs/brand-and-voice-guide.md)), and the 87-entry **Awesome Anti-Slop** directory ([awesome/README.md](./awesome/README.md)).
 
 ## [0.2.0] - 2026-11-21

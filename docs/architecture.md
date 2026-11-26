@@ -1,4 +1,4 @@
-# Architecture (`v1.0.0` Node.js Micro-Kernel)
+# Architecture (Node.js Micro-Kernel)
 
 `dislop` is a single-stack **Node.js (`>= 20.0.0`, ESM, zero external runtime dependencies)** Pluggable Editorial & Artifact Linter.
 
@@ -42,7 +42,7 @@ Loading in [pack-loader.mjs](../src/kernel/pack-loader.mjs) and [pipeline.mjs](.
 
 ## 3. The 7-Step Execution Lifecycle (`src/kernel/pipeline.mjs`)
 
-1. **Environment & Layered Config (`config.mjs`)**: Merges `~/.config/dislop/config.json` <- `.dislop.json` <- `.dislop.local.json` <- CLI flags, detects CI / coding-agent sandboxes (`isInteractiveHumanTty`), and checks SHA-256 `voice.json` fingerprints (`voice-profile.mjs`).
+1. **Environment & Layered Config (`config.mjs`, `file-discovery.mjs`)**: Merges `~/.config/dislop/config.json` <- `.dislop.json` <- `.dislop.local.json` <- CLI flags (including `ignore` directory/glob exclusions and bounded `--concurrency` for multi-file `check`), detects CI / coding-agent sandboxes (`isInteractiveHumanTty`), and checks SHA-256 `voice.json` fingerprints (`voice-profile.mjs`).
 2. **Multi-Modal `DocumentModel` (`document-model.mjs`, `ooxml-binary.mjs`)**: Parses `.md`, `.mdx`, `.txt`, `.html`, `.css`, `.jsx`, `.tsx`, `.svg`, `.docx`, `.pptx`, `.pdf`, and raster images (`.png`, `.jpg`, `.jpeg`, `.webp`, `.gif`) into addressable segments (`[P1-S2|L4]` / `[B1-S2]`), format-specific write-back `locator` pointers, and modality signal bags (`uiSignals`, `deckSignals`, `mediaSignals`).
 3. **Deterministic Pack Checks (`pack-loader.mjs`)**: Runs `scripts/*.mjs` across active Packs in parallel (`reportDefect` + `reportSuggestion`).
 4. **Prompt Assembly, Sliding Window & Routing (`prompt-assembler.mjs`, `chunker.mjs`, `router.mjs`)**:
@@ -53,7 +53,7 @@ Loading in [pack-loader.mjs](../src/kernel/pack-loader.mjs) and [pipeline.mjs](.
    - Blocks **newly fabricated or prompt-injected** URLs, inline code spans, or numbers absent from `originalQuote`.
    - Runs `verifyFix()` from the originating Pack's `scripts/`. Any failure strips `suggestedReplacement` and downgrades `fixSafety` to `"manual"` with a `verificationNote`.
 6. **Runners & Lossless Atomic Patching (`interactive-tty.mjs`, `auto-fix.mjs`, `reporters.mjs`, `patcher.mjs`)**:
-   - Deduplicates and sorts Dual-Track (`Defect` `error -> warning` first, then `Suggestion` `strong -> moderate -> hint`), running either read-only reporters (`check`), batch safe apply (`fix --auto`), or the single-keypress TTY hunk loop (`y/n/e/p/a/A/s/u/q`).
+   - Deduplicates by `(targetId, ruleId, originalQuote)` (suppressing redundant LLM suggestions on segments already targeted for full-segment deterministic deletion) and sorts Dual-Track (`Defect` `error -> warning` first, then `Suggestion` `strong -> moderate -> hint`), running either read-only reporters (`check`), batch safe apply (`fix --auto`), or the single-keypress TTY hunk loop (`y/n/e/p/a/A/s/u/q`).
    - Writes accepted edits atomically via sibling temp-file rename (`--dry-run`, `--backup`), preserving `LF`/`CRLF` line endings and `.docx`/`.pptx` run properties & binary entries.
 7. **Exit Code Arbitration**: `1` iff `summary.defects.error > 0`; `0` otherwise (`2` on CLI/config/auth/file errors).
 

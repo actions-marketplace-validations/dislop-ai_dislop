@@ -18,10 +18,10 @@
   <text x="640" y="88" fill="#474C55" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16">dislop check  ·  1 hard bug  ·  1 warning</text>
 
   <rect x="637" y="127" width="204" height="30" rx="0" fill="#FEF3F2"/>
-  <text x="640" y="150" font-family="Georgia, 'Times New Roman', serif" font-size="22"><tspan fill="#5E646E">Certainly! Here it is:</tspan><tspan fill="#14171A" dx="28">This release is</tspan></text>
+  <text x="640" y="150" font-family="Georgia, 'Times New Roman', serif" font-size="22"><tspan fill="#5E646E" data-dislop-ignore="true">Certainly! Here it is:</tspan><tspan fill="#14171A" dx="28">This release is</tspan></text>
   <path data-dele="true" d="M639 143H833C841 143 848 137 848 130C848 125 844 122 839 122C834 122 831 126 831 131C831 140 838 148 849 152" stroke="#F04438" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
 
   <rect x="637" y="180" width="368" height="29" rx="0" fill="#EFF4FF"/>
-  <text x="640" y="202" fill="#14171A" font-family="Georgia, 'Times New Roman', serif" font-size="22">not just faster — it's a paradigm shift.</text>
+  <text x="640" y="202" fill="#14171A" font-family="Georgia, 'Times New Roman', serif" font-size="22" data-dislop-ignore="true">not just faster — it's a paradigm shift.</text>
   <line x1="640" y1="212" x2="1002" y2="212" stroke="#1B52B0" stroke-width="2.2" stroke-dasharray="6 4"/>
 </svg>

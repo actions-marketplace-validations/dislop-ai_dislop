@@ -18,10 +18,10 @@
   <text x="640" y="88" fill="#474C55" font-family="'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif" font-size="16">dislop check  ·  1 处硬伤  ·  1 条提醒</text>
 
   <rect x="637" y="126" width="226" height="32" rx="0" fill="#FEF3F2"/>
-  <text x="640" y="150" font-family="'Songti SC', 'Noto Serif CJK SC', 'STSong', Georgia, serif" font-size="22"><tspan fill="#5E646E">好的，以下是修改后：</tspan><tspan fill="#14171A" dx="30">本次上线说明</tspan></text>
+  <text x="640" y="150" font-family="'Songti SC', 'Noto Serif CJK SC', 'STSong', Georgia, serif" font-size="22"><tspan fill="#5E646E" data-dislop-ignore="true">好的，以下是修改后：</tspan><tspan fill="#14171A" dx="30">本次上线说明</tspan></text>
   <path data-dele="true" d="M639 142H855C863 142 870 136 870 129C870 124 866 121 861 121C856 121 853 125 853 130C853 139 860 147 871 151" stroke="#F04438" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
 
   <rect x="637" y="179" width="380" height="31" rx="0" fill="#EFF4FF"/>
-  <text x="640" y="202" fill="#14171A" font-family="'Songti SC', 'Noto Serif CJK SC', 'STSong', Georgia, serif" font-size="22">这不是一次升级，而是一场范式革命。</text>
+  <text x="640" y="202" fill="#14171A" font-family="'Songti SC', 'Noto Serif CJK SC', 'STSong', Georgia, serif" font-size="22" data-dislop-ignore="true">这不是一次升级，而是一场范式革命。</text>
   <line x1="640" y1="212" x2="1014" y2="212" stroke="#1B52B0" stroke-width="2.2" stroke-dasharray="6 4"/>
 </svg>

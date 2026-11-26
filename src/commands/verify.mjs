@@ -3,14 +3,21 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { DislopConfigError } from "../kernel/config.mjs";
+import { DislopConfigError, resolveLayeredConfig } from "../kernel/config.mjs";
 import { detectFormatFromPath, parseDocumentFile, parseDocumentText } from "../kernel/document-model.mjs";
 import { verifyDocumentRevision } from "../kernel/fact-gate.mjs";
+import { buildVerifyWorklogEntry, recordWorklogEntry } from "../runtime/worklog.mjs";
 
 function extractComparableText(filePath) {
   const doc = parseDocumentFile(filePath);
   if (doc.segments.length > 0) {
     return doc.segments.map((s) => s.text).join("\n");
+  }
+  const ext = path.extname(filePath).toLowerCase();
+  if ([".pdf", ".docx", ".pptx", ".png", ".jpg", ".jpeg", ".webp", ".gif"].includes(ext)) {
+    throw new DislopConfigError(
+      `Unable to extract inspectable text segments from binary file '${filePath}'. Cannot verify unextractable binary artifacts.`,
+    );
   }
   return fs.readFileSync(filePath, "utf8");
 }
@@ -44,7 +51,8 @@ function extractComparableTextFromBuffer(buf, targetPath) {
  * or `dislop verify --git [ref] <file> [--json]`
  */
 export async function runVerifyCommand(positionals, flags, io = {}) {
-  const { cwd = process.cwd(), stdout = process.stdout } = io;
+  const { cwd = process.cwd(), env = process.env, stdout = process.stdout } = io;
+  const startedAt = Date.now();
 
   let beforeText = "";
   let afterText = "";
@@ -118,7 +126,9 @@ export async function runVerifyCommand(positionals, flags, io = {}) {
   if (flags.json || flags.format === "json") {
     stdout.write(`${JSON.stringify(payload, null, 2)}\n`);
   } else if (verification.ok) {
-    stdout.write(`PASS ${label}: all protected facts preserved; 0 second-order slop regressions.\n`);
+    stdout.write(
+      `PASS ${label}: anchored tokens & qualifiers preserved; 0 detected slop/polarity regressions.\n`,
+    );
   } else {
     stdout.write(`FAIL ${label}:\n`);
     for (const reason of verification.droppedFacts) {
@@ -129,5 +139,27 @@ export async function runVerifyCommand(positionals, flags, io = {}) {
     }
   }
 
-  return verification.ok ? 0 : 1;
+  const exitCode = verification.ok ? 0 : 1;
+  try {
+    const config = resolveLayeredConfig({ cwd, env, cliFlags: flags });
+    recordWorklogEntry(
+      buildVerifyWorklogEntry({
+        source: "cli",
+        command: "verify",
+        mode: flags.git !== undefined && flags.git !== false ? "verify-git" : "verify-files",
+        cwd,
+        config,
+        targetLabel: label,
+        verification,
+        durationMs: Date.now() - startedAt,
+        exitCode,
+      }),
+      config,
+      env,
+    );
+  } catch {
+    // Worklog recording must never break verify
+  }
+
+  return exitCode;
 }

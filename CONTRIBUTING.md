@@ -148,5 +148,8 @@ export default definePack({
 
 ```bash
 npm test
+npm run check:security
+npm run bench:assert
 npm run dogfood
+node ./bin/dislop.mjs packs lint ./path/to/your.pack.md
 ```

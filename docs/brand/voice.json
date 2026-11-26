@@ -43,9 +43,11 @@
         "category": "AI slop linter"
       },
       "cliBadges": {
-        "error": "error",
-        "warning": "warn",
-        "info": "info"
+        "defectError": "error",
+        "defectWarning": "warning",
+        "suggestionStrong": "strong",
+        "suggestionModerate": "moderate",
+        "suggestionHint": "hint"
       }
     },
     "zh": {
@@ -58,9 +60,11 @@
         "category": "AI 味检查工具"
       },
       "cliBadges": {
-        "error": "硬伤",
-        "warning": "提醒",
-        "info": "提示"
+        "defectError": "硬伤",
+        "defectWarning": "警告",
+        "suggestionStrong": "强建议",
+        "suggestionModerate": "建议",
+        "suggestionHint": "提示"
       }
     }
   },
@@ -169,7 +173,7 @@
     ]
   },
   "verificationBinding": {
-    "extendsNegativePacks": ["core", "business-brief"],
+    "extendsNegativePacks": ["common/artifact-qa", "en/prose", "zh/prose"],
     "requireFactLockVerify": true,
     "rejectOnDisplacementFamilies": [
       "frame/negation-pivot",

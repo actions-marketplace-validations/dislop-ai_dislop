@@ -6,9 +6,15 @@ import { resolveLayeredConfig } from "../kernel/config.mjs";
 import { verifyDocumentRevision } from "../kernel/fact-gate.mjs";
 import { listBuiltinPackIds } from "../kernel/pack-loader.mjs";
 import { runDocumentPipeline } from "../kernel/pipeline.mjs";
+import { DISLOP_VERSION } from "../kernel/version.mjs";
 import { runAutoFixOnDocumentResult } from "../runners/auto-fix.mjs";
 import { formatAgentReports } from "../runners/reporters.mjs";
 import { resolveExecutionRoute } from "../runtime/router.mjs";
+import {
+  buildCheckOrFixWorklogEntry,
+  buildVerifyWorklogEntry,
+  recordWorklogEntry,
+} from "../runtime/worklog.mjs";
 
 const SUPPORTED_MCP_VERSIONS = ["2024-11-05", "2025-03-26", "2025-06-18", "2025-11-25"];
 
@@ -127,7 +133,7 @@ export async function handleMcpJsonRpcRequest(msg, { cwd = process.cwd(), env = 
           protocolVersion,
           serverInfo: {
             name: "dislop",
-            version: "1.0.1",
+            version: DISLOP_VERSION,
           },
           capabilities: {
             tools: {},
@@ -167,7 +173,28 @@ export async function handleMcpJsonRpcRequest(msg, { cwd = process.cwd(), env = 
       }
 
       if (toolName === "dislop_verify") {
+        const startedAt = Date.now();
         const res = verifyDocumentRevision(String(args.beforeText || ""), String(args.afterText || ""));
+        try {
+          const cfg = resolveLayeredConfig({ cwd, env });
+          recordWorklogEntry(
+            buildVerifyWorklogEntry({
+              source: "mcp",
+              command: "verify",
+              mode: "mcp-verify",
+              cwd,
+              config: cfg,
+              targetLabel: "mcp-inline",
+              verification: res,
+              durationMs: Date.now() - startedAt,
+              exitCode: res.ok ? 0 : 1,
+            }),
+            cfg,
+            env,
+          );
+        } catch {
+          // Worklog recording must never break MCP tool calls
+        }
         return {
           jsonrpc: "2.0",
           id,
@@ -179,6 +206,7 @@ export async function handleMcpJsonRpcRequest(msg, { cwd = process.cwd(), env = 
       }
 
       if (toolName === "dislop_check") {
+        const startedAt = Date.now();
         let targetPath = args.filePath ? path.resolve(cwd, String(args.filePath)) : null;
         let tmpFile = null;
 
@@ -201,6 +229,7 @@ export async function handleMcpJsonRpcRequest(msg, { cwd = process.cwd(), env = 
             env,
             cliFlags: {
               packs: Array.isArray(args.packs) ? args.packs : null,
+              packOrigin: Array.isArray(args.packs) ? "mcp" : undefined,
               noLlm: args.noLlm !== undefined ? Boolean(args.noLlm) : true,
               level: args.level || "all",
             },
@@ -211,6 +240,22 @@ export async function handleMcpJsonRpcRequest(msg, { cwd = process.cwd(), env = 
             docRes.report.file = `inline.${args.format || "md"}`;
           }
           const agentText = formatAgentReports([docRes]);
+          const exitCode = (docRes.report.summary?.defects?.error || 0) > 0 ? 1 : 0;
+          recordWorklogEntry(
+            buildCheckOrFixWorklogEntry({
+              source: "mcp",
+              command: "check",
+              mode: tmpFile ? "mcp-inline" : "mcp-file",
+              cwd,
+              config,
+              route,
+              results: [docRes],
+              durationMs: Date.now() - startedAt,
+              exitCode,
+            }),
+            config,
+            env,
+          );
 
           return {
             jsonrpc: "2.0",
@@ -231,12 +276,14 @@ export async function handleMcpJsonRpcRequest(msg, { cwd = process.cwd(), env = 
         if (!args.filePath) {
           throw new Error("dislop_fix_safe requires 'filePath'.");
         }
+        const startedAt = Date.now();
         const targetPath = path.resolve(cwd, String(args.filePath));
         const config = resolveLayeredConfig({
           cwd,
           env,
           cliFlags: {
             packs: Array.isArray(args.packs) ? args.packs : null,
+            packOrigin: Array.isArray(args.packs) ? "mcp" : undefined,
             noLlm: true,
           },
         });
@@ -246,6 +293,29 @@ export async function handleMcpJsonRpcRequest(msg, { cwd = process.cwd(), env = 
           dryRun: Boolean(args.dryRun),
           backup: Boolean(args.backup),
         });
+        const exitCode = (fixRes.report.summary?.defects?.error || 0) > 0 ? 1 : 0;
+        recordWorklogEntry(
+          buildCheckOrFixWorklogEntry({
+            source: "mcp",
+            command: "fix",
+            mode: args.dryRun ? "mcp-fix-dry-run" : "mcp-fix-auto",
+            cwd,
+            config,
+            route,
+            results: [docRes],
+            decisionsByFile: [
+              {
+                decisions: fixRes.decisions || {},
+                undoCount: 0,
+                aborted: false,
+              },
+            ],
+            durationMs: Date.now() - startedAt,
+            exitCode,
+          }),
+          config,
+          env,
+        );
 
         return {
           jsonrpc: "2.0",

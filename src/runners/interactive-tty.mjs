@@ -193,15 +193,16 @@ export async function runInteractiveTtySession(
   const { doc, items, report } = docResult;
   if (items.length === 0) {
     stdout.write(`${report.file}: clean (0 items)\n`);
-    return { appliedCount: 0, modified: false, diff: "", report };
+    return { appliedCount: 0, modified: false, diff: "", decisions: {}, undoCount: 0, report };
   }
 
   let reader = keyReader || createKeypressQueue(stdin);
   const ownedReader = !keyReader;
 
-  // Map itemIndex -> decision `{ status: 'accepted' | 'skipped' | 'edited', patch?: Object }`
+  // Map itemIndex -> decision `{ status: 'accepted' | 'skipped' | 'edited', copiedPrompt?: boolean, patch?: Object }`
   let decisions = new Map();
   const undoStack = [];
+  let undoCount = 0;
   let idx = 0;
 
   const snapshotState = () => {
@@ -221,7 +222,15 @@ export async function runInteractiveTtySession(
 
       if (key === "\u0003") {
         // Abort immediately without saving
-        return { appliedCount: 0, modified: false, diff: "", aborted: true, report };
+        return {
+          appliedCount: 0,
+          modified: false,
+          diff: "",
+          aborted: true,
+          decisions: {},
+          undoCount,
+          report,
+        };
       }
 
       if (key === "q") {
@@ -235,6 +244,7 @@ export async function runInteractiveTtySession(
           const prev = undoStack.pop();
           idx = prev.idx;
           decisions = prev.decisions;
+          undoCount += 1;
           stdout.write(`  (Reverted back to hunk ${idx + 1}.)\n`);
         }
         continue;
@@ -281,7 +291,7 @@ export async function runInteractiveTtySession(
           stdout.write(`  Rewrite prompt:\n  ${promptText}\n`);
         }
         snapshotState();
-        decisions.set(idx, { status: "skipped" });
+        decisions.set(idx, { status: "skipped", copiedPrompt: true });
         idx += 1;
         continue;
       }
@@ -427,7 +437,15 @@ export async function runInteractiveTtySession(
 
   const patches = [];
   const appliedIndices = new Set();
+  const decisionsSummary = {};
   for (const [itemIdx, dec] of decisions.entries()) {
+    const itemId = items[itemIdx]?.id;
+    if (itemId) {
+      if (dec.status === "accepted") decisionsSummary[itemId] = "accepted";
+      else if (dec.status === "edited") decisionsSummary[itemId] = "edited";
+      else if (dec.copiedPrompt) decisionsSummary[itemId] = "prompt_copied";
+      else decisionsSummary[itemId] = "skipped";
+    }
     if ((dec.status === "accepted" || dec.status === "edited") && dec.patch) {
       patches.push(dec.patch);
       appliedIndices.add(itemIdx);
@@ -436,7 +454,14 @@ export async function runInteractiveTtySession(
 
   if (patches.length === 0) {
     stdout.write("\nNo edits accepted; file left unchanged.\n");
-    return { appliedCount: 0, modified: false, diff: "", report };
+    return {
+      appliedCount: 0,
+      modified: false,
+      diff: "",
+      decisions: decisionsSummary,
+      undoCount,
+      report,
+    };
   }
 
   const patchRes = patchDocumentOnDisk(doc, patches, { dryRun, backup });
@@ -456,6 +481,8 @@ export async function runInteractiveTtySession(
     appliedCount: patchRes.modified ? patches.length : 0,
     modified: patchRes.modified,
     diff: patchRes.diff,
+    decisions: decisionsSummary,
+    undoCount,
     report,
   };
 }

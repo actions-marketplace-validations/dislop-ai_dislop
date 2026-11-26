@@ -1391,12 +1391,92 @@ export function inspectPdfBuffer(buffer) {
     }
   }
 
+function extractPdfUriValuesFromText(rawText, pageIndex, seen, out) {
+  if (!rawText || !rawText.includes("/URI")) return;
+  const pushUrl = (url) => {
+    const clean = String(url || "").trim();
+    if (!clean) return;
+    const key = `${pageIndex}:${clean}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    out.push({
+      url: clean,
+      raw: clean,
+      line: pageIndex,
+      segmentId: null,
+      locator: { kind: "pdf-readonly", page: pageIndex },
+    });
+  };
+
+  // Balanced nested parenthesis scan for `/URI (...)`
+  const keyRe = /\/URI\s*\(/g;
+  let km;
+  while ((km = keyRe.exec(rawText)) !== null) {
+    let i = km.index + km[0].length;
+    let depth = 1;
+    let rawLit = "";
+    while (i < rawText.length && depth > 0) {
+      const ch = rawText[i];
+      if (ch === "\\") {
+        rawLit += ch + (rawText[i + 1] ?? "");
+        i += 2;
+        continue;
+      }
+      if (ch === "(") {
+        depth += 1;
+        rawLit += ch;
+      } else if (ch === ")") {
+        depth -= 1;
+        if (depth > 0) rawLit += ch;
+      } else {
+        rawLit += ch;
+      }
+      i += 1;
+    }
+    if (depth === 0) {
+      pushUrl(decodePdfUnicodeLiteral(rawLit));
+    }
+  }
+
+  const hexRe = /\/URI\s*<([0-9A-Fa-f\s]+)>/g;
+  let m;
+  while ((m = hexRe.exec(rawText)) !== null) {
+    pushUrl(decodePdfHexString(m[1]));
+  }
+}
+
   const fontCache = new Map();
+  const pdfLinks = [];
+  const seenLinks = new Set();
+  const visitedUriObjNums = new Set();
+
   const pages = orderedPageObjs.map((pageObj, idx) => {
     const [width, height] = inheritedMediaBox.get(pageObj.objNum) || [612, 792];
     const resText = inheritedResources.get(pageObj.objNum) || extractOwnRes(pageObj.dictRaw);
     const fontMap = resolvePageFontMap(resText, objects, fontCache);
     const xObjectMap = resolvePageXObjectMap(resText, objects);
+
+    const annotRefs = [];
+    const annotsArr = pageObj.dictRaw.match(/\/Annots\s*\[([^\]]*)\]/);
+    if (annotsArr) {
+      for (const rm of annotsArr[1].matchAll(/(\d+)\s+\d+\s+R/g)) annotRefs.push(Number(rm[1]));
+    } else {
+      const annotsSingle = pageObj.dictRaw.match(/\/Annots\s+(\d+)\s+\d+\s+R/);
+      if (annotsSingle) annotRefs.push(Number(annotsSingle[1]));
+    }
+    for (const aNum of annotRefs) {
+      visitedUriObjNums.add(aNum);
+      const aObj = objects.get(aNum);
+      if (!aObj) continue;
+      extractPdfUriValuesFromText(aObj.dictRaw, idx + 1, seenLinks, pdfLinks);
+      const actRef = aObj.dictRaw.match(/\/A\s+(\d+)\s+\d+\s+R/);
+      if (actRef) {
+        const actNum = Number(actRef[1]);
+        visitedUriObjNums.add(actNum);
+        const actObj = objects.get(actNum);
+        if (actObj) extractPdfUriValuesFromText(actObj.dictRaw, idx + 1, seenLinks, pdfLinks);
+      }
+    }
 
     const contentRefs = [];
     const arrMatch = pageObj.dictRaw.match(/\/Contents\s*\[([^\]]*)\]/);
@@ -1429,11 +1509,17 @@ export function inspectPdfBuffer(buffer) {
     };
   });
 
+  for (const obj of objects.values()) {
+    if (visitedUriObjNums.has(obj.objNum)) continue;
+    extractPdfUriValuesFromText(obj.dictRaw, 1, seenLinks, pdfLinks);
+  }
+
   const fallbackPageCount = pages.length || (latin.match(/\/Type\s*\/Page\b/g) || []).length || 1;
   return {
     encrypted: false,
     pageCount: fallbackPageCount,
     pages,
+    links: pdfLinks,
     extractedText: pages.map((p) => p.text).filter(Boolean).join("\n\n"),
   };
 }

@@ -10,7 +10,7 @@ Do not sound corporate, do not try to impress or please the reader, and do not d
 
 ## 1. A Real Before/After: Why 0 Findings Can Still Sound Like AI
 
-An earlier draft of our own homepage hero passed `dislop check --fail-on info` with 0 findings, yet still read like an LLM wrote it:
+An earlier draft of our own homepage hero passed `dislop check --no-llm` with 0 findings, yet still read like an LLM wrote it:
 
 ```text
 Before (0 findings, still reads like AI):
@@ -66,14 +66,14 @@ We aim for the plain clarity of **ASD-STE100** (Simplified Technical English) in
 
 Plain copy does not mean a dull interface. The lightness lives in the graphic mark itself, drawn from [assets/logo.svg](../assets/logo.svg): a rounded carbon tile (`#14171A`), a light manuscript line underneath, and a single vermilion round-capped loop (`#F04438`) taking out the extra bit while leaving the rest alone. The struck AI greeting at the top of the homepage shows that action directly so the copy does not have to narrate a "red pen" metaphor.
 
-Full contrast numbers live in [design-system.md](./design-system.md). Keep `1px` rules, cool neutral paper (`#F6F7F5` / `#FFFFFF`), monotonic dark surfaces (`#0E1012 → #15181C → #1D2127`), no external font CDNs, and `CSP: connect-src 'self'` (zero third-party requests; offline checking stays zero-upload by default). Skip both purple-pink neon gradients and warm-cream terracotta templates.
+The palette and contrast targets follow the tokens below and [docs/brand/voice.json](./brand/voice.json). Keep `1px` rules, cool neutral paper (`#F6F7F5` / `#FFFFFF`), monotonic dark surfaces (`#0E1012 → #15181C → #1D2127`), no external font CDNs, and `CSP: connect-src 'self'` (zero third-party requests; offline checking stays zero-upload by default). Skip both purple-pink neon gradients and warm-cream terracotta templates.
 
 Use `--pen` (`#F04438`) on the logo loop and thick drawn strokes in both light and dark modes, `#B42318` (`6.6:1`) for small light-mode red text, and `#FF7A6B` (`7.0:1`) in dark mode, with a `1px` border around the logo tile in dark mode so it does not blend into the header. Keep `0px` radii on joined grid cells, `6px` on buttons (`5px` compact), `4px` on inputs, and no `999px` pill walls. Keep monospace for code, line numbers, rule IDs, and counts, use system sans for prose and controls, and keep `letter-spacing: 0` on Chinese headings.
 
 Two mark styles stay readable without color:
 
-- Red solid underline (`2px solid`, `#FEF3F2` wash): AI delivery artifact (`hard bug` in UI prose, `error` in CLI/JSON badges)
-- Blue dashed underline (`1.5px dashed`, `#EFF4FF` wash): cliché or template warning (`warning` / `info`)
+- Red solid underline (`2px solid`, `#FEF3F2` wash): AI delivery artifact (`hard bug` in UI prose, `Defect` `error | warning` in CLI/JSON badges)
+- Blue dashed underline (`1.5px dashed`, `#EFF4FF` wash): cliché or template warning (`warning` in UI prose, `Suggestion` `strong | moderate | hint` in CLI/JSON badges)
 
 ---
 
@@ -83,9 +83,9 @@ When `dislop` publishes automated social cards, benchmark summaries, or release 
 
 Keep automated cards and captions plain:
 
-1. **Show the verbatim text with its marks**: Frame a crisp `0px`-radius white sheet (`#FFFFFF`) on the dark charcoal stage (`#14171A`). Render the real input prose, HTML snippet, or slide XML with live `dislop check` marks (`#F04438` *dele* loop on deletable chat wrappers, solid red underline on other `core` hard bugs, dashed blue underline on style warnings) measured directly to the text span.
+1. **Show the verbatim text with its marks**: Frame a crisp `0px`-radius white sheet (`#FFFFFF`) on the dark charcoal stage (`#14171A`). Render the real input prose, HTML snippet, or slide XML with live `dislop check` marks (`#F04438` *dele* loop on deletable chat wrappers, solid red underline on other `Defect` hard bugs, dashed blue underline on `Suggestion` style warnings) measured directly to the text span.
 2. **Keep the dele mark (`₰`) as the only visual signature**: `dislop` never speaks in first person (`"I"`), never uses a mascot, and never scolds the reader. Any dry humor comes from letting verbatim AI leftovers—including `dislop`'s own retired drafts—sit under the *dele* mark without commentary.
-3. **State what went in, what came out, and the command—then stop**: Name the concrete input file, commit, or setup (`30` drafts across `4` upstream `SKILL.md` prompts on `gemini-3.5-flash`). Give the verbatim surviving defect or count (`4/4` standalone runs left dead `href="#"` in HTML). Give the plain reason or reproducible command (`npx --yes dislop check . --pack auto`), and end there without a closing moral.
+3. **State what went in, what came out, and the command—then stop**: Name the concrete input file, commit, or setup (`30` drafts across `4` upstream `SKILL.md` prompts on `gemini-3.5-flash`). Give the verbatim surviving defect or count (`4/4` standalone runs left dead `href="#"` in HTML). Give the plain reason or reproducible command (`npx --yes dislop check .`), and end there without a closing moral.
 4. **Hard bans on outward copy**: No rhetorical-question openers (`?` in line 1), no exclamation hype (outside the official Chinese slogan), no transition glue, an explicit `EXAMPLE` badge on every constructed snippet (live benchmark cards cite commit + task ID instead), and an upfront self-scoring note whenever citing pass rates scored with `dislop`'s own rules.
 
 ---
@@ -100,6 +100,6 @@ Before merging changes to the website, README, CLI help, or release notes:
 4. Is the tool wearing a roleplay costume (`Pass for press`, `the pen stays in your hand`)? Say it plainly.
 5. Does the same concept (`hard bug` / `warning` / `passed`) use the same plain name everywhere on the page?
 6. Are English and Chinese strictly separated (no Chinese in EN examples, no English in ZH examples)?
-7. Does `dislop check <file> --fail-on info` pass with 0 findings, and keep body prose free of `!`, emojis, and `finding(s)` (the official Chinese slogan `去 AI 味才是真正的生产力！` keeps its original `！`)?
+7. Does `dislop check <file> --no-llm` report 0 defects and 0 suggestions, and keep body prose free of `!`, emojis, and `finding(s)` (the official Chinese slogan `去 AI 味才是真正的生产力！` keeps its original `！`)?
 
 The machine-readable voice config lives at [docs/brand/voice.json](./brand/voice.json) (`dislop.voice/1`, `v1.0.0`).

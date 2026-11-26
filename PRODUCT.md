@@ -11,8 +11,8 @@ Cutting AI slop is real productivity.
 ## Architectural Pillars
 
 1. **Micro-Kernel + Multi-Modal Packs (`dislop/sdk`)**:
-   - Core owns document coordinate parsing (`DocumentModel`), immutable safety invariants, the Dual Fact Gate, 3-Tier LLM routing, lossless coordinate patching, and CI exit-code arbitration.
-   - Rules and modality probes live in pluggable Packs organized by scope/language and scenario (`packs/common/*`, `packs/en/*`, `packs/zh/*`), local `.mjs` modules, or zero-code `.pack.md` files.
+   - Core owns document coordinate parsing (`DocumentModel`), untrusted repo vs. user config layering (`overrides`, declarative `.dislop/rules.json`, `extraPacks`), immutable safety invariants, the Dual Fact Gate, 3-Tier LLM routing (`local`, `auto`, `cloud`, `byok`, `off`), lossless OOXML patching, and CI exit-code arbitration (`--fail-on none|error|warning`).
+   - Rules and modality probes live in pluggable Packs organized by scope/language and scenario (`packs/common/*`, `packs/en/*`, `packs/zh/*`), validated via `dislop packs lint <path>`.
 2. **Dual-Track Taxonomy (`Defect` vs. `Suggestion`)**:
    - Editorial prose findings are `Suggestion`s (`strong | moderate | hint`) and never block CI (`Exit Code 0`).
    - Objective delivery bugs (placeholders, chatbot residue, broken links, raw Markdown leaks in `.docx`/`.pptx`) are `Defect`s (`error | warning`) emitted strictly by deterministic `pack.check()` hooks (`Exit Code 1` on unresolved `Defect: error`).

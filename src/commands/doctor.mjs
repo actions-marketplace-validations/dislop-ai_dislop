@@ -1,5 +1,9 @@
 import fs from "node:fs";
-import { isInteractiveHumanTty, resolveLayeredConfig } from "../kernel/config.mjs";
+import {
+  isCiEnvironment,
+  isInteractiveHumanTty,
+  resolveLayeredConfig,
+} from "../kernel/config.mjs";
 import { listBuiltinPackIds } from "../kernel/pack-loader.mjs";
 import {
   detectOllamaBinary,
@@ -10,6 +14,7 @@ import {
   resolveExecutionRoute,
   resolveTier2ProviderCandidate,
 } from "../runtime/router.mjs";
+import { isWorklogActive } from "../runtime/worklog.mjs";
 
 /**
  * `dislop doctor [--json]` — zero-network diagnostic snapshot of config, active tier, auth, voice, and Packs.
@@ -66,6 +71,14 @@ export async function runDoctorCommand(_positionals, flags, io = {}) {
       installed: Object.keys(modelsManifest.installed),
     },
     voiceCachePresent: Boolean(config.voice?.cachePath && fs.existsSync(config.voice.cachePath)),
+    worklog: {
+      enabled: config.worklog.enabled,
+      active: isWorklogActive(config, env),
+      ciDisabled: isCiEnvironment(env),
+      privacy: config.worklog.privacy,
+      dir: config.worklog.dir,
+      retentionDays: config.worklog.retentionDays,
+    },
     configuredPacks: config.packs || ["(auto by document format & language)"],
     builtinPacks,
   };
@@ -104,6 +117,15 @@ export async function runDoctorCommand(_positionals, flags, io = {}) {
     } (${ollamaStatusText})\n`,
   );
   stdout.write(`  Voice Profile    : ${diagnosis.voiceCachePresent ? "cached" : "not configured"}\n`);
+  stdout.write(
+    `  Worklog          : ${
+      diagnosis.worklog.active
+        ? `active (privacy=${diagnosis.worklog.privacy}, dir=${diagnosis.worklog.dir})`
+        : diagnosis.worklog.ciDisabled
+          ? "disabled in CI"
+          : "disabled (local opt-in only)"
+    }\n`,
+  );
   stdout.write(`  Built-in Packs   : ${diagnosis.builtinPacks.join(", ")}\n`);
 
   return 0;

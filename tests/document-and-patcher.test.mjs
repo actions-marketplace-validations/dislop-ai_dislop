@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import zlib from "node:zlib";
-import { parseDocumentFile, parseDocumentText } from "../src/kernel/document-model.mjs";
+import { detectDocumentLanguage, parseDocumentFile, parseDocumentText } from "../src/kernel/document-model.mjs";
 import { buildZipArchive } from "../src/kernel/ooxml-binary.mjs";
 import {
   applyPatchesToOoxmlBuffer,
@@ -365,4 +365,27 @@ test("PDF ASCII85Decode+FlateDecode, Form XObject (/Do), # table header immunity
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
+});
+
+test("patcher.mjs strips orphaned leading blank line after deleting a line-1 wrapper", () => {
+  const src = "Certainly! Here is your draft.\n\n# Heading\n\nBody text with 18ms latency.\n";
+  const doc = parseDocumentText(src, "leading.md", "md");
+  const patched = applyPatchesToText(src, doc, [{ targetId: "P1-S1", replacement: "" }]);
+  assert.equal(patched, "# Heading\n\nBody text with 18ms latency.\n");
+});
+
+test("SVG nested data-dislop-ignore masks child tspan while detectDocumentLanguage ignores tiny CJK quotes in long EN docs", () => {
+  const svg = [
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 100">`,
+    `<text x="10" y="40"><tspan data-dislop-ignore="true">Certainly! Here it is:</tspan><tspan dx="10">This release is</tspan></text>`,
+    `</svg>`,
+  ].join("\n");
+  const svgDoc = parseDocumentText(svg, "banner.svg", "svg");
+  assert.equal(svgDoc.segments.length, 1);
+  assert.equal(svgDoc.segments[0].text, "This release is");
+
+  const longEnWithCjkQuote = `${"Plain English documentation sentence about latency and links. ".repeat(40)}(\u53bb AI \u5473\u624d\u662f\u771f\u6b63\u7684\u751f\u4ea7\u529b\uff01)`;
+  assert.equal(detectDocumentLanguage(longEnWithCjkQuote), "en");
+  assert.equal(detectDocumentLanguage("\u5ef6\u8fdf 18ms"), "zh");
+  assert.equal(detectDocumentLanguage("\u5728\u5f53\u4eca\u6570\u5b57\u5316\u8f6c\u578b\u7684\u6d6a\u6f6e\u4e0b\uff0c\u5ef6\u8fdf\u4e3a 18ms\u3002"), "zh");
 });

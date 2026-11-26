@@ -5,11 +5,11 @@ CLI check: `dislop check <essay.md> --format agent` (optional personal voice bas
 
 ## Rules & Fixes
 
-1. **Let sentence lengths vary naturally (`low-burstiness-vapor`)**: Avoid 5+ uniform medium sentences filled with abstract nouns. Anchor clauses in supplied times, places, and physical actions without chopping prose into artificial short fragments.
-2. **Cut staged self-Q&A & semicolon tricolons (`literary-rhetorical-qa`, `literary-semicolon-tricolon`)**: Remove `"Why does this matter? Because..."`, `"The result?"`, and 3-part balanced semicolon chains.
-3. **Break 5-comma run-on chains (`comma-chain-runon`)**: Split sprawling comma-spliced sentences into 2–3 clear sentences.
-4. **End on the last concrete scene (`en-essay-moralizing-ending`, `literary-narrative-frame`)**: Cut closing paragraphs that zoom out into life lessons (`"Ultimately, this reminds us..."`). Stop on the final observed action or quote.
-5. **Restrain em-dashes & binary pivots (`excessive-em-dash-density`, `literary-negation-pivot`)**: Replace stacked em-dashes with commas or periods, and replace `"Not just X — it's Y"` pivots with plain action.
+1. **Avoid low-information abstract filler (`stealth-vapor`, `hollow-transition`)**: Anchor clauses in supplied times, places, and physical actions without chopping prose into artificial short fragments (`staccato-slogan-run`).
+2. **Cut staged self-Q&A & macro preambles (`rhetorical-self-qa`, `hollow-transition`)**: Remove `"Why does this matter?"`, `"The result?"`, `"In today's fast-paced world..."`, and balanced semicolon padding.
+3. **Break sprawling comma-spliced sentences**: Split tangled multi-clause run-on sentences into 2–3 clear sentences when the subject gets lost.
+4. **End on the last concrete scene (`moralizing-closer`)**: Cut closing paragraphs that zoom out into life lessons (`"Ultimately, this reminds us..."`). Stop on the final observed action or quote.
+5. **Restrain em-dashes & binary pivots (`excessive-em-dash`, `unprompted-negation`)**: Replace stacked em-dashes (`3+` in one sentence) with commas or periods, and replace `"Not just X — it's Y"` pivots with plain action.
 6. **Zero invented scene detail**: Use only objects, weather, bystanders, and quotes in the notes; develop those supplied details clearly to fit the target length without adding outside scenery.
 
 ## Contrast

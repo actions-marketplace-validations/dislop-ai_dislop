@@ -78,7 +78,9 @@ export function detectDocumentLanguage(text) {
   const cjkMatches = sample.match(/[\u4e00-\u9fff]/g);
   const cjkCount = cjkMatches ? cjkMatches.length : 0;
   const nonWs = sample.replace(/\s+/g, "").length;
-  if (cjkCount >= 6 || (nonWs > 0 && cjkCount / nonWs >= 0.12)) {
+  if (nonWs === 0) return "en";
+  const ratio = cjkCount / nonWs;
+  if (ratio >= 0.12 || (cjkCount >= 6 && ratio >= 0.04)) {
     return "zh";
   }
   return "en";
@@ -921,6 +923,14 @@ function parseMarkupOrStylesheet(rawText, filePath, format) {
   const proseMask = new Uint8Array(nonUiMask);
   maskRegexOn(proseMask, /<style\b[^>]*>[\s\S]*?<\/style>/gi);
 
+  // Separate mask for nested inline exclusions inside prose blocks (without masking <code>)
+  const inlineIgnoreMask = new Uint8Array(len);
+  applySuppressionDirectives(rawText, inlineIgnoreMask);
+  maskRegexOn(inlineIgnoreMask, /<!--[\s\S]*?-->/g);
+  maskRegexOn(inlineIgnoreMask, /\{\/\*[\s\S]*?\*\/\}/g);
+  maskRegexOn(inlineIgnoreMask, /<del\b[^>]*>[\s\S]*?<\/del>/gi);
+  maskElementsByAttr(rawText, inlineIgnoreMask, /\bdata-dislop-ignore\b/i);
+
   // Extract <a ... href="..."> links outside masked regions
   const anchorRe = /<a\b([^>]*)>([\s\S]*?)<\/a>/gi;
   let am;
@@ -943,7 +953,10 @@ function parseMarkupOrStylesheet(rawText, filePath, format) {
   let bCounter = 0;
 
   for (const blk of blocks) {
-    const pieces = normalizeHtmlInnerToPieces(blk.rawInner, blk.innerStart);
+    const strippedInner = Array.from(blk.rawInner)
+      .map((ch, idx) => (inlineIgnoreMask[blk.innerStart + idx] ? (ch === "\n" ? "\n" : " ") : ch))
+      .join("");
+    const pieces = normalizeHtmlInnerToPieces(strippedInner, blk.innerStart);
     if (pieces.length === 0) continue;
 
     let blockKind = "paragraph";
@@ -1253,21 +1266,19 @@ function parseOoxmlDocument(buffer, filePath, format) {
 }
 
 /**
- * Parse any supported file on disk into a unified `DocumentModel`.
+ * Parse any supported buffer into a unified `DocumentModel` (for both disk reads and binary-safe stdin).
  */
-export function parseDocumentFile(filePath, explicitFormat = null) {
+export function parseDocumentBuffer(buf, filePath = "untitled.md", explicitFormat = null) {
   const format = explicitFormat || detectFormatFromPath(filePath);
   if (!format) {
     throw new Error(`Unsupported file extension for '${filePath}'`);
   }
 
   if (format === "docx" || format === "pptx") {
-    const buf = fs.readFileSync(filePath);
     return parseOoxmlDocument(buf, filePath, format);
   }
 
   if (["png", "jpg", "jpeg", "webp", "gif"].includes(format)) {
-    const buf = fs.readFileSync(filePath);
     const mediaSignals = inspectImageBuffer(buf, format);
     return {
       filePath,
@@ -1286,7 +1297,6 @@ export function parseDocumentFile(filePath, explicitFormat = null) {
   }
 
   if (format === "pdf") {
-    const buf = fs.readFileSync(filePath);
     const pdfInfo = inspectPdfBuffer(buf);
     const pages = pdfInfo.pages || [];
     const segments = [];
@@ -1359,7 +1369,7 @@ export function parseDocumentFile(filePath, explicitFormat = null) {
       segments,
       paragraphs,
       artifacts: {
-        links: [],
+        links: pdfInfo.links || [],
         codeBlocks: [],
         rawFormattingLeaks,
         ...(isSlideDeckPdf
@@ -1386,13 +1396,23 @@ export function parseDocumentFile(filePath, explicitFormat = null) {
     };
   }
 
-  const buf = fs.readFileSync(filePath);
-  // Reject binary NUL bytes in supposed UTF-8 text files
   if (buf.includes(0)) {
     throw new Error(`Binary or non-UTF-8 file cannot be parsed as ${format}: '${filePath}'`);
   }
   const rawText = buf.toString("utf8");
   return parseDocumentText(rawText, filePath, format);
+}
+
+/**
+ * Parse any supported file on disk into a unified `DocumentModel`.
+ */
+export function parseDocumentFile(filePath, explicitFormat = null) {
+  const format = explicitFormat || detectFormatFromPath(filePath);
+  if (!format) {
+    throw new Error(`Unsupported file extension for '${filePath}'`);
+  }
+  const buf = fs.readFileSync(filePath);
+  return parseDocumentBuffer(buf, filePath, format);
 }
 
 /**

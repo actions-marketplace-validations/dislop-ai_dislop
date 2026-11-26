@@ -5,11 +5,11 @@
 
 ## 常见问题与改法
 
-1. **清掉裸 Markdown、寒暄与占位符（`markdown-leak`、`chatbot-artifact`、`unfilled-placeholder`）**：删掉 `**加粗**`、`## 标题`、`[待补充]` 和整句模型寒暄（如 `很高兴协助，下方是……`）。寒暄里的名词整句删掉，不要硬粘成 `总体说明：` 这类半截小标题。
+1. **清掉裸 Markdown、寒暄与占位符（`raw-markdown-leak`、`chatbot-artifact`、`unfilled-placeholder`、`leaked-slide-directive`）**：删掉 `**加粗**`、`## 标题`、`[待补充]`、`[配图建议：...]` 和整句模型寒暄（如 `很高兴协助，下方是……`）。寒暄里的名词整句删掉，不要硬粘成 `总体说明：` 这类半截小标题。
 2. **保住 XML 标签、文档接口样式与语法完整**：修改原始 XML 或通过办公软件文档接口编辑时，保持 `<w:document>/<w:body>/<w:p>/<w:r>/<w:t>` 等标签配平，保留审阅修订、批注、段落样式与真实表格。默认保留原有的 `<w:t>` / `<a:t>` 分段边界，留意跨节点拆开的数字（如 `84.` 与 `6 万千瓦时`）和前面限定词；删掉虚高修饰词后检查主语和限定词是否通顺。
-3. **把弱标签改成结论标题（`slide-weak-topic-title`、`slide-process-not-finding-title`）**：把 `概述`、`工作背景` 改成一句带数据的结论（如 `西站 6 号闸机早高峰积压 18 分钟`）。
-4. **控住新建幻灯片密度且不重复数字（`slide-word-wall`、`slide-bullet-overload`、`slide-autofit-shrink`）**：起草单页控制在 120 字和 5–6 条要点以内，不用缩排硬塞，标题写过的数字不要在要点里反复重复；改旧稿时不要为了凑字数删掉原稿事实。
-5. **打破连续同构模板页（`pptx-layout-monotony`）**：不要连续 4 页全放纯文字要点，对比改表格、趋势改图表。
+3. **把弱标签改成结论标题（`buzzword-slide-headline`、`vague-slide-headline`、`closing-slide-slogan`）**：把 `顶层设计与生态赋能`、`项目整体概况` 改成一句带数据的结论（如 `西站 6 号闸机早高峰积压 18 分钟`），并清掉 `携手并进，共创辉煌未来！` 类口号末页。
+4. **控住新建幻灯片密度且不重复数字（`slide-word-wall`、`slide-bullet-overload`、`slide-autofit-shrink`、`slide-prose-dump`）**：起草单页控制在 120 字和 5–6 条要点以内，不用缩排硬塞，标题写过的数字不要在要点里反复重复；改旧稿时不要为了凑字数删掉原稿事实。
+5. **打破连续同构模板页（`repetitive-slide-skeleton`）**：不要连续 4 页全放纯文字要点，对比改表格、趋势改图表；配图同步清掉生成工具工作流元数据（`image-ai-workflow-residue`）。
 
 ## 三段对照
 

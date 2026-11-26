@@ -161,7 +161,7 @@ export async function resolveExecutionRoute({
   fetchImpl = globalThis.fetch,
   promptFn = null,
 }) {
-  if (config.noLlm) {
+  if (config.noLlm || config.routing === "off" || env.DISLOP_TEST_MODE === "1") {
     return { tier: "none", engineLabel: "deterministic", maxInputTokens: 0, execute: null };
   }
 
@@ -192,7 +192,7 @@ export async function resolveExecutionRoute({
         "Engine 'byok' requires a configured provider in config.json or an OPENAI_API_KEY / ANTHROPIC_API_KEY / GEMINI_API_KEY environment variable.",
       );
     }
-    await checkPrivacyConsent({
+    const consent = await checkPrivacyConsent({
       provider,
       config,
       isTty,
@@ -201,6 +201,11 @@ export async function resolveExecutionRoute({
       stderr,
       promptFn,
     });
+    if (!consent || !consent.approved) {
+      throw new DislopConfigError(
+        consent?.reason || "BYOK external network upload cancelled or missing explicit consent.",
+      );
+    }
     return buildTier2Route(provider, fetchImpl);
   }
 
@@ -289,10 +294,12 @@ function buildTier2Route(provider, fetchImpl, labelPrefix = "byok") {
   const protocol = String(provider.protocol || "openai").toLowerCase();
   const engineLabel = `${labelPrefix}:${provider.model}`;
   const maxInputTokens = provider.maxInputTokens || 16000;
+  const isLoopback = isLoopbackHostname(extractHostname(provider.baseUrl || ""));
 
   if (protocol === "anthropic") {
     return {
       tier: labelPrefix,
+      isLoopback,
       engineLabel,
       maxInputTokens,
       execute: (payload) => invokeAnthropicProvider({ provider, payload, fetchImpl }),
@@ -301,6 +308,7 @@ function buildTier2Route(provider, fetchImpl, labelPrefix = "byok") {
   if (protocol === "gemini") {
     return {
       tier: labelPrefix,
+      isLoopback,
       engineLabel,
       maxInputTokens,
       execute: (payload) => invokeGeminiProvider({ provider, payload, fetchImpl }),
@@ -308,6 +316,7 @@ function buildTier2Route(provider, fetchImpl, labelPrefix = "byok") {
   }
   return {
     tier: labelPrefix,
+    isLoopback,
     engineLabel,
     maxInputTokens,
     execute: (payload) => invokeOpenAiCompatProvider({ provider, payload, fetchImpl }),

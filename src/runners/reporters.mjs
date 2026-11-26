@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import { formatDisplayCoordinate } from "../kernel/document-model.mjs";
 import { applyPatchesToText, renderUnifiedDiff } from "../kernel/patcher.mjs";
+import { DISLOP_VERSION } from "../kernel/version.mjs";
 
 /**
  * Render `--format json` (`dislop.report/1` verbatim for single file; array of `dislop.report/1` for multi-file).
@@ -25,9 +26,16 @@ export function formatAgentReports(results) {
       (report.summary.suggestions.moderate || 0) +
       (report.summary.suggestions.hint || 0);
 
+    const coverageNote =
+      report.coverage && report.coverage.segmentCount === 0 ? " coverage=0-segments" : "";
     const lines = [
-      `# dislop file=${report.file} engine=${report.engine} defects=${defectTotal} suggestions=${suggestionTotal}`,
+      `# dislop file=${report.file} engine=${report.engine} defects=${defectTotal} suggestions=${suggestionTotal}${coverageNote}`,
     ];
+    if (report.coverage && report.coverage.segmentCount === 0) {
+      lines.push(
+        `# notice: ${report.coverage.notice || "0 inspectable text segments extracted; only container checks ran."}`,
+      );
+    }
 
     for (const item of report.items) {
       const coord = formatDisplayCoordinate(item.targetId, item.line);
@@ -110,7 +118,7 @@ export function formatSarifReports(results) {
         tool: {
           driver: {
             name: "dislop",
-            version: "1.0.1",
+            version: DISLOP_VERSION,
             informationUri: "https://dislop.com",
             rules: Array.from(rulesMap.values()),
           },
@@ -180,6 +188,14 @@ export function formatTextReports(results, { lang = "en" } = {}) {
 
     if (report.documentToneAnchor) {
       lines.push(`  Tone: ${report.documentToneAnchor}`);
+    }
+
+    if (report.coverage && report.coverage.segmentCount === 0) {
+      lines.push(
+        lang === "zh"
+          ? `  \u63d0\u793a: ${report.coverage.notice || "\u672a\u63d0\u53d6\u5230\u53ef\u5ba1\u8ba1\u6587\u672c\u6bb5\u843d\uff08\u53ef\u80fd\u662f\u626b\u63cf\u4ef6\u6216\u7eaf\u56fe\u7247\u5bb9\u5668\uff09\uff0c\u4ec5\u8fd0\u884c\u4e86\u5bb9\u5668\u5c42\u68c0\u67e5\u3002"}`
+          : `  Notice: ${report.coverage.notice || "0 inspectable prose segments extracted (scanned PDF or visual-only container); container-level checks only."}`,
+      );
     }
 
     if (defects.length === 0 && suggestions.length === 0) {

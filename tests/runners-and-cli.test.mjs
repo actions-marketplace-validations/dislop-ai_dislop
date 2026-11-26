@@ -242,16 +242,18 @@ test("Subcommands (init, login/logout, voice, model, packs, verify, doctor) and 
 
     assert.equal(await runCli(["model", "rm", "qwen2.5-1.5b-instruct"], makeMemoryIo({ cwd: root, cfgDir })), 0);
 
-    // With .dislop.json pointing to local-ollama:11434 and Ollama missing, explicit `--engine local` exits 2 telling user Ollama is missing
-    const ioCheckLocalConfiguredMissing = { ...makeMemoryIo({ cwd: root, cfgDir }), env: missingOllamaEnv };
-    assert.equal(await runCli(["check", "author.md", "--engine", "local"], ioCheckLocalConfiguredMissing), 2);
-    assert.match(ioCheckLocalConfiguredMissing.getStderr(), /Ollama is missing on this machine/);
-
     // Without .dislop.json or installed model, `check --engine local` falls back to deterministic (exit 0) and warns Ollama is missing
-    fs.unlinkSync(path.join(root, ".dislop.json"));
     const ioCheckLocalMissing = { ...makeMemoryIo({ cwd: root, cfgDir }), env: missingOllamaEnv };
     assert.equal(await runCli(["check", "author.md", "--engine", "local"], ioCheckLocalMissing), 0);
     assert.match(ioCheckLocalMissing.getStderr(), /Ollama is missing on this machine/);
+
+    // With global config pointing to local-ollama:11434 and Ollama missing, explicit `--engine local` exits 2 telling user Ollama is missing
+    assert.equal(await runCli(["init", "--global", "--force"], makeMemoryIo({ cwd: root, cfgDir })), 0);
+    const ioCheckLocalConfiguredMissing = { ...makeMemoryIo({ cwd: root, cfgDir }), env: missingOllamaEnv };
+    assert.equal(await runCli(["check", "author.md", "--engine", "local"], ioCheckLocalConfiguredMissing), 2);
+    assert.match(ioCheckLocalConfiguredMissing.getStderr(), /Ollama is missing on this machine/);
+    fs.unlinkSync(path.join(cfgDir, "config.json"));
+    fs.unlinkSync(path.join(root, ".dislop.json"));
     assert.equal(await runCli(["logout"], makeMemoryIo({ cwd: root, cfgDir })), 0);
 
     // verify <before> <after>
@@ -340,7 +342,7 @@ test("End-to-end 7-Step LLM Pipeline with BYOK mock, custom .pack.md, zh/prose a
     );
 
     fs.writeFileSync(
-      path.join(root, ".dislop.json"),
+      path.join(root, ".dislop.local.json"),
       JSON.stringify({
         routing: "byok",
         providers: {
@@ -429,6 +431,41 @@ test("End-to-end 7-Step LLM Pipeline with BYOK mock, custom .pack.md, zh/prose a
     assert.ok(uiRules.includes("common/artifact-qa/placeholder-dead-link"));
     assert.ok(uiRules.includes("common/web-ui/unexplained-disabled-button"));
     assert.ok(uiRules.includes("common/web-ui/neon-ai-gradient"));
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("Config ignore patterns and --concurrency preserve deterministic order and validate bounds", async () => {
+  const { root, cfgDir } = makeTempWorkspace();
+  try {
+    fs.mkdirSync(path.join(root, ".private"), { recursive: true });
+    fs.writeFileSync(path.join(root, ".private", "secret.md"), "Certainly! Here is a draft.\n", "utf8");
+    fs.writeFileSync(path.join(root, "a.md"), "Latency stayed at 11ms.\n", "utf8");
+    fs.writeFileSync(path.join(root, "b.md"), "Throughput reached 900 req/s.\n", "utf8");
+    fs.writeFileSync(
+      path.join(root, ".dislop.local.json"),
+      JSON.stringify({ ignore: [".private/**"] }),
+      "utf8",
+    );
+
+    const ioDir = makeMemoryIo({ cwd: root, cfgDir });
+    const dirCode = await runCli(["check", ".", "--no-llm", "--concurrency", "2", "--json"], ioDir);
+    assert.equal(dirCode, 0);
+    const reports = JSON.parse(ioDir.getStdout());
+    assert.deepEqual(
+      reports.map((r) => r.file),
+      ["a.md", "b.md"],
+    );
+
+    // Ignored path is consistently skipped even when passed directly by hooks/wrappers (R7)
+    const ioExplicit = makeMemoryIo({ cwd: root, cfgDir });
+    assert.equal(await runCli(["check", ".private/secret.md", "--no-llm", "--json"], ioExplicit), 0);
+    assert.deepEqual(JSON.parse(ioExplicit.getStdout()), []);
+
+    // Invalid --concurrency flags exit 2
+    assert.equal(await runCli(["check", "a.md", "--concurrency", "0"], makeMemoryIo({ cwd: root, cfgDir })), 2);
+    assert.equal(await runCli(["check", "a.md", "--concurrency", "abc"], makeMemoryIo({ cwd: root, cfgDir })), 2);
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }

@@ -1,3 +1,5 @@
+import path from "node:path";
+import { DISLOP_VERSION } from "../../kernel/version.mjs";
 import { extractStructuredJson } from "../json-extract.mjs";
 
 export const DEFAULT_CLOUD_REVIEW_URL = "https://dislop.com/api/v1/review";
@@ -31,14 +33,14 @@ export async function invokeCloudProvider({
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
-        "User-Agent": "dislop-cli/1.0.1",
+        "User-Agent": `dislop-cli/${DISLOP_VERSION}`,
       },
       body: JSON.stringify({
         schema: "dislop.review-request/1",
         text: Array.isArray(doc?.segments)
           ? doc.segments.map((s) => s.text).join("\n\n")
           : String(payload?.userPrompt || ""),
-        file: doc?.filePath || "",
+        file: path.basename(doc?.filePath || "document"),
         format: doc?.format || "md",
         modality: doc?.format || "md",
         language: doc?.language || "en",

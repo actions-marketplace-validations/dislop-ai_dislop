@@ -467,6 +467,8 @@ export async function applyDualFactGate(items, doc, activePacks) {
         fixSafety: "manual",
         actionType: item.rewritePrompt ? "prompt" : item.actionType,
         verificationNote: `Fact Gate withheld replacement (${baseline.summary}).`,
+        _factGateDowngraded: true,
+        _factGateReasons: baseline.reasons,
       });
       continue;
     }
@@ -498,6 +500,8 @@ export async function applyDualFactGate(items, doc, activePacks) {
         fixSafety: "manual",
         actionType: item.rewritePrompt ? "prompt" : item.actionType,
         verificationNote: `Pack '${pack.name}' withheld replacement (${customRejected.reason || "failed custom verifyFix"}).`,
+        _factGateDowngraded: true,
+        _factGateReasons: ["pack_verify_fix"],
       });
       continue;
     }
@@ -602,6 +606,162 @@ export function verifyDocumentRevision(beforeText, afterText) {
       secondOrderSlopHits.push({
         id: "polarity-prohibition-dropped",
         message: "Dropped mandatory Chinese prohibition/negation marker from revised claim.",
+      });
+    }
+  }
+
+  // Verb / guarantee / bound polarity reversal checks
+  const hadEnNoGuarantee = /\b(?:not\s+guaranteed|no\s+guarantee|does\s+not\s+guarantee|without\s+guarantee)\b/i.test(
+    beforeText,
+  );
+  const afterHasEnNoGuarantee =
+    /\b(?:not\s+guaranteed|no\s+guarantee|does\s+not\s+guarantee|never\s+guaranteed|without\s+guarantee)\b/i.test(
+      afterText,
+    );
+  if (hadEnNoGuarantee && /\bguarantees?\b|\bguaranteed\b/i.test(afterText) && !afterHasEnNoGuarantee) {
+    secondOrderSlopHits.push({
+      id: "polarity-guarantee-flipped",
+      message: "Flipped non-guarantee disclaimer into an unqualified guarantee.",
+    });
+  }
+
+  const hadZhNoGuarantee = /(?:\u4e0d\u4fdd\u8bc1|\u65e0\u6cd5\u4fdd\u8bc1|\u5e76\u975e\u4fdd\u8bc1)/.test(
+    beforeText,
+  );
+  const afterHasZhNoGuarantee = /(?:\u4e0d\u4fdd\u8bc1|\u65e0\u6cd5\u4fdd\u8bc1|\u5e76\u975e\u4fdd\u8bc1)/.test(
+    afterText,
+  );
+  if (hadZhNoGuarantee && /(?:\u4fdd\u8bc1|\u786e\u4fdd)/.test(afterText) && !afterHasZhNoGuarantee) {
+    secondOrderSlopHits.push({
+      id: "polarity-zh-guarantee-flipped",
+      message: "Flipped Chinese non-guarantee hedge into an unqualified guarantee.",
+    });
+  }
+
+  // Subject-scoped trend polarity guard (`Revenue rose` -> `Revenue fell`, while allowing `Revenue rose. Expenses fell.`)
+  const extractSubjectTrends = (text) => {
+    const map = new Map();
+    const enTrendRe =
+      /\b([A-Za-z][A-Za-z0-9_-]{1,24})\s+(?:have\s+|has\s+)?(rose|increased|grew|gained|climbed|expanded|fell|decreased|dropped|declined|shrank|reduced)\b/gi;
+    let tm;
+    while ((tm = enTrendRe.exec(text)) !== null) {
+      const subj = tm[1].toLowerCase();
+      if (["that", "which", "they", "it", "this", "there"].includes(subj)) continue;
+      const dir = /^(?:rose|increased|grew|gained|climbed|expanded)$/i.test(tm[2]) ? "up" : "down";
+      if (!map.has(subj)) map.set(subj, new Set());
+      map.get(subj).add(dir);
+    }
+    const zhTrendRe =
+      /([\u4E00-\u9FFF]{2,12})(?:\u5927\u5e45|\u6301\u7eed|\u660e\u663e)?(\u4e0a\u5347|\u589e\u957f|\u589e\u52a0|\u4e0b\u964d|\u51cf\u5c11|\u964d\u4f4e)/g;
+    while ((tm = zhTrendRe.exec(text)) !== null) {
+      const subj = tm[1];
+      const dir = /^(?:\u4e0a\u5347|\u589e\u957f|\u589e\u52a0)$/.test(tm[2]) ? "up" : "down";
+      if (!map.has(subj)) map.set(subj, new Set());
+      map.get(subj).add(dir);
+    }
+    return map;
+  };
+  const beforeTrends = extractSubjectTrends(beforeText);
+  const afterTrends = extractSubjectTrends(afterText);
+  let subjectTrendFlipped = false;
+  for (const [subj, dirs] of beforeTrends.entries()) {
+    const afterDirs = afterTrends.get(subj);
+    if (!afterDirs) continue;
+    for (const d of dirs) {
+      const opp = d === "up" ? "down" : "up";
+      if (!dirs.has(opp) && afterDirs.has(opp)) {
+        secondOrderSlopHits.push({
+          id: /[\u4E00-\u9FFF]/.test(subj) ? "polarity-zh-trend-flipped" : "polarity-trend-flipped",
+          message: `Flipped trend verb polarity for '${subj}' (${d} -> ${opp}).`,
+        });
+        subjectTrendFlipped = true;
+        break;
+      }
+    }
+    if (subjectTrendFlipped) break;
+  }
+
+  const polarityPairs = [
+    {
+      id: "polarity-permission-flipped",
+      a: /\b(?:allows|permits|enables|supports)\b/i,
+      b: /\b(?:prohibits|forbids|blocks|prevents|disallows)\b/i,
+      message: "Flipped permission/prohibition verb polarity.",
+    },
+    {
+      id: "bound-qualifier-flipped",
+      a: /\b(?:up\s+to|at\s+most|no\s+more\s+than)\b/i,
+      b: /\b(?:at\s+least|more\s+than|always)\b/i,
+      message: "Flipped upper bound ('up to' / 'at most') into lower bound or unconditional quantifier.",
+    },
+    {
+      id: "bound-zh-qualifier-flipped",
+      a: /(?:\u4e0d\u8d85\u8fc7|\u6700\u591a)/,
+      b: /(?:\u81f3\u5c11|\u8d85\u8fc7)/,
+      message: "Flipped Chinese bound qualifier between upper and lower limits.",
+    },
+  ];
+  for (const pp of polarityPairs) {
+    if (pp.a.test(beforeText) && !pp.b.test(beforeText)) {
+      if (pp.b.test(afterText)) {
+        secondOrderSlopHits.push({ id: pp.id, message: pp.message });
+      }
+    } else if (pp.b.test(beforeText) && !pp.a.test(beforeText) && pp.a.test(afterText)) {
+      secondOrderSlopHits.push({ id: pp.id, message: pp.message });
+    }
+  }
+
+  // Dropped "up to X" / "at most X" / "at least X" upper/lower bound qualifier around preserved numbers
+  const enBoundRe = /\b(up\s+to|at\s+most|no\s+more\s+than|at\s+least)\s+([$€¥£]?\d[\d.,]*(?:\s*%|\s*[a-zA-Z]{1,6})?)/gi;
+  let bm;
+  while ((bm = enBoundRe.exec(beforeText)) !== null) {
+    const qual = bm[1].replace(/\s+/g, "\\s+");
+    const val = bm[2].replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const origNumPresent = new RegExp(val, "i").test(afterText);
+    const qualStillPresent = new RegExp(`\\b${qual}\\s+${val}`, "i").test(afterText);
+    if (origNumPresent && !qualStillPresent) {
+      secondOrderSlopHits.push({
+        id: "bound-qualifier-dropped",
+        message: `Dropped bound qualifier '${bm[1]}' before '${bm[2]}' in revised text.`,
+      });
+    }
+  }
+
+  // Currency or percentage fabrication check in revised copy
+  const moneyOrPctRe = /(?:[$€¥£]\s*\d[\d.,]*|\bHK\$\s*\d[\d.,]*|\b\d+(?:\.\d+)?%)/gi;
+  const beforeMoneyOrPct = new Set(
+    (String(beforeText || "").match(moneyOrPctRe) || []).map((t) => t.replace(/[,\s]+/g, "").toLowerCase()),
+  );
+  const afterMoneyOrPct = String(afterText || "").match(moneyOrPctRe) || [];
+  for (const tok of afterMoneyOrPct) {
+    const norm = tok.replace(/[,\s]+/g, "").toLowerCase();
+    if (!beforeMoneyOrPct.has(norm)) {
+      secondOrderSlopHits.push({
+        id: "fabricated-currency-or-percent",
+        message: `Introduced unanchored currency/percentage figure '${tok}' not found in original.`,
+      });
+    }
+  }
+
+  // Swapped Label: <value> row check (`Alpha: 10 ... Beta: 20` vs `Alpha: 20 ... Beta: 10`)
+  const rowPairRe = /(?:^|[\n.;\u3002])\s*([A-Za-z0-9_\u4E00-\u9FFF][A-Za-z0-9_\s\u4E00-\u9FFF/()-]{1,30}?)\s*[:\uff1a]\s*([$€¥£]?\d[\d.,]*(?:\s*(?:%|ms|s|x|k|m|b))?)/gi;
+  const beforePairs = new Map();
+  let pm;
+  while ((pm = rowPairRe.exec(beforeText)) !== null) {
+    const key = pm[1].replace(/\s+/g, " ").trim().toLowerCase();
+    const val = pm[2].replace(/[,\s]+/g, "").toLowerCase();
+    if (!beforePairs.has(key)) beforePairs.set(key, new Set());
+    beforePairs.get(key).add(val);
+  }
+  rowPairRe.lastIndex = 0;
+  while ((pm = rowPairRe.exec(afterText)) !== null) {
+    const key = pm[1].replace(/\s+/g, " ").trim().toLowerCase();
+    const val = pm[2].replace(/[,\s]+/g, "").toLowerCase();
+    const expected = beforePairs.get(key);
+    if (expected && !expected.has(val)) {
+      secondOrderSlopHits.push({
+        id: "swapped-labeled-metric",
+        message: `Metric value for '${pm[1].trim()}' changed from '${Array.from(expected).join("/")}' to '${pm[2]}'.`,
       });
     }
   }

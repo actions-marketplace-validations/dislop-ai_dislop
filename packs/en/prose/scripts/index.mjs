@@ -273,6 +273,9 @@ export default definePackScripts({
           consecutiveBoldListItems = 0;
           boldWallAnchorSeg = null;
         }
+      } else if (seg.id.endsWith("-S1")) {
+        consecutiveBoldListItems = 0;
+        boldWallAnchorSeg = null;
       }
     }
     flushStaccatoRun();

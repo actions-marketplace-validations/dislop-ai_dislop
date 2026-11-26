@@ -147,6 +147,9 @@ export async function extractVoiceProfile(referenceFiles, { route = null } = {})
  * otherwise extract and write updated cache.
  */
 export async function resolveOrExtractVoiceProfile(config, { route = null } = {}) {
+  if (config?.noLlm || config?.routing === "off" || !route || typeof route.execute !== "function") {
+    return null;
+  }
   const refFiles = (config.voice?.referenceFiles || []).filter((fp) => fs.existsSync(fp));
   const cachePath = config.voice?.cachePath;
 

@@ -7,6 +7,7 @@
 !.agents/plugins/marketplace.json
 CLAUDE.local.md
 .dislop.local.json
+.dislop-worklog/
 .env
 .env.*
 !.env.example

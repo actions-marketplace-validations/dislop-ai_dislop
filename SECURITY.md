@@ -3,17 +3,19 @@
 ## Scope & Privacy Model
 
 - **Local CLI, SDK, Skills & Stdio MCP (`dislop`)**:
-  - Default routing (`routing: "local"`) performs **zero external network uploads** and zero telemetry.
-  - Ambient environment API keys (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`) are gated by `src/runtime/privacy-gate.mjs`: in interactive TTY sessions, `dislop` asks once before sending text to an unapproved remote host; in Non-TTY / CI / agent sessions, unapproved ambient keys are skipped automatically unless `--engine byok` is explicitly passed or the host is listed in `approvedHosts`.
+  - Default routing (`routing: "local"`) performs **zero external network uploads** and zero telemetry; `routing: "off"` or `DISLOP_TEST_MODE=1` keeps execution offline and deterministic.
+  - Project configs (`.dislop.json`) are treated as untrusted inputs: `routing` is restricted to `local` or `off`, credential/provider/host/worklog keys are rejected, `voice.referenceFiles` must remain inside the project root, `.dislop.local.json` is rejected if tracked by git, and `packs` / `extraPacks` / MCP callers cannot load executable `.mjs` scripts or external `npm` packages from project scope (only built-in packs or validated prompt-only `.pack.md` files inside the project root).
+  - Ambient environment API keys (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`) are gated by `src/runtime/privacy-gate.mjs`: in interactive TTY sessions, `dislop` asks once before sending text to an unapproved remote host (never bypassing failed explicit consent in `byok` mode); in Non-TTY / CI / agent sessions, unapproved ambient keys are skipped automatically unless `--engine byok` is explicitly passed or the host is listed in `approvedHosts`.
   - Note that loopback endpoints (`localhost`, `127.0.0.1`) configured in `providers` are treated as local runtimes; if you run a local reverse proxy forwarding to a remote cloud API, set `"routing": "byok"` (or pass `--no-llm` when working offline).
-- **Prompt-Injection & Archive Safety**:
-  - Untrusted target documents are isolated with boundary-tag escaping (`<untrusted_document>`), LLM outputs are structurally clamped to non-blocking `Suggestion`s with `fixSafety` capped at `"review" | "manual"`, and `src/kernel/fact-gate.mjs` deterministically blocks injected URLs, inline code spans, or fabricated numbers.
-  - OOXML (`.docx`, `.pptx`) parsing enforces a 3,000-entry cap, 120 MB uncompressed XML ceiling, path-traversal checks, and XXE (`<!DOCTYPE` / `<!ENTITY`) rejection.
+- **Prompt-Injection, Archive & Linter Rule Safety**:
+  - Untrusted target documents and caller-carried tone anchors (`<untrusted_document>`, `<context_readonly>`, `<established_tone_anchor>`) are isolated with boundary-tag escaping, LLM outputs are clamped to non-blocking `Suggestion`s with bounded field lengths (`<= 320` chars) and `fixSafety` capped at `"review" | "manual"`, and `src/kernel/fact-gate.mjs` deterministically blocks injected URLs, inline code spans, fabricated numbers/currency/percentages, polarity flips, dropped bound qualifiers, and swapped labeled metrics.
+  - `dislop packs lint <path>` validates external `.pack.md` and Pack manifests/scripts against hidden Unicode, XML breakout tags, instruction-override prompts, and restricted Node imports.
+  - OOXML (`.docx`, `.pptx`) parsing enforces a 3,000-entry cap, 120 MB uncompressed XML ceiling, path-traversal checks, and XXE (`<!DOCTYPE` / `<!ENTITY`) rejection; OOXML patching preserves hyperlinks and multi-run styling.
 - **Official Hosted Cloud (`https://dislop.com`)**: Uses paid-tier model APIs that do not train on submitted content.
 
 ## Supported Versions
 
-Security fixes apply to the latest `1.0.x` release line on `main` (Node.js `>= 20.0.0`, published via `npm`).
+Security fixes apply to the latest `1.1.x` release line on `main` (Node.js `>= 20.0.0`, published via `npm`).
 
 ## Reporting a Vulnerability
 

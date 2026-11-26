@@ -16,11 +16,13 @@ export function runAutoFixOnDocumentResult(docResult, { dryRun = false, backup =
         (item.actionType === "replace" && item.suggestedReplacement !== "")),
   );
 
+  const decisions = {};
   if (safeItems.length === 0) {
     return {
       appliedCount: 0,
       modified: false,
       diff: "",
+      decisions,
       report,
     };
   }
@@ -38,11 +40,23 @@ export function runAutoFixOnDocumentResult(docResult, { dryRun = false, backup =
     displayPath: report.file,
   });
 
+  let appliedCount = 0;
   if (patchRes.modified && !dryRun) {
-    const appliedIds = new Set(safeItems.map((i) => i.id));
+    const appliedIdxSet =
+      patchRes.appliedIndices instanceof Set
+        ? patchRes.appliedIndices
+        : new Set(safeItems.map((_, idx) => idx));
+    const appliedIds = new Set();
+    safeItems.forEach((item, idx) => {
+      if (appliedIdxSet.has(idx)) {
+        appliedIds.add(item.id);
+      }
+    });
     for (const item of items) {
       if (appliedIds.has(item.id)) {
         item._applied = true;
+        decisions[item.id] = "auto_applied";
+        appliedCount += 1;
       }
     }
     const remaining = items.filter((i) => !i._applied);
@@ -51,9 +65,10 @@ export function runAutoFixOnDocumentResult(docResult, { dryRun = false, backup =
   }
 
   return {
-    appliedCount: patchRes.modified ? safeItems.length : 0,
+    appliedCount,
     modified: patchRes.modified,
     diff: patchRes.diff,
+    decisions,
     report,
   };
 }

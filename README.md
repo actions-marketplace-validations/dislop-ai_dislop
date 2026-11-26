@@ -124,14 +124,14 @@ dislop check slop-samples/en.md --engine cloud --format agent
 
 ### Tier 2: BYOK / OpenAI-Compatible Endpoint (`--engine byok`)
 
-Combines deterministic `DEFECT` detection with frontier semantic `SUGGESTION` analysis—catching unchosen `Option A / Option B` branches (`[P10-S1|L16]`), disguised prose placeholders (`Mention the Q3 error-budget burn rate here once SRE signs off` at `[P10-S3|L16]`), and implicit assistant handoffs (`Based on the notes you shared...` at `[P3-S2|L5]`), while the Dual Fact Gate withholds any rewrite that drops entities (`[P1-S1|L1]`):
+Combines deterministic `DEFECT` detection with frontier semantic `SUGGESTION` analysis—catching unchosen `Option A / Option B` branches (`[P10-S1|L16]`), disguised prose placeholders (`Mention the Q3 error-budget burn rate here once SRE signs off` at `[P10-S3|L16]`), and implicit assistant handoffs (`Based on the notes you shared...` at `[P3-S2|L5]`):
 
 ```bash
-dislop check slop-samples/en.md --engine byok --format agent
+dislop check slop-samples/en.md --engine byok --provider gemini --format agent
 ```
 
 ```text
-# dislop file=slop-samples/en.md engine=byok:gpt-6.2-astra defects=8 suggestions=14
+# dislop file=slop-samples/en.md engine=byok:gemini-3.8-flash defects=8 suggestions=9
 [P1-S1|L1] DEFECT(error,safe) en/artifact-qa/chatbot-artifact
   quote: "Certainly! Here is a polished draft of your Q3 database migration postmortem."
   reason: Conversational English assistant wrapper left in the deliverable; safe to delete.
@@ -164,17 +164,13 @@ dislop check slop-samples/en.md --engine byok --format agent
   quote: "[incident timeline](#)"
   reason: Placeholder non-navigating link target '#'.
   prompt: Wire a real destination URL or use a <button type="button"> control.
-[P1-S1|L1] SUGGESTION(strong,manual) en/artifact-qa/implicit-assistant-framing
-  quote: "Certainly! Here is a polished draft of your Q3 database migration postmortem."
-  reason: This announces delivery of a draft to its requester. The title already introduces the migration to readers.
-  note: Fact Gate withheld replacement (dropped proper noun/entity: Q3).
 [P3-S1|L5] SUGGESTION(strong,safe) en/prose/hollow-transition
   quote: "In today's rapidly evolving digital landscape, infrastructure reliability is a top priority."
   reason: Zero-information macro filler sentence; deleting it preserves all factual claims and causal links.
   fix: DELETE
 [P3-S2|L5] SUGGESTION(strong,review) en/artifact-qa/implicit-assistant-framing
   quote: "Based on the notes you shared, I have organized the key findings for [Company Name] below [oaicite:1]."
-  reason: The sentence tells the requester how their notes were used rather than reporting a finding. Removing it also removes the company placeholder and stray citation marker.
+  reason: Assistant handoff sentence explaining chatbot actions to the prompt author.
   fix: DELETE
 [P4-S1|L7] SUGGESTION(strong,safe) en/prose/throat-clearing
   quote: "It is worth noting that PostgreSQL p95 query latency dropped from 142ms to 18ms across 4 read replicas in `{{cluster_region}}`."
@@ -184,37 +180,21 @@ dislop check slop-samples/en.md --engine byok --format agent
   quote: "This isn't just a configuration tweak — it's a new reliability baseline for our checkout pipeline."
   reason: Formulaic 'Not just X — it's Y' contrast shell; state the actual point directly without theatrical negation.
   fix: "It is a new reliability baseline for our checkout pipeline."
-[P5-S2|L9] SUGGESTION(strong,manual) en/artifact-qa/disguised-placeholder-prose
-  quote: "Review the [incident timeline](#) or open the [on-call runbook]() before Friday, and assign follow-up verification to [TODO: confirm incident owner]."
-  reason: The TODO is an instruction to the writer, not an assignee. The timeline and runbook links also lack usable destinations, so readers cannot act on the Friday instruction as written.
-  prompt: Supply [incident timeline URL], [on-call runbook URL], and [confirmed incident owner] while retaining the Friday instruction.
 [P10-S1|L16] SUGGESTION(strong,manual) common/artifact-qa/unchosen-draft-options
   quote: "Option A: Roll out pooler settings to EU shards on Tuesday."
-  reason: The Tuesday rollout and the following billing-freeze hold are competing drafts of the same next step. The text does not establish which was approved.
-  prompt: Confirm [approved EU rollout decision]. Keep the matching instruction without its option label and remove the other alternative.
+  reason: Inline text retains unchosen draft alternatives left over from drafting.
+  prompt: Select either [Option A] or [Option B] and remove the unused alternative.
 [P10-S3|L16] SUGGESTION(strong,manual) en/artifact-qa/disguised-placeholder-prose
   quote: "Mention the Q3 error-budget burn rate here once SRE signs off."
-  reason: This tells the writer what to add after sign-off rather than giving readers a confirmed result.
-  prompt: Report [SRE-confirmed Q3 error-budget burn rate] after sign-off, or omit the reminder before publication.
+  reason: Prose note formulated as an author-facing reminder rather than published postmortem content.
+  prompt: Insert the confirmed [Q3 error-budget burn rate percentage] from SRE, or remove the note.
 [P11-S1|L18] SUGGESTION(strong,safe) en/prose/hollow-transition
   quote: "Looking ahead, the possibilities are truly endless."
   reason: Zero-information macro filler sentence; deleting it preserves all factual claims and causal links.
   fix: DELETE
-[P12-S1|L20] SUGGESTION(strong,review) en/artifact-qa/implicit-assistant-framing
-  quote: "I hope this helps!"
-  reason: This closes a conversation with the requester rather than the postmortem.
-  fix: DELETE
-[P12-S2|L20] SUGGESTION(strong,review) en/artifact-qa/implicit-assistant-framing
-  quote: "Let me know if you'd like any further adjustments."
-  reason: The offer concerns revisions to the draft, not follow-up work on the migration.
-  fix: DELETE
 [P4-S2|L7] SUGGESTION(moderate,review) en/prose/rhetorical-self-qa
   quote: "Why does this matter?"
   reason: Removes mechanical assistant rhetorical bridge question so the answer states the point directly.
-  fix: DELETE
-[P11-S1|L18] SUGGESTION(moderate,review) en/prose/moralizing-closer
-  quote: "Looking ahead, the possibilities are truly endless."
-  reason: The optimistic sign-off names no operational consequence or next step. The rollout decision, once confirmed, makes a more useful ending.
   fix: DELETE
 [P6-S1|L11] SUGGESTION(hint,manual) en/prose/bold-lead-list-wall
   quote: "**Faster Failover**: Automated promotion finished in 9 seconds during chaos drills."
@@ -357,27 +337,48 @@ dislop check slop-samples/en.md --engine local --format agent
 ## CLI Reference
 
 ```text
-dislop check <files/globs...> [options]     Read-only Dual-Track audit
+dislop check <files/globs... | -> [options] Read-only Dual-Track linter (`-` reads stdin with `--stdin-filename`; `--changed` / `--since <ref>` scans git diffs)
 dislop fix <files/globs...> [options]       Interactive TTY hunk loop, or batch safe fixes (--auto)
-dislop verify <before> <after> [--json]     Verify edits preserved facts, units, links, and entities
+dislop verify <before> <after> [--json]     Verify edits preserved facts, qualifiers, polarity, links, and metrics
 dislop verify --git [ref] <file> [--json]   Verify working-tree edits against a Git revision
-dislop init [--global] [--voice <glob>]     Initialize .dislop.json or ~/.config/dislop/config.json
+dislop init [--global] [--voice <glob>]     Initialize project .dislop.json or ~/.config/dislop/config.json
 dislop login [--token <dslp_*>]             Save Official Cloud credentials
 dislop logout                               Remove Official Cloud credentials
 dislop voice <extract|show|clear> [files]   Manage personal voice profile (voice.json)
 dislop model <list|pull|rm> [name]          Manage Tier 3 local models (requires Ollama)
-dislop packs [--json]                       List built-in multi-level Packs
+dislop packs [list|lint <path>] [--json]    List built-in Packs or lint external .pack.md / Pack dirs
 dislop doctor [--json]                      Diagnose active routing tier, Ollama status, auth, config, and Packs
+dislop worklog <status|list|show|stats|reflect|clear>  Inspect local dev worklog & reflection summaries
 dislop mcp                                  Start local stdio MCP server (also `dislop-mcp`)
 ```
 
-## Configuring an LLM Provider (`~/.config/dislop/config.json` or `.dislop.json`)
+Key flags: `--fail-on <none|error|warning>` controls Defect CI exit thresholds (Suggestions remain non-blocking at Exit `0`), `--stdin-filename <name>` sets stdin format, and `--changed` / `--since <ref>` scope checks to modified git files.
+
+## Configuration Layering (`~/.config/dislop/config.json` vs `.dislop.json`)
+
+Shared repo `.dislop.json` files are isolated under untrusted linter rules (`routing` limited to `"local"` or `"off"`, per-glob `overrides`, `extraPacks`, `rules`, `failOn`, `ignore`, and `voice.referenceFiles` inside the repo root). Put personal LLM backends and credentials ONLY in `~/.config/dislop/config.json` or an untracked `.dislop.local.json`:
+
+```json
+{
+  "routing": "local",
+  "ignore": [".private/**"],
+  "failOn": "error",
+  "overrides": [
+    { "files": ["docs/**/*.md"], "packs": ["prose"] },
+    { "files": ["site/**/*.html"], "packs": ["web-ui"] }
+  ]
+}
+```
+
+User config (`~/.config/dislop/config.json`) holds credentials & providers:
 
 ```json
 {
   "routing": "byok",
   "activeProvider": "openai-default",
   "approvedHosts": ["api.openai.com"],
+  "ignore": [".private/**"],
+  "concurrency": 4,
   "providers": {
     "openai-default": {
       "protocol": "openai",

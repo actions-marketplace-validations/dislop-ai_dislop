@@ -2,7 +2,7 @@
 
 [English](./README.md) | 简体中文
 
-**去除 AI 废话与交付脏残留，就是硬核生产力。**
+**去 AI 味才是真正的生产力！**
 
 `dislop` 是一款构建在零第三方运行时依赖 Node.js（`>= 20`）微内核上的可插拔文稿与交付物 Linter。它在正式发稿、提交 PR 或导出客户交付物前，自动审计 Markdown、纯文本、HTML/CSS/JSX/TSX/SVG、Word（`.docx`）、PowerPoint（`.pptx`）、PDF 与位图图片，将客观交付**缺陷（Defect）**与非阻断的文风去 AI 味**建议（Suggestion）**严格隔离。
 
@@ -124,39 +124,38 @@ dislop fix slop-samples/zh-CN.md --auto --dry-run --no-llm
 ```diff
 --- a/slop-samples/zh-CN.md
 +++ b/slop-samples/zh-CN.md
-@@ -1,13 +1,13 @@
+@@ -1,1 +1,1 @@
 -当然可以！以下是为您润色后的第三季度存储集群迁移复盘报告。
--
--# 第三季度存储层迁移复盘纪要
--
--在当今数字化转型加速推进的时代浪潮下，这一举措无疑具有举足轻重的战略意义。根据您提供的会议纪要，我已将 [公司名称]（合作方某某科技）的核心发现梳理如下 [oaicite:1]。
--
--值得注意的是，PostgreSQL 在 `{{cluster_region}}` 区域的 4 个只读副本上 p95 查询延迟从 142ms 降至 18ms。为什么这一点如此重要？通过 `--pool-mode=transaction` 启用事务级连接池后，空闲连接内存开销降低了 64%，且未中断任何活跃会话。
--
--这不是一次简单的参数微调，而是核心结账链路可靠性基线的重建。请在周五前查阅 [故障时间线](#) 或打开 [值班应急手册]()，并将后续压测核验指派给 [TODO: 确认故障负责人]。
--
--本次架构升级实现了全面赋能、协同联动、闭环管理，具体收益包括：混沌演练自动主从切换耗时控制在 9 秒以内，工作节点峰值 RSS 内存低于 4.2GB，慢查询日志采样阈值收紧至 50ms。
--
--方案 A：周二将连接池参数灰度至欧洲分片。 / 方案 B：等账单冻结窗口结束后再推欧洲分片。待 SRE 团队签字确认后在此处补上第三季度错误预算消耗率。
-+
 +# 第三季度存储层迁移复盘纪要
-+
-+根据您提供的会议纪要，我已将 [公司名称]（合作方某某科技）的核心发现梳理如下。
-+
-+PostgreSQL 在 `{{cluster_region}}` 区域的 4 个只读副本上 p95 查询延迟从 142ms 降至 18ms。为什么这一点如此重要？通过 `--pool-mode=transaction` 启用事务级连接池后，空闲连接内存开销降低了 64%，且未中断任何活跃会话。
-+
-+这不是一次简单的参数微调，而是核心结账链路可靠性基线的重建。请在周五前查阅 [故障时间线](#) 或打开 [值班应急手册]()，并将后续压测核验指派给 [TODO: 确认故障负责人]。
-+
-+本次架构升级实现了全面赋能、协同联动、闭环管理，具体收益包括：混沌演练自动主从切换耗时控制在 9 秒以内，工作节点峰值 RSS 内存低于 4.2GB，慢查询日志采样阈值收紧至 50ms。
-+
-+方案 A：周二将连接池参数灰度至欧洲分片。 / 方案 B：等账单冻结窗口结束后再推欧洲分片。待 SRE 团队签字确认后在此处补上第三季度错误预算消耗率。
-+
-@@ -14,5 +14,1 @@
+@@ -2,2 +2,2 @@
  
+-# 第三季度存储层迁移复盘纪要
++根据您提供的会议纪要，我已将 [公司名称]（合作方某某科技）的核心发现梳理如下。
+@@ -4,2 +4,2 @@
+ 
+-在当今数字化转型加速推进的时代浪潮下，这一举措无疑具有举足轻重的战略意义。根据您提供的会议纪要，我已将 [公司名称]（合作方某某科技）的核心发现梳理如下 [oaicite:1]。
++PostgreSQL 在 `{{cluster_region}}` 区域的 4 个只读副本上 p95 查询延迟从 142ms 降至 18ms。为什么这一点如此重要？通过 `--pool-mode=transaction` 启用事务级连接池后，空闲连接内存开销降低了 64%，且未中断任何活跃会话。
+@@ -6,2 +6,2 @@
+ 
+-值得注意的是，PostgreSQL 在 `{{cluster_region}}` 区域的 4 个只读副本上 p95 查询延迟从 142ms 降至 18ms。为什么这一点如此重要？通过 `--pool-mode=transaction` 启用事务级连接池后，空闲连接内存开销降低了 64%，且未中断任何活跃会话。
++这不是一次简单的参数微调，而是核心结账链路可靠性基线的重建。请在周五前查阅 [故障时间线](#) 或打开 [值班应急手册]()，并将后续压测核验指派给 [TODO: 确认故障负责人]。
+@@ -8,2 +8,2 @@
+ 
+-这不是一次简单的参数微调，而是核心结账链路可靠性基线的重建。请在周五前查阅 [故障时间线](#) 或打开 [值班应急手册]()，并将后续压测核验指派给 [TODO: 确认故障负责人]。
++本次架构升级实现了全面赋能、协同联动、闭环管理，具体收益包括：混沌演练自动主从切换耗时控制在 9 秒以内，工作节点峰值 RSS 内存低于 4.2GB，慢查询日志采样阈值收紧至 50ms。
+@@ -10,2 +10,2 @@
+ 
+-本次架构升级实现了全面赋能、协同联动、闭环管理，具体收益包括：混沌演练自动主从切换耗时控制在 9 秒以内，工作节点峰值 RSS 内存低于 4.2GB，慢查询日志采样阈值收紧至 50ms。
++方案 A：周二将连接池参数灰度至欧洲分片。 / 方案 B：等账单冻结窗口结束后再推欧洲分片。待 SRE 团队签字确认后在此处补上第三季度错误预算消耗率。
+@@ -12,7 +12,2 @@
+ 
+-方案 A：周二将连接池参数灰度至欧洲分片。 / 方案 B：等账单冻结窗口结束后再推欧洲分片。待 SRE 团队签字确认后在此处补上第三季度错误预算消耗率。
+-
 -展望未来，我们将继续砥砺前行，构筑更加稳健的数字底座！
 -
 -希望以上内容对您有所帮助！如果您需要进一步调整，请随时告诉我。
 -
++
 ```
 
 ### 用例 3：Tier 1 官方云端引擎（`--engine cloud`）
@@ -170,14 +169,14 @@ dislop check slop-samples/zh-CN.md --engine cloud --format agent
 
 ### 用例 4：Tier 2 自有密钥 / OpenAI 兼容网关深度语义审校（`--engine byok`）
 
-在确定性规则基础上叠加前沿大模型语义理解，精准捕获绕过固定正则的隐性交付问题：面向委托人的交差过渡句（`根据您提供的会议纪要…` `[P3-S2|L5]`）、未二选一的并列排期草稿（`方案 A … / 方案 B …` `[P7-S1|L13]`）、混入正文的作者自留备忘（`待 SRE 团队签字确认后在此处补上第三季度错误预算消耗率。` `[P7-S3|L13]`），并直接将 `本次架构升级实现了全面赋能、协同联动、闭环管理，具体收益包括：` 收敛为 `本次架构升级的具体收益包括：`（`[P6-S1|L11]`）：
+在确定性规则基础上叠加前沿大模型语义理解，精准捕获绕过固定正则的隐性交付问题：面向委托人的交差过渡句（`根据您提供的会议纪要…` `[P3-S2|L5]`）、合作方占位假名（`某某科技` `[P3-S2|L5]`）、未二选一的并列排期草稿（`方案 A … / 方案 B …` `[P7-S2|L13]`）、混入正文的作者自留备忘（`待 SRE 团队签字确认后在此处补上第三季度错误预算消耗率。` `[P7-S3|L13]`），并直接将 `本次架构升级实现了全面赋能、协同联动、闭环管理，具体收益包括：…` 收敛为 `本次架构升级的具体收益包括：…`（`[P6-S1|L11]`）：
 
 ```bash
-dislop check slop-samples/zh-CN.md --engine byok --format agent
+dislop check slop-samples/zh-CN.md --engine byok --provider gemini --format agent
 ```
 
 ```text
-# dislop file=slop-samples/zh-CN.md engine=byok:gpt-6.2-astra defects=8 suggestions=15
+# dislop file=slop-samples/zh-CN.md engine=byok:gemini-3.8-flash defects=8 suggestions=10
 [P1-S1|L1] DEFECT(error,safe) zh/artifact-qa/chatbot-artifact
   quote: "当然可以！以下是为您润色后的第三季度存储集群迁移复盘报告。"
   reason: 正文中遗留了 AI 对话寒暄开场或客套收尾壳，可直接安全删除。
@@ -210,50 +209,34 @@ dislop check slop-samples/zh-CN.md --engine byok --format agent
   quote: "[故障时间线](#)"
   reason: Placeholder non-navigating link target '#'.
   prompt: Wire a real destination URL or use a <button type="button"> control.
-[P1-S1|L1] SUGGESTION(strong,review) zh/artifact-qa/implicit-assistant-framing
-  quote: "当然可以！以下是为您润色后的第三季度存储集群迁移复盘报告。"
-  reason: 这句话向委托人交代润色任务已完成。下一行标题已说明报告主题，可以直接从标题开始。
-  fix: DELETE
 [P3-S1|L5] SUGGESTION(strong,safe) zh/prose/hollow-transition
   quote: "在当今数字化转型加速推进的时代浪潮下，这一举措无疑具有举足轻重的战略意义。"
   reason: 零信息增量的宏大叙事套话，执行破坏性删除测试后不影响上下文事实与因果推进。
   fix: DELETE
 [P3-S2|L5] SUGGESTION(strong,review) zh/artifact-qa/implicit-assistant-framing
   quote: "根据您提供的会议纪要，我已将 [公司名称]（合作方某某科技）的核心发现梳理如下 [oaicite:1]。"
-  reason: 这句说明的是如何替委托人整理材料，没有陈述任何发现，也没有给出可识别的公司或可查阅的出处。
+  reason: 向提示词提问者汇报的助手过渡句，并残留引用标记，不应出现在正式复盘文档中。
   fix: DELETE
 [P5-S1|L9] SUGGESTION(strong,review) zh/prose/unprompted-negation
   quote: "这不是一次简单的参数微调，而是核心结账链路可靠性基线的重建。"
   reason: 移除无前文语境支撑的“不是…而是…”伪深刻对比壳，直接陈述后半句内容。
   fix: "这是核心结账链路可靠性基线的重建。"
-[P5-S2|L9] SUGGESTION(strong,manual) zh/artifact-qa/disguised-placeholder-prose
-  quote: "[TODO: 确认故障负责人]"
-  reason: 核验指派的对象仍是给作者的待办，值班团队无法据此分派工作。
-  prompt: 将待办替换为[已确认的故障负责人]，保留周五前查阅资料的要求。
-[P6-S1|L11] SUGGESTION(strong,review) zh/prose/hollow-transition
-  quote: "本次架构升级实现了全面赋能、协同联动、闭环管理，具体收益包括："
-  reason: 三个概括性标签没有说明谁在协同、如何闭环。缩短引语即可突出冒号后的切换耗时、内存峰值和采样阈值。
-  fix: "本次架构升级的具体收益包括："
-[P7-S1|L13] SUGGESTION(strong,manual) common/artifact-qa/unchosen-draft-options
-  quote: "方案 A：周二将连接池参数灰度至欧洲分片。"
-  reason: 此句与下一句用斜线并列，给同一次欧洲分片灰度留下两种排期，未说明哪一种获准执行。
-  prompt: 按[已确认的欧洲分片灰度排期]保留对应安排，删除另一稿及方案编号。
+[P7-S2|L13] SUGGESTION(strong,manual) common/artifact-qa/unchosen-draft-options
+  quote: "/ 方案 B：等账单冻结窗口结束后再推欧洲分片。"
+  reason: 正文中保留了头脑风暴期互斥的方案 A/B 草稿选项，未做最终定夺。
+  prompt: 请在 [方案 A / 方案 B] 中二选一保留最终确定的执行方案，并删除未采纳的选项。
 [P7-S3|L13] SUGGESTION(strong,manual) zh/artifact-qa/disguised-placeholder-prose
   quote: "待 SRE 团队签字确认后在此处补上第三季度错误预算消耗率。"
-  reason: “在此处补上”是在提醒作者填数，不是已经确认的复盘结果。
-  prompt: 签字后填入[SRE 团队确认的第三季度错误预算消耗率]；未确认前不要把它写成实测结论。
+  reason: 正文中混入写给作者自己的待办备忘指令，非定稿内容。
+  prompt: 请填入经 SRE 团队确认的具体 [第三季度错误预算消耗率]，或在发布前删除此待办说明。
 [P8-S1|L15] SUGGESTION(strong,safe) zh/prose/hollow-transition
   quote: "展望未来，我们将继续砥砺前行，构筑更加稳健的数字底座！"
   reason: 零信息增量的宏大叙事套话，执行破坏性删除测试后不影响上下文事实与因果推进。
   fix: DELETE
-[P9-S1|L17] SUGGESTION(strong,review) zh/artifact-qa/implicit-assistant-framing
-  quote: "希望以上内容对您有所帮助！"
-  reason: 这是面向提问者的客套收尾，不属于迁移纪要。
-  fix: DELETE
-[P9-S2|L17] SUGGESTION(strong,review) zh/artifact-qa/implicit-assistant-framing
-  quote: "如果您需要进一步调整，请随时告诉我。"
-  reason: 这句邀请委托人继续改稿，不是给工程团队的后续行动。
-  fix: DELETE
+[P3-S2|L5] SUGGESTION(moderate,manual) zh/artifact-qa/synthetic-example-entity
+  quote: "某某科技"
+  reason: 正式交付文档中残留了未替换的测试假名“某某科技”。
+  prompt: 请将占位假名“某某科技”替换为真实的合作方机构名称，例如 [合作方真实名称]。
 [P4-S1|L7] SUGGESTION(moderate,safe) zh/prose/throat-clearing
   quote: "值得注意的是，PostgreSQL 在 `{{cluster_region}}` 区域的 4 个只读副本上 p95 查询延迟从 142ms 降至 18ms。"
   reason: 删去无实质信息的句首套话铺垫，直接进入具体陈述。
@@ -266,10 +249,10 @@ dislop check slop-samples/zh-CN.md --engine byok --format agent
   quote: "全面赋能、协同联动、闭环管理"
   reason: 连续堆砌三个及以上空洞四字套话排比，缺乏具体动作或边界信息。
   prompt: 删去四字口号排比串，保留或改写为原文中实际发生的具体改动：[填入具体机制或动作]
-[P8-S1|L15] SUGGESTION(moderate,review) zh/prose/moralizing-closer
-  quote: "展望未来，我们将继续砥砺前行，构筑更加稳健的数字底座！"
-  reason: 这句没有新增改进措施或验收条件，报告可止于已确认的结果或行动安排。
-  fix: DELETE
+[P6-S1|L11] SUGGESTION(moderate,review) zh/prose/cooccurrence-padding
+  quote: "本次架构升级实现了全面赋能、协同联动、闭环管理，具体收益包括：混沌演练自动主从切换耗时控制在 9 秒以内，工作节点峰值 RSS 内存低于 4.2GB，慢查询日志采样阈值收紧至 50ms。"
+  reason: 连续堆叠‘全面赋能、协同联动、闭环管理’等空泛管理词，去除后不影响后续具体收益数据。
+  fix: "本次架构升级的具体收益包括：混沌演练自动主从切换耗时控制在 9 秒以内，工作节点峰值 RSS 内存低于 4.2GB，慢查询日志采样阈值收紧至 50ms。"
 ```
 
 ### 用例 5：Tier 3 本地小模型离线语义审校（`--engine local`）
@@ -391,27 +374,48 @@ dislop check slop-samples/zh-CN.md --engine local --format agent
 ## CLI 命令参考
 
 ```text
-dislop check <files/globs...> [options]     只读双轨审校（Defect 缺陷与 Suggestion 建议）
+dislop check <files/globs... | -> [options] 只读双轨 Linter 审计（支持 `-` 管道与 `--stdin-filename`、`--changed` / `--since <ref>`）
 dislop fix <files/globs...> [options]       终端交互式逐块修补，或批量安全清理（--auto）
-dislop verify <before> <after> [--json]     校验改稿前后数字、单位、链接与专有名词守恒
+dislop verify <before> <after> [--json]     校验改稿前后数字、量纲、极性反转、限定词与指标配对是否守恒
 dislop verify --git [ref] <file> [--json]   对比 Git 历史版本校验当前工作区改稿安全性
-dislop init [--global] [--voice <glob>]     初始化 .dislop.json 或 ~/.config/dislop/config.json
+dislop init [--global] [--voice <glob>]     初始化项目最小 .dislop.json 或 ~/.config/dislop/config.json
 dislop login [--token <dslp_*>]             保存官方云端访问凭据
 dislop logout                               清除本机保存的官方云端凭据
 dislop voice <extract|show|clear> [files]   提取并管理个人写作风格基线（voice.json）
 dislop model <list|pull|rm> [name]          管理 Tier 3 本地小模型（依赖 Ollama）
-dislop packs [--json]                       查看内置多层级规则包列表
+dislop packs [list|lint <path>] [--json]    查看内置规则包，或对外部 .pack.md / 规则包目录运行安全与格式检查
 dislop doctor [--json]                      诊断当前路由层级、Ollama 状态、鉴权与规则包配置
+dislop worklog <status|list|show|stats|reflect|clear>  查看本地工作记录与反思摘要
 dislop mcp                                  启动本地 stdio MCP 服务（亦可直接运行 `dislop-mcp`）
 ```
 
-## 配置大模型后端（`~/.config/dislop/config.json` 或 `.dislop.json`）
+常用工程接入参数：`--fail-on <none|error|warning>`（仅控制确定性 Defect 退出码，Suggestion 恒为退出码 `0`）、`--changed` / `--since <ref>`（只扫 Git 变更文件）、`--stdin-filename <name>`（stdin 扩展名提示）。
+
+## 分层配置边界（`~/.config/dislop/config.json` 与 `.dislop.json`）
+
+共享仓库内的 `.dislop.json` 按不可信配置隔离：`routing` 仅允许 `"local"` 或 `"off"`，支持按路径 `overrides`、`extraPacks`、`rules`、`failOn`、`ignore` 与项目内 `.dislop/rules.json`；大模型供应商与本地凭据仅可写在 `~/.config/dislop/config.json` 或未跟踪的 `.dislop.local.json` 中：
+
+```json
+{
+  "routing": "local",
+  "ignore": [".private/**"],
+  "failOn": "error",
+  "overrides": [
+    { "files": ["docs/**/*.md"], "packs": ["prose"] },
+    { "files": ["site/**/*.html"], "packs": ["web-ui"] }
+  ]
+}
+```
+
+个人配置（`~/.config/dislop/config.json`）：
 
 ```json
 {
   "routing": "byok",
   "activeProvider": "openai-default",
   "approvedHosts": ["api.openai.com"],
+  "ignore": [".private/**"],
+  "concurrency": 4,
   "providers": {
     "openai-default": {
       "protocol": "openai",
