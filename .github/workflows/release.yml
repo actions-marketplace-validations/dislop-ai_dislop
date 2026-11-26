@@ -24,24 +24,30 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Verify tag matches package.json, CLI, server.json, and plugin.json versions
-        if: github.ref_type == 'tag'
+      - name: Verify manifests, server.json description length, and tag version match
         run: |
           node -e '
             const fs = require("node:fs");
-            const tagVer = (process.env.GITHUB_REF_NAME || "").replace(/^v/, "");
+            const isTag = process.env.GITHUB_REF_TYPE === "tag";
+            const tagVer = isTag ? (process.env.GITHUB_REF_NAME || "").replace(/^v/, "") : "";
             const pkgVer = JSON.parse(fs.readFileSync("package.json", "utf8")).version;
-            const srvVer = JSON.parse(fs.readFileSync("server.json", "utf8")).version;
+            const srv = JSON.parse(fs.readFileSync("server.json", "utf8"));
+            const srvVer = srv.version;
             const plgVer = JSON.parse(fs.readFileSync("plugin.json", "utf8")).version;
             const cliSrc = fs.readFileSync("src/cli-main.mjs", "utf8");
             const cliVer = (cliSrc.match(/CLI_VERSION\s*=\s*"([^"]+)"/) || [])[1];
+            if (String(srv.description || "").length > 100) {
+              console.error(`server.json description exceeds 100 chars (${String(srv.description || "").length})`);
+              process.exit(1);
+            }
+            const expected = isTag ? tagVer : pkgVer;
             for (const [label, v] of [["package.json", pkgVer], ["server.json", srvVer], ["plugin.json", plgVer], ["src/cli-main.mjs", cliVer]]) {
-              if (v !== tagVer) {
-                console.error(`Version mismatch in ${label}: expected ${tagVer}, got ${v}`);
+              if (v !== expected) {
+                console.error(`Version mismatch in ${label}: expected ${expected}, got ${v}`);
                 process.exit(1);
               }
             }
-            console.log(`All manifests aligned at v${tagVer}`);
+            console.log(`All manifests aligned at v${expected} (server.json description ${srv.description.length}/100 chars)`);
           '
 
       - uses: actions/setup-node@v4
@@ -122,7 +128,11 @@ jobs:
 
   publish-mcp-registry:
     needs: [verify-and-github-release, publish-npm]
-    if: github.ref_type == 'tag'
+    if: >-
+      always() && !cancelled() &&
+      needs.verify-and-github-release.result == 'success' &&
+      (needs.publish-npm.result == 'success' || needs.publish-npm.result == 'skipped') &&
+      (github.ref_type == 'tag' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -142,4 +152,14 @@ jobs:
             -o mcp-publisher.tar.gz
           tar -xzf mcp-publisher.tar.gz mcp-publisher
           ./mcp-publisher login github-oidc
-          ./mcp-publisher publish
+          if ! OUT=$(./mcp-publisher publish 2>&1); then
+            if echo "$OUT" | grep -qiE "already exists|duplicate"; then
+              echo "$OUT"
+              echo "Version already published to MCP Registry; skipping duplicate publish."
+            else
+              echo "$OUT" >&2
+              exit 1
+            fi
+          else
+            echo "$OUT"
+          fi
