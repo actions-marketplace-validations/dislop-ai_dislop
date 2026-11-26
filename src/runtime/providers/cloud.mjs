@@ -31,7 +31,7 @@ export async function invokeCloudProvider({
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
-        "User-Agent": "dislop-cli/1.0.0",
+        "User-Agent": "dislop-cli/1.0.1",
       },
       body: JSON.stringify({
         schema: "dislop.review-request/1",

@@ -85,7 +85,7 @@ jobs:
 
   publish-npm:
     needs: verify-and-github-release
-    if: github.ref_type == 'tag' && (vars.NPM_OIDC_ENABLED == 'true' || secrets.NPM_TOKEN != '')
+    if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

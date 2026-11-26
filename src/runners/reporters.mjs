@@ -110,7 +110,7 @@ export function formatSarifReports(results) {
         tool: {
           driver: {
             name: "dislop",
-            version: "1.0.0",
+            version: "1.0.1",
             informationUri: "https://dislop.com",
             rules: Array.from(rulesMap.values()),
           },

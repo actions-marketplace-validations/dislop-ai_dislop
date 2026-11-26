@@ -11,7 +11,7 @@ import { DislopConfigError } from "./kernel/config.mjs";
 import { startStdioMcpServer } from "./mcp/stdio-server.mjs";
 import { detectOllamaBinary } from "./runtime/providers/local-model.mjs";
 
-export const CLI_VERSION = "1.0.0";
+export const CLI_VERSION = "1.0.1";
 
 export function buildHelpText(env = process.env) {
   const ollama = detectOllamaBinary(env);

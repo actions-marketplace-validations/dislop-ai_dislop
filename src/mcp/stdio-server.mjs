@@ -127,7 +127,7 @@ export async function handleMcpJsonRpcRequest(msg, { cwd = process.cwd(), env = 
           protocolVersion,
           serverInfo: {
             name: "dislop",
-            version: "1.0.0",
+            version: "1.0.1",
           },
           capabilities: {
             tools: {},

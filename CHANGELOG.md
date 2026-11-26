@@ -4,6 +4,12 @@ All notable changes to `dislop` are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-11-26
+
+### Changed
+- **PDF & Multi-Modal Real-Deliverable Hardening**: Extended the zero-dependency PDF parser with `ASCII85Decode` / `ASCIIHexDecode` filter chains and recursive `/Subtype /Form` XObject (`/Do`) expansion; exempted `#` table-header tokens in `raw-markdown-leak` and script-wired or loading-state `<button disabled>` controls in UI checks; raised Chinese `bold-lead-list-wall` restraint to skip concrete numeric/quoted domain lists.
+- **Provider Routing & Release Automation**: Added `--model <name>` CLI override, built-in `--provider <openai|anthropic|gemini>` ambient key resolution without `config.json`, updated default Gemini model to `gemini-3.8-flash` with `MAX_TOKENS` guard, added Official Cloud `dislop.findings/1` adaptation, expanded `dislop-bench v3` to 86 multimodal samples, and restored pure-Node OIDC/MCP Registry `release.yml`.
+
 ## [1.0.0] - 2026-11-26
 
 ### Added

@@ -3,7 +3,7 @@
   "name": "io.github.dislop-ai/dislop",
   "title": "dislop",
   "description": "Cutting AI slop is real productivity. Pluggable editorial and artifact linter in docs, web UI & slides.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "websiteUrl": "https://dislop.com",
   "icons": [
     {
