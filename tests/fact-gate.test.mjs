@@ -137,3 +137,48 @@ test("verifyDocumentRevision catches second-order slogan regressions", () => {
   assert.equal(res.regressions.length, 1);
   assert.equal(res.regressions[0].id, "introduced-negation-slogan");
 });
+
+test("Fact Gate catches direction reversals, polarity flips, Chinese numerals, HTML class numbers, acronyms, Zero, and RAM/memory", () => {
+  const revEn = verifyDocumentRevision(
+    "p95 latency dropped from 142ms to 18ms across 4 nodes.",
+    "p95 latency rose from 18ms to 142ms across 4 nodes.",
+  );
+  assert.equal(revEn.ok, false);
+  assert.ok(revEn.regressions.some((r) => r.id === "metric-direction-reversed"));
+
+  const revZh = verifyDocumentRevision(
+    "\u6838\u5fc3\u63a5\u53e3\u5ef6\u8fdf\u4ece 142ms \u964d\u81f3 18ms\u3002",
+    "\u6838\u5fc3\u63a5\u53e3\u5ef6\u8fdf\u4ece 18ms \u5347\u81f3 142ms\u3002",
+  );
+  assert.equal(revZh.ok, false);
+  assert.ok(revZh.regressions.some((r) => r.id === "metric-direction-reversed"));
+
+  const flipEn = verifyDocumentRevision(
+    "Offline mode does not upload files.",
+    "Offline mode uploads files.",
+  );
+  assert.equal(flipEn.ok, false);
+  assert.ok(flipEn.regressions.some((r) => r.id === "polarity-negation-dropped"));
+
+  const flipZh = verifyDocumentRevision(
+    "\u5355\u6d4b\u8fd0\u884c\u6001\u4e25\u7981\u5411\u771f\u5b9e\u901a\u9053\u5916\u53d1\u901a\u77e5\u3002",
+    "\u5355\u6d4b\u8fd0\u884c\u6001\u5411\u771f\u5b9e\u901a\u9053\u5916\u53d1\u901a\u77e5\u3002",
+  );
+  assert.equal(flipZh.ok, false);
+  assert.ok(flipZh.regressions.some((r) => r.id === "polarity-prohibition-dropped"));
+
+  assert.equal(verifyBaselineFacts("\u672c\u6b21\u8fc1\u79fb\u5171\u4e09\u4e2a\u6a21\u5757\u3002", "\u672c\u6b21\u8fc1\u79fb\u5171\u56db\u4e2a\u6a21\u5757\u3002").ok, false);
+  assert.equal(verifyBaselineFacts("\u672c\u6b21\u8fc1\u79fb\u5171\u4e09\u4e2a\u6a21\u5757\u3002", "\u672c\u6b21\u8fc1\u79fb\u5171 3 \u4e2a\u6a21\u5757\u3002").ok, true);
+  assert.equal(verifyBaselineFacts("\u8fd9\u4e0d\u662f\u4e00\u6b21\u7b80\u5355\u7684\u8c03\u6574\uff0c\u800c\u662f\u57fa\u7ebf\u91cd\u5efa\u3002", "\u8fd9\u662f\u57fa\u7ebf\u91cd\u5efa\u3002").ok, true);
+
+  assert.equal(
+    verifyBaselineFacts(
+      "<div class=\"from-indigo-500 p-6\"><p>Latency stayed at 18ms.</p></div>",
+      "<section class=\"surface-card\"><p>Latency stayed at 18ms.</p></section>",
+    ).ok,
+    true,
+  );
+  assert.equal(verifyBaselineFacts("REST APIs expose OAuth 2.1.", "REST API exposes OAuth 2.1.").ok, true);
+  assert.equal(verifyBaselineFacts("Zero files leave the machine.", "No files leave the machine.").ok, true);
+  assert.equal(verifyBaselineFacts("peak 4GB RAM usage", "peak 4GB memory usage").ok, true);
+});

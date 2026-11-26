@@ -1,0 +1,850 @@
+{
+  "schema": "dislop.bench-multimodal/3",
+  "version": "1.0.0",
+  "license": "CC0-1.0",
+  "description": "80 synthetic multi-modal samples (EN & ZH) across Markdown, HTML/JSX, CSS, SVG, DOCX, PPTX, PDF, and PNG testing Track A1 Defect Precision/Zero-FP CI Gate and Track A2 High-Restraint Suggestion Recall/Zero-FP Editorial Gate.",
+  "samples": [
+    {
+      "id": "a1-pos-en-chatbot-lead",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["en/artifact-qa/chatbot-artifact"],
+      "content": "Happy to help! Below is the updated deployment checklist for staging.\n\n1. Run database migrations before restarting workers."
+    },
+    {
+      "id": "a1-pos-en-chatbot-opener",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["en/artifact-qa/chatbot-artifact"],
+      "content": "Certainly! Here is your Q4 engineering update.\n\nCheckout p99 latency dropped to 24ms."
+    },
+    {
+      "id": "a1-pos-en-chatbot-closer",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["en/artifact-qa/chatbot-artifact"],
+      "content": "Cache eviction completes in 9 seconds.\n\nI hope this helps! Let me know if you'd like any further adjustments."
+    },
+    {
+      "id": "a1-pos-en-placeholder-todo",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["common/artifact-qa/unfilled-placeholder"],
+      "content": "Assign primary on-call rotation to [TODO: confirm SRE lead] before Friday."
+    },
+    {
+      "id": "a1-pos-en-placeholder-var",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["common/artifact-qa/unfilled-placeholder"],
+      "content": "Traffic routes to {{primary_region}} with automatic failover."
+    },
+    {
+      "id": "a1-pos-en-citation-leak",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["common/artifact-qa/chatbot-citation-leak"],
+      "content": "Connection pooling reduced idle memory overhead by 64% [oaicite:1]."
+    },
+    {
+      "id": "a1-pos-en-cutoff-leak",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["en/artifact-qa/chatbot-cutoff-leak"],
+      "content": "As of my last knowledge cutoff, the v4 SDK supports streaming."
+    },
+    {
+      "id": "a1-pos-en-empty-link",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["common/artifact-qa/empty-link-target"],
+      "content": "Consult the [on-call runbook]() before triggering a manual failover."
+    },
+    {
+      "id": "a1-pos-en-broken-rel-link",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["common/artifact-qa/broken-local-link"],
+      "content": "See the [missing spec](./nonexistent-spec-file-xyz.md) for schema rules."
+    },
+    {
+      "id": "a1-pos-zh-chatbot-opener",
+      "track": "A1-defect",
+      "lang": "zh",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["zh/artifact-qa/chatbot-artifact"],
+      "content": "当然可以！以下是为您整理的发布说明。\n\n本次发版将支付队列超时阈值调整为 15 秒。"
+    },
+    {
+      "id": "a1-pos-zh-chatbot-closer",
+      "track": "A1-defect",
+      "lang": "zh",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["zh/artifact-qa/chatbot-artifact"],
+      "content": "周二 10:00 切流，预计耗时 15 分钟。希望这对你有帮助！"
+    },
+    {
+      "id": "a1-pos-zh-placeholder",
+      "track": "A1-defect",
+      "lang": "zh",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["zh/artifact-qa/unfilled-placeholder"],
+      "content": "本次灰度覆盖 [待填写] 个集群，压测报告链接见【待补充】。"
+    },
+    {
+      "id": "a1-pos-html-dead-link-disabled",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "html",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["common/artifact-qa/placeholder-dead-link", "common/web-ui/unexplained-disabled-button"],
+      "content": "<section><a href=\"javascript:void(0)\">Download SDK</a><button disabled>Export CSV</button></section>"
+    },
+    {
+      "id": "a1-pos-html-placeholder-copy",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "html",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["en/web-ui/placeholder-ui-copy"],
+      "content": "<div class=\"card\"><h3>Card Title</h3><p>Short description goes here.</p></div>"
+    },
+    {
+      "id": "a1-pos-zh-html-placeholder-copy",
+      "track": "A1-defect",
+      "lang": "zh",
+      "format": "html",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["zh/web-ui/placeholder-ui-copy"],
+      "content": "<div class=\"card\"><h3>功能标题</h3><p>此处输入描述</p></div>"
+    },
+    {
+      "id": "a1-pos-svg-missing-viewbox",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "svg",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["common/web-ui/svg-missing-viewbox"],
+      "content": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"640\" height=\"360\"><rect width=\"640\" height=\"360\" fill=\"#fff\"/></svg>"
+    },
+    {
+      "id": "a1-pos-docx-markdown-leak",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "docx",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["common/artifact-qa/raw-markdown-leak"],
+      "ooxml": {
+        "word/document.xml": "<?xml version=\"1.0\"?><w:document xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"><w:body><w:p><w:r><w:t>Latency stayed below **18ms** across all regions.</w:t></w:r></w:p></w:body></w:document>"
+      }
+    },
+    {
+      "id": "a1-pos-pptx-leaked-directive-autofit",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "pptx",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["en/slide-deck/leaked-slide-directive", "common/slide-deck/slide-autofit-shrink"],
+      "ooxml": {
+        "ppt/presentation.xml": "<p:presentation xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"><p:sldIdLst><p:sldId id=\"256\" r:id=\"rId1\"/></p:sldIdLst></p:presentation>",
+        "ppt/_rels/presentation.xml.rels": "<Relationships><Relationship Id=\"rId1\" Target=\"slides/slide1.xml\"/></Relationships>",
+        "ppt/slides/slide1.xml": "<p:sld xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\"><p:cSld><p:spTree><p:sp><p:txBody><a:bodyPr><a:normAutofit fontScale=\"65000\"/></a:bodyPr><a:p><a:r><a:t>Q3 Throughput Summary</a:t></a:r></a:p><a:p><a:r><a:t>[Visual: bar chart of p95 latency]</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>"
+      }
+    },
+    {
+      "id": "a1-pos-zh-pptx-directive",
+      "track": "A1-defect",
+      "lang": "zh",
+      "format": "pptx",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["zh/slide-deck/leaked-slide-directive"],
+      "ooxml": {
+        "ppt/presentation.xml": "<p:presentation xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"><p:sldIdLst><p:sldId id=\"256\" r:id=\"rId1\"/></p:sldIdLst></p:presentation>",
+        "ppt/_rels/presentation.xml.rels": "<Relationships><Relationship Id=\"rId1\" Target=\"slides/slide1.xml\"/></Relationships>",
+        "ppt/slides/slide1.xml": "<p:sld xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\"><p:cSld><p:spTree><p:sp><p:txBody><a:p><a:r><a:t>【配图建议：三季度支付成功率曲线】</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>"
+      }
+    },
+    {
+      "id": "a1-pos-png-comfyui-residue",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "png",
+      "expected": "slop",
+      "expectedKind": "defect",
+      "expectedRuleIds": ["common/slide-deck/image-ai-workflow-residue"],
+      "synthPng": {
+        "width": 32,
+        "height": 32,
+        "textChunks": [{ "key": "parameters", "value": "Steps: 28, Sampler: DPM++ 2M Karras, CFG scale: 7" }]
+      }
+    },
+    {
+      "id": "a1-clean-custom-scheme-demo",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "![CLI preview showing exit code 0 after cleanup](demo:cli-check)"
+    },
+    {
+      "id": "a1-clean-custom-scheme-uri",
+      "track": "A1-defect",
+      "lang": "zh",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "设计说明参见 [知识索引](kb://notes/architecture-overview.md) 与 [编辑器跳转](vscode://file/project/README.md)。"
+    },
+    {
+      "id": "a1-clean-angle-bracket-link",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "Read the [project guide](<./README.md>) for local test commands."
+    },
+    {
+      "id": "a1-clean-html-extensionless-route",
+      "track": "A1-defect",
+      "lang": "zh",
+      "format": "html",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "<nav><a href=\"about/\">关于我们</a><a href=\"#pricing\">定价</a><button type=\"button\" disabled title=\"Save at least one draft first\">导出</button></nav>"
+    },
+    {
+      "id": "a1-clean-html-inline-code-markdown",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "html",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "<article><p>Flags unrendered <code>**bold**</code> and <code># heading</code> tokens left inside HTML.</p></article>"
+    },
+    {
+      "id": "a1-clean-html-dislop-quote",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "html",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "<!-- dislop-quote-start --><div class=\"blur-3xl rounded-full bg-purple-500\"><a href=\"#\">Bad sample</a><p>Certainly! Here is a draft.</p></div><!-- dislop-quote-end --><p>Actual latency stayed at 14ms.</p>"
+    },
+    {
+      "id": "a1-clean-html-data-dislop-ignore",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "html",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "<section data-dislop-ignore><div class=\"from-purple-500 to-pink-500\"><p>Certainly! Here is a raw specimen.</p></div></section><p>Measured p95 latency was 18ms across 4 nodes.</p>"
+    },
+    {
+      "id": "a1-clean-html-del-and-script",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "html",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "<p>Status: <del>Certainly! Here is the old text.</del> Shipped in v1.2.</p><script>const re = /from-purple-500.*to-pink-500/;</script>"
+    },
+    {
+      "id": "a1-clean-md-inline-code-artifacts",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "Unfilled `[TODO]`, `{{cluster_region}}`, and `[oaicite:1]` tokens inside backticks are documented syntax, not delivery bugs."
+    },
+    {
+      "id": "a1-clean-md-dislop-ignore-next-line",
+      "track": "A1-defect",
+      "lang": "zh",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "<!-- dislop-ignore-next-line -->\n示例占位符：[待填写] 与 {{sample_var}}。\n\n正式接口支持 128KB 请求体。"
+    },
+    {
+      "id": "a1-clean-pdf-mono-code-block",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "pdf",
+      "expected": "clean",
+      "expectedKind": "none",
+      "synthPdf": {
+        "compress": true,
+        "pages": [
+          {
+            "width": 612,
+            "height": 792,
+            "runs": [
+              { "font": "Helvetica", "size": 14, "text": "Runbook verification commands:" },
+              { "font": "Courier", "size": 10, "text": "# 1) Check service health" },
+              { "font": "Courier", "size": 10, "text": "curl -fsS http://127.0.0.1:8080/health" }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "a1-clean-pptx-hidden-slide",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "pptx",
+      "expected": "clean",
+      "expectedKind": "none",
+      "ooxml": {
+        "ppt/presentation.xml": "<p:presentation xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"><p:sldIdLst><p:sldId id=\"256\" r:id=\"rId1\"/><p:sldId id=\"257\" r:id=\"rId2\"/></p:sldIdLst></p:presentation>",
+        "ppt/_rels/presentation.xml.rels": "<Relationships><Relationship Id=\"rId1\" Target=\"slides/slide1.xml\"/><Relationship Id=\"rId2\" Target=\"slides/slide2.xml\"/></Relationships>",
+        "ppt/slides/slide1.xml": "<p:sld xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\"><p:cSld><p:spTree><p:sp><p:txBody><a:p><a:r><a:t>Checkout latency fell to 18ms</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>",
+        "ppt/slides/slide2.xml": "<p:sld show=\"0\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\"><p:cSld><p:spTree><p:sp><p:txBody><a:p><a:r><a:t>[Visual: hidden backup slide with **raw markdown**]</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>"
+      }
+    },
+    {
+      "id": "a1-clean-png-photo",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "png",
+      "expected": "clean",
+      "expectedKind": "none",
+      "synthPng": {
+        "width": 32,
+        "height": 32,
+        "textChunks": [{ "key": "Software", "value": "ImageMagick 7.1" }]
+      }
+    },
+    {
+      "id": "a2-pos-en-hollow-transition",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["en/prose/hollow-transition"],
+      "content": "In today's fast-paced digital landscape, teams need clear metrics. We cut deploy latency to 14 seconds."
+    },
+    {
+      "id": "a2-pos-en-throat-clearing",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["en/prose/throat-clearing"],
+      "content": "It is worth noting that batch indexing processes 40 million rows in 12 minutes."
+    },
+    {
+      "id": "a2-pos-en-rhetorical-qa-single",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["en/prose/rhetorical-self-qa"],
+      "content": "Why do internal dashboards collect dust after launch? Because they surface vanity totals instead of actionable queue lag."
+    },
+    {
+      "id": "a2-pos-en-rhetorical-qa-bridge",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["en/prose/rhetorical-self-qa"],
+      "content": "We partitioned the billing queue last month. Why does this matter? Peak-hour writes no longer stall report queries."
+    },
+    {
+      "id": "a2-pos-en-negation-pivot-this",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["en/prose/unprompted-negation"],
+      "content": "This isn't just a cache tweak — it's a new reliability baseline for checkout."
+    },
+    {
+      "id": "a2-pos-en-negation-pivot-merely",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["en/prose/unprompted-negation"],
+      "content": "It is not merely a redesign, but rather a complete overhaul of search."
+    },
+    {
+      "id": "a2-pos-en-negation-pivot-aphorism",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["en/prose/unprompted-negation"],
+      "content": "His grandfather's hand plane wasn't just a tool — it was a quiet discipline shaped over decades."
+    },
+    {
+      "id": "a2-pos-en-moralizing-closer",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["en/prose/moralizing-closer"],
+      "content": "At 6:15 a.m., the ferry deck smelled of wet rope and diesel. Ultimately, this reminds us that patience matters more than speed."
+    },
+    {
+      "id": "a2-pos-en-em-dash-overuse",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["en/prose/excessive-em-dash"],
+      "content": "The station clock — brass-rimmed — stopped at 4:10 — right before the rain — leaving the platform quiet."
+    },
+    {
+      "id": "a2-pos-en-staccato-run",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["en/prose/staccato-slogan-run"],
+      "content": "Queues clear. Charts load. Teams ship. We replaced polling with server-sent events."
+    },
+    {
+      "id": "a2-pos-en-bold-list-wall",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["en/prose/bold-lead-list-wall"],
+      "content": "- **Speed**: Queries finish faster.\n- **Scale**: Handles 40 million rows.\n- **Safety**: Preserves primary shards.\n- **Cost**: Uses less memory."
+    },
+    {
+      "id": "a2-pos-zh-hollow-transition",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["zh/prose/hollow-transition"],
+      "content": "在当今数字化转型加速的时代浪潮下，这一举措无疑具有举足轻重的意义。上周五结算作业耗时降至 4 分钟。"
+    },
+    {
+      "id": "a2-pos-zh-throat-clearing",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["zh/prose/throat-clearing"],
+      "content": "值得注意的是，第三季度告警首响时间已压到 45 秒以内。"
+    },
+    {
+      "id": "a2-pos-zh-rhetorical-qa",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["zh/prose/rhetorical-self-qa"],
+      "content": "上个月我们把订单查询切到了只读副本。这意味着什么？意味着大促期间主库写延迟不会再拖慢后台报表。"
+    },
+    {
+      "id": "a2-pos-zh-negation-pivot-juefei",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["zh/prose/unprompted-negation"],
+      "content": "这绝非简单的参数调优，而是底层架构的彻底重塑。"
+    },
+    {
+      "id": "a2-pos-zh-negation-aphorism",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["zh/prose/unprompted-negation"],
+      "content": "老周留下的那把旧刨子不是木工工具，而是手艺人在岁月里的尊严。"
+    },
+    {
+      "id": "a2-pos-zh-moralizing-closer",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["zh/prose/moralizing-closer"],
+      "content": "傍晚六点半，修表匠把拆下来的三枚铜齿轮泡进煤油皿里。这或许就是慢工出细活在喧嚣时代真正的意义所在。"
+    },
+    {
+      "id": "a2-pos-zh-four-char-triad",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["zh/prose/four-char-slogan-triad"],
+      "content": "新版搜索模块做到精准高效、安全可靠、灵活易用，单节点支持 8000 QPS。"
+    },
+    {
+      "id": "a2-pos-zh-buzzword-cluster",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["zh/prose/buzzword-cluster"],
+      "content": "本次改造以工单分级为重要抓手，全面赋能一线客服团队形成服务闭环，持续夯实产品数字底座。"
+    },
+    {
+      "id": "a2-pos-zh-halfwidth-punct",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["zh/prose/halfwidth-cjk-punctuation"],
+      "content": "冬至那天下了初雪,院子里的腊梅开了三朵;香气一直飘到走廊里,茶杯边沾了点冷味。"
+    },
+    {
+      "id": "a2-pos-zh-bold-list-wall",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "md",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["zh/prose/bold-lead-list-wall"],
+      "content": "- **性能**：查询耗时降了三成。\n- **稳定**：超时后自动切备库。\n- **成本**：下线了 6 台旧机器。\n- **维护**：配置收进一个文件里。"
+    },
+    {
+      "id": "a2-pos-html-nested-prose-and-ui",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "html",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["en/prose/throat-clearing", "common/web-ui/neon-ai-gradient"],
+      "content": "<section class=\"bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500\"><div class=\"card\"><p>It is worth noting that <strong>checkout latency</strong> dropped to 18ms across 4 shards.</p></div></section>"
+    },
+    {
+      "id": "a2-pos-html-glassmorphism-pill-soup",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "html",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["common/web-ui/glassmorphism-overuse", "common/web-ui/pill-badge-soup"],
+      "content": "<header class=\"backdrop-blur-md\">Nav</header><div class=\"backdrop-blur-lg\"><span class=\"rounded-full px-2\">Fast</span><span class=\"rounded-full px-2\">Safe</span><span class=\"rounded-full px-2\">Smart</span><span class=\"rounded-full px-2\">Open</span></div><footer class=\"backdrop-blur-sm\">End</footer>"
+    },
+    {
+      "id": "a2-pos-svg-gradient-and-glow",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "svg",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["common/web-ui/neon-ai-gradient", "common/web-ui/glow-blob-backdrop"],
+      "content": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 200\"><defs><linearGradient id=\"g\"><stop offset=\"0%\" stop-color=\"#8b5cf6\"/><stop offset=\"100%\" stop-color=\"#ec4899\"/></linearGradient><filter id=\"b\"><feGaussianBlur stdDeviation=\"24\"/></filter></defs><rect width=\"400\" height=\"200\" fill=\"url(#g)\"/></svg>"
+    },
+    {
+      "id": "a2-pos-css-heavy-blur",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "css",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["common/web-ui/glow-blob-backdrop"],
+      "content": ".orb { border-radius: 50%; filter: blur(64px); background: #8b5cf6; }"
+    },
+    {
+      "id": "a2-pos-zh-pdf-compressed-tounicode",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "pdf",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["zh/prose/throat-clearing"],
+      "synthPdf": {
+        "compress": true,
+        "pages": [
+          {
+            "width": 960,
+            "height": 540,
+            "runs": [
+              { "font": "CJK-ToUnicode", "size": 16, "text": "值得注意的是，第三季度网关延迟从 142ms 降至 18ms。" }
+            ]
+          },
+          {
+            "width": 960,
+            "height": 540,
+            "runs": [
+              { "font": "CJK-ToUnicode", "size": 16, "text": "连接池上限设为 64。" }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "a2-pos-en-pptx-buzzword-headline",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "pptx",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["en/slide-deck/buzzword-slide-headline"],
+      "ooxml": {
+        "ppt/presentation.xml": "<p:presentation xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"><p:sldIdLst><p:sldId id=\"256\" r:id=\"rId1\"/></p:sldIdLst></p:presentation>",
+        "ppt/_rels/presentation.xml.rels": "<Relationships><Relationship Id=\"rId1\" Target=\"slides/slide1.xml\"/></Relationships>",
+        "ppt/slides/slide1.xml": "<p:sld xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\"><p:cSld><p:spTree><p:sp><p:txBody><a:p><a:r><a:t>Unlocking Synergies</a:t></a:r></a:p><a:p><a:r><a:t>Merged regional queues cut idle nodes from 12 to 4.</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>"
+      }
+    },
+    {
+      "id": "a2-clean-en-faq-heading",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "## Why does this matter?\n\nUnindexed foreign keys trigger full table scans during bulk deletes."
+    },
+    {
+      "id": "a2-clean-en-blockquote-slop",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "The vendor press release claimed:\n\n> It is worth noting that this game-changer transforms every workflow.\n\nActual benchmark throughput stayed flat at 420 req/s."
+    },
+    {
+      "id": "a2-clean-en-ordinary-abstract-verbs",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "The scheduler streamlines batch retries across three regional workers and aligns retry backoff with upstream rate limits."
+    },
+    {
+      "id": "a2-clean-en-legitimate-negation",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "Offline mode does not upload drafts to external servers; it checks rules in local memory and writes reports to stdout."
+    },
+    {
+      "id": "a2-clean-zh-technical-clarification",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "这不是否定官方文档的价值，而是说明操作时要以安装版本的帮助输出和真实回执共同判断。"
+    },
+    {
+      "id": "a2-clean-zh-quoted-buzzwords",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "写作规范明确要求避开“抓手”“赋能”“闭环”“底座”等空洞词汇，直接写明接口输入和耗时变化。"
+    },
+    {
+      "id": "a2-clean-zh-code-bold-list",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "- **参数**：传入 `--format agent` 输出紧凑报告。\n- **输出**：写入 `report.json` 供后续校验。\n- **路径**：读取 `.dislop.json` 分层配置。\n- **校验**：执行 `dislop verify --git HEAD`。"
+    },
+    {
+      "id": "a2-clean-zh-comma-dates-and-numbers",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "2026 年 11 月版把单页上限设为 1,200 字符，在 `127.0.0.1:8080/health` 检查 `status,code` 字段即可。"
+    },
+    {
+      "id": "a2-clean-zh-concrete-triad",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "入库前校验编号、日期、清单与出处字段，缺一项直接退出码 2。"
+    },
+    {
+      "id": "a2-clean-html-avatars",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "html",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "<div class=\"avatars\"><span class=\"w-8 h-8 rounded-full bg-slate-200\">AL</span><span class=\"w-8 h-8 rounded-full bg-slate-200\">BK</span><span class=\"w-8 h-8 rounded-full bg-slate-200\">CM</span><span class=\"w-8 h-8 rounded-full bg-slate-200\">DN</span></div>"
+    },
+    {
+      "id": "a2-clean-svg-small-icon",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "svg",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" fill=\"none\"><path d=\"M4 12h16\" stroke=\"#111\"/></svg>"
+    },
+    {
+      "id": "a2-clean-pdf-handbook-dense-prose",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "pdf",
+      "expected": "clean",
+      "expectedKind": "none",
+      "synthPdf": {
+        "compress": true,
+        "pages": [
+          {
+            "width": 612,
+            "height": 792,
+            "runs": [
+              { "font": "CJK-ToUnicode", "size": 11, "text": "第一章：部署拓扑与端口规范。本手册说明服务端 8080 与 9090 端口的只读健康检查路径。" }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "a2-clean-en-short-natural-sentences",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "The worker exited cleanly. Logs rotated at midnight with 14MB archived."
+    },
+    {
+      "id": "a2-clean-zh-narrative-scene",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "雨停以后，巷口修鞋摊的塑料布上积了一洼水，风一吹就顺着折痕往下滴。老周把胶水瓶拧紧，擦了擦手上的灰。"
+    },
+    {
+      "id": "a2-clean-md-pipe-table",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "| Flag | Default | Purpose |\n|---|---|---|\n| `--no-llm` | `false` | Run offline script packs only |\n| `--format` | `text` | Choose `text`, `json`, `agent`, `sarif`, or `diff` |"
+    },
+    {
+      "id": "a2-clean-html-clean-card",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "html",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "<article class=\"border border-slate-200 p-6\"><h2>PostgreSQL Pooler</h2><p>Transaction pooling cut idle worker RSS from 4.8GB to 1.7GB across 4 read replicas.</p></article>"
+    },
+    {
+      "id": "a2-clean-zh-html-clean-card",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "html",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "<section class=\"card\"><h2>网关延迟监控</h2><p>上周接入异步校验后，结算提交耗时从 4.2 秒降到 0.9 秒，误报率为 0。</p></section>"
+    },
+    {
+      "id": "a2-clean-en-em-dash-pair",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "The fallback queue — sized for 10,000 events — drains inside 30 seconds after recovery."
+    },
+    {
+      "id": "a2-clean-en-pptx-takeaway-slide",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "pptx",
+      "expected": "clean",
+      "expectedKind": "none",
+      "ooxml": {
+        "ppt/presentation.xml": "<p:presentation xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"><p:sldIdLst><p:sldId id=\"256\" r:id=\"rId1\"/></p:sldIdLst></p:presentation>",
+        "ppt/_rels/presentation.xml.rels": "<Relationships><Relationship Id=\"rId1\" Target=\"slides/slide1.xml\"/></Relationships>",
+        "ppt/slides/slide1.xml": "<p:sld xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\"><p:cSld><p:spTree><p:sp><p:txBody><a:p><a:r><a:t>Async validation cut checkout drop-off from 38% to 14%</a:t></a:r></a:p><a:p><a:buChar char=\"•\"/><a:r><a:t>Address lookup blocked submit for 4.2s</a:t></a:r></a:p><a:p><a:buChar char=\"•\"/><a:r><a:t>Async queue deployed on Friday</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>"
+      }
+    },
+    {
+      "id": "a2-clean-docx-formatted",
+      "track": "A2-suggestion",
+      "lang": "en",
+      "format": "docx",
+      "expected": "clean",
+      "expectedKind": "none",
+      "ooxml": {
+        "word/document.xml": "<?xml version=\"1.0\"?><w:document xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"><w:body><w:p><w:r><w:t>Database migration completed at 02:15 UTC with zero dropped connections.</w:t></w:r></w:p></w:body></w:document>"
+      }
+    }
+  ]
+}

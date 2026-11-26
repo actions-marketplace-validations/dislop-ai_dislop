@@ -1,0 +1,116 @@
+{
+  "schema": "dislop.bench-report/3",
+  "generatedAt": "2026-11-26T00:33:05.987Z",
+  "nodeVersion": "v24.21.0",
+  "results": {
+    "multimodal": {
+      "total": 80,
+      "trackA1": {
+        "positives": 20,
+        "tp": 20,
+        "fn": 0,
+        "clean": 13,
+        "fp": 0,
+        "precision": 100,
+        "recall": 100,
+        "cleanFpr": 0,
+        "failures": []
+      },
+      "trackA2": {
+        "positives": 27,
+        "tp": 27,
+        "fn": 0,
+        "clean": 20,
+        "fp": 0,
+        "recall": 100,
+        "cleanFpr": 0,
+        "failures": []
+      }
+    },
+    "semanticSecurity": {
+      "total": 18,
+      "passed": 18,
+      "passRate": 100,
+      "failures": []
+    },
+    "revisionAndFactGate": {
+      "revisionTasks": {
+        "total": 18,
+        "factGatePassed": 18,
+        "factGatePassRate": 100,
+        "rawAiSlopItems": 19,
+        "dislopCleanSlopItems": 0,
+        "slopClearanceRate": 100,
+        "naiveHumanizerFactFailures": 11,
+        "failures": []
+      },
+      "adversarialPairs": {
+        "total": 8,
+        "passed": 8,
+        "passRate": 100,
+        "failures": []
+      },
+      "autoFixRoundTrips": {
+        "total": 4,
+        "passed": 4,
+        "passRate": 100,
+        "failures": []
+      }
+    }
+  },
+  "evaluation": {
+    "gates": [
+      {
+        "name": "Track A1 Defect Clean FPR === 0.0%",
+        "actual": "0% (0/13)",
+        "ok": true
+      },
+      {
+        "name": "Track A1 Defect Precision >= 98.0%",
+        "actual": "100%",
+        "ok": true
+      },
+      {
+        "name": "Track A1 Defect Recall >= 96.0%",
+        "actual": "100% (20/20)",
+        "ok": true
+      },
+      {
+        "name": "Track A2 Suggestion Clean FPR === 0.0%",
+        "actual": "0% (0/20)",
+        "ok": true
+      },
+      {
+        "name": "Track A2 Suggestion Recall >= 95.0%",
+        "actual": "100% (27/27)",
+        "ok": true
+      },
+      {
+        "name": "Semantic & Security Invariants === 100.0%",
+        "actual": "100% (18/18)",
+        "ok": true
+      },
+      {
+        "name": "Revision Tasks Fact Gate === 100.0%",
+        "actual": "100% (18/18)",
+        "ok": true
+      },
+      {
+        "name": "Revision Tasks Slop Clearance === 100.0%",
+        "actual": "100% (0 remaining)",
+        "ok": true
+      },
+      {
+        "name": "Adversarial Fact Gate Pairs === 100.0%",
+        "actual": "100% (8/8)",
+        "ok": true
+      },
+      {
+        "name": "fix --auto Lossless Round-Trips === 100.0%",
+        "actual": "100% (4/4)",
+        "ok": true
+      }
+    ],
+    "passed": true
+  }
+}

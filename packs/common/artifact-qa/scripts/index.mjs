@@ -12,7 +12,32 @@ const CITATION_ARTIFACT_RE =
   /(?::contentReference\[oaicite:\d+\](?:\{[^}]*\})?|\[(?:oaicite|turn\d+search\d+|citation):\s*[^\]]+\])/i;
 
 function isExternalOrSpecialScheme(url) {
-  return /^(?:https?:|mailto:|tel:|data:|blob:|ftp:|irc:|vscode:)/i.test(url);
+  return /^(?:[a-zA-Z][a-zA-Z0-9+.-]*:|\/\/)/.test(url);
+}
+
+function localTargetExists(docDir, cleanRel) {
+  const resolvedTarget = path.resolve(docDir, cleanRel);
+  const candidates = [
+    resolvedTarget,
+    `${resolvedTarget}.html`,
+    `${resolvedTarget}.md`,
+    path.join(resolvedTarget, "index.html"),
+    path.join(resolvedTarget, "index.md"),
+  ];
+  if (candidates.some((c) => fs.existsSync(c))) {
+    return true;
+  }
+  for (const staticSubdir of ["site", "dist", "public"]) {
+    const altBase = path.resolve(docDir, "..", staticSubdir, cleanRel);
+    if (
+      fs.existsSync(altBase) ||
+      fs.existsSync(`${altBase}.html`) ||
+      fs.existsSync(path.join(altBase, "index.html"))
+    ) {
+      return true;
+    }
+  }
+  return false;
 }
 
 export default definePackScripts({
@@ -95,8 +120,9 @@ export default definePackScripts({
       if (!url.startsWith("#") && !url.startsWith("/") && !isExternalOrSpecialScheme(url)) {
         const cleanRel = decodeURIComponent(url.split("#")[0].split("?")[0]);
         if (cleanRel && doc.filePath && fs.existsSync(doc.filePath)) {
-          const resolvedTarget = path.resolve(docDir, cleanRel);
-          if (!fs.existsSync(resolvedTarget)) {
+          const isExtensionlessRoute =
+            doc.modality === "markup" && cleanRel.endsWith("/") && !path.extname(cleanRel.replace(/\/+$/, ""));
+          if (!isExtensionlessRoute && !localTargetExists(docDir, cleanRel)) {
             ctx.reportDefect({
               ruleId: "broken-local-link",
               severity: "error",

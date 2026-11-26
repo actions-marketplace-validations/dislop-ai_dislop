@@ -8,7 +8,7 @@ const EN_PLACEHOLDER_PATTERNS = [
 ];
 
 const EN_CHATBOT_WRAPPER_SENTENCES = [
-  /^(?:Certainly!|Sure!|Of course!|Absolutely!|Great question!)\s+(?:Here(?:'s| is)\b|Below is\b|I(?:'ve| have)\b)[\s\S]*$/i,
+  /^(?:Certainly!|Sure!|Of course!|Absolutely!|Great question!|Happy to help!|Glad to help!)\s*(?:(?:Here(?:'s| is)\b|Below is\b|I(?:'ve| have)\b)[\s\S]*)?$/i,
   /^Here(?:'s| is) (?:a|the|your) (?:revised|updated|draft|polished|rewritten|concise|cleaned-up)\b[\s\S]*[:.]$/i,
   /^As an AI(?: language model| assistant)?\b[\s\S]*$/i,
   /^(?:I hope this helps!?|Hope this helps!?|(?:Please )?[Ll]et me know if you(?:'d| would) like (?:any )?(?:further |more |additional )?(?:changes|adjustments|edits|modifications|revisions)[\s\S]*)$/i,

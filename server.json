@@ -1,0 +1,24 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.dislop-ai/dislop",
+  "title": "dislop",
+  "description": "Cutting AI slop is real productivity. Pluggable editorial and artifact linter in docs, web UI & slides.",
+  "version": "1.0.0",
+  "websiteUrl": "https://dislop.com",
+  "icons": [
+    {
+      "src": "https://dislop.com/assets/logo.svg",
+      "mimeType": "image/svg+xml"
+    }
+  ],
+  "repository": {
+    "url": "https://github.com/dislop-ai/dislop",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://dislop.com/mcp"
+    }
+  ]
+}

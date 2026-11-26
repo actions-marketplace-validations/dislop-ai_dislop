@@ -64,5 +64,17 @@ export default definePackScripts({
         rewritePrompt: "Consolidate decorative pill kickers into plain typographic labels or metadata rows.",
       });
     }
+
+    if ((ui.backdropBlurCount || 0) >= 3) {
+      ctx.reportSuggestion({
+        ruleId: "glassmorphism-overuse",
+        priority: "hint",
+        fixSafety: "manual",
+        actionType: "prompt",
+        originalQuote: `backdrop-blur (${ui.backdropBlurCount} regions)`,
+        reason: `Page stacks ${ui.backdropBlurCount} frosted-glass backdrop-blur panels, a common AI UI template default.`,
+        rewritePrompt: "Use crisp solid surfaces with 1px borders and reserve backdrop-blur for transient overlays.",
+      });
+    }
   },
 });

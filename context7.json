@@ -1,0 +1,22 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "dislop",
+  "description": "Pluggable editorial and artifact linter built on a zero-dependency Node.js micro-kernel across Markdown, HTML/CSS/JSX/SVG, Word (.docx), PowerPoint (.pptx), PDF, and raster images.",
+  "folders": ["docs", "skills", "benchmarks", "slop-samples"],
+  "excludeFolders": [
+    "site",
+    "tests",
+    "content",
+    "awesome",
+    "benchmarks/results",
+    "benchmarks/datasets"
+  ],
+  "excludeFiles": ["CHANGELOG.md"],
+  "rules": [
+    "Run deterministic local checks first with `npx --yes dislop check <path> --no-llm --format agent` (or `dislop check <path> --format agent`).",
+    "Apply verified safe deterministic cleanups with `npx --yes dislop fix <path> --auto --backup` or review hunks interactively with `dislop fix <path>`.",
+    "Verify edited drafts against git HEAD with `npx --yes dislop verify --git HEAD <file>` so no numbers, units, URLs, code spans, or proper nouns are dropped or reversed.",
+    "For Remote MCP without local setup, connect to `https://dislop.com/mcp`, or start the local stdio server with `npx --yes dislop-mcp`.",
+    "Use pure-Markdown Agent Skills via `npx --yes skills add dislop-ai/dislop --skill dislop` (or task-focused `deslop-docs`, `deslop-slides-docx`, `deslop-web-ui`, `deslop-verify`)."
+  ]
+}

@@ -67,7 +67,7 @@ dislop check slop-samples/en.md --no-llm --format agent
   quote: "[Company Name]"
   reason: Unfilled English template placeholder or dummy Latin copy left in deliverable.
   prompt: Supply the real copy in place of '[Company Name]', or delete the unfinished sentence.
-[P5-S2|L9] DEFECT(error,manual) en/artifact-qa/unfilled-placeholder
+[P5-S2|L9] DEFECT(error,manual) common/artifact-qa/unfilled-placeholder
   quote: "[TODO: confirm incident owner]"
   reason: Unfilled developer or template token left in deliverable.
   prompt: Replace '[TODO: confirm incident owner]' with the real value before publishing, or remove the unfinished sentence.
@@ -144,7 +144,7 @@ dislop check slop-samples/en.md --engine byok --format agent
   quote: "[Company Name]"
   reason: Unfilled English template placeholder or dummy Latin copy left in deliverable.
   prompt: Supply the real copy in place of '[Company Name]', or delete the unfinished sentence.
-[P5-S2|L9] DEFECT(error,manual) en/artifact-qa/unfilled-placeholder
+[P5-S2|L9] DEFECT(error,manual) common/artifact-qa/unfilled-placeholder
   quote: "[TODO: confirm incident owner]"
   reason: Unfilled developer or template token left in deliverable.
   prompt: Replace '[TODO: confirm incident owner]' with the real value before publishing, or remove the unfinished sentence.
@@ -252,7 +252,7 @@ dislop check slop-samples/en.md --engine local --format agent
   quote: "[Company Name]"
   reason: Unfilled English template placeholder or dummy Latin copy left in deliverable.
   prompt: Supply the real copy in place of '[Company Name]', or delete the unfinished sentence.
-[P5-S2|L9] DEFECT(error,manual) en/artifact-qa/unfilled-placeholder
+[P5-S2|L9] DEFECT(error,manual) common/artifact-qa/unfilled-placeholder
   quote: "[TODO: confirm incident owner]"
   reason: Unfilled developer or template token left in deliverable.
   prompt: Replace '[TODO: confirm incident owner]' with the real value before publishing, or remove the unfinished sentence.

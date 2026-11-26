@@ -1,0 +1,81 @@
+name: "dislop Anti-Slop Check"
+author: "dislop-ai"
+description: "Pluggable editorial and artifact linter for Markdown, Word (.docx), PowerPoint (.pptx), PDF, and HTML/CSS/JSX/SVG — zero runtime dependencies."
+branding:
+  icon: "edit-3"
+  color: "red"
+
+inputs:
+  paths:
+    description: "Newline- or whitespace-separated file or directory paths to inspect."
+    required: false
+    default: "."
+  pack:
+    description: "Optional comma-separated Pack names or paths (e.g., `en/prose,common/artifact-qa`)."
+    required: false
+    default: ""
+  level:
+    description: "Suggestion priority filter (`strong`, `moderate`, `hint`, `all`)."
+    required: false
+    default: "all"
+  format:
+    description: "Output format (`text`, `diff`, `json`, `agent`, `sarif`)."
+    required: false
+    default: "text"
+  lang:
+    description: "Diagnostic language (`auto`, `en`, `zh`)."
+    required: false
+    default: "auto"
+  sarif-file:
+    description: "Optional file path to write SARIF 2.1.0 output when `format: sarif` is selected."
+    required: false
+    default: ""
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Node.js 22
+      uses: actions/setup-node@v4
+      with:
+        node-version: "22"
+
+    - name: Run dislop deterministic check
+      shell: bash
+      env:
+        INPUT_PATHS: ${{ inputs.paths }}
+        INPUT_PACK: ${{ inputs.pack }}
+        INPUT_LEVEL: ${{ inputs.level }}
+        INPUT_FORMAT: ${{ inputs.format }}
+        INPUT_LANG: ${{ inputs.lang }}
+        INPUT_SARIF_FILE: ${{ inputs.sarif-file }}
+        ACTION_DIR: ${{ github.action_path }}
+      run: |
+        set -euo pipefail
+        ARGS=("check" "--no-llm" "--level" "${INPUT_LEVEL}" "--format" "${INPUT_FORMAT}" "--lang" "${INPUT_LANG}")
+        if [ -n "${INPUT_PACK}" ]; then
+          ARGS+=("--pack" "${INPUT_PACK}")
+        fi
+        NONEMPTY_LINES=()
+        while IFS= read -r line; do
+          trimmed="${line#"${line%%[![:space:]]*}"}"
+          trimmed="${trimmed%"${trimmed##*[![:space:]]}"}"
+          [ -n "${trimmed}" ] && NONEMPTY_LINES+=("${trimmed}")
+        done <<< "${INPUT_PATHS}"
+        if [ "${#NONEMPTY_LINES[@]}" -gt 1 ]; then
+          for item in "${NONEMPTY_LINES[@]}"; do
+            ARGS+=("${item}")
+          done
+        elif [ "${#NONEMPTY_LINES[@]}" -eq 1 ]; then
+          only="${NONEMPTY_LINES[0]}"
+          if [ -e "${only}" ]; then
+            ARGS+=("${only}")
+          else
+            read -r -a words <<< "${only}"
+            ARGS+=("${words[@]}")
+          fi
+        fi
+        if [ "${INPUT_FORMAT}" = "sarif" ] && [ -n "${INPUT_SARIF_FILE}" ]; then
+          node "${ACTION_DIR}/bin/dislop.mjs" "${ARGS[@]}" > "${INPUT_SARIF_FILE}"
+        else
+          node "${ACTION_DIR}/bin/dislop.mjs" "${ARGS[@]}"
+        fi

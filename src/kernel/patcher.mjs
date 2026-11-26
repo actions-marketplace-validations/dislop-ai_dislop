@@ -92,11 +92,25 @@ export function applyPatchesToText(sourceText, doc, patches) {
   for (const patch of patches) {
     const loc = resolveLocatorForPatch(doc, patch);
     if (!loc || (loc.kind !== "text-span" && loc.kind !== "html-span")) continue;
-    const replacement = String(patch.replacement ?? "");
-    const span =
+    let replacement = String(patch.replacement ?? "");
+    let span =
       replacement === "" && loc.kind === "text-span"
         ? adjustTextSpanForDeletion(sourceText, loc.start, loc.end)
         : { start: loc.start, end: loc.end };
+    // Narrow non-empty text-span replacements to their minimal differing slice so enclosing sentence rewrites
+    // never collide with non-overlapping inner defect deletions (e.g., trailing leaked citation tokens).
+    if (replacement !== "" && loc.kind === "text-span") {
+      const orig = sourceText.slice(span.start, span.end);
+      const minLen = Math.min(orig.length, replacement.length);
+      let cp = 0;
+      while (cp < minLen && orig[cp] === replacement[cp]) cp += 1;
+      let cs = 0;
+      while (cs < minLen - cp && orig[orig.length - 1 - cs] === replacement[replacement.length - 1 - cs]) cs += 1;
+      if (cp > 0 || cs > 0) {
+        span = { start: span.start + cp, end: span.end - cs };
+        replacement = replacement.slice(cp, replacement.length - cs);
+      }
+    }
     resolved.push({
       start: span.start,
       end: span.end,

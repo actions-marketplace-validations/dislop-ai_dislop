@@ -21,12 +21,12 @@ Currently retained untouched on disk (and excluded from npm `"files"` in `packag
 1. Update `POST https://dislop.com/api/v1/review` in `dislop-cloud` to accept segment-indexed payloads from `src/runtime/providers/cloud.mjs` and return items conforming to `dislop.report/1`.
 2. Replace `dislop-cloud/scripts/sync_core.mjs` + `dislop-cloud/vendor/` (which previously vendored the legacy `src/core.mjs` and `pack.json` manifests) with a clean dependency on `dislop` (`src/kernel/` + `packs/`).
 
-## 3. Add CI Malicious-Pack Security Scanner for Community Pack PRs
+## 3. CI Malicious-Pack Security Scanner for Community Pack PRs (`[x]` Implemented)
 
-Because Packs are separated into `pack.json`, `scripts/*.mjs`, and `prompts/*.md` and reviewed via GitHub PRs, add a dedicated CI gate (`.github/workflows/ci.yml` + `scripts/verify-packs-security.mjs`) that fails incoming PRs if any Pack contains:
+Implemented in `scripts/verify-packs-security.mjs` (`npm run check:security`) and enforced in `.github/workflows/ci.yml`:
 1. **Boundary Tag / Prompt-Override Injection in `prompts/*.md` or `.pack.md`**:
-   - Any literal kernel delimiter tags (`<pack_rules>`, `</pack_rules>`, `<untrusted_document>`, `</untrusted_document>`, `<context_readonly>`, `</context_readonly>`).
-   - Jailbreak / override directives (`ignore previous instructions`, `override core invariants`, `system prompt`, `disregard safety`, etc.) or leaked internal schema identifiers (`actionType`, `fixSafety`, `suggestedReplacement`).
-   - Hidden zero-width or bidirectional Trojan Source Unicode characters (`U+200B`–`U+200F`, `U+202A`–`U+202E`, `U+2066`–`U+2069`, `U+FEFF` mid-file).
+   - Rejects literal kernel delimiter tags (`<pack_rules>`, `<untrusted_document>`, `<context_readonly>`, `<established_tone_anchor>`), jailbreak/override directives, leaked internal schema identifiers (`actionType`, `fixSafety`, `suggestedReplacement`, `rewritePrompt`, `targetId`, `documentToneAnchor`), and hidden zero-width or bidirectional Trojan Source Unicode characters.
 2. **Forbidden Runtime Capabilities in `scripts/*.mjs`**:
-   - Disallow outbound network, process-spawning, dynamic code execution, or filesystem mutation primitives inside Pack scripts (`child_process`, `http`, `https`, `net`, `tls`, `dgram`, `dns`, `fetch`, `WebSocket`, `eval`, `new Function`, `fs.writeFile*`, `fs.unlink*`, `fs.rm*`).
+   - Disallows outbound network, process-spawning, dynamic code execution, and filesystem mutation primitives inside Pack scripts (`child_process`, `http`, `https`, `net`, `tls`, `dgram`, `dns`, `fetch`, `WebSocket`, `eval`, `new Function`, `writeFile*`, `unlink*`, `rm*`).
+3. **Strict Single-Language Separation**:
+   - Blocks literal CJK characters inside `src/`, `packs/common/`, `packs/en/`, and pure-English documentation.

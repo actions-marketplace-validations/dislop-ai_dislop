@@ -1,0 +1,6 @@
+- id: dislop-check
+  name: dislop anti-slop check (deterministic defect gate)
+  description: Catch stray chatbot wrappers, unfilled placeholders, broken local links, raw Markdown in Office/HTML docs, and dead UI controls before commit.
+  entry: npx --yes dislop check --no-llm
+  language: system
+  files: \.(md|mdx|txt|html|htm|css|jsx|tsx|svg|docx|pptx|pdf)$

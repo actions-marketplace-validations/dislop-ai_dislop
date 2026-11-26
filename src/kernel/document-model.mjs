@@ -177,7 +177,9 @@ export function splitParagraphIntoSentences(slice) {
       if (ch === "!") {
         const leadIn = slice.slice(sentStart, i).trim();
         if (
-          /^(?:Certainly|Sure|Of course|Absolutely|Great|Awesome|Great question)$/i.test(leadIn) &&
+          /^(?:Certainly|Sure|Of course|Absolutely|Great|Awesome|Great question|Happy to help|Glad to help)$/i.test(
+            leadIn,
+          ) &&
           i + 1 < len &&
           /\s/.test(slice[i + 1])
         ) {
@@ -239,6 +241,56 @@ function detectRawMarkdownLeaksInRun(text, segmentId, line, locator) {
   return leaks;
 }
 
+function applySuppressionDirectives(rawText, masked) {
+  let m;
+  const blockDirectiveRe =
+    /<!--\s*dislop-(?:ignore|quote|disable)-start\s*-->[\s\S]*?<!--\s*dislop-(?:ignore|quote|disable)-end\s*-->/gi;
+  while ((m = blockDirectiveRe.exec(rawText)) !== null) {
+    masked.fill(1, m.index, m.index + m[0].length);
+  }
+  const nextLineDirectiveRe =
+    /<!--\s*dislop-(?:ignore|disable)(?:-next-line)?\s*-->[ \t]*\r?\n[^\r\n]*/gi;
+  while ((m = nextLineDirectiveRe.exec(rawText)) !== null) {
+    masked.fill(1, m.index, m.index + m[0].length);
+  }
+}
+
+function splitMarkdownTableRow(rowText, rowStart) {
+  const cells = [];
+  let inCode = false;
+  let cellStart = 0;
+  const len = rowText.length;
+  for (let i = 0; i < len; i += 1) {
+    const ch = rowText[i];
+    if (ch === "`") {
+      inCode = !inCode;
+      continue;
+    }
+    if (ch === "\\" && i + 1 < len) {
+      i += 1;
+      continue;
+    }
+    if (!inCode && ch === "|") {
+      const rawCell = rowText.slice(cellStart, i);
+      const lead = rawCell.match(/^\s*/)[0].length;
+      const trail = rawCell.match(/\s*$/)[0].length;
+      const s = rowStart + cellStart + lead;
+      const e = rowStart + i - trail;
+      if (e > s) cells.push({ start: s, end: e, text: rowText.slice(cellStart + lead, i - trail) });
+      cellStart = i + 1;
+    }
+  }
+  if (cellStart < len) {
+    const rawCell = rowText.slice(cellStart);
+    const lead = rawCell.match(/^\s*/)[0].length;
+    const trail = rawCell.match(/\s*$/)[0].length;
+    const s = rowStart + cellStart + lead;
+    const e = rowStart + len - trail;
+    if (e > s) cells.push({ start: s, end: e, text: rowText.slice(cellStart + lead, len - trail) });
+  }
+  return cells;
+}
+
 function parseMarkdownOrText(rawText, filePath, format) {
   const lineStarts = buildLineTable(rawText);
   const len = rawText.length;
@@ -255,7 +307,7 @@ function parseMarkdownOrText(rawText, filePath, format) {
     }
   }
 
-  // 2. Mask fenced code blocks ``` or ~~~
+  // 2. Mask fenced code blocks ``` or ~~~ and HTML/suppression comments
   if (format === "md" || format === "mdx") {
     const fenceRe = /(^[ \t]*(`{3,}|~{3,})([^\r\n]*)\r?\n)([\s\S]*?)(^[ \t]*\2[ \t]*(?:\r?\n|$))/gm;
     let m;
@@ -268,7 +320,8 @@ function parseMarkdownOrText(rawText, filePath, format) {
       });
     }
 
-    // Mask HTML comments
+    applySuppressionDirectives(rawText, masked);
+
     const commentRe = /<!--[\s\S]*?-->/g;
     while ((m = commentRe.exec(rawText)) !== null) {
       masked.fill(1, m.index, m.index + m[0].length);
@@ -307,7 +360,7 @@ function parseMarkdownOrText(rawText, filePath, format) {
 
   const flushCurrent = () => {
     if (currentLines.length === 0) return;
-    rawBlocks.push(currentLines);
+    rawBlocks.push({ kind: "prose", lines: currentLines });
     currentLines = [];
   };
 
@@ -321,9 +374,21 @@ function parseMarkdownOrText(rawText, filePath, format) {
       flushCurrent();
       continue;
     }
+    // Mask Markdown blockquotes (> ...) so quoted external copy never triggers author-prose warnings
+    if ((format === "md" || format === "mdx") && /^\s*>/.test(ln.text)) {
+      flushCurrent();
+      masked.fill(1, ln.start, ln.rawEnd);
+      continue;
+    }
     // Table separator rows |---|---|
     if ((format === "md" || format === "mdx") && /^\|?(?:\s*:?-+:?\s*\|)+\s*:?-+:?\s*\|?$/.test(trimmed)) {
       flushCurrent();
+      continue;
+    }
+    // Pipe table rows | a | b |
+    if ((format === "md" || format === "mdx") && /^\s*\|.*\|\s*$/.test(ln.text)) {
+      flushCurrent();
+      rawBlocks.push({ kind: "table-row", lines: [ln] });
       continue;
     }
     // Horizontal rules
@@ -332,12 +397,14 @@ function parseMarkdownOrText(rawText, filePath, format) {
       continue;
     }
     // Headings & list items each form clean standalone addressable blocks
-    if (
-      (format === "md" || format === "mdx") &&
-      (/^\s*#{1,6}\s+/.test(ln.text) || /^\s*(?:[-*+]|\d+\.)\s+/.test(ln.text))
-    ) {
+    if ((format === "md" || format === "mdx") && /^\s*#{1,6}\s+/.test(ln.text)) {
       flushCurrent();
-      rawBlocks.push([ln]);
+      rawBlocks.push({ kind: "heading", lines: [ln] });
+      continue;
+    }
+    if ((format === "md" || format === "mdx") && /^\s*(?:[-*+]|\d+\.|[\u2460-\u2473])\s+/.test(ln.text)) {
+      flushCurrent();
+      rawBlocks.push({ kind: "list-item", lines: [ln] });
       continue;
     }
     currentLines.push(ln);
@@ -348,17 +415,69 @@ function parseMarkdownOrText(rawText, filePath, format) {
   const paragraphs = [];
   let pCounter = 0;
 
-  for (const blk of rawBlocks) {
+  for (const blockEntry of rawBlocks) {
+    const blk = blockEntry.lines;
     const blkStart = blk[0].start;
     const blkEnd = blk[blk.length - 1].end;
+
+    if (blockEntry.kind === "table-row") {
+      const cells = splitMarkdownTableRow(blk[0].text, blkStart);
+      for (const cell of cells) {
+        pCounter += 1;
+        const paragraphId = `P${pCounter}`;
+        const sentenceSpans = splitParagraphIntoSentences(cell.text);
+        if (sentenceSpans.length === 0) continue;
+        const segIds = [];
+        let sCounter = 0;
+        for (const sp of sentenceSpans) {
+          sCounter += 1;
+          const absStart = cell.start + sp.relStart;
+          const absEnd = cell.start + sp.relEnd;
+          const id = `${paragraphId}-S${sCounter}`;
+          segIds.push(id);
+          segments.push({
+            id,
+            paragraphId,
+            blockKind: "table-cell",
+            line: offsetToLine(lineStarts, absStart),
+            text: sp.text,
+            locator: {
+              kind: "text-span",
+              start: absStart,
+              end: absEnd,
+              lineStart: blkStart,
+              lineEnd: blk[0].rawEnd,
+            },
+          });
+        }
+        paragraphs.push({
+          id: paragraphId,
+          blockKind: "table-cell",
+          line: offsetToLine(lineStarts, cell.start),
+          text: cell.text,
+          segmentIds: segIds,
+          locator: {
+            kind: "text-span",
+            start: cell.start,
+            end: cell.end,
+            lineStart: blkStart,
+            lineEnd: blk[0].rawEnd,
+          },
+        });
+      }
+      continue;
+    }
+
     let bodyStart = blkStart;
     const firstText = blk[0].text;
+    let blockKind = blockEntry.kind === "prose" ? "paragraph" : blockEntry.kind;
 
     if (format === "md" || format === "mdx") {
       const headingPrefix = firstText.match(/^(\s*#{1,6}\s+)/);
-      const listPrefix = !headingPrefix ? firstText.match(/^(\s*(?:[-*+]|\d+\.)\s+(?:\[[ xX]\]\s+)?)/) : null;
-      const quotePrefix = !headingPrefix && !listPrefix && blk.length === 1 ? firstText.match(/^(\s*>\s+)/) : null;
-      const prefix = headingPrefix?.[1] || listPrefix?.[1] || quotePrefix?.[1] || "";
+      const listPrefix = !headingPrefix
+        ? firstText.match(/^(\s*(?:[-*+]|\d+\.|[\u2460-\u2473])\s+(?:\[[ xX]\]\s+)?)/)
+        : null;
+      const prefix = headingPrefix?.[1] || listPrefix?.[1] || "";
       bodyStart += prefix.length;
     }
 
@@ -382,6 +501,7 @@ function parseMarkdownOrText(rawText, filePath, format) {
       segments.push({
         id,
         paragraphId,
+        blockKind,
         line: segLine,
         text: sp.text,
         locator: {
@@ -396,6 +516,7 @@ function parseMarkdownOrText(rawText, filePath, format) {
 
     paragraphs.push({
       id: paragraphId,
+      blockKind,
       line: offsetToLine(lineStarts, bodyStart),
       text: slice,
       segmentIds: segIds,
@@ -418,11 +539,13 @@ function parseMarkdownOrText(rawText, filePath, format) {
       inlineCodeMask.fill(1, im.index, im.index + im[0].length);
     }
 
-    const mdLinkRe = /!?\[([^\]\n]*)\]\(([^)\n]*)\)/g;
+    const mdLinkRe = /!?\[([^\]\n]*)\]\((<[^>\n]*>|[^)\n]*)\)/g;
     let lm;
     while ((lm = mdLinkRe.exec(rawText)) !== null) {
       if (inlineCodeMask[lm.index]) continue;
-      const rawUrl = lm[2].trim().replace(/\s+["'][^"']*["']$/, "");
+      let rawUrl = lm[2].trim().replace(/\s+["'][^"']*["']$/, "");
+      const angleMatch = rawUrl.match(/^<([\s\S]*)>$/);
+      if (angleMatch) rawUrl = angleMatch[1].trim();
       const line = offsetToLine(lineStarts, lm.index);
       const seg = segments.find(
         (s) => s.locator.start <= lm.index && s.locator.end >= lm.index + lm[0].length,
@@ -454,6 +577,12 @@ function parseMarkdownOrText(rawText, filePath, format) {
   };
 }
 
+function parseLengthPx(rawVal) {
+  if (!rawVal) return null;
+  const m = String(rawVal).trim().match(/^(\d+(?:\.\d+)?)(?:px)?$/i);
+  return m ? Number(m[1]) : null;
+}
+
 function collectUiSignals(rawSource, format) {
   const purplePinkGradients = [];
   const glowBlobs = [];
@@ -468,13 +597,45 @@ function collectUiSignals(rawSource, format) {
     purplePinkGradients.push({ text: m[0], offset: m.index });
   }
 
+  // SVG purple-pink gradients
+  const svgGradRe = /<(?:linearGradient|radialGradient)\b[\s\S]*?<\/(?:linearGradient|radialGradient)>/gi;
+  while ((m = svgGradRe.exec(rawSource)) !== null) {
+    const block = m[0];
+    const hasPurpleStop = /#(?:8b5cf6|a855f7|6366f1|7c3aed)\b/i.test(block);
+    const hasPinkOrCyanStop = /#(?:ec4899|d946ef|f43f5e|06b6d4)\b/i.test(block);
+    if (hasPurpleStop && hasPinkOrCyanStop) {
+      purplePinkGradients.push({ text: block.slice(0, 120), offset: m.index });
+    }
+  }
+
   const blobRe = /\bblur-3xl\b[^\n"']{0,80}\b(?:opacity-(?:20|30|40)|animate-pulse|rounded-full)\b/gi;
   while ((m = blobRe.exec(rawSource)) !== null) {
     glowBlobs.push({ text: m[0], offset: m.index });
   }
 
-  const pillRe = /<(?:span|div)\b[^>]*class(?:Name)?=["'][^"']*\brounded-full\b[^"']*["'][^>]*>[^<]{1,40}<\/(?:span|div)>/gi;
+  const cssBlurRe = /filter\s*:\s*blur\(\s*(?:[4-9]\d|\d{3,})px\s*\)/gi;
+  while ((m = cssBlurRe.exec(rawSource)) !== null) {
+    glowBlobs.push({ text: m[0], offset: m.index });
+  }
+
+  const svgBlurRe = /<feGaussianBlur\b[^>]*\bstdDeviation\s*=\s*["']?(?:1[2-9]|[2-9]\d|\d{3,})\b[^>]*>/gi;
+  while ((m = svgBlurRe.exec(rawSource)) !== null) {
+    glowBlobs.push({ text: m[0], offset: m.index });
+  }
+
+  const pillRe =
+    /<(?:span|div)\b([^>]*class(?:Name)?=["'][^"']*\brounded-full\b[^"']*["'][^>]*)>([^<]{1,40})<\/(?:span|div)>/gi;
   while ((m = pillRe.exec(rawSource)) !== null) {
+    const classMatch = m[1].match(/\bclass(?:Name)?=["']([^"']*)["']/i);
+    const cls = classMatch ? classMatch[1] : "";
+    const inner = m[2].trim();
+    const isSquareAvatar =
+      /\bw-(\d+(?:\.\d+)?)\b[^\n"']*\bh-\1\b/.test(cls) ||
+      /\bh-(\d+(?:\.\d+)?)\b[^\n"']*\bw-\1\b/.test(cls) ||
+      /\bsize-\d+\b/.test(cls);
+    if (!inner || isSquareAvatar || /^[A-Z]{1,2}$/.test(inner)) {
+      continue;
+    }
     pillBadges.push({ text: m[0], offset: m.index });
   }
 
@@ -489,9 +650,21 @@ function collectUiSignals(rawSource, format) {
   if (format === "svg" && /<svg\b/i.test(rawSource)) {
     const svgOpen = rawSource.match(/<svg\b[^>]*>/i);
     if (svgOpen && !/\bviewBox\s*=/i.test(svgOpen[0])) {
-      missingSvgViewBox = true;
+      const wMatch = svgOpen[0].match(/\bwidth\s*=\s*["']([^"']+)["']/i);
+      const hMatch = svgOpen[0].match(/\bheight\s*=\s*["']([^"']+)["']/i);
+      const wPx = parseLengthPx(wMatch?.[1]);
+      const hPx = parseLengthPx(hMatch?.[1]);
+      const isSmallIcon = wPx !== null && hPx !== null && wPx <= 48 && hPx <= 48;
+      if (!isSmallIcon) {
+        missingSvgViewBox = true;
+      }
     }
   }
+
+  const backdropBlurMatches = rawSource.match(
+    /\bbackdrop-blur(?:-(?:sm|md|lg|xl|2xl|3xl))?\b|backdrop-filter\s*:\s*blur\(/gi,
+  );
+  const backdropBlurCount = backdropBlurMatches ? backdropBlurMatches.length : 0;
 
   return {
     purplePinkGradients,
@@ -499,12 +672,180 @@ function collectUiSignals(rawSource, format) {
     pillBadges,
     disabledButtonsWithoutTitle,
     missingSvgViewBox,
+    backdropBlurCount,
   };
+}
+
+const HTML_VOID_TAGS = new Set([
+  "area",
+  "base",
+  "br",
+  "col",
+  "embed",
+  "hr",
+  "img",
+  "input",
+  "link",
+  "meta",
+  "param",
+  "source",
+  "track",
+  "wbr",
+]);
+
+const PROSE_ELEMENT_TAGS = new Set([
+  "p",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "li",
+  "figcaption",
+  "td",
+  "th",
+  "dt",
+  "dd",
+  "summary",
+  "blockquote",
+  "button",
+  "label",
+  "text",
+  "div",
+  "span",
+  "a",
+]);
+
+function maskElementsByAttr(rawText, masked, attrRe) {
+  const tagRe = /<(\/?)([a-zA-Z][a-zA-Z0-9:-]*)([^>]*)>/g;
+  const ignoreStack = [];
+  let m;
+  while ((m = tagRe.exec(rawText)) !== null) {
+    const isClose = m[1] === "/";
+    const tag = m[2].toLowerCase();
+    const attrs = m[3] || "";
+    const selfClose = /\/\s*$/.test(attrs) || HTML_VOID_TAGS.has(tag);
+
+    if (!isClose) {
+      if (selfClose) {
+        if (attrRe.test(attrs)) masked.fill(1, m.index, m.index + m[0].length);
+      } else {
+        ignoreStack.push({ tag, start: m.index, ignored: attrRe.test(attrs) });
+      }
+    } else {
+      for (let i = ignoreStack.length - 1; i >= 0; i -= 1) {
+        if (ignoreStack[i].tag === tag) {
+          const popped = ignoreStack.splice(i, ignoreStack.length - i)[0];
+          if (popped.ignored) {
+            masked.fill(1, popped.start, m.index + m[0].length);
+          }
+          break;
+        }
+      }
+    }
+  }
+}
+
+function collectHtmlProseBlocks(rawText, proseMask) {
+  const tagRe = /<(\/?)([a-zA-Z][a-zA-Z0-9:-]*)([^>]*)>/g;
+  const stack = [];
+  const candidates = [];
+  let m;
+
+  while ((m = tagRe.exec(rawText)) !== null) {
+    if (proseMask[m.index]) continue;
+    const isClose = m[1] === "/";
+    const tag = m[2].toLowerCase();
+    const attrs = m[3] || "";
+    const selfClose = /\/\s*$/.test(attrs) || HTML_VOID_TAGS.has(tag);
+
+    if (!isClose) {
+      if (!selfClose) {
+        stack.push({ tag, openStart: m.index, innerStart: m.index + m[0].length });
+      }
+      continue;
+    }
+
+    for (let i = stack.length - 1; i >= 0; i -= 1) {
+      if (stack[i].tag === tag) {
+        const popped = stack.splice(i, stack.length - i)[0];
+        if (!PROSE_ELEMENT_TAGS.has(tag)) break;
+        const innerEnd = m.index;
+        const rawInner = rawText.slice(popped.innerStart, innerEnd);
+        if (!rawInner.trim()) break;
+
+        const hasNestedBlock =
+          /<(?:div|section|article|main|header|footer|nav|aside|ul|ol|dl|table|thead|tbody|tr|p|h[1-6]|li|blockquote|pre|figure|figcaption|form|svg)\b/i.test(
+            rawInner,
+          );
+        const hasNestedInlineContainer = /<(?:td|th|dt|dd|summary|button|label|text|span|a)\b/i.test(rawInner);
+
+        if (tag === "div" && (hasNestedBlock || hasNestedInlineContainer)) break;
+        if ((tag === "span" || tag === "a") && (hasNestedBlock || hasNestedInlineContainer)) break;
+        if (hasNestedBlock) break;
+
+        candidates.push({
+          tag,
+          openStart: popped.openStart,
+          innerStart: popped.innerStart,
+          innerEnd,
+          rawInner,
+        });
+        break;
+      }
+    }
+  }
+
+  candidates.sort((a, b) => a.innerStart - b.innerStart);
+  const filtered = [];
+  for (const cand of candidates) {
+    if (cand.tag === "span" || cand.tag === "a") {
+      const insideEmitted = filtered.some(
+        (p) => cand.openStart >= p.innerStart && cand.innerEnd <= p.innerEnd,
+      );
+      if (insideEmitted) continue;
+    }
+    filtered.push(cand);
+  }
+  return filtered;
+}
+
+function normalizeHtmlInnerToPieces(rawInner, innerOffset) {
+  // Split on <br> tags into logical line pieces while keeping rough source offsets
+  const brSplitRe = /<br\s*\/?>/gi;
+  const parts = [];
+  let lastIdx = 0;
+  let bm;
+  while ((bm = brSplitRe.exec(rawInner)) !== null) {
+    parts.push({ raw: rawInner.slice(lastIdx, bm.index), offset: innerOffset + lastIdx });
+    lastIdx = bm.index + bm[0].length;
+  }
+  parts.push({ raw: rawInner.slice(lastIdx), offset: innerOffset + lastIdx });
+
+  const out = [];
+  for (const part of parts) {
+    const raw = part.raw;
+    if (!raw.trim()) continue;
+    // Convert inline <code>...</code> to backtick spans so maskInlineCode protects them
+    const withInlineCode = raw
+      .replace(/<code\b[^>]*>([\s\S]*?)<\/code>/gi, (_, body) => `\`${decodeXmlEntities(body).trim()}\``)
+      .replace(/<\/?[a-zA-Z][a-zA-Z0-9:-]*(?:\s+[^>]*)?>/g, "")
+      .replace(/(?<!\{)\{[^{}\n]{1,120}\}(?!\})/g, "");
+    const decoded = decodeXmlEntities(withInlineCode);
+    if (!decoded.trim()) continue;
+    out.push({
+      rawPart: raw,
+      partOffset: part.offset,
+      text: decoded,
+      exactOneToOne: raw === decoded,
+    });
+  }
+  return out;
 }
 
 function parseMarkupOrStylesheet(rawText, filePath, format) {
   const lineStarts = buildLineTable(rawText);
-  const uiSignals = collectUiSignals(rawText, format);
   const links = [];
   const codeBlocks = [];
   const rawFormattingLeaks = [];
@@ -512,6 +853,7 @@ function parseMarkupOrStylesheet(rawText, filePath, format) {
   const paragraphs = [];
 
   if (format === "css") {
+    const uiSignals = collectUiSignals(rawText, format);
     return {
       filePath,
       format,
@@ -529,27 +871,41 @@ function parseMarkupOrStylesheet(rawText, filePath, format) {
   }
 
   const len = rawText.length;
-  const masked = new Uint8Array(len);
+  const nonUiMask = new Uint8Array(len);
 
-  const maskRegex = (re) => {
+  const maskRegexOn = (targetMask, re) => {
     let m;
     while ((m = re.exec(rawText)) !== null) {
-      masked.fill(1, m.index, m.index + m[0].length);
+      targetMask.fill(1, m.index, m.index + m[0].length);
     }
   };
 
-  maskRegex(/<!--[\s\S]*?-->/g);
-  maskRegex(/\{\/\*[\s\S]*?\*\/\}/g);
-  maskRegex(/<script\b[^>]*>[\s\S]*?<\/script>/gi);
-  maskRegex(/<style\b[^>]*>[\s\S]*?<\/style>/gi);
-  maskRegex(/<pre\b[^>]*>[\s\S]*?<\/pre>/gi);
-  maskRegex(/<code\b[^>]*>[\s\S]*?<\/code>/gi);
+  applySuppressionDirectives(rawText, nonUiMask);
+  maskRegexOn(nonUiMask, /<!--[\s\S]*?-->/g);
+  maskRegexOn(nonUiMask, /\{\/\*[\s\S]*?\*\/\}/g);
+  maskRegexOn(nonUiMask, /<script\b[^>]*>[\s\S]*?<\/script>/gi);
+  maskRegexOn(nonUiMask, /<pre\b[^>]*>[\s\S]*?<\/pre>/gi);
+  maskRegexOn(nonUiMask, /<code\b[^>]*>[\s\S]*?<\/code>/gi);
+  maskRegexOn(nonUiMask, /<samp\b[^>]*>[\s\S]*?<\/samp>/gi);
+  maskRegexOn(nonUiMask, /<kbd\b[^>]*>[\s\S]*?<\/kbd>/gi);
+  maskRegexOn(nonUiMask, /<del\b[^>]*>[\s\S]*?<\/del>/gi);
+  maskRegexOn(nonUiMask, /<template\b[^>]*>[\s\S]*?<\/template>/gi);
+  maskRegexOn(nonUiMask, /<noscript\b[^>]*>[\s\S]*?<\/noscript>/gi);
+  maskElementsByAttr(rawText, nonUiMask, /\bdata-dislop-ignore\b/i);
 
-  // Extract <a ... href="..."> links
+  const maskedUiSource = Array.from(rawText)
+    .map((ch, idx) => (nonUiMask[idx] ? (ch === "\n" ? "\n" : " ") : ch))
+    .join("");
+  const uiSignals = collectUiSignals(maskedUiSource, format);
+
+  const proseMask = new Uint8Array(nonUiMask);
+  maskRegexOn(proseMask, /<style\b[^>]*>[\s\S]*?<\/style>/gi);
+
+  // Extract <a ... href="..."> links outside masked regions
   const anchorRe = /<a\b([^>]*)>([\s\S]*?)<\/a>/gi;
   let am;
   while ((am = anchorRe.exec(rawText)) !== null) {
-    if (masked[am.index]) continue;
+    if (nonUiMask[am.index]) continue;
     const hrefMatch = am[1].match(/\bhref\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
     if (hrefMatch) {
       const url = hrefMatch[1] ?? hrefMatch[2] ?? "";
@@ -563,52 +919,76 @@ function parseMarkupOrStylesheet(rawText, filePath, format) {
     }
   }
 
-  // Extract visible leaf text nodes inside prose/UI elements (matching tag-free bodies keeps 1:1 byte offsets)
-  const blockTagRe =
-    /<(p|h[1-6]|li|blockquote|figcaption|td|th|button|label|text|span|a)\b[^>]*>([^<{}]+)<\/\1>/gi;
-  let bm;
+  const blocks = collectHtmlProseBlocks(rawText, proseMask);
   let bCounter = 0;
 
-  while ((bm = blockTagRe.exec(rawText)) !== null) {
-    if (masked[bm.index]) continue;
-    const innerOffset = bm.index + bm[0].indexOf(">") + 1;
-    const cleanSlice = bm[2];
-    if (!cleanSlice.trim()) continue;
+  for (const blk of blocks) {
+    const pieces = normalizeHtmlInnerToPieces(blk.rawInner, blk.innerStart);
+    if (pieces.length === 0) continue;
 
-    bCounter += 1;
-    const blockId = `B${bCounter}`;
-    const sentenceSpans = splitParagraphIntoSentences(cleanSlice);
-    if (sentenceSpans.length === 0) continue;
+    let blockKind = "paragraph";
+    if (/^h[1-6]$/.test(blk.tag)) blockKind = "heading";
+    else if (blk.tag === "li") blockKind = "list-item";
+    else if (blk.tag === "td" || blk.tag === "th") blockKind = "table-cell";
+    else if (blk.tag === "button" || blk.tag === "label" || blk.tag === "a") blockKind = "ui-control";
 
-    const segIds = [];
-    let sCounter = 0;
-    for (const sp of sentenceSpans) {
-      sCounter += 1;
-      const absStart = innerOffset + sp.relStart;
-      const absEnd = innerOffset + sp.relEnd;
-      const line = offsetToLine(lineStarts, absStart);
-      const id = `${blockId}-S${sCounter}`;
-      const locator = { kind: "html-span", start: absStart, end: absEnd };
-      segIds.push(id);
-      segments.push({
-        id,
-        paragraphId: blockId,
-        line,
-        text: decodeXmlEntities(sp.text),
-        locator,
+    for (const piece of pieces) {
+      const cleanSlice = piece.text;
+      bCounter += 1;
+      const blockId = `B${bCounter}`;
+      const sentenceSpans = splitParagraphIntoSentences(cleanSlice);
+      if (sentenceSpans.length === 0) continue;
+
+      const segIds = [];
+      let sCounter = 0;
+      for (const sp of sentenceSpans) {
+        sCounter += 1;
+        let absStart = piece.partOffset + sp.relStart;
+        let absEnd = piece.partOffset + sp.relEnd;
+        let locatorKind = "html-readonly";
+
+        if (piece.exactOneToOne && rawText.slice(absStart, absEnd) === sp.text) {
+          locatorKind = "html-span";
+        } else {
+          const idx = piece.rawPart.indexOf(sp.text);
+          if (idx !== -1 && piece.rawPart.indexOf(sp.text, idx + 1) === -1) {
+            absStart = piece.partOffset + idx;
+            absEnd = absStart + sp.text.length;
+            locatorKind = "html-span";
+          }
+        }
+
+        const line = offsetToLine(lineStarts, absStart);
+        const id = `${blockId}-S${sCounter}`;
+        const locator = { kind: locatorKind, start: absStart, end: absEnd };
+        segIds.push(id);
+        segments.push({
+          id,
+          paragraphId: blockId,
+          blockKind,
+          line,
+          text: sp.text,
+          locator,
+        });
+
+        const maskedForLeakCheck = sp.text.replace(/`+[^`]+`+/g, (cm) => " ".repeat(cm.length));
+        const leaks = detectRawMarkdownLeaksInRun(maskedForLeakCheck, id, line, locator);
+        rawFormattingLeaks.push(...leaks);
+      }
+
+      paragraphs.push({
+        id: blockId,
+        blockKind,
+        line: offsetToLine(lineStarts, piece.partOffset),
+        text: cleanSlice.trim(),
+        segmentIds: segIds,
+        locator: {
+          kind: piece.exactOneToOne ? "html-span" : "html-readonly",
+          start: piece.partOffset,
+          end: piece.partOffset + piece.rawPart.length,
+        },
       });
-
-      const leaks = detectRawMarkdownLeaksInRun(sp.text, id, line, locator);
-      rawFormattingLeaks.push(...leaks);
     }
-
-    paragraphs.push({
-      id: blockId,
-      line: offsetToLine(lineStarts, innerOffset),
-      text: decodeXmlEntities(cleanSlice.trim()),
-      segmentIds: segIds,
-      locator: { kind: "html-span", start: innerOffset, end: innerOffset + cleanSlice.length },
-    });
   }
 
   const proseCorpus = segments.map((s) => s.text).join("\n");
@@ -792,9 +1172,14 @@ function parseOoxmlDocument(buffer, filePath, format) {
   }
 
   const slideMetrics = [];
+  let visibleSlideCount = 0;
   for (let idx = 0; idx < slideNames.length; idx += 1) {
     const entryName = slideNames[idx];
     const xml = xmlEntries[entryName];
+    if (/<p:sld\b[^>]*\bshow\s*=\s*["'](?:0|false)["']/i.test(xml)) {
+      continue;
+    }
+    visibleSlideCount += 1;
     const startSegIdx = segments.length;
     const res = parseOoxmlParagraphsFromXml(xml, entryName, "a", bCounter);
     bCounter = res.nextBCounter;
@@ -816,7 +1201,7 @@ function parseOoxmlDocument(buffer, filePath, format) {
     const firstSegmentId = segments[startSegIdx]?.id || null;
 
     slideMetrics.push({
-      index: idx + 1,
+      index: visibleSlideCount,
       entryName,
       firstSegmentId,
       title: res.paragraphs[0]?.text || "",
@@ -840,7 +1225,7 @@ function parseOoxmlDocument(buffer, filePath, format) {
       codeBlocks: [],
       rawFormattingLeaks,
       deckSignals: {
-        slideCount: slideNames.length,
+        slideCount: visibleSlideCount,
         slides: slideMetrics,
       },
     },
@@ -883,23 +1268,96 @@ export function parseDocumentFile(filePath, explicitFormat = null) {
   if (format === "pdf") {
     const buf = fs.readFileSync(filePath);
     const pdfInfo = inspectPdfBuffer(buf);
-    const tempDoc = parseMarkdownOrText(pdfInfo.extractedText, filePath, "txt");
-    // Clear patch locators on PDF segments so PDF findings stay read-only/manual
-    const pdfSegments = tempDoc.segments.map((s) => ({
-      ...s,
-      locator: { kind: "pdf-readonly" },
-    }));
+    const pages = pdfInfo.pages || [];
+    const segments = [];
+    const paragraphs = [];
+    const rawFormattingLeaks = [];
+    let pCounter = 0;
+
+    for (const page of pages) {
+      if (!page.text || !page.text.trim()) continue;
+      const pageDoc = parseMarkdownOrText(page.text, filePath, "txt");
+      const pageIdOffset = pCounter;
+      for (const seg of pageDoc.segments) {
+        const pNum = parseInt(seg.paragraphId.slice(1), 10) + pageIdOffset;
+        const sNum = seg.id.split("-")[1];
+        const id = `P${pNum}-${sNum}`;
+        const locator = { kind: "pdf-readonly", page: page.index };
+        segments.push({
+          ...seg,
+          id,
+          paragraphId: `P${pNum}`,
+          line: page.index,
+          locator,
+        });
+      }
+      for (const para of pageDoc.paragraphs) {
+        const pNum = parseInt(para.id.slice(1), 10) + pageIdOffset;
+        paragraphs.push({
+          ...para,
+          id: `P${pNum}`,
+          line: page.index,
+          segmentIds: para.segmentIds.map((sid) => {
+            const sNum = sid.split("-")[1];
+            return `P${pNum}-${sNum}`;
+          }),
+          locator: { kind: "pdf-readonly", page: page.index },
+        });
+      }
+      pCounter += pageDoc.paragraphs.length;
+
+      if (page.nonMonoText && page.nonMonoText.trim()) {
+        const nonMonoDoc = parseMarkdownOrText(page.nonMonoText, filePath, "txt");
+        for (const seg of nonMonoDoc.segments) {
+          rawFormattingLeaks.push(
+            ...detectRawMarkdownLeaksInRun(seg.text, null, page.index, {
+              kind: "pdf-readonly",
+              page: page.index,
+            }),
+          );
+        }
+      }
+    }
+
+    const landscapeSlidePages = pages.filter((p) => p.width > p.height * 1.25);
+    const wordCounts = landscapeSlidePages.map((p) => p.wordCount).sort((a, b) => a - b);
+    const cjkCounts = landscapeSlidePages.map((p) => p.cjkCount).sort((a, b) => a - b);
+    const medianWords = wordCounts.length ? wordCounts[Math.floor(wordCounts.length / 2)] : 0;
+    const medianCjk = cjkCounts.length ? cjkCounts[Math.floor(cjkCounts.length / 2)] : 0;
+    const isSlideDeckPdf =
+      pages.length >= 2 &&
+      landscapeSlidePages.length >= Math.ceil(pages.length * 0.7) &&
+      medianWords <= 180 &&
+      medianCjk <= 420;
+
+    const corpus = segments.map((s) => s.text).join("\n");
     return {
       filePath,
       format: "pdf",
       modality: "presentation",
-      language: tempDoc.language,
-      segments: pdfSegments,
-      paragraphs: [],
+      language: corpus ? detectDocumentLanguage(corpus) : "en",
+      segments,
+      paragraphs,
       artifacts: {
         links: [],
         codeBlocks: [],
-        rawFormattingLeaks: [],
+        rawFormattingLeaks,
+        ...(isSlideDeckPdf
+          ? {
+              deckSignals: {
+                slideCount: pages.length,
+                slides: pages.map((p) => ({
+                  index: p.index,
+                  firstSegmentId: segments.find((s) => s.line === p.index)?.id || null,
+                  title: (p.text.split("\n")[0] || "").slice(0, 80),
+                  wordCount: p.wordCount,
+                  cjkCount: p.cjkCount,
+                  bulletCount: 0,
+                  autofitFontScale: 100,
+                })),
+              },
+            }
+          : {}),
         mediaSignals: {
           encrypted: pdfInfo.encrypted,
           pageCount: pdfInfo.pageCount,

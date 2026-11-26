@@ -111,22 +111,93 @@ const SENTENCE_INITIAL_STOPWORDS = new Set([
   "Yet",
   "You",
   "Your",
+  "Zero",
 ]);
 
 function normalizeNumericToken(raw) {
   return raw.replace(/,/g, "");
 }
 
+const ZH_DIGIT_MAP = {
+  "\u96f6": 0,
+  "\u3007": 0,
+  "\u4e00": 1,
+  "\u4e8c": 2,
+  "\u4e24": 2,
+  "\u4e09": 3,
+  "\u56db": 4,
+  "\u4e94": 5,
+  "\u516d": 6,
+  "\u4e03": 7,
+  "\u516b": 8,
+  "\u4e5d": 9,
+};
+
+function parseChineseNumeral(str) {
+  const s = String(str || "").trim();
+  if (!s) return null;
+  if (/^[\u96f6\u3007\u4e00\u4e8c\u4e24\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d]+$/.test(s)) {
+    return Number(Array.from(s).map((c) => ZH_DIGIT_MAP[c]).join(""));
+  }
+  const m = s.match(
+    /^([\u4e00\u4e8c\u4e24\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d])?\u5341([\u4e00\u4e8c\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d])?$/,
+  );
+  if (m) {
+    const tens = m[1] ? ZH_DIGIT_MAP[m[1]] : 1;
+    const ones = m[2] ? ZH_DIGIT_MAP[m[2]] : 0;
+    return tens * 10 + ones;
+  }
+  const m2 = s.match(
+    /^([\u4e00\u4e8c\u4e24\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d])\u767e(?:([\u96f6\u4e00\u4e8c\u4e24\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d])?\u5341?([\u4e00\u4e8c\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d])?)?$/,
+  );
+  if (m2) {
+    const hundreds = ZH_DIGIT_MAP[m2[1]] * 100;
+    if (!m2[2] && !m2[3]) return hundreds;
+    if (s.includes("\u5341")) {
+      const tens = m2[2] && m2[2] !== "\u96f6" ? ZH_DIGIT_MAP[m2[2]] * 10 : 10;
+      const ones = m2[3] ? ZH_DIGIT_MAP[m2[3]] : 0;
+      return hundreds + tens + ones;
+    }
+    const last = m2[3] || m2[2];
+    return hundreds + (last && last !== "\u96f6" ? ZH_DIGIT_MAP[last] : 0);
+  }
+  return null;
+}
+
+function stripMarkupForFacts(text) {
+  const raw = String(text || "");
+  if (!/<[a-zA-Z/][^>]*>/.test(raw)) return raw;
+  return raw
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&apos;/gi, "'");
+}
+
+function normalizeProperNounKey(noun) {
+  if (/^[A-Z]{2,}s$/.test(noun)) {
+    return noun.slice(0, -1);
+  }
+  return noun;
+}
+
+const GENERIC_NON_ENTITY_CAPS = new Set(["AI", "TODO", "TBD", "FIXME", "XXX", "OK"]);
+
 /**
  * Extract protected factual anchors from a text span:
- * - Numbers, decimals, percentages, currencies, version tags (NOT negation counts)
+ * - Numbers, decimals, percentages, currencies, version tags, Chinese classifier quantities
  * - Measurement units paired with numbers (`ms`, `KB`, `GB`, `%`, `hours`, etc.)
  * - URLs (`https://...`, `http://...`, `mailto:...`)
  * - Inline code spans (`` `...` ``)
- * - Capitalized proper nouns, acronyms (`OAuth`, `PostgreSQL`, `GDPR`, `Q3`), excluding sentence-initial stopwords
+ * - Mid-clause proper nouns, mixed-case identifiers, and ALL-CAPS / alphanumeric acronyms (`OAuth`, `PostgreSQL`, `GDPR`, `Q3`)
  */
 export function extractProtectedFacts(text) {
-  const input = String(text || "");
+  const input = stripMarkupForFacts(text);
 
   // 1. Inline code spans
   const codeSpans = [];
@@ -171,7 +242,9 @@ export function extractProtectedFacts(text) {
     if (numPart) {
       numbers.push(normalizeNumericToken(numPart[0]));
     }
-    const unitPart = token.match(/(?:[$€£¥]|%|ms|s|sec|mins?|hrs?|hours?|days?|weeks?|months?|years?|kb|mb|gb|tb|bps|kbps|mbps|gbps|hz|khz|mhz|ghz|px|pt|x)$/i);
+    const unitPart = token.match(
+      /(?:[$€£¥]|%|ms|s|sec|mins?|hrs?|hours?|days?|weeks?|months?|years?|kb|mb|gb|tb|bps|kbps|mbps|gbps|hz|khz|mhz|ghz|px|pt|x)$/i,
+    );
     if (unitPart) {
       units.push(unitPart[0].toLowerCase());
     }
@@ -189,29 +262,62 @@ export function extractProtectedFacts(text) {
     if (u) units.push(u);
   }
 
-  // 4. Capitalized proper nouns, mixed-case identifiers, and ALL-CAPS / alphanumeric acronyms (`Q3`, `GDPR`, `PostgreSQL`)
+  // CJK spelled quantities followed by explicit classifiers (2+ always count; standalone "\u4e00" only counts with explicit quantifier or measurement unit)
+  const cjkQtyRe =
+    /(?:[\u4e8c\u4e24\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341\u767e]{1,4}\s*(?=\u4e2a|\u6b21|\u6761|\u9879|\u6a21\u5757|\u53f0|\u5957|\u5f20|\u4efd|\u9875|\u5468|\u5929|\u5c0f\u65f6|\u5206\u949f|\u79d2|\u500d|\u6735|\u679a|\u5bb6|\u4eba|\u5904|\u5c42|\u9636\u6bb5)|(?<=\u5171|\u4ec5|\u53ea\u6709|\u81f3\u5c11|\u6700\u591a|\u7b2c)\u4e00\s*(?=\u4e2a|\u6b21|\u6761|\u9879|\u6a21\u5757|\u53f0|\u5957|\u5f20|\u4efd|\u9875|\u5468|\u5929|\u5c0f\u65f6|\u5206\u949f|\u79d2|\u500d|\u6735|\u679a|\u5bb6|\u4eba|\u5904|\u5c42|\u9636\u6bb5)|\u4e00(?=\s*(?:\u5c0f\u65f6|\u5206\u949f|\u79d2|\u5468|\u5929|\u500d)))/g;
+  while ((m = cjkQtyRe.exec(unmasked)) !== null) {
+    const val = parseChineseNumeral(m[0]);
+    if (val !== null) {
+      numbers.push(String(val));
+    }
+  }
+
+  // 4. Proper nouns: always protect ALL-CAPS/mixed-case/alphanumeric tokens (excluding generic badges like 'AI'),
+  // and protect plain TitleCase words only when they appear mid-clause (never solely at sentence/heading/label starts)
   const properNouns = [];
+  const plainStartOnly = new Set();
+  const plainMidClause = new Set();
   const wordRe = /\b(?:[A-Z][a-zA-Z0-9]+|[A-Z]{2,}[0-9]*|[a-z]+[A-Z][a-zA-Z0-9]*)\b/g;
   while ((m = wordRe.exec(unmasked)) !== null) {
     const word = m[0];
+    if (GENERIC_NON_ENTITY_CAPS.has(word)) continue;
+
     const idx = m.index;
-    // Check if word sits at start of text or right after sentence-ending punctuation
-    const beforeSlice = unmasked.slice(0, idx).trimEnd();
-    const isSentenceStart =
-      beforeSlice.length === 0 || /[.!?\u3002\uff01\uff1f:\uff1a"\u201c\u201d'(\[-]$/.test(beforeSlice);
+    const beforeRaw = unmasked.slice(0, idx);
+    const beforeSlice = beforeRaw.trimEnd();
+    const isBoundaryStart =
+      beforeSlice.length === 0 ||
+      /[.!?\u3002\uff01\uff1f:\uff1a"\u201c\u201d'(\[\n\r\-*•·\u2014\u2013\/]$/.test(beforeSlice) ||
+      /\*\*$/.test(beforeSlice);
 
     const isAllCapsOrMixed =
       /^[A-Z]{2,}[0-9]*$/.test(word) ||
       /[a-z][A-Z]/.test(word) ||
       /[A-Z].*\d|\d.*[A-Z]/.test(word);
 
-    if (isSentenceStart && !isAllCapsOrMixed && SENTENCE_INITIAL_STOPWORDS.has(word)) {
+    if (!isAllCapsOrMixed) {
+      if (SENTENCE_INITIAL_STOPWORDS.has(word)) continue;
+      if (isBoundaryStart) {
+        plainStartOnly.add(word);
+        continue;
+      }
+      const prevTokenMatch = beforeSlice.match(/([A-Za-z]+)$/);
+      const prevIsStopwordTitle = prevTokenMatch && SENTENCE_INITIAL_STOPWORDS.has(prevTokenMatch[1]);
+      // Mid-clause single-capital word: protect when preceded by lowercase word, CJK, comma, or non-stopword entity
+      if (!prevIsStopwordTitle && /(?:^|\s)[a-z][a-z0-9,)\-]*\s+$|[\u4e00-\u9fff,)]\s+$|[A-Z][A-Za-z0-9]+\s+$/.test(beforeRaw)) {
+        plainMidClause.add(word);
+        properNouns.push(word);
+      }
       continue;
     }
-    if (SENTENCE_INITIAL_STOPWORDS.has(word) && !isAllCapsOrMixed) {
-      continue;
-    }
+
     properNouns.push(word);
+  }
+
+  for (const w of plainStartOnly) {
+    if (plainMidClause.has(w)) {
+      properNouns.push(w);
+    }
   }
 
   return {
@@ -223,19 +329,30 @@ export function extractProtectedFacts(text) {
   };
 }
 
-function multisetMissing(expectedList, actualList) {
-  const counts = new Map();
-  for (const item of actualList) {
-    counts.set(item, (counts.get(item) || 0) + 1);
-  }
+function setMissing(expectedList, actualList) {
+  const actualSet = new Set(actualList);
   const missing = [];
   for (const req of expectedList) {
-    const c = counts.get(req) || 0;
-    if (c > 0) {
-      counts.set(req, c - 1);
-    } else {
+    if (!actualSet.has(req)) {
       missing.push(req);
     }
+  }
+  return Array.from(new Set(missing));
+}
+
+function missingProperNouns(origNouns, candNouns, candRaw) {
+  const candNormSet = new Set(candNouns.map(normalizeProperNounKey));
+  const candLower = candRaw.toLowerCase();
+  const missing = [];
+  for (const noun of origNouns) {
+    const norm = normalizeProperNounKey(noun);
+    if (candNouns.includes(noun) || candNormSet.has(norm) || candRaw.includes(noun)) {
+      continue;
+    }
+    if (noun === "RAM" && /\bmemory\b/.test(candLower)) {
+      continue;
+    }
+    missing.push(noun);
   }
   return Array.from(new Set(missing));
 }
@@ -248,17 +365,17 @@ function multisetMissing(expectedList, actualList) {
 export function verifyBaselineFacts(originalText, candidateText, { checkFabrication = false } = {}) {
   const orig = extractProtectedFacts(originalText);
   const cand = extractProtectedFacts(candidateText);
-  const origRaw = String(originalText || "");
-  const candRaw = String(candidateText || "");
+  const origRaw = stripMarkupForFacts(originalText);
+  const candRaw = stripMarkupForFacts(candidateText);
 
   const reasons = [];
 
-  const missingNums = multisetMissing(orig.numbers, cand.numbers);
+  const missingNums = setMissing(orig.numbers, cand.numbers);
   if (missingNums.length > 0) {
     reasons.push(`dropped number(s): ${missingNums.join(", ")}`);
   }
 
-  const missingUnits = multisetMissing(orig.units, cand.units);
+  const missingUnits = setMissing(orig.units, cand.units);
   if (missingUnits.length > 0) {
     reasons.push(`dropped unit/symbol(s): ${missingUnits.join(", ")}`);
   }
@@ -275,9 +392,7 @@ export function verifyBaselineFacts(originalText, candidateText, { checkFabricat
     reasons.push(`dropped inline code: ${missingCode.map((c) => `\`${c}\``).join(", ")}`);
   }
 
-  const missingNouns = orig.properNouns.filter(
-    (n) => !cand.properNouns.includes(n) && !candRaw.includes(n),
-  );
+  const missingNouns = missingProperNouns(orig.properNouns, cand.properNouns, candRaw);
   if (missingNouns.length > 0) {
     reasons.push(`dropped proper noun/entity: ${missingNouns.join(", ")}`);
   }
@@ -296,7 +411,7 @@ export function verifyBaselineFacts(originalText, candidateText, { checkFabricat
       reasons.push(`injected unverified inline code: ${fabricatedCode.map((c) => `\`${c}\``).join(", ")}`);
     }
 
-    const fabricatedNums = multisetMissing(cand.numbers, orig.numbers);
+    const fabricatedNums = setMissing(cand.numbers, orig.numbers);
     if (fabricatedNums.length > 0) {
       reasons.push(`fabricated number(s): ${fabricatedNums.join(", ")}`);
     }
@@ -424,6 +539,70 @@ export function verifyDocumentRevision(beforeText, afterText) {
   for (const rule of regressions) {
     if (rule.re.test(afterText) && !rule.beforeRe.test(beforeText)) {
       secondOrderSlopHits.push({ id: rule.id, message: rule.message });
+    }
+  }
+
+  // Metric direction reversal guard (`from A to B` -> `from B to A`, `\u4ece A \u964d\u81f3 B` -> `\u4ece B \u5347\u81f3 A`)
+  const normBefore = String(beforeText || "").replace(/,/g, "");
+  const normAfter = String(afterText || "").replace(/,/g, "");
+  const dirPairs = [];
+  const enDirRe = /\bfrom\s+(\d+(?:\.\d+)?)\s*(?:%|ms|s|sec|mins?|hrs?|hours?|kb|mb|gb|x)?(?![A-Za-z0-9_])\s+to\s+(\d+(?:\.\d+)?)\s*(?:%|ms|s|sec|mins?|hrs?|hours?|kb|mb|gb|x)?(?![A-Za-z0-9_])/gi;
+  let dm;
+  while ((dm = enDirRe.exec(normBefore)) !== null) {
+    if (dm[1] !== dm[2]) dirPairs.push({ fromVal: dm[1], toVal: dm[2], lang: "en" });
+  }
+  const zhDirRe = /\u4ece\s*(\d+(?:\.\d+)?)\s*(?:%|ms|s|\u6beb\u79d2|\u79d2|\u5206\u949f|\u5c0f\u65f6|\u500d)?[^\u3002\uff01\uff1f\n]{0,12}?(?:\u964d\u5230|\u964d\u81f3|\u5347\u5230|\u5347\u81f3|\u5230|\u81f3|\u53d8\u4e3a)\s*(\d+(?:\.\d+)?)/g;
+  while ((dm = zhDirRe.exec(normBefore)) !== null) {
+    if (dm[1] !== dm[2]) dirPairs.push({ fromVal: dm[1], toVal: dm[2], lang: "zh" });
+  }
+  for (const pair of dirPairs) {
+    const escA = pair.fromVal.replace(/\./g, "\\.");
+    const escB = pair.toVal.replace(/\./g, "\\.");
+    const revRe =
+      pair.lang === "en"
+        ? new RegExp(`\\bfrom\\s+${escB}[^.\\n]{0,20}?\\bto\\s+${escA}(?:\\s*(?:%|ms|s|sec|mins?|hrs?|hours?|kb|mb|gb|x))?(?![A-Za-z0-9_])`, "i")
+        : new RegExp(`\\u4ece\\s*${escB}[^\\u3002\\uff01\\uff1f\\n]{0,12}?(?:\\u964d\\u5230|\\u964d\\u81f3|\\u5347\\u5230|\\u5347\\u81f3|\\u5230|\\u81f3|\\u53d8\\u4e3a)\\s*${escA}`);
+    if (revRe.test(normAfter)) {
+      secondOrderSlopHits.push({
+        id: "metric-direction-reversed",
+        message: `Reversed metric direction from '${pair.fromVal} -> ${pair.toVal}' to '${pair.toVal} -> ${pair.fromVal}'.`,
+      });
+      break;
+    }
+  }
+
+  // Hard negation / prohibition polarity flip guard
+  const enNegClaim = String(beforeText || "").match(
+    /\b([A-Za-z][A-Za-z0-9_-]{2,24}(?:\s+[A-Za-z0-9_-]{2,20}){0,2})\s+(?:does not|do not|cannot|can't|must not|never)\s+([a-z]{3,20})\b/i,
+  );
+  if (enNegClaim) {
+    const subj = enNegClaim[1].replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const verb = enNegClaim[2].replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const flippedEn = new RegExp(`\\b${subj}\\s+${verb}s?\\b`, "i");
+    const hasNegInAfter = /\b(?:not|never|no|zero|without|cannot|can't|won't|don't|doesn't|mustn't)\b/i.test(
+      afterText,
+    );
+    if (flippedEn.test(afterText) && !hasNegInAfter) {
+      secondOrderSlopHits.push({
+        id: "polarity-negation-dropped",
+        message: `Dropped mandatory negation around '${enNegClaim[1]} ... ${enNegClaim[2]}'.`,
+      });
+    }
+  }
+
+  const zhProhibClaim = String(beforeText || "").match(
+    /(?:\u4e25\u7981|\u7981\u6b62|\u4e0d\u5f97|\u5207\u52ff|\u7edd\u4e0d|\u4e0d(?:\u4f1a|\u518d)?)([^\uff0c\u3002\uff1b\n]{0,12}?(?:\u4e0a\u4f20|\u5916\u53d1|\u8054\u7f51|\u5199\u5165|\u53d1\u9001|\u4fee\u6539|\u5220\u9664))/,
+  );
+  if (zhProhibClaim) {
+    const action = zhProhibClaim[1].slice(-2);
+    const hasZhNegAfter = /(?:\u4e25\u7981|\u7981\u6b62|\u4e0d\u5f97|\u5207\u52ff|\u7edd\u4e0d|\u4e0d|\u672a|\u96f6|\u65e0)/.test(
+      afterText,
+    );
+    if (action && afterText.includes(action) && !hasZhNegAfter) {
+      secondOrderSlopHits.push({
+        id: "polarity-prohibition-dropped",
+        message: "Dropped mandatory Chinese prohibition/negation marker from revised claim.",
+      });
     }
   }
 

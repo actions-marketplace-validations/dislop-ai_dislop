@@ -25,9 +25,24 @@
   },
   "scripts": {
     "test": "node --test tests/*.test.mjs",
-    "dogfood": "node ./bin/dislop.mjs check README.md README.zh-CN.md CONTRIBUTING.md --no-llm"
+    "check:security": "node ./scripts/verify-packs-security.mjs",
+    "bench": "node ./scripts/run-benchmark.mjs",
+    "bench:assert": "node ./scripts/run-benchmark.mjs --assert",
+    "dogfood": "node ./bin/dislop.mjs check README.md README.zh-CN.md CONTRIBUTING.md PRODUCT.md AGENTS.md SECURITY.md docs/architecture.md docs/MIGRATION-TODO.md benchmarks/README.md benchmarks/REPORT.md skills/ --no-llm"
   },
   "files": [
+    ".agents/plugins/marketplace.json",
+    ".claude-plugin/",
+    ".codex-plugin/",
+    ".cursor-plugin/",
+    ".mcp.json",
+    ".pre-commit-hooks.yaml",
+    "action.yml",
+    "gemini-extension.json",
+    "mcp.json",
+    "plugin.json",
+    "server.json",
+    "llms-install.md",
     "bin/",
     "src/",
     "packs/",
@@ -38,6 +53,7 @@
     "PRODUCT.md",
     "LICENSE"
   ],
+  "mcpName": "io.github.dislop-ai/dislop",
   "keywords": [
     "anti-slop",
     "de-slop",

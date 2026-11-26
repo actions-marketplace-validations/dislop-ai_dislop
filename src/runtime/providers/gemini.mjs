@@ -62,6 +62,7 @@ export async function invokeGeminiProvider({
     const json = await res.json();
     const parts = json?.candidates?.[0]?.content?.parts || [];
     const content = parts
+      .filter((p) => !p?.thought)
       .map((p) => p.text || "")
       .join("\n")
       .trim();

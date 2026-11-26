@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
@@ -16,6 +17,8 @@ import {
 } from "../src/kernel/pack-loader.mjs";
 import { runDocumentPipeline } from "../src/kernel/pipeline.mjs";
 import { collectPackPromptRules } from "../src/kernel/prompt-assembler.mjs";
+import { invokeGeminiProvider } from "../src/runtime/providers/gemini.mjs";
+import { runVerifyCommand } from "../src/commands/verify.mjs";
 import { definePack, definePackScripts } from "dislop/sdk";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -289,5 +292,68 @@ test("Strict single-language separation across all pack.json, scripts/*.mjs, and
       false,
       `Pack prompt '${id}/prompts/rules.md' must only describe triggers & fix suggestions without kernel schema keys`,
     );
+  }
+});
+
+test("Custom URI schemes, .html/.md fallback, Gemini thought filtering, and verify --git on binary OOXML", async () => {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "dislop-uri-git-"));
+  try {
+    fs.writeFileSync(path.join(tmpDir, "guide.html"), "<html><body>Guide</body></html>", "utf8");
+    const mdPath = path.join(tmpDir, "notes.md");
+    fs.writeFileSync(
+      mdPath,
+      "Open [vault note](obsidian://vault/note) or [editor](vscode://file/app) and [guide](guide).\n",
+      "utf8",
+    );
+    const cfg = await resolveLayeredConfig({ cwd: tmpDir, env: {}, cliFlags: { noLlm: true } });
+    const res = await runDocumentPipeline({ filePath: mdPath, config: cfg, route: null, cwd: tmpDir });
+    assert.equal(res.items.length, 0);
+
+    // Gemini provider skips `thought: true` reasoning parts
+    const gemOut = await invokeGeminiProvider({
+      provider: { name: "gemini", apiKey: "mock-key", model: "gemini-2.5-flash" },
+      payload: { systemPrompt: "sys", userPrompt: "usr", jsonSchema: { type: "object" } },
+      fetchImpl: async () =>
+        new Response(
+          JSON.stringify({
+            candidates: [
+              {
+                content: {
+                  parts: [
+                    { thought: true, text: "Internal reasoning draft should not appear." },
+                    { text: JSON.stringify({ documentToneAnchor: "Note", items: [] }) },
+                  ],
+                },
+              },
+            ],
+          }),
+          { status: 200, headers: { "content-type": "application/json" } },
+        ),
+    });
+    assert.deepEqual(gemOut, { documentToneAnchor: "Note", items: [] });
+
+    // `dislop verify --git HEAD <docx>` extracts comparable text from Git binary blobs
+    execFileSync("git", ["init"], { cwd: tmpDir, stdio: "ignore" });
+    execFileSync("git", ["config", "user.email", "test@example.com"], { cwd: tmpDir, stdio: "ignore" });
+    execFileSync("git", ["config", "user.name", "Tester"], { cwd: tmpDir, stdio: "ignore" });
+    const docxPath = path.join(tmpDir, "spec.docx");
+    const mkDocx = (bodyText) =>
+      buildZipArchive({
+        "word/document.xml": `<?xml version="1.0" encoding="UTF-8"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body><w:p><w:r><w:t>${bodyText}</w:t></w:r></a:p></w:body></w:document>`.replace("</a:p>", "</w:p>"),
+      });
+    fs.writeFileSync(docxPath, mkDocx("Gateway supports 8000 QPS with 18ms p95 latency."));
+    execFileSync("git", ["add", "spec.docx"], { cwd: tmpDir, stdio: "ignore" });
+    execFileSync("git", ["commit", "-m", "init"], { cwd: tmpDir, stdio: "ignore" });
+
+    // Modify working tree DOCX dropping 18ms -> verify --git must exit 1
+    fs.writeFileSync(docxPath, mkDocx("Gateway supports 8000 QPS."));
+    const code = await runVerifyCommand(
+      ["spec.docx"],
+      { git: "HEAD", json: true },
+      { cwd: tmpDir, stdout: { write() {} } },
+    );
+    assert.equal(code, 1);
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
   }
 });

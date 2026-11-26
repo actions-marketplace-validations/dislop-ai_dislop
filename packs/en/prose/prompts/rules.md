@@ -11,6 +11,10 @@ rules:
     priority: moderate
   - id: rhetorical-self-qa
     priority: hint
+  - id: stealth-vapor
+    priority: moderate
+  - id: cooccurrence-hype-cluster
+    priority: moderate
 ---
 
 1. **unprompted-negation**: Fires on 'Not X, but Y' or 'This isn't about X — it's about Y' contrast shells when X was never claimed, expected, or implied in preceding context. Do not flag genuine corrections of a prior misconception established earlier in the text. Fix suggestion: drop the theatrical negation and state Y directly using existing facts.
@@ -18,3 +22,5 @@ rules:
 3. **throat-clearing**: Fires on meta-announcements ('In this section, we will explore...', 'It is worth noting that...') when the heading or clause already establishes scope. Fix suggestion: strip the meta-announcement prefix and keep the core statement.
 4. **moralizing-closer**: Fires on preachy or promotional closing sentences ('Ultimately, this journey underscores...', 'Looking ahead, the future is bright...') that add no concrete conclusion or next step. Fix suggestion: remove the closing slogan or end on the last substantive point.
 5. **rhetorical-self-qa**: Fires on mechanical assistant self-Q&A transitions ('Why does this matter? Because...'). Do not flag genuine open research questions in specs or essays. Fix suggestion: merge the artificial question-and-answer pair into a single direct statement.
+6. **stealth-vapor**: Fires on whole paragraphs of smooth, cliché-free prose that contain zero concrete nouns, numbers, files, commands, mechanisms, or verifiable actors (e.g., generic advice about 'clear communication across cross-functional workflows'). Do not flag concrete technical explanations, personal narrative scenes, or deliberate authorial humor. Fix suggestion: ask the author to replace the paragraph with one concrete mechanism, constraint, or example, or cut it.
+7. **cooccurrence-hype-cluster**: Fires when a single sentence or paragraph chains 3 or more generic AI hype verbs/nouns ('leverage', 'streamline', 'seamlessly', 'elevate', 'harness', 'scalable telemetry', 'unlock potential') without naming a specific change or threshold. Do not flag grounded sentences mentioning a single technical verb. Fix suggestion: rewrite around the concrete input, mechanism, and measured effect.

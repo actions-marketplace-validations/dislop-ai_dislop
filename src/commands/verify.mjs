@@ -1,8 +1,10 @@
 import { execFileSync } from "node:child_process";
+import crypto from "node:crypto";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { DislopConfigError } from "../kernel/config.mjs";
-import { parseDocumentFile } from "../kernel/document-model.mjs";
+import { detectFormatFromPath, parseDocumentFile, parseDocumentText } from "../kernel/document-model.mjs";
 import { verifyDocumentRevision } from "../kernel/fact-gate.mjs";
 
 function extractComparableText(filePath) {
@@ -11,6 +13,30 @@ function extractComparableText(filePath) {
     return doc.segments.map((s) => s.text).join("\n");
   }
   return fs.readFileSync(filePath, "utf8");
+}
+
+function extractComparableTextFromBuffer(buf, targetPath) {
+  const fmt = detectFormatFromPath(targetPath);
+  if (fmt === "docx" || fmt === "pptx" || fmt === "pdf") {
+    const tmpFile = path.join(
+      os.tmpdir(),
+      `dislop-verify-${process.pid}-${crypto.randomBytes(4).toString("hex")}.${fmt}`,
+    );
+    fs.writeFileSync(tmpFile, buf);
+    try {
+      return extractComparableText(tmpFile);
+    } finally {
+      if (fs.existsSync(tmpFile)) fs.unlinkSync(tmpFile);
+    }
+  }
+  const text = buf.toString("utf8");
+  if (fmt) {
+    const doc = parseDocumentText(text, targetPath, fmt);
+    if (doc.segments.length > 0) {
+      return doc.segments.map((s) => s.text).join("\n");
+    }
+  }
+  return text;
 }
 
 /**
@@ -32,10 +58,11 @@ export async function runVerifyCommand(positionals, flags, io = {}) {
         "Usage: dislop verify --git [ref] <file> (missing target file)",
       );
     }
-    const absTarget = path.resolve(cwd, targetArg);
-    if (!fs.existsSync(absTarget)) {
+    const resolvedTarget = path.resolve(cwd, targetArg);
+    if (!fs.existsSync(resolvedTarget)) {
       throw new DislopConfigError(`Target file not found: '${targetArg}'`);
     }
+    const absTarget = fs.realpathSync(resolvedTarget);
 
     let repoRoot;
     try {
@@ -48,17 +75,19 @@ export async function runVerifyCommand(positionals, flags, io = {}) {
     }
 
     const relGitPath = path.relative(repoRoot, absTarget).replace(/\\/g, "/");
+    let beforeBuf;
     try {
-      beforeText = execFileSync("git", ["show", `${gitRef}:${relGitPath}`], {
+      beforeBuf = execFileSync("git", ["show", `${gitRef}:${relGitPath}`], {
         cwd: repoRoot,
-        encoding: "utf8",
+        maxBuffer: 32 * 1024 * 1024,
       });
     } catch (err) {
       throw new DislopConfigError(
         `Could not read '${relGitPath}' at git ref '${gitRef}': ${err.message}`,
       );
     }
-    afterText = fs.readFileSync(absTarget, "utf8");
+    beforeText = extractComparableTextFromBuffer(beforeBuf, absTarget);
+    afterText = extractComparableText(absTarget);
     label = `${gitRef}:${relGitPath} -> ${targetArg}`;
   } else {
     if (positionals.length < 2) {

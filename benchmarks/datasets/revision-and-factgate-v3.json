@@ -1,0 +1,419 @@
+{
+  "schema": "dislop.bench-revision-factgate/3",
+  "version": "1.0.0",
+  "license": "CC0-1.0",
+  "description": "18 end-to-end multi-modal revision tasks + 8 adversarial Fact Gate pairs + 4 fix --auto lossless round-trip tasks.",
+  "revisionTasks": [
+    {
+      "id": "rev-zh-01-launch-note",
+      "domain": "zh-brief",
+      "lang": "zh",
+      "modality": "markdown",
+      "pack": "business-brief",
+      "filename": "launch-note.md",
+      "source": "好的，以下是修改后的上线说明。值得注意的是，本次改造以队列分级为重要抓手，全面赋能一线运维团队，故障恢复时间最多 45 秒。",
+      "arms": {
+        "raw_ai": "好的，以下是修改后的上线说明。值得注意的是，本次改造以队列分级为重要抓手，全面赋能一线运维团队，故障恢复时间最多 45 秒。",
+        "naive_humanizer": "队列分级已经落地，故障恢复时间稳定在 30 秒。这不是一次简单的升级，而是一场效率革命。",
+        "dislop_clean": "这次改造给队列分了级，一线运维团队的故障恢复时间最多 45 秒。"
+      }
+    },
+    {
+      "id": "rev-zh-02-homepage-pitch",
+      "domain": "zh-brief",
+      "lang": "zh",
+      "modality": "markdown",
+      "pack": "business-brief",
+      "filename": "hero-copy.md",
+      "source": "把稿子、PPT 或网页贴进来。不能发的硬伤，dislop 直接划掉；听着像套话的地方，它在页边问你一句；等你改完，再拿原稿逐条对一遍。它不替你改稿，笔一直在你手里。",
+      "arms": {
+        "raw_ai": "把稿子、PPT 或网页贴进来。不能发的硬伤，dislop 直接划掉；听着像套话的地方，它在页边问你一句；等你改完，再拿原稿逐条对一遍。它不替你改稿，笔一直在你手里。",
+        "naive_humanizer": "把文档、PPT 或网页贴进来。硬伤当场标出；套话给出提醒；改完再来复查。这才是好工具真正的温度，笔一直在你手里。",
+        "dislop_clean": "AI 写完的文档、Word、PPT 和网页，经常留着开头寒暄、空话套话、满页字墙或默认紫粉模板。你可以把稿子贴进来直接测，也可以装给 Agent 自动过一遍。"
+      }
+    },
+    {
+      "id": "rev-zh-03-tech-spec",
+      "domain": "zh-brief",
+      "lang": "zh",
+      "modality": "markdown",
+      "pack": "business-brief",
+      "filename": "gateway-spec.md",
+      "source": "新版网关具备精准高效、安全可靠、灵活易用的特性，单节点支持 8000 QPS。数据显示，绝大多数团队在发稿前都不会检查套话。",
+      "arms": {
+        "raw_ai": "新版网关具备精准高效、安全可靠、灵活易用的特性，单节点支持 8000 QPS。数据显示，绝大多数团队在发稿前都不会检查套话。",
+        "naive_humanizer": "新版网关单节点支持 10000 QPS。这不是一次普通迭代，而是系统架构的质变。",
+        "dislop_clean": "新版网关单节点支持 8000 QPS。发稿前建议把套话和占位符都过一遍，没有实测来源的比例数字不要直接写进方案。"
+      }
+    },
+    {
+      "id": "rev-zh-04-essay-ending",
+      "domain": "zh-essay",
+      "lang": "zh",
+      "modality": "markdown",
+      "pack": "literary-essay",
+      "filename": "watchmaker.md",
+      "source": "冬至那天下了初雪,院子里的腊梅开了 3 朵;傍晚 18:30，修表匠把拆下的 3 枚铜齿轮泡进煤油皿里，关掉台灯。这或许就是慢工出细活在喧嚣时代真正的意义所在。",
+      "arms": {
+        "raw_ai": "冬至那天下了初雪,院子里的腊梅开了 3 朵;傍晚 18:30，修表匠把拆下的 3 枚铜齿轮泡进煤油皿里，关掉台灯。这或许就是慢工出细活在喧嚣时代真正的意义所在。",
+        "naive_humanizer": "冬至那天下了初雪，院子里的腊梅开了 3 朵；傍晚 18:30，修表匠收好 3 枚铜齿轮。修表不是手艺，而是时间本身。",
+        "dislop_clean": "冬至那天下了初雪，院子里的腊梅开了 3 朵；傍晚 18:30，修表匠把拆下的 3 枚铜齿轮泡进煤油皿里，关掉台灯。"
+      }
+    },
+    {
+      "id": "rev-en-01-release-note",
+      "domain": "en-brief",
+      "lang": "en",
+      "modality": "markdown",
+      "pack": "business-brief",
+      "filename": "export-release.md",
+      "source": "Certainly! Here is the launch note. It's worth noting that CSV exports are a game-changer, finishing in up to 12 minutes for workspaces above 500,000 rows.",
+      "arms": {
+        "raw_ai": "Certainly! Here is the launch note. It's worth noting that CSV exports are a game-changer, finishing in up to 12 minutes for workspaces above 500,000 rows.",
+        "naive_humanizer": "CSV exports finish in 5 minutes for workspaces above 500,000 rows. This isn't just an upgrade — it's a new standard.",
+        "dislop_clean": "CSV exports finish in up to 12 minutes for workspaces above 500,000 rows."
+      }
+    },
+    {
+      "id": "rev-en-02-homepage-pitch",
+      "domain": "en-brief",
+      "lang": "en",
+      "modality": "markdown",
+      "pack": "business-brief",
+      "filename": "readme-intro.md",
+      "source": "Drop in a draft, deck, or page. Hard defects get crossed out; cliché lines get a margin query; once you edit, we check every file again. It never rewrites for you — the pen stays in your hand.",
+      "arms": {
+        "raw_ai": "Drop in a draft, deck, or page. Hard defects get crossed out; cliché lines get a margin query; once you edit, we check every file again. It never rewrites for you — the pen stays in your hand.",
+        "naive_humanizer": "Paste any doc, deck, or page. Bugs vanish; fluff disappears; quality ships. Ultimately, the pen stays in your hand.",
+        "dislop_clean": "Paste a doc, slide deck, or web page to flag chat replies and stock phrasing offline. It also catches crowded slides and generic AI templates."
+      }
+    },
+    {
+      "id": "rev-en-03-rfc-summary",
+      "domain": "en-brief",
+      "lang": "en",
+      "modality": "markdown",
+      "pack": "business-brief",
+      "filename": "indexing-rfc.md",
+      "source": "Studies show batch indexing unlocks the full potential of 40-million-row archives, cutting queries from 19 seconds to 1.4 seconds.\n\n- **Speed**: Queries finish fast.\n- **Scale**: Handles 40 million rows.\n- **Safety**: Zero data loss.\n- **Cost**: Uses less RAM.",
+      "arms": {
+        "raw_ai": "Studies show batch indexing unlocks the full potential of 40-million-row archives, cutting queries from 19 seconds to 1.4 seconds.\n\n- **Speed**: Queries finish fast.\n- **Scale**: Handles 40 million rows.\n- **Safety**: Zero data loss.\n- **Cost**: Uses less RAM.",
+        "naive_humanizer": "Batch indexing cuts 40-million-row queries from 19 seconds to 1.4 seconds. Queries fly. Memory shrinks. Teams ship.",
+        "dislop_clean": "Batch indexing cuts 40-million-row archive queries from 19 seconds to 1.4 seconds while keeping memory flat and preserving existing shards."
+      }
+    },
+    {
+      "id": "rev-en-04-narrative-essay",
+      "domain": "en-essay",
+      "lang": "en",
+      "modality": "markdown",
+      "pack": "literary-essay",
+      "filename": "ferry-essay.md",
+      "source": "The station clock — brass-rimmed — stopped at 4:10 — right before the rain — leaving the platform quiet — and empty. Ultimately, this reminds us that waiting changes everyone.",
+      "arms": {
+        "raw_ai": "The station clock — brass-rimmed — stopped at 4:10 — right before the rain — leaving the platform quiet — and empty. Ultimately, this reminds us that waiting changes everyone.",
+        "naive_humanizer": "The brass-rimmed station clock stopped at 4:10 right before the rain. It wasn't just a delay — it was a quiet lesson in stillness.",
+        "dislop_clean": "The brass-rimmed station clock stopped at 4:10 right before the rain, leaving the platform quiet and empty."
+      }
+    },
+    {
+      "id": "rev-ui-01-zh-landing-card",
+      "domain": "web-ui",
+      "lang": "zh",
+      "modality": "html",
+      "pack": "deck-and-ui",
+      "filename": "landing-card.html",
+      "source": "<div class=\"bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent\">\n  <span class=\"badge\">AI 强力驱动</span>\n  <h2>1.2 秒查完 48 份演示文稿</h2>\n  <a href=\"#\">下载完整报告</a>\n</div>",
+      "arms": {
+        "raw_ai": "<div class=\"bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent\">\n  <span class=\"badge\">AI 强力驱动</span>\n  <h2>1.2 秒查完 48 份演示文稿</h2>\n  <a href=\"#\">下载完整报告</a>\n</div>",
+        "naive_humanizer": "<div class=\"backdrop-blur-md bg-white/30 border-l-4 border-purple-500 p-4\">\n  <span class=\"badge\">零幻觉保证</span>\n  <h2>1.2 秒查完 48 份演示文稿</h2>\n  <a href=\"./report.html\">下载完整报告</a>\n</div>",
+        "dislop_clean": "<section class=\"surface-card\">\n  <h2>1.2 秒查完 48 份演示文稿</h2>\n  <a href=\"./report.html\">下载完整报告</a>\n</section>"
+      }
+    },
+    {
+      "id": "rev-ui-02-en-metrics-card",
+      "domain": "web-ui",
+      "lang": "en",
+      "modality": "html",
+      "pack": "deck-and-ui",
+      "filename": "metrics-card.html",
+      "source": "<div class=\"border rounded-xl p-6\"><div class=\"border rounded-lg p-4\"><div class=\"border rounded p-3\">\n  <span class=\"eyebrow\">AI-Powered · Zero Hallucination</span>\n  <h3>p95 latency: 18 ms</h3>\n  <a href=\"#\">Open benchmark</a>\n</div></div></div>",
+      "arms": {
+        "raw_ai": "<div class=\"border rounded-xl p-6\"><div class=\"border rounded-lg p-4\"><div class=\"border rounded p-3\">\n  <span class=\"eyebrow\">AI-Powered · Zero Hallucination</span>\n  <h3>p95 latency: 18 ms</h3>\n  <a href=\"#\">Open benchmark</a>\n</div></div></div>",
+        "naive_humanizer": "<div class=\"backdrop-blur-lg bg-slate-900/60 border-l-4 border-indigo-500 p-4\">\n  <span class=\"rounded-full\">Fast</span><span class=\"rounded-full\">Safe</span><span class=\"rounded-full\">Pro</span><span class=\"rounded-full\">v3</span><span class=\"rounded-full\">Local</span><span class=\"rounded-full\">Zero-Dep</span><span class=\"rounded-full\">Open</span>\n  <h3>p95 latency: 18 ms</h3>\n  <a href=\"./benchmark.html\">Open benchmark</a>\n</div>",
+        "dislop_clean": "<section class=\"metric-row\">\n  <h3>p95 latency: 18 ms</h3>\n  <a href=\"./benchmark.html\">Open benchmark</a>\n</section>"
+      }
+    },
+    {
+      "id": "rev-pptx-01-zh-slide",
+      "domain": "pptx-deck",
+      "lang": "zh",
+      "modality": "pptx",
+      "pack": "deck-and-ui",
+      "filename": "zh-checkout.pptx",
+      "source": {
+        "ppt/presentation.xml": "<p:presentation><p:sldIdLst><p:sldId id=\"256\" r:id=\"rId1\"/></p:sldIdLst></p:presentation>",
+        "ppt/_rels/presentation.xml.rels": "<Relationships><Relationship Id=\"rId1\" Target=\"slides/slide1.xml\"/></Relationships>",
+        "ppt/slides/slide1.xml": "<p:sld><p:cSld><p:spTree><p:sp><p:nvSpPr><p:nvPr><p:ph type=\"title\"/></p:nvPr></p:nvSpPr><p:txBody><a:p><a:r><a:t>项目背景</a:t></a:r></a:p></p:txBody></p:sp><p:sp><p:txBody><a:bodyPr><a:normAutofit fontScale=\"65000\"/></a:bodyPr><a:p><a:r><a:t>**核心问题**：上个月我们在移动端结算页发现第 3 步地址表单校验阻塞提交长达 4.2 秒，导致 38% 购物车流失。为了全面赋能增长团队，我们计划本周五把地址校验改为异步执行，并同步拆分 7 条并列监控项，把后续流失压回 15% 以下。</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>"
+      },
+      "arms": {
+        "raw_ai": {
+          "ppt/presentation.xml": "<p:presentation><p:sldIdLst><p:sldId id=\"256\" r:id=\"rId1\"/></p:sldIdLst></p:presentation>",
+          "ppt/_rels/presentation.xml.rels": "<Relationships><Relationship Id=\"rId1\" Target=\"slides/slide1.xml\"/></Relationships>",
+          "ppt/slides/slide1.xml": "<p:sld><p:cSld><p:spTree><p:sp><p:nvSpPr><p:nvPr><p:ph type=\"title\"/></p:nvPr></p:nvSpPr><p:txBody><a:p><a:r><a:t>项目背景</a:t></a:r></a:p></p:txBody></p:sp><p:sp><p:txBody><a:bodyPr><a:normAutofit fontScale=\"65000\"/></a:bodyPr><a:p><a:r><a:t>**核心问题**：上个月我们在移动端结算页发现第 3 步地址表单校验阻塞提交长达 4.2 秒，导致 38% 购物车流失。为了全面赋能增长团队，我们计划本周五把地址校验改为异步执行，并同步拆分 7 条并列监控项，把后续流失压回 15% 以下。</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>"
+        },
+        "naive_humanizer": {
+          "ppt/presentation.xml": "<p:presentation><p:sldIdLst><p:sldId id=\"256\" r:id=\"rId1\"/></p:sldIdLst></p:presentation>",
+          "ppt/_rels/presentation.xml.rels": "<Relationships><Relationship Id=\"rId1\" Target=\"slides/slide1.xml\"/></Relationships>",
+          "ppt/slides/slide1.xml": "<p:sld><p:cSld><p:spTree><p:sp><p:nvSpPr><p:nvPr><p:ph type=\"title\"/></p:nvPr></p:nvSpPr><p:txBody><a:p><a:r><a:t>概述</a:t></a:r></a:p></p:txBody></p:sp><p:sp><p:txBody><a:bodyPr><a:normAutofit fontScale=\"70000\"/></a:bodyPr><a:p><a:r><a:t>这不是一次普通表单改动，而是结算体验的跃迁：地址校验 4.2 秒导致 38% 流失，周五改异步，目标压到 15% 以下。</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>"
+        },
+        "dislop_clean": {
+          "ppt/presentation.xml": "<p:presentation><p:sldIdLst><p:sldId id=\"256\" r:id=\"rId1\"/></p:sldIdLst></p:presentation>",
+          "ppt/_rels/presentation.xml.rels": "<Relationships><Relationship Id=\"rId1\" Target=\"slides/slide1.xml\"/></Relationships>",
+          "ppt/slides/slide1.xml": "<p:sld><p:cSld><p:spTree><p:sp><p:nvSpPr><p:nvPr><p:ph type=\"title\"/></p:nvPr></p:nvSpPr><p:txBody><a:p><a:r><a:t>结算页第 3 步造成 38% 购物车流失</a:t></a:r></a:p></p:txBody></p:sp><p:sp><p:txBody><a:p><a:buChar char=\"•\"/><a:r><a:t>地址校验阻塞提交 4.2 秒</a:t></a:r></a:p><a:p><a:buChar char=\"•\"/><a:r><a:t>本周五改为异步校验</a:t></a:r></a:p><a:p><a:buChar char=\"•\"/><a:r><a:t>目标流失降到 15% 以下（7 项监控）</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>"
+        }
+      }
+    },
+    {
+      "id": "rev-pptx-02-en-slide",
+      "domain": "pptx-deck",
+      "lang": "en",
+      "modality": "pptx",
+      "pack": "deck-and-ui",
+      "filename": "en-checkout.pptx",
+      "source": {
+        "ppt/presentation.xml": "<p:presentation><p:sldIdLst><p:sldId id=\"256\" r:id=\"rId1\"/></p:sldIdLst></p:presentation>",
+        "ppt/_rels/presentation.xml.rels": "<Relationships><Relationship Id=\"rId1\" Target=\"slides/slide1.xml\"/></Relationships>",
+        "ppt/slides/slide1.xml": "<p:sld><p:cSld><p:spTree><p:sp><p:nvSpPr><p:nvPr><p:ph type=\"title\"/></p:nvPr></p:nvSpPr><p:txBody><a:p><a:r><a:t>Overview</a:t></a:r></a:p></p:txBody></p:sp><p:sp><p:txBody><a:bodyPr><a:normAutofit fontScale=\"62500\"/></a:bodyPr><a:p><a:r><a:t>**Summary**: Address lookup blocks mobile checkout step 3 for 4.2s, dropping 38% of carts. Moving validation async on Friday targets drop-off below 15%.</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>"
+      },
+      "arms": {
+        "raw_ai": {
+          "ppt/presentation.xml": "<p:presentation><p:sldIdLst><p:sldId id=\"256\" r:id=\"rId1\"/></p:sldIdLst></p:presentation>",
+          "ppt/_rels/presentation.xml.rels": "<Relationships><Relationship Id=\"rId1\" Target=\"slides/slide1.xml\"/></Relationships>",
+          "ppt/slides/slide1.xml": "<p:sld><p:cSld><p:spTree><p:sp><p:nvSpPr><p:nvPr><p:ph type=\"title\"/></p:nvPr></p:nvSpPr><p:txBody><a:p><a:r><a:t>Overview</a:t></a:r></a:p></p:txBody></p:sp><p:sp><p:txBody><a:bodyPr><a:normAutofit fontScale=\"62500\"/></a:bodyPr><a:p><a:r><a:t>**Summary**: Address lookup blocks mobile checkout step 3 for 4.2s, dropping 38% of carts. Moving validation async on Friday targets drop-off below 15%.</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>"
+        },
+        "naive_humanizer": {
+          "ppt/presentation.xml": "<p:presentation><p:sldIdLst><p:sldId id=\"256\" r:id=\"rId1\"/></p:sldIdLst></p:presentation>",
+          "ppt/_rels/presentation.xml.rels": "<Relationships><Relationship Id=\"rId1\" Target=\"slides/slide1.xml\"/></Relationships>",
+          "ppt/slides/slide1.xml": "<p:sld><p:cSld><p:spTree><p:sp><p:nvSpPr><p:nvPr><p:ph type=\"title\"/></p:nvPr></p:nvSpPr><p:txBody><a:p><a:r><a:t>Background</a:t></a:r></a:p></p:txBody></p:sp><p:sp><p:txBody><a:p><a:r><a:t>This isn't just a form tweak — it's a game-changer. Step 3 drops 38% of carts because lookup takes 4.2s; async validation targets below 15%.</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>"
+        },
+        "dislop_clean": {
+          "ppt/presentation.xml": "<p:presentation><p:sldIdLst><p:sldId id=\"256\" r:id=\"rId1\"/></p:sldIdLst></p:presentation>",
+          "ppt/_rels/presentation.xml.rels": "<Relationships><Relationship Id=\"rId1\" Target=\"slides/slide1.xml\"/></Relationships>",
+          "ppt/slides/slide1.xml": "<p:sld><p:cSld><p:spTree><p:sp><p:nvSpPr><p:nvPr><p:ph type=\"title\"/></p:nvPr></p:nvSpPr><p:txBody><a:p><a:r><a:t>Checkout step 3 drops 38% of mobile carts</a:t></a:r></a:p></p:txBody></p:sp><p:sp><p:txBody><a:p><a:buChar char=\"•\"/><a:r><a:t>Address lookup blocks submit for 4.2s</a:t></a:r></a:p><a:p><a:buChar char=\"•\"/><a:r><a:t>Move validation async on Friday</a:t></a:r></a:p><a:p><a:buChar char=\"•\"/><a:r><a:t>Target drop-off below 15%</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>"
+        }
+      }
+    },
+    {
+      "id": "rev2-zh-01-saas-launch",
+      "domain": "zh-brief",
+      "lang": "zh",
+      "modality": "markdown",
+      "pack": "business-brief",
+      "filename": "sync-v3.md",
+      "source": "随着远程协作的不断深入，团队对文档同步的稳定性提出了更高要求。为什么许多团队用了多款协同工具，项目推进依然缓慢？因为跨端同步延迟打断了日常工作节奏。\n\n在传输效率方面，v3.2 版本有效推动增量同步落地，将 20MB 设计稿的同步耗时从 14 秒压至 2.3 秒，显著提升协同体验。在离线编辑方面，客户端持续优化本地冲突合并机制，支持离线缓存 500 次修改。在权限管控方面，系统进一步助力管理员按部门配置 3 级只读权限。\n\n展望未来，我们将继续围绕真实办公场景打磨产品，携手团队迈向更加高效顺畅的协作新阶段。",
+      "arms": {
+        "raw_ai": "随着远程协作的不断深入，团队对文档同步的稳定性提出了更高要求。为什么许多团队用了多款协同工具，项目推进依然缓慢？因为跨端同步延迟打断了日常工作节奏。\n\n在传输效率方面，v3.2 版本有效推动增量同步落地，将 20MB 设计稿的同步耗时从 14 秒压至 2.3 秒，显著提升协同体验。在离线编辑方面，客户端持续优化本地冲突合并机制，支持离线缓存 500 次修改。在权限管控方面，系统进一步助力管理员按部门配置 3 级只读权限。\n\n展望未来，我们将继续围绕真实办公场景打磨产品，携手团队迈向更加高效顺畅的协作新阶段。",
+        "naive_humanizer": "远程协作离不开快同步。v3.2 上线了：同步快了；离线稳了；权限细了。这不是一次小更新，而是跨端体验的新起点，20MB 文件只要 2.3 秒，支持离线 500 次修改和 3 级权限。笔一直在你手里。",
+        "dislop_clean": "v3.2 改用增量同步后，20MB 设计稿的跨端同步时间从 14 秒降到 2.3 秒。\n\n断网时客户端最多缓存 500 次本地修改，恢复联网后自动合并本地冲突。管理员现在也可以按部门配置 3 级只读权限，避免外部协作者误改原稿。"
+      }
+    },
+    {
+      "id": "rev2-zh-02-infra-memo",
+      "domain": "zh-brief",
+      "lang": "zh",
+      "modality": "markdown",
+      "pack": "business-brief",
+      "filename": "db-migration.md",
+      "source": "首先，我们需要梳理现有订单库的查询热点，定位高并发下的主要瓶颈。其次，我们需要推进分库分表方案落地，把 1.2 亿条历史订单拆到 8 个物理分片中。再次，我们需要完善双写校验链路，确保迁移窗口内 99.995% 以上的数据一致性。最后，我们需要定期复盘切换耗时，持续优化整体架构稳定性。总而言之，这次迁移将把核心查询 P99 延迟从 380ms 降到 65ms，为全年大促打下坚实基础。",
+      "arms": {
+        "raw_ai": "首先，我们需要梳理现有订单库的查询热点，定位高并发下的主要瓶颈。其次，我们需要推进分库分表方案落地，把 1.2 亿条历史订单拆到 8 个物理分片中。再次，我们需要完善双写校验链路，确保迁移窗口内 99.995% 以上的数据一致性。最后，我们需要定期复盘切换耗时，持续优化整体架构稳定性。总而言之，这次迁移将把核心查询 P99 延迟从 380ms 降到 65ms，为全年大促打下坚实基础。",
+        "naive_humanizer": "订单库马上切分片！热点查清；分片落地；校验到位。1.2 亿订单拆 8 个分片，延迟降到 50ms，一致性拉满。",
+        "dislop_clean": "订单库迁移分三步走：先按用户尾号把 1.2 亿条历史订单拆进 8 个物理分片，再开双写比对任务，要求迁移窗口内一致率不低于 99.995%。\n\n压测结果显示，切完分片后核心查询 P99 延迟会从 380ms 降到 65ms。正式切流前我们会先在备库完整演练一次耗时。"
+      }
+    },
+    {
+      "id": "rev2-zh-03-essay-bookshop",
+      "domain": "zh-essay",
+      "lang": "zh",
+      "modality": "markdown",
+      "pack": "literary-essay",
+      "filename": "old-ferry.md",
+      "source": "在快节奏的现代生活中，轮渡渐渐淡出了大多数人的日常视野。为什么江边老码头总能勾起人们的怀旧情绪？因为慢下来的十五分钟给了城市难得的留白。\n\n清晨 6:20 的汽笛准时响起；铁质跳板压在水泥坡道上咔哒作响；卖早点的摊位冒出细密白烟。诚然，跨江大桥早已把过江时间缩到了 3 分钟。然而，老轮渡依然承载着一代人的集体记忆。或许，真正值得珍惜的从来不是速度本身，而是人与江水共处的片刻宁静。",
+      "arms": {
+        "raw_ai": "在快节奏的现代生活中，轮渡渐渐淡出了大多数人的日常视野。为什么江边老码头总能勾起人们的怀旧情绪？因为慢下来的十五分钟给了城市难得的留白。\n\n清晨 6:20 的汽笛准时响起；铁质跳板压在水泥坡道上咔哒作响；卖早点的摊位冒出细密白烟。诚然，跨江大桥早已把过江时间缩到了 3 分钟。然而，老轮渡依然承载着一代人的集体记忆。或许，真正值得珍惜的从来不是速度本身，而是人与江水共处的片刻宁静。",
+        "naive_humanizer": "6:20 汽笛响起。跳板咔哒作响。白烟升起。大桥只要 3 分钟，轮渡要 15 分钟。这不只是过江，而是与江水的重逢。",
+        "dislop_clean": "清晨 6:20，老码头第一班轮渡拉响汽笛。铁跳板压在水泥坡道上咔哒一声，旁边早点摊蒸笼刚掀开，白烟顺着江风往检票口飘。\n\n跨江大桥通车后，开车过江只要 3 分钟，但仍有不少推电瓶车的早班工人花十五分钟坐船。"
+      }
+    },
+    {
+      "id": "rev2-en-01-api-release",
+      "domain": "en-brief",
+      "lang": "en",
+      "modality": "markdown",
+      "pack": "business-brief",
+      "filename": "webhook-v2.md",
+      "source": "As organizations navigate increasingly distributed event pipelines, reliable webhook delivery has become critical. Why do integrations silently drop customer notifications during traffic spikes? Because naive retry loops overwhelm struggling endpoints.\n\nBy introducing per-tenant queues, Webhook v2 seamlessly streamlines delivery across 40,000 events per second. By adding automatic circuit breakers, the service leverages adaptive backoff to foster robust reliability with 99.98% delivery inside 5 seconds. By exposing dead-letter replay APIs, developers can resolve failed batches without manual scripts.\n\nLooking ahead, teams that adopt structured event delivery will be well-positioned to thrive at scale.",
+      "arms": {
+        "raw_ai": "As organizations navigate increasingly distributed event pipelines, reliable webhook delivery has become critical. Why do integrations silently drop customer notifications during traffic spikes? Because naive retry loops overwhelm struggling endpoints.\n\nBy introducing per-tenant queues, Webhook v2 seamlessly streamlines delivery across 40,000 events per second. By adding automatic circuit breakers, the service leverages adaptive backoff to foster robust reliability with 99.98% delivery inside 5 seconds. By exposing dead-letter replay APIs, developers can resolve failed batches without manual scripts.\n\nLooking ahead, teams that adopt structured event delivery will be well-positioned to thrive at scale.",
+        "naive_humanizer": "Webhook v2 handles 50,000 events per second with 99.98% delivery inside 5 seconds. Per-tenant queues run fast; circuit breakers hold steady; replay APIs stay simple. It isn't just a queue — it's delivery peace of mind.",
+        "dislop_clean": "Webhook v2 moves each tenant onto an isolated queue so one slow receiver no longer stalls other accounts. Under load tests at 40,000 events per second, 99.98% of payloads delivered within 5 seconds.\n\nWhen a target endpoint starts timing out, an automatic circuit breaker backs off retries and stores failed payloads in a dead-letter bucket that you can replay through the API."
+      }
+    },
+    {
+      "id": "rev2-en-02-postmortem",
+      "domain": "en-brief",
+      "lang": "en",
+      "modality": "markdown",
+      "pack": "business-brief",
+      "filename": "dns-incident.md",
+      "source": "First, our on-call team noticed elevated 502 error rates at 14:12 UTC across 3 European edge nodes. Second, our on-call team traced the spike to a stale DNS TTL setting of 3600 seconds during a load-balancer swap. Third, our on-call team drained the affected pool and restored full traffic by 14:38 UTC. Finally, our on-call team lowered the TTL to 60 seconds and added pre-flight checks. Furthermore, automated alerts fired within 40 seconds. Moreover, no customer records were lost. Additionally, status page updates shipped every 10 minutes. In conclusion, this incident underscores the importance of resilient deployment hygiene.",
+      "arms": {
+        "raw_ai": "First, our on-call team noticed elevated 502 error rates at 14:12 UTC across 3 European edge nodes. Second, our on-call team traced the spike to a stale DNS TTL setting of 3600 seconds during a load-balancer swap. Third, our on-call team drained the affected pool and restored full traffic by 14:38 UTC. Finally, our on-call team lowered the TTL to 60 seconds and added pre-flight checks. Furthermore, automated alerts fired within 40 seconds. Moreover, no customer records were lost. Additionally, status page updates shipped every 10 minutes. In conclusion, this incident underscores the importance of resilient deployment hygiene.",
+        "naive_humanizer": "At 14:12 UTC, 3 European edge nodes threw 502 errors because DNS TTL was 3600 seconds. Alerts fired fast; pools drained cleanly; traffic returned by 14:38 UTC. No data was lost.",
+        "dislop_clean": "Between 14:12 and 14:38 UTC, 3 European edge nodes returned 502 errors during a load-balancer swap because the old DNS record still carried a 3600-second TTL.\n\nAutomated alerts paged on-call within 40 seconds, we posted status updates every 10 minutes, and no customer records were lost. After draining the stale pool, we lowered the TTL to 60 seconds and added pre-flight checks for future swaps."
+      }
+    },
+    {
+      "id": "rev2-en-03-essay-bakery",
+      "domain": "en-essay",
+      "lang": "en",
+      "modality": "markdown",
+      "pack": "literary-essay",
+      "filename": "corner-bakery.md",
+      "source": "In an era defined by industrial convenience, neighborhood bakeries preserve an unhurried craft. Why does a loaf baked at dawn taste unmistakably different from supermarket bread? Because slow fermentation rewards patience.\n\nFlour dust settles across the maple bench; steam pours from the deck oven at 4:45 a.m.; twenty sourdough boules cool on wire racks by the window. While chain stores compete on price and speed, small ovens build quiet loyalty street by street. Moving forward, these humble storefronts remind us what everyday care looks like.",
+      "arms": {
+        "raw_ai": "In an era defined by industrial convenience, neighborhood bakeries preserve an unhurried craft. Why does a loaf baked at dawn taste unmistakably different from supermarket bread? Because slow fermentation rewards patience.\n\nFlour dust settles across the maple bench; steam pours from the deck oven at 4:45 a.m.; twenty sourdough boules cool on wire racks by the window. While chain stores compete on price and speed, small ovens build quiet loyalty street by street. Moving forward, these humble storefronts remind us what everyday care looks like.",
+        "naive_humanizer": "4:45 a.m. Maple bench. Twenty sourdough boules. Steam rises; crust crackles; neighbors queue. This isn't just bread — it's patience baked whole.",
+        "dislop_clean": "At 4:45 a.m., steam hits the front glass as the baker pulls twenty sourdough boules from the deck oven and slides them onto wire racks. Flour dust coats the maple bench along the wall, and by six the first dog walkers are tapping on the latch."
+      }
+    }
+  ],
+  "factGatePairs": [
+    {
+      "id": "fg-adv-01-en-direction-reversal",
+      "kind": "adversarial-fact-corruption",
+      "before": "PostgreSQL p95 query latency dropped from 142ms to 18ms across 4 replicas.",
+      "after": "PostgreSQL p95 query latency rose from 18ms to 142ms across 4 replicas.",
+      "expectOk": false,
+      "expectReason": "metric-direction-reversed"
+    },
+    {
+      "id": "fg-adv-02-zh-direction-reversal",
+      "kind": "adversarial-fact-corruption",
+      "before": "核心接口 p95 延迟从 142ms 降至 18ms。",
+      "after": "核心接口 p95 延迟从 18ms 升至 142ms。",
+      "expectOk": false,
+      "expectReason": "metric-direction-reversed"
+    },
+    {
+      "id": "fg-adv-03-zh-numeral-swap",
+      "kind": "adversarial-fact-corruption",
+      "before": "本次迁移覆盖共三个模块，预计耗时 15 分钟。",
+      "after": "本次迁移覆盖共四个模块，预计耗时 15 分钟。",
+      "expectOk": false,
+      "expectReason": "dropped number"
+    },
+    {
+      "id": "fg-adv-04-zh-numeral-equiv-clean",
+      "kind": "clean-preservation",
+      "before": "本次迁移覆盖共三个模块，预计耗时 15 分钟。",
+      "after": "本次迁移覆盖共 3 个模块，预计耗时 15 分钟。",
+      "expectOk": true
+    },
+    {
+      "id": "fg-adv-05-en-negation-flip",
+      "kind": "adversarial-fact-corruption",
+      "before": "Offline mode does not upload files to external servers.",
+      "after": "Offline mode uploads files to external servers.",
+      "expectOk": false,
+      "expectReason": "polarity-negation-dropped"
+    },
+    {
+      "id": "fg-adv-06-zh-prohibition-flip",
+      "kind": "adversarial-fact-corruption",
+      "before": "演练模式下严禁向生产消息队列写入事件。",
+      "after": "演练模式下向生产消息队列写入事件。",
+      "expectOk": false,
+      "expectReason": "polarity-prohibition-dropped"
+    },
+    {
+      "id": "fg-adv-07-plural-acronym-clean",
+      "kind": "clean-preservation",
+      "before": "REST APIs expose OAuth 2.1 metadata on port 443.",
+      "after": "REST API exposes OAuth 2.1 metadata on port 443.",
+      "expectOk": true
+    },
+    {
+      "id": "fg-adv-08-html-class-numbers-clean",
+      "kind": "clean-preservation",
+      "before": "<div class=\"from-indigo-500 p-6 grid-cols-3\"><p>Latency stayed at 18ms.</p></div>",
+      "after": "<section class=\"surface-card\"><p>Latency stayed at 18ms.</p></section>",
+      "expectOk": true
+    }
+  ],
+  "autoFixRoundTrips": [
+    {
+      "id": "autofix-en-md",
+      "format": "md",
+      "content": "Certainly! Here is your release note.\n\nIn today's fast-paced world, stability matters.\n\nIt is worth noting that p95 latency dropped from 142ms to 18ms [oaicite:1].\n\nI hope this helps!\n",
+      "mustNotContain": [
+        "Certainly!",
+        "fast-paced world",
+        "It is worth noting",
+        "[oaicite:1]",
+        "I hope this helps"
+      ],
+      "mustContain": [
+        "142ms",
+        "18ms"
+      ]
+    },
+    {
+      "id": "autofix-zh-md",
+      "format": "md",
+      "content": "当然可以！以下是为您润色后的发布说明。\n\n值得注意的是，延迟从 142ms 降至 18ms [oaicite:1]。\n\n冬至那天下了初雪,院子里的腊梅开了三朵;茶杯边沾了点冷味。\n\n希望以上内容对您有所帮助！\n",
+      "mustNotContain": [
+        "当然可以！",
+        "值得注意的是",
+        "[oaicite:1]",
+        "希望以上内容"
+      ],
+      "mustContain": [
+        "142ms",
+        "18ms",
+        "冬至那天下了初雪，院子里的腊梅开了三朵；茶杯边沾了点冷味。"
+      ]
+    },
+    {
+      "id": "autofix-en-docx",
+      "format": "docx",
+      "ooxml": {
+        "word/document.xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><w:document xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"><w:body><w:p><w:r><w:t>Certainly! Here is the draft. </w:t></w:r><w:r><w:t>Export finished in 12 minutes for **all** shards.</w:t></w:r></w:p></w:body></w:document>"
+      },
+      "mustNotContain": [
+        "Certainly!",
+        "**all**"
+      ],
+      "mustContain": [
+        "Export finished in 12 minutes for all shards."
+      ]
+    },
+    {
+      "id": "autofix-zh-pptx",
+      "format": "pptx",
+      "ooxml": {
+        "ppt/presentation.xml": "<p:presentation xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"><p:sldIdLst><p:sldId id=\"256\" r:id=\"rId1\"/></p:sldIdLst></p:presentation>",
+        "ppt/_rels/presentation.xml.rels": "<Relationships><Relationship Id=\"rId1\" Target=\"slides/slide1.xml\"/></Relationships>",
+        "ppt/slides/slide1.xml": "<p:sld xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\"><p:cSld><p:spTree><p:sp><p:txBody><a:p><a:r><a:t>延迟压到 **18ms**</a:t></a:r></a:p><a:p><a:r><a:t>携手并进，共创辉煌未来！</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld></p:sld>"
+      },
+      "mustNotContain": [
+        "**18ms**",
+        "携手并进"
+      ],
+      "mustContain": [
+        "延迟压到 18ms"
+      ]
+    }
+  ]
+}
