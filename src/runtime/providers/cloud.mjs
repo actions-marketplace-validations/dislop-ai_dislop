@@ -35,9 +35,13 @@ export async function invokeCloudProvider({
       },
       body: JSON.stringify({
         schema: "dislop.review-request/1",
-        file: doc.filePath,
-        format: doc.format,
-        language: doc.language,
+        text: Array.isArray(doc?.segments)
+          ? doc.segments.map((s) => s.text).join("\n\n")
+          : String(payload?.userPrompt || ""),
+        file: doc?.filePath || "",
+        format: doc?.format || "md",
+        modality: doc?.format || "md",
+        language: doc?.language || "en",
         systemPrompt: payload.systemPrompt,
         userPrompt: payload.userPrompt,
         rules: promptRules,
@@ -59,6 +63,9 @@ export async function invokeCloudProvider({
     if (data && typeof data === "object" && Array.isArray(data.items)) {
       return data;
     }
+    if (data && typeof data === "object" && Array.isArray(data.findings)) {
+      return adaptLegacyCloudFindings(data, doc, promptRules);
+    }
     if (typeof data?.content === "string") {
       return extractStructuredJson(data.content);
     }
@@ -66,4 +73,64 @@ export async function invokeCloudProvider({
   } finally {
     clearTimeout(timer);
   }
+}
+
+function adaptLegacyCloudFindings(data, doc, promptRules = []) {
+  const proseFallbackRule =
+    promptRules.find((r) => r.ruleId.endsWith("/stealth-vapor"))?.ruleId ||
+    promptRules[0]?.ruleId ||
+    `${doc.language || "en"}/prose/stealth-vapor`;
+  const mountedByFull = new Map(promptRules.map((r) => [r.ruleId, r.ruleId]));
+  const mountedByBare = new Map();
+  for (const r of promptRules) {
+    const bare = r.ruleId.split("/").pop();
+    if (!mountedByBare.has(bare)) mountedByBare.set(bare, r.ruleId);
+  }
+
+  const items = [];
+  for (const f of data.findings || []) {
+    if (!f || typeof f !== "object") continue;
+    const rawQuote = String(f.anchor?.quote || f.revision?.find || "").trim();
+    const seg =
+      (rawQuote && doc.segments.find((s) => s.text.includes(rawQuote))) ||
+      (rawQuote && doc.segments.find((s) => rawQuote.includes(s.text))) ||
+      null;
+    if (!seg) continue;
+
+    const quote = seg.text.includes(rawQuote) ? rawQuote : seg.text;
+    const bareId = f.ruleId ? String(f.ruleId).split("/").pop() : "";
+    const ruleId =
+      mountedByFull.get(f.ruleId) || mountedByBare.get(bareId) || proseFallbackRule;
+    const priority = f.severity === "error" ? "strong" : f.severity === "warning" ? "moderate" : "hint";
+    const rev = f.revision || {};
+
+    let actionType = "prompt";
+    let fixSafety = "manual";
+    let suggestedReplacement = "";
+    let rewritePrompt = String(rev.instruction || rev.question || f.why || "").trim();
+    if (rev.kind === "edit") {
+      const rep = String(rev.replace ?? "");
+      actionType = rep === "" ? "delete" : "replace";
+      fixSafety = "review";
+      suggestedReplacement = rep;
+      rewritePrompt = "";
+    }
+
+    items.push({
+      ruleId,
+      targetId: seg.id,
+      priority,
+      fixSafety,
+      actionType,
+      originalQuote: quote,
+      suggestedReplacement,
+      reason: String(f.why || "").trim() || "Editorial issue flagged by Official Cloud.",
+      rewritePrompt,
+    });
+  }
+
+  return {
+    documentToneAnchor: String(data?.llmReview?.summary || "").trim(),
+    items,
+  };
 }

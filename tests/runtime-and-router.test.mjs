@@ -293,7 +293,7 @@ test("Provider HTTP adapters negotiate structured output, reasoning model temper
 
   // 3. Gemini adapter
   const gemRes = await invokeGeminiProvider({
-    provider: { name: "gem", apiKey: "gem-key", model: "gemini-2.5-flash" },
+    provider: { name: "gem", apiKey: "gem-key", model: "gemini-3.8-flash" },
     payload: dummyPayload,
     fetchImpl: async () =>
       new Response(
@@ -307,14 +307,66 @@ test("Provider HTTP adapters negotiate structured output, reasoning model temper
   });
   assert.equal(gemRes.documentToneAnchor, "gem");
 
-  // 4. Official Cloud adapter
+  // 3b. Gemini adapter throws explicit diagnostic when truncated at MAX_TOKENS
+  await assert.rejects(
+    () =>
+      invokeGeminiProvider({
+        provider: { name: "gem", apiKey: "gem-key" },
+        payload: dummyPayload,
+        fetchImpl: async () =>
+          new Response(
+            JSON.stringify({
+              candidates: [{ finishReason: "MAX_TOKENS", content: { parts: [{ text: '{"items": [' }] } }],
+            }),
+            { status: 200 },
+          ),
+      }),
+    /MAX_TOKENS/,
+  );
+
+  // 4. Official Cloud adapter (supports both native dislop.report/1 items & dislop.findings/1)
+  let capturedCloudBody = null;
   const cloudRes = await invokeCloudProvider({
     credentials: { accessToken: "dslp_tok", endpoint: "http://127.0.0.1:8787/api/v1/review" },
     payload: dummyPayload,
-    doc: { filePath: "a.md", format: "md", language: "en" },
-    promptRules: [],
-    fetchImpl: async () =>
-      new Response(JSON.stringify({ documentToneAnchor: "cloud", items: [] }), { status: 200 }),
+    doc: { filePath: "a.md", format: "md", language: "en", segments: [{ id: "P1-S1", text: "Hello world." }] },
+    promptRules: [{ ruleId: "en/prose/stealth-vapor" }],
+    fetchImpl: async (_url, opts) => {
+      capturedCloudBody = JSON.parse(opts.body);
+      return new Response(
+        JSON.stringify({
+          llmReview: { summary: "cloud-legacy" },
+          findings: [
+            {
+              source: "model",
+              severity: "warning",
+              anchor: { quote: "Hello world." },
+              why: "Legacy finding",
+              revision: { kind: "edit", find: "Hello world.", replace: "Direct hello." },
+            },
+          ],
+        }),
+        { status: 200 },
+      );
+    },
   });
-  assert.equal(cloudRes.documentToneAnchor, "cloud");
+  assert.equal(capturedCloudBody.text, "Hello world.");
+  assert.equal(cloudRes.documentToneAnchor, "cloud-legacy");
+  assert.equal(cloudRes.items.length, 1);
+  assert.equal(cloudRes.items[0].targetId, "P1-S1");
+  assert.equal(cloudRes.items[0].suggestedReplacement, "Direct hello.");
+
+  // 5. Built-in provider alias & `--model` override in router
+  const gemAliasCfg = resolveLayeredConfig({
+    cwd: process.cwd(),
+    env: { DISLOP_CONFIG_DIR: path.join(os.tmpdir(), "dislop-nonexistent-cfg"), GEMINI_API_KEY: "gem-env-k" },
+    cliFlags: { engine: "byok", provider: "gemini", model: "gemini-3.8-flash-custom" },
+  });
+  const gemAliasRoute = await resolveExecutionRoute({
+    config: gemAliasCfg,
+    isTty: false,
+    env: { GEMINI_API_KEY: "gem-env-k", DISLOP_ALLOW_AMBIENT_KEYS: "1" },
+  });
+  assert.equal(gemAliasRoute.tier, "byok");
+  assert.equal(gemAliasRoute.engineLabel, "byok:gemini-3.8-flash-custom");
 });

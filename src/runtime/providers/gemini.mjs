@@ -12,7 +12,7 @@ export async function invokeGeminiProvider({
   const baseUrl = String(
     provider.baseUrl || "https://generativelanguage.googleapis.com/v1beta",
   ).replace(/\/+$/, "");
-  const model = String(provider.model || "gemini-2.5-flash").replace(/^models\//, "");
+  const model = String(provider.model || "gemini-3.8-flash").replace(/^models\//, "");
 
   if (!provider.apiKey) {
     const err = new Error(`Gemini provider '${provider.name}' is missing an API key`);
@@ -43,6 +43,7 @@ export async function invokeGeminiProvider({
         ],
         generationConfig: {
           temperature: 0.1,
+          maxOutputTokens: provider.maxOutputTokens || 8192,
           responseMimeType: "application/json",
         },
       }),
@@ -60,16 +61,30 @@ export async function invokeGeminiProvider({
     }
 
     const json = await res.json();
-    const parts = json?.candidates?.[0]?.content?.parts || [];
+    const candidate = json?.candidates?.[0] || {};
+    const finishReason = candidate?.finishReason || "";
+    const parts = candidate?.content?.parts || [];
     const content = parts
       .filter((p) => !p?.thought)
       .map((p) => p.text || "")
       .join("\n")
       .trim();
     if (!content) {
+      if (finishReason === "MAX_TOKENS") {
+        throw new Error(`Gemini provider '${provider.name}' truncated output at MAX_TOKENS before returning JSON`);
+      }
       throw new Error(`Gemini provider '${provider.name}' returned empty candidate parts`);
     }
-    return extractStructuredJson(content);
+    try {
+      return extractStructuredJson(content);
+    } catch (parseErr) {
+      if (finishReason === "MAX_TOKENS") {
+        throw new Error(
+          `Gemini provider '${provider.name}' hit MAX_TOKENS while emitting JSON: ${parseErr.message}`,
+        );
+      }
+      throw parseErr;
+    }
   } finally {
     clearTimeout(timer);
   }

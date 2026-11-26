@@ -36,11 +36,34 @@ const AMBIENT_ENV_CANDIDATES = [
     protocol: "gemini",
     envVarName: "GEMINI_API_KEY",
     baseUrl: "https://generativelanguage.googleapis.com/v1beta",
-    model: "gemini-2.5-flash",
+    model: "gemini-3.8-flash",
     structuredOutput: "json_object",
     maxInputTokens: 24000,
   },
 ];
+
+const BUILTIN_PROVIDER_ALIASES = new Map([
+  ["openai", "env-openai"],
+  ["env-openai", "env-openai"],
+  ["anthropic", "env-anthropic"],
+  ["claude", "env-anthropic"],
+  ["env-anthropic", "env-anthropic"],
+  ["gemini", "env-gemini"],
+  ["google", "env-gemini"],
+  ["env-gemini", "env-gemini"],
+]);
+
+function readAmbientCandidate(cand, env, modelOverride) {
+  const keyVal = env[cand.envVarName] || (cand.envVarName === "GEMINI_API_KEY" ? env.GOOGLE_API_KEY : "");
+  if (!keyVal || !String(keyVal).trim()) return null;
+  return {
+    ...cand,
+    model: modelOverride || cand.model,
+    apiKey: String(keyVal).trim(),
+    fromAmbientEnv: true,
+    envVarName: env[cand.envVarName] ? cand.envVarName : "GOOGLE_API_KEY",
+  };
+}
 
 export const UPGRADE_TIER_HINT =
   "💡 Running local deterministic checks only. For deeper semantic de-slopping, run 'dislop login' (Cloud), pass '--engine auto' / '--engine byok', or run 'dislop model pull' (requires Ollama: https://ollama.com).";
@@ -62,11 +85,17 @@ export function loadCloudCredentials(credentialsPath) {
 
 export function resolveTier2ProviderCandidate(config, env = process.env) {
   const configured = config.providers || {};
+  const modelOverride = config.modelOverride ? String(config.modelOverride).trim() : "";
 
   // 1. Named activeProvider from CLI `--provider` or `config.json`
   if (config.activeProvider) {
     const entry = configured[config.activeProvider];
     if (!entry) {
+      const aliasTarget = BUILTIN_PROVIDER_ALIASES.get(String(config.activeProvider).toLowerCase());
+      if (aliasTarget) {
+        const cand = AMBIENT_ENV_CANDIDATES.find((c) => c.name === aliasTarget);
+        return cand ? readAmbientCandidate(cand, env, modelOverride) : null;
+      }
       throw new DislopConfigError(
         `Configured provider '${config.activeProvider}' not found in config.json providers.`,
       );
@@ -81,7 +110,7 @@ export function resolveTier2ProviderCandidate(config, env = process.env) {
       protocol: entry.protocol || "openai",
       baseUrl: entry.baseUrl || "https://api.openai.com/v1",
       apiKey: apiKey || "",
-      model: entry.model || "gpt-4o-mini",
+      model: modelOverride || entry.model || "gpt-4o-mini",
       structuredOutput: entry.structuredOutput || "json_object",
       maxInputTokens: Number(entry.maxInputTokens) || 16000,
       fromAmbientEnv: false,
@@ -99,7 +128,7 @@ export function resolveTier2ProviderCandidate(config, env = process.env) {
       protocol: entry.protocol || "openai",
       baseUrl: entry.baseUrl || "https://api.openai.com/v1",
       apiKey: apiKey || "",
-      model: entry.model || "gpt-4o-mini",
+      model: modelOverride || entry.model || "gpt-4o-mini",
       structuredOutput: entry.structuredOutput || "json_object",
       maxInputTokens: Number(entry.maxInputTokens) || 16000,
       fromAmbientEnv: false,
@@ -109,15 +138,8 @@ export function resolveTier2ProviderCandidate(config, env = process.env) {
 
   // 3. Ambient environment variable detection (subject to Privacy Consent Gate)
   for (const cand of AMBIENT_ENV_CANDIDATES) {
-    const keyVal = env[cand.envVarName] || (cand.envVarName === "GEMINI_API_KEY" ? env.GOOGLE_API_KEY : "");
-    if (keyVal && String(keyVal).trim()) {
-      return {
-        ...cand,
-        apiKey: String(keyVal).trim(),
-        fromAmbientEnv: true,
-        envVarName: env[cand.envVarName] ? cand.envVarName : "GOOGLE_API_KEY",
-      };
-    }
+    const resolved = readAmbientCandidate(cand, env, modelOverride);
+    if (resolved) return resolved;
   }
 
   return null;
@@ -215,12 +237,15 @@ export async function resolveExecutionRoute({
   // Default `"local"` mode (and Tier 3 fallback of `"auto"`): check installed local model
   const localModel = resolveInstalledLocalModel(config, env);
   if (localModel) {
+    const resolvedLocal = config.modelOverride
+      ? { ...localModel, model: String(config.modelOverride).trim() }
+      : localModel;
     return {
       tier: "local",
-      engineLabel: `local:${localModel.model}`,
-      maxInputTokens: localModel.maxInputTokens || 8000,
+      engineLabel: `local:${resolvedLocal.model}`,
+      maxInputTokens: resolvedLocal.maxInputTokens || 8000,
       fallbackOnConnRefused: !config.explicitEngine,
-      execute: (payload) => invokeLocalModelProvider({ localModel, payload, fetchImpl, env }),
+      execute: (payload) => invokeLocalModelProvider({ localModel: resolvedLocal, payload, fetchImpl, env }),
     };
   }
 

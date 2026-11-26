@@ -86,7 +86,31 @@ function escapePdfLiteral(str) {
   return String(str).replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
 }
 
-function buildSyntheticPdf({ compress = true, pages = [] }) {
+function encodeAscii85(buf) {
+  const out = [];
+  for (let i = 0; i < buf.length; i += 4) {
+    const rem = Math.min(4, buf.length - i);
+    const b0 = buf[i] || 0;
+    const b1 = rem > 1 ? buf[i + 1] : 0;
+    const b2 = rem > 2 ? buf[i + 2] : 0;
+    const b3 = rem > 3 ? buf[i + 3] : 0;
+    const val = (((b0 << 24) | (b1 << 16) | (b2 << 8) | b3) >>> 0);
+    if (rem === 4 && val === 0) {
+      out.push("z");
+      continue;
+    }
+    let tmp = val;
+    const digits = new Array(5);
+    for (let k = 4; k >= 0; k -= 1) {
+      digits[k] = String.fromCharCode((tmp % 85) + 33);
+      tmp = Math.floor(tmp / 85);
+    }
+    out.push(digits.slice(0, rem + 1).join(""));
+  }
+  return `${out.join("")}~>`;
+}
+
+function buildSyntheticPdf({ compress = true, ascii85 = false, useFormXObject = false, pages = [] }) {
   // Objects:
   // 1: Catalog, 2: Pages, 3: Helvetica (/F1), 4: Courier (/F2),
   // Optional 5: CJK Type0/Type1 font (/F3) + 6: ToUnicode CMap stream
@@ -157,7 +181,19 @@ function buildSyntheticPdf({ compress = true, pages = [] }) {
 
   const fontDictParts = [`/F1 ${f1} 0 R`, `/F2 ${f2} 0 R`];
   if (f3) fontDictParts.push(`/F3 ${f3} 0 R`);
-  const resDict = `<< /Font << ${fontDictParts.join(" ")} >> >>`;
+  const fontSubDictNum = addObj(`<< ${fontDictParts.join(" ")} >>`);
+  const resDict = `<< /Font ${fontSubDictNum} 0 R >>`;
+
+  const encodeContentStream = (rawBuf) => {
+    let encoded = compress ? zlib.deflateSync(rawBuf) : rawBuf;
+    if (ascii85) {
+      encoded = Buffer.from(encodeAscii85(encoded), "ascii");
+      const filterStr = compress ? "/Filter [ /ASCII85Decode /FlateDecode ] " : "/Filter /ASCII85Decode ";
+      return { dict: `<< ${filterStr}/Length ${encoded.length} >>`, stream: encoded };
+    }
+    const filterPart = compress ? "/Filter /FlateDecode " : "";
+    return { dict: `<< ${filterPart}/Length ${encoded.length} >>`, stream: encoded };
+  };
 
   const pageObjNums = [];
   for (const p of pages) {
@@ -187,16 +223,27 @@ function buildSyntheticPdf({ compress = true, pages = [] }) {
     }
     ops.push("ET");
     const streamStr = ops.join("\n");
-    const streamBytes = compress ? zlib.deflateSync(Buffer.from(streamStr, "latin1")) : Buffer.from(streamStr, "latin1");
-    const filterPart = compress ? "/Filter /FlateDecode " : "";
-    const contentObjNum = addObj({
-      dict: `<< ${filterPart}/Length ${streamBytes.length} >>`,
-      stream: streamBytes,
-    });
-    const pageObjNum = addObj(
-      `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${w} ${h}] /Resources ${resDict} /Contents ${contentObjNum} 0 R >>`
-    );
-    pageObjNums.push(pageObjNum);
+    const rawBuf = Buffer.from(streamStr, "latin1");
+
+    if (useFormXObject) {
+      const formEncoded = encodeContentStream(rawBuf);
+      const formObjNum = addObj({
+        dict: `<< /Type /XObject /Subtype /Form /BBox [0 0 ${w} ${h}] /Resources ${resDict} ${formEncoded.dict.slice(3, -2).trim()} >>`,
+        stream: formEncoded.stream,
+      });
+      const outerEncoded = encodeContentStream(Buffer.from(`q\n/X1 Do\nQ\n`, "ascii"));
+      const contentObjNum = addObj(outerEncoded);
+      const pageObjNum = addObj(
+        `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${w} ${h}] /Resources << /XObject << /X1 ${formObjNum} 0 R >> >> /Contents ${contentObjNum} 0 R >>`
+      );
+      pageObjNums.push(pageObjNum);
+    } else {
+      const contentObjNum = addObj(encodeContentStream(rawBuf));
+      const pageObjNum = addObj(
+        `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${w} ${h}] /Resources ${resDict} /Contents ${contentObjNum} 0 R >>`
+      );
+      pageObjNums.push(pageObjNum);
+    }
   }
 
   objects[0] = `<< /Type /Catalog /Pages 2 0 R >>`;

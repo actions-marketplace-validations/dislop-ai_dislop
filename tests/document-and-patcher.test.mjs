@@ -281,3 +281,88 @@ test("HTML/JSX nested prose extraction, masking, avatar exemption, PPTX hidden s
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
 });
+
+test("PDF ASCII85Decode+FlateDecode, Form XObject (/Do), # table header immunity, and smart disabled button checks", () => {
+  const html = [
+    "<html><body>",
+    "<button id=\"exportBtn\" disabled>Export CSV</button>",
+    "<button disabled>Loading preview...</button>",
+    "<button disabled>Static Dead Control</button>",
+    "<script>document.getElementById(\"exportBtn\").disabled = false;</script>",
+    "</body></html>",
+  ].join("\n");
+  const htmlDoc = parseDocumentText(html, "panel.html", "html");
+  assert.equal(htmlDoc.artifacts.uiSignals.disabledButtonsWithoutTitle.length, 1);
+  assert.match(htmlDoc.artifacts.uiSignals.disabledButtonsWithoutTitle[0].text, /Static Dead Control/);
+
+  const encodeAscii85 = (buf) => {
+    const out = [];
+    for (let i = 0; i < buf.length; i += 4) {
+      const rem = Math.min(4, buf.length - i);
+      const val = (((buf[i] << 24) | ((buf[i + 1] || 0) << 16) | ((buf[i + 2] || 0) << 8) | (buf[i + 3] || 0)) >>> 0);
+      if (rem === 4 && val === 0) {
+        out.push("z");
+        continue;
+      }
+      let tmp = val;
+      const digits = new Array(5);
+      for (let k = 4; k >= 0; k -= 1) {
+        digits[k] = String.fromCharCode((tmp % 85) + 33);
+        tmp = Math.floor(tmp / 85);
+      }
+      out.push(digits.slice(0, rem + 1).join(""));
+    }
+    return `${out.join("")}~>`;
+  };
+
+  const tmpDir = makeTempDir();
+  try {
+    const pdfPath = path.join(tmpDir, "nested-form.pdf");
+    const innerStream = Buffer.from(
+      encodeAscii85(zlib.deflateSync(Buffer.from("BT\n/F1 12 Tf\n1 0 0 1 54 700 Tm\n(# Route Latency) Tj\n1 0 0 1 54 680 Tm\n(Measured 18ms p95 latency.) Tj\nET", "latin1"))),
+      "ascii",
+    );
+    const outerStream = zlib.deflateSync(Buffer.from("q\n/X1 Do\nQ", "ascii"));
+    const objs = [
+      "<< /Type /Catalog /Pages 2 0 R >>",
+      "<< /Type /Pages /Count 1 /Kids [3 0 R] >>",
+      "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /XObject << /X1 4 0 R >> >> /Contents 5 0 R >>",
+      {
+        dict: `<< /Type /XObject /Subtype /Form /BBox [0 0 612 792] /Resources << /Font << /F1 6 0 R >> >> /Filter [ /ASCII85Decode /FlateDecode ] /Length ${innerStream.length} >>`,
+        stream: innerStream,
+      },
+      { dict: `<< /Filter /FlateDecode /Length ${outerStream.length} >>`, stream: outerStream },
+      "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+    ];
+    const parts = [Buffer.from("%PDF-1.4\n", "ascii")];
+    const offsets = [0];
+    let cur = parts[0].length;
+    for (let i = 0; i < objs.length; i++) {
+      offsets.push(cur);
+      const hdr = Buffer.from(`${i + 1} 0 obj\n`, "ascii");
+      const o = objs[i];
+      const body =
+        typeof o === "string"
+          ? Buffer.from(`${o}\nendobj\n`, "ascii")
+          : Buffer.concat([Buffer.from(`${o.dict}\nstream\n`, "ascii"), o.stream, Buffer.from("\nendstream\nendobj\n", "ascii")]);
+      parts.push(hdr, body);
+      cur += hdr.length + body.length;
+    }
+    const xrefPos = cur;
+    const xref = [
+      `xref\n0 ${objs.length + 1}\n0000000000 65535 f \n`,
+      ...offsets.slice(1).map((off) => `${String(off).padStart(10, "0")} 00000 n \n`),
+      `trailer\n<< /Size ${objs.length + 1} /Root 1 0 R >>\nstartxref\n${xrefPos}\n%%EOF\n`,
+    ].join("");
+    parts.push(Buffer.from(xref, "ascii"));
+    fs.writeFileSync(pdfPath, Buffer.concat(parts));
+
+    const pdfDoc = parseDocumentFile(pdfPath);
+    const pdfText = pdfDoc.segments.map((s) => s.text).join("\n");
+    assert.ok(pdfText.includes("# Route Latency"));
+    assert.ok(pdfText.includes("Measured 18ms p95 latency."));
+    assert.equal(pdfDoc.artifacts.rawFormattingLeaks.length, 0);
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});

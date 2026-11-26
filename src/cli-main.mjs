@@ -44,7 +44,8 @@ Options (check / fix):
   --voice <files/globs...>                    Align review with hand-written voice reference files
   --level <strong|moderate|hint|all>          Filter Suggestion priority threshold (default: all)
   --engine <local|auto|cloud|byok>            Routing tier (default: local; Tier 3 local LLM requires Ollama)
-  --provider <name>                           Select named provider from config.json
+  --provider <name>                           Select named or built-in provider (openai, anthropic, gemini)
+  --model <name>                              Override LLM model identifier for the active provider
   --dry-run                                   Preview unified diff without modifying files on disk
   --backup                                    Create <file>.bak before atomic write
   --lang <auto|en|zh>                         Diagnostic language ('auto' matches target document language)
@@ -120,6 +121,7 @@ export async function runCli(argv = process.argv.slice(2), io = {}) {
           level: { type: "string" },
           engine: { type: "string" },
           provider: { type: "string" },
+          model: { type: "string" },
           "dry-run": { type: "boolean" },
           backup: { type: "boolean" },
           lang: { type: "string" },
@@ -160,6 +162,7 @@ export async function runCli(argv = process.argv.slice(2), io = {}) {
       level: values.level || null,
       engine: values.engine || null,
       provider: values.provider || null,
+      model: values.model || null,
       dryRun: Boolean(values["dry-run"]),
       backup: Boolean(values.backup),
       lang: values.lang || null,

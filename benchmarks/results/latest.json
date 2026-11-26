@@ -1,15 +1,15 @@
 {
   "schema": "dislop.bench-report/3",
-  "generatedAt": "2026-11-26T00:33:05.987Z",
+  "generatedAt": "2026-11-26T00:53:10.114Z",
   "nodeVersion": "v24.21.0",
   "results": {
     "multimodal": {
-      "total": 80,
+      "total": 86,
       "trackA1": {
         "positives": 20,
         "tp": 20,
         "fn": 0,
-        "clean": 13,
+        "clean": 15,
         "fp": 0,
         "precision": 100,
         "recall": 100,
@@ -17,10 +17,10 @@
         "failures": []
       },
       "trackA2": {
-        "positives": 27,
-        "tp": 27,
+        "positives": 28,
+        "tp": 28,
         "fn": 0,
-        "clean": 20,
+        "clean": 23,
         "fp": 0,
         "recall": 100,
         "cleanFpr": 0,
@@ -62,7 +62,7 @@
     "gates": [
       {
         "name": "Track A1 Defect Clean FPR === 0.0%",
-        "actual": "0% (0/13)",
+        "actual": "0% (0/15)",
         "ok": true
       },
       {
@@ -77,12 +77,12 @@
       },
       {
         "name": "Track A2 Suggestion Clean FPR === 0.0%",
-        "actual": "0% (0/20)",
+        "actual": "0% (0/23)",
         "ok": true
       },
       {
         "name": "Track A2 Suggestion Recall >= 95.0%",
-        "actual": "100% (27/27)",
+        "actual": "100% (28/28)",
         "ok": true
       },
       {

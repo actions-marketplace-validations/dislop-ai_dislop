@@ -13,7 +13,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - **Pack Supply-Chain Security Scanner & `dislop-bench v3`**: Added `scripts/verify-packs-security.mjs` (`npm run check:security`) and `scripts/run-benchmark.mjs` (`benchmarks/datasets/*-v3.json`) validating multi-modal HTML/PDF/OOXML parsing, zero-FP CI gating, mock-LLM security clamping, and Fact Gate retention.
 
 ### Changed
-- **Hardened Multi-Modal Parsers & Ecosystem Manifests**: Upgraded zero-dependency PDF decoding (FlateDecode, `/ObjStm`, `/ToUnicode` CMaps, `TJ`, `/ActualText`, monospace exemption), nested HTML/JSX/SVG prose extraction with `data-dislop-ignore` / `dislop-quote` masking, Markdown pipe-table & angle-bracket link support, PPTX hidden-slide skipping, and `v1.0.0` MCP/plugin/GitHub Action manifests.
+- **Hardened Multi-Modal Parsers & Ecosystem Manifests**: Upgraded zero-dependency PDF decoding (`FlateDecode`, `ASCII85Decode`, `ASCIIHexDecode` filter chains, `/ObjStm`, `/ToUnicode` CMaps, `TJ`, recursive `/Subtype /Form` XObjects via `/Do`, `/ActualText`, monospace exemption, and `#` table-header immunity), nested HTML/JSX/SVG prose extraction with `data-dislop-ignore` / `dislop-quote` / script-wired disabled button & loading-state exemptions, Markdown pipe-table & angle-bracket link support, PPTX hidden-slide skipping, high-restraint Chinese bold-lead list thresholds, and `v1.0.0` MCP/plugin/GitHub Action & npm OIDC/MCP Registry release workflows.
+- **Provider Routing & CLI Flag Ergonomics**: Added `--model <name>` CLI override, built-in `--provider <openai|anthropic|gemini>` ambient key resolution without requiring `config.json`, updated default Gemini model to `gemini-3.8-flash` with `MAX_TOKENS` truncation guard, and added backward-compatible `dislop.findings/1` adaptation in the Official Cloud adapter.
 
 ## [0.9.1] - 2026-11-24
 

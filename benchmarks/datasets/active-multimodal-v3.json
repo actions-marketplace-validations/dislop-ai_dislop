@@ -2,7 +2,7 @@
   "schema": "dislop.bench-multimodal/3",
   "version": "1.0.0",
   "license": "CC0-1.0",
-  "description": "80 synthetic multi-modal samples (EN & ZH) across Markdown, HTML/JSX, CSS, SVG, DOCX, PPTX, PDF, and PNG testing Track A1 Defect Precision/Zero-FP CI Gate and Track A2 High-Restraint Suggestion Recall/Zero-FP Editorial Gate.",
+  "description": "86 synthetic multi-modal samples (EN & ZH) across Markdown, HTML/JSX, CSS, SVG, DOCX, PPTX, PDF (Flate/ASCII85/Form XObject), and PNG testing Track A1 Defect Precision/Zero-FP CI Gate and Track A2 High-Restraint Suggestion Recall/Zero-FP Editorial Gate.",
   "samples": [
     {
       "id": "a1-pos-en-chatbot-lead",
@@ -565,7 +565,7 @@
       "expected": "slop",
       "expectedKind": "suggestion",
       "expectedRuleIds": ["zh/prose/bold-lead-list-wall"],
-      "content": "- **性能**：查询耗时降了三成。\n- **稳定**：超时后自动切备库。\n- **成本**：下线了 6 台旧机器。\n- **维护**：配置收进一个文件里。"
+      "content": "- **精准高效**：提升团队协作与整体执行效率。\n- **安全可靠**：保障关键业务系统的平稳运行。\n- **灵活易用**：适配多场景的统一操作体验。\n- **全面赋能**：释放组织创新与长期增长潜能。\n- **协同联动**：打通各环节形成自动化闭环。"
     },
     {
       "id": "a2-pos-html-nested-prose-and-ui",
@@ -845,6 +845,124 @@
       "ooxml": {
         "word/document.xml": "<?xml version=\"1.0\"?><w:document xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"><w:body><w:p><w:r><w:t>Database migration completed at 02:15 UTC with zero dropped connections.</w:t></w:r></w:p></w:body></w:document>"
       }
+    },
+    {
+      "id": "a2-clean-pdf-ascii85-report",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "pdf",
+      "expected": "clean",
+      "expectedKind": "none",
+      "synthPdf": {
+        "compress": true,
+        "ascii85": true,
+        "pages": [
+          {
+            "width": 595,
+            "height": 842,
+            "runs": [
+              {
+                "font": "CJK-ToUnicode",
+                "size": 12,
+                "text": "多节点调度压测报告：在 4 台工作节点上运行 120 分钟，p95 延迟维持在 18ms。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "a2-pos-pdf-ascii85-slop",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "pdf",
+      "expected": "slop",
+      "expectedKind": "suggestion",
+      "expectedRuleIds": ["zh/prose/throat-clearing"],
+      "synthPdf": {
+        "compress": true,
+        "ascii85": true,
+        "pages": [
+          {
+            "width": 595,
+            "height": 842,
+            "runs": [
+              {
+                "font": "CJK-ToUnicode",
+                "size": 12,
+                "text": "值得注意的是，本次压测吞吐稳定在每秒 8000 次请求。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "a2-clean-pdf-form-xobject-appendix",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "pdf",
+      "expected": "clean",
+      "expectedKind": "none",
+      "synthPdf": {
+        "compress": true,
+        "useFormXObject": true,
+        "pages": [
+          {
+            "width": 420,
+            "height": 595,
+            "runs": [
+              {
+                "font": "CJK-ToUnicode",
+                "size": 12,
+                "text": "附录一：状态码与重试间隔说明（含 3 类超时阈值与 1 张对照表）。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "a1-clean-pdf-hash-table-header",
+      "track": "A1-defect",
+      "lang": "en",
+      "format": "pdf",
+      "expected": "clean",
+      "expectedKind": "none",
+      "synthPdf": {
+        "compress": true,
+        "pages": [
+          {
+            "width": 612,
+            "height": 792,
+            "runs": [
+              {
+                "font": "Helvetica",
+                "size": 10,
+                "text": "# Code Route Timeout"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "a1-clean-html-script-wired-disabled-btn",
+      "track": "A1-defect",
+      "lang": "zh",
+      "format": "html",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "<section class=\"controls\"><button id=\"exportBtn\" disabled>导出报表</button><button disabled>正在加载预览…</button></section><script>document.getElementById(\"exportBtn\").disabled = false;</script>"
+    },
+    {
+      "id": "a2-clean-zh-domain-spec-bullets",
+      "track": "A2-suggestion",
+      "lang": "zh",
+      "format": "md",
+      "expected": "clean",
+      "expectedKind": "none",
+      "content": "- **定义**：确定流程、负责人与 3 项硬验收标准。\n- **采样**：「核心延迟」按每 5 秒抓 1 次 p95 统计。\n- **限额**：单节点连接池上限控制在 64 个。\n- **回滚**：超阈值是否触发「自动降级」？"
     }
   ]
 }

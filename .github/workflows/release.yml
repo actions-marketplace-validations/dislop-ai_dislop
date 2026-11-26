@@ -1,0 +1,145 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify-and-github-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Verify tag matches package.json, CLI, server.json, and plugin.json versions
+        if: github.ref_type == 'tag'
+        run: |
+          node -e '
+            const fs = require("node:fs");
+            const tagVer = (process.env.GITHUB_REF_NAME || "").replace(/^v/, "");
+            const pkgVer = JSON.parse(fs.readFileSync("package.json", "utf8")).version;
+            const srvVer = JSON.parse(fs.readFileSync("server.json", "utf8")).version;
+            const plgVer = JSON.parse(fs.readFileSync("plugin.json", "utf8")).version;
+            const cliSrc = fs.readFileSync("src/cli-main.mjs", "utf8");
+            const cliVer = (cliSrc.match(/CLI_VERSION\s*=\s*"([^"]+)"/) || [])[1];
+            for (const [label, v] of [["package.json", pkgVer], ["server.json", srvVer], ["plugin.json", plgVer], ["src/cli-main.mjs", cliVer]]) {
+              if (v !== tagVer) {
+                console.error(`Version mismatch in ${label}: expected ${tagVer}, got ${v}`);
+                process.exit(1);
+              }
+            }
+            console.log(`All manifests aligned at v${tagVer}`);
+          '
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run full test, security, benchmark, and dogfood preflight
+        run: |
+          npm test
+          npm run check:security
+          npm run bench:assert
+          npm run dogfood
+
+      - name: Package npm tarball and extract release notes
+        if: github.ref_type == 'tag'
+        run: |
+          mkdir -p dist-assets
+          npm pack --pack-destination dist-assets
+          node -e '
+            const fs = require("node:fs");
+            const ver = (process.env.GITHUB_REF_NAME || "").replace(/^v/, "");
+            const cl = fs.readFileSync("CHANGELOG.md", "utf8");
+            const esc = ver.replace(/\./g, "\\.");
+            const re = new RegExp(`## \\[${esc}\\][^\\n]*\\n([\\s\\S]*?)(?=\\n## \\[|$)`);
+            const m = cl.match(re);
+            fs.writeFileSync("release-notes.md", m ? m[0].trim() + "\n" : `Release v${ver}\n`);
+          '
+
+      - name: Create or update GitHub Release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            gh release upload "${GITHUB_REF_NAME}" dist-assets/* --clobber
+          else
+            gh release create "${GITHUB_REF_NAME}" dist-assets/* \
+              --title "dislop ${GITHUB_REF_NAME}" \
+              --notes-file release-notes.md
+          fi
+
+  publish-npm:
+    needs: verify-and-github-release
+    if: github.ref_type == 'tag' && (vars.NPM_OIDC_ENABLED == 'true' || secrets.NPM_TOKEN != '')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Ensure npm >= 11.5.1 for OIDC Trusted Publishing
+        run: npm install -g npm@latest
+
+      - name: Publish dislop to npm
+        env:
+          BOOTSTRAP_NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          PKG_VER="$(node -p "require('./package.json').version")"
+          if curl -sf "https://registry.npmjs.org/dislop/${PKG_VER}" >/dev/null 2>&1; then
+            echo "dislop@${PKG_VER} is already published on npm; skipping duplicate publish."
+            exit 0
+          fi
+          if [ -n "${BOOTSTRAP_NPM_TOKEN}" ]; then
+            NODE_AUTH_TOKEN="${BOOTSTRAP_NPM_TOKEN}" npm publish --access=public --provenance
+          else
+            rm -f "${NPM_CONFIG_USERCONFIG:-/nonexistent}" ~/.npmrc
+            unset NODE_AUTH_TOKEN NPM_CONFIG_USERCONFIG
+            npm publish --access=public --provenance
+          fi
+
+  publish-mcp-registry:
+    needs: [verify-and-github-release, publish-npm]
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Publish server.json to Official MCP Registry via GitHub OIDC
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error "https://dislop.com/api/health" >/dev/null
+          curl --fail --location --silent --show-error \
+            "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" \
+            -o mcp-publisher.tar.gz
+          tar -xzf mcp-publisher.tar.gz mcp-publisher
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish

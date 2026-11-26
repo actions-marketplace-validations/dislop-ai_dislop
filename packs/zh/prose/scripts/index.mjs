@@ -243,10 +243,11 @@ export default definePackScripts({
 
       if (seg.id.endsWith("-S1") && seg.blockKind === "list-item") {
         const boldMatch = text.match(/^\*\*([\u4e00-\u9fff]{2,6})\*\*\s*[：:—-]/);
-        if (boldMatch && !/(?:--|`)/.test(text)) {
+        const hasConcreteAnchors = /(?:--|`|\d|[「『“”]|[？?]$)/.test(text);
+        if (boldMatch && !hasConcreteAnchors) {
           consecutiveBoldListItems += 1;
           if (consecutiveBoldListItems === 1) boldWallAnchorSeg = seg;
-          if (consecutiveBoldListItems === 4 && boldWallAnchorSeg) {
+          if (consecutiveBoldListItems === 5 && boldWallAnchorSeg) {
             ctx.reportSuggestion({
               ruleId: "bold-lead-list-wall",
               priority: "hint",
@@ -255,7 +256,7 @@ export default definePackScripts({
               targetId: boldWallAnchorSeg.id,
               line: boldWallAnchorSeg.line,
               originalQuote: boldWallAnchorSeg.text,
-              reason: "连续四条及以上使用“**抽象词**：说明”机械加粗列表，呈现明显助手生成模板感。",
+              reason: "连续五条及以上使用“**抽象词**：说明”机械加粗列表，呈现明显助手生成模板感。",
               rewritePrompt: "去掉重复的加粗前缀标签，改写为直接陈述事实的普通列表或自然段落。",
             });
           }

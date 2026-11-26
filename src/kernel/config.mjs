@@ -208,6 +208,7 @@ export function resolveLayeredConfig({ cwd = process.cwd(), env = process.env, c
   return {
     ...merged,
     explicitEngine,
+    modelOverride: cliFlags.model ? String(cliFlags.model) : null,
     noLlm: Boolean(cliFlags.noLlm),
     homeDir,
     userConfigPath,

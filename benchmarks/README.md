@@ -2,7 +2,7 @@
 
 `dislop-bench v3` evaluates the `dislop` v1.0.0 Micro-Kernel and its 11 built-in Packs across three offline suites (`CC0-1.0`):
 
-1. `datasets/active-multimodal-v3.json` (80 samples, EN & ZH)
+1. `datasets/active-multimodal-v3.json` (86 samples, EN & ZH)
    - Track A1 (`Defect` gate): hard delivery failures across Markdown, HTML/JSX, DOCX, PPTX, PDF, and PNG metadata (`Precision >= 98%`, `Recall >= 96%`, `Clean FPR = 0.0%`).
    - Track A2 (`Suggestion` gate): editorial & template cues across prose, web UI, slide decks, and compressed CJK PDFs (`Recall >= 95%`, `Clean FPR = 0.0%`).
 2. `datasets/semantic-and-security-v3.json` (18 cases)

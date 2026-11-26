@@ -664,18 +664,88 @@ function parseMediaBoxRect(dictText) {
   return [w, h];
 }
 
+function decodeAsciiHex(buf) {
+  const bytes = [];
+  let hi = -1;
+  for (let i = 0; i < buf.length; i += 1) {
+    const c = buf[i];
+    if (c === 0x3e) break; // '>'
+    let v = -1;
+    if (c >= 0x30 && c <= 0x39) v = c - 0x30;
+    else if (c >= 0x41 && c <= 0x46) v = c - 0x37;
+    else if (c >= 0x61 && c <= 0x66) v = c - 0x57;
+    else continue;
+    if (hi === -1) hi = v;
+    else {
+      bytes.push((hi << 4) | v);
+      hi = -1;
+    }
+  }
+  if (hi !== -1) bytes.push(hi << 4);
+  return Buffer.from(bytes);
+}
+
+function decodeAscii85(buf) {
+  const out = [];
+  const tuple = [];
+  for (let i = 0; i < buf.length; i += 1) {
+    const c = buf[i];
+    if (c === 0x7e && buf[i + 1] === 0x3e) break; // '~>'
+    if (c <= 0x20) continue;
+    if (c === 0x7a && tuple.length === 0) {
+      out.push(0, 0, 0, 0);
+      continue;
+    }
+    if (c < 0x21 || c > 0x75) continue;
+    tuple.push(c - 0x21);
+    if (tuple.length === 5) {
+      const val =
+        (((tuple[0] * 85 + tuple[1]) * 85 + tuple[2]) * 85 + tuple[3]) * 85 + tuple[4];
+      out.push((val >>> 24) & 0xff, (val >>> 16) & 0xff, (val >>> 8) & 0xff, val & 0xff);
+      tuple.length = 0;
+    }
+  }
+  if (tuple.length >= 2) {
+    const k = tuple.length;
+    while (tuple.length < 5) tuple.push(84);
+    const val =
+      (((tuple[0] * 85 + tuple[1]) * 85 + tuple[2]) * 85 + tuple[3]) * 85 + tuple[4];
+    const extra = [(val >>> 24) & 0xff, (val >>> 16) & 0xff, (val >>> 8) & 0xff, val & 0xff];
+    for (let j = 0; j < k - 1; j += 1) out.push(extra[j]);
+  }
+  return Buffer.from(out);
+}
+
+function extractPdfFilterList(dictRaw) {
+  const arrM = dictRaw.match(/\/Filter\s*\[([\s\S]*?)\]/);
+  if (arrM) {
+    return [...arrM[1].matchAll(/\/([A-Za-z0-9]+)/g)].map((m) => m[1]);
+  }
+  const singleM = dictRaw.match(/\/Filter\s*\/([A-Za-z0-9]+)/);
+  return singleM ? [singleM[1]] : [];
+}
+
 function decodeObjectStream(obj) {
   if (!obj || !obj.streamBytes) return "";
   let bytes = obj.streamBytes;
-  if (/\/FlateDecode\b/.test(obj.dictRaw)) {
-    try {
-      bytes = inflateSync(bytes, { maxOutputLength: MAX_STREAM_UNCOMPRESSED_BYTES });
-    } catch {
+  const filters = extractPdfFilterList(obj.dictRaw || "");
+  for (const fName of filters) {
+    if (fName === "ASCII85Decode" || fName === "A85") {
+      bytes = decodeAscii85(bytes);
+    } else if (fName === "ASCIIHexDecode" || fName === "AHx") {
+      bytes = decodeAsciiHex(bytes);
+    } else if (fName === "FlateDecode" || fName === "Fl") {
       try {
-        bytes = inflateRawSync(bytes, { maxOutputLength: MAX_STREAM_UNCOMPRESSED_BYTES });
+        bytes = inflateSync(bytes, { maxOutputLength: MAX_STREAM_UNCOMPRESSED_BYTES });
       } catch {
-        return "";
+        try {
+          bytes = inflateRawSync(bytes, { maxOutputLength: MAX_STREAM_UNCOMPRESSED_BYTES });
+        } catch {
+          return "";
+        }
       }
+    } else {
+      return "";
     }
   }
   return bytes.toString("latin1");
@@ -881,8 +951,7 @@ function stripInlineImagesLinear(streamText) {
 function resolvePageFontMap(resText, objects, fontCache) {
   const fontMap = new Map();
   const fontRefs = [];
-  const inlineM = resText.match(/\/Font\s*<<([\s\S]*?)>>/);
-  if (inlineM) {
+  for (const inlineM of resText.matchAll(/\/Font\s*<<([\s\S]*?)>>/g)) {
     for (const fm of inlineM[1].matchAll(/\/([A-Za-z0-9_+.-]+)\s+(\d+)\s+\d+\s+R/g)) {
       fontRefs.push([fm[1], Number(fm[2])]);
     }
@@ -930,7 +999,39 @@ function resolvePageFontMap(resText, objects, fontCache) {
   return fontMap;
 }
 
-function parsePdfContentStream(streamText, fontMap = new Map()) {
+function resolvePageXObjectMap(resText, objects) {
+  const xObjMap = new Map();
+  for (const inlineM of resText.matchAll(/\/XObject\s*<<([\s\S]*?)>>/g)) {
+    for (const xm of inlineM[1].matchAll(/\/([A-Za-z0-9_+.-]+)\s+(\d+)\s+\d+\s+R/g)) {
+      xObjMap.set(xm[1], Number(xm[2]));
+    }
+  }
+  for (const refM of resText.matchAll(/\/XObject\s+(\d+)\s+\d+\s+R/g)) {
+    const xDictObj = objects.get(Number(refM[1]));
+    if (xDictObj) {
+      for (const xm of xDictObj.dictRaw.matchAll(/\/([A-Za-z0-9_+.-]+)\s+(\d+)\s+\d+\s+R/g)) {
+        xObjMap.set(xm[1], Number(xm[2]));
+      }
+    }
+  }
+  return xObjMap;
+}
+
+function extractOwnResourcesText(dictRaw, objects) {
+  let out = dictRaw || "";
+  for (const resRef of out.matchAll(/\/Resources\s+(\d+)\s+\d+\s+R/g)) {
+    if (objects.has(Number(resRef[1]))) {
+      out += `\n${objects.get(Number(resRef[1])).dictRaw}`;
+    }
+  }
+  return out;
+}
+
+function parsePdfContentStream(
+  streamText,
+  fontMap = new Map(),
+  { xObjectMap = new Map(), objects = new Map(), fontCache = new Map(), visitedForms = new Set(), depth = 0 } = {},
+) {
   const cleaned = stripInlineImagesLinear(streamText);
   const textParts = [];
   const nonMonoParts = [];
@@ -1160,6 +1261,36 @@ function parsePdfContentStream(streamText, fontMap = new Map()) {
           curY = ny;
           tm = vals;
         }
+      } else if (tok === "Do") {
+        if (lastName && depth < 8 && xObjectMap.has(lastName)) {
+          const xObjNum = xObjectMap.get(lastName);
+          if (!visitedForms.has(xObjNum)) {
+            const formObj = objects.get(xObjNum);
+            if (formObj && /\/Subtype\s*\/Form\b/.test(formObj.dictRaw || "")) {
+              flushLine();
+              const formStream = decodeObjectStream(formObj);
+              if (formStream) {
+                const formResText = extractOwnResourcesText(formObj.dictRaw, objects);
+                const ownFonts = resolvePageFontMap(formResText, objects, fontCache);
+                const mergedFonts = new Map([...fontMap, ...ownFonts]);
+                const ownXObjs = resolvePageXObjectMap(formResText, objects);
+                const mergedXObjs = new Map([...xObjectMap, ...ownXObjs]);
+                const nextVisited = new Set(visitedForms);
+                nextVisited.add(xObjNum);
+                const nested = parsePdfContentStream(formStream, mergedFonts, {
+                  xObjectMap: mergedXObjs,
+                  objects,
+                  fontCache,
+                  visitedForms: nextVisited,
+                  depth: depth + 1,
+                });
+                if (nested.text) textParts.push(nested.text);
+                if (nested.nonMonoText) nonMonoParts.push(nested.nonMonoText);
+              }
+            }
+          }
+        }
+        lastName = null;
       } else if (tok === "BMC" || tok === "BDC") {
         mcStack.push({ actualText: null, hasChildActual: false });
       } else if (tok === "EMC") {
@@ -1207,13 +1338,8 @@ export function inspectPdfBuffer(buffer) {
     }
   }
 
-  function extractOwnResourcesText(dictRaw) {
-    let out = dictRaw || "";
-    const resRef = out.match(/\/Resources\s+(\d+)\s+\d+\s+R/);
-    if (resRef && objects.has(Number(resRef[1]))) {
-      out += `\n${objects.get(Number(resRef[1])).dictRaw}`;
-    }
-    return out;
+  function extractOwnRes(dictRaw) {
+    return extractOwnResourcesText(dictRaw, objects);
   }
 
   const orderedPageObjs = [];
@@ -1231,7 +1357,7 @@ export function inspectPdfBuffer(buffer) {
       if (!obj) continue;
       const ownBox = parseMediaBoxRect(obj.dictRaw) || parentBox;
       const hasOwnRes = /\/Resources(?:\s|\n|<<)/.test(obj.dictRaw);
-      const combinedRes = hasOwnRes ? `${parentRes}\n${extractOwnResourcesText(obj.dictRaw)}` : parentRes;
+      const combinedRes = hasOwnRes ? `${parentRes}\n${extractOwnRes(obj.dictRaw)}` : parentRes;
       if (/\/Type\s*\/Pages\b/.test(obj.dictRaw)) {
         const kidsMatch = obj.dictRaw.match(/\/Kids\s*\[([^\]]*)\]/);
         if (kidsMatch) {
@@ -1244,7 +1370,7 @@ export function inspectPdfBuffer(buffer) {
       }
       if (/\/Type\s*\/Page(?![a-zA-Z])/.test(obj.dictRaw)) {
         inheritedMediaBox.set(objNum, ownBox || [612, 792]);
-        inheritedResources.set(objNum, combinedRes || extractOwnResourcesText(obj.dictRaw));
+        inheritedResources.set(objNum, combinedRes || extractOwnRes(obj.dictRaw));
         orderedPageObjs.push(obj);
       }
     }
@@ -1259,7 +1385,7 @@ export function inspectPdfBuffer(buffer) {
     for (const obj of Array.from(objects.values()).sort((a, b) => a.objNum - b.objNum)) {
       if (/\/Type\s*\/Page(?![a-zA-Z])/.test(obj.dictRaw)) {
         inheritedMediaBox.set(obj.objNum, parseMediaBoxRect(obj.dictRaw) || [612, 792]);
-        inheritedResources.set(obj.objNum, extractOwnResourcesText(obj.dictRaw));
+        inheritedResources.set(obj.objNum, extractOwnRes(obj.dictRaw));
         orderedPageObjs.push(obj);
       }
     }
@@ -1268,8 +1394,9 @@ export function inspectPdfBuffer(buffer) {
   const fontCache = new Map();
   const pages = orderedPageObjs.map((pageObj, idx) => {
     const [width, height] = inheritedMediaBox.get(pageObj.objNum) || [612, 792];
-    const resText = inheritedResources.get(pageObj.objNum) || extractOwnResourcesText(pageObj.dictRaw);
+    const resText = inheritedResources.get(pageObj.objNum) || extractOwnRes(pageObj.dictRaw);
     const fontMap = resolvePageFontMap(resText, objects, fontCache);
+    const xObjectMap = resolvePageXObjectMap(resText, objects);
 
     const contentRefs = [];
     const arrMatch = pageObj.dictRaw.match(/\/Contents\s*\[([^\]]*)\]/);
@@ -1281,7 +1408,13 @@ export function inspectPdfBuffer(buffer) {
     }
 
     const joinedStream = contentRefs.map((id) => decodeObjectStream(objects.get(id))).join("\n");
-    const parsed = parsePdfContentStream(joinedStream, fontMap);
+    const parsed = parsePdfContentStream(joinedStream, fontMap, {
+      xObjectMap,
+      objects,
+      fontCache,
+      visitedForms: new Set(),
+      depth: 0,
+    });
     const wordCount = parsed.text.trim() ? parsed.text.trim().split(/\s+/).length : 0;
     const cjkCount = (parsed.text.match(/[\u4e00-\u9fff]/g) || []).length;
 

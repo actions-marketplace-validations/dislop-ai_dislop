@@ -222,9 +222,12 @@ function detectRawMarkdownLeaksInRun(text, segmentId, line, locator) {
   const leaks = [];
   const rules = [
     { pattern: "bold-asterisks", re: /\*\*[^*\n]{2,120}\*\*/g },
-    { pattern: "atx-heading", re: /(?:^|\n)\s*#{1,6}\s+\S[^\n]{1,120}/g },
+    { pattern: "atx-heading", re: /(?:^|\n)\s*#{2,6}\s+\S[^\n]{1,120}/g },
     { pattern: "markdown-link", re: /\[[^\]\n]{1,80}\]\(https?:\/\/[^)\s]+\)/g },
-    { pattern: "code-fence", re: /```[\s\S]*?```|```[a-zA-Z0-9_-]*/g },
+    {
+      pattern: "code-fence",
+      re: /(?:^|\n)[ \t]*```[a-zA-Z0-9_+-]*[ \t]*(?:\r?\n|$)|```[a-zA-Z0-9_+-]*\r?\n[\s\S]*?```/g,
+    },
   ];
   for (const { pattern, re } of rules) {
     let m;
@@ -583,7 +586,7 @@ function parseLengthPx(rawVal) {
   return m ? Number(m[1]) : null;
 }
 
-function collectUiSignals(rawSource, format) {
+function collectUiSignals(rawSource, format, scriptText = "") {
   const purplePinkGradients = [];
   const glowBlobs = [];
   const pillBadges = [];
@@ -642,9 +645,20 @@ function collectUiSignals(rawSource, format) {
   const btnRe = /<button\b([^>]*\bdisabled\b[^>]*)>([\s\S]*?)<\/button>/gi;
   while ((m = btnRe.exec(rawSource)) !== null) {
     const attrs = m[1];
-    if (!/\b(?:title|aria-label|aria-describedby)=/i.test(attrs)) {
-      disabledButtonsWithoutTitle.push({ text: m[0], offset: m.index });
+    if (/\b(?:title|aria-label|aria-describedby)=/i.test(attrs)) continue;
+    const innerText = m[2].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    const isLoadingLabel =
+      /(?:\.\.\.|\u2026|\b(?:loading|pending|preparing|initializing|saving|submitting|connecting|please wait)\b|\u51c6\u5907\u4e2d|\u52a0\u8f7d\u4e2d|\u5904\u7406\u4e2d|\u751f\u6210\u4e2d|\u8bf7\u7a0d\u5019)/i.test(
+        innerText,
+      );
+    if (isLoadingLabel) continue;
+    const idMatch = attrs.match(/\bid\s*=\s*(?:"([A-Za-z0-9_-]+)"|'([A-Za-z0-9_-]+)')/i);
+    const btnId = idMatch ? idMatch[1] || idMatch[2] : "";
+    if (btnId && scriptText) {
+      const escId = btnId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      if (new RegExp(`\\b${escId}\\b`).test(scriptText)) continue;
     }
+    disabledButtonsWithoutTitle.push({ text: m[0], offset: m.index });
   }
 
   if (format === "svg" && /<svg\b/i.test(rawSource)) {
@@ -880,6 +894,12 @@ function parseMarkupOrStylesheet(rawText, filePath, format) {
     }
   };
 
+  const scriptBodies = [];
+  for (const sm of rawText.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)) {
+    if (sm[1]) scriptBodies.push(sm[1]);
+  }
+  const scriptText = scriptBodies.join("\n");
+
   applySuppressionDirectives(rawText, nonUiMask);
   maskRegexOn(nonUiMask, /<!--[\s\S]*?-->/g);
   maskRegexOn(nonUiMask, /\{\/\*[\s\S]*?\*\/\}/g);
@@ -896,7 +916,7 @@ function parseMarkupOrStylesheet(rawText, filePath, format) {
   const maskedUiSource = Array.from(rawText)
     .map((ch, idx) => (nonUiMask[idx] ? (ch === "\n" ? "\n" : " ") : ch))
     .join("");
-  const uiSignals = collectUiSignals(maskedUiSource, format);
+  const uiSignals = collectUiSignals(maskedUiSource, format, scriptText);
 
   const proseMask = new Uint8Array(nonUiMask);
   maskRegexOn(proseMask, /<style\b[^>]*>[\s\S]*?<\/style>/gi);
