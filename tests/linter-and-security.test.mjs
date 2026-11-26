@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -229,6 +229,71 @@ test("Config trust boundaries (R1-R4, R9): project allowlist, git-tracked local 
     });
     assert.equal(testRoute.engineLabel, "deterministic");
     assert.equal(testRoute.execute, null);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("action.yml exposes fail-on and since inputs and routes them cleanly to dislop CLI", () => {
+  const actionRaw = fs.readFileSync(path.join(process.cwd(), "action.yml"), "utf8");
+  assert.match(actionRaw, /^\s+fail-on:/m);
+  assert.match(actionRaw, /^\s+since:/m);
+  assert.match(actionRaw, /--fail-on"\s+"\$\{INPUT_FAIL_ON\}"/);
+  assert.match(actionRaw, /--since"\s+"\$\{INPUT_SINCE\}"/);
+
+  const { root } = makeWorkspace();
+  try {
+    const captureScript = `
+      set -euo pipefail
+      ARGS=("check" "--no-llm" "--fail-on" "\${INPUT_FAIL_ON}" "--level" "\${INPUT_LEVEL}" "--format" "\${INPUT_FORMAT}" "--lang" "\${INPUT_LANG}")
+      if [ -n "\${INPUT_PACK}" ]; then
+        ARGS+=("--pack" "\${INPUT_PACK}")
+      fi
+      if [ -n "\${INPUT_SINCE}" ]; then
+        ARGS+=("--since" "\${INPUT_SINCE}")
+      fi
+      NONEMPTY_LINES=()
+      while IFS= read -r line; do
+        trimmed="\${line#"\${line%%[![:space:]]*}"}"
+        trimmed="\${trimmed%"\${trimmed##*[![:space:]]}"}"
+        [ -n "\${trimmed}" ] && NONEMPTY_LINES+=("\${trimmed}")
+      done <<< "\${INPUT_PATHS}"
+      if [ "\${#NONEMPTY_LINES[@]}" -gt 1 ]; then
+        for item in "\${NONEMPTY_LINES[@]}"; do
+          ARGS+=("\${item}")
+        done
+      elif [ "\${#NONEMPTY_LINES[@]}" -eq 1 ]; then
+        only="\${NONEMPTY_LINES[0]}"
+        if [ -n "\${INPUT_SINCE}" ] && [ "\${only}" = "." ]; then
+          :
+        elif [ -e "\${only}" ]; then
+          ARGS+=("\${only}")
+        else
+          read -r -a words <<< "\${only}"
+          ARGS+=("\${words[@]}")
+        fi
+      fi
+      printf '%s\\n' "\${ARGS[@]}"
+    `;
+    const res = spawnSync("bash", ["-c", captureScript], {
+      cwd: root,
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        INPUT_PATHS: ".",
+        INPUT_PACK: "en/prose",
+        INPUT_FAIL_ON: "warning",
+        INPUT_SINCE: "origin/main",
+        INPUT_LEVEL: "all",
+        INPUT_FORMAT: "json",
+        INPUT_LANG: "en",
+      },
+    });
+    assert.equal(res.status, 0, res.stderr);
+    const args = res.stdout.trim().split("\n");
+    assert.ok(args.includes("--fail-on") && args[args.indexOf("--fail-on") + 1] === "warning");
+    assert.ok(args.includes("--since") && args[args.indexOf("--since") + 1] === "origin/main");
+    assert.equal(args.includes("."), false);
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }

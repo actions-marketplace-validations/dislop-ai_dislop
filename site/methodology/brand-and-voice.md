@@ -1,13 +1,13 @@
 ---
 content-type: reference-data
-version: 0.9.1
+version: 1.1.1
 ---
 
 # Voice, Copy, and Visual Guide
 
-[简体中文](./brand-and-voice-guide.zh-CN.md) · [Product Brief](../PRODUCT.md)
+[简体中文](https://github.com/dislop-ai/dislop/blob/main/docs/brand-and-voice-guide.zh-CN.md) · [Product Brief](./product-brief.md)
 
-One rule covers every public word in `dislop`—the website, READMEs, CLI help, and release notes: **write like the person who built the tool talking to a colleague. Plain, relaxed, direct.** Public slogans (`Cutting AI slop is real productivity.` / `去 AI 味才是真正的生产力！`), positioning, target users, selling points, and one-sentence pitch follow [PRODUCT.md](../PRODUCT.md).
+One rule covers every public word in `dislop`—the website, READMEs, CLI help, and release notes: **write like the person who built the tool talking to a colleague. Plain, relaxed, direct.** Public slogans (`Cutting AI slop is real productivity.` / `去 AI 味才是真正的生产力！`), positioning, target users, selling points, and one-sentence pitch follow [PRODUCT.md](./product-brief.md).
 
 Do not sound corporate, do not try to impress or please the reader, and do not dress the tool up in a literary persona.
 
@@ -15,7 +15,7 @@ Do not sound corporate, do not try to impress or please the reader, and do not d
 
 ## 1. A Real Before/After: Why 0 Findings Can Still Sound Like AI
 
-An earlier draft of our own homepage hero passed `dislop check --fail-on info` with 0 findings, yet still read like an LLM wrote it:
+An earlier draft of our own homepage hero passed `dislop check --no-llm --fail-on warning` with 0 findings, yet still read like an LLM wrote it:
 
 ```text
 Before (0 findings, still reads like AI):
@@ -90,7 +90,7 @@ Keep automated cards and captions plain:
 
 1. **Show the verbatim text with its marks**: Frame a crisp `0px`-radius white sheet (`#FFFFFF`) on the dark charcoal stage (`#14171A`). Render the real input prose, HTML snippet, or slide XML with live `dislop check` marks (`#F04438` *dele* loop on deletable chat wrappers, solid red underline on other `core` hard bugs, dashed blue underline on style warnings) measured directly to the text span.
 2. **Keep the dele mark (`₰`) as the only visual signature**: `dislop` never speaks in first person (`"I"`), never uses a mascot, and never scolds the reader. Any dry humor comes from letting verbatim AI leftovers—including `dislop`'s own retired drafts—sit under the *dele* mark without commentary.
-3. **State what went in, what came out, and the command—then stop**: Name the concrete input file, commit, or setup (`30` drafts across `4` upstream `SKILL.md` prompts on `gemini-3.5-flash`). Give the verbatim surviving defect or count (`4/4` standalone runs left dead `href="#"` in HTML). Give the plain reason or reproducible command (`npx --yes dislop check . --pack auto`), and end there without a closing moral.
+3. **State what went in, what came out, and the command—then stop**: Name the concrete input file, commit, or setup (`30` drafts across `4` upstream `SKILL.md` prompts on `gemini-3.5-flash`). Give the verbatim surviving defect or count (`4/4` standalone runs left dead `href="#"` in HTML). Give the plain reason or reproducible command (`npx --yes dislop check . --no-llm`), and end there without a closing moral.
 4. **Hard bans on outward copy**: No rhetorical-question openers (`?` in line 1), no exclamation hype (outside the official Chinese slogan), no transition glue, an explicit `EXAMPLE` badge on every constructed snippet (live benchmark cards cite commit + task ID instead), and an upfront self-scoring note whenever citing pass rates scored with `dislop`'s own rules.
 
 ---
@@ -105,6 +105,6 @@ Before merging changes to the website, README, CLI help, or release notes:
 4. Is the tool wearing a roleplay costume (`Pass for press`, `the pen stays in your hand`)? Say it plainly.
 5. Does the same concept (`hard bug` / `warning` / `passed`) use the same plain name everywhere on the page?
 6. Are English and Chinese strictly separated (no Chinese in EN examples, no English in ZH examples)?
-7. Does `dislop check <file> --fail-on info` pass with 0 findings, and keep body prose free of `!`, emojis, and `finding(s)` (the official Chinese slogan `去 AI 味才是真正的生产力！` keeps its original `！`)?
+7. Does `dislop check <file> --no-llm --fail-on warning` pass with 0 findings, and keep body prose free of `!`, emojis, and `finding(s)` (the official Chinese slogan `去 AI 味才是真正的生产力！` keeps its original `！`)?
 
 The machine-readable voice config lives at [docs/brand/voice.json](https://github.com/dislop-ai/dislop/blob/main/docs/brand/voice.json) (`dislop.voice/1`, `v1.0.0`).

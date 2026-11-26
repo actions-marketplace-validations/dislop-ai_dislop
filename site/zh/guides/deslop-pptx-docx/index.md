@@ -2,7 +2,7 @@
 content-type: reference-data
 lang: zh
 updated: 2026-11-23
-version: 0.9.1
+version: 1.1.1
 ---
 
 # AI 生成的 PPT 和 Word 怎么去模板味：字墙、自动缩字和伪结论标题排查教程
@@ -42,11 +42,11 @@ good: ## 三季度新客首周流失率从 34% 降至 19%
 如果你的文件涉及内部经营数据或未公开方案，最稳妥的方式是在本机离线跑一遍检查：
 
 ```bash
-# Node 命令行（零依赖）
+# 本地离线一键检查 Word、PPT 和 PDF（自动按格式加载对应规则包）
 npx --yes dislop check report.docx deck.pptx slides.pdf
 
-# Python 命令行（uvx 一行执行）
-uvx dislop check deck.pptx --pack executive-deck
+# 显式启用幻灯片规则包并开启 warning 阻断
+npx --yes dislop check deck.pptx --pack common/slide-deck,zh/slide-deck --no-llm --fail-on warning
 ```
 
 如果文件本身已损坏、加密或扫描 PDF 完全没有可选文字，`dislop` 会如实输出 `[SKIP]` 或覆盖率警告（单文件返回退出码 `2`），不会假装报成“0 处问题”。

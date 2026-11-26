@@ -53,7 +53,6 @@
         "https://github.com/dislop-ai",
         "https://github.com/dislop-ai/dislop",
         "https://www.npmjs.com/package/dislop",
-        "https://pypi.org/project/dislop/",
         "https://x.com/dislop_ai",
         "https://glama.ai/mcp/servers/dislop-ai/dislop",
         "https://glama.ai/mcp/connectors/io.github.dislop-ai/dislop"
@@ -74,19 +73,19 @@
       "name": "dislop",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "macOS, Linux, Windows, Web",
-      "softwareVersion": "0.9.1",
+      "softwareVersion": "1.1.1",
       "url": "https://dislop.com/zh/",
       "image": "https://dislop.com/assets/og-card-zh.png",
       "installUrl": "https://www.npmjs.com/package/dislop",
       "codeRepository": "https://github.com/dislop-ai/dislop",
       "softwareHelp": "https://dislop.com/llms.txt",
       "license": "https://www.apache.org/licenses/LICENSE-2.0",
-      "description": "专用的 AI 味检查工具，内置 7 套场景包 53 条规则与 90 条核验工具清单，支持本地离线检查文档、网页和 Word/PPT。",
+      "description": "可插拔的内容与交付物检查器（Node.js 零依赖微内核），内置 11 套模块化规则包与 90 条核验工具清单，支持双轨 CI 门禁与本地离线检查。",
       "featureList": [
-        "内置 53 条离线确定性规则，覆盖 Markdown、网页界面、Word、PPT 和 PDF",
-        "改后核验保留数字、单位、日期和关键词，并防改过头",
-        "支持本地 CLI、编辑器插件、纯 Markdown Skill 与本地 stdio MCP",
-        "可选连接 https://dislop.com/mcp 远程 MCP 进行多模态视觉版式审校"
+        "Node.js 零外部依赖微内核，内置 11 套规则包覆盖 Markdown、网页界面、Word、PPT 和 PDF",
+        "双轨退出码机制区分 CI 阻塞硬伤（Defect）与非阻塞散文建议（Suggestion）",
+        "改后核验保留数字、单位、链接、代码块与实体，防篡改",
+        "支持本地 CLI、纯 Markdown Skill、本地 stdio MCP 及远程 MCP"
       ],
       "offers": [
         {
@@ -163,7 +162,7 @@
       <a class="brand-lockup" href="#top">
         <img src="../assets/logo.svg" width="30" height="30" alt="">
         <span class="brand-wordmark">dislop</span>
-        <span class="brand-meta"><span data-i18n="nav.brandMeta">AI 味检查</span> · <span class="brand-ver">v0.9.1</span></span>
+        <span class="brand-meta"><span data-i18n="nav.brandMeta">AI 味检查</span> · <span class="brand-ver">v1.1.1</span></span>
       </a>
 
       <nav class="nav-links" aria-label="Main navigation">
@@ -429,7 +428,7 @@
             </li>
             <li>
               <h3 data-i18n="surf.w2Title">开源本地 CLI 与插件</h3>
-              <p data-i18n="surf.w2Desc">零依赖，安装包不到 250 KB，内置 7 套场景包。断网也能查文档、Word、PPT 和 Git 改动，适合终端、编辑器和 CI。开发者也可以配自己的模型密钥。</p>
+              <p data-i18n="surf.w2Desc">Node.js 20+ 零外部依赖微内核，内置 11 套模块化规则包，支持 .dislop.json 分目录覆盖与 .dislop/rules.json 自定义规则。断网也能查文档、Word、PPT、PDF 和 Git 改动，还可选 Ollama 本地小模型或自有密钥。</p>
             </li>
             <li>
               <h3 data-i18n="surf.w3Title">官方云端 MCP 与网页工作台</h3>
@@ -568,7 +567,7 @@
           <div class="endpoint-row">
             <div class="endpoint-main">
               <a class="endpoint-path" href="../llms-full.txt">/llms-full.txt</a>
-              <div class="endpoint-desc" data-i18n="ep.full">单次拉取的全部 53 条规则</div>
+              <div class="endpoint-desc" data-i18n="ep.full">单文件拉取核心规则摘要</div>
             </div>
             <span class="endpoint-meta">35.6 KB · ~9106 tok</span>
           </div>
@@ -667,9 +666,9 @@
           </div>
           <figcaption class="demo-caption">
             <div class="demo-cap-head">
-              <strong class="demo-cap-title" data-i18n="demos.c2Title">命令行门禁：Node 与 Python 结果一致</strong>
+              <strong class="demo-cap-title" data-i18n="demos.c2Title">命令行门禁：确定性硬伤拦 CI，建议不阻塞</strong>
             </div>
-            <span class="demo-cap-desc" data-i18n="demos.c2Desc">本地跑 dislop check --profile，硬伤直接返回退出码 1 卡住 CI，顺带输出句长起伏与具体度体检。</span>
+            <span class="demo-cap-desc" data-i18n="demos.c2Desc">本地跑 dislop check --no-llm，硬伤（Defect）直接返回退出码 1 卡住 CI，散文建议（Suggestion）只提示不误杀，顺带输出句长起伏统计。</span>
           </figcaption>
         </figure>
 
@@ -705,7 +704,7 @@
             <div class="demo-cap-head">
               <strong class="demo-cap-title" data-i18n="demos.c5Title">Word / PPT 检查：揪出裸星号、字墙和过程标题</strong>
             </div>
-            <span class="demo-cap-desc" data-i18n="demos.c5Desc">直接解包 .pptx 检查未渲染的 **加粗** 符号、单页字墙、68% 自动缩字与空泛标题，改回结论先行的干净页。</span>
+            <span class="demo-cap-desc" data-i18n="demos.c5Desc">直接解包 .pptx 检查未渲染的 Markdown 加粗星号、单页字墙、68% 自动缩字与空泛标题，改回结论先行的干净页。</span>
           </figcaption>
         </figure>
 
@@ -771,14 +770,14 @@
             </tr>
             <tr>
               <td><strong data-i18n="cov.r5Name">Git 改动与 PR</strong></td>
-              <td><code>--changed</code>, <code>--staged</code></td>
-              <td data-i18n="cov.r5Scope">只查本次改过的行，拦住残留寒暄、占位符和文字/页面里的 AI 味，支持 GitHub PR 批注和 SARIF。代码语法树检查还没做。</td>
+              <td><code>--changed</code>, <code>--since</code></td>
+              <td data-i18n="cov.r5Scope">只查本次改过的或 --since &lt;ref&gt; 变动文件，拦住残留寒暄、占位符和文字/页面里的 AI 味，支持 SARIF 2.1.0。代码语法树检查还没做。</td>
               <td data-i18n="status.partial">改动检查可用，AST 未做</td>
             </tr>
             <tr>
-              <td><strong data-i18n="cov.r6Name">个人文风、轻量模型与云端深度审校</strong></td>
-              <td><code>voice</code>, <code>--ml</code>, <code>MCP</code></td>
-              <td data-i18n="cov.r6Scope">本地 CLI 与工作台支持离线统计个人文风、内置 14.6 KB 轻量空话识别（--ml）；登录后可通过官方云端 MCP 按文体做多模型深度审校与提炼个人文风。</td>
+              <td><strong data-i18n="cov.r6Name">个人文风、本地小模型与 3 档路由</strong></td>
+              <td><code>voice</code>, <code>Ollama</code>, <code>MCP</code></td>
+              <td data-i18n="cov.r6Scope">CLI 与工作台支持离线个人文风（dislop voice）、可选 Ollama 本地小模型（dislop model pull）、自有密钥（--engine byok），以及登录后通过官方云端 MCP 做多模型审校。</td>
               <td data-i18n="status.live">可用</td>
             </tr>
           </tbody>
@@ -1715,15 +1714,15 @@
       <div class="pricing-grid">
         <div class="pricing-col">
           <div class="pricing-head">
-            <h3 data-i18n="price.t1Name">开源本地（Skill + CLI）</h3>
+            <h3 data-i18n="price.t1Name">开源本地（Skill + CLI + SDK）</h3>
             <span class="pricing-amount" data-i18n="price.t1Price">$0 · 永久免费</span>
           </div>
           <p class="pricing-sub" data-i18n="price.t1Sub">适合稿子不能上传的场景，比如内网和私有仓库。代码和规则都开源。</p>
           <ul class="pricing-list">
-            <li data-i18n="price.t1F1">纯文档 Agent Skill（不含脚本）与开源本地 CLI（Apache-2.0）</li>
-            <li data-i18n="price.t1F2">全量内置 7 套场景与行业包（53 条规则），离线查文档、Word、PPT、PDF、图片与网页</li>
-            <li data-i18n="price.t1F3">内置 5 轴节奏体检、14.6 KB 轻量本地模型（--ml）与 dislop voice 离线个人文风</li>
-            <li data-i18n="price.t1F4">零联网零上传；开发者也可配自有密钥做单步审校</li>
+            <li data-i18n="price.t1F1">纯文档 Agent Skill（不含脚本）、Node.js 零依赖 CLI 与本地 stdio MCP（Apache-2.0）</li>
+            <li data-i18n="price.t1F2">全量内置 11 套模块化规则包，离线查 Markdown、HTML/CSS/JSX/SVG、图片、Word、PPT 与 PDF</li>
+            <li data-i18n="price.t1F3">双轨 CI 门禁（Defect vs Suggestion）、.dislop.json 分目录覆盖、事实核验（verify）与本地 Ollama / 个人文风</li>
+            <li data-i18n="price.t1F4">零联网零上传；开发者也可配自有密钥（BYOK）或通过 dislop/sdk 自定义插件包</li>
           </ul>
           <div class="quick-actions" style="margin-top:auto;padding-top:12px;">
             <a href="#surfaces" class="ctrl-btn" data-i18n="price.t1Cta">安装 Skill / CLI ↑</a>
@@ -1978,7 +1977,6 @@
           <span class="colophon-group-title" data-i18n="footer.gElsewhere">外部链接</span>
           <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener">GitHub (Apache-2.0)</a>
           <a href="https://www.npmjs.com/package/dislop" target="_blank" rel="noopener">npm</a>
-          <a href="https://pypi.org/project/dislop/" target="_blank" rel="noopener">PyPI</a>
           <a href="https://x.com/dislop_ai" target="_blank" rel="noopener">X (@dislop_ai)</a>
         </div>
       </nav>

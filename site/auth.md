@@ -1,7 +1,7 @@
 ---
 content-type: reference-data
-version: 0.9.1
-snapshot: 2026-11-21
+version: 1.1.1
+snapshot: 2026-11-26
 ---
 
 # auth.md
@@ -46,8 +46,9 @@ For scripts or CLI wrappers, sign in at https://dislop.com/#cloud-token-box via 
 
 ## Step 5 — Offline Local Alternative (Zero Network)
 
-Run the same 7 rule packs and 65 patterns locally with no sign-in or uploads:
+Run all 11 built-in modular Packs and the Fact Gate locally with no sign-in or uploads:
 
 ```bash
-npx --yes dislop check . --pack auto --format agent
+npx --yes dislop check . --no-llm --format agent
+npx --yes dislop verify --git HEAD draft.md
 ```

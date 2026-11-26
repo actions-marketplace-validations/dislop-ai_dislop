@@ -128,7 +128,7 @@
       <a class="brand-lockup" href="../../">
         <img src="../../assets/logo.svg" width="30" height="30" alt="">
         <span class="brand-wordmark">dislop</span>
-        <span class="brand-meta"><span>AI slop linter</span> · <span class="brand-ver">v0.9.1</span></span>
+        <span class="brand-meta"><span>AI slop linter</span> · <span class="brand-ver">v1.1.1</span></span>
       </a>
 
       <nav class="nav-links" aria-label="Main navigation">
@@ -179,8 +179,8 @@
 
 <div class="table-scroll" tabindex="0"><table><thead><tr><th>Goal</th><th>Surface</th><th>Where it runs</th><th>Command / endpoint</th></tr></thead><tbody>
 <tr><td><strong>Prevent clichés while drafting</strong></td><td>Pure-doc Skill</td><td>Local coding agent</td><td><code>npx --yes skills add dislop-ai/dislop --skill dislop</code></td></tr>
-<tr><td><strong>Verify docs, UI, and slides offline</strong></td><td>Zero-dep CLI</td><td>Local shell (0 uploads)</td><td><code>npx --yes dislop check .</code> or <code>uvx dislop check .</code></td></tr>
-<tr><td><strong>Block PR artifacts incrementally</strong></td><td><code>--changed</code> + GitHub Action</td><td>Pre-commit / CI</td><td><code>npx --yes dislop check --changed origin/main --fail-on error</code></td></tr>
+<tr><td><strong>Verify docs, UI, and slides offline</strong></td><td>Zero-dep CLI</td><td>Local shell (0 uploads)</td><td><code>npx --yes dislop check .</code></td></tr>
+<tr><td><strong>Block PR artifacts incrementally</strong></td><td><code>--since</code> + GitHub Action</td><td>Pre-commit / CI</td><td><code>npx --yes dislop check --since origin/main --fail-on error</code></td></tr>
 <tr><td><strong>Office agents without local CLI</strong></td><td>Official Cloud MCP</td><td><code>https://dislop.com/mcp</code></td><td>0-credit checks without login; OAuth 2.1 or sign in for 30 free credits/mo</td></tr>
 </tbody></table></div>
 
@@ -243,13 +243,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: dislop-ai/dislop@v0.7.1
+      - uses: dislop-ai/dislop@v1.1.1
         with:
-          args: check --changed origin/${{ github.base_ref }} --fail-on error --format github</code></pre>
+          since: origin/${{ github.base_ref }}
+          fail-on: error
+          format: sarif</code></pre>
 
 <p>For RFCs, PR descriptions, and incident postmortems, add <code>--pack engineering-spec</code> to catch diff-parroting (<code>eng-pr-diff-parrot</code>), shallow <code>&quot;human error&quot;</code> root causes (<code>eng-shallow-root-cause</code>), and ownerless action items (<code>eng-vague-action-item</code>):</p>
 
-<pre><code class="language-bash">npx --yes dislop check docs/ postmortems/ --pack engineering-spec --fail-on warning</code></pre>
+<pre><code class="language-bash">npx --yes dislop check docs/ postmortems/ --pack common/artifact-qa,en/prose --no-llm --fail-on warning</code></pre>
 
 <figure class="guide-demo" data-demo-card="cli-check" data-demo-prefix="../../" data-demo-lang="en" data-demo-ver="v2">
           <div class="demo-media">
@@ -352,7 +354,6 @@ jobs:
           <span class="colophon-group-title">Elsewhere</span>
           <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener">GitHub (Apache-2.0)</a>
           <a href="https://www.npmjs.com/package/dislop" target="_blank" rel="noopener">npm</a>
-          <a href="https://pypi.org/project/dislop/" target="_blank" rel="noopener">PyPI</a>
           <a href="https://x.com/dislop_ai" target="_blank" rel="noopener">X (@dislop_ai)</a>
         </div>
       </nav>

@@ -1,9 +1,9 @@
 ---
 content-type: reference-data
-version: 0.9.1
+version: 1.1.1
 ---
 
-# Official Cloud MCP, HTTP API & JS Core
+# Official Cloud MCP, HTTP API & `dislop/sdk`
 
 ## 1. Official Cloud HTTP MCP (Free 0-Credit Checks Without Login; 30 Free Credits/Month After Sign-In)
 
@@ -55,8 +55,8 @@ http_headers = { Authorization = "Bearer dslp_YOUR_FREE_TOKEN" }
   - `dislop_voice_manage` (0 credits): List, view, or delete saved personal voice cards.
   - `dislop_account` (0 credits): Inspect active plan, remaining credits, and saved voice count.
 
-## 2. Cloud HTTP API & JS Core Export
+## 2. Cloud HTTP API, `dislop/sdk` & Local Stdio MCP
 
 - Same-origin HTTP endpoints: `GET /api/health`, `GET /api/v1/auth/session`, `POST /api/v1/auth/otp/request`, `POST /api/v1/auth/otp/verify`, `GET /api/v1/account/me`, `GET|POST /api/v1/account/keys`, `POST /api/v1/check`, `POST /api/v1/review`, `POST /api/v1/deslop`, `POST /api/v1/office/review`, `POST /api/v1/office/deslop`, `POST /api/v1/voice/extract`, and `POST /api/v1/waitlist`.
-- `package.json` exports the zero-I/O pure ES module `src/core.mjs` (`auditText`, `auditOoxmlEntries`, `resolveEffectivePack`).
-- Note: existing local `--mcp` stdio code remains in the open-source CLI during real-world evaluation, while official manifests target `https://dislop.com/mcp`.
+- `dislop/sdk` (`src/sdk/index.mjs`) exports the programmatic Micro-Kernel Linter API (`createLinter`, `definePack`, `definePackScripts`, `parseMarkdownPack`, `verifyDocumentRevision`, `lintPackPath`, and `analyzeDocument`) alongside zero-dependency runtime modules.
+- Offline coding and office agents can also run the bundled local stdio MCP server via `npx --yes dislop-mcp` (or `dislop mcp`) with zero outbound network uploads.

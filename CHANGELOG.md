@@ -4,6 +4,14 @@ All notable changes to `dislop` are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-11-26
+
+### Added
+- **GitHub Action `fail-on` & `since` Inputs (`action.yml`)**: Exposed `fail-on` (`none`, `error`, `warning`) and `since` (Git revision diff gating) directly in the composite action alongside `paths`, `pack`, `level`, `format`, `lang`, and `sarif-file`.
+
+### Changed
+- **Website, Guides, Discovery Endpoints & Open Graph Cards Aligned with `v1.1.x`**: Updated `site/` (`dislop.com` and `dislop.com/zh/`), bilingual guides (`content/guides/`), Agent discovery documents (`llms.txt`, `llms-full.txt`, `.well-known/*`, `catalog.json`), Skill mirrors (`site/tools/*`), and rendered `assets/og-card*.png` previews to reflect the `v1.1.1` Node.js Micro-Kernel Linter (`11` modular Packs, Dual-Track `Defect` vs. `Suggestion` CI gates, `.dislop.json` `overrides`, `.dislop/rules.json`, `dislop packs lint`, `dislop verify`, and 3-Tier local-first routing), removing retired PyPI/`uvx` and `v0.9.1` instructions.
+
 ## [1.1.0] - 2026-11-26
 
 ### Added

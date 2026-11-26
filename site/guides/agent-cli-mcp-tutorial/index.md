@@ -2,7 +2,7 @@
 content-type: reference-data
 lang: en
 updated: 2026-11-23
-version: 0.9.1
+version: 1.1.1
 ---
 
 # Adding an AI Slop Linter to Claude Code, Codex, Cursor, and GitHub Actions
@@ -18,8 +18,8 @@ Adding deterministic checks to your agent workflow and CI takes under two minute
 | Goal | Surface | Where it runs | Command / endpoint |
 |---|---|---|---|
 | **Prevent clichés while drafting** | Pure-doc Skill | Local coding agent | `npx --yes skills add dislop-ai/dislop --skill dislop` |
-| **Verify docs, UI, and slides offline** | Zero-dep CLI | Local shell (0 uploads) | `npx --yes dislop check .` or `uvx dislop check .` |
-| **Block PR artifacts incrementally** | `--changed` + GitHub Action | Pre-commit / CI | `npx --yes dislop check --changed origin/main --fail-on error` |
+| **Verify docs, UI, and slides offline** | Zero-dep CLI | Local shell (0 uploads) | `npx --yes dislop check .` |
+| **Block PR artifacts incrementally** | `--since` + GitHub Action | Pre-commit / CI | `npx --yes dislop check --since origin/main --fail-on error` |
 | **Office agents without local CLI** | Official Cloud MCP | `https://dislop.com/mcp` | 0-credit checks without login; OAuth 2.1 or sign in for 30 free credits/mo |
 
 ## 2. Connect coding agents and editors
@@ -72,15 +72,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: dislop-ai/dislop@v0.7.1
+      - uses: dislop-ai/dislop@v1.1.1
         with:
-          args: check --changed origin/${{ github.base_ref }} --fail-on error --format github
+          since: origin/${{ github.base_ref }}
+          fail-on: error
+          format: sarif
 ```
 
-For RFCs, PR descriptions, and incident postmortems, add `--pack engineering-spec` to catch diff-parroting (`eng-pr-diff-parrot`), shallow `"human error"` root causes (`eng-shallow-root-cause`), and ownerless action items (`eng-vague-action-item`):
+For RFCs, PR descriptions, and incident postmortems, add explicit Packs alongside `.dislop.json` per-glob `overrides`:
 
 ```bash
-npx --yes dislop check docs/ postmortems/ --pack engineering-spec --fail-on warning
+npx --yes dislop check docs/ postmortems/ --pack common/artifact-qa,en/prose --no-llm --fail-on warning
 ```
 
 ![dislop CLI offline check failing with exit code 1 on draft and passing with exit code 0 after cleanup](demo:cli-check)

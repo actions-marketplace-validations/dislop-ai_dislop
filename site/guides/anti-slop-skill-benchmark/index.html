@@ -126,7 +126,7 @@
       <a class="brand-lockup" href="../../">
         <img src="../../assets/logo.svg" width="30" height="30" alt="">
         <span class="brand-wordmark">dislop</span>
-        <span class="brand-meta"><span>AI slop linter</span> · <span class="brand-ver">v0.9.1</span></span>
+        <span class="brand-meta"><span>AI slop linter</span> · <span class="brand-ver">v1.1.1</span></span>
       </a>
 
       <nav class="nav-links" aria-label="Main navigation">
@@ -214,7 +214,7 @@
 <h2 id="3-four-raw-string-defects-that-slipped-past-standalone-skills">3. Four Raw-String Defects That Slipped Past Standalone Skills</h2>
 
 <ol>
-<li><strong>Dead <code>href=&quot;#&quot;</code> controls and slide XML leftovers stayed untouched</strong>: Across all four standalone skills, HTML metric cards kept dead <code>&lt;a href=&quot;#&quot;&gt;</code> buttons (<code>4/4</code> arms). On <code>rev-pptx-02-en-exec-slide</code>, <code>stop-slop</code> left raw <code>**Summary**:</code> Markdown and <code>fontScale=&quot;62500&quot;</code> (<code>62.5%</code> text shrink) inside <code>.pptx</code> XML. Pairing with <code>dislop</code> cleared <code>core</code> errors to <code>0</code> across every arm.</li>
+<li><strong>Dead <code>href=&quot;#&quot;</code> controls and slide XML leftovers stayed untouched</strong>: Across all four standalone skills, HTML metric cards kept dead <code>&lt;a href=&quot;#&quot;&gt;</code> buttons (<code>4/4</code> arms). On <code>rev-pptx-02-en-exec-slide</code>, <code>stop-slop</code> left raw <code>Summary:</code> bold asterisks (<code>**</code>) Markdown and <code>fontScale=&quot;62500&quot;</code> (<code>62.5%</code> text shrink) inside <code>.pptx</code> XML. Pairing with <code>dislop</code> cleared <code>core</code> errors to <code>0</code> across every arm.</li>
 </ol>
 
 <pre><code class="language-html">&lt;div class=&quot;border rounded-xl p-6&quot;&gt;&lt;div class=&quot;border rounded-lg p-4&quot;&gt;&lt;div class=&quot;border rounded p-3&quot;&gt;
@@ -239,10 +239,10 @@
 <p>Keep whichever writing skill matches your taste for drafting, then run deterministic verification at the gate:</p>
 
 <pre><code class="language-bash"># 1. Check Markdown, HTML/JSX/SVG, DOCX, PPTX, or PDF offline (zero uploads)
-npx --yes dislop check . --pack auto --format agent
+npx --yes dislop check . --no-llm --format agent
 
 # 2. Verify numbers, bounds, and qualifiers against git HEAD
-npx --yes dislop verify --git HEAD draft.md --strict</code></pre>
+npx --yes dislop verify --git HEAD draft.md</code></pre>
 
 <p><strong>Caveats</strong>: This run tests <code>30</code> tasks (<code>15</code> EN + <code>15</code> ZH) on a single model (<code>gemini-3.5-flash</code>). At <code>n = 15</code> per language, Wilson 95% confidence intervals are wide (<code>14/15 = 93.3%</code> spans <code>[70.2%, 98.8%]</code>). Upstream <code>SKILL.md</code> prompts were evaluated unmodified as published on 2026-11-23. See <a href="https://github.com/dislop-ai/dislop/blob/main/benchmarks/ECOSYSTEM-BENCHMARK.md" target="_blank" rel="noopener">ECOSYSTEM-BENCHMARK.md</a> for the raw run log.</p>
 <h2 id="faq">Frequently asked questions</h2>
@@ -328,7 +328,6 @@ npx --yes dislop verify --git HEAD draft.md --strict</code></pre>
           <span class="colophon-group-title">Elsewhere</span>
           <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener">GitHub (Apache-2.0)</a>
           <a href="https://www.npmjs.com/package/dislop" target="_blank" rel="noopener">npm</a>
-          <a href="https://pypi.org/project/dislop/" target="_blank" rel="noopener">PyPI</a>
           <a href="https://x.com/dislop_ai" target="_blank" rel="noopener">X (@dislop_ai)</a>
         </div>
       </nav>

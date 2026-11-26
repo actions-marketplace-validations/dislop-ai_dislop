@@ -2,7 +2,7 @@
 content-type: reference-data
 lang: en
 updated: 2026-11-23
-version: 0.9.1
+version: 1.1.1
 ---
 
 # Cleaning Up AI-Generated PowerPoint Decks and Word Docs (PPTX / DOCX / PDF)
@@ -42,11 +42,11 @@ Notice how `trap` dropped the actual numbers (`88% to 94%`) in favor of an empty
 Keep confidential quarterly decks and internal memos on your machine using the zero-upload CLI:
 
 ```bash
-# Node CLI (zero dependencies)
+# Check Office and PDF files offline (auto-routes OOXML and slide packs)
 npx --yes dislop check proposal.docx board-deck.pptx summary.pdf
 
-# Python CLI (with executive-deck headline rules)
-uvx dislop check board-deck.pptx --pack executive-deck
+# Check PowerPoint slides with explicit slide-deck packs and warning gate
+npx --yes dislop check board-deck.pptx --pack common/slide-deck,en/slide-deck --no-llm --fail-on warning
 ```
 
 If an archive is corrupted, password-locked, or exported as an unreadable scan with zero selectable text, `dislop` prints `[SKIP]` or a coverage warning (exiting `2` on single-file runs) instead of pretending the file passed with `0` issues.

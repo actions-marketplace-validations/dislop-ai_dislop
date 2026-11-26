@@ -89,10 +89,10 @@ Keep whichever writing skill matches your taste for drafting, then run determini
 
 ```bash
 # 1. Check Markdown, HTML/JSX/SVG, DOCX, PPTX, or PDF offline (zero uploads)
-npx --yes dislop check . --pack auto --format agent
+npx --yes dislop check . --no-llm --format agent
 
 # 2. Verify numbers, bounds, and qualifiers against git HEAD
-npx --yes dislop verify --git HEAD draft.md --strict
+npx --yes dislop verify --git HEAD draft.md
 ```
 
 **Caveats**: This run tests `30` tasks (`15` EN + `15` ZH) on a single model (`gemini-3.5-flash`). At `n = 15` per language, Wilson 95% confidence intervals are wide (`14/15 = 93.3%` spans `[70.2%, 98.8%]`). Upstream `SKILL.md` prompts were evaluated unmodified as published on 2026-11-23. See [ECOSYSTEM-BENCHMARK.md](https://github.com/dislop-ai/dislop/blob/main/benchmarks/ECOSYSTEM-BENCHMARK.md) for the raw run log.

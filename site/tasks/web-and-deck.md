@@ -1,7 +1,7 @@
 ---
 content-type: reference-data
 task: web-and-deck
-version: 0.9.1
+version: 1.1.1
 ---
 
 # Task Bundle: Web UI, SVG & Slide Decks
@@ -50,8 +50,8 @@ good: <h1 class="page-title">Release Notes v2.4</h1>
 ## 4. Deterministic Verification Command
 
 ```bash
-npx --yes dislop check site/ --pack deck-and-ui --fail-on warning
-uvx dislop check deck.pptx
+npx --yes dislop check site/ --pack common/web-ui --no-llm --fail-on warning
+npx --yes dislop check deck.pptx --pack common/slide-deck,en/slide-deck --no-llm --fail-on warning
 ```
 
 Deep dives: [Pack `deck-and-ui`](../packs/deck-and-ui.md) · [Design System](../methodology/design-system.md) · [UI References](../cases/ui-specimens.md)

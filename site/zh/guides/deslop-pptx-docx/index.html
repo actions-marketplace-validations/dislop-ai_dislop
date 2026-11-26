@@ -128,7 +128,7 @@
       <a class="brand-lockup" href="../../../zh/">
         <img src="../../../assets/logo.svg" width="30" height="30" alt="">
         <span class="brand-wordmark">dislop</span>
-        <span class="brand-meta"><span>AI 味检查</span> · <span class="brand-ver">v0.9.1</span></span>
+        <span class="brand-meta"><span>AI 味检查</span> · <span class="brand-ver">v1.1.1</span></span>
       </a>
 
       <nav class="nav-links" aria-label="主导航">
@@ -211,7 +211,7 @@ good: ## 三季度新客首周流失率从 34% 降至 19%</code></pre>
             <div class="demo-cap-head">
               <strong class="demo-cap-title">Word / PPT 检查：揪出裸星号、字墙与自动缩字</strong>
             </div>
-            <span class="demo-cap-desc">本地解包 .pptx 检查未渲染的 **星号**、单页字墙、68% 自动缩字与过程式标题，改成结论先行的结构化页面。</span>
+            <span class="demo-cap-desc">本地解包 .pptx 检查未渲染的 Markdown 星号、单页字墙、68% 自动缩字与过程式标题，改成结论先行的结构化页面。</span>
           </figcaption>
         </figure>
 
@@ -219,11 +219,11 @@ good: ## 三季度新客首周流失率从 34% 降至 19%</code></pre>
 
 <p>如果你的文件涉及内部经营数据或未公开方案，最稳妥的方式是在本机离线跑一遍检查：</p>
 
-<pre><code class="language-bash"># Node 命令行（零依赖）
+<pre><code class="language-bash"># 本地离线一键检查 Word、PPT 和 PDF（自动按格式加载对应规则包）
 npx --yes dislop check report.docx deck.pptx slides.pdf
 
-# Python 命令行（uvx 一行执行）
-uvx dislop check deck.pptx --pack executive-deck</code></pre>
+# 显式启用幻灯片规则包并开启 warning 阻断
+npx --yes dislop check deck.pptx --pack common/slide-deck,zh/slide-deck --no-llm --fail-on warning</code></pre>
 
 <p>如果文件本身已损坏、加密或扫描 PDF 完全没有可选文字，<code>dislop</code> 会如实输出 <code>[SKIP]</code> 或覆盖率警告（单文件返回退出码 <code>2</code>），不会假装报成“0 处问题”。</p>
 
@@ -323,7 +323,6 @@ uvx dislop check deck.pptx --pack executive-deck</code></pre>
           <span class="colophon-group-title">外部链接</span>
           <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener">GitHub (Apache-2.0)</a>
           <a href="https://www.npmjs.com/package/dislop" target="_blank" rel="noopener">npm</a>
-          <a href="https://pypi.org/project/dislop/" target="_blank" rel="noopener">PyPI</a>
           <a href="https://x.com/dislop_ai" target="_blank" rel="noopener">X (@dislop_ai)</a>
         </div>
       </nav>

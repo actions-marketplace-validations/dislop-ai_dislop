@@ -14,7 +14,7 @@
   <text x="1080" y="150" text-anchor="end" fill="#474C55" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="24" font-weight="600">dislop.com</text>
 
   <rect x="116" y="240" width="634" height="54" rx="0" fill="#FEF3F2"/>
-  <text id="og-en-opener" x="120" y="282" fill="#5E646E" font-family="Georgia, 'Times New Roman', serif" font-size="42" font-weight="700">Certainly! Here is your draft.</text>
+  <text id="og-en-opener" x="120" y="282" fill="#5E646E" font-family="Georgia, 'Times New Roman', serif" font-size="42" font-weight="700" data-dislop-ignore="true">Certainly! Here is your draft.</text>
   <path data-dele="true" d="M118 268H740C756 268 768 257 768 244C768 234 761 228 752 228C742 228 736 235 736 245C736 261 750 278 770 285" stroke="#F04438" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round"/>
 
   <text x="120" y="394" fill="#14171A" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="52" font-weight="700" letter-spacing="-1.2">Cutting AI slop is real productivity.</text>

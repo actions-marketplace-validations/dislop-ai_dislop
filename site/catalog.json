@@ -1,7 +1,7 @@
 {
   "schema": "dislop.catalog/1",
-  "version": "0.9.1",
-  "snapshotDate": "2026-11-21",
+  "version": "1.1.1",
+  "snapshotDate": "2026-11-26",
   "baseUrl": "https://dislop.com",
   "pillars": [
     "methodology",
@@ -20,13 +20,13 @@
   "entryPoints": {
     "llmsTxt": {
       "path": "/llms.txt",
-      "bytes": 2488,
-      "approxTokens": 622
+      "bytes": 2874,
+      "approxTokens": 718
     },
     "llmsFullTxt": {
       "path": "/llms-full.txt",
-      "bytes": 36424,
-      "approxTokens": 9106
+      "bytes": 36759,
+      "approxTokens": 9190
     },
     "awesomeJson": {
       "path": "/awesome/index.json",
@@ -69,8 +69,8 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 3271,
-      "approxTokens": 818,
+      "bytes": 3434,
+      "approxTokens": 858,
       "relatedTools": [
         "browser-workbench",
         "skill",
@@ -111,8 +111,8 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 1084,
-      "approxTokens": 271,
+      "bytes": 1061,
+      "approxTokens": 265,
       "relatedTools": [
         "skill",
         "plugin",
@@ -187,8 +187,8 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 2037,
-      "approxTokens": 509,
+      "bytes": 2038,
+      "approxTokens": 510,
       "relatedTools": [
         "cli",
         "mcp"
@@ -260,8 +260,8 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 9310,
-      "approxTokens": 2328,
+      "bytes": 2790,
+      "approxTokens": 698,
       "relatedTools": [
         "browser-workbench",
         "skill",
@@ -445,7 +445,7 @@
         "business-brief",
         "deck-and-ui"
       ],
-      "bytes": 1209,
+      "bytes": 1208,
       "approxTokens": 302,
       "relatedTools": [
         "cli",
@@ -514,8 +514,8 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 3429,
-      "approxTokens": 857,
+      "bytes": 3641,
+      "approxTokens": 910,
       "relatedTools": [
         "browser-workbench",
         "skill",
@@ -558,8 +558,8 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 5728,
-      "approxTokens": 1432,
+      "bytes": 3104,
+      "approxTokens": 776,
       "relatedTools": [
         "skill",
         "cli",
@@ -597,8 +597,8 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 2679,
-      "approxTokens": 670,
+      "bytes": 2948,
+      "approxTokens": 737,
       "relatedTools": [
         "skill",
         "cli"
@@ -635,8 +635,8 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 2798,
-      "approxTokens": 700,
+      "bytes": 2935,
+      "approxTokens": 734,
       "relatedTools": [
         "skill",
         "cli"
@@ -673,8 +673,8 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 2095,
-      "approxTokens": 524,
+      "bytes": 2073,
+      "approxTokens": 518,
       "relatedTools": [
         "skill",
         "cli"
@@ -711,8 +711,8 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 2271,
-      "approxTokens": 568,
+      "bytes": 2234,
+      "approxTokens": 558,
       "relatedTools": [
         "skill",
         "cli"
@@ -749,8 +749,8 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 2384,
-      "approxTokens": 596,
+      "bytes": 2620,
+      "approxTokens": 655,
       "relatedTools": [
         "skill",
         "cli"
@@ -787,8 +787,8 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 2428,
-      "approxTokens": 607,
+      "bytes": 2718,
+      "approxTokens": 680,
       "relatedTools": [
         "skill",
         "cli"
@@ -825,8 +825,8 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 2627,
-      "approxTokens": 657,
+      "bytes": 2719,
+      "approxTokens": 680,
       "relatedTools": [
         "skill",
         "cli"
@@ -863,8 +863,8 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 2560,
-      "approxTokens": 640,
+      "bytes": 2783,
+      "approxTokens": 696,
       "relatedTools": [
         "skill",
         "cli"
@@ -940,8 +940,8 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 2565,
-      "approxTokens": 641,
+      "bytes": 2635,
+      "approxTokens": 659,
       "relatedTools": [
         "cli"
       ],
@@ -980,8 +980,8 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 3543,
-      "approxTokens": 886,
+      "bytes": 3705,
+      "approxTokens": 926,
       "relatedTools": [
         "mcp",
         "cli"
@@ -1006,8 +1006,8 @@
         "zh"
       ],
       "packs": [],
-      "bytes": 2397,
-      "approxTokens": 599,
+      "bytes": 2641,
+      "approxTokens": 660,
       "relatedTools": [
         "browser-workbench",
         "cli",
@@ -1332,7 +1332,7 @@
         "core"
       ],
       "bytes": 970,
-      "approxTokens": 243,
+      "approxTokens": 242,
       "relatedTools": [
         "browser-workbench",
         "cli",
@@ -1518,7 +1518,7 @@
         "business-brief"
       ],
       "bytes": 1178,
-      "approxTokens": 295,
+      "approxTokens": 294,
       "relatedTools": [
         "browser-workbench",
         "cli",
@@ -1799,7 +1799,7 @@
         "business-brief"
       ],
       "bytes": 1394,
-      "approxTokens": 349,
+      "approxTokens": 348,
       "relatedTools": [
         "browser-workbench",
         "cli",
@@ -1828,7 +1828,7 @@
         "business-brief"
       ],
       "bytes": 1586,
-      "approxTokens": 397,
+      "approxTokens": 396,
       "relatedTools": [
         "browser-workbench",
         "cli",
@@ -1859,7 +1859,7 @@
         "business-brief"
       ],
       "bytes": 1394,
-      "approxTokens": 349,
+      "approxTokens": 348,
       "relatedTools": [
         "browser-workbench",
         "cli",
@@ -2011,7 +2011,7 @@
         "engineering-spec"
       ],
       "bytes": 1146,
-      "approxTokens": 287,
+      "approxTokens": 286,
       "relatedTools": [
         "browser-workbench",
         "cli",
@@ -2041,7 +2041,7 @@
         "engineering-spec"
       ],
       "bytes": 1154,
-      "approxTokens": 289,
+      "approxTokens": 288,
       "relatedTools": [
         "browser-workbench",
         "cli",
@@ -2463,7 +2463,7 @@
         "deck-and-ui"
       ],
       "bytes": 1090,
-      "approxTokens": 273,
+      "approxTokens": 272,
       "relatedTools": [
         "browser-workbench",
         "cli",
@@ -2524,7 +2524,7 @@
         "deck-and-ui"
       ],
       "bytes": 1202,
-      "approxTokens": 301,
+      "approxTokens": 300,
       "relatedTools": [
         "browser-workbench",
         "cli",
@@ -2673,7 +2673,7 @@
         "deck-and-ui"
       ],
       "bytes": 1410,
-      "approxTokens": 353,
+      "approxTokens": 352,
       "relatedTools": [
         "browser-workbench",
         "cli",
@@ -2907,8 +2907,8 @@
         "core",
         "deck-and-ui"
       ],
-      "bytes": 4846,
-      "approxTokens": 1212,
+      "bytes": 4929,
+      "approxTokens": 1232,
       "relatedTools": [
         "browser-workbench",
         "skill",
@@ -2977,8 +2977,8 @@
       "packs": [
         "core"
       ],
-      "bytes": 1338,
-      "approxTokens": 335,
+      "bytes": 1371,
+      "approxTokens": 343,
       "relatedTools": [
         "cli",
         "mcp"
@@ -3036,8 +3036,8 @@
       "packs": [
         "core"
       ],
-      "bytes": 6125,
-      "approxTokens": 1531,
+      "bytes": 5989,
+      "approxTokens": 1497,
       "relatedTools": [
         "cli",
         "skill",
@@ -3067,8 +3067,8 @@
       "packs": [
         "core"
       ],
-      "bytes": 6165,
-      "approxTokens": 1541,
+      "bytes": 6003,
+      "approxTokens": 1501,
       "relatedTools": [
         "cli",
         "skill",
@@ -3098,8 +3098,8 @@
       "packs": [
         "core"
       ],
-      "bytes": 8933,
-      "approxTokens": 2233,
+      "bytes": 8921,
+      "approxTokens": 2230,
       "relatedTools": [
         "cli",
         "skill",
@@ -3129,8 +3129,8 @@
       "packs": [
         "core"
       ],
-      "bytes": 8939,
-      "approxTokens": 2235,
+      "bytes": 8927,
+      "approxTokens": 2232,
       "relatedTools": [
         "cli",
         "skill",
@@ -3160,8 +3160,8 @@
       "packs": [
         "core"
       ],
-      "bytes": 5830,
-      "approxTokens": 1458,
+      "bytes": 5946,
+      "approxTokens": 1486,
       "relatedTools": [
         "cli",
         "skill",
@@ -3191,8 +3191,8 @@
       "packs": [
         "core"
       ],
-      "bytes": 7069,
-      "approxTokens": 1767,
+      "bytes": 7191,
+      "approxTokens": 1798,
       "relatedTools": [
         "cli",
         "skill",
@@ -3378,7 +3378,7 @@
         "core"
       ],
       "bytes": 8226,
-      "approxTokens": 2057,
+      "approxTokens": 2056,
       "relatedTools": [
         "cli",
         "skill",
@@ -3480,8 +3480,8 @@
         "deck-and-ui",
         "executive-deck"
       ],
-      "bytes": 15751,
-      "approxTokens": 3938,
+      "bytes": 12534,
+      "approxTokens": 3134,
       "relatedTools": [
         "browser-workbench",
         "cli",

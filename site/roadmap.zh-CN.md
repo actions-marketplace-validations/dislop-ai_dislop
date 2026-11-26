@@ -1,29 +1,30 @@
 ---
 content-type: reference-data
-version: 0.9.1
-snapshot: 2026-11-21
+version: 1.1.1
+snapshot: 2026-11-26
 ---
 
 # 路线图与协作计划（Roadmap）
 
-[English](./roadmap.md) · [产品定义](./PRODUCT.md)
+[English](./roadmap.md) · [产品定义](./methodology/product-brief.md)
 
-最后更新：`2026-11-24` · 当前基线：`v0.9.1`（`dislop.com` 已上线 · 全球英文优先基线）
+最后更新：`2026-11-26` · 当前基线：`v1.1.1`（Node.js 微内核 Linter · `dislop.com` 已上线）
 
-这份路线图记录 `dislop` 现在已经做到哪一步、接下来按全球英文优先与中英同核适配原则覆盖 Coding Agent 用户、办公 Agent（Claude Cowork、ChatGPT 及千问、WorkBuddy 等）用户与日常办公人群的推进顺序，以及欢迎团队一起拍板的开放问题。认领任务、反馈误报，或者聊新点子，直接在 [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) 开帖，或建一个 [Issue](https://github.com/dislop-ai/dislop/issues) 即可。
+这份路线图记录 `dislop` 目前已经交付的能力、从编码 Agent / CI 向办公 Agent 与日常写作者扩展的节奏，以及欢迎一起在 [GitHub Discussions](https://github.com/dislop-ai/dislop/discussions) 或 [Issue](https://github.com/dislop-ai/dislop/issues) 讨论的开放问题。
 
 ---
 
-## 1. 当前进度（`v0.9.0` 已落地）
+## 1. 当前进度（`v1.1.1` 已落地）
 
 | 模块 | 现已实现 | 核心目录 |
 |---|---|---|
-| 双端零依赖内核 | Node.js 20+ 与 Python 3.10+ 双端零外部依赖，通过 230 项规则与语体样本断言、分场景策略路由（`getScenarioStrategy` / `registerOverrides`）、65 条反模式库核验、默认英文终端输出（`--lang en`，可显式切换 `--lang zh`）、按编号写回审校建议（`review --interactive-apply` / `apply`）、离线个人文风提取及 66 项 Python `unittest` 跨运行时一致性、CLI 与安全单测 | `src/core.mjs`、`src/dislop/engine.py`、`src/review-client.mjs`、`tests/` |
-| 全内置规则包与轻量模型 | 全部 7 套场景与行业包（53 条规则）直接内置离线运行：`core`、`business-brief`、`engineering-spec`、`regulated-comms`、`literary-essay`、`deck-and-ui`、`executive-deck`；附 12 条扩展模式库探针（`--patterns`）、随包 `14.6 KB` gzip 零依赖集成模型（`pocket-slop-v1`）与本机内存/芯片小模型选装向导（`dislop model`） | `packs/*/pack.json`、`patterns/`、`models/`、`src/local-model.mjs` |
-| 支持格式 | `.md`、`.mdx`、`.txt`、`.html`、`.css`、`.jsx`、`.tsx`、`.svg`、`.docx`、`.pptx`、`.pdf`、`.png`、`.jpg`、`.jpeg`、`.webp` | `src/binary-node.mjs`、`src/dislop/engine.py` |
-| 官网与在线工作台 | 单域名 `dislop.com/` 默认纯英文（`x-default`）与 `/zh/` 原生中文子路径（旧路径 `/en/*` 保留 `301` 跳转）、5 标签 Account Hub、分站点登录排序（OAuth 与 6 位邮箱验证码 / Magic Link）、无底条零装饰 `20fps` v2 演示、场景包 + 语体选择器与分场景改稿提示、两种标线（红实线硬伤 / 蓝虚线套话提醒）、5 格白话节奏条、离线 `#share=v1.*` 分享链接与 `#try=<ruleId>` 直达、双语指南与规则图鉴、`/llms.txt` 端点 | `scripts/build_site.mjs`、`site/` |
+| 微内核与 `dislop/sdk` | Node.js（`>= 20.0.0`，ESM）零外部依赖 7 步微内核，支持项目与全局 `.dislop.json` 分层、`overrides` 分目录覆盖、`.dislop/rules.json` 自定义规则、双轨退出码仲裁（`Defect` vs `Suggestion`）、交互式 hunk 审核（`dislop fix`）、双端事实闸门（`dislop verify`）、规则安全体检（`dislop packs lint`）与可选本地开发工作日志（`dislop worklog`） | `src/kernel/`、`src/runtime/`、`src/commands/`、`src/sdk/` |
+| 11 套模块化规则包 | 中英文与通用规则严格按单语目录隔离（`common` / `en` / `zh` × `artifact-qa` / `prose` / `web-ui` / `slide-deck`），确定性脚本（`scripts/*.mjs`）与按需提示词（`prompts/*.md`）分离 | `packs/`、`scripts/verify-packs-security.mjs` |
+| 支持格式与无损写回 | `.md`、`.mdx`、`.txt`、`.html`、`.css`、`.jsx`、`.tsx`、`.svg`、`.docx`、`.pptx`、`.pdf`（支持 `FlateDecode` / `ASCII85Decode` / `ASCIIHexDecode`、`/ObjStm`、`/ToUnicode`、XObject 递归展开与 `/URI` 链接提取）以及 `.png`/`.jpg`/`.webp` | `src/document/`、`src/fact-gate/` |
+| 3 档本地优先路由与 MCP | 默认纯本地确定性检查（支持可选 Ollama 本地小模型 `dislop model pull`）、Tier 2 自备密钥（`--engine byok`）、Tier 1 官方云端（`dislop login`）与本地 stdio MCP（`dislop mcp` / `dislop-mcp`） | `src/runtime/router.mjs`、`src/runtime/providers/`、`src/mcp/` |
+| 官网与在线工作台 | 单域名 `dislop.com/` 默认纯英文（`x-default`）与 `/zh/` 原生中文子路径（旧路径 `/en/*` 保留 `301` 跳转）、浏览器本地离线工作台、双语指南、规则图鉴与 `/llms.txt` 端点 | `site/` |
 | Awesome Anti-Slop | 90 条双语核验清单（`dislop.radar/2`），同源生成纯英文 `awesome/README.md`、纯中文 `awesome/README.zh-CN.md` 与 `dislop.com/awesome/`、`dislop.com/zh/awesome/` 网页筛选页 | `docs/research/anti-slop-radar-index.json`、`awesome/` |
-| 多平台清单与编辑器集成 | 同源生成并受 CI 校验的分发清单与集成包：npm（`dislop`）、PyPI（`dislop`）、官方 MCP Registry（`io.github.dislop-ai/dislop`，直连官方云端 `https://dislop.com/mcp`）、5 套纯文档 Agent Skill（`skills/dislop/` 与 `deslop-docs`、`deslop-slides-docx`、`deslop-web-ui`、`deslop-verify`，含 4 张本地参考卡与 `agents/openai.yaml`）、Claude Code 插件（`.claude-plugin/`，常驻仅约 130 tokens）、Codex 插件（`.codex-plugin/` 与 `.agents/plugins/marketplace.json`）、Cursor 插件（`.cursor-plugin/`）、Antigravity 插件包（`integrations/antigravity/`）、VS Code / Open VSX 轻量 Web 扩展（`integrations/vscode/`）、可复用 GitHub Action（`action.yml`）与 `.pre-commit-hooks.yaml` | `scripts/sync_manifests.mjs`、`integrations/`、`server.json`、`action.yml` |
+| 多平台清单与 CI 集成 | 同源锁定分发清单：npm（`dislop`）、官方 MCP Registry（`io.github.dislop-ai/dislop`）、5 套纯文档 Agent Skill（`skills/*`）、Claude Code（`.claude-plugin/`）、Codex（`.codex-plugin/`）、Cursor（`.cursor-plugin/`）、Gemini CLI（`gemini-extension.json`）、GitHub Action（`action.yml`）与 `.pre-commit-hooks.yaml` | `package.json`、`server.json`、`action.yml`、`.pre-commit-hooks.yaml` |
 
 ---
 
@@ -31,7 +32,7 @@ snapshot: 2026-11-21
 
 各条轨道按目录边界拆开，减少合并冲突。
 
-排期遵循 [PRODUCT.md](./PRODUCT.md) 的内部设计原则：能被 Agent 自动挂载复用的协议接口、防改坏验收门禁与 Office 保排版管线优先，纯人工手写触发的单点插件顺延。
+排期遵循 [PRODUCT.md](./methodology/product-brief.md) 的内部设计原则：能被 Agent 自动挂载复用的协议接口、防改坏验收门禁与 Office 保排版管线优先，纯人工手写触发的单点插件顺延。
 
 ### 轨道 A — 公共源正式上架与首批 6 大目录提审（当前最优先）
 
@@ -39,10 +40,10 @@ snapshot: 2026-11-21
 
 - [x] 建立同源清单同步与校验脚本（`scripts/sync_manifests.mjs`）、自动发包工作流（`.github/workflows/release.yml`）、GitHub Action（`action.yml`）与 `pre-commit` 钩子配置（`.pre-commit-hooks.yaml`）。
 - [x] 默认开启本地 MCP 紧凑输出（`verbosity: "compact"`），收口为 7 个核心离线工具并剥离 `dislop_explain` 测试负例，通过 `claude plugin validate` 与 `codex plugin` 实装校验，配置 GitHub 仓库 `gemini-cli-extension` 等爬虫检索标签。
-- [x] 完成 npm（`dislop`）与 PyPI（`dislop`）正式发布，运行 `node scripts/sync_manifests.mjs --channel registry` 将全仓默认坐标切换至正式公共包，并已将 `server.json` 推送上线至官方 MCP Registry（`io.github.dislop-ai/dislop`）。
+- [x] 完成 npm（`dislop`）正式发布，并将 `server.json` 推送上线至官方 MCP Registry（`io.github.dislop-ai/dislop`）。
 - [ ] 核验 `skills.sh` 与 `geminicli.com/extensions` 自动收录状态，认领 Smithery 与 Glama 页面；Anthropic 官方目录与 OpenAI 通用插件目录待人工资质与提审窗口推进。
 
-**验收标准**：公网直接执行 `npx dislop check .`、`uvx dislop check .` 与 `gemini extensions install` 可用，官方 MCP Registry 返回 `io.github.dislop-ai/dislop` 官方远程端点。
+**验收标准**：公网直接执行 `npx --yes dislop check .`、`npx --yes dislop-mcp` 与 `gemini extensions install` 可用，官方 MCP Registry 返回 `io.github.dislop-ai/dislop` 官方远程端点。
 
 ### 轨道 B — 编辑器单包双发与多 Agent 并行编排器适配（下一里程碑）
 
@@ -58,7 +59,7 @@ snapshot: 2026-11-21
 
 目标：从首批 Coding Agent 用户向 WorkBuddy、千问、Claude Cowork 等办公 Agent 用户及日常写方案、周报的人群延伸，并用公开可复现数据持续验证检出率。
 
-- [x] 交付 `dislop-bench v2`（112 份核心检测基准与 154 份多角度反模式基准，精确率 `100.0%`、召回率 `100.0%`、干净原稿误报率 `0.0%`、双端一致率 `100.0%`，18 组端到端改稿评测 `18/18` 全过及 5 模型真实在线对比，见 [benchmarks/REPORT.md](./benchmarks/REPORT.md)）及 30 任务 4 Skill 生态横向评测（[benchmarks/ECOSYSTEM-BENCHMARK.zh-CN.md](./benchmarks/ECOSYSTEM-BENCHMARK.zh-CN.md)）。
+- [x] 交付 `dislop-bench v2`（112 份核心检测基准与 154 份多角度反模式基准，精确率 `100.0%`、召回率 `100.0%`、干净原稿误报率 `0.0%`、双端一致率 `100.0%`，18 组端到端改稿评测 `18/18` 全过及 5 模型真实在线对比，见 [benchmarks/REPORT.md](https://github.com/dislop-ai/dislop/blob/main/benchmarks/REPORT.md)）及 30 任务 4 Skill 生态横向评测（[benchmarks/ECOSYSTEM-BENCHMARK.zh-CN.md](https://github.com/dislop-ai/dislop/blob/main/benchmarks/ECOSYSTEM-BENCHMARK.zh-CN.md)）。
 - [ ] *（低优顺延）* 待云端 Office 保排版与 `dislop_verify_edit` 落地后，再评估复用纯 JS `src/core.mjs` 打包 **Obsidian Community Plugins** 与 **Raycast Store** 等纯手写单点扩展。
 - [ ] 扩充真实长文、多页管理汇报 `.pptx` 与跨模型盲评样本，按双周复盘各商店安装量。
 
@@ -73,22 +74,16 @@ snapshot: 2026-11-21
 - [ ] 冷启动阶段继续把 `awesome/README.md`、`awesome/README.zh-CN.md` 与 `https://dislop.com/awesome/` 留在 `dislop-ai/dislop` 主仓维护。
 - [ ] **拆仓阈值**：仅当外部有效目录 PR 持续达到 `>= 5 条/月` 时，再按 `dislop.radar/3` 预案切出独立 CC0-1.0 仓库 `dislop-ai/awesome-anti-slop`，永久保持 `https://dislop.com/awesome/` 地址不变。
 
-### 轨道 E — 真实评测驱动的智能审校与闭源云端能力（`v0.7.0+`）
-
-**先评测再精简代码**：在真实保留集完成评测对比前，保留既有离线规则、Pocket ML 与 Python 双端代码不删。
+### 轨道 E — 云端审校与独立官网仓拆分（`dislop-cloud`）
 
 - **开源部分（`dislop-ai/dislop`，Apache-2.0）**：
   - 纯文档 `SKILL.md` 与 `./references/*.md`
-  - 零依赖本地 `CLI`，内置全部 7 套规则包（53 条规则）、65 条反模式库与 `14.6 KB` 轻量集成模型
-  - 浏览器基础工作台、`Awesome Anti-Slop`、开源单步审校 Prompt 与 `dislop-bench v2`
-- **闭源部分（`dislop-cloud`）**：官方云端 MCP（`https://dislop.com/mcp`）、多模型流水线与防改坏净增益评估服务（`dislop_eval` / `dislop_verify_edit`）。
+  - 零依赖 Node.js CLI、SDK、本地 stdio MCP 与 `11` 套模块化规则包（`common/*`、`en/*`、`zh/*`）
+  - 浏览器基础工作台、`Awesome Anti-Slop` 与 `dislop-bench v3`
+- **闭源部分（`dislop-cloud`）**：官方云端 MCP（`https://dislop.com/mcp`）、多模型流水线与 Word/PPT 保排版处理。
 
-- [x] **阶段 0（云端上线、Account Hub 与双市场登录订阅闭环）**：官方 `dislop-cloud` 已上线 `https://dislop.com/mcp` 与 `/api/v1/*`，落地每月 30 免费额度、5 标签 Account Hub、分站点 `Google`/`GitHub` OAuth 与 6 位邮箱验证码 / Magic Link 登录、2 次 Office 免费试用量封顶与 Stripe Payment Links（`Pro` / `PAYGO` / `Team`）；`v0.7.0+` 保持 CLI 0 命中输出“未发现已知模式”并统一全部插件清单直连官方云端 MCP。
-- [ ] **真实语料保留评测集与 4 臂盲评**：收集覆盖叙事随笔、思辨论述、公文简报与工程文档的真实中英文文章并人工标注，对比离线快检、单个开源 Prompt、纯云端大模型与混合流水线（离线规则 + 5 轴特征注入 + 分文体大模型审校 + 确定性护栏），用保留集结果决定后续代码取舍。
-- [x] **分场景语体策略、结构化 `revision` 与 CLI 自备密钥 `review` + `doctor`**：双端落地 `--register`（`technical` / `official` / `argumentative` / `narrative` / `casual` / `marketing`）、`getScenarioStrategy`、`registerOverrides`、带保护锚点的 `edit`/`rewrite`/`ask` 改法建议、`verify` 口语/书面语域防漂移护栏、`--format agent` 紧凑输出、零联网 `dislop doctor` 与显式授权 BYOK `dislop review`。
-- [ ] **闭源云端防改坏净增益评估（`dislop_eval` / `dislop_verify_edit`）与零训练校准飞轮**：对 `Before vs. After` 改写执行原子事实精确度/召回率与跨厂商换序盲测，全档位坚持用户稿件零训练。
-- [ ] **按地区多模型路由与保留原排版去味导出（`.docx` / `.pptx` Round-Trip）**：按地区切换不拿稿子训练的付费模型接口，拆解 OOXML、去掉 AI 味并复核数字与限定词后保留原样式导出。
-- [ ] **网页与 PPT 视觉多模态审查（Visual Anti-Slop）与团队共享文风库**：无头渲染真实截图 + VLM 审校版式拥挤度、模板审美与连续同版式，并支持跨成员复用 `dislop.voice/1`。
+- [x] **阶段 0（云端上线、Account Hub 与登录闭环）**：官方 `dislop-cloud` 已上线 `https://dislop.com/mcp` 与 `/api/v1/*`，落地每月 30 免费额度与 OAuth / 验证码登录。
+- [ ] **对齐 `dislop.report/1` 契约与拆分官网仓**：按 [MIGRATION-TODO.md](https://github.com/dislop-ai/dislop/blob/main/docs/MIGRATION-TODO.md) 完成 `site/`、`content/`、`awesome/` 拆仓并让云端 `/api/v1/review` 对齐微内核 `dislop.report/1` 协议。
 
 ---
 
@@ -118,7 +113,7 @@ snapshot: 2026-11-21
 - **三条底线**：
   - `src/core.mjs` 与 `src/dislop/` 核心检查器保持零外部运行时依赖。
   - 官网禁止加载第三方字体、统计脚本与外域请求（`CSP: connect-src 'self'`），默认离线检查 0 上传。
-  - 所有写给访客看的文案遵守 [docs/brand-and-voice-guide.zh-CN.md](https://github.com/dislop-ai/dislop/blob/main/docs/brand-and-voice-guide.zh-CN.md) 与 [AGENTS.md](./AGENTS.md) §2，中英文严格不混排。
+  - 所有写给访客看的文案遵守 [docs/brand-and-voice-guide.zh-CN.md](https://github.com/dislop-ai/dislop/blob/main/docs/brand-and-voice-guide.zh-CN.md) 与 [AGENTS.md](https://github.com/dislop-ai/dislop/blob/main/AGENTS.md) §2，中英文严格不混排。
 - **提 PR 或发版前跑一条命令**（多平台发布细则见 [docs/releasing.zh-CN.md](https://github.com/dislop-ai/dislop/blob/main/docs/releasing.zh-CN.md)）：
   ```bash
   npm run release:check

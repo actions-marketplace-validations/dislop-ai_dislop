@@ -31,8 +31,8 @@ Adding deterministic checks to your agent workflow and CI takes under two minute
 | Goal | Surface | Where it runs | Command / endpoint |
 |---|---|---|---|
 | **Prevent clichés while drafting** | Pure-doc Skill | Local coding agent | `npx --yes skills add dislop-ai/dislop --skill dislop` |
-| **Verify docs, UI, and slides offline** | Zero-dep CLI | Local shell (0 uploads) | `npx --yes dislop check .` or `uvx dislop check .` |
-| **Block PR artifacts incrementally** | `--changed` + GitHub Action | Pre-commit / CI | `npx --yes dislop check --changed origin/main --fail-on error` |
+| **Verify docs, UI, and slides offline** | Zero-dep CLI | Local shell (0 uploads) | `npx --yes dislop check .` |
+| **Block PR artifacts incrementally** | `--since` + GitHub Action | Pre-commit / CI | `npx --yes dislop check --since origin/main --fail-on error` |
 | **Office agents without local CLI** | Official Cloud MCP | `https://dislop.com/mcp` | 0-credit checks without login; OAuth 2.1 or sign in for 30 free credits/mo |
 
 ## 2. Connect coding agents and editors
@@ -73,7 +73,7 @@ Auto-discovery metadata is published at `https://dislop.com/.well-known/mcp/serv
 
 ## 3. Gate pull requests incrementally in GitHub Actions
 
-Start with `--changed` and `--fail-on error` so CI blocks hard AI leftovers without noise on untouched legacy files:
+Start with `--since` and `--fail-on error` so CI blocks hard AI leftovers without noise on untouched legacy files:
 
 ```yaml
 name: dislop-gate
@@ -85,15 +85,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: dislop-ai/dislop@v0.7.1
+      - uses: dislop-ai/dislop@v1.1.1
         with:
-          args: check --changed origin/${{ github.base_ref }} --fail-on error --format github
+          since: origin/${{ github.base_ref }}
+          fail-on: error
+          format: sarif
 ```
 
-For RFCs, PR descriptions, and incident postmortems, add `--pack engineering-spec` to catch diff-parroting (`eng-pr-diff-parrot`), shallow `"human error"` root causes (`eng-shallow-root-cause`), and ownerless action items (`eng-vague-action-item`):
+For RFCs, PR descriptions, and incident postmortems, add `--pack en/prose` (or explicit `en/prose,common/artifact-qa`) alongside `.dislop.json` per-glob `overrides`:
 
 ```bash
-npx --yes dislop check docs/ postmortems/ --pack engineering-spec --fail-on warning
+npx --yes dislop check docs/ postmortems/ --pack common/artifact-qa,en/prose --no-llm --fail-on warning
 ```
 
 ![dislop CLI offline check failing with exit code 1 on draft and passing with exit code 0 after cleanup](demo:cli-check)

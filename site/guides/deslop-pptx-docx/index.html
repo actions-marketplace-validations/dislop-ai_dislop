@@ -125,7 +125,7 @@
       <a class="brand-lockup" href="../../">
         <img src="../../assets/logo.svg" width="30" height="30" alt="">
         <span class="brand-wordmark">dislop</span>
-        <span class="brand-meta"><span>AI slop linter</span> · <span class="brand-ver">v0.9.1</span></span>
+        <span class="brand-meta"><span>AI slop linter</span> · <span class="brand-ver">v1.1.1</span></span>
       </a>
 
       <nav class="nav-links" aria-label="Main navigation">
@@ -208,7 +208,7 @@ good: ## Q3 Net Retention Rose from 88% to 94%</code></pre>
             <div class="demo-cap-head">
               <strong class="demo-cap-title">Slide check: catch raw Markdown and shrunk text</strong>
             </div>
-            <span class="demo-cap-desc">Unpacks .pptx slides locally to flag raw **markdown** leaks, word walls, 68% autofit shrink, and topic-only titles.</span>
+            <span class="demo-cap-desc">Unpacks .pptx slides locally to flag raw Markdown bold syntax, word walls, 68% autofit shrink, and topic-only titles.</span>
           </figcaption>
         </figure>
 
@@ -216,11 +216,11 @@ good: ## Q3 Net Retention Rose from 88% to 94%</code></pre>
 
 <p>Keep confidential quarterly decks and internal memos on your machine using the zero-upload CLI:</p>
 
-<pre><code class="language-bash"># Node CLI (zero dependencies)
+<pre><code class="language-bash"># Check Office and PDF files offline (auto-routes OOXML and slide packs)
 npx --yes dislop check proposal.docx board-deck.pptx summary.pdf
 
-# Python CLI (with executive-deck headline rules)
-uvx dislop check board-deck.pptx --pack executive-deck</code></pre>
+# Check PowerPoint slides with explicit slide-deck packs and warning gate
+npx --yes dislop check board-deck.pptx --pack common/slide-deck,en/slide-deck --no-llm --fail-on warning</code></pre>
 
 <p>If an archive is corrupted, password-locked, or exported as an unreadable scan with zero selectable text, <code>dislop</code> prints <code>[SKIP]</code> or a coverage warning (exiting <code>2</code> on single-file runs) instead of pretending the file passed with <code>0</code> issues.</p>
 
@@ -317,7 +317,6 @@ uvx dislop check board-deck.pptx --pack executive-deck</code></pre>
           <span class="colophon-group-title">Elsewhere</span>
           <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener">GitHub (Apache-2.0)</a>
           <a href="https://www.npmjs.com/package/dislop" target="_blank" rel="noopener">npm</a>
-          <a href="https://pypi.org/project/dislop/" target="_blank" rel="noopener">PyPI</a>
           <a href="https://x.com/dislop_ai" target="_blank" rel="noopener">X (@dislop_ai)</a>
         </div>
       </nav>

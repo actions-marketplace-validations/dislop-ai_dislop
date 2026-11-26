@@ -14,6 +14,14 @@ inputs:
     description: "Optional comma-separated Pack names or paths (e.g., `en/prose,common/artifact-qa`)."
     required: false
     default: ""
+  fail-on:
+    description: "Minimum Defect severity to fail with Exit 1 (`none`, `error`, `warning`)."
+    required: false
+    default: "error"
+  since:
+    description: "Optional Git revision (e.g., `origin/main`) to inspect only changed deliverable files."
+    required: false
+    default: ""
   level:
     description: "Suggestion priority filter (`strong`, `moderate`, `hint`, `all`)."
     required: false
@@ -44,6 +52,8 @@ runs:
       env:
         INPUT_PATHS: ${{ inputs.paths }}
         INPUT_PACK: ${{ inputs.pack }}
+        INPUT_FAIL_ON: ${{ inputs.fail-on }}
+        INPUT_SINCE: ${{ inputs.since }}
         INPUT_LEVEL: ${{ inputs.level }}
         INPUT_FORMAT: ${{ inputs.format }}
         INPUT_LANG: ${{ inputs.lang }}
@@ -51,9 +61,12 @@ runs:
         ACTION_DIR: ${{ github.action_path }}
       run: |
         set -euo pipefail
-        ARGS=("check" "--no-llm" "--level" "${INPUT_LEVEL}" "--format" "${INPUT_FORMAT}" "--lang" "${INPUT_LANG}")
+        ARGS=("check" "--no-llm" "--fail-on" "${INPUT_FAIL_ON}" "--level" "${INPUT_LEVEL}" "--format" "${INPUT_FORMAT}" "--lang" "${INPUT_LANG}")
         if [ -n "${INPUT_PACK}" ]; then
           ARGS+=("--pack" "${INPUT_PACK}")
+        fi
+        if [ -n "${INPUT_SINCE}" ]; then
+          ARGS+=("--since" "${INPUT_SINCE}")
         fi
         NONEMPTY_LINES=()
         while IFS= read -r line; do
@@ -67,7 +80,9 @@ runs:
           done
         elif [ "${#NONEMPTY_LINES[@]}" -eq 1 ]; then
           only="${NONEMPTY_LINES[0]}"
-          if [ -e "${only}" ]; then
+          if [ -n "${INPUT_SINCE}" ] && [ "${only}" = "." ]; then
+            :
+          elif [ -e "${only}" ]; then
             ARGS+=("${only}")
           else
             read -r -a words <<< "${only}"

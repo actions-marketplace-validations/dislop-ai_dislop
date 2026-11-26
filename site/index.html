@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>dislop — Cutting AI slop is real productivity.</title>
-  <meta name="description" content="Cutting AI slop is real productivity. A dedicated linter for AI slop across docs, web UI, Word, and PowerPoint, combining 53 deterministic rules and 90 curated anti-slop tools.">
+  <meta name="description" content="Cutting AI slop is real productivity. A pluggable editorial and artifact linter for docs, web UI, PDF, Word, and PowerPoint across 11 modular Packs and 90 curated tools.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="dislop">
   <meta property="og:url" content="https://dislop.com/">
@@ -18,7 +18,7 @@
   <meta name="twitter:site" content="@dislop_ai">
   <meta name="twitter:creator" content="@dislop_ai">
   <meta name="twitter:title" content="dislop — Cutting AI slop is real productivity.">
-  <meta name="twitter:description" content="Dedicated linter for AI slop across docs, web UI, Word, and PowerPoint, with 53 rules and 90 curated tools.">
+  <meta name="twitter:description" content="Pluggable editorial and artifact linter for docs, web UI, PDF, Word, and PowerPoint with 11 modular Packs and 90 curated tools.">
   <meta name="twitter:image" content="https://dislop.com/assets/og-card.png">
   <meta name="msvalidate.01" content="98E6B00BCC69ADFB1682F3437E8C6F87">
   <link rel="canonical" href="https://dislop.com/">
@@ -53,7 +53,6 @@
         "https://github.com/dislop-ai",
         "https://github.com/dislop-ai/dislop",
         "https://www.npmjs.com/package/dislop",
-        "https://pypi.org/project/dislop/",
         "https://x.com/dislop_ai",
         "https://glama.ai/mcp/servers/dislop-ai/dislop",
         "https://glama.ai/mcp/connectors/io.github.dislop-ai/dislop"
@@ -74,19 +73,19 @@
       "name": "dislop",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "macOS, Linux, Windows, Web",
-      "softwareVersion": "0.9.1",
+      "softwareVersion": "1.1.1",
       "url": "https://dislop.com/",
       "image": "https://dislop.com/assets/og-card.png",
       "installUrl": "https://www.npmjs.com/package/dislop",
       "codeRepository": "https://github.com/dislop-ai/dislop",
       "softwareHelp": "https://dislop.com/llms.txt",
       "license": "https://www.apache.org/licenses/LICENSE-2.0",
-      "description": "Dedicated linter for AI slop across docs, web UI, Word, and PowerPoint (53 built-in rules, 7 scenario packs, 90 curated anti-slop tools, 7 guides).",
+      "description": "Pluggable editorial and artifact linter for docs, web UI, PDF, Word, and PowerPoint (11 modular Packs, Dual-Track CI gates, 90 curated anti-slop tools, 7 guides).",
       "featureList": [
-        "Deterministic linter with 53 rules across Markdown, HTML, CSS, JSX, SVG, Word (.docx), PowerPoint (.pptx), and PDF",
-        "Revision verifier checking numbers, units, dates, and protected terms against the original draft",
-        "Offline local CLI, editor extensions, pure-Markdown Agent Skills, and stdio MCP",
-        "Hosted Streamable HTTP MCP at https://dislop.com/mcp with multimodal visual layout review"
+        "Zero-dependency Node.js Micro-Kernel linter across Markdown, HTML, CSS, JSX, SVG, Word (.docx), PowerPoint (.pptx), and PDF",
+        "Dual-Track enforcement separating CI-blocking Defects from non-blocking editorial Suggestions",
+        "Dual Fact Gate (dislop verify) checking numbers, units, URLs, code spans, and entities against the original draft",
+        "Offline CLI, local stdio MCP, pure-Markdown Agent Skills, and hosted Streamable HTTP MCP at https://dislop.com/mcp"
       ],
       "offers": [
         {
@@ -163,7 +162,7 @@
       <a class="brand-lockup" href="#top">
         <img src="./assets/logo.svg" width="30" height="30" alt="">
         <span class="brand-wordmark">dislop</span>
-        <span class="brand-meta"><span data-i18n="nav.brandMeta">AI slop linter</span> · <span class="brand-ver">v0.9.1</span></span>
+        <span class="brand-meta"><span data-i18n="nav.brandMeta">AI slop linter</span> · <span class="brand-ver">v1.1.1</span></span>
       </a>
 
       <nav class="nav-links" aria-label="Main navigation">
@@ -432,8 +431,8 @@
               <p data-i18n="surf.w1Desc">Writing and UI reference cards by genre, with no bundled scripts. Install it in Claude Code, Codex, Cursor, or Antigravity so the agent reads it before drafting and runs the local CLI afterward.</p>
             </li>
             <li>
-              <h3 data-i18n="surf.w2Title">Open-source local CLI and plugins</h3>
-              <p data-i18n="surf.w2Desc">Zero dependencies, under 250 KB, with all 7 scenario packs built in. Checks docs, Word, PowerPoint, and Git diffs offline in terminals, editors, and CI. You can also plug in your own model key.</p>
+              <h3 data-i18n="surf.w2Title">Open-source local CLI, SDK, and plugins</h3>
+              <p data-i18n="surf.w2Desc">Zero-dependency Node.js 20+ Micro-Kernel with 11 modular Packs built in, walk-up .dislop.json overrides, and custom .dislop/rules.json. Checks docs, Word, PowerPoint, PDF, and Git diffs offline, with optional Ollama local models or BYOK.</p>
             </li>
             <li>
               <h3 data-i18n="surf.w3Title">Official Cloud MCP &amp; web workbench</h3>
@@ -572,7 +571,7 @@ Read https://dislop.com/llms.txt, evaluate which dislop setup fits my environmen
           <div class="endpoint-row">
             <div class="endpoint-main">
               <a class="endpoint-path" href="./llms-full.txt">/llms-full.txt</a>
-              <div class="endpoint-desc" data-i18n="ep.full">All 53 rules in one file</div>
+              <div class="endpoint-desc" data-i18n="ep.full">Single-file rule digest</div>
             </div>
             <span class="endpoint-meta">35.6 KB · ~9106 tok</span>
           </div>
@@ -671,9 +670,9 @@ Read https://dislop.com/llms.txt, evaluate which dislop setup fits my environmen
           </div>
           <figcaption class="demo-caption">
             <div class="demo-cap-head">
-              <strong class="demo-cap-title" data-i18n="demos.c2Title">Offline CLI gate: Node &amp; Python parity</strong>
+              <strong class="demo-cap-title" data-i18n="demos.c2Title">Offline CLI gate: deterministic Defects block CI</strong>
             </div>
-            <span class="demo-cap-desc" data-i18n="demos.c2Desc">Runs dislop check --profile locally: core artifacts exit 1 to block CI while rhythm and concreteness telemetry prints inline.</span>
+            <span class="demo-cap-desc" data-i18n="demos.c2Desc">Runs dislop check --no-llm locally: objective Defect: error hits exit 1 to block CI, while editorial Suggestions always exit 0.</span>
           </figcaption>
         </figure>
 
@@ -709,7 +708,7 @@ Read https://dislop.com/llms.txt, evaluate which dislop setup fits my environmen
             <div class="demo-cap-head">
               <strong class="demo-cap-title" data-i18n="demos.c5Title">PPTX &amp; DOCX audit: catch walls &amp; shrunk text</strong>
             </div>
-            <span class="demo-cap-desc" data-i18n="demos.c5Desc">Unpacks .pptx slides locally to flag raw **markdown** leaks, word walls, 68% autofit shrink, and process titles.</span>
+            <span class="demo-cap-desc" data-i18n="demos.c5Desc">Unpacks .pptx slides locally to flag raw Markdown bold syntax, word walls, 68% autofit shrink, and process titles.</span>
           </figcaption>
         </figure>
 
@@ -777,14 +776,14 @@ Read https://dislop.com/llms.txt, evaluate which dislop setup fits my environmen
             </tr>
             <tr>
               <td><strong data-i18n="cov.r5Name">Git diffs &amp; PRs</strong></td>
-              <td><code>--changed</code>, <code>--staged</code></td>
-              <td data-i18n="cov.r5Scope">Checks only modified lines for chat wrappers, placeholders, prose clichés, and UI template slop, with GitHub annotations and SARIF output. Code AST linting is not built.</td>
+              <td><code>--changed</code>, <code>--since</code></td>
+              <td data-i18n="cov.r5Scope">Checks modified or --since &lt;ref&gt; deliverable files for chat wrappers, placeholders, prose clichés, and UI slop, with SARIF 2.1.0 output. Code AST linting is not built.</td>
               <td data-i18n="status.partial">Diff checks work; no AST</td>
             </tr>
             <tr>
-              <td><strong data-i18n="cov.r6Name">Personal style, Pocket ML &amp; Cloud Review</strong></td>
-              <td><code>voice</code>, <code>--ml</code>, <code>MCP</code></td>
-              <td data-i18n="cov.r6Scope">The CLI and workbench support offline style stats and bundled 14.6 KB Pocket ML (--ml); sign in for Official Cloud MCP multi-model genre review and style extraction.</td>
+              <td><strong data-i18n="cov.r6Name">Personal voice, local Ollama &amp; 3-Tier routing</strong></td>
+              <td><code>voice</code>, <code>Ollama</code>, <code>MCP</code></td>
+              <td data-i18n="cov.r6Scope">The CLI supports offline voice baselines (dislop voice), local Ollama small models (dislop model pull), BYOK (--engine byok), and Official Cloud MCP multi-model review.</td>
               <td data-i18n="status.live">Works now</td>
             </tr>
           </tbody>
@@ -1705,15 +1704,15 @@ By surfacing error budgets, on-call engineers spot regressions early.</code></di
       <div class="pricing-grid">
         <div class="pricing-col">
           <div class="pricing-head">
-            <h3 data-i18n="price.t1Name">Open Source Local (Skill + CLI)</h3>
+            <h3 data-i18n="price.t1Name">Open Source Local (Skill + CLI + SDK)</h3>
             <span class="pricing-amount" data-i18n="price.t1Price">$0 · Forever free</span>
           </div>
           <p class="pricing-sub" data-i18n="price.t1Sub">For drafts that can't leave your machine: offline setups, private repos, and internal docs. All code and rules are open source.</p>
           <ul class="pricing-list">
-            <li data-i18n="price.t1F1">Pure-Markdown Agent Skill (no scripts) &amp; local CLI (Apache-2.0)</li>
-            <li data-i18n="price.t1F2">All 7 domain packs (53 rules) bundled offline for Markdown, HTML/CSS/SVG, images, DOCX, PPTX &amp; PDF</li>
-            <li data-i18n="price.t1F3">Built-in 5-axis rhythm telemetry, 14.6 KB Pocket ML (--ml) &amp; offline dislop voice</li>
-            <li data-i18n="price.t1F4">Zero network during check; developers can also plug in their own model key</li>
+            <li data-i18n="price.t1F1">Pure-Markdown Agent Skill, zero-dep Node.js CLI &amp; local stdio MCP (Apache-2.0)</li>
+            <li data-i18n="price.t1F2">All 11 modular Packs bundled offline for Markdown, HTML/CSS/JSX/SVG, images, DOCX, PPTX &amp; PDF</li>
+            <li data-i18n="price.t1F3">Dual-Track CI gates (Defect vs. Suggestion), .dislop.json overrides, Fact Gate (verify), Ollama &amp; dislop voice</li>
+            <li data-i18n="price.t1F4">Zero network by default; bring your own key (BYOK) or build custom Packs via dislop/sdk</li>
           </ul>
           <div class="quick-actions" style="margin-top:auto;padding-top:12px;">
             <a href="#surfaces" class="ctrl-btn" data-i18n="price.t1Cta">Install Skill / CLI ↑</a>
@@ -1976,7 +1975,6 @@ By surfacing error budgets, on-call engineers spot regressions early.</code></di
           <span class="colophon-group-title" data-i18n="footer.gElsewhere">Elsewhere</span>
           <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener">GitHub (Apache-2.0)</a>
           <a href="https://www.npmjs.com/package/dislop" target="_blank" rel="noopener">npm</a>
-          <a href="https://pypi.org/project/dislop/" target="_blank" rel="noopener">PyPI</a>
           <a href="https://x.com/dislop_ai" target="_blank" rel="noopener">X (@dislop_ai)</a>
         </div>
       </nav>

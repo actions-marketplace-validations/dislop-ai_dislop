@@ -1,6 +1,6 @@
 ---
 content-type: reference-data
-version: 0.9.1
+version: 1.1.1
 ---
 
 # Cases & Specimens

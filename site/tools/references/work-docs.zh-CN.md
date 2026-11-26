@@ -1,16 +1,16 @@
 # 工作简报、研发复盘与对外通告
 
 适用范围：工作简报、技术方案与故障复盘、发版说明、CLI 帮助与报错文案、邮件及对外通告。
-检查命令：`dislop check <path> --pack business-brief`（研发场景用 `engineering-spec`，合规通告用 `regulated-comms`）。
+检查命令：`dislop check <path> --format agent`（改稿后运行 `dislop verify --git HEAD <path>` 核验事实）。
 
 ## 常见问题与改法
 
-1. **清掉寒暄壳与占位符（`chatbot-artifact`、`unfilled-placeholder`）**：删掉 `你好，下面为你附上……` 和 `[待填写]` 标记，第一句落到具体模块、单号或数字。
-2. **删掉宏大三明治与口号结尾（`narrative-sandwich-frame`）**：删去 `随着……的不断深入`、`展望未来……`、`这标志着……`。
-3. **拆散公文黑话与四字排比（`zh-bureaucratic-padding`、`zh-four-char-triad`、`cooccurrence-slop-cluster`）**：把 `重要抓手`、`全面赋能`、`精准高效、安全可靠、灵活易用`、`有效推动、持续优化、显著提升` 换成笔记里的真实动作。
-4. **改实研发复盘、CLI 文案与改进项（`eng-pr-diff-parrot`、`eng-shallow-root-cause`、`eng-vague-action-item`）**：笔记给了负责人、命令参数、阈值和日期就照抄；没给就单独列为待确认问题。直接写缺了哪道校验或具体排查步骤，不要写 `并非单纯人为失误，而是……` 这种转折句。
-5. **删掉绝对承诺与悬空倍数（`reg-unsubstantiated-superlative`、`reg-unanchored-multiplier`）**：删掉 `绝对安全`、`永不宕机`、`倍速跃升`；原文给了加密协议、合同可用性、预计目标或前后基线才保留。
-6. **保留原始出处标签，别堆加粗列表，别缩成残句（`unsourced-attribution`、`bold-lead-list-wall`）**：只删模型自己加的 `业内普遍认为` 等空壳背书；笔记里原有 `实测结果` 时直接写结论（如 `升级后……`），不添 `上线后实测`，也别把短列表全堆成 `- **标签**：内容`；删掉空话时保留原句每个独立动作与数字，别硬压缩成一句话。
+1. **清掉寒暄壳、引用泄漏、占位符与死链（`chatbot-artifact`、`chatbot-citation-leak`、`unfilled-placeholder`、`broken-local-link`、`disguised-placeholder-prose`、`unchosen-draft-options`）**：删掉 `你好，下面为你附上……`、`[oaicite:1]`、`[待填写]`、正文里的待办提醒与未定稿的 `方案 A / 方案 B`，第一句落到具体模块、单号或数字。
+2. **删掉宏大空话、句首铺垫与口号结尾（`hollow-transition`、`throat-clearing`、`moralizing-closer`）**：删去 `在当今……浪潮下`、`值得注意的是，`、`展望未来……`、`这标志着……`。
+3. **拆散公文黑话与四字排比（`four-char-slogan-triad`、`buzzword-cluster`、`cooccurrence-padding`）**：把 `重要抓手`、`全面赋能`、`精准高效、安全可靠、灵活易用`、`深度融合、充分释放` 换成笔记里的真实动作。
+4. **改实研发复盘、CLI 文案与改进项（`unprompted-negation`、`rhetorical-self-qa`）**：笔记给了负责人、命令参数、阈值和日期就照抄；没给就单独列为待确认问题。直接写缺了哪道校验或具体排查步骤，不要写 `这不是……而是……` 或 `为什么这一点如此重要？`。
+5. **删掉绝对承诺与悬空倍数**：删掉 `绝对安全`、`永不宕机`、`倍速跃升`；原文给了加密协议、合同可用性、预计目标或前后基线才保留。
+6. **保留原始出处标签，别堆加粗列表，别缩成残句（`bold-lead-list-wall`）**：只删模型自己加的 `业内普遍认为` 等空壳背书；笔记里原有 `实测结果` 时直接写结论（如 `升级后……`），不添 `上线后实测`，也别把短列表全堆成 5 条及以上 `- **标签**：内容`；删掉空话时保留原句每个独立动作与数字，别硬压缩成一句话。
 
 ## 三段对照
 

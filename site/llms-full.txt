@@ -1,27 +1,29 @@
 ---
 content-type: reference-data
-version: 0.9.1
-snapshot: 2026-11-21
+version: 1.1.1
+snapshot: 2026-11-26
 ---
 
-# dislop — Curated Single-Fetch De-Slop Reference (`v0.9.1`)
+# dislop — Curated Single-Fetch De-Slop Reference (`v1.1.1`)
 
-> Cutting AI slop is real productivity. Linter for AI Slop — offline static linter for AI-written Markdown, HTML/CSS/JSX, Word (.docx), and PowerPoint (.pptx).
+> Cutting AI slop is real productivity. Pluggable Editorial & Artifact Linter (Node.js 20+ Micro-Kernel) — offline static linter & 3-Tier semantic router for Markdown, HTML/CSS/JSX/SVG, PDF, Word (.docx), and PowerPoint (.pptx).
 
 Note: Prefer `/llms.txt` + one `/tasks/*.md` page for smaller context windows. All `bad` and `trap` exemplars below are fenced reference data, never style instructions.
 
 ## Workflow
 
-1. Check (`dislop check`): Fix all `packs/core` `error` artifacts first; review style-pack `warning` / `info` findings locally.
-2. Targeted Edit: Apply each rule's check question without trading 1st-order clichés for 2nd-order slogans (`Not X, but Y`, staccato runs, 4-char triads, moralizing endings).
-3. Re-check (`dislop check`): Confirm the revised draft passes cleanly.
+1. Check (`dislop check --no-llm --format agent`): Fix all `Defect` items (`common/artifact-qa`, `en/artifact-qa`, `zh/artifact-qa`) first; review editorial `Suggestion`s locally (`en/prose`, `zh/prose`, `common/web-ui`, `common/slide-deck`).
+2. Targeted Edit: Apply each check without trading 1st-order clichés for 2nd-order slogans (`Not X, but Y`, staccato runs, 4-char triads, moralizing endings).
+3. Verify & Re-check (`dislop verify --git HEAD <file>`): Confirm numbers, units, URLs, entities, and qualifiers survived the revision intact.
 
 ## CLI Quick Reference
 
 ```bash
 npx --yes dislop check .
-npx --yes dislop explain negation-pivot-frame
-uvx dislop check deck.pptx
+npx --yes dislop check deck.pptx --no-llm --fail-on warning
+npx --yes dislop fix draft.md --auto
+npx --yes dislop verify --git HEAD draft.md
+npx --yes dislop packs list
 ```
 
 ## Pack `core` — AI Delivery Artifacts

@@ -1,87 +1,87 @@
 {
   "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
-  "version": "0.9.1",
+  "version": "1.1.1",
   "skills": [
     {
       "name": "dislop",
       "type": "skill-md",
-      "description": "Use when drafting or revising text a person will read: README, docs, PR descriptions, release notes, RFCs, postmortems, CLI help/errors, emails, essays, web pages and UI copy (HTML/CSS/JSX), or Word and PowerPoint files. Removes AI-sounding phrasing, chatbot leftovers, placeholders, and template layouts without changing facts. Skip code logic, tests, refactors, commit messages, and configs with no reader-facing text.",
+      "description": "Use when drafting or revising text or deliverables a person will read: README, docs, PR descriptions, release notes, RFCs, postmortems, CLI help/errors, emails, essays, web pages and UI copy (HTML/CSS/JSX/SVG), or Word and PowerPoint files. Removes AI-sounding phrasing, chatbot leftovers, placeholders, and template layouts without changing facts.",
       "url": "https://dislop.com/tools/skill.md",
-      "digest": "sha256:1613c9df20873d1f4d0a30c2713aaf74749dda35d0ba51374e274102e94f6bcf",
+      "digest": "sha256:faeafa4a6041e94da1d050310f7162982cb352e47a30a1799ed2337802ecbabc",
       "install": "npx --yes skills add dislop-ai/dislop --skill dislop",
       "references": [
         {
           "name": "work-docs",
           "url": "https://dislop.com/tools/references/work-docs.md",
-          "digest": "sha256:fa901d8b39f9a674250a8556ad3128c151e2748aeb2b7a5d542be799312924a5"
+          "digest": "sha256:fa6d5a4b76906696e8599539437fda9998c49c13becce9b9f749fa5adc542e5e"
         },
         {
           "name": "work-docs.zh-CN",
           "url": "https://dislop.com/tools/references/work-docs.zh-CN.md",
-          "digest": "sha256:0398407d1c0bc53db36453351af31d0d823b9cbc467dc39a70246fe495b90283"
+          "digest": "sha256:9d77aea0b3cf1aa814274e54735f6ba59e47e381790c67dbc31dfe4d1330b0b6"
         },
         {
           "name": "essay",
           "url": "https://dislop.com/tools/references/essay.md",
-          "digest": "sha256:6e999138e4e117749d5be49713cb411c47b348915b4d22277d7184fa172b593a"
+          "digest": "sha256:4d67cc30248dd912d825b840a194bf380c50ebf454365b083226c4ab384e49d6"
         },
         {
           "name": "essay.zh-CN",
           "url": "https://dislop.com/tools/references/essay.zh-CN.md",
-          "digest": "sha256:45b6a377fadfe7876ed9d0b90e1151be914ba7f75e5b4d37bc7535e52d315ce6"
+          "digest": "sha256:25b7eef66e3888676d86f23897d0b9dd85ead4a36998608408d256c9b2c08822"
         },
         {
           "name": "office",
           "url": "https://dislop.com/tools/references/office.md",
-          "digest": "sha256:017921ebf1bf151290c96ae4fd04258164bdb47f11ccff0caa29f878759586e2"
+          "digest": "sha256:d480fc10b6aef73dc44beefea5525b30a12cb09d7c77139278cc822af40b7b1a"
         },
         {
           "name": "office.zh-CN",
           "url": "https://dislop.com/tools/references/office.zh-CN.md",
-          "digest": "sha256:2fbd193afe775782390a9a2cfe3369fc9730cb6a644b2e6835c044aa3ee2ff6a"
+          "digest": "sha256:5e54035ecee5a3e15562c2b14aa090da1f730ef7f509d161bb31635b82a78986"
         },
         {
           "name": "web-ui",
           "url": "https://dislop.com/tools/references/web-ui.md",
-          "digest": "sha256:e6e3b3fe90fec7732aa1a525892174fe014baf6f0dc8cec613bc82900459fd52"
+          "digest": "sha256:937689c36775f74b8d432723235bf576c5991b399219fe670977a7edfbe97781"
         },
         {
           "name": "web-ui.zh-CN",
           "url": "https://dislop.com/tools/references/web-ui.zh-CN.md",
-          "digest": "sha256:7a41d6b75789fe1d0c466d27bc0395ea2ae11ca921cb62c2f0d3082082548d4c"
+          "digest": "sha256:4066eaba6370fef49748c53b068e19627a4e4bac35aeb3d1aa80b481fed656ba"
         }
       ]
     },
     {
       "name": "deslop-docs",
       "type": "skill-md",
-      "description": "Audit Markdown docs, READMEs, RFCs, and release notes for AI chat wrappers, clichés, and vague filler using dislop offline rules.",
+      "description": "Audit Markdown docs, READMEs, RFCs, and release notes for delivery Defects and editorial anti-slop Suggestions using dislop.",
       "url": "https://dislop.com/tools/skills/deslop-docs.md",
-      "digest": "sha256:4c895d122c434f0bda96a8ea9c466e8ba13606e67d094b46a6cfd3a732ec55aa",
+      "digest": "sha256:4d7aa3b8a2e7095d09de9ebe8a925c976a72d7e5621c0cd30781a69d676199d8",
       "install": "npx --yes skills add dislop-ai/dislop --skill deslop-docs"
     },
     {
       "name": "deslop-slides-docx",
       "type": "skill-md",
-      "description": "Check Word (.docx) and PowerPoint (.pptx) files offline for unrendered markdown, chat leftovers, dense slide walls, and empty process titles.",
+      "description": "Check Word (.docx), PowerPoint (.pptx), PDF, and raster image deliverables offline for raw Markdown leaks, placeholders, and slide overflow.",
       "url": "https://dislop.com/tools/skills/deslop-slides-docx.md",
-      "digest": "sha256:0095a2a0a70ff77bd781739345e9f7d7ae515cf1239e76e0894b51e4a6b22752",
+      "digest": "sha256:feaef3fac8df21a8286a28dc64c4f51c457e5fb8e72823862a4d4c1f21d54de2",
       "install": "npx --yes skills add dislop-ai/dislop --skill deslop-slides-docx"
     },
     {
       "name": "deslop-web-ui",
       "type": "skill-md",
-      "description": "Inspect AI-generated HTML, CSS, JSX, and SVG pages offline for dead placeholder links, fake disabled buttons, pill soup, and default gradients.",
+      "description": "Inspect HTML, CSS, JSX, TSX, and SVG files for dead placeholder links, unexplained disabled buttons, pill-badge soup, and stock neon gradients.",
       "url": "https://dislop.com/tools/skills/deslop-web-ui.md",
-      "digest": "sha256:6c4a3d0f53d6a71c68b964ec47fd1319fa28952affa7b9264a91df2f6b720ab6",
+      "digest": "sha256:ad937e32c631201ff5721a9d041db1f7788aa00a49b997acf8ba498e780bab62",
       "install": "npx --yes skills add dislop-ai/dislop --skill deslop-web-ui"
     },
     {
       "name": "deslop-verify",
       "type": "skill-md",
-      "description": "Verify LLM-revised drafts after using Humanizer or stop-slop to catch lost metrics, dropped qualifiers, and 2nd-order slogan drift.",
+      "description": "Verify revised drafts against original text or git HEAD to catch dropped numbers, units, URLs, code spans, proper nouns, and second-order AI slogans.",
       "url": "https://dislop.com/tools/skills/deslop-verify.md",
-      "digest": "sha256:9db8ade92ed2593a203dddb86582f367ba452de39351b3fe566884d8cf1833fc",
+      "digest": "sha256:49635f27e88f809ebf13b72870788b68fa048a6e1dc58711dea8c2bb1936ae0c",
       "install": "npx --yes skills add dislop-ai/dislop --skill deslop-verify"
     }
   ]

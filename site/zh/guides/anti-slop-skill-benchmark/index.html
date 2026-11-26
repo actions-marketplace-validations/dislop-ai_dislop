@@ -127,7 +127,7 @@
       <a class="brand-lockup" href="../../../zh/">
         <img src="../../../assets/logo.svg" width="30" height="30" alt="">
         <span class="brand-wordmark">dislop</span>
-        <span class="brand-meta"><span>AI 味检查</span> · <span class="brand-ver">v0.9.1</span></span>
+        <span class="brand-meta"><span>AI 味检查</span> · <span class="brand-ver">v1.1.1</span></span>
       </a>
 
       <nav class="nav-links" aria-label="主导航">
@@ -240,10 +240,10 @@
 <p><code>Humanizer-zh</code>、<code>lieflat</code>、<code>humanizer</code> 和 <code>stop-slop</code> 适合做第一遍顺文字，不需要二选一替换。在前面保留你顺手的改写 Skill，交付前加一道本地离线检查与核对即可：</p>
 
 <pre><code class="language-bash"># 本地离线检查 Markdown、HTML/JSX/SVG、Word 与 PPT（零上传）
-npx --yes dislop check . --pack auto --lang zh --format agent
+npx --yes dislop check . --no-llm --lang zh --format agent
 
 # 改完对照 git HEAD 核对数字和限定词有没有丢失
-npx --yes dislop verify --git HEAD draft.md --strict</code></pre>
+npx --yes dislop verify --git HEAD draft.md</code></pre>
 
 <p><strong>口径与局限</strong>：本轮测试覆盖单模型（<code>gemini-3.5-flash</code>）的 <code>30</code> 份样本，按单语 <code>15</code> 份计算时 95% 威尔逊置信区间较宽（如 <code>14/15 = 93.3%</code> 对应 <code>[70.2%, 98.8%]</code>）；外部 <code>SKILL.md</code> 均按 <code>2026-11-23</code> 公开原版未改提示词实测。完整原始记录见 <a href="https://github.com/dislop-ai/dislop/blob/main/benchmarks/ECOSYSTEM-BENCHMARK.zh-CN.md" target="_blank" rel="noopener">ECOSYSTEM-BENCHMARK.zh-CN.md</a>。</p>
 <h2 id="faq">常见问题</h2>
@@ -330,7 +330,6 @@ npx --yes dislop verify --git HEAD draft.md --strict</code></pre>
           <span class="colophon-group-title">外部链接</span>
           <a href="https://github.com/dislop-ai/dislop" target="_blank" rel="noopener">GitHub (Apache-2.0)</a>
           <a href="https://www.npmjs.com/package/dislop" target="_blank" rel="noopener">npm</a>
-          <a href="https://pypi.org/project/dislop/" target="_blank" rel="noopener">PyPI</a>
           <a href="https://x.com/dislop_ai" target="_blank" rel="noopener">X (@dislop_ai)</a>
         </div>
       </nav>

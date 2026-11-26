@@ -2,7 +2,7 @@
 content-type: reference-data
 lang: zh
 updated: 2026-11-23
-version: 0.9.1
+version: 1.1.1
 ---
 
 # 把去 AI 味检查接进 Claude Code、Codex、Cursor 与 CI：Skill / CLI / MCP 教程
@@ -18,8 +18,8 @@ version: 0.9.1
 | 使用场景 | 推荐形态 | 运行位置 | 典型命令 / 配置 |
 |---|---|---|---|
 | **动笔前约束 Agent 写作/设计** | 纯文档 Skill | 本地客户端 | `npx --yes skills add dislop-ai/dislop --skill dislop` |
-| **写完后本地查硬伤与套话** | 开源 CLI（Node / Python） | 纯本机离线 | `npx --yes dislop check .` 或 `uvx dislop check .` |
-| **Git 提交与 PR 自动拦截** | `--changed` + GitHub Actions | 本地 / CI | `npx --yes dislop check --changed origin/main --fail-on error` |
+| **写完后本地查硬伤与套话** | 开源 Node.js CLI（零依赖） | 纯本机离线 | `npx --yes dislop check .` |
+| **Git 提交与 PR 自动拦截** | `--since` + GitHub Actions | 本地 / CI | `npx --yes dislop check --since origin/main --fail-on error` |
 | **办公 Agent 免环境深度审校** | 官方远程 MCP | `https://dislop.com/mcp` | 0 额度基础检查免登录直连；OAuth 2.1 或登录后领每月 30 免费额度 |
 
 ## 2. 接进编码 Agent 与编辑器
@@ -72,15 +72,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: dislop-ai/dislop@v0.7.1
+      - uses: dislop-ai/dislop@v1.1.1
         with:
-          args: check --changed origin/${{ github.base_ref }} --fail-on error --format github
+          since: origin/${{ github.base_ref }}
+          fail-on: error
+          format: sarif
 ```
 
-对于研发文档和复盘，还可以专门加上 `--pack engineering-spec`，拦住复读 diff 动作的 `eng-pr-diff-parrot`、把根因归咎于“人工疏忽/沟通不足”的 `eng-shallow-root-cause`，以及没有负责人与截止日期的 `eng-vague-action-item`：
+针对特定目录或场景，也可在 `.dislop.json` 里按目录配 `overrides`，或显式传入本地规则包：
 
 ```bash
-npx --yes dislop check docs/ postmortems/ --pack engineering-spec --fail-on warning
+npx --yes dislop check docs/ postmortems/ --pack common/artifact-qa,zh/prose --no-llm --fail-on warning
 ```
 
 ![dislop CLI 本地离线检查：原稿退出码 1 与清理后退出码 0](demo:cli-check)

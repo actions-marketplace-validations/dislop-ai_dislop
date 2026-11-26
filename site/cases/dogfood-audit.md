@@ -1,11 +1,11 @@
 ---
 content-type: reference-data
-version: 0.9.1
+version: 1.1.1
 ---
 
 # Repository Self-Dogfooding Audit
 
-Every Markdown document, SVG brand asset, and HTML/CSS file in `dislop` runs through `dislop check . --fail-on warning` in CI, and `site/` plus `docs/` pass `--fail-on info` across both Node.js and Python runtimes.
+Every Markdown document, SVG brand asset, and HTML/CSS file in `dislop` runs through `dislop check ... --no-llm` in `npm run dogfood` and CI (`--fail-on error` blocking, `--fail-on warning` clean on curated copy).
 
 ## English Contrast
 

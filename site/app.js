@@ -95,8 +95,8 @@ const I18N = {
     "demos.tab4": "网页去模板",
     "demos.tab5": "Word / PPT",
     "demos.tab6": "Agent + CI",
-    "demos.c2Title": "命令行门禁：Node 与 Python 结果一致",
-    "demos.c2Desc": "本地跑 dislop check --profile，硬伤直接返回退出码 1 卡住 CI，顺带输出句长起伏与具体度体检。",
+    "demos.c2Title": "命令行门禁：确定性硬伤拦 CI，建议不阻塞",
+    "demos.c2Desc": "本地跑 dislop check --no-llm，硬伤（Defect）直接返回退出码 1 卡住 CI，散文建议（Suggestion）只提示不误杀，顺带输出句长起伏统计。",
     "demos.c4Title": "网页与组件：清掉默认紫粉模板和死按钮",
     "demos.c4Desc": "直接扫 HTML/CSS/JSX 里的渐变标题、装饰徽章、胶囊堆叠和 href=\"#\" 假按钮，退回干净可用的界面。",
     "demos.c5Title": "Word / PPT 检查：揪出裸星号、字墙和过程标题",
@@ -166,7 +166,7 @@ const I18N = {
     "surf.w1Title": "纯文档 Agent Skill",
     "surf.w1Desc": "按文体整理的写作与界面避坑卡，不带脚本。装进 Claude Code、Codex、Cursor 或 Antigravity，Agent 动笔前读取，写完再调用本地 CLI 自检。",
     "surf.w2Title": "开源本地 CLI 与插件",
-    "surf.w2Desc": "零依赖，安装包不到 250 KB，内置 7 套场景包。断网也能查文档、Word、PPT 和 Git 改动，适合终端、编辑器和 CI。开发者也可以配自己的模型密钥。",
+    "surf.w2Desc": "Node.js 20+ 零外部依赖微内核，内置 11 套模块化规则包，支持 .dislop.json 分目录覆盖与 .dislop/rules.json 自定义规则。断网也能查文档、Word、PPT、PDF 和 Git 改动，还可选 Ollama 本地小模型或自有密钥。",
     "surf.w3Title": "官方云端 MCP 与网页工作台",
     "surf.w3Desc": "在 WorkBuddy、千问、Claude Cowork 或编辑器里直连，登录后每月 30 免费额度，按文体做多模型审校并返回改法。",
     "surf.w4Title": "一句话让 Agent 自己接管",
@@ -181,13 +181,13 @@ const I18N = {
     "price.desc":
       "Skill、CLI 和规则库按 Apache-2.0 开源，离线运行不上传。云端审校、改写和远程 MCP 登录后使用，免费版每月 30 额度，付费版模型接口不拿你的稿子训练。",
     "price.benchLink": "看 5 模型实测对比 →",
-    "price.t1Name": "开源本地（Skill + CLI）",
+    "price.t1Name": "开源本地（Skill + CLI + SDK）",
     "price.t1Price": "$0 · 永久免费",
     "price.t1Sub": "适合稿子不能上传的场景，比如内网和私有仓库。代码和规则都开源。",
-    "price.t1F1": "纯文档 Agent Skill（不含脚本）与开源本地 CLI（Apache-2.0）",
-    "price.t1F2": "全量内置 7 套场景与行业包（53 条规则），离线查文档、Word、PPT、PDF、图片与网页",
-    "price.t1F3": "内置 5 轴节奏体检、14.6 KB 轻量本地模型（--ml）与 dislop voice 离线个人文风",
-    "price.t1F4": "零联网零上传；开发者也可配自有密钥做单步审校",
+    "price.t1F1": "纯文档 Agent Skill（不含脚本）、Node.js 零依赖 CLI 与本地 stdio MCP（Apache-2.0）",
+    "price.t1F2": "全量内置 11 套模块化规则包，离线查 Markdown、HTML/CSS/JSX/SVG、图片、Word、PPT 与 PDF",
+    "price.t1F3": "双轨 CI 门禁（Defect vs Suggestion）、.dislop.json 分目录覆盖、事实核验（verify）与本地 Ollama / 个人文风",
+    "price.t1F4": "零联网零上传；开发者也可配自有密钥（BYOK）或通过 dislop/sdk 自定义插件包",
     "price.t1Cta": "安装 Skill / CLI ↑",
     "price.t2Name": "云端免费版（远程 MCP）",
     "price.t2Price": "$0 · 30 额度 / 月",
@@ -236,7 +236,7 @@ const I18N = {
     "ep.awesome": "90 条工具清单 JSON",
     "ep.brief": "产品定义（定位 / 用户 / 卖点）",
     "ep.method": "文案与设计基准",
-    "ep.full": "单次拉取的全部 53 条规则",
+    "ep.full": "单文件拉取核心规则摘要",
 
     "awesome.title": "去 AI 味工具清单：核验过的工具、规范与论文",
     "awesome.desc":
@@ -306,9 +306,9 @@ const I18N = {
     "cov.r4Name": "网页与组件",
     "cov.r4Scope": "点不动的空链接和占位按钮、默认紫粉渐变、满屏胶囊标签、三层套盒、把提示词口号印成装饰徽章。",
     "cov.r5Name": "Git 改动与 PR",
-    "cov.r5Scope": "只查本次改过的行，拦住残留寒暄、占位符和文字/页面里的 AI 味，支持 GitHub PR 批注和 SARIF。代码语法树检查还没做。",
-    "cov.r6Name": "个人文风、轻量模型与云端深度审校",
-    "cov.r6Scope": "本地 CLI 与工作台支持离线统计个人文风、内置 14.6 KB 轻量空话识别（--ml）；登录后可通过官方云端 MCP 按文体做多模型深度审校与提炼个人文风。",
+    "cov.r5Scope": "只查本次改过的或 --since <ref> 变动文件，拦住残留寒暄、占位符和文字/页面里的 AI 味，支持 SARIF 2.1.0。代码语法树检查还没做。",
+    "cov.r6Name": "个人文风、本地小模型与 3 档路由",
+    "cov.r6Scope": "CLI 与工作台支持离线个人文风（dislop voice）、可选 Ollama 本地小模型（dislop model pull）、自有密钥（--engine byok），以及登录后通过官方云端 MCP 做多模型审校。",
     "status.live": "可用",
     "status.partial": "改动检查可用，AST 未做",
     "status.partialVoice": "本地与云端均可用",
@@ -402,8 +402,8 @@ const I18N = {
     "demos.tab4": "Web UI",
     "demos.tab5": "PPTX & DOCX",
     "demos.tab6": "Agent + CI",
-    "demos.c2Title": "Offline CLI gate: Node & Python parity",
-    "demos.c2Desc": "Runs dislop check --profile locally: core artifacts exit 1 to block CI while rhythm and concreteness telemetry prints inline.",
+    "demos.c2Title": "Offline CLI gate: deterministic Defects block CI",
+    "demos.c2Desc": "Runs dislop check --no-llm locally: objective Defect: error hits exit 1 to block CI, while editorial Suggestions always exit 0.",
     "demos.c4Title": "Web UI audit: strip gradients & dead controls",
     "demos.c4Desc": "Flags indigo-purple gradients, prompt-echo badges, pill walls, and dead href='#' buttons before switching to a 1px paper sheet.",
     "demos.c5Title": "PPTX & DOCX audit: catch walls & shrunk text",
@@ -472,8 +472,8 @@ const I18N = {
     "surf.readTools": "Full setup guide (.md) →",
     "surf.w1Title": "Markdown-only Agent Skill",
     "surf.w1Desc": "Writing and UI reference cards by genre, with no bundled scripts. Install it in Claude Code, Codex, Cursor, or Antigravity so the agent reads it before drafting and runs the local CLI afterward.",
-    "surf.w2Title": "Open-source local CLI and plugins",
-    "surf.w2Desc": "Zero dependencies, under 250 KB, with all 7 scenario packs built in. Checks docs, Word, PowerPoint, and Git diffs offline in terminals, editors, and CI. You can also plug in your own model key.",
+    "surf.w2Title": "Open-source local CLI, SDK, and plugins",
+    "surf.w2Desc": "Zero-dependency Node.js 20+ Micro-Kernel with 11 modular Packs built in, walk-up .dislop.json overrides, and custom .dislop/rules.json. Checks docs, Word, PowerPoint, PDF, and Git diffs offline, with optional Ollama local models or BYOK.",
     "surf.w3Title": "Official Cloud MCP & web workbench",
     "surf.w3Desc": "Connect from Claude Cowork, WorkBuddy, Qwen, or your editor. Sign in for 30 free credits a month and get multi-model review by genre with concrete edits.",
     "surf.w4Title": "Let your agent set it up",
@@ -488,13 +488,13 @@ const I18N = {
     "price.desc":
       "The Skill, CLI, and rules are Apache-2.0 and run offline. Cloud review, rewrites, and remote MCP need a sign-in: 30 free credits a month, and the paid model API does not train on your text.",
     "price.benchLink": "Read 5-model benchmark →",
-    "price.t1Name": "Open Source Local (Skill + CLI)",
+    "price.t1Name": "Open Source Local (Skill + CLI + SDK)",
     "price.t1Price": "$0 · Forever free",
     "price.t1Sub": "For drafts that can't leave your machine: offline setups, private repos, and internal docs. All code and rules are open source.",
-    "price.t1F1": "Pure-Markdown Agent Skill (no scripts) & local CLI (Apache-2.0)",
-    "price.t1F2": "All 7 domain packs (53 rules) bundled offline for Markdown, HTML/CSS/SVG, images, DOCX, PPTX & PDF",
-    "price.t1F3": "Built-in 5-axis rhythm telemetry, 14.6 KB Pocket ML (--ml) & offline dislop voice",
-    "price.t1F4": "Zero network during check; developers can also plug in their own model key",
+    "price.t1F1": "Pure-Markdown Agent Skill, zero-dep Node.js CLI & local stdio MCP (Apache-2.0)",
+    "price.t1F2": "All 11 modular Packs bundled offline for Markdown, HTML/CSS/JSX/SVG, images, DOCX, PPTX & PDF",
+    "price.t1F3": "Dual-Track CI gates (Defect vs. Suggestion), .dislop.json overrides, Fact Gate (verify), Ollama & dislop voice",
+    "price.t1F4": "Zero network by default; bring your own key (BYOK) or build custom Packs via dislop/sdk",
     "price.t1Cta": "Install Skill / CLI ↑",
     "price.t2Name": "Cloud Free (Remote MCP)",
     "price.t2Price": "$0 · 30 credits / mo",
@@ -543,7 +543,7 @@ const I18N = {
     "ep.awesome": "Raw JSON for 90 anti-slop tools",
     "ep.brief": "Product brief (positioning & pitch)",
     "ep.method": "Voice & design guide",
-    "ep.full": "All 53 rules in one file",
+    "ep.full": "Single-file rule digest",
 
     "awesome.title": "Awesome Anti-Slop: checked tools, guides, and papers",
     "awesome.desc":
@@ -613,9 +613,9 @@ const I18N = {
     "cov.r4Name": "Web pages & components",
     "cov.r4Scope": "Dead href='#' placeholder links, unexplained disabled buttons, purple-pink AI gradients, pill walls, 3-level nested boxes, and prompt-echo badges.",
     "cov.r5Name": "Git diffs & PRs",
-    "cov.r5Scope": "Checks only modified lines for chat wrappers, placeholders, prose clichés, and UI template slop, with GitHub annotations and SARIF output. Code AST linting is not built.",
-    "cov.r6Name": "Personal style, Pocket ML & Cloud Review",
-    "cov.r6Scope": "The CLI and workbench support offline style stats and bundled 14.6 KB Pocket ML (--ml); sign in for Official Cloud MCP multi-model genre review and style extraction.",
+    "cov.r5Scope": "Checks modified or --since <ref> deliverable files for chat wrappers, placeholders, prose clichés, and UI slop, with SARIF 2.1.0 output. Code AST linting is not built.",
+    "cov.r6Name": "Personal voice, local Ollama & 3-Tier routing",
+    "cov.r6Scope": "The CLI supports offline voice baselines (dislop voice), local Ollama small models (dislop model pull), BYOK (--engine byok), and Official Cloud MCP multi-model review.",
     "status.live": "Works now",
     "status.partial": "Diff checks work; no AST",
     "status.partialVoice": "Live offline & cloud",
@@ -1328,18 +1328,20 @@ npx skills add dislop-ai/dislop
     }
   }
 }`,
-    cli: `# 离线检查当前目录（Node 或 Python PyPI 包，内置全部 7 套场景包，0 联网）
+    cli: `# 离线检查当前目录（Node.js 20+ 零依赖，内置 11 套模块化规则包，0 联网）
 npx --yes dislop check .
-uvx dislop check .
 
-# 开启 5 轴节奏统计、内置 14.6 KB 轻量模型与扩展探针
-npx --yes dislop check draft.md --pack auto --profile --ml --patterns
+# 仅跑确定性规则包并在 warning 时阻断 CI（0 联网）
+npx --yes dislop check . --no-llm --fail-on warning
 
-# 离线提取你自己的句长与标点个人文风（0 上传）
-npx --yes dislop voice my-notes.md
+# 仅写回通过安全检验的确定性修复（交互式 hunks 去掉 --auto）
+npx --yes dislop fix draft.md --auto
 
-# 查看某条规则的判断方法和改前/改后示例
-npx --yes dislop explain negation-pivot-frame --lang zh`,
+# 改后事实闸门核验，确认数字、单位、网址与限定词无漂移
+npx --yes dislop verify --git HEAD draft.md
+
+# 查看内置规则包，或校验自定义 .pack.md 安全性
+npx --yes dislop packs list`,
     ci: `name: dislop
 on: [pull_request]
 jobs:
@@ -1349,20 +1351,19 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: dislop-ai/dislop@v1.1.1
         with:
-          node-version: "22"
-      - run: npx --yes dislop check --changed origin/main --format github`,
+          since: origin/\${{ github.base_ref }}
+          fail-on: error`,
     config: `{
+  "routing": "local",
   "failOn": "error",
   "ignore": ["vendor/**", "dist/**"],
   "overrides": [
-    { "files": ["docs/**/*.md"], "pack": "business-brief" },
-    { "files": ["rfcs/**/*.md", "postmortems/**/*.md"], "pack": "engineering-spec" },
-    { "files": ["press/**/*.md"], "pack": "regulated-comms" },
-    { "files": ["site/**/*.{html,css,svg}"], "pack": "deck-and-ui" }
-  ],
-  "allow": ["无缝钢管"]
+    { "files": ["docs/**/*.md"], "packs": ["zh/prose"], "failOn": "warning" },
+    { "files": ["slides/**/*.pptx"], "packs": ["common/slide-deck", "zh/slide-deck"] },
+    { "files": ["site/**/*.{html,css,jsx,tsx,svg}"], "packs": ["common/web-ui"] }
+  ]
 }`,
   },
   en: {
@@ -1402,18 +1403,20 @@ npx skills add dislop-ai/dislop
     }
   }
 }`,
-    cli: `# Check the current folder offline (Node or PyPI, ships all 7 built-in packs, 0 network calls)
+    cli: `# Check the current folder offline (Node.js 20+ zero dependencies, 11 modular Packs)
 npx --yes dislop check .
-uvx dislop check .
 
-# Run with 5-axis rhythm telemetry, 14.6 KB Pocket ML, and extended pattern probes
-npx --yes dislop check draft.md --pack auto --profile --ml --patterns
+# Deterministic CI check treating Defect: warning as exit 1
+npx --yes dislop check . --no-llm --fail-on warning
 
-# Extract a deterministic personal style profile offline (0 uploads)
-npx --yes dislop voice my-notes.md
+# Batch-apply verified safe cleanups (omit --auto for interactive hunks)
+npx --yes dislop fix draft.md --auto
 
-# Inspect a rule's rationale and before/after examples
-npx --yes dislop explain negation-pivot-frame`,
+# Deterministic Fact Gate verifying numbers, units, and qualifiers against git HEAD
+npx --yes dislop verify --git HEAD draft.md
+
+# List built-in Packs or lint custom .pack.md packs before PR submission
+npx --yes dislop packs list`,
     ci: `name: dislop
 on: [pull_request]
 jobs:
@@ -1423,20 +1426,19 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: dislop-ai/dislop@v1.1.1
         with:
-          node-version: "22"
-      - run: npx --yes dislop check --changed origin/main --format github`,
+          since: origin/\${{ github.base_ref }}
+          fail-on: error`,
     config: `{
+  "routing": "local",
   "failOn": "error",
   "ignore": ["vendor/**", "dist/**"],
   "overrides": [
-    { "files": ["docs/**/*.md"], "pack": "business-brief" },
-    { "files": ["rfcs/**/*.md", "postmortems/**/*.md"], "pack": "engineering-spec" },
-    { "files": ["press/**/*.md"], "pack": "regulated-comms" },
-    { "files": ["site/**/*.{html,css,svg}"], "pack": "deck-and-ui" }
-  ],
-  "allow": ["Delve", "Bayeux Tapestry"]
+    { "files": ["docs/**/*.md"], "packs": ["en/prose"], "failOn": "warning" },
+    { "files": ["slides/**/*.pptx"], "packs": ["common/slide-deck", "en/slide-deck"] },
+    { "files": ["site/**/*.{html,css,jsx,tsx,svg}"], "packs": ["common/web-ui"] }
+  ]
 }`,
   },
 };

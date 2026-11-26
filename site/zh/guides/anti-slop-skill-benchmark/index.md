@@ -2,7 +2,7 @@
 content-type: reference-data
 lang: zh
 updated: 2026-11-24
-version: 0.9.1
+version: 1.1.1
 ---
 
 # 4 款去 AI 味 Skill 跑 30 份真实稿件的实测记录（2026 基准）
@@ -76,10 +76,10 @@ version: 0.9.1
 
 ```bash
 # 本地离线检查 Markdown、HTML/JSX/SVG、Word 与 PPT（零上传）
-npx --yes dislop check . --pack auto --lang zh --format agent
+npx --yes dislop check . --no-llm --lang zh --format agent
 
 # 改完对照 git HEAD 核对数字和限定词有没有丢失
-npx --yes dislop verify --git HEAD draft.md --strict
+npx --yes dislop verify --git HEAD draft.md
 ```
 
 **口径与局限**：本轮测试覆盖单模型（`gemini-3.5-flash`）的 `30` 份样本，按单语 `15` 份计算时 95% 威尔逊置信区间较宽（如 `14/15 = 93.3%` 对应 `[70.2%, 98.8%]`）；外部 `SKILL.md` 均按 `2026-11-23` 公开原版未改提示词实测。完整原始记录见 [ECOSYSTEM-BENCHMARK.zh-CN.md](https://github.com/dislop-ai/dislop/blob/main/benchmarks/ECOSYSTEM-BENCHMARK.zh-CN.md)。

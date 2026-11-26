@@ -1,7 +1,7 @@
 ---
 content-type: reference-data
-version: 0.9.1
-snapshot: 2026-11-21
+version: 1.1.1
+snapshot: 2026-11-26
 ---
 
 # Privacy & Data Boundaries
@@ -10,8 +10,8 @@ snapshot: 2026-11-21
 
 ## 1. Open-Source Local Tools (Zero Uploads, Zero Telemetry)
 
-- **Pure-Markdown Agent Skill (`skills/dislop/`, zero scripts)**, **Local CLI (`dislop check`, `patterns`, `voice`, `explain`, `packs`, `catalog`, `resources`)**, **Local Editor Plugins**, and the **local rule mode** in the browser workbench run on your machine with zero network calls.
-- `dislop check`, `dislop patterns`, and `dislop voice` make zero network calls.
+- **Pure-Markdown Agent Skill (`skills/dislop/`, zero scripts)**, **Node.js CLI (`dislop check`, `fix`, `verify`, `voice`, `packs`, `doctor`, `model`)**, **Local Stdio MCP (`dislop mcp` / `dislop-mcp`)**, and the **local rule mode** in the browser workbench run on your machine with zero outbound network uploads by default (`routing: "local"`).
+- Deterministic `--no-llm` checks, `dislop verify`, `dislop packs lint`, and `dislop voice extract` make zero network calls; local dev `dislop worklog` telemetry is opt-in only, disabled by default, automatically suppressed in CI, and stays on disk (`0700`/`0600`).
 - `dislop.com` loads zero third-party fonts, analytics, or external scripts (`Content-Security-Policy: connect-src 'self'`).
 
 ## 2. Official Cloud MCP & Web AI (`/api/v1/*` & `/mcp`)

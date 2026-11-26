@@ -2,7 +2,7 @@
 content-type: reference-data
 lang: en
 updated: 2026-11-23
-version: 0.9.1
+version: 1.1.1
 ---
 
 # What Is AI Slop? A 2026 Field Guide Across Prose, Web UI, and Slide Decks

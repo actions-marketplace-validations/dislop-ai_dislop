@@ -14,7 +14,7 @@
   <text x="1080" y="150" text-anchor="end" fill="#474C55" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="24" font-weight="600">dislop.com/zh</text>
 
   <rect x="116" y="238" width="610" height="58" rx="0" fill="#FEF3F2"/>
-  <text x="120" y="281" fill="#5E646E" font-family="'Songti SC', 'Noto Serif CJK SC', 'STSong', Georgia, serif" font-size="40" font-weight="700">好的，以下是为您润色后的版本。</text>
+  <text x="120" y="281" fill="#5E646E" font-family="'Songti SC', 'Noto Serif CJK SC', 'STSong', Georgia, serif" font-size="40" font-weight="700" data-dislop-ignore="true">好的，以下是为您润色后的版本。</text>
   <path data-dele="true" d="M118 267H714C730 267 742 256 742 243C742 233 735 227 726 227C716 227 710 234 710 244C710 260 724 277 744 284" stroke="#F04438" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round"/>
 
   <text x="120" y="396" fill="#14171A" font-family="'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', -apple-system, sans-serif" font-size="54" font-weight="700">去 AI 味才是真正的生产力！</text>

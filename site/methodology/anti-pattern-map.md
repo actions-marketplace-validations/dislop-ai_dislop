@@ -1,19 +1,19 @@
 ---
 content-type: reference-data
-version: 0.9.1
+version: 1.1.1
 ---
 
 # Cross-Modality Anti-Pattern Map
 
-`dislop` ships 65 structured anti-slop patterns across 6 dimensions in `v0.9.1` (53 built-in pack rules across 7 packs + 12 extended pattern-bank probes), plus an offline 14.6 KB Pocket ML scorer (`--ml`) for uniform-cadence vapor prose.
+`dislop` (`v1.1.1`) runs `11` stage-gated modular Packs organized by scope/language and deliverable modality (`common/*`, `en/*`, `zh/*`), separating deterministic `Defect` guards (`scripts/*.mjs`, CI blocking) from high-restraint editorial `Suggestion` probes and prompts (`prompts/*.md`, never fail CI).
 
-| Category | What It Covers | Shipped `v0.9.1` Offline Coverage |
+| Category | What It Covers | Shipped `v1.1.1` Offline Coverage |
 |---|---|---|
-| **AI Delivery Artifacts** | Obvious AI leftovers (`severity: error`) | `packs/core`: stray chatbot wrappers, unfilled placeholders, raw Markdown in DOCX/PPTX, dead `href="#"` placeholder controls |
-| **Stock Lexicon & Default UI** | Filler words and default generator chrome | `en-cliche-lexicon`, `en-throat-clearing-opener`, `zh-bureaucratic-padding`, `ui-ai-gradient`, `ui-pill-soup`, `ui-box-in-box`, `ui-prompt-echo-badge`, plus pattern-bank probes `ui-glassmorphism-overuse` and `ui-accent-stripe-card` |
-| **Cadence, Frames & Slide Layout** | Structural fallback after banning stock words | `negation-pivot-frame`, `staccato-slogan-run`, `zh-four-char-triad`, `semicolon-tricolon`, `rhetorical-qa-cadence`, `comma-chain-runon`, `narrative-sandwich-frame`, `template-skeleton-echo`, `low-burstiness-vapor`, `zh/en-essay-moralizing-ending`, `bold-lead-list-wall`, `excessive-em-dash-density`, `zh-halfwidth-punctuation`, slide word-walls/bullets/autofit/weak-titles, `pptx-layout-monotony`, and extended pattern-bank probes |
-| **Domain Specs, Voice & Craft** | Engineering/regulated slop, personal cadence, and visual craft | `engineering-spec`, `regulated-comms`, and `executive-deck` packs; `SKILL.md` plain writing & UI rules; 31 print/type design references; `dislop voice` (`dislop.voice/1`) offline stylometrics; 14.6 KB `--ml` Pocket ML scorer; optional local small models (`dislop model`) |
+| **Artifact QA (`common/artifact-qa`, `en/artifact-qa`, `zh/artifact-qa`)** | Objective delivery defects (`Defect: error | warning`) | Unfilled placeholders, stray chatbot wrappers & AI search citation tokens, local user home paths, unrendered Markdown syntax in `.docx`/`.pptx`/`.html`, dead `href="#"` controls, and shrunk OOXML `normAutofit` fonts |
+| **Prose Craft (`en/prose`, `zh/prose`)** | Zero-information filler & syntactic AI shells (`Suggestion`) | Throat-clearing preambles, stock cliché lexicons, `"Not X, but Y"` contrast pivots, balanced three-clause semicolon pitches, rhetorical Q&A hooks, macro-trend openers, moralizing endings, and custom `.dislop/rules.json` term guards |
+| **Web UI & Diagrams (`common/web-ui`)** | Stock AI template chrome (`Suggestion`) | Purple-pink neon gradients, ambient `blur-3xl` glow orbs, pill-badge walls, 3-level nested boxes, prompt-echo badges, missing `<svg viewBox>`, and unstripped image workflow metadata |
+| **Slide Decks (`common/slide-deck`, `en/slide-deck`, `zh/slide-deck`)** | Executive decks & PDF layouts (`Defect` & `Suggestion`) | Slide word walls (`> 120` EN words / `> 280` ZH chars), `> 6` bullets per slide, process-label titles instead of takeaways, monotonous 4+ identical slide skeletons, and raster-only or sub-`9.5pt` landscape PDFs (incl. XObject form expansion) |
 
 ## Coverage Honesty Principle
 
-Uninspectable artifacts (corrupted archives, non-UTF-8 files) are reported explicitly as `[SKIP]` and exit `2` on single-file checks. `dislop` never reports an uninspected artifact as clean.
+Uninspectable artifacts (corrupted archives, non-UTF-8 files) are reported explicitly as skipped (`Exit 2` on single-file runs). `dislop` never reports an uninspected artifact as clean.

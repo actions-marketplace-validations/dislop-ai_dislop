@@ -1,24 +1,24 @@
 # dislop
 
-> Cutting AI slop is real productivity. Linter for AI Slop (7 packs, 53 rules, 65 patterns, 90 tools) for agents and people.
+> Cutting AI slop is real productivity. Pluggable Editorial & Artifact Linter (Node.js 20+ Micro-Kernel, 11 modular Packs, Dual-Track Defect/Suggestion CI gates, Fact Gate, and 90 curated anti-slop tools) for coding agents, office agents, and human writers.
 
 ## Quick Start & Agent Setup
 1. Evaluate: inspect host (Claude Code, Codex, Cursor, Gemini CLI, or web) and deliverables; pick Skill, CLI, or MCP via [Tools & Setup](https://dislop.com/tools/index.md).
-2. Install: Skill `npx --yes skills add dislop-ai/dislop --skill dislop`; CLI `npx --yes dislop init` (Node 20+ / `uvx dislop`); Remote MCP `https://dislop.com/mcp` (0 cr check, no login).
-3. First check: `npx --yes dislop check <path> --pack auto --compact --json` (exit `0`/`1`/`2`), summarize hits, and offer to fix.
+2. Install: Skill `npx --yes skills add dislop-ai/dislop --skill dislop`; CLI `npx --yes dislop init` (Node 20+ zero dependencies); Local stdio MCP `npx --yes dislop-mcp`; Remote MCP `https://dislop.com/mcp` (0-credit check, no login).
+3. First check: `npx --yes dislop check <path> --no-llm --format agent` (exit `0`/`1`/`2`), fix `DEFECT`s first, and verify edits with `npx --yes dislop verify --git HEAD <path>`.
 
 ## Start by task
-- [Brief](https://dislop.com/tasks/business-doc.md): AI artifacts and `business-brief` rules.
-- [Web & slides](https://dislop.com/tasks/web-and-deck.md): `deck-and-ui` rules and tokens.
-- [Essay](https://dislop.com/tasks/editorial-writing.md): `literary-essay` rules and contrasts.
-- [Pre-release gate](https://dislop.com/tasks/pre-release-gate.md): Core `error` checks and CI diff gating.
+- [Brief](https://dislop.com/tasks/business-doc.md): AI artifacts and `en/prose` rules.
+- [Web & slides](https://dislop.com/tasks/web-and-deck.md): `common/web-ui` & `common/slide-deck` rules and tokens.
+- [Essay](https://dislop.com/tasks/editorial-writing.md): `en/prose` narrative guardrails and contrasts.
+- [Pre-release gate](https://dislop.com/tasks/pre-release-gate.md): Objective `common/artifact-qa` `error` checks and `--since` PR diff gating.
 
 ## Browse by topic
 - [Guides (EN & ZH)](https://dislop.com/guides/): 7 tutorials (ZH at `/zh/guides/`).
-- [Product Brief](https://dislop.com/methodology/product-brief.md): Positioning and user tiers.
+- [Product Brief](https://dislop.com/methodology/product-brief.md): Micro-kernel positioning, Dual-Track taxonomy, and 3-Tier routing.
 - [Methodology](https://dislop.com/methodology/index.md): Plain writing guide and visual tokens.
 - [Cases & Refs](https://dislop.com/cases/index.md): Contrasts and 31 design references.
-- [Tools & Setup](https://dislop.com/tools/index.md): Skill, CLI, Plugin, Cloud MCP.
+- [Tools & Setup](https://dislop.com/tools/index.md): Skill, CLI, Plugin, local stdio MCP, Cloud MCP.
 - [Awesome Anti-Slop](https://dislop.com/awesome/index.md): 90 tools & papers (`/awesome/index.json`).
 - [Roadmap](https://dislop.com/roadmap.md): Active tracks and collaboration.
 
@@ -26,8 +26,8 @@
 - [MCP Server Card](https://dislop.com/.well-known/mcp/server-card.json): `/mcp` discovery (10 tools).
 - [Agent Skills Index](https://dislop.com/.well-known/agent-skills/index.json): `SKILL.md` & card sha256.
 - [JSON Catalog](https://dislop.com/catalog.json): `dislop.catalog/1` manifest with sha256.
-- [Agent Skill](https://dislop.com/tools/skill.md): `SKILL.md` mirror (`v0.9.1`).
-- [Cloud MCP & API](https://dislop.com/tools/mcp-sdk-api.md): Remote MCP, OAuth 2.1, HTTP API.
-- [Rule Packs](https://dislop.com/packs/core.md): 7 packs & 53 `/rules/<id>.md` cards.
-- [Single-Fetch Bundle](https://dislop.com/llms-full.txt): All 53 rules without fixtures.
-- [Privacy](https://dislop.com/privacy.md): Offline boundaries and Cloud MCP policy.
+- [Agent Skill](https://dislop.com/tools/skill.md): `SKILL.md` mirror (`v1.1.1`).
+- [Cloud MCP & API](https://dislop.com/tools/mcp-sdk-api.md): Remote MCP, OAuth 2.1, HTTP API, `dislop/sdk`.
+- [Rule Packs](https://dislop.com/packs/core.md): Built-in packs & `/rules/<id>.md` cards.
+- [Single-Fetch Bundle](https://dislop.com/llms-full.txt): Reference rule cards without fixtures.
+- [Privacy](https://dislop.com/privacy.md): Local-first offline boundaries and Cloud MCP policy.
